@@ -1,0 +1,31 @@
+{
+  "name": "parkspot",
+  "version": "1.0.0",
+  "description": "website for parkspot.in",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arrogant-ant/parkspot.git"
+  },
+  "keywords": [
+    "website",
+    "parkspot",
+    "parking",
+    "booking",
+    "find"
+  ],
+  "author": "the thought engine",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arrogant-ant/parkspot/issues"
+  },
+  "homepage": "https://github.com/arrogant-ant/parkspot#readme",
+  "dependencies": {
+    "chokidar": "^3.4.2",
+    "pug": "^3.0.0",
+    "stylus": "^0.54.8"
+  }
+}
