@@ -20,11 +20,14 @@ html
 		.main-holder
 			div(class="navbar is-dark yellow is-fixed-top")
 				.navbar-brand
-					a(class="navbar-item parkspottext is-size-3" href=".") Parkspot.in
+					a(class="navbar-item" href=".")
+						img(src="psotbrand.png")
+					a(class="navbar-item parkspottext is-size-4" href=".") Parkspot.in
 				.navbar-end
 					a(class="navbar-item is-size-4 parkspottext" href="#home") Home
 					a(class="navbar-item is-size-4 parkspottext" href="#services") Services
 					a(class="navbar-item is-size-4 parkspottext" href="#team") Team
+					a(class="navbar-item is-size-4 parkspottext" href="#contact") Book
 					a(class="navbar-item is-size-4 parkspottext" href="#about") About
 					a(class="navbar-item is-size-4 parkspottext" href="#contact") Contact Us
 			div(class="hero is-warning is-halfheight" id="home")
@@ -133,36 +136,44 @@ html
 			div(class="hero is-warning is-fullheight" id="about")
 				.hero-head
 					.columns.is-vcentered.tengine
-						.column-is-half
-							img(src="tengine.png")
-						.column-is-half
-							h1.title.has-text-black The Thought Engine
+						.column.is-half
+							img(src="psot.png")
+						.column.is-half
+							h1.title.has-text-black ParkSpot.in
 							br
 							p.subsitle.has-text-black
-								| We at thought engine solve trivial problems faced by millions of people. 
-								| we stive for solutions which brings technology and life closer and accessible
+								| We at Parkspot strive to solve the trivial problem of finding/booking 
+								| available parking slots in vicinity which is faced by millions of people on a daily basis. 
+								| we vie for solutions which brings technology and life closer and accessible.
 							br
 							p.has-text-black
 								| "When the need for something becomes imperative, you are forced to find ways of getting or achieving it. - lexico.com"
-			.hero.is-fullheight#contact
+			.hero.is-fullheight.is-black#contact
 				.hero-head
 					.columns
-						.column.is-one-third
+						.column.is-one-third.contact
+							p.title.has-text-white
+								|Contact Us
+							p.subtitile.has-text-white 
+								|Location:
 							br
+							p.has-text-white 
+								|Norbert Church Road, Off, Kasavanahalli Main Rd, 
+								|Kasavanahalli, Karnataka 560035
 							br
+							p.subtitle.has-text-white 
+								|Email:
+							p.has-text-white 
+								|connect@parkspot.in
+								|
 							br
-							p.title Contact Us
+							p.substitle 
+								|Call:
 							br
-							p.subtitile Location:
-							p.has-text-black Norbert Church Road, Off, Kasavanahalli Main Rd, Kasavanahalli, Karnataka 560035
+							p.has-text-white 
+								|7292824305
 
-							p.subtitle Email:
-							p.has-text-black connect@parkspot.in
-							
-							p.substitle Call:
-							p.has-text-black 7292824305
-
-						.column.is-one-third.map
+						.column.is-one-third.map.contact
 							br
 							br
 							br
@@ -170,23 +181,19 @@ html
 							br
 							br
 							iframe(src="https://maps.google.com/maps?q=bhavya%20serene&t=&z=13&ie=UTF8&iwloc=&output=embed" height="300" width="300")
-						.column.is-one-third
-							br
-							br
-							br
-							br
-							br
+						.column.is-one-third.contact
+							p.title Got suggestions?
 							.form
-								label.label Name
+								label.label.has-text-white Name
 								input(class="input" type="text" placeholder="Enter Name Here")
-								label.label Email
+								label.label.has-text-white Email
 								input(class="input" type="text" placeholder="Enter Email id here")
-								label.label City
+								label.label.has-text-white City
 								input(class="input" type="text" placeholder="Bangalore")
-								label.label Message
+								label.label.has-text-white Message
 								textarea(class="textarea" placeholder="Enter your suggestions; We are happy to listen")
 								br
-								button.button.is-link Submit
+								button.button.is-link.is-light Submit
 			footer.footer
 				.content.has-text-centered
 					p
