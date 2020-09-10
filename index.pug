@@ -6,7 +6,7 @@ html
 		meta(name="viewport" content="width=device-width, initial-scale=1")
 		meta(name="description" content="Parkspot platform allows user to book/prebook a parking slot for short or long term at affordable rates")
 		link(rel="icon" href="favicon.ico" sizes="32x32")
-		meta(name="title" content="Find and book parking sites near your visinity")
+		meta(name="title" content="Find and book parking sites near your vicinity")
 		link(rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css")
 		link(rel="stylesheet" type="text/css" href="styles.css")
 		script(async src="https://www.googletagmanager.com/gtag/js?id=G-779VHE86MJ")
@@ -46,7 +46,7 @@ html
 								h1.title.has-text-black 
 									| ParkSpot
 								br
-								p.subtitle.has-text-black-bis
+								p.subtitle.has-text-black-bis.has-text-weight-bold
 									|ParkSpot is a completely automated Secured parking platorm for the new generation 
 								p.has-text-black
 									| Are you fed up of drifting throught the traffic to find a parking lot
@@ -62,7 +62,7 @@ html
 							.column.is-half
 								h1.title.has-text-white Join ParkSpot platform as a parking operator
 								br
-								p.subtitle.has-text-black-light
+								p.subtitle.has-text-black-light.has-text-weight-bold
 									| Want to reach new customers? 
 								p.has-text-white
 									| Not getting enough customers? Spending too much on billboards but still not reaching customers? 
@@ -77,7 +77,7 @@ html
 							.column.is-half
 								h1.title.has-text-black Join ParkSpot as an individual
 								br
-								p.subtitle.has-text-black-bis
+								p.subtitle.has-text-black-bis.has-text-weight-bold
 									| Looking for new ways to make money?
 								p.has-text-black
 									| Try parkspot.in to list/rent your parking space in our platform for extra income.
@@ -106,11 +106,14 @@ html
 										.content
 											.columns
 												.column.is-one-third
-													img(src="github.png")
+													a(href="https://github.com/arrogant-ant")
+														img(src="github.png" width="100px")
 												.column.is-one-third
-													img(src="linkedin.png")
+													a(href="https://www.linkedin.com/in/sudhanshu-ambastha/")
+														img(src="linkedin.png")
 												.column.is-one-third
-													img(src="twitter.png")
+													a(href="https://twitter.com/sud_ambastha")
+														img(src="twitter.png")
 							.column.is-one-fifth
 								.card.team
 									.card-image
@@ -128,9 +131,11 @@ html
 										.content
 											.columns
 												.column.is-one-third
-													img(src="github.png")
+													a(href="https://github.com/NextIshwar")
+														img(src="github.png")
 												.column.is-one-third
-													img(src="linkedin.png")
+													a(href="")
+														img(src="linkedin.png")
 												.column.is-one-third
 													img(src="twitter.png")
 							.column.is-one-fifth
@@ -150,11 +155,14 @@ html
 										.content
 											.columns
 												.column.is-one-third
-													img(src="github.png")
+													a(href="https://github.com/iamfiasco")
+														img(src="github.png")
 												.column.is-one-third
-													img(src="linkedin.png")
+													a(href="https://www.linkedin.com/in/iamfiasco/")
+														img(src="linkedin.png")
 												.column.is-one-third
-													img(src="twitter.png")
+													a(href="https://twitter.com/NikhilSuryaMuk1")
+														img(src="twitter.png")
 							.column.is-one-fifth
 								.card.team
 									.card-image
@@ -171,16 +179,19 @@ html
 										.content
 											.columns
 												.column.is-one-third
-													img(src="github.png")
+													a(href="https://github.com/shubhamjpc")
+														img(src="github.png")
 												.column.is-one-third
-													img(src="linkedin.png")
+													a(href="https://www.linkedin.com/in/shubham-choudhary-391942101")
+														img(src="linkedin.png")
 												.column.is-one-third
-													img(src="twitter.png")
+													a(href="https://twitter.com/shubhamjpc?s=09")
+														img(src="twitter.png")
 			div(class="hero is-warning is-fullheight" id="about")
 				.hero-head
 					.columns.is-vcentered.tengine
 						.column.is-half
-							img(src="psot.png")
+							img(src="psot.png" class="aboutbanner")
 						.column.is-half
 							h1.title.has-text-black ParkSpot.in
 							br
@@ -214,7 +225,7 @@ html
 								|Call:
 							br
 							p.has-text-white 
-								|7292824305
+								| 8092996057
 
 						.column.is-one-third.map.contact
 							br
@@ -239,6 +250,7 @@ html
 										select(id="options" name="Authority type")
 											option Parking Operator
 											option Parking User
+											option Others
 								label.label.has-text-white Message
 								textarea(class="textarea" name="Message" placeholder="Enter your suggestions; We are happy to listen")
 								br
