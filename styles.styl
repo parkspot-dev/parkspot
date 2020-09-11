@@ -1,3 +1,7 @@
+full_block = 300px
+mobile = "all and (min-width: " + 2*full_block + ")"
+desktop = "all and (min-width: " + 3 *full_block + ")"
+
 @font-face
     font-family: "oday"
     src: url("fonts/ONEDAY.ttf")
@@ -37,8 +41,15 @@ html
 	height: 50%
 	width: 50%
 
-.aboutbanner
-	margin 0% 12% 0% 12%
+@media desktop
+	.aboutbanner
+		margin 0% 12% 0% 12%
+
+.inline
+	display: inline
+
+.thanksinline > *
+	display: inline
 //.map
 //	width 100%
 //	height 100%
