@@ -8,6 +8,7 @@ html
 		link(rel="icon" href="favicon.ico" sizes="32x32")
 		meta(name="title" content="Find and book parking sites near your visinity")
 		link(rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css")
+		link(rel="stylesheet" type="text/css" href="styles.css")
 		style.
 			.vcenter{
 				margin: 0;
@@ -28,9 +29,12 @@ html
 						.columns
 							.column.is-full.vcenter
 								p.title
-									| Thankyou for reaching out to us
-								p.subtitle
-									| please email your further concers at connect@parkspot.in
+									| Thanks for reaching out to us.
+								.thanks.inline
+									a(href="mailto:connect@parkspot.in")
+										p.subtitle
+											| Please email your further concerns at connect@parkspot.in
+
 			footer.footer
 				.content.has-text-centered
 					p
