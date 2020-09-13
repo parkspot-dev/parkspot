@@ -47,3 +47,10 @@ html {
 .thanksinline > * {
   display: inline;
 }
+.navbar-menu {
+  background-color: #363636;
+  color: #fff;
+}
+.bottomicons {
+  width: 20%;
+}

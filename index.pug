@@ -5,6 +5,22 @@ html
 		meta(http-equiv="Content-Type" content="text/html" charset="utf-8")
 		meta(name="viewport" content="width=device-width, initial-scale=1")
 		meta(name="description" content="Parkspot platform allows user to book/prebook a parking slot for short or long term at affordable rates")
+		<meta data-rh="true" name="robots" content="noodp, noydir">
+		<meta data-rh="true" property="fb:app_id" content="171344769571965">
+		<meta data-rh="true" name="twitter:card" content="app">
+		<meta data-rh="true" name="twitter:site" content="@parkspot">
+		<meta data-rh="true" name="twitter:creator" content="@parkspot">
+		<meta data-rh="true" name="twitter:app:name:ipad" content="ParkSpot">
+		<meta data-rh="true" name="twitter:app:id:googleplay" content="com.irisinc.parkspot">
+		<meta data-rh="true" name="twitter:app:url:googleplay" content="https://play.google.com/store/apps/details?id=com.parkspot.parkspot">
+		<meta data-rh="true" name="google-site-verification" content="xoYVsdp3bXNxwds_Sw1C46aJ_9pJ0tQOXI3bxgBGyfQ">
+		<meta data-rh="true" name="msvalidate.01" content="E44412335167C2135871BD45A0A0B36C">
+		<meta data-rh="true" property="og:type" content="website">
+		<meta data-rh="true" property="og:image" content="https://www.parkspot.in">
+		<meta data-rh="true" property="og:site_name" content="parkspot">
+		<meta data-rh="true" http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta data-rh="true" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 		link(rel="icon" href="favicon.ico" sizes="32x32")
 		meta(name="title" content="Find and book parking sites near your vicinity")
 		link(rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css")
@@ -39,18 +55,18 @@ html
 					a(class="navbar-item" href=".")
 						img(src="psotbrand.png")
 					a(class="navbar-item parkspottext is-size-4" href=".") Parkspot
-					a.navbar-burger.burger(role='button' aria-label='menu' aria-expanded='false' data-target='psnav')
+					div.navbar-burger.burger(role='button' aria-label='menu' aria-expanded='false' data-target='psnav')
 						span(aria-hidden="true")
 						span(aria-hidden="true")
 						span(aria-hidden="true")
 				.navbar-end.navbar-menu#psnav
-					a(class="navbar-item is-size-4 parkspottext" href="#home") Home
-					a(class="navbar-item is-size-4 parkspottext" href="#services") Services
-					a(class="navbar-item is-size-4 parkspottext" href="#team") Team
-					a(class="navbar-item is-size-4 parkspottext" href="#contact" onclick="setOptionUser()") Book
-					a(class="navbar-item is-size-4 parkspottext" href="#contact" onclick="setOptionOperator()") Rent
-					a(class="navbar-item is-size-4 parkspottext" href="#about") About
-					a(class="navbar-item is-size-4 parkspottext" href="#contact") Contact Us
+					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#home") Home
+					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#services") Services
+					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#team") Team
+					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#contact" onclick="setOptionUser()") Book
+					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#contact" onclick="setOptionOperator()") Rent
+					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#about") About
+					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#contact") Contact Us
 			div(class="hero is-warning is-halfheight" id="home")
 				div(class="hero-head")
 					.hero-body
@@ -255,10 +271,27 @@ html
 								button.button.is-link.is-light Submit
 			footer.footer
 				.content.has-text-centered
-					p
-					|© 2020 
-					strong The Thought Engine 
-					|- All rights reserved.
+					.footercontainer
+						.containersocial
+							.columns.bottomicons
+								.column.is-one-third.inline
+									a(href="https://github.com/arrogant-ant")
+										img(src="github.png" width="100px")
+								.column.is-one-third.inline
+									a(href="https://www.linkedin.com/in/sudhanshu-ambastha/")
+										img(src="linkedin.png" width="100px")
+								.column.is-one-third.inline
+									a(href="https://twitter.com/sud_ambastha")
+										img(src="twitter.png" width="100px")
+						br
+						br
+						br
+						br
+						br
+						p
+						|© 2020 
+						strong The Thought Engine 
+						|- All rights reserved.
 
 
 
