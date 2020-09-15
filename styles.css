@@ -24,7 +24,7 @@ html {
   transition: transform 0.3s ease-out;
 }
 .team:hover {
-  transform: translate(0, -5px);
+  transform: translate(0, -13px);
 }
 .tengine {
   transform: translateY(10%);
@@ -42,7 +42,8 @@ html {
   }
 }
 .inline {
-  display: inline;
+  display: inline-block;
+  margin: 0 auto;
 }
 .thanksinline > * {
   display: inline;
