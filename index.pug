@@ -5,7 +5,7 @@ html
 		meta(http-equiv="Content-Type" content="text/html" charset="utf-8")
 		meta(name="viewport" content="width=device-width, initial-scale=1")
 		meta(name="description" content="Book a secure parking slot for short or long term at affordable rates")
-		meta(name="keywords" content="parking spot, parking location, parking nearby, bangalore, mumbai, delhi, pune, book parking, prebook parking, rental parkings, reliable parking, safe parking, smart parking, advanced parking")
+		meta(name="keywords" content="parking app, parking spot, parking location, parking slot, parking nearby, parking places, fast, reliable, nearby parking, schedule parking, book parking, prebook parking, rental parkings, reliable parking, safe parking, smart parking, advanced parking, IOT driven parking, bangalore, mumbai, delhi, pune, bengaluru")
 		<meta data-rh="true" name="robots" content="noodp, noydir">
 		//<meta data-rh="true" property="fb:app_id" content="171344769571964">
 		<meta data-rh="true" name="twitter:card" content="app">
@@ -50,27 +50,45 @@ html
 				$(".navbar-menu").toggleClass("is-active");
 					});
 				});
+		script.
+			function postContact(){
+				var url = ""
+				var payload = {
+					
+				}
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: payload,
+					success: function(data){
+						window.location.replace("https://www.parkspot.in/thanks")
+					},
+					contentType: "application/json"
+					dataType: "json"
+				});
+			}
 	body
 		.main-holder
 			div(class="navbar is-dark is-fixed-top")
 				.navbar-brand
 					a(class="navbar-item" href=".")
 						img(src="psotbrand.png")
-					a(class="navbar-item parkspottext is-size-4" href=".") Parkspot
+					a(class="navbar-item parkspottext is-size-3" href=".") Parkspot
 					div.navbar-burger.burger(role='button' aria-label='menu' aria-expanded='false' data-target='psnav')
 						span(aria-hidden="true")
 						span(aria-hidden="true")
 						span(aria-hidden="true")
 				.navbar-end.navbar-menu#psnav
-					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#home") Home
-					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#services") Services
-					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#team") Team
-					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#contact" onclick="setOptionUser()") Book
-					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#contact" onclick="setOptionOperator()") Rent
-					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#about") About
-					a(class="navbar-item is-size-4 has-text-white parkspottext" href="#contact") Contact Us
-					a(class="nabar-item parkspot" href="https://play.google.com/store/apps/details?id=com.parkspot.parkspot")
-						img(class="playstore" src="play.png")
+					a(class="navbar-item is-size-5 has-text-white parkspottext" href="#home") Home
+					a(class="navbar-item is-size-5 has-text-white parkspottext" href="#services") Services
+					a(class="navbar-item is-size-5 has-text-white parkspottext" href="#team") Team
+					a(class="navbar-item is-size-5 has-text-white parkspottext" href="#contact" onclick="setOptionUser()") Book
+					a(class="navbar-item is-size-5 has-text-white parkspottext" href="#contact" onclick="setOptionOperator()") Rent
+					a(class="navbar-item is-size-5 has-text-white parkspottext" href="#about") About
+					a(class="navbar-item is-size-5 has-text-white parkspottext" href="#contact") Contact Us
+					.playstore
+						a(class="nabar-item" href="https://play.google.com/store/apps/details?id=com.parkspot.parkspot")
+							img(src="play.png")
 			div(class="hero is-warning is-halfheight" id="home")
 				div(class="hero-head")
 					.hero-body
@@ -138,16 +156,16 @@ html
 												p.title.is-4.has-text-black Sudhanshu Kumar Ambastha
 												p.subtitle.is-6.has-text-black @arrogant-ant
 										.content
-											.columns
+											.columns.is-centered
 												.column.is-one-third
 													a(href="https://github.com/arrogant-ant")
-														img(src="github.png" width="50")
+														img(class="image is-48x48" src="github.png")
 												.column.is-one-third
 													a(href="https://www.linkedin.com/in/sudhanshu-ambastha/")
-														img(src="linkedin.png" width="50")
+														img(class="image is-48x48" src="linkedin.png")
 												.column.is-one-third
 													a(href="https://twitter.com/sud_ambastha")
-														img(src="twitter.png" width="50")
+														img(class="image is-48x48" src="twitter.png")
 							.column.is-one-fifth
 								.card.team
 									.card-image
@@ -221,7 +239,7 @@ html
 												.column.is-one-third
 													a(href="https://twitter.com/shubhamjpc?s=09")
 														img(src="twitter.png" width="50")
-			div(class="hero is-warning is-fullheight" id="about")
+			.hero.is-warning.is-fullheight.is-warning#about
 				.hero-head
 					.columns.is-vcentered.tengine
 						.column.is-half
@@ -255,13 +273,13 @@ html
 							iframe(src="https://maps.google.com/maps?q=bhavya%20serene&t=&z=13&ie=UTF8&iwloc=&output=embed" height="45%" width="100%")
 						.column.is-half.contact
 							p.title Got suggestions?
-							form(class="form" action="https://api.sheetmonkey.io/form/4LQXCEMZFtaaSQMmXc7nbw" method="POST")
+							form(id="contactusform" class="form" action="https://api.sheetmonkey.io/form/4LQXCEMZFtaaSQMmXc7nbw" method="POST")
 								label.label.has-text-white Name
-								input(class="input" type="text" name="Name" placeholder="Enter Name Here")
+								input(id="namec" class="input" type="text" name="Name" placeholder="Enter Name Here")
 								label.label.has-text-white Email
-								input(class="input" type="text" name="Email" placeholder="Enter Email id here")
+								input(id="emailc" class="input" type="text" name="Email" placeholder="Enter Email id here")
 								label.label.has-text-white City
-								input(class="input" type="text" name="City" placeholder="Bangalore")
+								input(id="cityc" class="input" type="text" name="City" placeholder="Bangalore")
 								label.label.has-text-white Authority type
 								.control
 									.select
@@ -270,7 +288,7 @@ html
 											option Parking User
 											option Others
 								label.label.has-text-white Message
-								textarea(class="textarea" name="Message" placeholder="Enter your suggestions; We are happy to listen")
+								textarea(id="messagec" class="textarea" name="Message" placeholder="Enter your suggestions; We are happy to listen")
 								br
 								button.button.is-link.is-light Submit
 			footer.footer
@@ -282,7 +300,7 @@ html
 									a(href="https://play.google.com/store/apps/details?id=com.parkspot.parkspot")
 										img(src="playc.png" width="50")
 								.column.is-one-third
-									a(href="https://www.linkedin.com/in/sudhanshu-ambastha/")
+									a(href="https://www.linkedin.com/company/parkspot-in")
 										img(src="linkedin.png" width="50")
 								.column.is-one-third
 									a(href="https://twitter.com/sud_ambastha")

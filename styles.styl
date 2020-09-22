@@ -30,9 +30,13 @@ html
 .team:hover{
 	transform: translate(0,-13px)
 }
-
-.tengine
-	transform translateY(10%)
+@media screen and (min-width: 700px){
+	.tengine{
+		transform translateY(10%)
+	}
+}
+.ep
+	width: 80%;
 
 .contact
 	padding: 5%;
@@ -58,7 +62,10 @@ html
 
 .bottomicons
 	width: 20%
-
+.playstore
+	display: flex;
+	justify-content: center;
+	align-items: center;
 //.footercontainer
 //	position: absolute
 //	left: 50%
