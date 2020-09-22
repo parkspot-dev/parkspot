@@ -60,3 +60,8 @@ html {
 .bottomicons {
   width: 20%;
 }
+.playstore {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
