@@ -1,19 +1,19 @@
-@font-face {
-  font-family: "oday";
-  src: url("fonts/ONEDAY.ttf");
+.mainp {
+  margin: 0 auto;
+  width: 80%;
 }
+@font-face;
+font-family: "oday",
+src: url("fonts/ONEDAY.ttf"),
 html {
   scroll-behavior: smooth;
 }
-.yellow {
-  color: #ffd000;
-}
-.main-holder {
-  margin: 0 auto;
-}
-.parkspottext {
-  font-family: "oday";
-}
+.yellow,
+color #ffd000,
+.main-holder,
+margin 0 auto,
+.parkspottext,
+font-family: "oday",
 .banner {
   margin: 0 auto;
 }
