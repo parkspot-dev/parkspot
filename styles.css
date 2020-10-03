@@ -10,7 +10,9 @@ html {
 }
 .yellow,
 color #ffd000,
-.main-holder,
+.main-holder {
+  background-color: ffd42aff;
+}
 margin 0 auto,
 .parkspottext,
 font-family: "oday",
