@@ -67,13 +67,13 @@ html
 					dataType: "json"
 				});
 			}
-	body
+	body(style="background-color: #ffdd57")
 		.main-holder
 			div(class="navbar is-dark is-fixed-top")
 				.navbar-brand
 					a(class="navbar-item" href=".")
 						img(src="psotbrand.png")
-					a(class="navbar-item parkspottext is-size-3" href=".") Parkspot
+					a(class="navbar-item parkspottext is-size-3" href=".") ParkSpot
 					div.navbar-burger.burger(role='button' aria-label='menu' aria-expanded='false' data-target='psnav')
 						span(aria-hidden="true")
 						span(aria-hidden="true")
@@ -95,37 +95,39 @@ html
 		br
 		.mainp
 			.content
-				p.is-size-1
+				p.is-size-1.has-text-black
 					| Privacy Policy
-				p.is-size-4
+				p.is-size-4.has-text-black
 					| ParkSpot respects the privacy of our users therefore we
 					strong  DO NOT 
 					|disclose users data to a third party.
-				p
+				p.has-text-black
 					| We reserve the right to make changes to this Privacy Policy at any time and for any reason. 
 					| We will alert you about any changes by updating the “Last updated” date of this Privacy Policy. 
 					| You are encouraged to periodically review this Privacy Policy to stay informed of updates. 
 					| You will be deemed to have been made aware of, will be subject to, and will be deemed to 
 					| have accepted the changes in any revised Privacy Policy by your continued use of the 
 					| Application after the date such revised Privacy Policy is posted.
-				p.is-size-4
+				p.is-size-4.has-text-black
 					| Personal Data
-				p
+				p.has-text-black
 					| Demographic and other personally identifiable information (such as your name and email address) WONT be shared
 					| to others. We make utmost effort to prevent them.
 				
-				p.is-size-4
+				p.is-size-4.has-text-black
 					| Geo-Location Information
-				p
+				p.has-text-black
 					| We may request access or permission to and track location-based information from your mobile device, 
 					| either continuously or while you are using the Application, to provide location-based services. 
 					| If you wish to change our access or permissions, you may do so in your device’s settings. 
 				
-				p.is-size-4
+				p.is-size-4.has-text-black
 					| Push Notifications
-				p
+				p.has-text-black
 					| We may request to send you push notifications regarding your account or the Application. 
 					| If you wish to opt-out from receiving these types of communications, you may turn them off in your device’s settings.
+				br
+				br
 		footer.footer
 				.content.has-text-centered
 					.footercontainer
