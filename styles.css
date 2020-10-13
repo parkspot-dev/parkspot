@@ -67,3 +67,8 @@ font-family: "oday",
   justify-content: center;
   align-items: center;
 }
+.columns {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
