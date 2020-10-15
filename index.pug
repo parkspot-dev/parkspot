@@ -74,14 +74,17 @@ html
 					if(payload[i] === ""){
 						valid = false
 						var target = "#"+i+"c"
-						
 						$(target).addClass("animate__animated animate__shakeX is-danger")
 						window.setTimeout(function(target){
 							$(target).removeClass("animate__animated animate__shakeX is-danger")
 						},2000, target)	
 					}
 				}
-				console.log("trapdoor")
+				if(!valid){
+					return false
+				}
+				//alert("rowdy baby")
+				//console.log("trapdoor")
 				//fetch(url, {
 				//	method: "POST",
 				//	mode: "cors",
@@ -348,7 +351,7 @@ html
 										| Hani elegance RT Nagar
 								.card-footer
 									.card-footer-item
-										button.button.is-dark(href="#contact" id="Banglore") Book
+										a.button.is-dark(href="#contact" id="Bangalore") Book
 
 			.hero.is-fullheight.is-warning#contact
 				.hero-head
