@@ -61,7 +61,7 @@ html
 				$("#messagec").val("Booking for CHE_PALLI#1")
 			})
 			function postPewPew(){
-				var url = "http://localhost:8080"
+				var url = "http://168.63.243.20:5002/contact" //"http://localhost:8080"
 				var payload = {
 					name: $("#namec").val(),
 					email: $("#emailc").val(),
@@ -81,14 +81,15 @@ html
 						},2000, target)	
 					}
 				}
-				fetch(url, {
-					method: "POST",
-					mode: "cors",
-					body: JSON.stringify(payload)
-				}).then((data)=>{
-					window.location.replace("https://www.parkspot.in/thanks")
-					//console.log("done", data)
-				})
+				//fetch(url, {
+				//	method: "POST",
+				//	mode: "cors",
+				//	body: JSON.stringify(payload)
+				//}).then((data)=>{
+				//	window.location.replace("https://www.parkspot.in/thanks")
+				//	//console.log("done", data)
+				//})
+				window.location.replace("https://www.parkspot.in")
 			}
 				$("#formsubmit").click(postPewPew)
 				$("rent").click(setOptionOperator)
@@ -367,7 +368,7 @@ html
 							iframe(src="https://maps.google.com/maps?q=bhavya%20serene&t=&z=13&ie=UTF8&iwloc=&output=embed" height="45%" width="100%")
 						.column.is-half.contact
 							p.title.has-text-black Got suggestions?
-							div(id="contactusform" class="form")
+							form(id="contactusform" class="form" method="POST" action="https://api.sheetmonkey.io/form/4LQXCEMZFtaaSQMmXc7nbw")
 								label.label.has-text-black Name
 								input(id="namec" class="input" type="text" name="Name" placeholder="Enter Name Here")
 								label.label.has-text-black Email
