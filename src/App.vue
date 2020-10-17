@@ -1,0 +1,37 @@
+<template>
+  <div id="app">
+	<PSNavbar />
+    <MainBanner />
+	<Services />
+	<PSTeam />
+	<contact />
+  </div>
+</template>
+
+<script>
+import PSNavbar from './components/PSNavbar.vue';
+import MainBanner from './components/MainBanner.vue';
+import PSTeam from './components/PSTeam.vue';
+import Services from './components/Service.vue';
+import contact from './components/Contact.vue';
+export default {
+  name: 'App',
+  components: {
+    PSNavbar,
+    MainBanner,
+	PSTeam,
+	Services,
+	contact,
+  },
+};
+</script>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+</style>
