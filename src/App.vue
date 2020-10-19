@@ -6,6 +6,7 @@
 	<Services />
 	<PSTeam />
 	<contact />
+	<PSFooter />
   </div>
 </template>
 
@@ -16,7 +17,7 @@ import PSTeam from './components/PSTeam.vue';
 import Services from './components/Service.vue';
 import contact from './components/Contact.vue';
 import PSMap from './components/MapboxSearch.vue';
-
+import PSFooter from './components/PSFooter.vue';
 export default {
   name: 'App',
   components: {
@@ -26,6 +27,7 @@ export default {
 	Services,
 	contact,
 	PSMap,
+	PSFooter
   },
 };
 </script>
