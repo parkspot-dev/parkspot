@@ -10,9 +10,11 @@
   "dependencies": {
     "buefy": "^0.9.3",
     "core-js": "^3.6.5",
+    "mapbox-gl": "^1.12.0",
     "pug": "^3.0.0",
     "pug-plain-loader": "^1.0.0",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-mapbox": "^0.4.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

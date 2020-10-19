@@ -1,0 +1,17 @@
+<html>
+		<head>
+				<title> AHOE </title>
+				<script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
+				<link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+		</head>
+		<script>
+				mapboxgl.accessToken = 'pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ'
+				var map = new mapboxgl.Map({
+				container: 'map',
+				style: 'mapbox://styles/mapbox/streets-v11'
+			});
+		</script>
+		<body>
+			<div id='map' style='width: 400px; height: 300px;'></div>
+		</body>
+</html>

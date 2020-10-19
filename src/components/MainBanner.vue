@@ -3,7 +3,7 @@
     b-carousel(:indicator=false)
       b-carousel-item(v-for="(carousel, i) in carousels" :key="i")
         section(:class="`hero is-fullheight is-${carousel.color}`")
-          hero-body.has-centered-text
+          .hero-body.has-centered-text
             .columns.is-vcentered.is-centered
               .column.is-half(v-if="carousel.istextb")
                 p.title.has-text-black(style="white-space: pre;")
@@ -58,6 +58,5 @@ export default {
 </script>
 <style scoped>
   .banner{
-    margin-top: 50px;
   }
 </style>

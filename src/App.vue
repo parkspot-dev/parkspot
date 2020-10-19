@@ -1,6 +1,7 @@
 <template>
   <div id="app">
 	<PSNavbar />
+	<PSMap />
     <MainBanner />
 	<Services />
 	<PSTeam />
@@ -14,6 +15,8 @@ import MainBanner from './components/MainBanner.vue';
 import PSTeam from './components/PSTeam.vue';
 import Services from './components/Service.vue';
 import contact from './components/Contact.vue';
+import PSMap from './components/MapboxSearch.vue';
+
 export default {
   name: 'App',
   components: {
@@ -22,6 +25,7 @@ export default {
 	PSTeam,
 	Services,
 	contact,
+	PSMap,
   },
 };
 </script>
