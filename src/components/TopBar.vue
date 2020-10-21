@@ -3,6 +3,8 @@
       template(slot='brand')
         b-navbar-item(href="/")
           img(:src='`${minilogo.path}`' alt='ParkSpot')
+		b-name-item(href="/")
+		  img(:src="`${minilogotext.path}`" alt="ParkSpot")
         b-navbar-item(href="/")
           p.is-size-4.is-black
             | ParkSpot
@@ -34,7 +36,8 @@ export default {
 	},
 	data (){
 		return {
-			minilogo: {path: require("../assets/mini.png")}
+			minilogotext: {path: require("../assets/pstoptext.png")},
+			minilogo: {path: require("../assets/pstopmini.png")}
 		}
 	} 
 };

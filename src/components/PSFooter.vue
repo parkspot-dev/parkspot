@@ -4,9 +4,9 @@
 			.footercontainer
 				.containersocial
 					.columns.bottomicons.inline
-						.columns.is-one-third(v-for="(elem, i) in bottomicons" :key="i")
+						.column.is-one-third(v-for="(elem, i) in bottomicons" :key="i")
 							a(:href="`${elem.href}`")
-								img(:src="`${elem.image}`")
+								img(class="footericons" :src="`${elem.image}`")
 				br
 				p
 				|© 2020 
@@ -28,8 +28,11 @@
 	}
 </script>
 <style scoped>
+	.footericons{
+		width: 50px;
+	}
 	.inline{
-		display: inline-block;
+		display: inline;
 		margin: 0 auto;
 	}
 	.bottomicons{
