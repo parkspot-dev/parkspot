@@ -1,15 +1,16 @@
 <template lang="pug">
   .banner
-    b-carousel(:indicator=false)
+    b-carousel(:indicator=false interval="8000")
       b-carousel-item(v-for="(carousel, i) in carousels" :key="i")
         section(:class="`hero is-fullheight is-${carousel.color}`")
           .hero-body.has-centered-text
-            .columns.is-vcentered.is-centered
+          .eightypercent
+            .columns.is-vcentered
               .column.is-half(v-if="carousel.istextb")
-                p.title.has-text-black(style="white-space: pre;")
+                p.title.has-text-black
                   | {{carousel.title}}
                 br
-                p.subtitle.has-text-black(style="white-space: pre;")
+                p.subtitle.has-text-black
                   | {{carousel.subtitle}}
               .column.is-half(v-else)
                 p.title
@@ -57,6 +58,8 @@ export default {
 };
 </script>
 <style scoped>
-  .banner{
+  .eightypercent{
+		  margin: auto;
+		  width: 90%;
   }
 </style>

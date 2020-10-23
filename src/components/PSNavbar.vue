@@ -1,12 +1,12 @@
 <template lang="pug">
     .PSContainer#topNav
-      b-navbar
+      b-navbar(id="top")
         template(slot='brand')
-          //b-navbar-item(href="/")
-            b-image(:src='`${minilogo.path}`' placeholder='ParkSpot')
+          b-navbar-item(href="/")
+            img(:src='`${minilogo.path}`' placeholder='ParkSpot' id="maximize")
         template(slot="start")
-          //b-navbar-item(href="/")
-            b-image(:src="`${minilogotext.path}`" placeholder="ParkSpot")
+          b-navbar-item(href="/")
+            img(:src="`${minilogotext.path}`" placeholder="ParkSpot" id="maximize")
         template(slot='end')
           b-navbar-item(tag='div')
             .buttons
@@ -15,10 +15,9 @@
               b-navbar-item.button.is-warning(@click="cardModal()")
                 strong Log in
       b-navbar.is-dark#mainNav
-        template(slot="brand")
+        template(slot='end')
           b-navbar-item(href="/")
             | Home
-        template(slot='end')
           b-navbar-item(href="#services")
             | Services
           b-navbar-item(href="#team")
@@ -32,7 +31,7 @@
           b-navbar-item(href="#about")
             | About
           b-navbar-item(href="#contact")
-            | Contact
+            | Contact Us
 </template>
 
 <script>
@@ -76,5 +75,11 @@ export default {
 }
 #minitext {
   width: 10%;
+}
+#top{
+	height: 6rem;
+}
+#maximize{
+	max-height: 4rem;
 }
 </style>

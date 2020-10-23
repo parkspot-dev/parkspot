@@ -1,11 +1,12 @@
 <template lang="pug">
-	.customhero
-		.searchbar
-			p.is-size-1.has-text-dark#welcomeText
-				| Search a parking spot near you !
-			br
-			input.input.is-primary(v-on:onkeydown="entered($event)")
-		#map
+	.customherocontainer
+		.customhero
+			.searchbar
+				p.is-size-1.has-text-dark#welcomeText
+					| Search a parking spot near you !
+				br
+				input.input.is-primary(v-on:onkeydown="entered($event)")
+			#map
 </template>
 
 <script>
@@ -60,6 +61,10 @@
 </script>
 
 <style scoped>
+	.customherocontainer{
+		top: 0;
+		position: relative;
+	}
 	.customhero{
 		display: flex;
 		align-items: center;
@@ -74,8 +79,11 @@
 		z-index: 1	
 	}
 	#map {
+		margin: 0;
+		padding: 0;
 		position: absolute; 
-		top: 0; bottom: 0; 
+		top: 0; 
+		bottom: 0; 
 		width: 100%; 
 		height: 100%;
 		z-index: 0;
