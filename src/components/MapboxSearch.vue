@@ -4,7 +4,6 @@
 			.searchbar
 				p.is-size-1.has-text-dark#welcomeText
 					| Search a parking spot near you !
-				br
 				input.input.is-primary(v-on:onkeydown="entered($event)")
 			#map
 </template>
@@ -50,6 +49,19 @@
 	}
 	export default {
 	  name: "PSMap",
+    data(){
+		  return {
+				citySearch: "Bangalore"	
+		  }
+	  },
+		//watch: {
+		//  citySearch: function(newVal, oldVal){
+		//					fetch(`http://api.mapbox.com/geocoding/v5/mapbox.places/${newVal}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ`).then(e => e.json()).
+		//									then(e => e.features.map(f=>f.place_name)).
+		//									then(e => e.forEach(console.log)).
+		//									catch(console.error)
+		//	}
+		//},
 	  methods: {
 	  	entered: function mapboxSearchEnter(capEvent){
 			if(capEvent.key === "Enter"){

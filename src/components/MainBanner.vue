@@ -1,6 +1,6 @@
 <template lang="pug">
   .banner
-    b-carousel(:indicator=false interval="8000")
+    b-carousel(:indicator=false)
       b-carousel-item(v-for="(carousel, i) in carousels" :key="i")
         section(:class="`hero is-fullheight is-${carousel.color}`")
           .hero-body.has-centered-text

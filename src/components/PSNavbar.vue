@@ -71,7 +71,8 @@ export default {
 
 <style scoped>
 .is-dark{
-	background: grey; 
+	background: #363636;
+	color: #fff;
 }
 #minitext {
   width: 10%;

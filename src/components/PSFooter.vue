@@ -3,10 +3,10 @@
 		.content.has-text-centered
 			.footercontainer
 				.containersocial
-					.columns.bottomicons.inline
-						.column.is-one-third(v-for="(elem, i) in bottomicons" :key="i")
-							a(:href="`${elem.href}`")
-								img(class="footericons" :src="`${elem.image}`")
+					//.columns.bottomicons.inline
+					//	.column.is-one-third(v-for="(elem, i) in bottomicons" :key="i")
+					//		a(:href="`${elem.href}`")
+					//			img(class="footericons" :src="`${elem.image}`")
 				br
 				p
 				|© 2020 
