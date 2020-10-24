@@ -8,3 +8,4 @@
 - [ ] levitiate on hover
 - [ ] form logic activation
 - [ ] bottom nav/avatar socials shrink fix
+- [ ] fixing bottomnav
