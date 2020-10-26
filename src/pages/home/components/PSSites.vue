@@ -63,9 +63,9 @@ export default{
 	name: "PSSites",
 	data (){
 		return {
-			bangalore: require("../assets/psites/bang.jpeg"),
-			chennai: require("../assets/psites/ch.jpeg"),
-			kolkata: require("../assets/psites/kol.jpeg")
+			bangalore: require("@/assets/psites/bang.jpeg"),
+			chennai: require("@/assets/psites/ch.jpeg"),
+			kolkata: require("@/assets/psites/kol.jpeg")
 		}
 	}
 }

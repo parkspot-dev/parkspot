@@ -25,9 +25,9 @@
 						input(id="emailc" class="input" type="text" name="Email" placeholder="Enter Email id here")
 						label.label.has-text-black.has-text-left City
 						input(id="cityc" class="input" type="text" name="City" placeholder="Bangalore")
-						label.label.has-text-black Authority type
-						.control
-							.select
+						label.label.has-text-black.has-text-left Authority type
+						.control.level
+							.select.level-left
 								select(id="options" name="Authority type")
 									option Parking Operator
 									option Parking User

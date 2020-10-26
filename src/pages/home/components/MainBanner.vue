@@ -30,25 +30,25 @@ export default {
       carousels: [
         { title: "ParkSpot... the parking app", 
           subtitle: "No more drifting through traffic use \n the ParkSpot app to reserve a parking spot !", 
-          path: require("../assets/banners/1b.png"), 
+          path: require("@/assets/banners/1b.png"), 
           color: 'black', 
           istextb: false
         },
         { title: "Worried about security ?", 
           subtitle: "We'll make sure no harm occurs to your property. To ensure this you can monitor your property in real time", 
-          path: require("../assets/banners/2b.png"), 
+          path: require("@/assets/banners/2b.png"), 
           color: 'warning', 
           istextb: true
         },
         { title: "Long term parking required ?", 
           subtitle: "No worries you can choose the timing duration and location", 
-          path: require('../assets/banners/3b.png'), 
+          path: require('@/assets/banners/3b.png'), 
           color: 'black', 
           istextb: false
         },
         { title: "Want to rent out your private space for extra pennies?", 
           subtitle: "ParkSpot allows you to list your private areas in our platform. It'll help you reach new customers", 
-          path: require('../assets/banners/4b.png'), 
+          path: require('@/assets/banners/4b.png'), 
           color: 'warning', 
           istextb: true
         },
