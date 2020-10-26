@@ -1,6 +1,6 @@
 <template lang="pug">
 	.containerz
-		div(v-for="(service, i) in services" :key="i")
+		div(v-for="(service, i) in services" :key="i" id="services")
 			section(:class="`hero is-fullheight is-${service.color}`")
 				.hero-body.has-centered-text
 					.columns.is-vcentered
@@ -33,13 +33,13 @@ export default {
 				{	title: "Join ParkSpot platform as a parking operator",
 					subtitle: "Want to reach new customers?",
 					text: "Not getting enough customers? Spending too much on billboards but still not reaching customers? Try parkspot.in to list your parking sites on our platform for reaching a bigger customer base",
-					image: require("../assets/services/operator.png"),
+					image: require("@/assets/services/operator.png"),
 					color: "black"
 				},
 				{	title: "Join ParkSpot as an individual",
 					subtitle: "Looking for new ways to make money?",
 					text: "Try parkspot.in to list/rent your parking space in our platform for extra income",
-					image: require("../assets/services/owner.png"),
+					image: require("@/assets/services/owner.png"),
 					color: "warning"
 				}
 			]

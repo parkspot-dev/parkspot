@@ -2,10 +2,10 @@
     .PSContainer#topNav
       b-navbar(id="top")
         template(slot='brand')
-          b-navbar-item(href="/")
+          b-navbar-item(tag="router-link" :to="{ path: '/' }")
             img(:src='`${minilogo.path}`' placeholder='ParkSpot' id="maximize")
         template(slot="start")
-          b-navbar-item(href="/")
+          b-navbar-item(tag="router-link" :to="{ path: '/' }")
             img(:src="`${minilogotext.path}`" placeholder="ParkSpot" id="maximize")
         template(slot='end')
           b-navbar-item(tag='div')
@@ -16,26 +16,26 @@
                 strong Log in
       b-navbar.is-dark#mainNav
         template(slot='end')
-          b-navbar-item(href="/")
+          b-navbar-item(tag="router-link" :to="{ path: '/' }")
             | Home
-          b-navbar-item(href="#services")
+          b-navbar-item(href="/#services")
             | Services
-          b-navbar-item(href="#team")
+          b-navbar-item(href="/#team")
             | Team
-          b-navbar-item(href="#book")
+          b-navbar-item(href="/#book")
             | Book
-          b-navbar-item(href="#Rent")
+          b-navbar-item(href="/#contact")
             | Rent
-          b-navbar-item(href="#faq")
+          b-navbar-item(tag="router-link" :to="{ path: '/faq' }")
             | FAQs
-          b-navbar-item(href="#about")
+          b-navbar-item(href="/#about")
             | About
-          b-navbar-item(href="#contact")
+          b-navbar-item(href="/#contact")
             | Contact Us
 </template>
 
 <script>
-import ModalForm from './ModalForm.vue';
+import ModalForm from '@/components/ModalForm.vue';
 var timer = setInterval(function(){
 		var main = document.getElementById("mainNav")
 		var height = document.getElementById("topNav").offsetHeight
@@ -62,8 +62,8 @@ export default {
 	},
 	data: function(){
 		return {
-			minilogotext: {path: require("../assets/pstoptext.png")},
-			minilogo: {path: require("../assets/pstopmini.png")}
+			minilogotext: {path: require("@/assets/pstoptext.png")},
+			minilogo: {path: require("@/assets/pstopmini.png")}
 		}
 	}
 };
