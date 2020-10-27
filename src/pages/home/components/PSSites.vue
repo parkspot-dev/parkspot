@@ -1,9 +1,9 @@
 <template lang="pug">
-	.hero.is-fullheight.is-dark#book
+	.hero.is-fullheight.is-warning#book
 		.hero-body
 			.columns.is-vcentered.is-centered
 				.column.is-one-quarter
-					p.title
+					p.title.has-text-black
 						| Our best picks
 				.column.is-one-quarter
 					.card.team

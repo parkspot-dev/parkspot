@@ -35,7 +35,7 @@
 						label.label.has-text-black.has-text-left Message
 						textarea(id="messagec" class="textarea" name="Message" placeholder="Enter your suggestions; We are happy to listen")
 						br
-						button.button.is-link.is-light Submit
+						button.button.is-dark Submit
 </template>
 <script>
 export default{
