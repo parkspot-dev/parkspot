@@ -6,6 +6,7 @@
 	<Services />
 	<PSTeam />
 	<PSSites />
+	<PSAbout />
 	<contact />
 	<PSFooter />
   </div>
@@ -21,7 +22,7 @@ import PSTeam from '@/pages/home/components/PSTeam.vue';
 import Services from '@/pages/home/components/Service.vue';
 import contact from '@/pages/home/components/Contact.vue';
 import PSSites from '@/pages/home/components/PSSites.vue';
-
+import PSAbout from '@/pages/home/components/PSAbout.vue';
 export default {
   name: 'App',
   components: {
@@ -32,7 +33,8 @@ export default {
 	contact,
 	PSMap,
 	PSFooter,
-	PSSites
+	PSSites,
+	PSAbout
   },
 };
 </script>

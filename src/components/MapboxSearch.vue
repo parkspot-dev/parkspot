@@ -23,7 +23,7 @@
 				container: 'map', // container id
 				style: 'mapbox://styles/mapbox/dark-v10', // style URL
 				center: pos, // starting position [lng, lat]
-				zoom: 17 // starting zoom
+				zoom: 13 // starting zoom
 				});
 				mapLoadedTimer = setInterval(function(timer, map){
 						if(map.loaded()){
