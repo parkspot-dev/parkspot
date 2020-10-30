@@ -27,6 +27,14 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: Thanks
+  },
+  {
+  	path: '*',
+	beforeEnter: (to, from, next)=>{
+		console.log(`route from ${to} to ${from}`)
+		next('/')
+	},
+	component: Home
   }
 ]
 
