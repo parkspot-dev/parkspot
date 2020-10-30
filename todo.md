@@ -7,5 +7,7 @@
 - [x] contact us left align
 - [ ] levitiate on hover
 - [ ] form logic activation
-- [ ] bottom nav/avatar socials shrink fix
+- [ ] bottom nav/avatar socials shrink fix {add bottom navicons}
 - [ ] fixing bottomnav
+- [x] added vuex
+- [ ] add store for sites -> contact form bridge; extension of line 9

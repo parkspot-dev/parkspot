@@ -27,13 +27,30 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: Thanks
+  },
+  {
+  	path: '*',
+	beforeRouteEnter: (to, from, next)=>{
+		console.log(`route from ${to} to ${from}`)
+		next('/')
+	},
+	component: Home
   }
 ]
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
+  base: "/",
   routes
 })
 
+router.beforeEach((to, from, next)=>{
+	if(to !== '/' || to != '/faq' || to != '/thanks'){
+		console.log(`route from ${to} to ${from}`)
+		next()
+	}
+	else{
+		next({path: "/"})
+	}
+})
 export default router
