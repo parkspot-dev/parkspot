@@ -30,7 +30,7 @@ const routes = [
   },
   {
   	path: '*',
-	beforeEnter: (to, from, next)=>{
+	beforeRouteEnter: (to, from, next)=>{
 		console.log(`route from ${to} to ${from}`)
 		next('/')
 	},
@@ -40,8 +40,17 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
+  base: "/",
   routes
 })
 
+router.beforeEach((to, from, next)=>{
+	if(to !== '/' || to != '/faq' || to != '/thanks'){
+		console.log(`route from ${to} to ${from}`)
+		next()
+	}
+	else{
+		next({path: "/"})
+	}
+})
 export default router
