@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && mv _redirects /dist",
+    "build": "vue-cli-service build && cp _redirects dist",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "buefy": "^0.9.3",
     "core-js": "^3.6.5",
+    "loadash": "^1.0.0",
     "mapbox-gl": "^1.12.0",
     "pug": "^3.0.0",
     "pug-plain-loader": "^1.0.0",

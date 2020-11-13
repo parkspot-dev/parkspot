@@ -1,16 +1,35 @@
-<template lang="pug">
-	.customherocontainer
-		.customhero
-			.searchbar
-				p.is-size-1.has-text-dark#welcomeText
-					| Search a parking spot near you !
-				input.input.is-primary(v-on:onkeydown="entered($event)")
-			#map
+<template>
+	<div class="customherocontainer">
+		<div class="customhero">
+			<div class="searchbar">
+      			<p class="is-size-1 has-text-dark" id="welcomeText">Search a parking spot near you !
+        		<!--input.input.is-primary(v-model="citySearch")-->
+      			</p>
+    			<section>
+    			        <b-autocomplete
+    			            :data="data"
+    			            placeholder="e.g. Bangalore"
+    			            field="title"
+    			            :loading="isFetching"
+    			            @typing="getAsyncData"
+    			            @select="option => selected = option">
+    			            <template slot-scope="props">
+    			                    <div class="media-content">
+    			                        {{ props.option }}
+    			                    </div>
+    			            </template>
+    			        </b-autocomplete>
+    			</section>
+			</div>
+			<div id="map" v-if="mapdisp">
+			</div>
+
+		</div>
+	</div>
 </template>
 
 <script>
-
-	
+    import debounce from 'lodash/debounce'
 	window.onload = function(){
 			var mapLoadedTimer;
 			var center = [77.8782,12.9098] //fallout lat long
@@ -47,31 +66,55 @@
 			repaint(center)
 
 	}
-	export default {
-	  name: "PSMap",
-    data(){
-		  return {
-				citySearch: "Bangalore"	
-		  }
-	  },
-		//watch: {
-		//  citySearch: function(newVal, oldVal){
-		//					fetch(`http://api.mapbox.com/geocoding/v5/mapbox.places/${newVal}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ`).then(e => e.json()).
-		//									then(e => e.features.map(f=>f.place_name)).
-		//									then(e => e.forEach(console.log)).
-		//									catch(console.error)
-		//	}
-		//},
-	  methods: {
-	  	entered: function mapboxSearchEnter(capEvent){
-			if(capEvent.key === "Enter"){
-				console.log("Entered")
-			}
-		}
-	  }
-	};
+    export default {
+        data() {
+            return {
+                data: [],
+                selected: null,
+                isFetching: false,
+				mapdisp: true,
+            }
+        },
+        methods: {
+            // You have to install and import debounce to use it,
+            // it's not mandatory though.
+            getAsyncData: debounce(function (name) {
+                if (!name.length) {
+                    this.data = []
+                    return
+                }
+                this.isFetching = true
+					fetch(`http://api.mapbox.com/geocoding/v5/mapbox.places/${name}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ&proximity=77.4977,12.9716`) //TODO: remove lat long hardcode
+				.then(e => e.json())
+				.then((data)=>{
+					try{
+						this.data = data.features.map(e => e.place_name)
+						console.log(this.data)
+					}
+					catch(e){
+						this.data = []
+						console.log("errm")
+						//data.features.forEach((item) => this.data.p)
+					}
+				})
+                //fetch(`https://api.themoviedb.org/3/search/movie?api_key=bb6f51bef07465653c3e553d6ab161a8&query=${name}`)
+				//	.then(e=>e.json())
+                //    .then((data) => {
+                //        console.log(data)
+				//		this.data = []
+                //        data.results.forEach((item) => this.data.push(item))
+                //    })
+                //    .catch((error) => {
+                //        this.data = []
+                //        throw error
+                //    })
+                //    .finally(() => {
+                //        this.isFetching = false
+                //    })
+            }, 500)
+        }
+    }
 </script>
-
 <style scoped>
 	.customherocontainer{
 		top: 0;
@@ -98,7 +141,7 @@
 		bottom: 0; 
 		width: 100%; 
 		height: 100%;
-		z-index: 0;
+		z-index: -1;
 	}
 	#map:focus{
   		-webkit-filter: blur(0.5px);
@@ -108,4 +151,3 @@
   		filter: blur(0.5px); 
 	}
 </style>
-
