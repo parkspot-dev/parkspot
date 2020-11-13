@@ -2,9 +2,7 @@
 	<div class="customherocontainer">
 		<div class="customhero">
 			<div class="searchbar">
-      			<p class="is-size-1 has-text-dark" id="welcomeText">Search a parking spot near you !
-        		<!--input.input.is-primary(v-model="citySearch")-->
-      			</p>
+      			<p class="is-size-1 has-text-dark" id="welcomeText"> Search a parking spot near you ! </p>
     			<section>
     			        <b-autocomplete
     			            :data="data"
@@ -31,6 +29,7 @@
 <script>
     import debounce from 'lodash/debounce'
 	window.onload = function(){
+
 			var mapLoadedTimer;
 			var center = [77.8782,12.9098] //fallout lat long
 			var map;
@@ -67,6 +66,7 @@
 
 	}
     export default {
+		name: 'PSMap',
         data() {
             return {
                 data: [],

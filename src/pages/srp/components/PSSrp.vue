@@ -13,8 +13,6 @@
 			var center = [77.8782,12.9098] //fallout lat long
 			var map;
 			mapboxgl.accessToken = 'pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ';
-			
-
 			function repaint(pos){
 				map = new mapboxgl.Map({
 				container: 'map', // container id
@@ -25,12 +23,26 @@
 				mapLoadedTimer = setInterval(function(timer, map){
 						if(map.loaded()){
 							var elem = document.getElementById("welcomeText")
-							elem.classList.remove("has-text-dark")
-							elem.classList.add("has-text-light")
-							clearInterval(timer)
+							if(elem !== null){
+								elem.classList.remove("has-text-dark")
+								elem.classList.add("has-text-light")
+								clearInterval(timer)
+							}
 						}
 				}, 100, mapLoadedTimer, map)
 				map.scrollZoom.disable();
+				var nmarkers = 10;
+				var markers = []
+				for(var i=0;i<nmarkers;i++){
+					var tpos = [...pos]
+					var min = 0.01
+					var max = 0.2
+					tpos[-1] = tpos[0] + (Math.random() * (max - min) + min)
+					tpos[1] = tpos[1] + (Math.random() * (max - min) + min)
+					console.log(tpos)
+					var marker = new mapboxgl.Marker().setLngLat(tpos).addTo(map)
+				}
+
 			}
 			
 
@@ -45,7 +57,7 @@
 
 	}
 	export default{
-		name: "SRP"
+		name: "SRP",
 	}
 </script>
 <style scoped>
@@ -83,4 +95,14 @@
   		-ms-filter: blur(0.5px);
   		filter: blur(0.5px); 
 	}
+	/*
+	.marker {
+  		background-image: url('https://developers.google.com/maps/images/maps-icon.svg');
+  		background-size: cover;
+  		width: 50px;
+  		height: 50px;
+  		border-radius: 50%;
+  		cursor: pointer;
+	}
+	*/
 </style>
