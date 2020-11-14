@@ -18,10 +18,11 @@
     			            </template>
     			        </b-autocomplete>
     			</section>
+				<br>
+				<button class="button is-warning" type="submit" v-on:click="flyToSrp()"> Go !</button>
 			</div>
 			<div id="maph" v-if="mapdisp">
 			</div>
-
 		</div>
 	</div>
 </template>
@@ -68,7 +69,6 @@
 			navigator.geolocation.getCurrentPosition(function(res){
 					//var current = [77.7053, 12.9504]
 					var current = [res.coords.longitude, res.coords.latitude]
-					console.log(current)
 					repaint(current)
 			})
 			var map;
@@ -76,42 +76,35 @@
 
 		},
         methods: {
-            // You have to install and import debounce to use it,
-            // it's not mandatory though.
+			/*
+				autosuggestions pulling data from remote source via API when reactive with respect to DOM
+				can make lot of network calls; inorder to disallow this we wait for 500ms of delay then and 
+				only then we make a call
+
+				for more info ``https://css-tricks.com/debouncing-throttling-explained-examples/#debounce-examples
+			*/
             getAsyncData: debounce(function (name) {
                 if (!name.length) {
                     this.data = []
                     return
                 }
                 this.isFetching = true
-					fetch(`http://api.mapbox.com/geocoding/v5/mapbox.places/${name}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ&proximity=77.4977,12.9716`) //TODO: remove lat long hardcode
+					fetch(`http://api.mapbox.com/geocoding/v5/mapbox.places/${name}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ&proximity=77.4977,12.9716`) 
+				//TODO: remove lat long hardcode
 				.then(e => e.json())
 				.then((data)=>{
 					try{
 						this.data = data.features.map(e => e.place_name)
-						console.log(this.data)
 					}
 					catch(e){
 						this.data = []
-						console.log("errm")
 						//data.features.forEach((item) => this.data.p)
 					}
 				})
-                //fetch(`https://api.themoviedb.org/3/search/movie?api_key=bb6f51bef07465653c3e553d6ab161a8&query=${name}`)
-				//	.then(e=>e.json())
-                //    .then((data) => {
-                //        console.log(data)
-				//		this.data = []
-                //        data.results.forEach((item) => this.data.push(item))
-                //    })
-                //    .catch((error) => {
-                //        this.data = []
-                //        throw error
-                //    })
-                //    .finally(() => {
-                //        this.isFetching = false
-                //    })
-            }, 500)
+            }, 500),
+			flyToSrp: function(){
+				this.$router.push({name: "PSSrp", query: {"search_loc": this.selected}})
+			}
         }
     }
 </script>

@@ -11,6 +11,8 @@
 	export default{
 		name: "SRP",
 		mounted: function(){
+			var searchParams = new URLSearchParams(window.location.search)
+			console.log(searchParams.get("search_loc"))
 			var mapLoadedTimer;
 			var center = [77.8782,12.9098] //fallout lat long
 			var map;
