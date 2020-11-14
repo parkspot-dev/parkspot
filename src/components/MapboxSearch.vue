@@ -1,17 +1,47 @@
-<template lang="pug">
-	.customherocontainer
-		.customhero
-			.searchbar
-				p.is-size-1.has-text-dark#welcomeText
-					| Search a parking spot near you !
-				input.input.is-primary(v-on:onkeydown="entered($event)")
-			#map
+<template>
+	<div class="customherocontainer">
+		<div class="customhero">
+			<div class="searchbar">
+      			<p class="is-size-1 has-text-dark" id="welcomeText"> Search a parking spot near you ! </p>
+    			<section>
+    			        <b-autocomplete
+    			            :data="data"
+    			            placeholder="e.g. Bangalore"
+    			            field="title"
+    			            :loading="isFetching"
+    			            @typing="getAsyncData"
+    			            @select="option => selected = option">
+    			            <template slot-scope="props">
+    			                    <div class="media-content">
+    			                        {{ props.option }}
+    			                    </div>
+    			            </template>
+    			        </b-autocomplete>
+    			</section>
+				<br>
+				<button class="button is-warning" type="submit" v-on:click="flyToSrp()"> Go !</button>
+			</div>
+			<div id="maph" v-if="mapdisp">
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
+    import debounce from 'lodash/debounce'
+	export default {
+		name: 'PSMap',
+        data() {
+            return {
+                data: [],
+                selected: null,
+                isFetching: false,
+				cdata: [],
+				mapdisp: true,
+            }
+        },
+		mounted: function(){
 
-	
-	window.onload = function(){
 			var mapLoadedTimer;
 			var center = [77.8782,12.9098] //fallout lat long
 			var map;
@@ -20,7 +50,7 @@
 
 			function repaint(pos){
 				map = new mapboxgl.Map({
-				container: 'map', // container id
+				container: 'maph', // container id
 				style: 'mapbox://styles/mapbox/dark-v10', // style URL
 				center: pos, // starting position [lng, lat]
 				zoom: 13 // starting zoom
@@ -30,8 +60,9 @@
 							var elem = document.getElementById("welcomeText")
 							elem.classList.remove("has-text-dark")
 							elem.classList.add("has-text-light")
-							clearInterval(timer)
 						}
+
+						clearInterval(timer)
 				}, 100, mapLoadedTimer, map)
 				map.scrollZoom.disable();
 			}
@@ -40,38 +71,55 @@
 			navigator.geolocation.getCurrentPosition(function(res){
 					//var current = [77.7053, 12.9504]
 					var current = [res.coords.longitude, res.coords.latitude]
-					console.log(current)
 					repaint(current)
 			})
 			var map;
 			repaint(center)
 
-	}
-	export default {
-	  name: "PSMap",
-    data(){
-		  return {
-				citySearch: "Bangalore"	
-		  }
-	  },
-		//watch: {
-		//  citySearch: function(newVal, oldVal){
-		//					fetch(`http://api.mapbox.com/geocoding/v5/mapbox.places/${newVal}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ`).then(e => e.json()).
-		//									then(e => e.features.map(f=>f.place_name)).
-		//									then(e => e.forEach(console.log)).
-		//									catch(console.error)
-		//	}
-		//},
-	  methods: {
-	  	entered: function mapboxSearchEnter(capEvent){
-			if(capEvent.key === "Enter"){
-				console.log("Entered")
-			}
-		}
-	  }
-	};
-</script>
+		},
+        methods: {
+			/*
+				autosuggestions pulling data from remote source via API when reactive with respect to DOM
+				can make lot of network calls; inorder to disallow this we wait for 500ms of delay then and 
+				only then we make a call
 
+				for more info ``https://css-tricks.com/debouncing-throttling-explained-examples/#debounce-examples
+			*/
+            getAsyncData: debounce(function (name) {
+                if (!name.length) {
+                    this.data = []
+                    return
+                }
+                this.isFetching = true
+					fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${name}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ&proximity=77.4977,12.9716`) 
+				//TODO: remove lat long hardcode
+				.then(e => e.json())
+				.then((data)=>{
+					try{
+						this.cdata = data.features
+						this.data = data.features.map(e => e.place_name)
+					}
+					catch(e){
+						this.data = []
+						//data.features.forEach((item) => this.data.p)
+					}
+				})
+            }, 500),
+			flyToSrp: function(){
+				var lng = null
+				var lat = null
+				for(var i = 0; i < this.cdata.length; i++){
+					if(this.cdata[i].place_name === this.selected){
+						lng = this.cdata[i].center[0]
+						lat = this.cdata[i].center[1]
+						break
+					}
+				}
+				this.$router.push({name: "PSSrp", query: {"lat": lat, "lng": lng}})
+			}
+        }
+    }
+</script>
 <style scoped>
 	.customherocontainer{
 		top: 0;
@@ -90,7 +138,7 @@
 		width: 60%;
 		z-index: 1	
 	}
-	#map {
+	#maph {
 		margin: 0;
 		padding: 0;
 		position: absolute; 
@@ -98,9 +146,9 @@
 		bottom: 0; 
 		width: 100%; 
 		height: 100%;
-		z-index: 0;
+		z-index: -1;
 	}
-	#map:focus{
+	#maph:focus{
   		-webkit-filter: blur(0.5px);
   		-moz-filter: blur(0.5px);
   		-o-filter: blur(0.5px);
@@ -108,4 +156,3 @@
   		filter: blur(0.5px); 
 	}
 </style>
-
