@@ -8,7 +8,9 @@
 </template>
 
 <script>
-	window.onload = function(){
+	export default{
+		name: "SRP",
+		mounted: function(){
 			var mapLoadedTimer;
 			var center = [77.8782,12.9098] //fallout lat long
 			var map;
@@ -56,8 +58,7 @@
 			repaint(center)
 
 	}
-	export default{
-		name: "SRP",
+
 	}
 </script>
 <style scoped>

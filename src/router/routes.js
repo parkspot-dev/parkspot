@@ -2,6 +2,7 @@ import Home from '@/views/Home.vue'
 import Thanks from '@/views/Thanks.vue'
 import Faq from '@/views/Faq.vue'
 import PSSrp from '@/views/Srp.vue'
+
 export const routes = [
   {
     path: '/',

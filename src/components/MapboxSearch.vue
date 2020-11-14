@@ -19,7 +19,7 @@
     			        </b-autocomplete>
     			</section>
 			</div>
-			<div id="map" v-if="mapdisp">
+			<div id="maph" v-if="mapdisp">
 			</div>
 
 		</div>
@@ -28,7 +28,17 @@
 
 <script>
     import debounce from 'lodash/debounce'
-	window.onload = function(){
+	export default {
+		name: 'PSMap',
+        data() {
+            return {
+                data: [],
+                selected: null,
+                isFetching: false,
+				mapdisp: true,
+            }
+        },
+		mounted: function(){
 
 			var mapLoadedTimer;
 			var center = [77.8782,12.9098] //fallout lat long
@@ -38,7 +48,7 @@
 
 			function repaint(pos){
 				map = new mapboxgl.Map({
-				container: 'map', // container id
+				container: 'maph', // container id
 				style: 'mapbox://styles/mapbox/dark-v10', // style URL
 				center: pos, // starting position [lng, lat]
 				zoom: 13 // starting zoom
@@ -64,17 +74,7 @@
 			var map;
 			repaint(center)
 
-	}
-    export default {
-		name: 'PSMap',
-        data() {
-            return {
-                data: [],
-                selected: null,
-                isFetching: false,
-				mapdisp: true,
-            }
-        },
+		},
         methods: {
             // You have to install and import debounce to use it,
             // it's not mandatory though.
@@ -133,7 +133,7 @@
 		width: 60%;
 		z-index: 1	
 	}
-	#map {
+	#maph {
 		margin: 0;
 		padding: 0;
 		position: absolute; 
@@ -143,7 +143,7 @@
 		height: 100%;
 		z-index: -1;
 	}
-	#map:focus{
+	#maph:focus{
   		-webkit-filter: blur(0.5px);
   		-moz-filter: blur(0.5px);
   		-o-filter: blur(0.5px);
