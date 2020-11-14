@@ -36,6 +36,7 @@
                 data: [],
                 selected: null,
                 isFetching: false,
+				cdata: [],
 				mapdisp: true,
             }
         },
@@ -59,8 +60,9 @@
 							var elem = document.getElementById("welcomeText")
 							elem.classList.remove("has-text-dark")
 							elem.classList.add("has-text-light")
-							clearInterval(timer)
 						}
+
+						clearInterval(timer)
 				}, 100, mapLoadedTimer, map)
 				map.scrollZoom.disable();
 			}
@@ -94,6 +96,7 @@
 				.then(e => e.json())
 				.then((data)=>{
 					try{
+						this.cdata = data.features
 						this.data = data.features.map(e => e.place_name)
 					}
 					catch(e){
@@ -103,7 +106,16 @@
 				})
             }, 500),
 			flyToSrp: function(){
-				this.$router.push({name: "PSSrp", query: {"search_loc": this.selected}})
+				var lng = null
+				var lat = null
+				for(var i = 0; i < this.cdata.length; i++){
+					if(this.cdata[i].place_name === this.selected){
+						lng = this.cdata[i].center[0]
+						lat = this.cdata[i].center[1]
+						break
+					}
+				}
+				this.$router.push({name: "PSSrp", query: {"lat": lat, "lng": lng}})
 			}
         }
     }

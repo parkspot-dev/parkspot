@@ -11,13 +11,21 @@
 	export default{
 		name: "SRP",
 		mounted: function(){
-			var searchParams = new URLSearchParams(window.location.search)
-			console.log(searchParams.get("search_loc"))
+			var lat = this.getLat()
+			var lng = this.getLng()
+			var center;
 			var mapLoadedTimer;
-			var center = [77.8782,12.9098] //fallout lat long
+			if(lat === null || lng === null){
+				center = [77.8782,12.9098] //fallout lat long
+			}
+			else{
+				center = [lng, lat]
+			}
 			var map;
 			mapboxgl.accessToken = 'pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ';
+			
 			function repaint(pos){
+				console.log("hale", pos)
 				map = new mapboxgl.Map({
 				container: 'map', // container id
 				style: 'mapbox://styles/mapbox/dark-v10', // style URL
@@ -30,9 +38,9 @@
 							if(elem !== null){
 								elem.classList.remove("has-text-dark")
 								elem.classList.add("has-text-light")
-								clearInterval(timer)
 							}
 						}
+						clearInterval(timer)
 				}, 100, mapLoadedTimer, map)
 				map.scrollZoom.disable();
 				var nmarkers = 10;
@@ -49,16 +57,27 @@
 
 			}
 			
-
-			navigator.geolocation.getCurrentPosition(function(res){
-					//var current = [77.7053, 12.9504]
-					var current = [res.coords.longitude, res.coords.latitude]
-					console.log(current)
-					repaint(current)
-			})
+			if(lat === null || lng === null){
+				navigator.geolocation.getCurrentPosition(function(res){
+						//var current = [77.7053, 12.9504]
+						var current = [res.coords.longitude, res.coords.latitude]
+						console.log(current)
+						repaint(current)
+				})
+			}
 			var map;
 			repaint(center)
 
+	},
+	methods: {
+		getLat: function(){
+			var queryParam = new URLSearchParams(window.location.search)
+			return queryParam.get("lat")
+		},
+		getLng: function(){
+			var queryParam = new URLSearchParams(window.location.search)
+			return queryParam.get("lng")
+		},
 	}
 
 	}
