@@ -10,7 +10,7 @@
                 p.title.has-text-black
                   | {{carousel.title}}
                 br
-                p.subtitle.has-text-black
+                pre.subtitle.has-text-black
                   | {{carousel.subtitle}}
               .column.is-half(v-else)
                 p.title
@@ -29,7 +29,7 @@ export default {
     return {
       carousels: [
         { title: "Park Smart with ParkSpot!", 
-          subtitle: "In case you are fed up of drifting through the traffic to find a parking lot on a hit and trial basis, we are here to help you out.\n ParkSpot is a completely automated parking spot booking platform for the new generation.\nParkSpot aims to provide you a secured parking reservation in your desired locality, with real time surveillance, anytime anywhere at the cost of the parking bill for the available spots.", 
+          subtitle: 'In case you are fed up of drifting through the traffic to find a parking lot on a hit and trial basis, we are here to help you out.\n\nParkSpot is a completely automated parking spot booking platform for the new generation.\n\We aims to provide you a secured parking reservation in your desired locality, with real time surveillance, anytime anywhere at the cost of the parking bill for the available spots.', 
           path: require("@/assets/banners/1b.png"), 
           color: 'black', 
           istextb: false
@@ -61,5 +61,11 @@ export default {
   .eightypercent{
 		  margin: auto;
 		  width: 90%;
+  }
+  pre{
+    background-color : transparent;
+    white-space: pre-line;
+    text-align: justify;
+    font-family:'Ubuntu';
   }
 </style>
