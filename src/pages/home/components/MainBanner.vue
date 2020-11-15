@@ -28,13 +28,13 @@ export default {
   data () {
     return {
       carousels: [
-        { title: "ParkSpot... the parking app", 
-          subtitle: "No more drifting through traffic use \n the ParkSpot app to reserve a parking spot !", 
+        { title: "Park Smart with ParkSpot!", 
+          subtitle: "In case you are fed up of drifting through the traffic to find a parking lot on a hit and trial basis, we are here to help you out.\n ParkSpot is a completely automated parking spot booking platform for the new generation.\nParkSpot aims to provide you a secured parking reservation in your desired locality, with real time surveillance, anytime anywhere at the cost of the parking bill for the available spots.", 
           path: require("@/assets/banners/1b.png"), 
           color: 'black', 
           istextb: false
         },
-        { title: "Worried about security ?", 
+        { title: "Worried about security?", 
           subtitle: "We'll make sure no harm occurs to your property. To ensure this you can monitor your property in real time", 
           path: require("@/assets/banners/2b.png"), 
           color: 'warning', 
