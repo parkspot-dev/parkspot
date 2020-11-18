@@ -1,5 +1,5 @@
  <template lang="pug">
-	footer.footer
+	footer.footer#black
 		.content.has-text-centered
 			.footercontainer
 				.containersocial
@@ -8,10 +8,10 @@
 					//		a(:href="`${elem.href}`")
 					//			img(class="footericons" :src="`${elem.image}`")
 				br
-				p
-				|© 2020 
-				strong The Thought Engine 
-				|- All rights reserved.
+				p.has-text-white
+					|© 2020 
+					strong.has-text-white The Thought Engine 
+					|- All rights reserved.
 </template>
 <script>
 	export default{
@@ -37,5 +37,8 @@
 	}
 	.bottomicons{
 		width: 20%;
+	}
+	#black{
+		background: black;
 	}
 </style>

@@ -16,7 +16,7 @@
                 p.title
                   | {{carousel.title}}
                 br
-                p.subtitle
+                p.subtitle(style="white-space: pre-line")
                   | {{carousel.subtitle}}
               .column.is-half
                 img(:src="`${carousel.path}`")
