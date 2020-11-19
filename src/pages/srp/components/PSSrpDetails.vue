@@ -4,33 +4,29 @@
 		.hero
 			p.title.has-text-left
 				| Results:
-			.columns(v-for="(site, i) in sites" :key="i")
-				.column
-				.column.is-three-quarters
-					//.rcorner
-					//	| {{ site.name }}
-					.card
-						.columns
-							.column.is-half
-								.image.is-4by3
-									img(src="https://bulma.io/images/placeholders/1280x960.png")
-							.column.is-half
-								p.has-text-left.is-size-7
-									| {{site.type}}
-								p.subtitle.has-text-left
-									| {{site.name}}
-								br
-								p.has-text-left.is-size-6
-									| {{site.location}}
-								br
-								p.has-text-right.is-size-6
-									| Rate:   &#x20b9; {{site.rate}}/{{site.unit}}     
-						a.button.is-warning
-							| Book
-						br
-						br
-				.column
-
+			.containers
+				.rcorner(v-for="(site, i) in sites" :key="i")
+					.columns.is-vcentered
+						.column.is-half
+							.image.is-4by3
+								img.resultimg(src="https://bulma.io/images/placeholders/1280x960.png")
+						.column.is-half
+							p.has-text-left.is-size-7
+								| {{site.type}}
+							p.subtitle.has-text-left
+								| {{site.name}}
+							br
+							p.has-text-left.is-size-6
+								| {{site.location}}
+							br
+							p.has-text-right.is-size-6
+								| Rate: &#x20b9; {{site.rate}}//{{site.unit}}
+							a.button.is-warning
+								| Book
+							br
+							br
+				br
+				br
 					
 </template>
 <script>
@@ -114,10 +110,18 @@ export default{
 <style scoped>
 .rcorner{
 	border-radius: 25px;
-	background: grey;
+	border: 1px solid black;
+	padding: 10px;
 }
 .cont{
 	width: 80%;
 	margin: 0 auto;
+}
+.containers{
+	width: 80%;
+	margin: 0 auto;
+}
+.resultimg{
+	border-radius: 25px;
 }
 </style>
