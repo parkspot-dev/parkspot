@@ -19,7 +19,7 @@
 				center = [77.8782,12.9098] //fallout lat long
 			}
 			else{
-				center = [lng, lat]
+				center = [lat,lng] //[lng, lat]
 			}
 			var map;
 			mapboxgl.accessToken = 'pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ';
@@ -72,10 +72,12 @@
 	methods: {
 		getLat: function(){
 			var queryParam = new URLSearchParams(window.location.search)
+			console.log(queryParam.get("lat"))
 			return queryParam.get("lat")
 		},
 		getLng: function(){
 			var queryParam = new URLSearchParams(window.location.search)
+			console.log(queryParam.get("lng"))
 			return queryParam.get("lng")
 		},
 	}

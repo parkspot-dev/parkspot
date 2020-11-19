@@ -11,16 +11,16 @@
 							.image.is-4by3
 								img.resultimg(src="https://bulma.io/images/placeholders/1280x960.png")
 						.column.is-half
-							p.has-text-left.is-size-7
-								| {{site.type}}
-							p.subtitle.has-text-left
-								| {{site.name}}
-							br
-							p.has-text-left.is-size-6
-								| {{site.location}}
-							br
-							p.has-text-right.is-size-6
-								| Rate: &#x20b9; {{site.rate}}//{{site.unit}}
+							.grid
+								.tname
+									.has-text-left.is-size-7
+										| {{site.type}}
+									.subtitle.has-text-left
+										| {{site.name}}
+								.loc.has-text-left.is-size-6
+									| {{site.location}}
+								.rate.has-text-right.is-size-6
+									| Rate: &#x20b9; {{site.rate}}//{{site.unit}}
 
 				br
 				.floatright
@@ -46,7 +46,7 @@ export default{
 				},
 				{
 					name: "Vijaya Niketan",
-					location: "Vijayanikethan Apartment, Kasavanahalli, Sarjapur",
+					location: "Vijayanikethan Apartment, Norbert Church road, Kasavanahalli, Sarjapur, Karnataka 560035",
 					latLng: [12.9151665, 77.6879585],
 					rate: 10,
 					unit: "hour",
@@ -128,5 +128,10 @@ export default{
 .floatright{
 	float: right;
 	padding-right: 1%;
+}
+.grid{
+	display: grid;
+	grid-template-rows: 1fr 2fr 1fr;
+	align-content: space-around;
 }
 </style>
