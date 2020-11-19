@@ -4,8 +4,8 @@
 		.hero
 			p.title.has-text-left
 				| Results:
-			.containers
-				.rcorner(v-for="(site, i) in sites" :key="i")
+			.containers(v-for="(site, i) in sites" :key="i")
+				.rcorner
 					.columns.is-vcentered
 						.column.is-half
 							.image.is-4by3
@@ -21,10 +21,11 @@
 							br
 							p.has-text-right.is-size-6
 								| Rate: &#x20b9; {{site.rate}}//{{site.unit}}
-							a.button.is-warning
-								| Book
-							br
-							br
+
+				br
+				.floatright
+					a.button.is-warning
+						| Book
 				br
 				br
 					
@@ -110,7 +111,7 @@ export default{
 <style scoped>
 .rcorner{
 	border-radius: 25px;
-	border: 1px solid black;
+	border: 0.5px solid black;
 	padding: 10px;
 }
 .cont{
@@ -123,5 +124,9 @@ export default{
 }
 .resultimg{
 	border-radius: 25px;
+}
+.floatright{
+	float: right;
+	padding-right: 1%;
 }
 </style>
