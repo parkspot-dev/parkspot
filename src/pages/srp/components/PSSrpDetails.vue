@@ -8,8 +8,8 @@
 				.rcorner
 					.columns.is-vcentered
 						.column.is-half
-							.image.is-4by3
-								img.resultimg(src="https://bulma.io/images/placeholders/1280x960.png")
+							.image.is-1by1
+								img.resultimg(:src="`${newPSSite}`")
 						.column.is-half
 							.grid
 								.tname
@@ -18,9 +18,14 @@
 									.subtitle.has-text-left
 										| {{site.name}}
 								.loc.has-text-left.is-size-6
+									strong
+										| Address: 
 									| {{site.location}}
 								.rate.has-text-right.is-size-6
-									| Rate: &#x20b9; {{site.rate}}//{{site.unit}}
+									strong
+										| Rate:
+										|  
+									| &#x20b9; {{site.rate}}/{{site.unit}}
 
 				br
 				.floatright
@@ -35,6 +40,7 @@ export default{
 	name: "PSSrpDetails",
 	data: function(){
 		return {
+			newPSSite: require("@/assets/psites/new.png"),
 			sites: [
 				{
 					name: "Muthumariamma Temple",
@@ -124,6 +130,7 @@ export default{
 }
 .resultimg{
 	border-radius: 25px;
+	width: 50%;
 }
 .floatright{
 	float: right;
@@ -131,7 +138,7 @@ export default{
 }
 .grid{
 	display: grid;
-	grid-template-rows: 1fr 2fr 1fr;
-	align-content: space-around;
+	align-items: center;
+	grid-template-rows: 1fr 3fr 1fr;
 }
 </style>
