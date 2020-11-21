@@ -8,8 +8,7 @@
 				.rcorner
 					.columns.is-vcentered
 						.column.is-half
-							.image.is-1by1
-								img.resultimg(:src="`${newPSSite}`")
+							img.resultimg(:src="`${newPSSite}`")
 						.column.is-half
 							.grid
 								.tname
@@ -26,11 +25,12 @@
 										| Rate:
 										|  
 									| &#x20b9; {{site.rate}}/{{site.unit}}
+							.floatright
+								a.button.is-warning
+									| Book
 
 				br
-				.floatright
-					a.button.is-warning
-						| Book
+
 				br
 				br
 					
@@ -119,6 +119,7 @@ export default{
 	border-radius: 25px;
 	border: 0.5px solid black;
 	padding: 10px;
+	box-shadow: 5px 10px 18px black; /*hsl(48, 100%, 67%);*/
 }
 .cont{
 	width: 80%;
