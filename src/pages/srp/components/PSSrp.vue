@@ -19,7 +19,7 @@
 				center = [77.8782,12.9098] //fallout lat long
 			}
 			else{
-				center = [lng, lat]
+				center = [Number(lng), Number(lat)]
 			}
 			var map;
 			mapboxgl.accessToken = 'pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ';
@@ -32,16 +32,6 @@
 				center: pos, // starting position [lng, lat]
 				zoom: 13 // starting zoom
 				});
-				mapLoadedTimer = setInterval(function(timer, map){
-						if(map.loaded()){
-							var elem = document.getElementById("welcomeText")
-							if(elem !== null){
-								elem.classList.remove("has-text-dark")
-								elem.classList.add("has-text-light")
-							}
-						}
-						clearInterval(timer)
-				}, 100, mapLoadedTimer, map)
 				map.scrollZoom.disable();
 				var nmarkers = 10;
 				var markers = []
@@ -72,10 +62,12 @@
 	methods: {
 		getLat: function(){
 			var queryParam = new URLSearchParams(window.location.search)
+			console.log(queryParam.get("lat"))
 			return queryParam.get("lat")
 		},
 		getLng: function(){
 			var queryParam = new URLSearchParams(window.location.search)
+			console.log(queryParam.get("lng"))
 			return queryParam.get("lng")
 		},
 	}

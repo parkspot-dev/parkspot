@@ -155,4 +155,7 @@
   		-ms-filter: blur(0.5px);
   		filter: blur(0.5px); 
 	}
+	.media-content{
+		text-align: left;
+	}
 </style>

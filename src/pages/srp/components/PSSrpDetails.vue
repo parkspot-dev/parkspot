@@ -4,33 +4,35 @@
 		.hero
 			p.title.has-text-left
 				| Results:
-			.columns(v-for="(site, i) in sites" :key="i")
-				.column
-				.column.is-three-quarters
-					//.rcorner
-					//	| {{ site.name }}
-					.card
-						.columns
-							.column.is-half
-								.image.is-4by3
-									img(src="https://bulma.io/images/placeholders/1280x960.png")
-							.column.is-half
-								p.has-text-left.is-size-7
-									| {{site.type}}
-								p.subtitle.has-text-left
-									| {{site.name}}
-								br
-								p.has-text-left.is-size-6
+			.containers(v-for="(site, i) in sites" :key="i")
+				.rcorner
+					.columns.is-vcentered
+						.column.is-half
+							img.resultimg(:src="`${newPSSite}`")
+						.column.is-half
+							.grid
+								.tname
+									.has-text-left.is-size-7
+										| {{site.type}}
+									.subtitle.has-text-left
+										| {{site.name}}
+								.loc.has-text-left.is-size-6
+									strong
+										| Address: 
 									| {{site.location}}
-								br
-								p.has-text-right.is-size-6
-									| Rate:   &#x20b9; {{site.rate}}/{{site.unit}}     
-						a.button.is-warning
-							| Book
-						br
-						br
-				.column
+								.rate.has-text-right.is-size-6
+									strong
+										| Rate:
+										|  
+									| &#x20b9; {{site.rate}}/{{site.unit}}
+							.floatright
+								a.button.is-warning
+									| Book
 
+				br
+
+				br
+				br
 					
 </template>
 <script>
@@ -38,6 +40,7 @@ export default{
 	name: "PSSrpDetails",
 	data: function(){
 		return {
+			newPSSite: require("@/assets/psites/new.png"),
 			sites: [
 				{
 					name: "Muthumariamma Temple",
@@ -49,7 +52,7 @@ export default{
 				},
 				{
 					name: "Vijaya Niketan",
-					location: "Vijayanikethan Apartment, Kasavanahalli, Sarjapur",
+					location: "Vijayanikethan Apartment, Norbert Church road, Kasavanahalli, Sarjapur, Karnataka 560035",
 					latLng: [12.9151665, 77.6879585],
 					rate: 10,
 					unit: "hour",
@@ -114,10 +117,30 @@ export default{
 <style scoped>
 .rcorner{
 	border-radius: 25px;
-	background: grey;
+	border: 0.5px solid black;
+	padding: 10px;
+	box-shadow: 5px 10px 18px black; /*hsl(48, 100%, 67%);*/
 }
 .cont{
 	width: 80%;
 	margin: 0 auto;
+}
+.containers{
+	width: 80%;
+	margin: 0 auto;
+}
+.resultimg{
+	border-radius: 25px;
+	width: 50%;
+}
+.floatright{
+	float: right;
+	padding-right: 10%;
+	padding-bottom: 5%;
+}
+.grid{
+	display: grid;
+	align-items: center;
+	grid-template-rows: 1fr 3fr 1fr;
 }
 </style>
