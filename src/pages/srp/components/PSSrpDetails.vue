@@ -135,7 +135,8 @@ export default{
 }
 .floatright{
 	float: right;
-	padding-right: 1%;
+	padding-right: 10%;
+	padding-bottom: 5%;
 }
 .grid{
 	display: grid;
