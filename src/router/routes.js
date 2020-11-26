@@ -2,6 +2,7 @@ import Home from '@/views/Home.vue'
 import Thanks from '@/views/Thanks.vue'
 import Faq from '@/views/Faq.vue'
 import PSSrp from '@/views/Srp.vue'
+import Blog1 from '@/views/Blog1.vue'
 
 export const routes = [
   {
@@ -27,11 +28,16 @@ export const routes = [
   },
   {
   	path: '/srp',
-	name: 'PSSrp',
-	component: PSSrp
-  },
+		name: 'PSSrp',
+		component: PSSrp
+	},
+	{
+		path: '/blog/eliminating-reason-for-traffic-jam',
+		name: 'EliminateTrafficJam',
+		component: Blog1
+	},
   {
-  	path: '*',
+  path: '*',
 	beforeRouteEnter: (to, from, next)=>{
 		console.log(`route from ${to} to ${from}`)
 		next('/')
