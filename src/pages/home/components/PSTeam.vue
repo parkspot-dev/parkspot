@@ -16,7 +16,7 @@
 										figure.image.is-48x48
 											img(:src="`${parkspot}`")
 									.media-content
-										p.title.is-4.has-text-black
+										p.title.is-4.has-text-black.nowrap
 											| {{team.name}} 
 										p.subtitle.is-6.has-text-black
 											| {{team.username}}
@@ -75,3 +75,8 @@
 		}
   }
 </script>
+<style scoped>
+.nowrap{
+	word-break: normal;
+}
+</style>
