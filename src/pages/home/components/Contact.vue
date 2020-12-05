@@ -14,7 +14,7 @@
 					p.subtitle.has-text-black.has-text-left
 						|Email: connect@parkspot.in
 					p.subtitle.has-text-left 
-						|Call: 8092996057
+						|Call: +91 80929 96057
 					iframe(src="https://maps.google.com/maps?q=bhavya%20serene&t=&z=13&ie=UTF8&iwloc=&output=embed" height="45%" width="100%")
 				.column.is-half.contact
 					p.title.has-text-black.has-text-left Got suggestions?
