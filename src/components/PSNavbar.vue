@@ -28,6 +28,8 @@
             | Rent
           b-navbar-item(tag="router-link" :to="{ path: '/faq' }")
             | FAQs
+          b-navbar-item(tag="router-link" :to="{ path: '/blog/eliminating-reason-for-traffic-jam' }")
+            | Blog
           b-navbar-item(href="/#about")
             | About
           b-navbar-item(href="/#contact")
