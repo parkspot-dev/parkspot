@@ -39,6 +39,36 @@
     </form>
 </template>
 <script>
+var utilFunctions = {
+	postData: async function(url = '', data = {}) {
+	  // Default options are marked with *
+	  const response = await fetch(url, {
+	    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+	    mode: 'cors', // no-cors, *cors, same-origin
+	    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+	    credentials: 'same-origin', // include, *same-origin, omit
+	    headers: {
+	      'Content-Type': 'application/json'
+	    },
+	    redirect: 'follow', // manual, *follow, error
+	    referrerPolicy: 'origin', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+	    body: JSON.stringify(data) // body data type must match "Content-Type" header
+	  });
+	  return response.json(); // parses JSON response into native JavaScript objects
+	},
+	getAccessToken: async function(){
+		var resp = await utils.postData('https://cors-anywhere.herokuapp.com/'+'http://168.63.243.20:5002/auth/login', { Username: "sud", Password: "ambastha@1"})
+		try{
+			var status = resp.status
+			var token = resp.token
+			return token
+		}
+		catch(e){
+			console.error("failed to extract token", e)
+			return ""
+		}
+	}
+}
 export default{
 	name: "ModalForm",
 	data(){
@@ -48,30 +78,7 @@ export default{
 		}
 	},
 	methods: {
-		handleLogin: function(){
-			fetch('http://168.63.243.20:5002/login', {
-				method: 'POST',
-				mode: 'cors',
-				body: JSON.stringify({Username: this.loginUser, Password: this.loginPassword}),
-				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-				credentials: 'include', // include, *same-origin, omit
-				
-				headers: {
-				  'Content-Type': 'application/json',
-				  'Access-Control-Allow-Origin': '*'
-				},
-				redirect: 'follow', // manual, *follow, error
-				referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-				    
-			})
-			.then((response)=>{
-				console.log(response)
-			})
-			.catch((err)=>{
-				console.log(err)
-				this.$emit('close')
-			})
-		},
+		handleLogin: utilFuntions.getAccessToken,
 	}
 }
 </script>
