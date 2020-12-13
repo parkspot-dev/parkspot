@@ -41,13 +41,15 @@
 					const jsonResponse = resp.json().then((sites)=>{
 					var arr = []
 					sites = sites["Sites"]
+					var markers = []
 					for(var i=0;i<sites.length;i++){
 						var temp = {}
 						temp["name"] = sites[i]["Name"]
 						temp["location"] = ""
-						temp["latLng"] = [Number(sites[i].Lat), Number(sites[i].Lng)]
+						temp["latLng"] = [Number(sites[i].Lat), Number(sites[i].Long)]
 						try{
-							new mapboxgl.Marker().setLngLat([Number(sites[i].Long), Number(sites[i].Lat)]).addTo(map)
+							markers.push([Number(sites[i].Long), Number(sites[i].Lat)])
+							//new mapboxgl.Marker().setLngLat([Number(sites[i].Long), Number(sites[i].Lat)]).addTo(map)
 						}
 						catch(e){
 							console.log(sites[i].Lat, sites[i].Lng)
@@ -59,6 +61,13 @@
 						temp["imageURI"] = sites[i]["IconURL"] 
 						arr.push(temp)
 					}
+					var centroid = this.calculateCentroid(arr)
+					console.log("centurion", centroid)
+					repaint(centroid)
+					for(var i of markers){
+						new mapboxgl.Marker({color: "#2F4F4F"}).setLngLat(i).addTo(map)
+					}
+					new mapboxgl.Marker({color: "#000"}).setLngLat(i).addTo(map)
 					this.$root.$emit("sitesReady", arr)
 					})
 				})
@@ -98,6 +107,20 @@
 
 	},
 	methods: {
+		calculateCentroid: function(arr){
+			console.log(arr)
+			var xs = arr.reduce((a,e)=>{
+				const cord = e["latLng"][0]
+				return a + cord
+			}
+			,0)
+			var ys = arr.reduce((a,e)=>{
+				const cord = e["latLng"][1]
+				return a + cord
+			}
+			,0)
+			return [ys/arr.length, xs/arr.length]
+		},
 		getLat: function(){
 			var queryParam = new URLSearchParams(window.location.search)
 			console.log(queryParam.get("lat"))
