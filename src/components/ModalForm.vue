@@ -58,15 +58,9 @@ var utilFunctions = {
 	},
 	getAccessToken: async function(){
 		var resp = await utils.postData('https://cors-anywhere.herokuapp.com/'+'http://168.63.243.20:5002/auth/login', { Username: "sud", Password: "ambastha@1"})
-		try{
-			var status = resp.status
-			var token = resp.token
-			return token
-		}
-		catch(e){
-			console.error("failed to extract token", e)
-			return ""
-		}
+		var status = resp.status
+		var token = resp.token || ""
+		return token
 	}
 }
 export default{
