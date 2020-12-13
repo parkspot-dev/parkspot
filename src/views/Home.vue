@@ -2,7 +2,7 @@
   <div id="app">
 	<PSNavbar />
 	<PSMap />
-    <MainBanner />
+	<!--<MainBanner /> -->
 	<Services />
 	<PSTeam />
 	<PSSites />

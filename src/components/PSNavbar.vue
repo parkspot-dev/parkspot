@@ -15,7 +15,7 @@
             .buttons(v-else)
               b-navbar-item.button.is-dark
                 strong Sign Up
-              b-navbar-item.button.is-warning(@click="cardModal()" @close="forceUpdate")
+              b-navbar-item.button.is-warning(@click="cardModal()")
                 strong Log In
       b-navbar.is-dark#mainNav
         template(slot='end')
@@ -55,6 +55,7 @@ export default {
   name: 'PSNavbar',
   methods: {
 		updateComponent(){
+			console.log("refreshing component")
 			this.$forceUpdate()
 		},
 		logout(){
@@ -68,8 +69,13 @@ export default {
                     component: ModalForm,
                     hasModalCard: true,
                     customClass: 'custom-class custom-class-2',
-                    trapFocus: true
-                })
+                    trapFocus: true,
+					events: {
+						"loggedInEvent": ()=>{
+							this.updateComponent()	
+						}	
+					}
+				})
     	},
 		 isLoggedIn(){
 			if(localStorage.getItem("PSToken") === null){

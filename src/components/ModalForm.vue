@@ -75,7 +75,7 @@ export default{
 				if(token !== ""){
 					this.isLoading = false
 					localStorage.setItem("PSToken", token)
-					this.$emit("loggedInEvent")
+					this.$emit("loggedInEvent") //loggedInEvent
 					this.$emit("close")
 				}
 				else{
