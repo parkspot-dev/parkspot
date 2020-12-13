@@ -8,7 +8,7 @@
 				.rcorner
 					.columns.is-vcentered
 						.column.is-half
-							img(:src="site.imageURI")
+							img.resultimg(:src="site.imageURI")
 						.column.is-half
 							.grid
 								.tname
@@ -16,10 +16,10 @@
 										| {{site.type}}
 									.subtitle.has-text-left
 										| {{site.name}}
-								.loc.has-text-left.is-size-6
-									strong
-										| Address: 
-									| {{site.location}}
+								//.loc.has-text-left.is-size-6
+								//	strong
+								//		| Address: 
+								//	| {{site.location}}
 								.rate.has-text-right.is-size-6
 									strong
 										| Rate:
@@ -143,7 +143,7 @@ export default{
 }
 .resultimg{
 	border-radius: 25px;
-	width: 50%;
+	width: 100%;
 }
 .floatright{
 	float: right;
@@ -153,6 +153,6 @@ export default{
 .grid{
 	display: grid;
 	align-items: center;
-	grid-template-rows: 1fr 3fr 1fr;
+	grid-template-rows: 1fr 1fr; /*1 3 1*/
 }
 </style>
