@@ -34,6 +34,7 @@
             <footer class="modal-card-foot">
                 <button class="button" type="button" @click="$emit('close')">Close</button>
                 <button class="button is-warning" @click="getAccessToken()" v-on:click.prevent="getAccessToken()">Login</button>
+				<div v-if="isLoading" class="lds-dual-ring"></div>
             </footer>
         </div>
     </form>
@@ -44,12 +45,14 @@ export default{
 	data(){
 		return {
 			loginPassword: "",
-			loginUser: ""
+			loginUser: "",
+			isLoading: false
 		}
 	},
 	methods: {
 		postData: async function(url = '', data = {}) {
 		  // Default options are marked with *
+		  this.Loading = true
 		  const response = await fetch(url, {
 		    method: 'POST', // *GET, POST, PUT, DELETE, etc.
 		    mode: 'cors', // no-cors, *cors, same-origin
@@ -68,9 +71,50 @@ export default{
 			var resp = await this.postData('https://cors-anywhere.herokuapp.com/'+'http://168.63.243.20:5002/auth/login', { Username: "sud", Password: "ambastha@1"})
 			var status = resp.status
 			var token = resp.token || ""
-			console.log("received token",token)
-			return token
+			if(localStorage !== undefined){
+				if(token !== ""){
+					this.isLoading = false
+					localStorage.setItem("PSToken", token)
+					this.$emit("loggedInEvent")
+					this.$emit("close")
+				}
+				else{
+					//insert here headshake animate css #wrong password
+					console.log("Invalid token")
+				}
+			}
+			else{
+				console.log("localStorage access is not available")
+			}
+			this.isLoading = false
 		}
 	}
 }
 </script>
+<style>
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 70%;
+  height: 70%;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid hsl(48, 100%, 67%);
+  border-color: hsl(48, 100%, 67%) transparent hsl(48, 100%, 67%) transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>
+

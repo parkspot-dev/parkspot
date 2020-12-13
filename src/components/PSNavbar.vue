@@ -9,11 +9,14 @@
             img(:src="`${minilogotext.path}`" placeholder="ParkSpot" id="maximize")
         template(slot='end')
           b-navbar-item(tag='div')
-            .buttons
+            .buttons(v-if="isLoggedIn()")
+              b-navbar-item.button.is-warning(@click="logout()")
+                strong Log Out
+            .buttons(v-else)
               b-navbar-item.button.is-dark
-                strong Sign up
-              b-navbar-item.button.is-warning(@click="cardModal()")
-                strong Log in
+                strong Sign Up
+              b-navbar-item.button.is-warning(@click="cardModal()" @close="forceUpdate")
+                strong Log In
       b-navbar.is-dark#mainNav
         template(slot='end')
           b-navbar-item(tag="router-link" :to="{ path: '/' }")
@@ -51,6 +54,13 @@ var timer = setInterval(function(){
 export default {
   name: 'PSNavbar',
   methods: {
+		updateComponent(){
+			this.$forceUpdate()
+		},
+		logout(){
+			localStorage.removeItem("PSToken")
+			this.updateComponent()
+		},
 		cardModal() {
 				console.log("hello")
                 this.$buefy.modal.open({
@@ -60,12 +70,22 @@ export default {
                     customClass: 'custom-class custom-class-2',
                     trapFocus: true
                 })
-    }
+    	},
+		 isLoggedIn(){
+			if(localStorage.getItem("PSToken") === null){
+					console.log("no cookie")
+					return false
+			}
+			else{
+				console.log("cookie is ready to eat")
+				return true
+			}
+		 }
 	},
 	data: function(){
 		return {
 			minilogotext: {path: require("@/assets/pstoptext.png")},
-			minilogo: {path: require("@/assets/pstopmini.png")}
+			minilogo: {path: require("@/assets/pstopmini.png")},
 		}
 	}
 };
