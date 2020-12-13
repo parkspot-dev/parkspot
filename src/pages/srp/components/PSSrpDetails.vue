@@ -4,11 +4,11 @@
 		.hero
 			p.title.has-text-left
 				| Results:
-			.containers(v-for="(site, i) in sites" :key="i")
+			.containers(v-for="(site, i) in PSSites")
 				.rcorner
 					.columns.is-vcentered
 						.column.is-half
-							img.resultimg(:src="`${newPSSite}`")
+							img(:src="site.imageURI")
 						.column.is-half
 							.grid
 								.tname
@@ -38,39 +38,51 @@
 <script>
 export default{
 	name: "PSSrpDetails",
+		
 	data: function(){
 		return {
 			newPSSite: require("@/assets/psites/new.png"),
-			sites: [
-				{
-					name: "Muthumariamma Temple",
-					location: "Off Kasavanahalli Main Road Off Kasavanahalli Main Road, Norbert Church Rd, Kasavanahalli, Karnataka 560035",
-					latLng: [13.012172800000002, 77.6077312],
-					rate: 10,
-					unit: "day",
-					type: "private parking"
-				},
-				{
-					name: "Vijaya Niketan",
-					location: "Vijayanikethan Apartment, Norbert Church road, Kasavanahalli, Sarjapur, Karnataka 560035",
-					latLng: [12.9151665, 77.6879585],
-					rate: 10,
-					unit: "hour",
-					type: "private parking"
-				},
-				{
-					name: "Ittina Mahavir",
-					location: "O block 102, Ittina Mahavir, Neeladri Nagar, Electronic City Phase 1, Bangalore Karnataka 560100",
-					latLng: [12.8402, 77.6482],
-					rate: 20,
-					unit: "month",
-					type: "housing society parking"
-				}
+			PSSites: [
+				//{
+				//	name: "Muthumariamma Temple",
+				//	location: "Off Kasavanahalli Main Road Off Kasavanahalli Main Road, Norbert Church Rd, Kasavanahalli, Karnataka 560035",
+				//	latLng: [13.012172800000002, 77.6077312],
+				//	rate: 10,
+				//	unit: "day",
+				//	type: "private parking"
+				//},
+				//{
+				//	name: "Vijaya Niketan",
+				//	location: "Vijayanikethan Apartment, Norbert Church road, Kasavanahalli, Sarjapur, Karnataka 560035",
+				//	latLng: [12.9151665, 77.6879585],
+				//	rate: 10,
+				//	unit: "hour",
+				//	type: "private parking"
+				//},
+				//{
+				//	name: "Ittina Mahavir",
+				//	location: "O block 102, Ittina Mahavir, Neeladri Nagar, Electronic City Phase 1, Bangalore Karnataka 560100",
+				//	latLng: [12.8402, 77.6482],
+				//	rate: 20,
+				//	unit: "month",
+				//	type: "housing society parking"
+				//}
 			]
 		}	
 	},
+	mounted(){
+		this.fillSites(this)
+		this.getLatLng()
+	},
 	methods: {
-		"getLatLng": function(){
+		fillSites(master){
+			this.$root.$on("sitesReady", function(sites){
+				for(var i=0;i<sites.length;i++){
+					master.PSSites.push(sites[i])	
+				}
+			})
+		},
+		getLatLng(){
 			return new Promise(function(resolve, reject){
 				navigator.geolocation.getCurrentPosition(function(data){
 					var lat = data.coords.latitude
@@ -84,7 +96,7 @@ export default{
 				})	
 			})
 		},
-		"calcDist": function(lat1, lat2, lng1, lng2,mode="K"){
+		calcDist(lat1, lat2, lng1, lng2,mode="K"){
 			//returns distance between two lat longs in meters
 			var phi1 = lat1 * Math.PI/180
 			var phi2 = lat2 * Math.PI/180
@@ -106,7 +118,7 @@ export default{
 					return 0
 			}
 		},
-		"filterDist": function(lat, lng){
+		filterDist(lat, lng){
 			return this.sites.filter(function(elem){
 				return distance(lat, elem.latLng[0], lng, elem.latLng[1]) < 60
 			})	

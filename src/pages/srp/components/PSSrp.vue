@@ -11,8 +11,8 @@
 	export default{
 		name: "SRP",
 		mounted: function(){
-			var lat = this.getLat()
-			var lng = this.getLng()
+			var lat = 12.8576 //this.getLat()
+			var lng = 77.338291 //this.getLng()
 			var center;
 			var mapLoadedTimer;
 			if(lat === null || lng === null){
@@ -23,7 +23,31 @@
 			}
 			var map;
 			mapboxgl.accessToken = 'pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ';
-			
+			fetch("https://cors-anywhere.herokuapp.com/"+`http://168.63.243.20:5002/search?lat=12.8576&long=77.7864&start=20201115t1250&end=20201115t1400`, {
+		    	method: 'GET', // *GET, POST, PUT, DELETE, etc.
+		    	headers: {
+    			  'Accept': '*/*',
+		    	  'Content-Type': 'application/json',
+		    	},
+				})
+				.then((resp)=>{
+					const jsonResponse = resp.json().then((sites)=>{
+					var arr = []
+					sites = sites["Sites"]
+					for(var i=0;i<sites.length;i++){
+						var temp = {}
+						temp["name"] = sites[i]["Name"]
+						temp["location"] = ""
+						temp["latLng"] = [sites[i].Lat, sites[i].Lng],
+						temp["rate"] = sites[i]["Fee"]["BaseAmount"]
+						temp["unit"] = sites[i]["RentUnit"]
+						temp["type"] = "private parking"
+						temp["imageURI"] = sites[i]["IconURL"] 
+						arr.push(temp)
+					}
+					this.$root.$emit("sitesReady", arr)
+					})
+				})
 			function repaint(pos){
 				console.log("hale", pos)
 				map = new mapboxgl.Map({
@@ -33,20 +57,20 @@
 				zoom: 13 // starting zoom
 				});
 				map.scrollZoom.disable();
-				var nmarkers = 10;
-				var markers = []
-				for(var i=0;i<nmarkers;i++){
-					var tpos = [...pos]
-					var min = 0.01
-					var max = 0.2
-					tpos[-1] = tpos[0] + (Math.random() * (max - min) + min)
-					tpos[1] = tpos[1] + (Math.random() * (max - min) + min)
-					console.log(tpos)
-					var marker = new mapboxgl.Marker().setLngLat(tpos).addTo(map)
-				}
+				//var nmarkers = 10;
+				//var markers = []
+				//for(var i=0;i<nmarkers;i++){
+				//	var tpos = [...pos]
+				//	var min = 0.01
+				//	var max = 0.2
+				//	tpos[-1] = tpos[0] + (Math.random() * (max - min) + min)
+				//	tpos[1] = tpos[1] + (Math.random() * (max - min) + min)
+				//	console.log(tpos)
+				//	var marker = new mapboxgl.Marker().setLngLat(tpos).addTo(map)
+				//}
 
 			}
-			
+
 			if(lat === null || lng === null){
 				navigator.geolocation.getCurrentPosition(function(res){
 						//var current = [77.7053, 12.9504]
@@ -69,7 +93,7 @@
 			var queryParam = new URLSearchParams(window.location.search)
 			console.log(queryParam.get("lng"))
 			return queryParam.get("lng")
-		},
+		}
 	}
 
 	}
