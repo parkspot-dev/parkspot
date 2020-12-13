@@ -33,7 +33,7 @@
             </section>
             <footer class="modal-card-foot">
                 <button class="button" type="button" @click="$emit('close')">Close</button>
-                <button class="button is-warning" @click="handleLogin()" v-on:click.prevent="handleLogin()">Login</button>
+                <button class="button is-warning" @click="getAccessToken()" v-on:click.prevent="handleLogin()">Login</button>
             </footer>
         </div>
     </form>
@@ -68,6 +68,7 @@ export default{
 			var resp = await utils.postData('https://cors-anywhere.herokuapp.com/'+'http://168.63.243.20:5002/auth/login', { Username: "sud", Password: "ambastha@1"})
 			var status = resp.status
 			var token = resp.token || ""
+			console.log("received token",token)
 			return token
 		}
 	}
