@@ -72,7 +72,7 @@ export default{
 		}
 	},
 	methods: {
-		handleLogin: utilFuntions.getAccessToken,
+		handleLogin: utilFunctions.getAccessToken,
 	}
 }
 </script>
