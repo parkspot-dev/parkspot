@@ -33,7 +33,7 @@
             </section>
             <footer class="modal-card-foot">
                 <button class="button" type="button" @click="$emit('close')">Close</button>
-                <button class="button is-warning" @click="getAccessToken()" v-on:click.prevent="handleLogin()">Login</button>
+                <button class="button is-warning" @click="getAccessToken()" v-on:click.prevent="getAccessToken()">Login</button>
             </footer>
         </div>
     </form>
