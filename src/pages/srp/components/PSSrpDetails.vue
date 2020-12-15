@@ -1,14 +1,16 @@
 <template lang="pug">
 	section.cont
 		br
-		.hero
+		.hero.is-fullheight
 			p.title.has-text-left
 				| Results:
-			.containers(v-for="(site, i) in sites" :key="i")
+			b-loading(v-model="isLoading")
+			.containers(v-for="(site, i) in PSSites")
 				.rcorner
 					.columns.is-vcentered
 						.column.is-half
-							img.resultimg(:src="`${newPSSite}`")
+							img.defImage(v-if="site.cropImage" :src="site.imageURI")
+							img(v-else :src="site.imageURI")
 						.column.is-half
 							.grid
 								.tname
@@ -16,10 +18,22 @@
 										| {{site.type}}
 									.subtitle.has-text-left
 										| {{site.name}}
-								.loc.has-text-left.is-size-6
+								.Amount.has-text-left.is-size-6
+										strong
+											| Amount:
+										| &#x20b9; {{site.amount}}
+								.vehicleType.has-text-left.is-size-6
 									strong
-										| Address: 
-									| {{site.location}}
+										| Vehicle Type:
+									| {{site.vehicleType}}
+								.slotsAvailable.has-text-left.is-size-6
+									strong
+										| Slots Available:
+									| {{site.slotsAvailable}}/{{site.totalSlots}}
+								//.loc.has-text-left.is-size-6
+								//	strong
+								//		| Address: 
+								//	| {{site.location}}
 								.rate.has-text-right.is-size-6
 									strong
 										| Rate:
@@ -38,39 +52,28 @@
 <script>
 export default{
 	name: "PSSrpDetails",
+		
 	data: function(){
 		return {
 			newPSSite: require("@/assets/psites/new.png"),
-			sites: [
-				{
-					name: "Muthumariamma Temple",
-					location: "Off Kasavanahalli Main Road Off Kasavanahalli Main Road, Norbert Church Rd, Kasavanahalli, Karnataka 560035",
-					latLng: [13.012172800000002, 77.6077312],
-					rate: 10,
-					unit: "day",
-					type: "private parking"
-				},
-				{
-					name: "Vijaya Niketan",
-					location: "Vijayanikethan Apartment, Norbert Church road, Kasavanahalli, Sarjapur, Karnataka 560035",
-					latLng: [12.9151665, 77.6879585],
-					rate: 10,
-					unit: "hour",
-					type: "private parking"
-				},
-				{
-					name: "Ittina Mahavir",
-					location: "O block 102, Ittina Mahavir, Neeladri Nagar, Electronic City Phase 1, Bangalore Karnataka 560100",
-					latLng: [12.8402, 77.6482],
-					rate: 20,
-					unit: "month",
-					type: "housing society parking"
-				}
-			]
+			PSSites: [],
+			isLoading: true
 		}	
 	},
+	mounted(){
+		this.fillSites(this)
+		this.getLatLng()
+	},
 	methods: {
-		"getLatLng": function(){
+		fillSites(master){
+			this.$root.$on("sitesReady", function(sites){
+				master.isLoading = false
+				for(var i=0;i<sites.length;i++){
+					master.PSSites.push(sites[i])	
+				}
+			})
+		},
+		getLatLng(){
 			return new Promise(function(resolve, reject){
 				navigator.geolocation.getCurrentPosition(function(data){
 					var lat = data.coords.latitude
@@ -84,7 +87,7 @@ export default{
 				})	
 			})
 		},
-		"calcDist": function(lat1, lat2, lng1, lng2,mode="K"){
+		calcDist(lat1, lat2, lng1, lng2,mode="K"){
 			//returns distance between two lat longs in meters
 			var phi1 = lat1 * Math.PI/180
 			var phi2 = lat2 * Math.PI/180
@@ -106,7 +109,7 @@ export default{
 					return 0
 			}
 		},
-		"filterDist": function(lat, lng){
+		filterDist(lat, lng){
 			return this.sites.filter(function(elem){
 				return distance(lat, elem.latLng[0], lng, elem.latLng[1]) < 60
 			})	
@@ -116,7 +119,7 @@ export default{
 </script>
 <style scoped>
 .rcorner{
-	border-radius: 25px;
+	/*border-radius: 25px;*/
 	border: 0.5px solid black;
 	padding: 10px;
 	box-shadow: 5px 10px 18px black; /*hsl(48, 100%, 67%);*/
@@ -131,7 +134,7 @@ export default{
 }
 .resultimg{
 	border-radius: 25px;
-	width: 50%;
+	width: 100%;
 }
 .floatright{
 	float: right;
@@ -141,6 +144,9 @@ export default{
 .grid{
 	display: grid;
 	align-items: center;
-	grid-template-rows: 1fr 3fr 1fr;
+	grid-template-rows: 1fr 1fr; /*1 3 1*/
+}
+.defImage{
+	height: 200px;
 }
 </style>

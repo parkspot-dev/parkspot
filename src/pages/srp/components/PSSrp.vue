@@ -11,46 +11,98 @@
 	export default{
 		name: "SRP",
 		mounted: function(){
-			var lat = this.getLat()
-			var lng = this.getLng()
+			var lat = 12.8576 //this.getLat()
+			var lng = 77.7864 //this.getLng()
 			var center;
 			var mapLoadedTimer;
 			if(lat === null || lng === null){
-				center = [77.8782,12.9098] //fallout lat long
+				center = [77.7864,12.8576] //fallout lat long
 			}
 			else{
 				center = [Number(lng), Number(lat)]
 			}
 			var map;
 			mapboxgl.accessToken = 'pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ';
-			
+			var check = false
+			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+				check = true
+			}
+			var flavor = check ? "mweb" : "dweb"
+			console.log(flavor)
+			fetch("https://cors-anywhere.herokuapp.com/"+`http://168.63.243.20:5002/search?lat=12.8576&long=77.7864&start=20201115t1250&end=20201115t1400`, {
+		    	method: 'GET', // *GET, POST, PUT, DELETE, etc.
+		    	headers: {
+    			  'Accept': '*/*',
+		    	  'Content-Type': 'application/json',
+				  'flavor': flavor 
+		    	},
+				})
+				.then((resp)=>{
+					const jsonResponse = resp.json().then((sites)=>{
+					var arr = []
+					sites = sites["Sites"]
+					var markers = []
+					for(var i=0;i<sites.length;i++){
+						var temp = {}
+						temp["name"] = sites[i]["Name"]
+						temp["location"] = ""
+						temp["latLng"] = [Number(sites[i].Lat), Number(sites[i].Long)]
+						try{
+							markers.push([Number(sites[i].Long), Number(sites[i].Lat)])
+							//new mapboxgl.Marker().setLngLat([Number(sites[i].Long), Number(sites[i].Lat)]).addTo(map)
+						}
+						catch(e){
+							console.log(sites[i].Lat, sites[i].Lng)
+							console.log(e)
+						}
+						temp["rate"] = sites[i]["Fee"]["BaseAmount"]
+						temp["unit"] = sites[i]["RentUnit"]
+						temp["type"] = "private parking"
+						temp["imageURI"] = sites[i]["IconURL"] 
+						temp["amount"] = sites[i]["Fee"]["Amount"]
+						temp["slotsAvailable"] = sites[i]["SlotsAvailable"]
+						temp["totalSlots"] = sites[i]["TotalSlots"]
+						temp["vehicleType"] = sites[i]["VehicleType"]
+						temp["cropImage"] = sites[i]["IconURL"] === "https://parkspot.blob.core.windows.net/assets/default.png"
+						arr.push(temp)
+					}
+					var centroid = this.calculateCentroid(arr)
+					console.log("centurion", centroid)
+					repaint(centroid)
+					for(var i of markers){
+						new mapboxgl.Marker({color: "#2F4F4F"}).setLngLat(i).addTo(map)
+					}
+					new mapboxgl.Marker({color: "#000"}).setLngLat(i).addTo(map)
+					this.$root.$emit("sitesReady", arr)
+					})
+				})
 			function repaint(pos){
 				console.log("hale", pos)
 				map = new mapboxgl.Map({
 				container: 'map', // container id
 				style: 'mapbox://styles/mapbox/dark-v10', // style URL
 				center: pos, // starting position [lng, lat]
-				zoom: 13 // starting zoom
+				zoom: 10 // starting zoom
 				});
 				map.scrollZoom.disable();
-				var nmarkers = 10;
-				var markers = []
-				for(var i=0;i<nmarkers;i++){
-					var tpos = [...pos]
-					var min = 0.01
-					var max = 0.2
-					tpos[-1] = tpos[0] + (Math.random() * (max - min) + min)
-					tpos[1] = tpos[1] + (Math.random() * (max - min) + min)
-					console.log(tpos)
-					var marker = new mapboxgl.Marker().setLngLat(tpos).addTo(map)
-				}
+				//var nmarkers = 10;
+				//var markers = []
+				//for(var i=0;i<nmarkers;i++){
+				//	var tpos = [...pos]
+				//	var min = 0.01
+				//	var max = 0.2
+				//	tpos[-1] = tpos[0] + (Math.random() * (max - min) + min)
+				//	tpos[1] = tpos[1] + (Math.random() * (max - min) + min)
+				//	console.log(tpos)
+				//	var marker = new mapboxgl.Marker().setLngLat(tpos).addTo(map)
+				//}
 
 			}
-			
+
 			if(lat === null || lng === null){
 				navigator.geolocation.getCurrentPosition(function(res){
-						//var current = [77.7053, 12.9504]
-						var current = [res.coords.longitude, res.coords.latitude]
+						var current = [77.7864, 12.8576]
+						//var current = [res.coords.longitude, res.coords.latitude]
 						console.log(current)
 						repaint(current)
 				})
@@ -60,6 +112,20 @@
 
 	},
 	methods: {
+		calculateCentroid: function(arr){
+			console.log(arr)
+			var xs = arr.reduce((a,e)=>{
+				const cord = e["latLng"][0]
+				return a + cord
+			}
+			,0)
+			var ys = arr.reduce((a,e)=>{
+				const cord = e["latLng"][1]
+				return a + cord
+			}
+			,0)
+			return [ys/arr.length, xs/arr.length]
+		},
 		getLat: function(){
 			var queryParam = new URLSearchParams(window.location.search)
 			console.log(queryParam.get("lat"))
@@ -69,7 +135,7 @@
 			var queryParam = new URLSearchParams(window.location.search)
 			console.log(queryParam.get("lng"))
 			return queryParam.get("lng")
-		},
+		}
 	}
 
 	}
