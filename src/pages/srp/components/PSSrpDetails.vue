@@ -1,14 +1,16 @@
 <template lang="pug">
 	section.cont
 		br
-		.hero
+		.hero.is-fullheight
 			p.title.has-text-left
 				| Results:
+			b-loading(v-model="isLoading")
 			.containers(v-for="(site, i) in PSSites")
 				.rcorner
 					.columns.is-vcentered
 						.column.is-half
-							img.resultimg(:src="site.imageURI")
+							img.defImage(v-if="site.cropImage" :src="site.imageURI")
+							img(v-else :src="site.imageURI")
 						.column.is-half
 							.grid
 								.tname
@@ -16,6 +18,18 @@
 										| {{site.type}}
 									.subtitle.has-text-left
 										| {{site.name}}
+								.Amount.has-text-left.is-size-6
+										strong
+											| Amount:
+										| &#x20b9; {{site.amount}}
+								.vehicleType.has-text-left.is-size-6
+									strong
+										| Vehicle Type:
+									| {{site.vehicleType}}
+								.slotsAvailable.has-text-left.is-size-6
+									strong
+										| Slots Available:
+									| {{site.slotsAvailable}}/{{site.totalSlots}}
 								//.loc.has-text-left.is-size-6
 								//	strong
 								//		| Address: 
@@ -42,32 +56,8 @@ export default{
 	data: function(){
 		return {
 			newPSSite: require("@/assets/psites/new.png"),
-			PSSites: [
-				//{
-				//	name: "Muthumariamma Temple",
-				//	location: "Off Kasavanahalli Main Road Off Kasavanahalli Main Road, Norbert Church Rd, Kasavanahalli, Karnataka 560035",
-				//	latLng: [13.012172800000002, 77.6077312],
-				//	rate: 10,
-				//	unit: "day",
-				//	type: "private parking"
-				//},
-				//{
-				//	name: "Vijaya Niketan",
-				//	location: "Vijayanikethan Apartment, Norbert Church road, Kasavanahalli, Sarjapur, Karnataka 560035",
-				//	latLng: [12.9151665, 77.6879585],
-				//	rate: 10,
-				//	unit: "hour",
-				//	type: "private parking"
-				//},
-				//{
-				//	name: "Ittina Mahavir",
-				//	location: "O block 102, Ittina Mahavir, Neeladri Nagar, Electronic City Phase 1, Bangalore Karnataka 560100",
-				//	latLng: [12.8402, 77.6482],
-				//	rate: 20,
-				//	unit: "month",
-				//	type: "housing society parking"
-				//}
-			]
+			PSSites: [],
+			isLoading: true
 		}	
 	},
 	mounted(){
@@ -77,6 +67,7 @@ export default{
 	methods: {
 		fillSites(master){
 			this.$root.$on("sitesReady", function(sites){
+				master.isLoading = false
 				for(var i=0;i<sites.length;i++){
 					master.PSSites.push(sites[i])	
 				}
@@ -128,7 +119,7 @@ export default{
 </script>
 <style scoped>
 .rcorner{
-	border-radius: 25px;
+	/*border-radius: 25px;*/
 	border: 0.5px solid black;
 	padding: 10px;
 	box-shadow: 5px 10px 18px black; /*hsl(48, 100%, 67%);*/
@@ -154,5 +145,8 @@ export default{
 	display: grid;
 	align-items: center;
 	grid-template-rows: 1fr 1fr; /*1 3 1*/
+}
+.defImage{
+	height: 200px;
 }
 </style>

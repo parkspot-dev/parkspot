@@ -59,6 +59,11 @@
 						temp["unit"] = sites[i]["RentUnit"]
 						temp["type"] = "private parking"
 						temp["imageURI"] = sites[i]["IconURL"] 
+						temp["amount"] = sites[i]["Fee"]["Amount"]
+						temp["slotsAvailable"] = sites[i]["SlotsAvailable"]
+						temp["totalSlots"] = sites[i]["TotalSlots"]
+						temp["vehicleType"] = sites[i]["VehicleType"]
+						temp["cropImage"] = sites[i]["IconURL"] === "https://parkspot.blob.core.windows.net/assets/default.png"
 						arr.push(temp)
 					}
 					var centroid = this.calculateCentroid(arr)

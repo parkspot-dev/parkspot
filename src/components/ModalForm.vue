@@ -32,9 +32,15 @@
                 <b-checkbox>Remember me</b-checkbox>
             </section>
             <footer class="modal-card-foot">
-                <button class="button" type="button" @click="$emit('close')">Close</button>
-                <button class="button is-warning" @click="getAccessToken()" v-on:click.prevent="getAccessToken()">Login</button>
-				<div v-if="isLoading" class="lds-dual-ring"></div>
+				<div class="center" v-if="isLoading">
+                	<button class="button" type="button" @click="$emit('close')">Close</button>
+                	<button class="button is-warning" @click="getAccessToken()" v-on:click.prevent="getAccessToken()">Login</button>
+					<div class="lds-dual-ring"></div>
+				</div>
+				<div v-else>
+                	<button class="button" type="button" @click="$emit('close')">Close</button>
+                	<button class="button is-warning" @click="getAccessToken()" v-on:click.prevent="getAccessToken()">Login</button>
+				</div>
             </footer>
         </div>
     </form>
@@ -52,7 +58,7 @@ export default{
 	methods: {
 		postData: async function(url = '', data = {}) {
 		  // Default options are marked with *
-		  this.Loading = true
+		  this.isLoading = true
 		  const response = await fetch(url, {
 		    method: 'POST', // *GET, POST, PUT, DELETE, etc.
 		    mode: 'cors', // no-cors, *cors, same-origin
@@ -94,8 +100,8 @@ export default{
 <style>
 .lds-dual-ring {
   display: inline-block;
-  width: 80px;
-  height: 80px;
+  width: 40px;
+  height: 40px;
 }
 .lds-dual-ring:after {
   content: " ";
@@ -105,7 +111,7 @@ export default{
   margin: 8px;
   border-radius: 50%;
   border: 6px solid hsl(48, 100%, 67%);
-  border-color: hsl(48, 100%, 67%) transparent hsl(48, 100%, 67%) transparent;
+  border-color: hsl(48, 100%, 67%) black hsl(48, 100%, 67%) black;
   animation: lds-dual-ring 1.2s linear infinite;
 }
 @keyframes lds-dual-ring {
@@ -115,6 +121,9 @@ export default{
   100% {
     transform: rotate(360deg);
   }
+}
+.center{
+	margin: auto;
 }
 </style>
 
