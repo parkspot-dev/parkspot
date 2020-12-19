@@ -77,7 +77,7 @@ export default{
 						},
 		getAccessToken: async function(){
 			try{
-				var resp = await this.postData('https://maya.southeastasia.cloudapp.azure.com/auth/login', { Username: this.loginUser, Password: this.loginPassword})
+				var resp = await this.postData('https://cors-anywhere.herokuapp.com/'+'https://maya.southeastasia.cloudapp.azure.com/auth/login', { Username: this.loginUser, Password: this.loginPassword})
 			var token = resp.token || ""
 			if(localStorage !== undefined){
 				if(token !== ""){
