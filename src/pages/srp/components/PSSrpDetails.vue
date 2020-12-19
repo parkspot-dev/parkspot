@@ -50,6 +50,7 @@
 					
 </template>
 <script>
+import EmptySitesModal from '@/pages/srp/components/EmptySitesModal.vue';
 export default{
 	name: "PSSrpDetails",
 		
@@ -65,9 +66,23 @@ export default{
 		this.getLatLng()
 	},
 	methods: {
+		openEmptyModal(){
+				console.log("opening empty sites modal")
+                this.$buefy.modal.open({
+                    parent: this,
+                    component: EmptySitesModal,
+                    hasModalCard: true,
+                    customClass: 'custom-class custom-class-2',
+                    trapFocus: true
+				})
+		},
 		fillSites(master){
 			this.$root.$on("sitesReady", function(sites){
 				master.isLoading = false
+				if(sites.length === 0){
+					console.log("no sites found", "opening modal")
+					master.openEmptyModal()
+				}
 				for(var i=0;i<sites.length;i++){
 					master.PSSites.push(sites[i])	
 				}

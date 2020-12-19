@@ -22,4 +22,13 @@
 - [ ] form logic activation/book on click (shake on empty)
 - [ ] add store for sites -> contact form bridge; extension of line 9
 
+- [ ] timeout
+- [ ] zoom level
+- [ ] flexbox
+- [x] hardcode fallout
+- [ ] signup
+- [ ] login bug
+- [ ] remove proxy
+- [ ] linkedin social avatar
+ 
 - [ ] levitiate on hover(sites)

@@ -57,9 +57,14 @@
 				});
 				mapLoadedTimer = setInterval(function(timer, map){
 						if(map.loaded()){
-							var elem = document.getElementById("welcomeText")
-							elem.classList.remove("has-text-dark")
-							elem.classList.add("has-text-light")
+							try{
+								var elem = document.getElementById("welcomeText")
+								elem.classList.remove("has-text-dark")
+								elem.classList.add("has-text-light")
+							}
+							catch(e){
+								console.log("jquery choke")
+							}
 						}
 
 						clearInterval(timer)

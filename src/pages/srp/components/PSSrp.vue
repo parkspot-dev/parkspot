@@ -11,8 +11,8 @@
 	export default{
 		name: "SRP",
 		mounted: function(){
-			var lat = 12.8576 //this.getLat()
-			var lng = 77.7864 //this.getLng()
+			var lat = this.getLat() //12.8576 
+			var lng = this.getLng() //77.7864
 			var center;
 			var mapLoadedTimer;
 			if(lat === null || lng === null){
@@ -29,7 +29,7 @@
 			}
 			var flavor = check ? "mweb" : "dweb"
 			console.log(flavor)
-			fetch("https://cors-anywhere.herokuapp.com/"+`http://168.63.243.20:5002/search?lat=12.8576&long=77.7864&start=20201115t1250&end=20201115t1400`, {
+				fetch("https://cors-anywhere.herokuapp.com/"+`http://168.63.243.20:5002/search?lat=${lat}&long=${lng}&start=20201115t1250&end=20201115t1400`, {
 		    	method: 'GET', // *GET, POST, PUT, DELETE, etc.
 		    	headers: {
     			  'Accept': '*/*',
@@ -41,6 +41,11 @@
 					const jsonResponse = resp.json().then((sites)=>{
 					var arr = []
 					sites = sites["Sites"]
+					console.log("something",sites)
+					if(sites === null){
+						this.$root.$emit("sitesReady", [])
+						return
+					}
 					var markers = []
 					for(var i=0;i<sites.length;i++){
 						var temp = {}
@@ -68,7 +73,7 @@
 					}
 					var centroid = this.calculateCentroid(arr)
 					console.log("centurion", centroid)
-					repaint(centroid)
+					repaint(centroid, check)
 					for(var i of markers){
 						new mapboxgl.Marker({color: "#2F4F4F"}).setLngLat(i).addTo(map)
 					}
@@ -76,7 +81,7 @@
 					this.$root.$emit("sitesReady", arr)
 					})
 				})
-			function repaint(pos){
+			function repaint(pos, check){
 				console.log("hale", pos)
 				map = new mapboxgl.Map({
 				container: 'map', // container id
@@ -84,7 +89,9 @@
 				center: pos, // starting position [lng, lat]
 				zoom: 10 // starting zoom
 				});
-				map.scrollZoom.disable();
+				if(check === "mweb"){
+					map.scrollZoom.disable();
+				}
 				//var nmarkers = 10;
 				//var markers = []
 				//for(var i=0;i<nmarkers;i++){
@@ -101,14 +108,14 @@
 
 			if(lat === null || lng === null){
 				navigator.geolocation.getCurrentPosition(function(res){
-						var current = [77.7864, 12.8576]
-						//var current = [res.coords.longitude, res.coords.latitude]
-						console.log(current)
-						repaint(current)
+						//var current = [77.7864, 12.8576]
+						var current = [res.coords.longitude, res.coords.latitude]
+						console.log("current lat long",current)
+						repaint(current, check)
 				})
 			}
 			var map;
-			repaint(center)
+			repaint(center, check)
 
 	},
 	methods: {
