@@ -74,8 +74,14 @@ export default{
 		  return response.json(); // parses JSON response into native JavaScript objects
 		},
 		getAccessToken: async function(){
-			var resp = await this.postData('https://maya.southeastasia.cloudapp.azure.com/search', { Username: this.loginUser, Password: this.loginPassword})
+			try{
+				var resp = await this.postData('https://maya.southeastasia.cloudapp.azure.com/search', { Username: this.loginUser, Password: this.loginPassword})
+			}
+			catch(e){
+				console.log("error blah pew",e)
+			}
 			var status = resp.status
+			console.log("response",resp.status)
 			var token = resp.token || ""
 			if(localStorage !== undefined){
 				if(token !== ""){
