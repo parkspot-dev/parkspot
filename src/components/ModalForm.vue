@@ -76,14 +76,6 @@ export default{
 		getAccessToken: async function(){
 			try{
 				var resp = await this.postData('https://maya.southeastasia.cloudapp.azure.com/search', { Username: this.loginUser, Password: this.loginPassword})
-			}
-			catch(e){
-				console.log("error blah pew",e)
-				this.isLoading = false
-				return
-			}
-			var status = resp.status
-			console.log("response",resp.status)
 			var token = resp.token || ""
 			if(localStorage !== undefined){
 				if(token !== ""){
@@ -100,7 +92,14 @@ export default{
 			else{
 				console.log("localStorage access is not available")
 			}
-			this.isLoading = false
+			}
+			catch(e){
+				console.log("error blah pew",e)
+				this.isLoading = false
+				this.isLoading = false
+			}
+
+
 		}
 	}
 }
