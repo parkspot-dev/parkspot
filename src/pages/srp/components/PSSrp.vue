@@ -87,22 +87,11 @@
 				container: 'map', // container id
 				style: 'mapbox://styles/mapbox/dark-v10', // style URL
 				center: pos, // starting position [lng, lat]
-				zoom: 10 // starting zoom
+				zoom: 11 // starting zoom
 				});
 				if(check === "mweb"){
 					map.scrollZoom.disable();
 				}
-				//var nmarkers = 10;
-				//var markers = []
-				//for(var i=0;i<nmarkers;i++){
-				//	var tpos = [...pos]
-				//	var min = 0.01
-				//	var max = 0.2
-				//	tpos[-1] = tpos[0] + (Math.random() * (max - min) + min)
-				//	tpos[1] = tpos[1] + (Math.random() * (max - min) + min)
-				//	console.log(tpos)
-				//	var marker = new mapboxgl.Marker().setLngLat(tpos).addTo(map)
-				//}
 
 			}
 

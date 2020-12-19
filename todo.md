@@ -23,12 +23,12 @@
 - [ ] add store for sites -> contact form bridge; extension of line 9
 
 - [ ] timeout
-- [ ] zoom level
+- [x] zoom level		//+1
 - [ ] flexbox
-- [x] hardcode fallout
-- [ ] signup
-- [ ] login bug
-- [ ] remove proxy
+- [x] hardcode fallout	//nav
+- [ ] signup			// TBD
+- [ ] login bug			// hardcode removal
+- [ ] remove proxy 		//options issue
 - [x] linkedin social avatar
  
 - [ ] levitiate on hover(sites)
