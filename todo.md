@@ -16,7 +16,7 @@
 - [x] backend integration //
 - [x] login support //
 - [x] sites result fetching(top sites) recents API, search API //
-- [ ] bottom nav/avatar socials shrink fix {add bottom navicons} //
+- [x] bottom nav/avatar socials shrink fix {add bottom navicons} //
 - [x] p1 spacing between less p3
 
 - [ ] form logic activation/book on click (shake on empty)
@@ -29,6 +29,6 @@
 - [ ] signup
 - [ ] login bug
 - [ ] remove proxy
-- [ ] linkedin social avatar
+- [x] linkedin social avatar
  
 - [ ] levitiate on hover(sites)
