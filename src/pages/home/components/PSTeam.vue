@@ -27,7 +27,7 @@
 												img(:src="`${github}`" class="image is-48x48")
 										.column.is-one-third
 											a(:href="`${team.linkedin}`")
-												img(:src="`${linkedin}`" class="image is-48x48")
+												img(:src="`${github}`" class="image is-48x48")
 										.column.is-one-third
 											a(:href="`${team.twitter}`")
 												img(:src="`${twitter}`" class="image is-48x48")
