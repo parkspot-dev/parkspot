@@ -79,6 +79,8 @@ export default{
 			}
 			catch(e){
 				console.log("error blah pew",e)
+				this.isLoading = false
+				return
 			}
 			var status = resp.status
 			console.log("response",resp.status)
