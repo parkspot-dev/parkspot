@@ -74,7 +74,7 @@ export default{
 		  return response.json(); // parses JSON response into native JavaScript objects
 		},
 		getAccessToken: async function(){
-			var resp = await this.postData('https://cors-anywhere.herokuapp.com/'+'http://168.63.243.20:5002/auth/login', { Username: "sud", Password: "ambastha@1"})
+			var resp = await this.postData('https://maya.southeastasia.cloudapp.azure.com/search', { Username: this.loginUser, Password: this.loginPassword})
 			var status = resp.status
 			var token = resp.token || ""
 			if(localStorage !== undefined){
