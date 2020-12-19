@@ -29,7 +29,7 @@
 			}
 			var flavor = check ? "mweb" : "dweb"
 			console.log(flavor)
-				fetch("https://cors-anywhere.herokuapp.com/"+`http://168.63.243.20:5002/search?lat=${lat}&long=${lng}&start=20201115t1250&end=20201115t1400`, {
+				fetch(`https://maya.parkspot.in/search?lat=${lat}&long=${lng}&start=20201115t1250&end=20201115t1400`, {
 		    	method: 'GET', // *GET, POST, PUT, DELETE, etc.
 		    	headers: {
     			  'Accept': '*/*',
