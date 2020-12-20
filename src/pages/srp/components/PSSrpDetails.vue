@@ -39,9 +39,9 @@
 										| Rate:
 										|  
 									| &#x20b9; {{site.rate}}/{{site.unit}}
-							.floatright
-								a.button.is-warning
-									| Book
+							//.floatright
+							//	a.button.is-warning
+							//		| Book
 
 				br
 

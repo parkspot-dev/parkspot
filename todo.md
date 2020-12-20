@@ -23,9 +23,9 @@
 - [ ] add store for sites -> contact form bridge; extension of line 9
 
 - [ ] timeout
-- [x] zoom level		//+1
+- [x] zoom level
 - [ ] flexbox
-- [x] hardcode fallout	//nav
+- [x] hardcode fallout
 - [ ] signup			// TBD
 - [ ] login bug			// hardcode removal
 - [ ] remove proxy 		//options issue
