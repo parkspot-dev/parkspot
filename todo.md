@@ -16,10 +16,19 @@
 - [x] backend integration //
 - [x] login support //
 - [x] sites result fetching(top sites) recents API, search API //
-- [ ] bottom nav/avatar socials shrink fix {add bottom navicons} //
+- [x] bottom nav/avatar socials shrink fix {add bottom navicons} //
 - [x] p1 spacing between less p3
 
 - [ ] form logic activation/book on click (shake on empty)
 - [ ] add store for sites -> contact form bridge; extension of line 9
 
+- [ ] timeout
+- [x] zoom level
+- [ ] flexbox
+- [x] hardcode fallout
+- [ ] signup			// TBD
+- [ ] login bug			// hardcode removal
+- [ ] remove proxy 		//options issue
+- [x] linkedin social avatar
+ 
 - [ ] levitiate on hover(sites)

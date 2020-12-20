@@ -1,0 +1,74 @@
+[
+  [
+    "maya.parkspot.in",
+    "3600",
+    "A",
+    "168.63.243.20"
+  ],
+  [
+    "jaadu.parkspot.in",
+    "3600",
+    "A",
+    "168.63.243.20"
+  ],
+  [
+    "parkspot.in",
+    "3600",
+    "MX",
+    "10 mx.zoho.in"
+  ],
+  [
+    "parkspot.in",
+    "3600",
+    "MX",
+    "20 mx2.zoho.in"
+  ],
+  [
+    "parkspot.in",
+    "3600",
+    "MX",
+    "50 mx3.zoho.in"
+  ],
+  [
+    "parkspot.in",
+    "3600",
+    "NETLIFY",
+    "parkspot-in.netlify.app"
+  ],
+  [
+    "www.parkspot.in",
+    "3600",
+    "NETLIFY",
+    "parkspot-in.netlify.app"
+  ],
+  [
+    "parkspot.in",
+    "3600",
+    "NETLIFYv6",
+    "parkspot-in.netlify.app"
+  ],
+  [
+    "www.parkspot.in",
+    "3600",
+    "NETLIFYv6",
+    "parkspot-in.netlify.app"
+  ],
+  [
+    "parkspot.in",
+    "3600",
+    "SPF",
+    "v=spf1 include:zoho.in ~all"
+  ],
+  [
+    "parkspot.in",
+    "3600",
+    "TXT",
+    "google-site-verification=Vmx7xqHa-MJ3o-t8SNMkyKLB6L0DxB5ojsXF7eBKF1w"
+  ],
+  [
+    "parkspot.in",
+    "3600",
+    "TXT",
+    "v=spf1 include:zoho.in ~all"
+  ]
+]

@@ -57,25 +57,27 @@ export default{
 	},
 	methods: {
 		postData: async function(url = '', data = {}) {
-		  // Default options are marked with *
-		  this.isLoading = true
-		  const response = await fetch(url, {
-		    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-		    mode: 'cors', // no-cors, *cors, same-origin
-		    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-		    credentials: 'same-origin', // include, *same-origin, omit
-		    headers: {
-		      'Content-Type': 'application/json'
-		    },
-		    redirect: 'follow', // manual, *follow, error
-		    referrerPolicy: 'origin', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-		    body: JSON.stringify(data) // body data type must match "Content-Type" header
-		  });
-		  return response.json(); // parses JSON response into native JavaScript objects
-		},
+						  // Default options are marked with *
+						  this.isLoading = true
+						  console.log(this.loginUser, this.loginPassword)
+						  const response = await fetch(url, {
+								  		    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+								  		    mode: 'cors', // no-cors, *cors, same-origin
+								  		    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+								  		    credentials: 'include', // include, *same-origin, omit
+								  		    headers: {
+												'Content-Type': 'application/json',
+												'Access-Control-Allow-Origin': '*'
+											},
+								  		    redirect: 'follow', // manual, *follow, error
+								  		    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+								  		    body: JSON.stringify(data) // body data type must match "Content-Type" header
+								  		  });
+						  return response.json(); // parses JSON response into native JavaScript objects
+						},
 		getAccessToken: async function(){
-			var resp = await this.postData('https://cors-anywhere.herokuapp.com/'+'http://168.63.243.20:5002/auth/login', { Username: "sud", Password: "ambastha@1"})
-			var status = resp.status
+			try{
+				var resp = await this.postData('https://cors-anywhere.herokuapp.com/'+'https://maya.southeastasia.cloudapp.azure.com/auth/login', { Username: this.loginUser, Password: this.loginPassword})
 			var token = resp.token || ""
 			if(localStorage !== undefined){
 				if(token !== ""){
@@ -92,7 +94,14 @@ export default{
 			else{
 				console.log("localStorage access is not available")
 			}
-			this.isLoading = false
+			}
+			catch(e){
+				console.log("error blah pew",e)
+				this.isLoading = false
+				this.isLoading = false
+			}
+
+
 		}
 	}
 }

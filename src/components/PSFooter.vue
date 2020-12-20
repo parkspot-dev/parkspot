@@ -3,10 +3,10 @@
 		.content.has-text-centered
 			.footercontainer
 				.containersocial
-					//.columns.bottomicons.inline
-					//	.column.is-one-third(v-for="(elem, i) in bottomicons" :key="i")
-					//		a(:href="`${elem.href}`")
-					//			img(class="footericons" :src="`${elem.image}`")
+					.columns.bottomicons
+						.column.is-one-third(v-for="(elem, i) in bottomicons" :key="i")
+							a(:href="`${elem.href}`")
+								img(class="footericons" :src="`${elem.image}`")
 				br
 				p.has-text-white
 					|© 2020 
@@ -31,13 +31,15 @@
 	.footericons{
 		width: 50px;
 	}
-	.inline{
-		display: inline;
-		margin: 0 auto;
+	.containersocial{
+		margin: auto;
+		width: 50%;
 	}
+	/*
 	.bottomicons{
 		width: 20%;
 	}
+	*/
 	#black{
 		background: black;
 	}
