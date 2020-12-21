@@ -63,21 +63,13 @@ export default{
 						  const response = await fetch(url, {
 								  		    method: 'POST', // *GET, POST, PUT, DELETE, etc.
 								  		    mode: 'cors', // no-cors, *cors, same-origin
-								  		    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-								  		    credentials: 'include', // include, *same-origin, omit
-								  		    headers: {
-												'Content-Type': 'application/json',
-												'Access-Control-Allow-Origin': '*'
-											},
-								  		    redirect: 'follow', // manual, *follow, error
-								  		    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
 								  		    body: JSON.stringify(data) // body data type must match "Content-Type" header
 								  		  });
 						  return response.json(); // parses JSON response into native JavaScript objects
 						},
 		getAccessToken: async function(){
 			try{
-				var resp = await this.postData('https://cors-anywhere.herokuapp.com/'+'https://maya.southeastasia.cloudapp.azure.com/auth/login', { Username: this.loginUser, Password: this.loginPassword})
+				var resp = await this.postData('https://maya.parkspot.in/auth/login', { Username: this.loginUser, Password: this.loginPassword})
 			var token = resp.token || ""
 			if(localStorage !== undefined){
 				if(token !== ""){

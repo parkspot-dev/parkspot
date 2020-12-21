@@ -1,11 +1,17 @@
 <template lang="pug">
 	section.cont
 		br
-		.hero.is-fullheight
+		.hero.is-halfheight
 			p.title.has-text-left
 				| Results:
 			b-loading(v-model="isLoading")
-			.containers(v-for="(site, i) in PSSites")
+			.columns.is-vcentered(v-if="isModalOpen")
+				.column
+					img(:src="nothingImage")
+				.column
+					p.has-text-left.is-size-4
+						| No parking sites found in the given location !
+			.containers(v-else v-for="(site, i) in PSSites")
 				.rcorner
 					.columns.is-vcentered
 						.column.is-half
@@ -59,7 +65,8 @@ export default{
 			newPSSite: require("@/assets/psites/new.png"),
 			PSSites: [],
 			isLoading: true,
-			isEmptyOpen: false
+			isModalOpen: false,
+			nothingImage: require("@/assets/stocks/emptyc.png")			
 		}	
 	},
 	mounted(){
@@ -68,8 +75,8 @@ export default{
 	},
 	methods: {
 		openEmptyModal(){
-				if(!this.isEmptyOpen){
-					this.isEmptyOpen = true
+				if(!this.isModalOpen){
+					this.isModalOpen = true
 					console.log("opening empty sites modal")
                 	this.$buefy.modal.open({
                 	    parent: this,
@@ -167,5 +174,8 @@ export default{
 }
 .defImage{
 	height: 200px;
+}
+.emptyHandle{
+	display: flex;
 }
 </style>
