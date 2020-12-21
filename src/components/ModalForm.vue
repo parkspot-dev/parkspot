@@ -84,7 +84,7 @@ export default{
 					}
 					else{
 						//insert here headshake animate css #wrong password
-						this.hasError = tfrue
+						this.hasError = true
 						this.isLoading = false
 						console.log("Invalid token")
 					}
