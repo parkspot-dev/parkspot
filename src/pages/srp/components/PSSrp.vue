@@ -29,54 +29,50 @@
 			}
 			var flavor = check ? "mweb" : "dweb"
 			console.log(flavor)
-			try{	
-				fetch(`https://maya.parkspot.in/search?lat=${lat}&long=${lng}&start=20201115t1250&end=20201115t1400`, {
+			fetch(`https://maya.parkspot.in/search?lat=${lat}&long=${lng}&start=20201115t1250&end=20201115t1400`, {
 		    	method: 'GET', // *GET, POST, PUT, DELETE, etc.
-				})
-				.then((resp)=>{
-					const jsonResponse = resp.json().then((sites)=>{
-					var arr = []
-					sites = sites["Sites"]
-					var markers = []
-					for(var i=0;i<sites.length;i++){
-						var temp = {}
-						temp["name"] = sites[i]["Name"]
-						temp["location"] = ""
-						temp["latLng"] = [Number(sites[i].Lat), Number(sites[i].Long)]
-						try{
-							markers.push([Number(sites[i].Long), Number(sites[i].Lat)])
-							//new mapboxgl.Marker().setLngLat([Number(sites[i].Long), Number(sites[i].Lat)]).addTo(map)
-						}
-						catch(e){
-							console.log(sites[i].Lat, sites[i].Lng)
-							console.log(e)
-						}
-						temp["rate"] = sites[i]["Fee"]["BaseAmount"]
-						temp["unit"] = sites[i]["RentUnit"]
-						temp["type"] = "private parking"
-						temp["imageURI"] = sites[i]["IconURL"] 
-						temp["amount"] = sites[i]["Fee"]["Amount"]
-						temp["slotsAvailable"] = sites[i]["SlotsAvailable"]
-						temp["totalSlots"] = sites[i]["TotalSlots"]
-						temp["vehicleType"] = sites[i]["VehicleType"]
-						temp["cropImage"] = sites[i]["IconURL"] === "https://parkspot.blob.core.windows.net/assets/default.png"
-						arr.push(temp)
+			})
+			.then((resp)=>{
+				const jsonResponse = resp.json().then((sites)=>{
+				var arr = []
+				sites = sites["Sites"]
+				var markers = []
+				for(var i=0;i<sites.length;i++){
+					var temp = {}
+					temp["name"] = sites[i]["Name"]
+					temp["location"] = ""
+					temp["latLng"] = [Number(sites[i].Lat), Number(sites[i].Long)]
+					try{
+						markers.push([Number(sites[i].Long), Number(sites[i].Lat)])
+						//new mapboxgl.Marker().setLngLat([Number(sites[i].Long), Number(sites[i].Lat)]).addTo(map)
 					}
-					var centroid = this.calculateCentroid(arr)
-					console.log("centurion", centroid)
-					repaint(centroid, check)
-					for(var i of markers){
-						new mapboxgl.Marker({color: "#2F4F4F"}).setLngLat(i).addTo(map)
+					catch(e){
+						console.log(sites[i].Lat, sites[i].Lng)
+						console.log(e)
 					}
-					new mapboxgl.Marker({color: "#000"}).setLngLat(i).addTo(map)
-					this.$root.$emit("sitesReady", arr)
-					})
-				})
-			}
-			catch(e){
-				console.log("caught error")
+					temp["rate"] = sites[i]["Fee"]["BaseAmount"]
+					temp["unit"] = sites[i]["RentUnit"]
+					temp["type"] = "private parking"
+					temp["imageURI"] = sites[i]["IconURL"] 
+					temp["amount"] = sites[i]["Fee"]["Amount"]
+					temp["slotsAvailable"] = sites[i]["SlotsAvailable"]
+					temp["totalSlots"] = sites[i]["TotalSlots"]
+					temp["vehicleType"] = sites[i]["VehicleType"]
+					temp["cropImage"] = sites[i]["IconURL"] === "https://parkspot.blob.core.windows.net/assets/default.png"
+					arr.push(temp)
+				}
+				var centroid = this.calculateCentroid(arr)
+				console.log("centurion", centroid)
+				repaint(centroid, check)
+				for(var i of markers){
+					new mapboxgl.Marker({color: "#2F4F4F"}).setLngLat(i).addTo(map)
+				}
+				new mapboxgl.Marker({color: "#000"}).setLngLat(i).addTo(map)
+				this.$root.$emit("sitesReady", arr)
+			})
+			}).catch(function(err){
 				this.$root.$emit("sitesReady", [])
-			}
+			})
 			function repaint(pos, check){
 				console.log("hale", pos)
 				map = new mapboxgl.Map({
