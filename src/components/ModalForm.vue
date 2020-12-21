@@ -23,10 +23,9 @@
 
                 <b-field label="Password"
 						:type="{ 'is-danger': hasError }"
-						v-model="loginPassword"
 				>
 					<b-input
-	  					v-model="lwoginPassword"
+	  					v-model="loginPassword"
                         type="password"
                         :value="loginPassword"
                         password-reveal
