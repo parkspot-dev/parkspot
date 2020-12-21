@@ -25,7 +25,8 @@
 						:type="{ 'is-danger': hasError }"
 						v-model="loginPassword"
 				>
-				<b-input>
+					<b-input
+	  					v-model="lwoginPassword"
                         type="password"
                         :value="loginPassword"
                         password-reveal
@@ -77,6 +78,7 @@ export default{
 			try{
 				var resp = await this.postData('https://maya.parkspot.in/auth/login', { Username: this.loginUser, Password: this.loginPassword})
 				var token = resp.token || ""
+				console.log("warning check", this.hasError)
 				if(localStorage !== undefined){
 					if(token !== ""){
 						this.hasError = false
@@ -98,6 +100,7 @@ export default{
 				}
 			}
 			catch(e){
+				this.hasError = true
 				console.log("error blah pew",e)
 				this.isLoading = false
 			}
