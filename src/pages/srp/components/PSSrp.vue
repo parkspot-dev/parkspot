@@ -72,7 +72,7 @@
 			})
 			}).catch(function(err){
 				this.$root.$emit("sitesReady", [])
-			})
+			}, this)
 			function repaint(pos, check){
 				console.log("hale", pos)
 				map = new mapboxgl.Map({
