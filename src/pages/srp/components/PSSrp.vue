@@ -16,6 +16,7 @@
 			var center;
 			var mapLoadedTimer;
 			if(lat === null || lng === null){
+				console.log("reverting to default lat long")
 				center = [77.7864,12.8576] //fallout lat long
 			}
 			else{
@@ -29,11 +30,13 @@
 			}
 			var flavor = check ? "mweb" : "dweb"
 			console.log(flavor)
-			fetch(`https://maya.parkspot.in/search?lat=${lat}&long=${lng}&start=20201115t1250&end=20201115t1400`, {
+			fetch(`https://maya.parkspot.in/search?lat=${center[1]}&long=${center[0]}&start=20201115t1250&end=20201115t1400`, {
 		    	method: 'GET', // *GET, POST, PUT, DELETE, etc.
 			})
 			.then((resp)=>{
-				const jsonResponse = resp.json().then((sites)=>{
+				return resp.json()
+			})
+			.then((sites)=>{
 				var arr = []
 				sites = sites["Sites"]
 				var markers = []
@@ -70,9 +73,9 @@
 				new mapboxgl.Marker({color: "#000"}).setLngLat(i).addTo(map)
 				this.$root.$emit("sitesReady", arr)
 			})
-			}).catch(function(err){
+			.catch((err)=>{
 				this.$root.$emit("sitesReady", [])
-			}, this)
+			})
 			function repaint(pos, check){
 				console.log("hale", pos)
 				map = new mapboxgl.Map({
