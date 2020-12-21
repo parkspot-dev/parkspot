@@ -11,7 +11,8 @@
             <section class="modal-card-body">
                 <b-field label="Username">
                     <b-input
-						:type="{'is-danger' : hasError}"
+						:type="{ 'is-danger': hasError }"
+						:message="{ 'invalid username or password': hasError }"
 						v-model="loginUser"
                         :value="loginUser"
                         placeholder="Your Username"
@@ -21,7 +22,7 @@
 
                 <b-field label="Password">
                     <b-input
-						:type="{'is-danger' : hasError}"
+						:type="{ 'is-danger': hasError }"
 						v-model="loginPassword"
                         type="password"
                         :value="loginPassword"
