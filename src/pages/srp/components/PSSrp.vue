@@ -29,6 +29,7 @@
 			}
 			var flavor = check ? "mweb" : "dweb"
 			console.log(flavor)
+			try{	
 				fetch(`https://maya.parkspot.in/search?lat=${lat}&long=${lng}&start=20201115t1250&end=20201115t1400`, {
 		    	method: 'GET', // *GET, POST, PUT, DELETE, etc.
 				})
@@ -36,11 +37,6 @@
 					const jsonResponse = resp.json().then((sites)=>{
 					var arr = []
 					sites = sites["Sites"]
-					console.log("something",sites)
-					if(sites === null){
-						this.$root.$emit("sitesReady", [])
-						return
-					}
 					var markers = []
 					for(var i=0;i<sites.length;i++){
 						var temp = {}
@@ -76,6 +72,10 @@
 					this.$root.$emit("sitesReady", arr)
 					})
 				})
+			}
+			catch(e){
+				this.$root.$emit("sitesReady", [])
+			}
 			function repaint(pos, check){
 				console.log("hale", pos)
 				map = new mapboxgl.Map({
