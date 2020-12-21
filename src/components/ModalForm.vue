@@ -9,10 +9,11 @@
                     @click="$emit('close')"/>
             </header>
             <section class="modal-card-body">
-                <b-field label="Username">
-                    <b-input
+                <b-field label="Username"
 						:type="{ 'is-danger': hasError }"
 						:message="{ 'invalid username or password': hasError }"
+				>				
+                    <b-input
 						v-model="loginUser"
                         :value="loginUser"
                         placeholder="Your Username"
@@ -20,10 +21,11 @@
                     </b-input>
                 </b-field>
 
-                <b-field label="Password">
-                    <b-input
+                <b-field label="Password"
 						:type="{ 'is-danger': hasError }"
 						v-model="loginPassword"
+				>
+				<b-input>
                         type="password"
                         :value="loginPassword"
                         password-reveal
