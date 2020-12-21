@@ -58,7 +58,8 @@ export default{
 		return {
 			newPSSite: require("@/assets/psites/new.png"),
 			PSSites: [],
-			isLoading: true
+			isLoading: true,
+			isEmptyOpen: false
 		}	
 	},
 	mounted(){
@@ -67,14 +68,17 @@ export default{
 	},
 	methods: {
 		openEmptyModal(){
-				console.log("opening empty sites modal")
-                this.$buefy.modal.open({
-                    parent: this,
-                    component: EmptySitesModal,
-                    hasModalCard: true,
-                    customClass: 'custom-class custom-class-2',
-                    trapFocus: true
-				})
+				if(!this.isEmptyOpen){
+					this.isEmptyOpen = true
+					console.log("opening empty sites modal")
+                	this.$buefy.modal.open({
+                	    parent: this,
+                	    component: EmptySitesModal,
+                	    hasModalCard: true,
+                	    customClass: 'custom-class custom-class-2',
+                	    trapFocus: true
+					})
+				}
 		},
 		fillSites(master){
 			this.$root.$on("sitesReady", function(sites){
