@@ -74,6 +74,7 @@
 				})
 			}
 			catch(e){
+				console.log("caught error")
 				this.$root.$emit("sitesReady", [])
 			}
 			function repaint(pos, check){
