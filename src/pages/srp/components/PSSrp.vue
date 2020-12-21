@@ -31,11 +31,6 @@
 			console.log(flavor)
 				fetch(`https://maya.parkspot.in/search?lat=${lat}&long=${lng}&start=20201115t1250&end=20201115t1400`, {
 		    	method: 'GET', // *GET, POST, PUT, DELETE, etc.
-		    	headers: {
-    			  'Accept': '*/*',
-		    	  'Content-Type': 'application/json',
-				  'flavor': flavor 
-		    	},
 				})
 				.then((resp)=>{
 					const jsonResponse = resp.json().then((sites)=>{
