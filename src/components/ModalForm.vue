@@ -11,6 +11,7 @@
             <section class="modal-card-body">
                 <b-field label="Username">
                     <b-input
+						:type="{'is-danger' : hasError}"
 						v-model="loginUser"
                         :value="loginUser"
                         placeholder="Your Username"
@@ -20,6 +21,7 @@
 
                 <b-field label="Password">
                     <b-input
+						:type="{'is-danger' : hasError}"
 						v-model="loginPassword"
                         type="password"
                         :value="loginPassword"
@@ -52,7 +54,8 @@ export default{
 		return {
 			loginPassword: "",
 			loginUser: "",
-			isLoading: false
+			isLoading: false,
+			hasError: false
 		}
 	},
 	methods: {
@@ -70,26 +73,29 @@ export default{
 		getAccessToken: async function(){
 			try{
 				var resp = await this.postData('https://maya.parkspot.in/auth/login', { Username: this.loginUser, Password: this.loginPassword})
-			var token = resp.token || ""
-			if(localStorage !== undefined){
-				if(token !== ""){
-					this.isLoading = false
-					localStorage.setItem("PSToken", token)
-					this.$emit("loggedInEvent") //loggedInEvent
-					this.$emit("close")
+				var token = resp.token || ""
+				if(localStorage !== undefined){
+					if(token !== ""){
+						this.hasError = false
+						this.isLoading = false
+						localStorage.setItem("PSToken", token)
+						this.$emit("loggedInEvent") //loggedInEvent
+						this.$emit("close")
+					}
+					else{
+						//insert here headshake animate css #wrong password
+						this.hasError = tfrue
+						this.isLoading = false
+						console.log("Invalid token")
+					}
 				}
 				else{
-					//insert here headshake animate css #wrong password
-					console.log("Invalid token")
+					this.isLoading = false
+					console.log("localStorage access is not available")
 				}
-			}
-			else{
-				console.log("localStorage access is not available")
-			}
 			}
 			catch(e){
 				console.log("error blah pew",e)
-				this.isLoading = false
 				this.isLoading = false
 			}
 
