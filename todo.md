@@ -27,8 +27,12 @@
 - [ ] flexbox
 - [x] hardcode fallout
 - [ ] signup			// TBD
-- [ ] login bug			// hardcode removal
-- [ ] remove proxy 		//options issue
+- [x] login bug			// hardcode removal
+- [x] remove proxy 		//options issue
 - [x] linkedin social avatar
- 
+- [ ] About
+- [ ] our top picks photo change last 
 - [ ] levitiate on hover(sites)
+- [ ] just park
+- [ ] simply guest
+- [ ] locanto
