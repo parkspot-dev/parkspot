@@ -78,6 +78,7 @@ export default{
 				var resp = await this.postData('https://maya.parkspot.in/auth/login', { Username: this.loginUser, Password: this.loginPassword})
 				var token = resp.token || ""
 				console.log("warning check", this.hasError)
+				console.log(this.loginUser, this.loginPassword)
 				if(localStorage !== undefined){
 					if(token !== ""){
 						this.hasError = false
