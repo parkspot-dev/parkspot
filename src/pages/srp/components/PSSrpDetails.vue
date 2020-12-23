@@ -20,13 +20,10 @@
 						.column.is-half
 							.grid
 								.tname
-									.columns
-										.column
-											.has-text-left.is-size-7
-												| {{site.type}}
-										.column
-											.subtitle.has-text-left
-												| {{site.name}}
+									p.has-text-left.is-size-7
+										| {{site.type}}
+									.subtitle.has-text-left
+										| {{site.name}}
 								.Amount.has-text-left.is-size-6
 										strong
 											| Amount:
