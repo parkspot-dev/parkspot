@@ -84,7 +84,7 @@
 				center: pos, // starting position [lng, lat]
 				zoom: 11 // starting zoom
 				});
-				if(check === "mweb"){
+				if(check === "mweb"){ // todo: check is a bool; true => mweb
 					map.scrollZoom.disable();
 				}
 
