@@ -67,6 +67,10 @@ export default{
 						  this.isLoading = true
 						  console.log(this.loginUser, this.loginPassword)
 						  const response = await fetch(url, {
+													headers: {
+      														'Accept': 'application/json',
+      														'Content-Type': 'application/json'
+    											},
 								  		    method: 'POST', // *GET, POST, PUT, DELETE, etc.
 								  		    mode: 'cors', // no-cors, *cors, same-origin
 								  		    body: JSON.stringify(data) // body data type must match "Content-Type" header
