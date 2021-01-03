@@ -52,7 +52,7 @@
 </template>
 <script>
 export default{
-	name: "ModalForm",
+	name: "loginModalForm",
 	data(){
 		return {
 			loginPassword: "",

@@ -13,9 +13,9 @@
               b-navbar-item.button.is-warning(@click="logout()")
                 strong Log Out
             .buttons(v-else)
-              b-navbar-item.button.is-dark
+              b-navbar-item.button.is-dark(@click="signupCardModal()")
                 strong Sign Up
-              b-navbar-item.button.is-warning(@click="cardModal()")
+              b-navbar-item.button.is-warning(@click="loginCardModal()")
                 strong Log In
       b-navbar.is-dark#mainNav
         template(slot='end')
@@ -40,7 +40,9 @@
 </template>
 
 <script>
-import ModalForm from '@/components/ModalForm.vue';
+import loginModalForm from '@/components/loginModalForm.vue';
+import sigupModalForm from '@/components/signupModalForm.vue'
+
 var timer = setInterval(function(){
 		var main = document.getElementById("mainNav")
 		var height = document.getElementById("topNav").offsetHeight
@@ -62,13 +64,22 @@ export default {
 			localStorage.removeItem("PSToken")
 			this.updateComponent()
 		},
-		cardModal() {
+		signupCardModal(){
+			this.$buefy.modal.open({
+				parent: this,
+				component: sigupModalForm,
+				hasModalCard: true,
+				customClass: "signupModal signup",
+				trapFocus: true
+			})
+		},
+		loginCardModal() {
 				console.log("hello")
                 this.$buefy.modal.open({
                     parent: this,
-                    component: ModalForm,
+                    component: loginModalForm,
                     hasModalCard: true,
-                    customClass: 'custom-class custom-class-2',
+                    customClass: 'login loginModal',
                     trapFocus: true,
 					events: {
 						"loggedInEvent": ()=>{
