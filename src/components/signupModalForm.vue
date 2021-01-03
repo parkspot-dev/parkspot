@@ -107,7 +107,7 @@
 				<div class="center" v-if="isLoading">
                 	<button class="button" type="button" @click="$emit('close')">Close</button>
                 	<button class="button is-warning" @click="signup()" v-on:click.prevent="signup()">Signup</button>
-				<div class="lds-dual-ring"></div>
+									<div class="lds-dual-ring"></div>
 				</div>
 				<div v-else>
                 	<button class="button" type="button" @click="$emit('close')">Close</button>
@@ -139,7 +139,6 @@ export default{
 		postData: async function(url = '', data = {}) {
 						  // Default options are marked with *
 						  this.isLoading = true
-						  console.log(this.signupUser, this.signupPassword)
 						  const response = await fetch(url, {
 													headers: {
       														'Accept': 'application/json',
@@ -155,18 +154,18 @@ export default{
 			try{
 				var resp = await this.postData("https://maya.parkspot.in/auth/register", {User: this.signupUser, Password: this.signupPassword, VehicleNumber: this.signupVNO, EmailID: this.signupEmail, Mobile: this.signupMobile, City: this.signupCity, FullName: this.signupFullName})
 			if(resp.status === true){
-				this.loading = false
+				this.Loading = false
 				this.hasError = false
 				this.$emit("close")
 				this.$emit("loggedIn")
 			}
 			else{
-				this.loading = false
+				this.Loading = false
 				this.hasError = true
 			}
 		}
 		catch(e){
-			this.loading = false
+			this.Loading = false
 			this.hasError = true
 		}
 	},
