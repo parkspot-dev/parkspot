@@ -154,18 +154,18 @@ export default{
 			try{
 				var resp = await this.postData("https://maya.parkspot.in/auth/register", {User: this.signupUser, Password: this.signupPassword, VehicleNumber: this.signupVNO, EmailID: this.signupEmail, Mobile: this.signupMobile, City: this.signupCity, FullName: this.signupFullName})
 			if(resp.status === true){
-				this.Loading = false
+				this.isLoading = false
 				this.hasError = false
 				this.$emit("close")
 				this.$emit("loggedIn")
 			}
 			else{
-				this.Loading = false
+				this.isLoading = false
 				this.hasError = true
 			}
 		}
 		catch(e){
-			this.Loading = false
+			this.isLoading = false
 			this.hasError = true
 		}
 	},
