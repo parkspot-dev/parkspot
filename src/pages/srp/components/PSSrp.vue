@@ -65,7 +65,7 @@
 					arr.push(temp)
 				}
 				var centroid = this.calculateCentroid(arr)
-				console.log("centurion", centroid, sites[i])
+				console.log("centurion", centroid)
 				repaint(centroid, check)
 				for(var i of markers){
 					new mapboxgl.Marker({color: "#2F4F4F"}).setLngLat(i).addTo(map)
