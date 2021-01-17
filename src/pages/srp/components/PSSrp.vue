@@ -43,7 +43,7 @@
 				for(var i=0;i<sites.length;i++){
 					var temp = {}
 					temp["name"] = sites[i]["Name"]
-					temp["location"] = ""
+					temp["address"] = sites[i]["Address"]
 					temp["latLng"] = [Number(sites[i].Lat), Number(sites[i].Long)]
 					try{
 						markers.push([Number(sites[i].Long), Number(sites[i].Lat)])
@@ -65,7 +65,7 @@
 					arr.push(temp)
 				}
 				var centroid = this.calculateCentroid(arr)
-				console.log("centurion", centroid)
+				console.log("centurion", centroid, sites[i])
 				repaint(centroid, check)
 				for(var i of markers){
 					new mapboxgl.Marker({color: "#2F4F4F"}).setLngLat(i).addTo(map)

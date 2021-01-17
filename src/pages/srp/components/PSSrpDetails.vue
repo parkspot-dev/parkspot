@@ -22,24 +22,23 @@
 								.tname
 									p.has-text-left.is-size-7
 										| {{site.type}}
-									.subtitle.has-text-left
-										| {{site.name}}
-								.Amount.has-text-left.is-size-6
+									p.has-text-left.is-size-11
 										strong
-											| Amount:
-										| &#x20b9; {{site.amount}}
+											| {{site.name}}
+									p.has-text-left.is-size-9
+										| {{site.address}}
+								//- .Amount.has-text-left.is-size-6
+								//- 		strong
+								//- 			| Amount: 
+								//- 		| &#x20b9; {{site.amount}}
 								.vehicleType.has-text-left.is-size-6
 									strong
-										| Vehicle Type:
+										| Vehicle Type: 
 									| {{site.vehicleType}}
 								.slotsAvailable.has-text-left.is-size-6
 									strong
-										| Slots Available:
+										| Slots Available: 
 									| {{site.slotsAvailable}}/{{site.totalSlots}}
-								//.loc.has-text-left.is-size-6
-								//	strong
-								//		| Address: 
-								//	| {{site.location}}
 								.rate.has-text-right.is-size-6
 									strong
 										| Rate:
