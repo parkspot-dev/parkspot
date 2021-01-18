@@ -43,7 +43,7 @@
 				for(var i=0;i<sites.length;i++){
 					var temp = {}
 					temp["name"] = sites[i]["Name"]
-					temp["location"] = ""
+					temp["address"] = sites[i]["Address"]
 					temp["latLng"] = [Number(sites[i].Lat), Number(sites[i].Long)]
 					try{
 						markers.push([Number(sites[i].Long), Number(sites[i].Lat)])
