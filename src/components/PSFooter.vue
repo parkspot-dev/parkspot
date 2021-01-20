@@ -19,9 +19,9 @@
 		data: function(){
 			return {
 				"bottomicons":[
-					{ image: require("../assets/sites/playstoreMini.png"), href: "https://play.google.com/store/apps/details?id=com.parkspot.parkspot"},
+					{ image: require("../assets/sites/playstoreMini.png"), href: "https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri"},
 					{ image: require("../assets/sites/linkedin.png"), href: "https://www.linkedin.com/company/parkspot-in"},
-					{ image: require("../assets/sites/twitter.png"), href: "https://twitter.com/sud_ambastha"},
+					{ image: require("../assets/sites/facebook.png"), href: "https://facebook.com/parkspot.in"},
 				]
 			}
 		}
