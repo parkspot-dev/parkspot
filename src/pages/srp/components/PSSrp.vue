@@ -24,11 +24,10 @@
 			}
 			var map;
 			mapboxgl.accessToken = 'pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ';
-			var check = false
+			var flavour = "dweb"
 			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-				check = true
+				flavour = "mweb"
 			}
-			var flavor = check ? "mweb" : "dweb"
 			console.log(flavor)
 			fetch(`https://maya.parkspot.in/search?lat=${center[1]}&long=${center[0]}&start=20201115t1250&end=20201115t1400`, {
 		    	method: 'GET', // *GET, POST, PUT, DELETE, etc.
@@ -66,7 +65,7 @@
 				}
 				var centroid = this.calculateCentroid(arr)
 				console.log("centurion", centroid)
-				repaint(centroid, check)
+				repaint(centroid, flavour)
 				for(var i of markers){
 					new mapboxgl.Marker({color: "#2F4F4F"}).setLngLat(i).addTo(map)
 				}
@@ -76,7 +75,7 @@
 			.catch((err)=>{
 				this.$root.$emit("sitesReady", [])
 			})
-			function repaint(pos, check){
+			function repaint(pos, flavour){
 				console.log("hale", pos)
 				map = new mapboxgl.Map({
 				container: 'map', // container id
@@ -84,9 +83,10 @@
 				center: pos, // starting position [lng, lat]
 				zoom: 11 // starting zoom
 				});
-				if(check === "mweb"){ // todo: check is a bool; true => mweb
+				if(flavour === "mweb"){
 					map.scrollZoom.disable();
 				}
+                map.addControl(new mapboxgl.NavigationControl());
 
 			}
 
@@ -95,11 +95,11 @@
 						//var current = [77.7864, 12.8576]
 						var current = [res.coords.longitude, res.coords.latitude]
 						console.log("current lat long",current)
-						repaint(current, check)
+						repaint(current, flavour)
 				})
 			}
 			var map;
-			repaint(center, check)
+			repaint(center, flavour)
 
 	},
 	methods: {
