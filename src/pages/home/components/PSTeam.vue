@@ -2,13 +2,13 @@
 	div(class="hero is-black is-fullheight" id="team")
 		div(class="hero-head")
 			.hero-body
-				.columns.is-vcentered
-					.column.is-one-fifth
+				.columns.is-vcentered.is-mobile.is-centered
+					.column
 						p.title Our Team
-					.column.is-one-fifth(v-for="(team, i) in teamMates" :key="i")
+					.column(v-for="(team, i) in teamMates" :key="i")
 						.card.team
 							.card-image
-								figure.image.is-128x128
+								figure.image.is-4by3
 									img(:src="`${team.dp}`")
 							.card-content
 								.media
@@ -62,13 +62,6 @@
 						linkedin: "https://www.linkedin.com/in/iamfiasco/",
 						twitter: "https://twitter.com/NikhilSuryaMuk1",
 						username: "@iamfiasco"
-					},
-					{ name: "Shubham Choudhary", 
-						dp: require("@/assets/team/sub.jpg"), 
-						git: "https://www.github.com/subhamjpc", 
-						linkedin: "https://www.linkedin.com/in/shubham-choudhary-391942101",
-						twitter: "https://twitter.com/shubhamjpc?s=09",
-						username: "@shubhamjpc"
 					}
 				]
 			}
