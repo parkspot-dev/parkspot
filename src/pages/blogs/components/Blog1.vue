@@ -29,7 +29,7 @@
 					| This sheer increase in vehicles has caused a strain on the roadways and parking infrastructure. Having such 
 					| a high population and vehicle density in India only makes things worse. These problems elevate the risk of 
 					| traffic jams in urban cities. With Bengaluru facing the worst traffic congestion in the world, Delhi, Mumbai 
-					| and Pune #[a(href="https://www.google.com" target="blank") remain] in the top 10 source traffic congestion index.
+					| and Pune remain in the top 10 source traffic congestion index.
 				br
 				p.is-size-3.has-text-black.has-text-left
 					| What causes a traffic jam ?
@@ -48,7 +48,7 @@
 				p.is-size-6.has-text-black.has-text-left
 					| A smart parking system allows people to search and book a secure parking spot. This two features to search and 
 					| book will allow people to plan where they park their vehicle in a secure parking zone. These two features can curb 
-					| the problem of traffic jams. Smart parking systems are equipped with smart sensors and devices which make the 
+					| the problem of traffic jams. Car parking systems are equipped with smart sensors and devices which make the 
 					| parking experience seamless which users will flock to experience.
 				br
 				p.is-size-3.has-text-black.has-text-left
