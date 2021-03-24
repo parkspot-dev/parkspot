@@ -7,56 +7,56 @@
                         p.title Our Offerings
                     .column
                         .card.team
+                            .card-title
+                                b.has-text-black ParkSpot for Corporates
                             .card-image
                                 figure.image.is-4by3
                                     img(:src="`${corporate}`")
                             .card-content
-                                .content
-                                    b.has-text-black ParkSpot for Corporates
-                                    |
+                                .content.is-left-align
                                     |Give your employees the gift of easy parking.
-                            .card-footer
+                            .card-footer.is-pad
                                 .container
-                                    a(class="button is-black" href='#') Get in touch
+                                    a(class="button is-black" href='/#contact') Get in touch
                     .column
                         .card.team
+                            .card-title
+                                b.has-text-black ParkSpot for Societies
                             .card-image
                                 figure.image.is-4by3
                                     img(:src="`${society}`")
                             .card-content
-                                .content
-                                    b.has-text-black ParkSpot for Societies
-                                    |
+                                .content.is-left-align
                                     |Secure your society and enable seamless entry/exit for residents.
-                            .card-footer
+                            .card-footer.is-pad
                                 .container
-                                    a(class="button is-black" href='#') Get in touch
+                                    a(class="button is-black" href='/#contact') Get in touch
                     .column
                         .card.team
+                            .card-title
+                                b.has-text-black ParkSpot for Parking Owners
                             .card-image
                                 figure.image.is-4by3
                                     img(:src="`${owner}`")
                             .card-content
-                                .content
-                                    b.has-text-black ParkSpot for Parking Owners
-                                    |
+                                .content.is-left-align
                                     |Want to monetize your idle parking spaces?
-                            .card-footer
+                            .card-footer.is-pad
                                 .container
-                                    a(class="button is-black" href='#') Get in touch
+                                    a(class="button is-black" href='/#contact') Get in touch
                     .column
                         .card.team
+                            .card-title
+                                b.has-text-black ParkSpot for Malls/Hotels
                             .card-image
                                 figure.image.is-4by3
                                     img(:src="`${corporate}`")
                             .card-content
-                                .content
-                                    b.has-text-black ParkSpot for Malls/Hotels
-                                    |
+                                .content.is-left-align
                                     |Digitized parking space for better monetization and a seamless customer experience.
-                            .card-footer
+                            .card-footer.is-pad
                                 .container
-                                    a(class="button is-black" href='#') Get in touch
+                                    a(class="button is-black" href='/#contact') Get in touch
 
     
 </template>
@@ -77,5 +77,13 @@ export default ({
 </script>
 
 <style scoped>
-
+.is-left-align{
+    text-align: left;
+}
+.is-pad{
+    padding-bottom: 10px;
+}
+.card-title{
+    padding: 10px 5px 5px 5px;
+}
 </style>
