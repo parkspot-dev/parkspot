@@ -5,6 +5,7 @@
 	<MainBanner />
 	<Services />
 	<PSTeam />
+	<PSOffering/>
 	<PSSites />
 	<PSAbout />
 	<contact />
@@ -22,6 +23,8 @@ import Services from '@/pages/home/components/Service.vue';
 import contact from '@/pages/home/components/Contact.vue';
 import PSSites from '@/pages/home/components/PSSites.vue';
 import PSAbout from '@/pages/home/components/PSAbout.vue';
+import PSOffering from '@/pages/home/components/PSOffering.vue';
+
 
 export default {
   name: 'App',
@@ -34,7 +37,8 @@ export default {
 	PSMap,
 	PSFooter,
 	PSSites,
-	PSAbout
+	PSAbout,
+	PSOffering
   },
 };
 </script>
