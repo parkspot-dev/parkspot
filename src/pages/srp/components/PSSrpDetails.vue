@@ -47,7 +47,7 @@
 									|{{site.distance}} Km
 								.has-text-left.grid-items.item6
 									strong Rating:
-									|{{site.rating}}
+									|{{site.rating}}/5
 								.floatright.grid-items.item7
 									a(class="button is-warning" href='/#contact') Book
 										
