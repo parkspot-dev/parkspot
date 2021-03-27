@@ -18,8 +18,8 @@
 							img.defImage(v-if="site.cropImage" :src="site.imageURI")
 							img(v-else :src="site.imageURI")
 						.column.is-half
-							.grid
-								.tname
+							.grid-container
+								.tname.item1
 									p.has-text-left.is-size-7
 										| {{site.type}}
 									p.has-text-left.is-size-11
@@ -31,28 +31,32 @@
 								//- 		strong
 								//- 			| Amount: 
 								//- 		| &#x20b9; {{site.amount}}
-								.vehicleType.has-text-left.is-size-6
+								.vehicleType.has-text-left.is-size-6.item2.mypad
 									strong
 										| Vehicle Type: 
 									| {{site.vehicleType}}
-								.slotsAvailable.has-text-left.is-size-6
+								.slotsAvailable.has-text-left.is-size-6.item3
 									strong
 										| Slots Available: 
 									| {{site.slotsAvailable}}/{{site.totalSlots}}
-								.rate.has-text-right.is-size-6
-									strong
-										| Rate:
-										|  
-									| &#x20b9; {{site.rate}}/{{site.unit}}
-							//.floatright
-							//	a.button.is-warning
-							//		| Book
+								.has-text-left.grid-items.item4
+									strong Rate: &#x20b9; 
+									|{{site.rate}}/{{site.unit}}
+								.has-text-left.grid-items.item5
+									strong Distance:
+									|{{site.distance}} Km
+								.has-text-left.grid-items.item6
+									strong Rating:
+									|{{site.rating}}
+								.floatright.grid-items.item7
+									a(class="button is-warning" href='/#contact') Book
+										
 
 				br
 
 				br
 				br
-					
+
 </template>
 <script>
 import EmptySitesModal from '@/pages/srp/components/EmptySitesModal.vue';
@@ -166,10 +170,14 @@ export default{
 	padding-right: 10%;
 	padding-bottom: 5%;
 }
-.grid{
+.grid-container{
 	display: grid;
 	align-items: center;
-	grid-template-rows: 1fr 1fr; /*1 3 1*/
+	grid-template: 'myArea myArea myArea'
+	'myArea2 myArea2 myArea2'
+	'myArea3 myArea3 myArea3'
+	'myArea4 myArea4 myArea4'
+	'myArea5 myArea6 myArea7';
 }
 .defImage{
 	height: 200px;
@@ -177,4 +185,29 @@ export default{
 .emptyHandle{
 	display: flex;
 }
+.grid-items{
+	grid-column-gap: 100px;
+}
+.item1{
+	grid-area: myArea;
+}
+.item2{
+	grid-area: myArea2;
+}
+.item3{
+	grid-area: myArea3;
+}
+.item4{
+	grid-area: myArea4;
+}
+.item5{
+	grid-area: myArea5;
+}
+.item5{
+	grid-area: myArea6;
+}
+.mypad{
+	margin-top: 5px;
+}
+
 </style>
