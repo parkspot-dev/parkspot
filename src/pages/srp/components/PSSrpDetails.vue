@@ -43,10 +43,10 @@
 									strong Rate: &#x20b9; 
 									|{{site.rate}}/{{site.unit}}
 								.has-text-left.grid-items.item5
-									strong Distance:
+									strong Distance: 
 									|{{site.distance}} Km
 								.has-text-left.grid-items.item6
-									strong Rating:
+									strong Rating: 
 									|{{site.rating}}/5
 								.floatright.grid-items.item7
 									a(class="button is-warning" href='/#contact') Book
