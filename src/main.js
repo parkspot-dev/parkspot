@@ -3,6 +3,10 @@ import Buefy from 'buefy';
 import App from './App.vue';
 import 'buefy/dist/buefy.css';
 import router from './router'
+import VeuResource from 'vue-resource';
+import VueResource from 'vue-resource';
+
+Vue.use(VueResource);
 
 Vue.config.productionTip = false;
 
