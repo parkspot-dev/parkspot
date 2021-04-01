@@ -18,28 +18,69 @@
 					iframe(src="https://maps.google.com/maps?q=2nd%20Floor,%20Nextcoworks%20BTM%20Layout,%20Ranka%20Colony%20Rd,%20Munivenkatppa%20Layout,%20BTM%202nd%20Stage,%20Bengaluru,%20Karnataka%20560076+(ParkSpot)&t=&z=14&ie=UTF8&iwloc=B&output=embed" height="47%" width="100%")
 				.column.is-half.contact
 					p.title.has-text-black.has-text-left Got suggestions?
-					form(id="contactusform" class="form" action="https://api.sheetmonkey.io/form/4LQXCEMZFtaaSQMmXc7nbw" method="POST")
+					form(id="contactusform" class="form"  method="POST"  )
 						label.label.has-text-black.has-text-left Name
-						input(id="namec" class="input" type="text" name="Name" placeholder="Enter Name Here")
+						input(id="namec" v-model="FullName" class="input" type="text" name="Name" placeholder="Enter Name Here")
 						label.label.has-text-black.has-text-left Email
-						input(id="emailc" class="input" type="text" name="Email" placeholder="Enter Email id here")
+						input(id="emailc" v-model="EmailID" class="input" type="text" name="Email" placeholder="Enter Email id here")
 						label.label.has-text-black.has-text-left City
-						input(id="cityc" class="input" type="text" name="City" placeholder="Bangalore")
-						label.label.has-text-black.has-text-left Authority type
-						.control.level
-							.select.level-left
-								select(id="options" name="Authority type")
-									option Parking Operator
-									option Parking User
-									option Others
+						input(id="cityc" v-model="City" class="input" type="text" name="city" placeholder="Bangalore")
+						label.label.has-text-black.has-text-left Contact No.
+						input(id="mobilec" v-model="Mobile" class="input" type="tel" name="mobile" placeholder="+91 ")
+						//- label.label.has-text-black.has-text-left Authority type
+						//- .control.level
+						//- 	.select.level-left
+						//- 		select(id="options" name="Authority type")
+						//- 			option Parking Operator
+						//- 			option Parking User
+						//- 			option Others
 						label.label.has-text-black.has-text-left Message
-						textarea(id="messagec" class="textarea" name="Message" placeholder="Enter your suggestions; We are happy to listen")
+						textarea(id="messagec" v-model="Comments" class="textarea" name="Message" placeholder="Enter your suggestions; We are happy to listen")
 						br
-						button.button.is-dark Submit
+						button(class="button is-dark" v-on:click.prevent="post") Submit
+						h1(v-if="isContacted")
+							|Thank you for contacting us!!
+					
 </template>
 <script>
+
 export default{
-	name: "contact"
+	name: "contact",
+	data(){
+		return{
+			FullName:"",
+			City:"",
+			EmailID:"",
+			Mobile:"",
+			Comments:"",
+			isContacted:false
+		}
+
+	},
+	methods:{
+		post:function(){
+			
+			var isMweb = false
+			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+				isMweb = true
+			}
+			var flavor = isMweb ? "mweb" : "dweb"
+			console.log(flavor)
+			this.isContacted = !this.isContacted
+			this.$http.post("https://maya.parkspot.in/contact",{
+				User:{FullName:this.FullName,
+				EmailID:this.EmailID,
+				City:this.City,
+				Mobile:this.Mobile
+				},
+				Comments:this.Comments,
+				Flavour:this.flavor
+			}).then(function(data){
+				console.log(data)
+			})
+		}
+		
+	}
 }
 </script>
 <style scoped>
