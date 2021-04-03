@@ -31,7 +31,7 @@
 						textarea(id="messagec" v-model="Comments" class="textarea" name="Message" placeholder="Enter your suggestions; We are happy to listen")
 						br
 						button(class="button is-dark" v-on:click.prevent="post") Submit
-					h1(v-if="isContacted" class="title center-contact")
+					h1(id="ContactButton" v-if="isContacted" class="title center-contact")
 						|Thank you for contacting us!!
 					
 </template>
