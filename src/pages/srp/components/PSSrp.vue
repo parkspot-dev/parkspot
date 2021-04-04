@@ -61,6 +61,8 @@
 					temp["totalSlots"] = sites[i]["TotalSlots"]
 					temp["vehicleType"] = sites[i]["VehicleType"]
 					temp["cropImage"] = sites[i]["IconURL"] === "https://parkspot.blob.core.windows.net/assets/default.png"
+					temp["distance"] = sites[i]["Distance"]
+					temp["rating"] = sites[i]["Rating"]
 					arr.push(temp)
 				}
 				var centroid = this.calculateCentroid(arr)
