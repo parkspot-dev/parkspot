@@ -8,7 +8,7 @@
           b-navbar-item(tag="router-link" :to="{ path: '/' }")
             img(:src="`${minilogotext.path}`" placeholder="ParkSpot" id="maximize")
         template(slot='end')
-          b-navbar-item.a(:href="`https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website`" onclick="ga('send', 'event', [GoogleApp_Link], [click], [event_tracking_guide],[25],[fieldsObject]);" target="_blank")
+          b-navbar-item.a(:href="`https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website`"  target="_blank")
             img(src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' alt='Get it on Google Play' placeholder="ParkSpotPlaystore" id="maximize")
           b-navbar-item(tag='div')
             .buttons(v-if="isLoggedIn()")
@@ -125,6 +125,3 @@ export default {
 	max-height: 4rem;
 }
 </style>
-
-
-<a href='https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.i&utm_campaign=website&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
