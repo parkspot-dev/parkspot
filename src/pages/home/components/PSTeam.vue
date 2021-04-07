@@ -56,12 +56,26 @@
 						twitter: "https://twitter.com/nextishwar",
 						username: "@nextishwar"
 					},
-					{ name: "Nikhil Surya Mukhi", 
-						dp: require("@/assets/team/nik.jpg"), 
-						git: "https://www.github.com/iamfiasco", 
-						linkedin: "https://www.linkedin.com/in/iamfiasco/",
-						twitter: "https://twitter.com/NikhilSuryaMuk1",
-						username: "@iamfiasco"
+					// { name: "Nikhil Surya Mukhi", 
+					// 	dp: require("@/assets/team/nik.jpg"), 
+					// 	git: "https://www.github.com/iamfiasco", 
+					// 	linkedin: "https://www.linkedin.com/in/iamfiasco/",
+					// 	twitter: "https://twitter.com/NikhilSuryaMuk1",
+					// 	username: "@iamfiasco"
+					// },
+					{ name: "Sujeet Manjhi", 
+						dp: require("@/assets/team/Sujeet.jpg"), 
+						git: "https://www.github.com/alias01", 
+						linkedin: "https://www.linkedin.com/in/sujeet-manjhi-345ba6176/",
+						twitter: "https://twitter.com/Sujeet_xd",
+						username: "@alias"
+					},
+					{ name: "Rashmi Kumari", 
+						dp: require("@/assets/team/Rashmi.jpg"), 
+						git: "#", 
+						linkedin: "https://www.linkedin.com/in/rashmi-kumari-2ab18b13a",
+						twitter: "#",
+						username: "@Rashmi"
 					}
 				]
 			}
