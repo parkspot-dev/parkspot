@@ -50,7 +50,7 @@
                                 b.has-text-black ParkSpot for Malls/Hotels
                             .card-image
                                 figure.image.is-4by3
-                                    img(:src="`${corporate}`")
+                                    img(:src="`${hotel}`")
                             .card-content
                                 .content.is-left-align
                                     |Digitized parking space for better monetization and a seamless customer experience.
@@ -67,10 +67,10 @@ export default ({
     name: 'PSOffering',
     data(){
         return{
-               corporate: require('@/assets/offering/corporates.png'),
-               hotel: require('@/assets/offering/hotels.png'),
-               society: require('@/assets/offering/society.png'),
-               owner: require('@/assets/offering/owner.png')
+               corporate: require('@/assets/offering/Corporates.png'),
+               hotel: require('@/assets/offering/Hotels.png'),
+               society: require('@/assets/offering/Society.png'),
+               owner: require('@/assets/offering/Owner.png')
         }
     }
 })
