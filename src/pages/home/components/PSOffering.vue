@@ -67,10 +67,10 @@ export default ({
     name: 'PSOffering',
     data(){
         return{
-               corporate: require('@/assets/offering/Corporates.png'),
-               hotel: require('@/assets/offering/Hotels.png'),
-               society: require('@/assets/offering/Society.png'),
-               owner: require('@/assets/offering/Owner.png')
+               corporate: require('@/assets/offering/corporates.png'),
+               hotel: require('@/assets/offering/hotels.png'),
+               society: require('@/assets/offering/society.png'),
+               owner: require('@/assets/offering/owner.png')
         }
     }
 })
