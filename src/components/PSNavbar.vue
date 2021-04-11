@@ -38,7 +38,7 @@
           b-navbar-item(href="/#about")
             | About
           b-navbar-item(href="/#contact")
-            | Contact Us
+            | Contact Us	
 </template>
 
 <script>
