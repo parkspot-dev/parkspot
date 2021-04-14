@@ -28,7 +28,7 @@
 			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 				flavour = "mweb"
 			}
-			console.log(flavor)
+			console.log(flavour)
 			fetch(`https://maya.parkspot.in/search?lat=${center[1]}&long=${center[0]}&start=20201115t1250&end=20201115t1400`, {
 		    	method: 'GET', // *GET, POST, PUT, DELETE, etc.
 			})
