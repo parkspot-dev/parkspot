@@ -10,7 +10,7 @@
                 p.title.has-text-black
                   | {{carousel.title}}
                 br
-                pre.subtitle.has-text-black
+                p.subtitle.has-text-black(style="white-space: pre-line")
                   | {{carousel.subtitle}}
               .column.is-half(v-else)
                 p.title
@@ -34,8 +34,8 @@ export default {
           color: 'black', 
           istextb: false
         },
-        { title: "Worried about security?", 
-          subtitle: "We'll make sure no harm occurs to your property. To ensure this you can monitor your property in real time", 
+        { title: "ParkSpot safeguard the vehicles!", 
+          subtitle: 'Everyone wants the vehicle to be safeguarded, and ParkSpot space provide just that.\nWith enhanced security systems in place and equipment like cameras and sensors regularly monitoring the parking spaces,\nthese parking lots are ideal destinations for leaving the vehicles even for more extended periods.',
           path: require("@/assets/banners/2b.png"), 
           color: 'warning', 
           istextb: true
