@@ -2,7 +2,7 @@
     div(class="hero is-warning is-fullheight" id="PSOffering")
         div(class="hero-head")
             .hero-body
-                .columns.is-vcentered.is-mobile.is-centered
+                .columns.is-vcentered.is-centered
                     .column
                         p.title Our Offerings
                     .column
@@ -10,53 +10,53 @@
                             .card-title
                                 b.has-text-black ParkSpot for Corporates
                             .card-image
-                                figure.image.is-4by3
+                                figure.image.is-4by3.mx-5
                                     img(:src="`${corporate}`")
                             .card-content
                                 .content.is-left-align
                                     |Give your employees the gift of easy parking.
                             .card-footer.is-pad
                                 .container
-                                    a(class="button is-black" href='/#contact') Get in touch
+                                    a(class="button is-warning" href='/#contact') Get in touch
                     .column
                         .card.team
                             .card-title
                                 b.has-text-black ParkSpot for Societies
                             .card-image
-                                figure.image.is-4by3
+                                figure.image.is-4by3.mx-5
                                     img(:src="`${society}`")
                             .card-content
                                 .content.is-left-align
                                     |Secure your society and enable seamless entry/exit for residents.
                             .card-footer.is-pad
                                 .container
-                                    a(class="button is-black" href='/#contact') Get in touch
+                                    a(class="button is-warning" href='/#contact') Get in touch
                     .column
                         .card.team
                             .card-title
                                 b.has-text-black ParkSpot for Parking Owners
                             .card-image
-                                figure.image.is-4by3
+                                figure.image.is-4by3.mx-5
                                     img(:src="`${owner}`")
                             .card-content
                                 .content.is-left-align
                                     |Want to monetize your idle parking spaces?
                             .card-footer.is-pad
                                 .container
-                                    a(class="button is-black" href='/#contact') Get in touch
+                                    a(class="button is-warning" href='/#contact') Get in touch
                     .column
                         .card.team
                             .card-title
                                 b.has-text-black ParkSpot for Malls/Hotels
                             .card-image
-                                figure.image.is-4by3
+                                figure.image.is-4by3.mx-5
                                     img(:src="`${hotel}`")
                             .card-content
                                 .content.is-left-align
                                     |Digitized parking space for better monetization and a seamless customer experience.
                             .card-footer.is-pad
                                 .container
-                                    a(class="button is-black" href='/#contact') Get in touch
+                                    a(class="button is-warning" href='/#contact') Get in touch
 
     
 </template>
@@ -67,10 +67,10 @@ export default ({
     name: 'PSOffering',
     data(){
         return{
-               corporate: require('@/assets/offering/corporates.png'),
-               hotel: require('@/assets/offering/hotels.png'),
+               corporate: require('@/assets/offering/building.png'),
+               hotel: require('@/assets/offering/hotel.png'),
                society: require('@/assets/offering/society.png'),
-               owner: require('@/assets/offering/owner.png')
+               owner: require('@/assets/offering/parking.png')
         }
     }
 })

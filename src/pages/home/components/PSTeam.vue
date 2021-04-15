@@ -2,7 +2,7 @@
 	div(class="hero is-black is-fullheight" id="team")
 		div(class="hero-head")
 			.hero-body
-				.columns.is-vcentered.is-mobile.is-centered
+				.columns.is-vcentered.is-centered
 					.column
 						p.title Our Team
 					.column(v-for="(team, i) in teamMates" :key="i")
@@ -24,7 +24,7 @@
 									.columns.is-centered.is-vcentered
 										.column.is-one-third
 											a(:href="`${team.git}`")
-												img(:src="`${github}`" class="image is-48x48")
+												img(:src="`${github}`" class="lazyload image is-48x48")
 										.column.is-one-third
 											a(:href="`${team.linkedin}`")
 												img(:src="`${linkedin}`" class="image is-48x48")
