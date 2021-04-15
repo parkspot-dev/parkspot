@@ -2,10 +2,10 @@
 	div(class="hero is-black is-fullheight" id="team")
 		div(class="hero-head")
 			.hero-body
-				.columns.is-vcentered.is-mobile.is-centered
+				.columns.is-vcentered.is-centered
 					.column
 						p.title Our Team
-					.column(v-for="(team, i) in teamMates" :key="i")
+					.column.center.is-three-quarters-mobile(v-for="(team, i) in teamMates" :key="i")
 						.card.team
 							.card-image
 								figure.image.is-4by3
