@@ -49,7 +49,7 @@
 									strong Rating: 
 									|{{site.rating}}/5
 								.floatright.grid-items.item7
-									a(class="button is-warning" href='/#contact') Book
+									a(id="srpBook" class="button is-warning" href='/#contact') Book
 										
 
 				br
