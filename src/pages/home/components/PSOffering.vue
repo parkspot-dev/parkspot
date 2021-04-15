@@ -5,11 +5,11 @@
                 .columns.is-vcentered.is-centered
                     .column
                         p.title Our Offerings
-                    .column
+                    .column.center.is-three-quarters-mobile
                         .card.team
-                            .card-title
-                                b.has-text-black ParkSpot for Corporates
-                            .card-image
+                            .card-title.has-background-black
+                                b.title.is-4.has-text-white ParkSpot for Corporates
+                            .card-image.has-background-black.pb-3
                                 figure.image.is-4by3.mx-5
                                     img(:src="`${corporate}`")
                             .card-content
@@ -17,25 +17,25 @@
                                     |Give your employees the gift of easy parking.
                             .card-footer.is-pad
                                 .container
-                                    a(class="button is-warning" href='/#contact') Get in touch
-                    .column
+                                    a(class="button is-dark" href='/#contact') Get in touch
+                    .column.center.is-three-quarters-mobile
                         .card.team
-                            .card-title
-                                b.has-text-black ParkSpot for Societies
-                            .card-image
+                            .card-title.has-background-black
+                                b.title.is-4.has-text-white ParkSpot for Societies
+                            .card-image.has-background-black.pb-3
                                 figure.image.is-4by3.mx-5
                                     img(:src="`${society}`")
                             .card-content
-                                .content.is-left-align
+                               .content.is-left-align
                                     |Secure your society and enable seamless entry/exit for residents.
                             .card-footer.is-pad
                                 .container
-                                    a(class="button is-warning" href='/#contact') Get in touch
-                    .column
+                                    a(class="button is-dark" href='/#contact') Get in touch
+                    .column.center.is-three-quarters-mobile
                         .card.team
-                            .card-title
-                                b.has-text-black ParkSpot for Parking Owners
-                            .card-image
+                            .card-title.has-background-black
+                                b.title.is-4.has-text-white ParkSpot for Parking Owners
+                            .card-image.has-background-black.pb-3
                                 figure.image.is-4by3.mx-5
                                     img(:src="`${owner}`")
                             .card-content
@@ -43,12 +43,12 @@
                                     |Want to monetize your idle parking spaces?
                             .card-footer.is-pad
                                 .container
-                                    a(class="button is-warning" href='/#contact') Get in touch
-                    .column
+                                    a(class="button is-dark" href='/#contact') Get in touch
+                    .column.center.is-three-quarters-mobile
                         .card.team
-                            .card-title
-                                b.has-text-black ParkSpot for Malls/Hotels
-                            .card-image
+                            .card-title.has-background-black
+                                b.title.is-4.has-text-white ParkSpot for Malls/Hotels
+                            .card-image.has-background-black.pb-3
                                 figure.image.is-4by3.mx-5
                                     img(:src="`${hotel}`")
                             .card-content
@@ -56,7 +56,7 @@
                                     |Digitized parking space for better monetization and a seamless customer experience.
                             .card-footer.is-pad
                                 .container
-                                    a(class="button is-warning" href='/#contact') Get in touch
+                                    a(class="button is-dark" href='/#contact') Get in touch
 
     
 </template>
@@ -85,5 +85,11 @@ export default ({
 }
 .card-title{
     padding: 10px 5px 5px 5px;
+}
+.bgblack{
+    background-color: black;
+}
+.textwhite{
+    color:white;
 }
 </style>

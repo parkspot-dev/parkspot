@@ -5,7 +5,7 @@
 				.columns.is-vcentered.is-centered
 					.column
 						p.title Our Team
-					.column(v-for="(team, i) in teamMates" :key="i")
+					.column.center.is-three-quarters-mobile(v-for="(team, i) in teamMates" :key="i")
 						.card.team
 							.card-image
 								figure.image.is-4by3
@@ -24,7 +24,7 @@
 									.columns.is-centered.is-vcentered
 										.column.is-one-third
 											a(:href="`${team.git}`")
-												img(:src="`${github}`" class="lazyload image is-48x48")
+												img(:src="`${github}`" class="image is-48x48")
 										.column.is-one-third
 											a(:href="`${team.linkedin}`")
 												img(:src="`${linkedin}`" class="image is-48x48")
