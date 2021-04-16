@@ -1,17 +1,17 @@
  <template lang="pug">
-	footer.footer#black
+	footer.footer.has-background-black
 		.content.has-text-centered
-			.footercontainer
-				.containersocial
-					.columns.bottomicons
-						.column.is-one-third(v-for="(elem, i) in bottomicons" :key="i")
-							a(:href="`${elem.href}`")
-								img(class="footericons" :src="`${elem.image}`")
-				br
-				p.has-text-white
-					|© 2020 
-					strong.has-text-white The Thought Engine 
-					|- All rights reserved.
+			.container.is-fluid
+				.columns.is-vcentered.is-centered.is-multiline.px-6.mx-6
+					.column.center.is-12-mobile.is-4(v-for="(elem, i) in bottomicons" :key="i")
+						a(:href="`${elem.href}`" alt="social handle icons")
+							img(class="footericons" :src="`${elem.image}`")
+						
+			br
+			p.has-text-white
+				|© 2020 
+				strong.has-text-white The Thought Engine 
+				|- All rights reserved.
 </template>
 <script>
 	export default{
@@ -30,17 +30,5 @@
 <style scoped>
 	.footericons{
 		width: 50px;
-	}
-	.containersocial{
-		margin: auto;
-		width: 50%;
-	}
-	/*
-	.bottomicons{
-		width: 20%;
-	}
-	*/
-	#black{
-		background: black;
 	}
 </style>
