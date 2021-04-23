@@ -1,0 +1,15 @@
+
+{
+    "api": "GET entity/:eid/tenants",
+    "Success": true,
+    "Tenants": [
+      {
+        "TID": 1,
+        "Name": "Softbank"
+      },
+      {
+        "TID": 12,
+        "Name": "Hardbank"
+      }
+    ]
+  }

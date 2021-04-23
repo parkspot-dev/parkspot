@@ -3,6 +3,9 @@ import Thanks from '@/views/Thanks.vue'
 import Faq from '@/views/Faq.vue'
 import PSSrp from '@/views/Srp.vue'
 import Blog1 from '@/views/Blog1.vue'
+// delete it after portal testing
+import Portal from '@/views/Portal.vue'
+
 
 export const routes = [
   {
@@ -36,6 +39,13 @@ export const routes = [
 		name: 'EliminateTrafficJam',
 		component: Blog1
 	},
+  // delete
+  {
+    path: '/portal',
+		name: 'PSPortal',
+		component: Portal
+  },
+  // delete above
   {
   path: '*',
 	beforeRouteEnter: (to, from, next)=>{

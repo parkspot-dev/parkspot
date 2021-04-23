@@ -37,7 +37,7 @@
                 selected: null,
                 isFetching: false,
 				cdata: [],
-				mapdisp: true,
+				mapdisp: true
             }
         },
 		mounted: function(){
