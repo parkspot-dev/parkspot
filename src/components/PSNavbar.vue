@@ -39,7 +39,7 @@
             | About
           b-navbar-item(href="/#contact")
             | Contact Us
-          b-navbar-item.is-hidden(tag="router-link" :to="{ path: '/portal' }")
+          b-navbar-item(tag="router-link" :to="{ path: '/portal' }")
             | Portal
 </template>
 

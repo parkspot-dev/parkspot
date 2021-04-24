@@ -15,14 +15,15 @@
 			.column
 				.label
 						| All Tenants List
-				.select
-					select(v-model="selectedValue" v-on:change="getTenantInfo($event.target.value)")
-						option(v-for="(tenantList,index) in tenantLists.Tenants" :value="tenantList.TID"  ) {{ tenantList.Name }}
+				.control
+					.select
+						select(v-model="selectedValue" v-on:change="getTenantInfo($event.target.value)")
+							option(v-for="(tenantList,index) in tenantLists.Tenants" :value="tenantList.TID"  ) {{ tenantList.Name }}
 
 			.column
 				.box.notification.is-warning
 					.field
-						| Total No. of Parking space: {{ tenants.TotalSpots.Car + tenants.TotalSpots.Bike }}
+						| Total No. of Parking Spot: {{ tenants.TotalSpots.Car + tenants.TotalSpots.Bike }}
 					.field
 						.level
 							.level-left
@@ -32,7 +33,7 @@
 			.column
 				.box.notification.is-success
 					.field
-						| Total No. of Vacant space: {{ tenants.VacantSpots.Car + tenants.VacantSpots.Bike }}
+						| Total No. of Vacant Spot: {{ tenants.VacantSpots.Car + tenants.VacantSpots.Bike }}
 					.field
 						.level
 							.level-left
@@ -50,8 +51,8 @@
 						tr
 							th No.
 							th Building Name
-							th Car parking space
-							th Bike space
+							th Car parking Spot
+							th Bike Spot
 							th Edit
 					tbody
 						tr(v-for="(site, index) in tenants.SiteWise")
@@ -61,9 +62,9 @@
 							td {{site.TotalSpots.Car}}
 							td {{site.TotalSpots.Bike}}
 							td 
-								.button.is-danger.is-small(type='submit' v-on:click="deleteBuilding(index + 1)") Delete
-								.button.is-info.is-small(type='submit' ) Edit
-								.button.is-success.is-small(type='submit' ) Add
+								.button.is-danger.is-small( type='submit' v-on:click="deleteBuilding(index + 1)") Delete
+								.button.is-info.is-small(type='submit'   v-on:click="EditBuildingModal()") Edit
+								.button.is-success.is-small(type='submit' v-on:click="addBuildingModal()" ) Add
 			.column.is-3
 				table(id="park-map-car",class="table")
 					tbody
@@ -84,6 +85,29 @@
 			//- //- button.btn.btn-primary(v-on:click="getParkingSite") site
 			//- //- div
 			//- //- 	
+		div(v-if="addBuildingModalCheck" )
+		div(class="modal is-vcentered" :class="{'is-active': addBuildingModalCheck}" )
+			.modal-background
+				.modal-card
+					.modal-card-head
+						p.modal-card-title {{Action}} Building Details
+						button.delete(aria-label="close" v-on:click="addBuildingModal()")
+					.modal-card-body
+						.form(action="" method="method")
+							.label.level-left Building Name:
+							.input(type="text")
+							br
+							br
+							.label.level-left No.of Car Spot
+							.input(type="number")
+							br
+							br
+							.label.level-left No.of Bike Spot
+							.input(type="number")
+					.modal-card-foot
+						.button.is-success
+							| {{Action}}
+						.button.is-danger(v-on:click="addBuildingModal()") Cancel			
 
 </template>
 <script>
@@ -96,7 +120,9 @@
 				selectedValue: 1,
 				Tid:1,
 				tenants : [],
-				tenantLists: []
+				tenantLists: [],
+				addBuildingModalCheck : false,
+				Action: "Add"
 			}
 		},
 		methods:{
@@ -195,15 +221,24 @@
 			var table = document.getElementById("parking-site");
 			table.deleteRow(index);
 		},
-		addBuilding(){
-			var table = document.getElementById("parking-site");
-			var tr = table.insertRow(1);
-			for(var i = 0; i < 4; i++){
-				var td = tr.insertCell(i);
+		// addBuilding(lastindex){
+		// 	var table = document.getElementById("parking-site");
+		// 	var tr = table.insertRow(lastindex);
+		// 	for(var i = 0; i < 4; i++){
+		// 		var td = tr.insertCell(i);
 
-			}
-		}
-				
+		// 	}
+		// }
+		addBuildingModal(){
+			this.addBuildingModalCheck = !this.addBuildingModalCheck;
+
+		},
+		EditBuildingModal(){
+			this.addBuildingModalCheck = !this.addBuildingModalCheck;
+			this.Action = "Edit"
+
+		}		
+		
 		},
 		async created(){
 			this.tenantLists=await this.getTenantList();
