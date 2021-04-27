@@ -38,7 +38,9 @@
           b-navbar-item(href="/#about")
             | About
           b-navbar-item(href="/#contact")
-            | Contact Us	
+            | Contact Us
+          b-navbar-item.is-hidden(tag="router-link" :to="{ path: '/portal' }")
+            | Portal
 </template>
 
 <script>

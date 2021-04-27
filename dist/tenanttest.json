@@ -1,0 +1,38 @@
+
+  {
+    "api": "GET tenant/:tid/details",
+    "Success": true,
+    "ParkingStatus": {
+      "SiteWise": [
+        {
+          "SiteID": "BLR#Inndiqube#1",
+          "Name": "Oracle Building",
+          "TotalSpots": {
+            "Car": 100,
+            "Bike": 5
+          },
+          "Spots": [
+            {
+              "ID": 1,
+              "Status": 0,
+              "VehichleType": 1
+            },
+            {
+              "ID": 10,
+              "Status": 1,
+              "VehichleType": 0
+            }
+          ]
+        }
+      ]
+    },
+    "TotalSpots": {
+      "Car": 100,
+      "Bike": 5
+    },
+    "VacantSpots": {
+      "Car": 100,
+      "Bike": 5
+    }
+  }
+
