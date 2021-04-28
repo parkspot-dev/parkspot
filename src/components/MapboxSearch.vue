@@ -23,7 +23,7 @@
 			</div>
 			<!-- <div id="maph" v-if="mapdisp"> -->
         <!-- <div class="maph"> -->
-          <img class="maph" id="main-img" src="https://api.mapbox.com/styles/v1/mapbox/dark-v10/static/77.5465,12.7999,10/1280x1280@2x?access_token=pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ" alt="Map of Bangluru">
+          <img class="maph" id="main-img" src="https://api.mapbox.com/styles/v1/mapbox/dark-v10/static/77.8782,12.9098,13/1280x1280@2x?access_token=pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ" alt="Map of Bangluru">
         <!-- </div> -->
 			</div>
 		</div>

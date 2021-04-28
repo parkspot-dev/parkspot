@@ -41,7 +41,7 @@
             | Contact Us
           b-navbar-item.is-hidden(tag="router-link" :to="{ path: '/portal' }")
             | Portal
-          b-navbar-item(tag="router-link" :to="{ path: '/parking-near-you' }")
+          b-navbar-item.is-hidden(tag="router-link" :to="{ path: '/parking-near-you' }")
             | Parking Near You
 </template>
 
