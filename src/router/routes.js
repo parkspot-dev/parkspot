@@ -5,6 +5,7 @@ import PSSrp from '@/views/Srp.vue'
 import Blog1 from '@/views/Blog1.vue'
 // delete it after portal testing
 import Portal from '@/views/Portal.vue'
+import Parking from '@/views/Parking.vue'
 
 
 export const routes = [
@@ -44,6 +45,11 @@ export const routes = [
     path: '/portal',
 		name: 'PSPortal',
 		component: Portal
+  },
+  {
+    path: '/parking-near-you',
+		name: 'Parking',
+		component: Parking
   },
   // delete above
   {
