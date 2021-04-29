@@ -5,6 +5,9 @@ import 'buefy/dist/buefy.css';
 import router from './router';
 import VueResource from 'vue-resource';
 
+import JwPagination from 'jw-vue-pagination';
+Vue.component('jw-pagination', JwPagination);
+
 Vue.use(VueResource);
 
 Vue.config.productionTip = false;
