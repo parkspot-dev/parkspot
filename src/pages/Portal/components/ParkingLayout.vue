@@ -5,8 +5,12 @@
       <div class="column is-6">
         <div class="subtitle">Car Map</div>
         <div class="columns is-multiline">
-          <div :key="itemObjKey" class="column is-2" v-for="(tenantDetail, itemObjKey) in tenantInfos[id1-1].ParkingStatus
-            .SiteWise[id2].TotalSpots.Car">
+          <div
+            :key="itemObjKey"
+            class="column is-2"
+            v-for="(tenantDetail, itemObjKey) in tenantInfos[id1 - 1]
+              .ParkingStatus.SiteWise[id2].TotalSpots.Car"
+          >
             <div class="mylayout">
               <div class="mybox">
                 <img :src="img1" alt="" />
@@ -18,8 +22,12 @@
       <div class="column">
         <div class="subtitle">Bike Map</div>
         <div class="columns is-multiline">
-          <div :key="itemObjKey" class="column is-2" v-for="(tenantDetail, itemObjKey) in tenantInfos[id1-1].ParkingStatus
-            .SiteWise[id2].TotalSpots.Bike">
+          <div
+            :key="itemObjKey"
+            class="column is-2"
+            v-for="(tenantDetail, itemObjKey) in tenantInfos[id1 - 1]
+              .ParkingStatus.SiteWise[id2].TotalSpots.Bike"
+          >
             <div class="mylayout">
               <div class="mybox">
                 <img :src="img2" alt="" />
@@ -39,14 +47,13 @@ export default {
     return {
       img1: require("@/assets/portal/car.png"),
       img2: require("@/assets/portal/motorbike.png"),
-    }
+    };
   },
-  props:{
-      tenantInfos:Array,
-      id1:Number,
-      id2:Number
-  }
-
+  props: {
+    tenantInfos: Array,
+    id1: Number,
+    id2: Number,
+  },
 };
 </script>
 
