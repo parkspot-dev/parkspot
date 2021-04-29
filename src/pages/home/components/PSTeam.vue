@@ -8,13 +8,13 @@
 					.column.center.is-three-quarters-mobile(v-for="(team, i) in teamMates" :key="i")
 						.card.team
 							.card-image
-								figure.image.is-4by3
-									img(:src="`${team.dp}`")
+								figure.image.is-4by3(v-lazyload)
+									img(:data-url="team.dp")
 							.card-content
 								.media
 									.media-left
-										figure.image.is-48x48
-											img(:src="`${parkspot}`")
+										figure.image.is-48x48(v-lazyload)
+											img(:data-url="parkspot")
 									.media-content
 										p.title.is-4.has-text-black.nowrap
 											| {{team.name}} 
@@ -23,14 +23,14 @@
 								.content
 									.columns.is-centered.is-vcentered
 										.column.is-one-third
-											a(:href="`${team.git}`")
-												img(:src="`${github}`" class="image is-48x48")
+											a(:href="`${team.git}`" v-lazyload)
+												img(:data-url="github" class="image is-48x48")
 										.column.is-one-third
-											a(:href="`${team.linkedin}`")
-												img(:src="`${linkedin}`" class="image is-48x48")
+											a(:href="`${team.linkedin}`" v-lazyload)
+												img(:data-url="linkedin" class="image is-48x48")
 										.column.is-one-third
-											a(:href="`${team.twitter}`")
-												img(:src="`${twitter}`" class="image is-48x48")
+											a(:href="`${team.twitter}`" v-lazyload)
+												img(:data-url="twitter" class="image is-48x48")
 </template>
 <script>
   export default {
