@@ -5,8 +5,8 @@
 			.content
 				p.is-size-1.has-text-black.has-text-left
 					| Eliminating Traffic jams in India!
-				#authorDetails
-					img.round(:src="`${dp}`")
+				#authorDetails(v-lazyload)
+					img.round(:data-url="dp")
 					p.is-size-6.has-text-success.noBottomMargin
 						| Nikhil Surya Mukhi
 					p.is-size-6.has-text-dark.noBottomMargin
