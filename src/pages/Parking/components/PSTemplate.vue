@@ -11,7 +11,7 @@
       </p>
       <p>Book your parking spot in few clicks</p>
       <p>
-        Download our new App ParkSpot from Google Play and park your Car/Bike in
+        Download our new App <span><a href="https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website">ParkSpot</a></span> ParkSpot from Google Play and park your Car/Bike in
         the right spot
       </p>
       <p>

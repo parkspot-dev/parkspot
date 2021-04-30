@@ -2,8 +2,8 @@
 	.hero.is-fullheight.is-dark#book
 		.hero-body
 			.columns.is-vcentered.tengine
-				.column.is-half
-					img(:src="`${aboutimg}`" class="aboutbanner" class="team")
+				.column.is-half(v-lazyload)
+					img(:data-url="aboutimg" class="aboutbanner" class="team")
 				.column.is-half
 					h1.title.has-text-light About ParkSpot
 					br

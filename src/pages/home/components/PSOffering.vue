@@ -10,8 +10,8 @@
                             .card-title.has-background-black
                                 b.title.is-4.has-text-white ParkSpot for Corporates
                             .card-image.has-background-black.pb-3
-                                figure.image.is-4by3.mx-5
-                                    img(:src="`${corporate}`")
+                                figure.image.is-4by3.mx-5(v-lazyload)
+                                    img(:data-url="corporate")
                             .card-content
                                 .content.is-left-align
                                     |Give your employees the gift of easy parking.
@@ -23,8 +23,8 @@
                             .card-title.has-background-black
                                 b.title.is-4.has-text-white ParkSpot for Societies
                             .card-image.has-background-black.pb-3
-                                figure.image.is-4by3.mx-5
-                                    img(:src="`${society}`")
+                                figure.image.is-4by3.mx-5(v-lazyload)
+                                    img(:data-url="society")
                             .card-content
                                .content.is-left-align
                                     |Secure your society and enable seamless entry/exit for residents.
@@ -36,8 +36,8 @@
                             .card-title.has-background-black
                                 b.title.is-4.has-text-white ParkSpot for Parking Owners
                             .card-image.has-background-black.pb-3
-                                figure.image.is-4by3.mx-5
-                                    img(:src="`${owner}`")
+                                figure.image.is-4by3.mx-5(v-lazyload)
+                                    img(:data-url="owner")
                             .card-content
                                 .content.is-left-align
                                     |Want to monetize your idle parking spaces?
@@ -49,8 +49,8 @@
                             .card-title.has-background-black
                                 b.title.is-4.has-text-white ParkSpot for Malls/Hotels
                             .card-image.has-background-black.pb-3
-                                figure.image.is-4by3.mx-5
-                                    img(:src="`${hotel}`")
+                                figure.image.is-4by3.mx-5(v-lazyload)
+                                    img(:data-url="hotel")
                             .card-content
                                 .content.is-left-align
                                     |Digitized parking space for better monetization and a seamless customer experience.

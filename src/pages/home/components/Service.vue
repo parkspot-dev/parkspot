@@ -28,8 +28,8 @@
 									| {{service.subtitle2}}
 								p.has-text-white.is-size-6
 									| {{service.text2}}
-						.column.is-half
-							img(:src="`${service.image}`")
+						.column.is-half(v-lazyload)
+							img(:data-url="service.image")
 </template>
 <script>
 export default {

@@ -8,8 +8,8 @@
 				.column.is-one-quarter
 					.card.team
 						.card-image
-							figure.image.is-4by3
-								img(:src="`${kolkata}`")
+							figure.image.is-4by3(v-lazyload)
+								img(:data-url="kolkata")
 						.card-content
 							.media
 								.media-content
@@ -26,8 +26,8 @@
 				.column.is-one-quarter
 					.card.team
 						.card-image
-							figure.image.is-4by3
-								img(:src="`${chennai}`")
+							figure.image.is-4by3(v-lazyload)
+								img(:data-url="chennai")
 						.card-content
 							.media
 								.media-content
@@ -44,8 +44,8 @@
 				.column.is-one-quarter
 					.card.team
 						.card-image
-							figure.image.is-4by3
-								img(:src="`${bangalore}`")
+							figure.image.is-4by3(v-lazyload)
+								img(:data-url="bangalore")
 						.card-content
 							.media
 								.media-content

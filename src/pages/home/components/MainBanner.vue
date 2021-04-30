@@ -18,8 +18,8 @@
                 br
                 p.subtitle(style="white-space: pre-line")
                   | {{carousel.subtitle}}
-              .column.is-half
-                img(:src="`${carousel.path}`")
+              .column.is-half(v-lazyload)
+                img(:data-url="carousel.path")
 </template>
 
 <script>

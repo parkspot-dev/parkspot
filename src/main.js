@@ -5,8 +5,13 @@ import 'buefy/dist/buefy.css';
 import router from './router';
 import VueResource from 'vue-resource';
 
+import LazyLoadDirective from "./directives/LazyLoadDirective.vue";
+
 import JwPagination from 'jw-vue-pagination';
 Vue.component('jw-pagination', JwPagination);
+
+
+Vue.directive("lazyload", LazyLoadDirective);
 
 Vue.use(VueResource);
 
