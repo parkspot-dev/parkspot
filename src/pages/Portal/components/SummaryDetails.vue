@@ -36,12 +36,11 @@
                 Bike Spots : <span>{{ tenantDetail.TotalSpots.Bike }}</span>
               </div>
             </div>
-            <i
+            <button
               v-if="showEdit"
               v-on:click="closeButton(tenantDetail.SiteID, id)"
-              class="fa fa-window-close"
-              aria-hidden="true"
-            ></i>
+              class="delete is-small"
+            ></button>
           </div>
         </div>
       </div>
@@ -90,7 +89,7 @@ export default {
       this.showEdit = !this.showEdit;
     },
     layout(id1, id2) {
-      console.log("layout clicked");
+      console.log("layout clicked", id1, id2);
       this.showLayout = true;
       (this.id1 = id1), (this.id2 = id2);
     },

@@ -1,12 +1,12 @@
 import Home from '@/views/Home.vue'
 import Thanks from '@/views/Thanks.vue'
 import Faq from '@/views/Faq.vue'
-import PSSrp from '@/views/Srp.vue'
-import Blog1 from '@/views/Blog1.vue'
+// import PSSrp from '@/views/Srp.vue'
+// import Blog1 from '@/views/Blog1.vue'
 // delete it after portal testing
-import Portal from '@/views/Portal.vue'
-import Parking from '@/views/Parking.vue'
-import PSTemplate from '@/pages/Parking/components/PSTemplate.vue'
+// import Portal from '@/views/Portal.vue'
+// import Parking from '@/views/Parking.vue'
+// import PSTemplate from '@/pages/Parking/components/PSTemplate.vue'
 
 
 export const routes = [
@@ -34,28 +34,29 @@ export const routes = [
   {
   	path: '/srp',
 		name: 'PSSrp',
-		component: PSSrp
+    //() => import('@/views/Srp.vue') is dynamic import , it is only get loaded when the route is loaded
+		component: () => import('@/views/Srp.vue')
 	},
 	{
 		path: '/blog/eliminating-reason-for-traffic-jam',
 		name: 'EliminateTrafficJam',
-		component: Blog1
+		component: () => import('@/views/Blog1.vue')
 	},
   // delete
   {
     path: '/portal',
 		name: 'PSPortal',
-		component: Portal
+		component: () => import('@/views/Portal.vue')
   },
   {
     path: '/parkspot-near-you',
 		name: 'Parking',
-		component: Parking
+		component: () => import('@/views/Parking.vue')
   },
   {
     path: '/parkspot-near-you/:id',
 		name: 'PSTemplate',
-		component: PSTemplate,
+		component: () => import('@/pages/Parking/components/PSTemplate.vue'),
     props: true
   },
   // delete above
