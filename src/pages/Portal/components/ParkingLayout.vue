@@ -27,7 +27,7 @@
             class="column is-2"
             v-for="(tenantDetail, itemObjKey) in tenantInfos[id1 - 1]
               .ParkingStatus.SiteWise[id2].TotalSpots.Bike"
-          >
+              >
             <div class="mylayout">
               <div class="mybox" v-lazyload>
                 <img :data-url="img2" alt="" />
