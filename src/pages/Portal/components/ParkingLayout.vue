@@ -12,8 +12,8 @@
               .ParkingStatus.SiteWise[id2].TotalSpots.Car"
           >
             <div class="mylayout">
-              <div class="mybox">
-                <img :src="img1" alt="" />
+              <div class="mybox" v-lazyload>
+                <img :data-url="img1" alt="" />
               </div>
             </div>
           </div>
@@ -27,10 +27,10 @@
             class="column is-2"
             v-for="(tenantDetail, itemObjKey) in tenantInfos[id1 - 1]
               .ParkingStatus.SiteWise[id2].TotalSpots.Bike"
-          >
+              >
             <div class="mylayout">
-              <div class="mybox">
-                <img :src="img2" alt="" />
+              <div class="mybox" v-lazyload>
+                <img :data-url="img2" alt="" />
               </div>
             </div>
           </div>

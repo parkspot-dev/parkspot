@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && cp _redirects dist",
     "lint": "vue-cli-service lint",
-    "sitemap": "vue-cli-service sitemap"
+    "sitemap": "vue-cli-service sitemap",
+    "build-report": "vue-cli-service build --report"
   },
   "dependencies": {
     "async": "^3.2.0",
