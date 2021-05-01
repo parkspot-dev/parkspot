@@ -15,7 +15,7 @@
 						|Email: connect@parkspot.in
 					p.subtitle.has-text-left 
 						|Call: +91 80929 96057
-					iframe(src="https://maps.google.com/maps?q=2nd%20Floor,%20Nextcoworks%20BTM%20Layout,%20Ranka%20Colony%20Rd,%20Munivenkatppa%20Layout,%20BTM%202nd%20Stage,%20Bengaluru,%20Karnataka%20560076+(ParkSpot)&t=&z=14&ie=UTF8&iwloc=B&output=embed" height="47%" width="100%")
+					iframe(src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/77.6059,12.915,12.69,0/305x120@2x?access_token=pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ" height="47%" width="100%")
 				.column.is-half.contact 
 					p.title.has-text-black.has-text-left Got suggestions?
 					form(id="contactusform" v-if="!isContacted" class="form"  method="POST"  )
@@ -33,6 +33,7 @@
 						button(class="button is-dark" v-on:click.prevent="post") Submit
 					h1(id="ContactButton" v-if="isContacted" class="title center-contact")
 						|Thank you for contacting us!!
+						//- https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/77.6059,12.915,12.69,0/300x200@2x?access_token=YOUR_MAPBOX_ACCESS_TOKEN https://maps.google.com/maps?q=2nd%20Floor,%20Nextcoworks%20BTM%20Layout,%20Ranka%20Colony%20Rd,%20Munivenkatppa%20Layout,%20BTM%202nd%20Stage,%20Bengaluru,%20Karnataka%20560076+(ParkSpot)&t=&z=14&ie=UTF8&iwloc=B&output=embed
 					
 </template>
 <script>
