@@ -4,9 +4,12 @@
 			.container.is-fluid
 				.columns.is-vcentered.is-centered.is-multiline.px-6.mx-6
 					.column.center.is-12-mobile.is-4(v-for="(elem, i) in bottomicons" :key="i")
-						a(:href="`${elem.href}`" alt="social handle icons")
-							img(class="footericons" :src="`${elem.image}`")
-						
+						a(:href="`${elem.href}`" alt="social handle icons" v-lazyload)
+							img(class="footericons" :data-url="elem.image")
+					
+			br
+			a(v-on:click="onTerms" ) Term and Conditions	
+			br
 			br
 			p.has-text-white
 				|© 2020 
@@ -24,7 +27,14 @@
 					{ image: require("../assets/sites/facebook.png"), href: "https://facebook.com/parkspot.in"},
 				]
 			}
+		},
+		methods:{
+			onTerms(){
+				console.log("clicked");
+				this.$emit('is-term');
+			}
 		}
+		
 	}
 </script>
 <style scoped>

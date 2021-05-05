@@ -3,15 +3,16 @@
     <PSNavbar />
     <PSMap />
 
-      <MainBanner />
-      <Services />
-      <PSTeam />
-      <PSOffering />
-      <PSSites />
-      <PSAbout />
-      <contact />
-      <PSFooter />
-   </div>
+    <MainBanner />
+    <Services />
+    <PSTeam />
+    <PSOffering />
+    <PSSites />
+    <PSAbout />
+    <contact />
+    <PSFooter @is-term="onTerm" />
+    <Terms v-if="isTerm" @is-term="onTerm"/>
+  </div>
 </template>
 
 <script>
@@ -20,6 +21,11 @@ import PSMap from "@/components/MapboxSearch.vue";
 
 export default {
   name: "App",
+  data() {
+    return {
+      isTerm: false,
+    };
+  },
   components: {
     PSNavbar,
     PSMap,
@@ -31,6 +37,13 @@ export default {
     PSSites: () => import("@/pages/home/components/PSSites.vue"),
     PSAbout: () => import("@/pages/home/components/PSAbout.vue"),
     PSOffering: () => import("@/pages/home/components/PSOffering.vue"),
+    Terms : () => import("./Terms.vue")
+  },
+  methods: {
+    onTerm() {
+      this.isTerm = !this.isTerm;
+      console.log("ghell");
+    },
   },
 };
 </script>
