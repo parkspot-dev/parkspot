@@ -2,45 +2,33 @@
   <div id="app">
     <PSNavbar />
     <PSMap />
-    <LazyHydrate when-visible>
-      <MainBanner />
-    </LazyHydrate>
-    <LazyHydrate when-visible>
-      <Services />
-    </LazyHydrate>
-    <LazyHydrate when-visible>
-      <PSTeam />
-    </LazyHydrate>
-    <LazyHydrate when-visible>
-      <PSOffering />
-    </LazyHydrate>
-    <LazyHydrate when-visible>
-      <PSSites />
-    </LazyHydrate>
-    <LazyHydrate when-visible>
-      <PSAbout />
-    </LazyHydrate>
-    <LazyHydrate when-visible>
-      <contact />
-    </LazyHydrate>
-    <LazyHydrate when-visible>
-      <PSFooter />
-    </LazyHydrate>
+
+    <MainBanner />
+    <Services />
+    <PSTeam />
+    <PSOffering />
+    <PSSites />
+    <PSAbout />
+    <contact />
+    <PSFooter @is-term="onTerm" />
+    <Terms v-if="isTerm" @is-term="onTerm"/>
   </div>
 </template>
 
 <script>
 import PSNavbar from "@/components/PSNavbar.vue";
 import PSMap from "@/components/MapboxSearch.vue";
-import LazyHydrate from "vue-lazy-hydration";
 
 export default {
   name: "App",
+  data() {
+    return {
+      isTerm: false,
+    };
+  },
   components: {
-    LazyHydrate,
     PSNavbar,
     PSMap,
-
     MainBanner: () => import("@/pages/home/components/MainBanner.vue"),
     PSTeam: () => import("@/pages/home/components/PSTeam.vue"),
     Services: () => import("@/pages/home/components/Service.vue"),
@@ -49,6 +37,13 @@ export default {
     PSSites: () => import("@/pages/home/components/PSSites.vue"),
     PSAbout: () => import("@/pages/home/components/PSAbout.vue"),
     PSOffering: () => import("@/pages/home/components/PSOffering.vue"),
+    Terms : () => import("./Terms.vue")
+  },
+  methods: {
+    onTerm() {
+      this.isTerm = !this.isTerm;
+      console.log("ghell");
+    },
   },
 };
 </script>
