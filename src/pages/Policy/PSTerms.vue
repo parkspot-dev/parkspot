@@ -6,7 +6,8 @@
         Please read these terms and conditions carefully before using Our
         Service.
       </p>
-      <h1><b>TNC for VO(Vehicle Owner)</b></h1>
+      <br>
+      <h1><b>TnC for Vehicle Owner(VO)</b></h1>
       <ol>
         <li>
           <p>Following documents are needed for booking a parking spot.</p>
@@ -41,7 +42,8 @@
           </p>
         </li>
       </ol>
-      <h1><b>TNC for SO(Site Owner)</b></h1>
+      <br>
+      <h1><b>TnC for Site Owner(SO)</b></h1>
       <ol>
         <li>
           <p >
@@ -75,12 +77,11 @@
         </li>
         <li>
           <p>
-            SO will have to inform our ParkSpot 15 days earlier if he/she wants
+            SO will have to inform our ParkSpot 1 month earlier if he/she wants
             to cancel the ongoing booking.
           </p>
         </li>
-      </ol>
-
+      </ol><br>
       <h1><b>Changes to These Terms and Conditions</b></h1>
       <p>
         We reserve the right, at Our sole discretion, to modify or replace these
