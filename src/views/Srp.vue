@@ -38,7 +38,7 @@ export default{
 				method:'POST',
 				headers:{
 					'Content-Type':'application/json',
-					// 'cookies' : true
+					'cookies' : true
 				},
 				body:JSON.stringify({
 				UserInfo: {
