@@ -42,7 +42,7 @@
           b-navbar-item.is-hidden(tag="router-link" :to="{ path: '/portal' }")
             | Portal
           b-navbar-item.is-hidden(tag="router-link" :to="{ path: '/parkspot-near-you' }")
-            | ParkSpot Near You
+            | ParkSpot Near You	
 </template>
 
 <script>
