@@ -59,6 +59,7 @@ export const routes = [
 		component: () => import('@/pages/Parking/components/PSTemplate.vue'),
     props: true
   },
+  
   // delete above
   {
   path: '*',

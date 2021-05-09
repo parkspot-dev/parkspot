@@ -49,7 +49,7 @@
 									strong Rating: 
 									|{{site.rating}}/5
 								.floatright.grid-items.item7
-									a(id="srpBook" class="button is-warning" href='/#contact') Book
+									a(id="srpBook" class="button is-warning" v-on:click="onBook(site.ID)") Book
 										
 
 				br
@@ -143,6 +143,10 @@ export default{
 				return distance(lat, elem.latLng[0], lng, elem.latLng[1]) < 60
 			})	
 		},
+		onBook(index){
+			console.log("clicked    "+index)
+			this.$emit('on-book',index)
+		}
 	}
 }
 </script>

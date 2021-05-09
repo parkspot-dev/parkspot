@@ -4,8 +4,8 @@
 			.container.is-fluid
 				.columns.is-vcentered.is-centered.is-multiline.px-6.mx-6
 					.column.center.is-12-mobile.is-4(v-for="(elem, i) in bottomicons" :key="i")
-						a(:href="`${elem.href}`" alt="social handle icons")
-							img(class="footericons" :src="`${elem.image}`")
+						a(:href="`${elem.href}`" alt="social handle icons" v-lazyload)
+							img(class="footericons" :data-url="`${elem.image}`")
 						
 			br
 			p.has-text-white
