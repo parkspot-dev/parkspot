@@ -10,8 +10,7 @@
     <PSSites />
     <PSAbout />
     <contact />
-    <PSFooter @is-term="onTerm" />
-    <Terms v-if="isTerm" @is-term="onTerm"/>
+    <PSFooter/>
   </div>
 </template>
 
@@ -37,13 +36,6 @@ export default {
     PSSites: () => import("@/pages/home/components/PSSites.vue"),
     PSAbout: () => import("@/pages/home/components/PSAbout.vue"),
     PSOffering: () => import("@/pages/home/components/PSOffering.vue"),
-    Terms : () => import("./Terms.vue")
-  },
-  methods: {
-    onTerm() {
-      this.isTerm = !this.isTerm;
-      console.log("ghell");
-    },
   },
 };
 </script>
