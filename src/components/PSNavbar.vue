@@ -21,7 +21,7 @@
                 strong Log In
       b-navbar.is-dark#mainNav
         template(slot='end')
-          b-navbar-item(tag="router-link" :to="{ path: '/' }")
+          b-navbar-item(tag="router-link" :to="{ path: '/' }    ")
             | Home
           b-navbar-item(href="/#services")
             | Services
@@ -42,7 +42,7 @@
           b-navbar-item.is-hidden(tag="router-link" :to="{ path: '/portal' }")
             | Portal
           b-navbar-item.is-hidden(tag="router-link" :to="{ path: '/parkspot-near-you' }")
-            | ParkSpot Near You
+            | ParkSpot Near You	
 </template>
 
 <script>
@@ -129,5 +129,4 @@ export default {
 #maximize{
 	max-height: 4rem;
 }
-/* https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png */
 </style>

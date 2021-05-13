@@ -1,6 +1,7 @@
 import Home from '@/views/Home.vue'
 import Thanks from '@/views/Thanks.vue'
 import Faq from '@/views/Faq.vue'
+import Terms from '@/views/Terms.vue'
 // import PSSrp from '@/views/Srp.vue'
 // import Blog1 from '@/views/Blog1.vue'
 // delete it after portal testing
@@ -59,7 +60,11 @@ export const routes = [
 		component: () => import('@/pages/Parking/components/PSTemplate.vue'),
     props: true
   },
-  
+  {
+    path: '/terms-and-conditions',
+		name: 'Terms',
+		component: Terms
+  },
   // delete above
   {
   path: '*',

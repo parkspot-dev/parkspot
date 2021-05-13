@@ -22,7 +22,10 @@
 				<button class="button is-warning" type="submit" v-on:click="flyToSrp()"> Go !</button>
 			</div>
 			<!-- <div id="maph" v-if="mapdisp"> -->
-         		 <img class="maph" id="main-img" :src="img1" alt="Map of Bangluru">
+         	
+  <img class="maph" id="main-img" :src="img1" alt="Map of Bangluru">
+
+              
 			</div>
 		</div>
 	</div>
@@ -39,7 +42,7 @@ export default {
       isFetching: false,
       cdata: [],
       mapdisp: true,
-      img1: require("@/assets/map.png"),
+     img1: require("@/assets/map.webp"),
     };
   },
   // mounted: function(){

@@ -6,8 +6,10 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
 	<link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+	<link rel="preload" as="image" href="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png">
 	<!-- <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css"> -->
-	<link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+	<!-- <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' /> -->
+	<link rel="preload" href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 	<title> Find and Book parking spaces nearby | Bangalore Delhi Mumbai Pune Bengaluru | Parkspot.in </title>
 	<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -110,12 +112,13 @@
 	<script>window.dataLayer = window.dataLayer || [];
 		function gtag() { dataLayer.push(arguments); }
 		gtag('js', new Date());
-		gtag('config', 'G-779VHE86MJ');
+		asyncgtag('config', 'G-779VHE86MJ');
 	</script>
-	<script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
-	<script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js'></script>
-	<script rel="stylesheet" type="text/css"
+	<script async src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
+	<script async src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js'></script>
+	<script async rel="stylesheet" type="text/css"
 		href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"></script>
+		<noscript><link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css"></noscript>
 </body>
 
 </html>
