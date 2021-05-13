@@ -8,8 +8,8 @@
           b-navbar-item(v-lazyload tag="router-link" :to="{ path: '/' }")
             img(:data-url="minilogotext.path" alt="logotext.png" placeholder="ParkSpot" id="maximize")
         template(slot='end')
-          b-navbar-item.a(:href="`https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website`"  target="_blank" )
-            img(src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' alt='Get it on Google Play' placeholder="ParkSpotPlaystore" id="maximize")
+          b-navbar-item.a(:href="`https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website`"  target="_blank" v-lazyload)
+            img(:data-url="gplay" alt='Get it on Google Play' placeholder="ParkSpotPlaystore" id="maximize")
           b-navbar-item(tag='div')
             .buttons(v-if="isLoggedIn()")
               b-navbar-item.button.is-warning(@click="logout()")
@@ -109,7 +109,7 @@ export default {
 		return {
 			minilogotext: {path: require("@/assets/pstoptext.png")},
 			minilogo: {path: require("@/assets/pstopmini.png")},
-			// gplay:() => import('https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png')
+			gplay: require("@/assets/google-play-badge.png")
 		}
 	}
 };

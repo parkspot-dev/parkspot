@@ -41,6 +41,7 @@
 				var markers = []
 				for(var i=0;i<sites.length;i++){
 					var temp = {}
+					temp["ID"] = sites[i]["ID"]
 					temp["name"] = sites[i]["Name"]
 					temp["address"] = sites[i]["Address"]
 					temp["latLng"] = [Number(sites[i].Lat), Number(sites[i].Long)]
