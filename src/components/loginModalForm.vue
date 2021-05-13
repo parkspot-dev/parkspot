@@ -100,7 +100,6 @@ export default {
           Password: this.loginPassword,
         });
         var token = resp.token || "";
-        console.log(token)
         console.log("warning check", this.hasError);
         console.log(this.loginUser, this.loginPassword);
         if (localStorage !== undefined) {

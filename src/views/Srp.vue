@@ -10,8 +10,8 @@
       @on-cancel="onBookFormtoggles"
       @on-submit="onSubmit"
     />
-	<BookMsg :resMsg="resMsg" v-if="resMsgflag"  @on-cancel="onCancel"/>
-	<!--  -->
+    <BookMsg :resMsg="resMsg" v-if="resMsgflag" @on-cancel="onCancel" />
+    <!--  -->
     <PSFooter />
   </section>
 </template>
@@ -30,19 +30,18 @@ export default {
     SRP,
     PSSrpDetails,
     SrpBookForm,
-	BookMsg
+    BookMsg,
   },
   data() {
     return {
       showBookForm: false,
       index: "",
-	  resMsg:"",
-	  resMsgflag:false	  
+      resMsg: "",
+      resMsgflag: false,
     };
   },
   methods: {
     async onSubmit(book) {
-      //console.log("HEllo")
       this.showBookForm = !this.showBookForm;
       console.log(book);
       const res = await fetch("https://maya.parkspot.in/booking/tentative", {
@@ -60,30 +59,25 @@ export default {
           UserInfo: {
             Name: book.name,
             Mobile: book.mno,
-            EmailID:book.email,
+            EmailID: book.email,
             VehicleNO: "KA01JE3635",
           },
         }),
       });
       const data = await res.json();
-      // const check =JSON.parse(data)
-      console.log(data);
-	  this.resMsg = data;
-	  this.resMsgflag = !this.resMsgflag
-	  
+      this.resMsg = data;
+      this.resMsgflag = !this.resMsgflag;
     },
     onBookFormtoggle(index) {
       this.showBookForm = !this.showBookForm;
-      // console.log(index)
-      // console.log(this.showBookForm)
       this.index = index;
     },
     onBookFormtoggles() {
       this.showBookForm = !this.showBookForm;
     },
-	onCancel(){
-		this.resMsgflag = !this.resMsgflag
-	}
+    onCancel() {
+      this.resMsgflag = !this.resMsgflag;
+    },
   },
 };
 </script>

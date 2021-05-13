@@ -27,9 +27,7 @@
           ></button>
         </div>
         <div class="message-body">
-            <p>Sorry for the inconvenience!! </p>
-          <p>It seems Spot is already filled...</p>
-          <p>But don't worry Our team will find you a Spot and get back to you!</p>
+           <p>{{resMsg.DisplayMsg}}</p>
         </div>
       </article>
     </div>
