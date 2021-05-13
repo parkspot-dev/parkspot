@@ -76,6 +76,7 @@ export default {
     };
   },
   methods: {
+    
     postData: async function (url = "", data = {}) {
       // Default options are marked with *
       this.isLoading = true;
@@ -85,6 +86,7 @@ export default {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
+        credentials:'include',
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         body: JSON.stringify(data), // body data type must match "Content-Type" header
@@ -98,6 +100,7 @@ export default {
           Password: this.loginPassword,
         });
         var token = resp.token || "";
+        console.log(token)
         console.log("warning check", this.hasError);
         console.log(this.loginUser, this.loginPassword);
         if (localStorage !== undefined) {
@@ -122,7 +125,7 @@ export default {
         console.log("error blah pew", e);
         this.isLoading = false;
       }
-    },
+    },    
   },
 };
 </script>
