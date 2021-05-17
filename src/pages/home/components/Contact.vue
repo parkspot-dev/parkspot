@@ -1,87 +1,164 @@
-<template lang="pug">
-	.hero.is-fullheight.is-warning#contact
-		.hero-head
-			.columns
-				.column.is-half.contact
-					p.title.has-text-black.has-text-left
-						|Contact Us
-					br
-					p.subtitle.has-text-black.has-text-left
-						|Location:
-					p.subtitle.has-text-black.has-text-left
-						|2nd Floor, Nextcoworks BTM Layout,<br> 
-						|BTM 2nd Stage, Bengaluru, Karnataka 560076 
-					p.subtitle.has-text-black.has-text-left
-						|Email: connect@parkspot.in
-					p.subtitle.has-text-left 
-						|Call: +91 80929 96057
-					iframe(src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/77.6059,12.915,12.69,0/305x120@2x?access_token=pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ" height="47%" width="100%")
-				.column.is-half.contact 
-					p.title.has-text-black.has-text-left Got suggestions?
-					form(id="contactusform" v-if="!isContacted" class="form"  method="POST"  )
-						label.label.has-text-black.has-text-left Name
-						input(id="namec" v-model="FullName" class="input" type="text" name="Name" placeholder="Enter Name Here")
-						label.label.has-text-black.has-text-left Email
-						input(id="emailc" v-model="EmailID" class="input" type="text" name="Email" placeholder="Enter Email id here")
-						label.label.has-text-black.has-text-left City
-						input(id="cityc" v-model="City" class="input" type="text" name="city" placeholder="Bangalore")
-						label.label.has-text-black.has-text-left Contact No.
-						input(id="mobilec" v-model="Mobile" class="input" type="tel" name="mobile" placeholder="+91 ")
-						label.label.has-text-black.has-text-left Message
-						textarea(id="messagec" v-model="Comments" class="textarea" name="Message" placeholder="Enter your suggestions; We are happy to listen")
-						br
-						button(class="button is-dark" v-on:click.prevent="post") Submit
-					h1(id="ContactButton" v-if="isContacted" class="title center-contact")
-						|Thank you for contacting us!!
-						//- https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/77.6059,12.915,12.69,0/300x200@2x?access_token=YOUR_MAPBOX_ACCESS_TOKEN https://maps.google.com/maps?q=2nd%20Floor,%20Nextcoworks%20BTM%20Layout,%20Ranka%20Colony%20Rd,%20Munivenkatppa%20Layout,%20BTM%202nd%20Stage,%20Bengaluru,%20Karnataka%20560076+(ParkSpot)&t=&z=14&ie=UTF8&iwloc=B&output=embed
-					
+<template >
+  <section class="pscontact">
+    <div class="pscontact__title">
+      <h2><b>Have Some Questions?</b></h2>
+    </div>
+
+    <div class="pscontact__body">
+      <div class="pscontact__body-left">
+        <div class="mail__logo">
+          <img :src="mailLogo" alt="mail-logo.png" />
+        </div>
+        <div class="pscontact__text">
+          <p>
+            If you have any questions or just want to get in touch with us, use
+            the form beside.<br> We are looking forward to hear from you!
+          </p>
+        </div>
+      </div>
+      <div class="pscontact__body-right">
+        <form action="" @submit="post">
+          <input class="pscontact__input" type="text" placeholder="Name"  required/>
+          <input class="pscontact__input" type="email" placeholder="Email"  required/>
+          <input
+            class="pscontact__input"
+            type="tel"
+            placeholder="Contact No."
+            required
+          />
+          <textarea
+            class="pscontact__input"
+            name=""
+            id=""
+            cols="30"
+            rows="10"
+            placeholder="Your Questions..."
+          ></textarea>
+          <button class="pscontact__button psbutton" >submit</button>
+        </form>
+      </div>
+    </div>
+  </section>
 </template>
 <script>
-
-export default{
-	name: "contact",
-	data(){
-		return{
-			FullName:"",
-			City:"",
-			EmailID:"",
-			Mobile:"",
-			Comments:"",
-			isContacted:false
-		}
-
-	},
-	methods:{
-		post:function(){
-			
-			var isMweb = false
-			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-				isMweb = true
-			}
-			var flavor = isMweb ? "mweb" : "dweb"
-			console.log(flavor)
-			this.isContacted = !this.isContacted
-			this.$http.post("https://maya.parkspot.in/contact",{
-				User:{FullName:this.FullName,
-				EmailID:this.EmailID,
-				City:this.City,
-				Mobile:this.Mobile
-				},
-				Comments:this.Comments,
-				Flavour:this.flavor
-			}).then(function(data){
-				console.log(data)
-			})
-		}
-		
-	}
-}
+export default {
+  name: "contact",
+  data() {
+    return {
+      FullName: "",
+      City: "",
+      EmailID: "",
+      Mobile: "",
+      Comments: "",
+      isContacted: false,
+      mailLogo: require("@/assets/mail__logo.png"),
+    };
+  },
+  methods: {
+    post: function (e) {
+      e.preventDefault();
+      var isMweb = false;
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        isMweb = true;
+      }
+      var flavor = isMweb ? "mweb" : "dweb";
+      console.log(flavor);
+      this.isContacted = !this.isContacted;
+      this.$http
+        .post("https://maya.parkspot.in/contact", {
+          User: {
+            FullName: this.FullName,
+            EmailID: this.EmailID,
+            City: this.City,
+            Mobile: this.Mobile,
+          },
+          Comments: this.Comments,
+          Flavour: this.flavor,
+        })
+        .then(function (data) {
+          console.log(data);
+        });
+    },
+  },
+};
 </script>
 <style scoped>
-.contact {
-  padding: 5%;
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
-.center-contact{
-	margin-top: 250px;
+.pscontact {
+  background-color: #ffdd57;
+  padding: 2rem;
+}
+.pscontact__title {
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.pscontact__body-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.mail__logo {
+  font-size: 7rem;
+}
+.pscontact__text {
+  margin-bottom: 2rem;
+}
+.pscontact__body-right {
+  display: flex;
+  flex-direction: column;
+}
+.pscontact__input {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1.5px solid #242329;
+  outline: none;
+  margin-bottom: 1.5rem;
+}
+.pscontact__button {
+  display: block;
+  border: none;
+  outline: none;
+  margin-left: auto;
+  width: 100%;
+}
+.psbutton {
+  display: inline-block;
+  background-color: #242329;
+  color: #fff;
+  padding: 0.75rem 2.5rem;
+  font-weight: 400;
+  border-radius: 0.5rem;
+}
+@media screen and (min-width: 768px) {
+  .pscontact__body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .pscontact__body-left,.pscontact__body-right  {
+    margin: 2rem;
+    flex: 1
+  }
+  .mail__logo {
+    font-size: 100px;
+    margin: 0;
+    padding: 0;
+  }
+  .pscontact__text >p{
+      font-size: 20px;
+      padding:0 4rem 4rem 4rem;
+    }
 }
 </style>

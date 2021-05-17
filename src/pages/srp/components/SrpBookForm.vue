@@ -1,5 +1,6 @@
 <template>
-  <div :class="[showBookForm ? 'is-active':'','modal' ]">
+ <form action="" @submit="onSubmit">
+    <div :class="[showBookForm ? 'is-active':'','modal' ]">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
@@ -8,10 +9,10 @@
       </header>
       <section class="modal-card-body">
         <!-- Content ... -->
-        <div class="field">
+       <div class="field">
           <label class="label">Name</label>
           <div class="control">
-            <input v-model="name" class="input" type="text" placeholder="John Doe" />
+            <input v-model="name" class="input" type="text" placeholder="John Doe" required/>
           </div>
         </div>
 
@@ -19,36 +20,36 @@
           <label class="label">Email</label>
           <div class="control">
             <input v-model="email"
-              class="input is-danger"
+              class="input"
               type="email"
               placeholder="abc@example.com"
             />
           </div>
-          <p class="help is-danger">This email is invalid</p>
         </div>
 
         <div class="field">
           <label class="label">Mobile No.</label>
           <div class="control">
-            <input class="input" type="tel" placeholder="+91 XXX XXX XXXX" />
+            <input v-model="mno" class="input" type="tel" placeholder="+91 XXX XXX XXXX"  required/>
           </div>
         </div>
 
         <div class="field">
           <div class="control">
             <label class="checkbox">
-              <input type="checkbox" />
-              I agree to the <a href="#">terms and conditions</a>
+              <input type="checkbox" required/>
+              I agree to the <router-link target="_blank" :to="{ name: 'Terms' }"> TERMS AND CONDITIONS</router-link>
             </label>
           </div>
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button v-on:click="onSubmit" class="button is-success">Submit</button>
+        <button class="button is-success">Submit</button>
         <button v-on:click="onCancel" class="button">Cancel</button>
       </footer>
     </div>
   </div>
+ </form>
 </template>
 
 <script>
@@ -66,8 +67,8 @@ export default {
       index:String
   },
 methods:{
-    onSubmit(){
-        
+    onSubmit(e){
+        e.preventDefault();
         console.log("submit");
         const newBook = {
             ID:this.index,

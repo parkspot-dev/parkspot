@@ -3,7 +3,7 @@
       b-navbar(id="top")
         template(slot='brand')
           b-navbar-item(v-lazyload tag="router-link" :to="{ path: '/' }")
-            img(:data-url="minilogo.path" alt="logo.png" placeholder='ParkSpot' id="maximize")
+            img(:data-url="minilogo.path" alt="logo.png" placeholder='ParkSpot' id="maximize" )
         template(slot="start")
           b-navbar-item(v-lazyload tag="router-link" :to="{ path: '/' }")
             img(:data-url="minilogotext.path" alt="logotext.png" placeholder="ParkSpot" id="maximize")
