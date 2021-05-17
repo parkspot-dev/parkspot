@@ -12,7 +12,7 @@
         <div class="pscontact__text">
           <p>
             If you have any questions or just want to get in touch with us, use
-            the form beside.We are looking forward to hear from you!
+            the form beside.<br> We are looking forward to hear from you!
           </p>
         </div>
       </div>
@@ -87,12 +87,7 @@ export default {
 };
 </script>
 <style scoped>
-/* .contact {
-  padding: 5%;
-}
-.center-contact {
-  margin-top: 250px;
-} */
+
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
 * {
   box-sizing: border-box;
@@ -162,7 +157,8 @@ export default {
     padding: 0;
   }
   .pscontact__text >p{
-    font-size: 32px;
+      font-size: 20px;
+      padding:0 4rem 4rem 4rem;
     }
 }
 </style>
