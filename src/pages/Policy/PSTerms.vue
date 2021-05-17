@@ -6,17 +6,17 @@
         Please read these terms and conditions carefully before using Our
         Service.
       </p>
-      <br>
+      <br />
       <h1><b>TnC for Vehicle Owner(VO)</b></h1>
       <ol>
         <li>
           <p>Following documents are needed for booking a parking spot.</p>
           <ul>
-            <li><p style="margin-left:2.0em"> a) Aadhar card</p></li>
-            <li><p style="margin-left:2.0em"> b) RC of the owned vehicle</p></li>
+            <li><p style="margin-left: 2em">a) Aadhar card</p></li>
+            <li><p style="margin-left: 2em">b) RC of the owned vehicle</p></li>
             <li>
-              <p style="margin-left:2.0em">
-                 c) Picture of the car after parking on the spot
+              <p style="margin-left: 2em">
+                c) Picture of the car after parking on the spot
               </p>
             </li>
           </ul>
@@ -42,11 +42,11 @@
           </p>
         </li>
       </ol>
-      <br>
+      <br />
       <h1><b>TnC for Site Owner(SO)</b></h1>
       <ol>
         <li>
-          <p >
+          <p>
             We are not responsible if anything happens to SO’s spot. We can only
             try to investigate
           </p>
@@ -54,11 +54,11 @@
         <li>
           <p>SO will have to submit the following documents</p>
           <ul>
-            <li><p style="margin-left:2.0em">a) Aadhar Card</p></li>
+            <li><p style="margin-left: 2em">a) Aadhar Card</p></li>
             <li>
-              <p style="margin-left:2.0em">
-                b) Rent Agreement (If spot owner is using the spot
-                as tenant) Or House Ownership paper(If Spot is owned)
+              <p style="margin-left: 2em">
+                b) Rent Agreement (If spot owner is using the spot as tenant) Or
+                House Ownership paper(If Spot is owned)
               </p>
             </li>
           </ul>
@@ -81,7 +81,20 @@
             to cancel the ongoing booking.
           </p>
         </li>
-      </ol><br>
+      </ol>
+      <br />
+      <p><b>Privacy</b> : We do not share any private information.</p>
+      <br />
+      <p>
+        <b>Refund</b> : Only if booking cancelled within 15 days of
+        booking or before parking start date (whichever is early).
+      </p>
+      <br />
+      <p>
+        <b>Cancellation Policies</b> : Cancellation request must be made in one
+        month advance.
+      </p>
+      <br />
       <h1><b>Changes to These Terms and Conditions</b></h1>
       <p>
         We reserve the right, at Our sole discretion, to modify or replace these
@@ -94,6 +107,7 @@
         agree to the new terms, in whole or in part, please stop using the
         website and the Service.
       </p>
+      <br />
       <h1>Contact Us</h1>
       <p>
         If you have any questions about these Terms and Conditions, You can

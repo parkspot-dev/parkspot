@@ -2,7 +2,14 @@
   <footer class="psfooter">
     <div class="footer__main">
       <div class="footer__brand">
-        <h2 class="psfooter__title">ParkSpot</h2>
+        <div class="footer__logo">
+          <div class="logo__img">
+            <img :src="logo" alt="" />
+          </div>
+          <div>
+            <h2 class="psfooter__title">ParkSpot</h2>
+          </div>
+        </div>
         <p class="psfooter__subtitle">Get The Spot</p>
       </div>
 
@@ -29,6 +36,29 @@
           </a>
         </div>
       </div>
+      <div class="psfooter__contact">
+        <p class="psfooter__contact-title">Contact Us</p>
+        <div class="psfooter__contact-details">
+          <div class="contact1">
+            <p>
+            <i class="bx bx-phone-call pschange"></i>
+              <span> &nbsp;+91 80929 96057</span>
+            </p>
+          </div>
+          <div class="contact2">
+            <p>
+            <i class="bx bx-mail-send pschange"></i>
+              <span>&nbsp;connect@parkspot.in</span>
+            </p>
+          </div>
+          <div class="contact3">
+            <p>
+            <i class="bx bx-current-location pschange"></i>
+              <span>&nbsp;2nd Floor, Nextcoworks BTM Layout, BTM 2nd Stage, Bengaluru, Karnataka 560076</span>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="psfooter__copyrights">
       <p>© 2020 The Thought Engine - ALL RIGHTS RESERVED</p>
@@ -41,6 +71,11 @@
 <script>
 export default {
   name: "PSFooter",
+  data() {
+    return {
+      logo: require("@/assets/pstopmini.png"),
+    };
+  },
 };
 </script>
 <style scoped>
@@ -83,6 +118,29 @@ export default {
 .psfooter__social-icon:hover {
   color: #ffdd57;
 }
+
+.psfooter__contact {
+  margin: 0 5rem 2rem 5rem;
+}
+
+.psfooter__contact-title{
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+.psfooter__contact-details {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: flex-start; */
+  font-weight: 400;
+
+}
+.contact1,
+.contact2,
+.contact3 {
+  align-self: center;
+  /* text-align: justify; */
+}
+
 .psfooter__copyrights {
   display: flex;
   justify-content: space-between;
@@ -105,7 +163,7 @@ export default {
 @media screen and (min-width: 768px) {
   .footer__main {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     margin: 0 2rem 2rem 2rem;
     padding-top: 2rem;
@@ -114,13 +172,32 @@ export default {
     font-size: 4.5rem;
     /* margin-bottom: 0.5rem; */
   }
+  .footer__logo {
+    display: flex;
+    align-items: center;
+  }
+
   .psfooter__subtitle {
     font-weight: 300;
     font-size: 1.5rem;
     font-weight: 400;
   }
-
-  .psfooter__social-title {
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    /* width: 800px; */
+  }
+  .logo__img {
+    width: 84px;
+    height: 84px;
+    align-self: center;
+  }
+  .psfooter__social {
+    width: 400px;
+    align-self: center;
+    margin: 0 1rem 0 5rem;
+  }
+  .psfooter__social-title,.psfooter__contact-title {
     margin-bottom: 1rem;
     font-weight: 400;
   }
@@ -130,10 +207,29 @@ export default {
 
   .psfooter__social-icons {
     justify-content: space-evenly;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
   }
   .psfooter__social-icon {
     font-size: 3rem;
   }
+  .psfooter__contact {
+    width: 400px;
+  }
+  .psfooter__contact {
+    margin: 0 1rem 0 5rem;
+  }
+  .contact1,
+.contact2,
+.contact3 {
+  align-self: flex-start;
+  text-align: justify;
+}
+  .pschange{
+    float: left;
+  }
+
   .psfooter__copyrights {
     font-size: 1rem;
     font-weight: 200;
