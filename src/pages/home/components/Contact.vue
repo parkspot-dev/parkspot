@@ -34,7 +34,7 @@
             rows="10"
             placeholder="Your Questions..."
           ></textarea>
-          <button class="pscontact__button psbutton" >submit</button>
+          <button class="pscontact__button psbutton" >Submit</button>
         </form>
       </div>
     </div>
@@ -120,11 +120,12 @@ export default {
 }
 .pscontact__input {
   width: 100%;
-  padding: 1rem;
+  padding: 0.7rem;
   border-radius: 0.5rem;
   border: 1.5px solid #242329;
   outline: none;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
 }
 .pscontact__button {
   display: block;
@@ -137,9 +138,11 @@ export default {
   display: inline-block;
   background-color: #242329;
   color: #fff;
-  padding: 0.75rem 2.5rem;
+  padding: 0.5rem 2.5rem;
   font-weight: 400;
   border-radius: 0.5rem;
+  font-size: 1.2rem;
+  
 }
 @media screen and (min-width: 768px) {
   .pscontact__body {
@@ -151,6 +154,12 @@ export default {
     margin: 2rem;
     flex: 1
   }
+  
+  .psbutton {
+  padding: 0.5rem 2.5rem;
+  font-size: 1.3rem;
+  
+}
   .mail__logo {
     font-size: 100px;
     margin: 0;
