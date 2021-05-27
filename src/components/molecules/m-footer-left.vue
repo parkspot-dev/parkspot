@@ -1,6 +1,6 @@
 <template>
   <div class="m_footer_left">
-    <atom-img />
+    <atom-img :src="src"/>
     <atom-b-title />
     <atom-b-subtitle/>
   </div>
@@ -13,7 +13,7 @@ export default {
   name: "m-footer-left",
   data(){
     return{
-      
+      src:require("@/assets/img/pstopmini.png")
     }
   },
   components: {

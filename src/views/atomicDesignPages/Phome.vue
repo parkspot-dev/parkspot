@@ -1,17 +1,17 @@
 <template>
 	<div id="home">
-		<PSNavbar />
+		<t-navbar/>
 		<t-footer/>
 	</div>
 </template>
 <script>
-import PSNavbar from '@/components/PSNavbar.vue'
 import TFooter from '@/components/templates/t-footer.vue'
+import TNavbar from '@/components/templates/t-navbar.vue'
 export default{
 	name: 'Home',
 	components: {
-		PSNavbar,
-		TFooter
+		TFooter,
+TNavbar
 	}
 }
 </script>
