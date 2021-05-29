@@ -2,6 +2,17 @@
 	<div id="home">
 		<t-navbar/>
 		<t-footer/>
+		<t-footer/>
+		<t-footer/>
+		<t-footer/>
+		<t-footer/>
+		<t-footer/>
+		<t-footer/>
+		<t-footer/>
+		<t-footer/>
+		<t-footer/>
+		<t-footer/>
+		<t-footer/>
 	</div>
 </template>
 <script>

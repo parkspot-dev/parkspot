@@ -1,5 +1,5 @@
  <template >
-<footer>
+<footer class="footer ps_footer_color">
   <o-footer-top/>
   <o-footer-bottom/>
 </footer>
@@ -15,3 +15,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.ps_footer_color{
+  background-color:#242329;
+  color:white;
+}
+</style>

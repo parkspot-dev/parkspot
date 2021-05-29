@@ -1,8 +1,8 @@
 <template>
-  <div class="o_footer_top">
-    <m-footer-left />
-    <m-footer-middle />
-    <m-footer-right />
+  <div class="o_footer_top columns">
+    <m-footer-left   class="column" />
+    <m-footer-middle class="column" />
+    <m-footer-right  class="column"/>
   </div>
 </template>
 <script>

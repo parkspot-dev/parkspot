@@ -1,6 +1,6 @@
 <template>
     <div class="o_footer_bottom">
-        <m-footer-bottom/>
+        <m-footer-bottom class="columns"/>
     </div>
 </template>
 

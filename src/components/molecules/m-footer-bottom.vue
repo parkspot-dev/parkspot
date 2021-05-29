@@ -1,7 +1,7 @@
 <template>
-    <div class="m_footer_bottom">
-        <atom-text :text="text1"/>
-        <atom-link :text="text2" />
+    <div class="m_footer_bottom columns is-mobile">
+        <atom-text id="ps__text" class="column" :text="text1"/>
+        <atom-link id="ps__text" class="column " :text="text2" />
     </div>
 </template>
 
@@ -20,3 +20,9 @@ export default {
 
 }
 </script>
+
+<style scoped>
+#ps__text{
+    font-size:13px;
+}
+</style>
