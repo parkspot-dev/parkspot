@@ -4,6 +4,7 @@ import App from './App.vue';
 import 'buefy/dist/buefy.css';
 import router from './router';
 import VueResource from 'vue-resource';
+import 'boxicons'
 
 import LazyLoadDirective from "./directives/LazyLoadDirective.vue";
 
