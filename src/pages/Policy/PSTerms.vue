@@ -91,7 +91,7 @@
       </p>
       <br />
       <p>
-        <b>Cancellation Policies</b> : Cancellation request must be made in one
+        <b>Cancellation Policies</b> : Cancellation request  of the ongoing booking must be made in one
         month advance.
       </p>
       <br />

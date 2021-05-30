@@ -3,8 +3,8 @@
     <div class="footer__main">
       <div class="footer__brand">
         <div class="footer__logo">
-          <div class="logo__img">
-            <img :src="logo" alt="" />
+          <div class="logo__img" v-lazyload>
+            <img :data-url="logo" alt="logo.png" />
           </div>
           <div>
             <h2 class="psfooter__title">ParkSpot</h2>
@@ -39,22 +39,18 @@
       <div class="psfooter__contact">
         <p class="psfooter__contact-title">Contact Us</p>
         <div class="psfooter__contact-details">
-          <div class="contact1">
+          <div class="contact">
+            <p><i class="bx bx-phone-call"></i>&emsp;+91 80929 96057</p>
+          </div>
+          <div class="contact">
             <p>
-            <i class="bx bx-phone-call pschange"></i>
-              <span> &nbsp;+91 80929 96057</span>
+              ✉ <a href="mailto:connect@parkspot.in"> connect@parkspot.in</a>
             </p>
           </div>
-          <div class="contact2">
+          <div class="contact">
             <p>
-            <i class="bx bx-mail-send pschange"></i>
-              <span>&nbsp;connect@parkspot.in</span>
-            </p>
-          </div>
-          <div class="contact3">
-            <p>
-            <i class="bx bx-current-location pschange"></i>
-              <span>&nbsp;2nd Floor, Nextcoworks BTM Layout, BTM 2nd Stage, Bengaluru, Karnataka 560076</span>
+              <i class="bx bx-current-location"></i>&emsp;2nd Floor, Nextcoworks
+              BTM Layout, BTM 2nd Stage, Bengaluru, Karnataka 560076
             </p>
           </div>
         </div>
@@ -63,7 +59,7 @@
     <div class="psfooter__copyrights">
       <p>© 2020 The Thought Engine - ALL RIGHTS RESERVED</p>
       <div>
-        <router-link :to="{ name: 'Terms' }"> TERMS AND CONDITIONS</router-link>
+        <router-link :to="{ name: 'Terms' }">TERMS AND CONDITIONS</router-link>
       </div>
     </div>
   </footer>
@@ -123,7 +119,7 @@ export default {
   margin: 0 5rem 2rem 5rem;
 }
 
-.psfooter__contact-title{
+.psfooter__contact-title {
   font-size: 1.5rem;
   font-weight: 400;
 }
@@ -132,15 +128,7 @@ export default {
   flex-direction: column;
   /* justify-content: flex-start; */
   font-weight: 400;
-
 }
-.contact1,
-.contact2,
-.contact3 {
-  align-self: center;
-  /* text-align: justify; */
-}
-
 .psfooter__copyrights {
   display: flex;
   justify-content: space-between;
@@ -197,7 +185,8 @@ export default {
     align-self: center;
     margin: 0 1rem 0 5rem;
   }
-  .psfooter__social-title,.psfooter__contact-title {
+  .psfooter__social-title,
+  .psfooter__contact-title {
     margin-bottom: 1rem;
     font-weight: 400;
   }
@@ -220,16 +209,9 @@ export default {
   .psfooter__contact {
     margin: 0 1rem 0 5rem;
   }
-  .contact1,
-.contact2,
-.contact3 {
-  align-self: flex-start;
-  text-align: justify;
-}
-  .pschange{
-    float: left;
+  .contact {
+    text-align: left;
   }
-
   .psfooter__copyrights {
     font-size: 1rem;
     font-weight: 200;
