@@ -24,6 +24,7 @@
     "vue-mapbox": "^0.4.1",
     "vue-resource": "^1.5.2",
     "vue-router": "^3.4.8",
+    "vue-scroll-reveal": "^1.0.11",
     "vuex": "^4.0.0-rc.1"
   },
   "devDependencies": {

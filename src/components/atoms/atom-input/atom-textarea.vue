@@ -1,18 +1,17 @@
 <template>
-    <h2>{{text}}</h2>
+    <textarea  cols="30" rows="5" :placeholder="placeholder"></textarea>
 </template>
 
 <script>
 export default {
-    name:"atom-b-subtitle",
+    name:'atom-textarea',
     props:{
-        text:{
+        placeholder:{
             type:String,
             default(){
-                return "SubTitle"
+                return "";
             }
         }
     }
-
 }
 </script>

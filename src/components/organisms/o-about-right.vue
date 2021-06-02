@@ -1,6 +1,6 @@
 <template>
   <div class="o_about_right">
-    <atom-b-title class="ps_title" :text="title" />
+    <atom-b-title class="ps_title mb-6 has-text-centered" :text="title" />
     <atom-b-subtitle class="ps_subtitle has-text-justified" :text="para" />
     <br>
   <m-about-right-bottom/>

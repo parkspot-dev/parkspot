@@ -1,8 +1,8 @@
 <template>
   <div class="t_about section">
     <div class="columns">
-      <atom-img class="column is-half" :src="src" />
-      <o-about-right class="column is-half" />
+      <atom-img class="column is-half" :src="src" v-scroll-reveal.reset />
+      <o-about-right class="column is-half"  v-scroll-reveal.reset/>
     </div>
   </div>
 </template>
