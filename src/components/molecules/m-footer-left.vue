@@ -2,20 +2,15 @@
   <div class="m_footer_left columns">
     <div class="column">
       <div class="columns is-mobile">
-        <div class="column ps_img" v-lazyload>
-          <atom-img :data-url="src" />
+        <div class="column is-one-fifth" v-lazyload>
+          <atom-img class="ps_img" :data-url="src" />
         </div>
-        <atom-b-title
-          class="ps_title column"
-          :text="text1"
-        />
+        <div class="column">
+          <atom-b-title class="is-size-2" :text="brand" />
+          <atom-b-subtitle class="has-text-centered" :text="hookup" />
+        </div>
       </div>
     </div>
-
-    <atom-b-subtitle
-      class="ps_subtitle column"
-      :text="text2"
-    />
   </div>
 </template>
 <script>
@@ -27,8 +22,8 @@ export default {
   data() {
     return {
       src: require("@/assets/img/pstopmini.png"),
-      text1: "ParkSpot",
-      text2: "Get the Spot",
+      brand: "ParkSpot",
+      hookup: "Get the Spot",
     };
   },
   components: {
@@ -40,12 +35,6 @@ export default {
 </script>
 
 <style scoped>
-.ps_title {
-  font-size: 36px;
-}
-.ps_subtitle {
-  font-size: 18px;
-}
 .ps_img {
   max-width: 11vh;
   max-height: 11vh;

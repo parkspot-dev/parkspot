@@ -1,6 +1,9 @@
 <template>
-  <div class="m_about-right-bottom columns is-vcentered ">
-    <atom-b-title class="ps_title column is-half" :text="title" />
+  <div class="m_about-right-bottom columns is-vcentered">
+    <atom-b-title
+      class="is-size-4-mobile is-size-3 column is-half"
+      :text="title"
+    />
     <atom-img class="ps_img column is-half" :src="src" />
   </div>
 </template>
@@ -24,15 +27,9 @@ export default {
 </script>
 
 <style scoped>
-.ps_title{
-  font-size: 28px;
-}
-
 @media only screen and (min-width: 1024px) {
-.ps_img{
+  .ps_img {
     max-width: 165px;
+  }
 }
-}
-
-
 </style>

@@ -1,23 +1,33 @@
 <template>
-    <div class="o_features_details">
-        <atom-b-subtitle :text="subtitle"/>
-        <atom-text :text="text"/>
-    </div>
+  <div class="o_features_details">
+    <atom-img class="ps_img" :src="src" />
+    <atom-b-subtitle :text="subtitle" />
+    <atom-text :text="text" />
+  </div>
 </template>
 
 <script>
-import AtomBSubtitle from '@/components/atoms/atom-text/atom-b-subtitle.vue'
-import atomText from '@/components/atoms/atom-text/atom-text.vue'
+import AtomBSubtitle from "@/components/atoms/atom-text/atom-b-subtitle.vue";
+import atomText from "@/components/atoms/atom-text/atom-text.vue";
+import AtomImg from "../atoms/atom-img/atom-img.vue";
 export default {
-  components: { atomText ,AtomBSubtitle},
-    name:"o-features-details.vue",
-    data(){
-        return{
-        }
-    },
-    props:{
-        subtitle:String,
-        text:String
-    }
-  }
+  components: { atomText, AtomBSubtitle,AtomImg },
+  name: "o-features-details.vue",
+  data() {
+    return {};
+  },
+  props: {
+    subtitle: String,
+    text: String,
+    src: String,
+  },
+};
 </script>
+
+<style scoped>
+/* @media only screen and (min-width: 1024px) {
+  .ps_img {
+    max-width: 165px;
+  }
+} */
+</style>

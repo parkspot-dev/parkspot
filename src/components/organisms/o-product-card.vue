@@ -5,9 +5,12 @@
         <div class="card-image">
           <atom-img class="image" :src="src" />
         </div>
+        <div class="card-content">
+          <atom-b-subtitle class="is-size-6 has-text-weight-semibold" :text="title" />
+        </div>
       </div>
       <div class="card card_back">
-          <m-product-back class="card-content" />
+        <m-product-back :title="title" :text="text" />
       </div>
     </div>
   </div>
@@ -16,13 +19,14 @@
 <script>
 import atomImg from "@/components/atoms/atom-img/atom-img.vue";
 import MProductBack from "@/components/molecules/m-product-back.vue";
+import AtomBSubtitle from "@/components/atoms/atom-text/atom-b-subtitle.vue";
 export default {
-  components: { atomImg, MProductBack },
+  components: { atomImg, MProductBack, AtomBSubtitle },
   name: "o-product-card",
-  data() {
-    return {
-      src: require("@/assets/img/mall.svg"),
-    };
+  props: {
+    title: String,
+    text: String,
+    src: String,
   },
 };
 </script>
@@ -42,15 +46,17 @@ export default {
   text-align: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .o_product_card:hover .o_product_card_inner {
   transform: rotateY(180deg);
 }
 
-.card_front, .card_back {
+.card_front,
+.card_back {
   position: absolute;
+  padding: 10px;
   width: 100%;
   height: 100%;
   -webkit-backface-visibility: hidden;
@@ -58,8 +64,17 @@ export default {
 }
 .card_back {
   transform: rotateY(180deg);
+  padding: 50px 0px;
 }
+.image{
+  display: block;
+  margin: auto;
+  height: 150px;
+  width: 150px;
+}
+
 .card-content{
-  padding: 15px;
+  padding: 10px;
 }
+
 </style>

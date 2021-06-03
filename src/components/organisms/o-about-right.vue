@@ -1,7 +1,7 @@
 <template>
   <div class="o_about_right">
-    <atom-b-title class="ps_title mb-6 has-text-centered" :text="title" />
-    <atom-b-subtitle class="ps_subtitle has-text-justified" :text="para" />
+    <atom-b-title class="is-size-3-mobile is-size-2 mb-2 has-text-centered" :text="title" />
+    <atom-b-subtitle class="is-size-7-mobile is-size-6 has-text-justified" :text="para" />
     <br>
   <m-about-right-bottom/>
   </div>
@@ -33,11 +33,5 @@ export default {
 </script>
 
 <style scoped>
-.ps_title {
-  font-size: 36px;
-}
 
-.ps_subtitle {
-  font-size: 18px;
-}
 </style>

@@ -1,12 +1,12 @@
 <template>
   <div id="home">
     <t-navbar />
-    <t-map v-scroll-reveal.reset />
-    <t-about v-scroll-reveal.reset />
-    <t-features v-scroll-reveal.reset />
-    <t-product v-scroll-reveal.reset />
-    <t-team v-scroll-reveal.reset />
-    <t-contact v-scroll-reveal.reset />
+    <t-map/>
+    <t-about  />
+    <t-features  />
+    <t-product  />
+    <t-team  />
+    <t-contact  />
     <t-footer  />
   </div>
 </template>
