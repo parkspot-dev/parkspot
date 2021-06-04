@@ -17,7 +17,7 @@
       </a>
     </div>
 
-    <div id="ps__navbar" class="navbar-menu is-active">
+    <div id="ps__navbar" class="navbar-menu ">
       <div class="navbar-start"></div>
       <o-navbar-right class="navbar-end"/>
     </div>

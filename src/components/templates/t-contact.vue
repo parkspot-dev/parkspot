@@ -1,13 +1,17 @@
 <template>
-  <section class="t_contact section">
-    <div class="container">
-      <atom-b-title class="is-size-3-mobile is-size-2 mb-5 has-text-centered" :text="title" />
+<section class="t_contact hero is-medium ">
+  <div class="hero-body">
+      <div class="container">
+      <atom-b-title class="is-size-3-mobile is-size-2 ps_mb has-text-centered" :text="title" />
       <div class="columns">
+        <div class="column is-2"></div>
         <o-contact-left class="column" />
         <o-contact-right class="column" />
+        <!-- <div class="column"></div> -->
       </div>
     </div>
-  </section>
+  </div>
+</section>
 </template>
 
 <script>
@@ -26,7 +30,12 @@ export default {
 </script>
 
 <style scoped>
-.ps_title {
-  font-size: 30px;
+.ps_mb{
+  margin-bottom: 50px;
+}
+@media only screen and (min-width: 1024px) {
+ .ps_mb{
+  margin-bottom: 150px;
+}
 }
 </style>

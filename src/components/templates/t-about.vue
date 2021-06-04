@@ -1,5 +1,5 @@
 <template>
-  <div class="t_about section">
+  <div class="t_about mt-4 section">
     <div class="container">
       <div class="columns">
         <div class="column is-1"></div>

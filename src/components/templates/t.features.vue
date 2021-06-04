@@ -2,7 +2,7 @@
   <section class="t_features section">
     <div class="container">
         <atom-b-title
-          class="is-size-3-mobile is-size-2 mb-2 has-text-centered"
+          class="is-size-3-mobile is-size-2 ps_mb has-text-centered"
           :text="title"
         />
       <div class="columns">
@@ -51,26 +51,36 @@ export default {
         },
         {
           id: 2,
-          src: require("@/assets/img/features-navigation.svg"),
-          title: "Navigation",
-          text: "We provide Navigation",
+          src: require("@/assets/img/features-booking.svg"),
+          title: "Booking",
+          text: "We provide Booking",
         },
       ],
       features2: [
         {
           id: 1,
-          src: require("@/assets/img/features-navigation.svg"),
-          title: "Navigation",
-          text: "We provide Navigation",
+          src: require("@/assets/img/features-searchParking.svg"),
+          title: "Search parking",
+          text: "We provide Search parking",
         },
         {
           id: 2,
-          src: require("@/assets/img/features-navigation.svg"),
-          title: "Navigation",
-          text: "We provide Navigation",
+          src: require("@/assets/img/features-security.svg"),
+          title: "Safety and Security",
+          text: "We provide Safety and Security",
         },
       ],
     };
   },
 };
 </script>
+
+<style scoped>
+.ps_mb{
+  margin-bottom: 50px;
+}
+@media only screen and (min-width: 1024px) {
+.ps_mb{
+  margin-bottom: 150px;
+}}
+</style>

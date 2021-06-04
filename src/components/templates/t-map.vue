@@ -1,8 +1,11 @@
 <template>
-  <div class="t_map section">
-    <div class="ps_map"></div>
+<section class="t_map hero ">
+  <div class="hero-body">
     <m-search-box class="ps_search" />
+    <div class="ps_map"></div>
   </div>
+</section>
+  
 </template>
 
 <script>
@@ -13,14 +16,17 @@ export default {
   name: "t-map",
   data() {
     return {
-      src: require("@/assets/img/home-map.svg"),
     };
   },
 };
 </script>
 
 <style scoped>
-.t_map {
+.t_map{
+  top: 0;
+  position:relative;
+}
+.hero-body {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,7 +36,7 @@ export default {
   width: 100%;
 }
 .ps_map {
-  background-image: url("../../assets/img/home-map2.svg");
+  background-image: url("../../assets/img/mobile-home-map.svg");
   position: absolute;
   top: 0;
   left: 0;
@@ -53,7 +59,7 @@ export default {
   }
   .ps_map {
     background-image: url("../../assets/img/home-map.svg");
-    min-height: 80vh;
+    min-height: 70vh;
   }
 }
 </style>

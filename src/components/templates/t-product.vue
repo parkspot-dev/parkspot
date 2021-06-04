@@ -1,7 +1,7 @@
 <template>
   <section class="t_products section">
     <div class="container">
-      <atom-b-title class="is-size-3-mobile is-size-2 mb-6 has-text-centered" :text="title" />
+      <atom-b-title class="is-size-3-mobile is-size-2 ps_mb has-text-centered" :text="title" />
       <div class="columns">
         <o-product-card :key='product.id' v-for="product in products" class="column center" :title="product.title" :text="product.text" :src="product.src" />
       </div>
@@ -50,4 +50,13 @@ export default {
 </script>
 
 <style scoped>
+
+.ps_mb{
+  margin-bottom: 50px;
+}
+@media only screen and (min-width: 1024px) {
+.ps_mb{
+  margin-bottom: 150px;
+}
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="field">
-    <p class="control has-icons-right">
-      <atom-input class="input"/>
+    <p class="ps_search control has-icons-right">
+      <atom-input class="input has-text-weight-semibold" :placeholder="placeholder"/>
       <span class="icon is-small is-right">
        <atom-boxicon :name="name" :color="color" :size="size" :animation="animation"/>
       </span>
@@ -24,8 +24,11 @@ export default {
           name:"search",
           color:"black",
           size:"sm",
-          animation:"tada"
+          animation:"tada",
+          placeholder:"Search your spot..."
       }
   }
 };
 </script>
+<style scoped>
+</style>

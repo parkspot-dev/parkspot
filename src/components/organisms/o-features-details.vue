@@ -25,9 +25,10 @@ export default {
 </script>
 
 <style scoped>
-/* @media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 1024px) {
   .ps_img {
-    max-width: 165px;
+    max-width: 400px;
+    height: 400px;
   }
-} */
+}
 </style>

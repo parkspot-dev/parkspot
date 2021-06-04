@@ -76,5 +76,17 @@ export default {
 .card-content{
   padding: 10px;
 }
-
+@media only screen and (min-width: 1024px) {
+.o_product_card {
+  width: 350px;
+  height:450px;
+}
+.image{
+  height: 350px;
+  width: 250px;
+}
+.card_back{
+   padding: 150px 0px;
+}
+}
 </style>
