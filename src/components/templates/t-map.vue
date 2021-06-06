@@ -1,11 +1,15 @@
 <template>
-<section class="t_map hero ">
-  <div class="hero-body">
-    <m-search-box class="ps_search" />
-    <div class="ps_map"></div>
-  </div>
-</section>
-  
+  <section class="t_map hero">
+    <div class="hero-body">
+      <m-search-box
+        @search="search"
+        @flytosrp="flyToSrp"
+        :results="results"
+        class="ps_search"
+      />
+      <div class="ps_map"></div>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -16,15 +20,49 @@ export default {
   name: "t-map",
   data() {
     return {
+      results: [],
+      cresults:[]
     };
+  },
+  methods: {
+    async search(name) {
+      if (!name.length) {
+        this.results = [];
+        return;
+      }
+      const res = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${name}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ&proximity=77.4977,12.9716`
+      );
+      const data = await res.json();
+      console.log(data)
+      this.cresults = data.features
+      this.results = data.features.map((e) => e.place_name);
+    },
+    flyToSrp(value) {
+      console.log(value);
+      console.log(this.cresults)
+      var lng = null;
+      var lat = null;
+      for (var i = 0; i < this.cresults.length; i++) {
+        console.log(this.cresults[i].place_name)
+        if (this.cresults[i].place_name === value) {
+          lng = this.cresults[i].center[0];
+          lat = this.cresults[i].center[1];
+          console.log(this.cresults[i])
+          break;
+        }
+      }
+      console.log(lng,lat)
+      this.$router.push({ name: "PSSrp", query: { lat: lat, lng: lng } });
+    },
   },
 };
 </script>
 
 <style scoped>
-.t_map{
+.t_map {
   top: 0;
-  position:relative;
+  position: relative;
 }
 .hero-body {
   display: flex;
@@ -51,6 +89,24 @@ export default {
 .ps_search {
   width: 60%;
   z-index: 1;
+}
+.ps_searchbox {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.ps_searchbox_list {
+  border: 1px solid #ddd;
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #f6f6f6;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 12px;
+  color: black;
+  display: block;
+}
+.ps_searchbox_list:hover {
+  background-color: #eee;
 }
 
 @media only screen and (min-width: 1024px) {

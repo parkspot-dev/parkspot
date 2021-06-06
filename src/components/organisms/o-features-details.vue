@@ -1,8 +1,8 @@
 <template>
   <div class="o_features_details">
     <atom-img class="ps_img" :src="src" />
-    <atom-b-subtitle :text="subtitle" />
-    <atom-text :text="text" />
+    <atom-b-subtitle class="is-size-4 has-text-weight-semibold	" :text="subtitle" />
+    <atom-text class="is-size-6" :text="text" />
   </div>
 </template>
 

@@ -4,9 +4,9 @@
       <div class="columns">
         <div class="column is-1"></div>
         <div class="column is-4">
-          <atom-img :src="src" v-scroll-reveal.reset />
+          <atom-img :src="src" />
         </div>
-        <o-about-right class="column" v-scroll-reveal.reset />
+        <o-about-right class="column"  />
         <div class="column is-1"></div>
       </div>
     </div>

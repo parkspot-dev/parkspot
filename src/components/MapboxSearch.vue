@@ -42,7 +42,7 @@ export default {
       isFetching: false,
       cdata: [],
       mapdisp: true,
-     img1: require("@/assets/map.webp"),
+      img1: require("@/assets/map.webp"),
     };
   },
   // mounted: function(){
@@ -102,6 +102,7 @@ export default {
         .then((e) => e.json())
         .then((data) => {
           try {
+            console.log(data)
             this.cdata = data.features;
             this.data = data.features.map((e) => e.place_name);
           } catch (e) {

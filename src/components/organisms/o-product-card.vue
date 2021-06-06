@@ -6,7 +6,10 @@
           <atom-img class="image" :src="src" />
         </div>
         <div class="card-content">
-          <atom-b-subtitle class="is-size-6 has-text-weight-semibold" :text="title" />
+          <atom-b-subtitle
+            class="is-size-6 has-text-weight-semibold"
+            :text="title"
+          />
         </div>
       </div>
       <div class="card card_back">
@@ -47,10 +50,13 @@ export default {
   transition: transform 0.6s;
   transform-style: preserve-3d;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  animation: mymove infinite;
+  animation-duration: 2s;
 }
 
 .o_product_card:hover .o_product_card_inner {
   transform: rotateY(180deg);
+  animation-play-state:paused;
 }
 
 .card_front,
@@ -62,31 +68,40 @@ export default {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
+@keyframes mymove {
+  from {
+    transform: rotateY(180deg);
+  }
+  to {
+    transform: rotateY(0deg);
+  }
+
+}
 .card_back {
   transform: rotateY(180deg);
   padding: 50px 0px;
 }
-.image{
+.image {
   display: block;
   margin: auto;
   height: 150px;
   width: 150px;
 }
 
-.card-content{
+.card-content {
   padding: 10px;
 }
 @media only screen and (min-width: 1024px) {
-.o_product_card {
-  width: 350px;
-  height:450px;
-}
-.image{
-  height: 350px;
-  width: 250px;
-}
-.card_back{
-   padding: 150px 0px;
-}
+  .o_product_card {
+    width: 350px;
+    height: 450px;
+  }
+  .image {
+    height: 350px;
+    width: 250px;
+  }
+  .card_back {
+    padding: 150px 0px;
+  }
 }
 </style>

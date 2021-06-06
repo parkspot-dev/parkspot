@@ -1,17 +1,33 @@
 <template>
   <div class="field">
-    <p class="ps_search control has-icons-right">
-      <atom-input class="input has-text-weight-semibold" :placeholder="placeholder"/>
+    <div class="ps_search control has-icons-right">
+      <atom-input
+        @flytosrp="flytosrp"
+        @search="search"
+        :result="result"
+        class="input has-text-weight-semibold"
+        :placeholder="placeholder"
+      />
       <span class="icon is-small is-right">
-       <atom-boxicon :name="name" :color="color" :size="size" :animation="animation"/>
+        <atom-boxicon
+          :name="name"
+          :color="color"
+          :size="size"
+          :animation="animation"
+        />
       </span>
-    </p>
+      <ul class="ps_searchbox">
+        <li  @click="flytosrp(result)"  :key="result" v-for="result in results.slice(0,3)" class="ps_searchbox_list">
+          {{ result }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
 import AtomInput from "@/components/atoms/atom-input/atom-input.vue";
-import AtomBoxicon from '../atoms/atom-boxicons/atom-boxicon.vue';
+import AtomBoxicon from "../atoms/atom-boxicons/atom-boxicon.vue";
 
 export default {
   name: "m-search-box",
@@ -19,16 +35,51 @@ export default {
     AtomInput,
     AtomBoxicon,
   },
-  data(){
-      return{
-          name:"search",
-          color:"black",
-          size:"sm",
-          animation:"tada",
-          placeholder:"Search your spot..."
-      }
-  }
+  data() {
+    return {
+      name: "search",
+      color: "black",
+      size: "sm",
+      animation: "tada",
+      placeholder: "Search your spot...",
+    };
+  },
+  props: {
+    results: Array,
+  },
+  methods: {
+    search(value) {
+      this.$emit("search", value);
+    },
+    flytosrp(value){
+      this.$emit("flytosrp",value)
+    },
+    // flytosrps(value){
+    // this.$emit('flysrp',value)
+    // }
+  },
 };
 </script>
 <style scoped>
+.ps_searchbox {
+  position: absolute;
+  width: 100%;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  z-index: 2;
+}
+.ps_searchbox_list {
+  border: 1px solid #ddd;
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #f6f6f6;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 12px;
+  color: black;
+  display: block;
+}
+.ps_searchbox_list:hover {
+  background-color: #eee;
+}
 </style>

@@ -11,9 +11,10 @@
           [480, 1],
           [1024, 4],
         ]"
-        :navigate-to="someLocalProperty"
+        
         :mouse-drag="false"
       >
+      <!-- :navigate-to="someLocalProperty" -->
         <slide class="mx-2" :key="team.id" v-for="team in teams">
           <div class="ps_container">
             <o-team-card-front :title="team.title"  :jobTitle="team.jobTitle" :src="team.src"/>
