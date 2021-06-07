@@ -103,7 +103,7 @@ export default {
   width: 80%;
 }
 .ps_mb{
-  margin-bottom: 150px;
+  margin-bottom: 60px;
 }
 }
 

@@ -70,7 +70,7 @@ export default {
   justify-content: center;
   margin: 0;
   padding: 0;
-  height: 60vh;
+  height: 55vh;
   width: 100%;
 }
 .ps_map {
@@ -115,7 +115,7 @@ export default {
   }
   .ps_map {
     background-image: url("../../assets/img/home-map.svg");
-    min-height: 70vh;
+    min-height: 85vh;
   }
 }
 </style>

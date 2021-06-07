@@ -51,7 +51,7 @@ export default {
   transform-style: preserve-3d;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   animation: mymove infinite;
-  animation-duration: 2s;
+  animation-duration: 4s;
 }
 
 .o_product_card:hover .o_product_card_inner {

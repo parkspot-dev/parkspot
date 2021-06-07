@@ -28,4 +28,7 @@ export default {
 </script>
 
 <style scoped>
+.t_about{
+  background-color: #ECECEC;
+}
 </style>
