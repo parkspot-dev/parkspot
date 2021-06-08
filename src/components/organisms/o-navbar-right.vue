@@ -22,13 +22,13 @@
     />
     <div class="navbar-item has-text-centered ">
       <atom-button
-        class="button is-warning is-outlined is-small is-rounded has-text-weight-semibold"
+        class="button is-warning is-rounded has-text-weight-semibold"
         :text="button1"
       />
     </div>
     <div class="navbar-item has-text-centered">
       <atom-button
-        class="button is-outlined is-small is-rounded has-text-weight-semibold"
+        class="button  is-rounded has-text-weight-semibold"
         :text="button2"
       />
     </div>

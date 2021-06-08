@@ -2,7 +2,7 @@
     <div class="m_product_back">
         <atom-b-subtitle class="is-size-7 mb-2 has-text-weight-bold" :text="title"/>
         <atom-text class="is-size-7 mb-2" :text="text"/>
-        <atom-button class="button is-warning is-outlined is-small is-rounded" :text="button" />
+        <atom-button class="button is-warning is-small is-rounded" :text="button" />
     </div>
 </template>
 
