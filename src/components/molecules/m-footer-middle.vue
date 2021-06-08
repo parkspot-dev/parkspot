@@ -20,26 +20,32 @@
         <atom-text class="is-size-6 mb-2" :text="text2" />
       </div>
       <div class="column">
-        <atom-boxicon
+        <a href="https://www.instagram.com/parkspot/?hl=en" target="_blank">
+          <atom-boxicon
+            class="mx-2"
+            :types="boxicons.insta.type"
+            :name="boxicons.insta.icon"
+          />
+        </a>
+        <a href="https://www.linkedin.com/company/parkspot-in" target="_blank">
+          <atom-boxicon
+            class="mx-2"
+            :types="boxicons.linkd.type"
+            :name="boxicons.linkd.icon"
+          />
+        </a>
+        <a href="https://facebook.com/parkspot.in" target="_blank">
+          <atom-boxicon
+            class="mx-2"
+            :types="boxicons.fb.type"
+            :name="boxicons.fb.icon"
+          />
+        </a>
+        <!-- <atom-boxicon
           class="mx-2"
           :types="boxicons.twitter.type"
           :name="boxicons.twitter.icon"
-        />
-        <atom-boxicon
-          class="mx-2"
-          :types="boxicons.insta.type"
-          :name="boxicons.insta.icon"
-        />
-        <atom-boxicon
-          class="mx-2"
-          :types="boxicons.fb.type"
-          :name="boxicons.fb.icon"
-        />
-        <atom-boxicon
-          class="mx-2"
-          :types="boxicons.linkd.type"
-          :name="boxicons.linkd.icon"
-        />
+        /> -->
       </div>
       <!-- <div class="column"></div> -->
     </div>
