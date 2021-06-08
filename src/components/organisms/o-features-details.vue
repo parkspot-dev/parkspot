@@ -27,8 +27,8 @@ export default {
 <style scoped>
 @media only screen and (min-width: 1024px) {
   .ps_img {
-    max-width: 400px;
-    height: 400px;
+    max-width: 350px;
+    height: 350px;
   }
 }
 </style>

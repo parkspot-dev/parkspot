@@ -4,7 +4,11 @@
       class="is-size-4-mobile is-size-3 column is-half"
       :text="title"
     />
-    <atom-img class="ps_img column is-half" :src="src" />
+    <div class="column is-half">
+      <a href="https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website"  target="_blank">
+        <atom-img class="ps_img" :src="src" />
+      </a>
+    </div>
   </div>
 </template>
 

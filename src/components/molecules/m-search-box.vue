@@ -2,9 +2,7 @@
   <div class="field">
     <div class="ps_search control has-icons-right">
       <atom-input
-        @flytosrp="flytosrp"
-        @search="search"
-        :result="result"
+        @input="search"
         class="input has-text-weight-semibold"
         :placeholder="placeholder"
       />
@@ -51,11 +49,11 @@ export default {
     search(value) {
       this.$emit("search", value);
     },
-    flytosrp(value){
-      this.$emit("flytosrp",value)
+    flytosrp(result){
+      this.$emit("flytosrp",result)
     },
-    // flytosrps(value){
-    // this.$emit('flysrp',value)
+    // flytosrps(){
+    // this.$emit('flysrp',this.results[0])    on keyup.enter not working
     // }
   },
 };

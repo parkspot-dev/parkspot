@@ -1,11 +1,37 @@
 <template>
   <div class="o-navbar-right">
-    <atom-router-link class="navbar-item has-text-centered" :text="text1" :link="link1" />
-    <atom-router-link class="navbar-item has-text-centered" :text="text2" :link="link2" />
-    <atom-router-link class="navbar-item has-text-centered" :text="text3" :link="link3" />
-    <atom-router-link class="navbar-item has-text-centered" :text="text4" :link="link4" />
-    <div class="navbar-item has-text-centered "> <atom-button class="button is-warning is-outlined is-small is-rounded" :text="button1" /></div>
-    <div class="navbar-item has-text-centered"> <atom-button class="button is-outlined is-small is-rounded" :text="button2" /></div>
+    <atom-router-link
+      class="navbar-item has-text-centered"
+      :text="text1"
+      :link="link1"
+    />
+    <atom-router-link
+      class="navbar-item has-text-centered"
+      :text="text2"
+      :link="link2"
+    />
+    <atom-router-link
+      class="navbar-item has-text-centered"
+      :text="text3"
+      :link="link3"
+    />
+    <atom-router-link
+      class="navbar-item has-text-centered"
+      :text="text4"
+      :link="link4"
+    />
+    <div class="navbar-item has-text-centered ">
+      <atom-button
+        class="button is-warning is-outlined is-small is-rounded has-text-weight-semibold"
+        :text="button1"
+      />
+    </div>
+    <div class="navbar-item has-text-centered">
+      <atom-button
+        class="button is-outlined is-small is-rounded has-text-weight-semibold"
+        :text="button2"
+      />
+    </div>
   </div>
 </template>
 
@@ -25,8 +51,8 @@ export default {
       link3: "#Features",
       text4: "Blog",
       link4: "EliminateTrafficJam",
-      button1:"Log In",
-      button2:"Sign Up"
+      button1: "Log In",
+      button2: "Sign Up",
     };
   },
 };

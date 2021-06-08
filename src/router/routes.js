@@ -2,7 +2,7 @@ import Home from '@/views/Home.vue'
 import Thanks from '@/views/Thanks.vue'
 import Faq from '@/views/Faq.vue'
 import Terms from '@/views/Terms.vue'
-import Phome from '@/views/atomicDesignPages/Phome.vue'
+// import Phome from '@/views/atomicDesignPages/Phome.vue'
 // import PHome from '@/views/atomicDesignPages/PHome.vue'
 // import PSSrp from '@/views/Srp.vue'
 // import Blog1 from '@/views/Blog1.vue'
@@ -68,11 +68,11 @@ export const routes = [
 		component: Terms
   },
  
-  {
-    path: '/atomic-design',
-		name: 'atomic',
-		component: Phome
-  },
+  // {
+  //   path: '/atomic-design',
+	// 	name: 'atomic',
+	// 	component: Phome
+  // },
  
   
   // delete above

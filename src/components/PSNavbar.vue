@@ -43,8 +43,8 @@
             | Portal
           b-navbar-item.is-hidden(tag="router-link" :to="{ path: '/parkspot-near-you' }")
             | ParkSpot Near You	
-          b-navbar-item(tag="router-link" :to="{ path: '/atomic-design' }")
-            | Atomic design
+        //-   b-navbar-item(tag="router-link" :to="{ path: '/atomic-design' }")
+        //-     | Atomic design
 </template>
 
 <script>

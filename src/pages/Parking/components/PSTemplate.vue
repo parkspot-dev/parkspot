@@ -1,6 +1,5 @@
 <template>
   <div>
-    <PSNavbar />
     <div class="box subtitle mt-5">
       <p>
         ParkSpot helps you to find the perfect spot in
@@ -18,21 +17,16 @@
         For more information please <span v-on:click="onContact"> <a> contact us </a> </span>
       </p>
     </div>
-    <PSFooter />
   </div>
 </template>
 
 <script>
-import PSFooter from "@/components/PSFooter.vue";
-import PSNavbar from "@/components/PSNavbar.vue";
 export default {
   name: "PSTemplate",
   props: {
     places: String,
   },
   components: {
-    PSFooter,
-    PSNavbar,
   },
   methods:{
     onContact(){

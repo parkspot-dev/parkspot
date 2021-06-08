@@ -1,6 +1,5 @@
 <template>
   <section>
-    <PSNavbar />
     <SRP />
     <PSSrpDetails @on-book="onBookFormtoggle" />
     <SrpBookForm
@@ -11,13 +10,9 @@
       @on-submit="onSubmit"
     />
     <BookMsg :resMsg="resMsg" v-if="resMsgflag" @on-cancel="onCancel" />
-    <!--  -->
-    <PSFooter />
   </section>
 </template>
 <script>
-import PSNavbar from "@/components/PSNavbar.vue";
-import PSFooter from "@/components/PSFooter.vue";
 import SRP from "@/pages/srp/components/PSSrp.vue";
 import PSSrpDetails from "@/pages/srp/components/PSSrpDetails.vue";
 import SrpBookForm from "@/pages/srp/components/SrpBookForm.vue";
@@ -25,8 +20,6 @@ import BookMsg from "@/pages/srp/components/BookMsg.vue";
 export default {
   name: "PSSrp",
   components: {
-    PSNavbar,
-    PSFooter,
     SRP,
     PSSrpDetails,
     SrpBookForm,

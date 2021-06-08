@@ -39,6 +39,8 @@ export default {
   }
   .ps_size_change_text{
       display: block;
+      width: 150px;
+      min-height: 50px;
   }
 }
 

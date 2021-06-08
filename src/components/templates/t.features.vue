@@ -47,13 +47,13 @@ export default {
           id: 1,
           src: require("@/assets/img/features-navigation.svg"),
           title: "Navigation",
-          text: "We provide Navigation",
+          text: "ParkSpot allows user a navigation feature to give a proper direction of parking site.",
         },
         {
           id: 2,
           src: require("@/assets/img/features-booking.svg"),
           title: "Booking",
-          text: "We provide Booking",
+          text: "Book your spot and choose our newly added service like Pay Now and Pay Later.",
         },
       ],
       features2: [
@@ -61,13 +61,13 @@ export default {
           id: 1,
           src: require("@/assets/img/features-searchParking.svg"),
           title: "Search parking",
-          text: "We provide Search parking",
+          text: "Search our spots in your local area.",
         },
         {
           id: 2,
           src: require("@/assets/img/features-security.svg"),
           title: "Safety and Security",
-          text: "We provide Safety and Security",
+          text: "Enhanced security systems in place and equipment like security camera and embedded sensors for monitoring vehicle.",
         },
       ],
     };

@@ -5,8 +5,8 @@
         <atom-img class="image" :src="src"/>
       </div>
       <div class="card-content">
-        <atom-b-subtitle class="is-size-5 has-text-centered" :text="title" />
-        <atom-text class="is-size-6 has-text-centered" :text="jobTitle"/>
+        <atom-b-subtitle class="is-size-6 has-text-centered" :text="title" />
+        <atom-text class="is-size-7 has-text-centered" :text="jobTitle"/>
       </div>
     </div>
   </div>

@@ -52,6 +52,7 @@ export default {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   animation: mymove infinite;
   animation-duration: 4s;
+  animation-delay: 2s;
 }
 
 .o_product_card:hover .o_product_card_inner {
@@ -70,11 +71,16 @@ export default {
 }
 @keyframes mymove {
   from {
-    transform: rotateY(180deg);
-  }
-  to {
     transform: rotateY(0deg);
   }
+  to {
+    transform: rotateY(180deg);
+  } 
+    /* 0%   {transform: rotateY(0deg);}
+  25%  {transform: rotateY(180deg);}
+  50%  {transform: rotateY(0deg);}
+  75%  {transform: rotateY(180deg);}
+  100% {transform: rotateY(0deg);} */
 
 }
 .card_back {

@@ -5,7 +5,12 @@
         <atom-text class="is-size-6" :text="text1" />
       </div>
       <div class="coulmn">
-        <atom-img class="has-text-centered" :src="src" />
+        <a
+          href="https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website"
+          target="_blank"
+        >
+          <atom-img class="has-text-centered" :src="src" />
+        </a>
       </div>
       <div class="column is-3"></div>
     </div>

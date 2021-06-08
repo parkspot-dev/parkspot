@@ -34,25 +34,20 @@ export default {
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${name}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ&proximity=77.4977,12.9716`
       );
       const data = await res.json();
-      console.log(data)
       this.cresults = data.features
       this.results = data.features.map((e) => e.place_name);
     },
     flyToSrp(value) {
-      console.log(value);
-      console.log(this.cresults)
+      console.log(value)
       var lng = null;
       var lat = null;
       for (var i = 0; i < this.cresults.length; i++) {
-        console.log(this.cresults[i].place_name)
         if (this.cresults[i].place_name === value) {
           lng = this.cresults[i].center[0];
           lat = this.cresults[i].center[1];
-          console.log(this.cresults[i])
           break;
         }
       }
-      console.log(lng,lat)
       this.$router.push({ name: "PSSrp", query: { lat: lat, lng: lng } });
     },
   },
