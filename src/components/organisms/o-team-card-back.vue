@@ -1,8 +1,18 @@
 <template>
-  <div class="o_team_card_back">
-    <atom-boxicon :types="boxicons.twitter.type" :name="boxicons.twitter.icon"/>
-    <atom-boxicon :types="boxicons.insta.type" :name="boxicons.insta.icon" />
-    <atom-boxicon :types="boxicons.linkd.type" :name="boxicons.linkd.icon" />
+  <div class="o_team_card_back columns is-mobile">
+    <a :href="twitter" class="column" target="_blank">
+      <atom-boxicon
+        :types="boxicons.twitter.type"
+        :name="boxicons.twitter.icon"
+        :color="boxicons.twitter.color"
+      />
+    </a>
+    <a :href="git" class="column"  target="_blank">
+      <atom-boxicon :types="boxicons.git.type" :name="boxicons.git.icon" :color="boxicons.git.color"/>
+    </a>
+    <a :href="linkd" class="column" target="_blank">
+      <atom-boxicon :types="boxicons.linkd.type" :name="boxicons.linkd.icon" :color="boxicons.linkd.color"/>
+    </a>
   </div>
 </template>
 
@@ -17,24 +27,28 @@ export default {
         twitter: {
           type: "logo",
           icon: "twitter",
-          color: "black",
+          color: "#ffdd57",
         },
-        insta: {
+        git: {
           type: "logo",
-          icon: "instagram",
-          color: "black",
+          icon: "git",
+          color: "#ffdd57",
         },
         linkd: {
           type: "logo",
           icon: "linkedin",
-          color: "black",
+          color: "#ffdd57",
         },
       },
     };
+  },
+  props: {
+    linkd: String,
+    twitter: String,
+    git: String,
   },
 };
 </script>
 
 <style scoped>
-
 </style>

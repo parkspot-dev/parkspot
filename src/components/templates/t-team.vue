@@ -1,5 +1,5 @@
 <template>
-  <section class="t_team  section mt-2">
+  <section class="t_team section mt-2">
     <div class="container">
       <atom-b-title
         class="is-size-3-mobile is-size-2 ps_mb has-text-centered"
@@ -11,15 +11,18 @@
           [480, 1],
           [1024, 4],
         ]"
-        
         :mouse-drag="false"
       >
-      <!-- :navigate-to="someLocalProperty" -->
+        <!-- :navigate-to="someLocalProperty" -->
         <slide class="mx-2" :key="team.id" v-for="team in teams">
           <div class="ps_container">
-            <o-team-card-front :title="team.title"  :jobTitle="team.jobTitle" :src="team.src"/>
+            <o-team-card-front
+              :title="team.title"
+              :jobTitle="team.jobTitle"
+              :src="team.src"
+            />
             <div class="ps_middle">
-              <o-team-card-back />
+              <o-team-card-back :git="team.git" :linkd="team.linkedin" :twitter="team.twitter"/>
             </div>
           </div>
         </slide>
@@ -51,24 +54,36 @@ export default {
           src: require("@/assets/img/sud.svg"),
           title: "Sudhanshu Kr. Ambastha",
           jobTitle: "CEO",
+          git: "https://www.github.com/arrogant-ant",
+          linkedin: "https://www.linkedin.com/in/sudhanshu-ambastha/",
+          twitter: "https://twitter.com/sud_ambastha",
         },
         {
           id: 2,
           src: require("@/assets/img/ish.svg"),
           title: "Ishwar Kumar",
           jobTitle: "App Developer",
+          git: "https://www.github.com/nextishwar",
+          linkedin: "https://www.linkedin.com/in/ishwar-kumar-50403a130/",
+          twitter: "https://twitter.com/nextishwar",
         },
         {
           id: 3,
           src: require("@/assets/img/Rashmi.svg"),
           title: "Rashmi Kumari",
           jobTitle: "-",
+          git: "#",
+          linkedin: "https://www.linkedin.com/in/rashmi-kumari-2ab18b13a",
+          twitter: "#",
         },
         {
           id: 4,
           src: require("@/assets/img/sujeet.svg"),
           title: "Sujeet Kr. Manjhi",
           jobTitle: "Web Developer",
+          git: "https://www.github.com/alias01",
+          linkedin: "https://www.linkedin.com/in/sujeet-manjhi-345ba6176/",
+          twitter: "https://twitter.com/Sujeet_xd",
         },
       ],
     };
@@ -94,17 +109,16 @@ export default {
 .ps_container:hover .ps_middle {
   opacity: 1;
 }
-.ps_mb{
+.ps_mb {
   margin-bottom: 50px;
 }
 
 @media only screen and (min-width: 1024px) {
- .ps_container {
-  width: 80%;
+  .ps_container {
+    width: 80%;
+  }
+  .ps_mb {
+    margin-bottom: 60px;
+  }
 }
-.ps_mb{
-  margin-bottom: 60px;
-}
-}
-
 </style>

@@ -20,7 +20,7 @@
       :text="text4"
       :link="link4"
     />
-    <div class="navbar-item has-text-centered ">
+    <!-- <div class="navbar-item has-text-centered ">
       <atom-button
         class="button is-warning is-rounded has-text-weight-semibold"
         :text="button1"
@@ -31,7 +31,7 @@
         class="button  is-rounded has-text-weight-semibold"
         :text="button2"
       />
-    </div>
+    </div> -->
   </div>
 </template>
 
