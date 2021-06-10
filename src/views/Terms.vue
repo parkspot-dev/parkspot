@@ -1,14 +1,14 @@
 <template>
 	<div id="app">
-		<PSTerms />
+		<t-terms/>
 	</div>
 </template>
 <script>
-import PSTerms from '@/pages/Policy/PSTerms.vue'
+import TTerms from '../components/templates/t-terms.vue'
 export default{
  name: "Terms",
 	components: {
-    PSTerms,
+TTerms,
 	}
 }
 </script>
