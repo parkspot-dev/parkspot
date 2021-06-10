@@ -1,24 +1,24 @@
 <template>
   <div class="o-navbar-right">
     <atom-router-link
-      class="navbar-item has-text-centered"
-      :text="text1"
-      :link="link1"
+      class="navbar-item has-text-centered ps_hover"
+      :text="home"
+      :link="hlink"
     />
     <atom-router-link
-      class="navbar-item has-text-centered"
-      :text="text2"
-      :link="link2"
+      class="navbar-item has-text-centered ps_hover"
+      :text="about"
+      :link="alink"
     />
     <atom-router-link
-      class="navbar-item has-text-centered"
-      :text="text3"
-      :link="link3"
+      class="navbar-item has-text-centered ps_hover"
+      :text="feature"
+      :link="afeature"
     />
     <atom-router-link
-      class="navbar-item has-text-centered"
-      :text="text4"
-      :link="link4"
+      class="navbar-item has-text-centered ps_hover"
+      :text="blog"
+      :link="blink"
     />
     <!-- <div class="navbar-item has-text-centered ">
       <atom-button
@@ -43,17 +43,24 @@ export default {
   name: "o-navbar-right",
   data() {
     return {
-      text1: "Home",
-      link1: "Home",
-      text2: "About",
-      link2: "#About",
-      text3: "Features",
-      link3: "#Features",
-      text4: "Blog",
-      link4: "EliminateTrafficJam",
+      home: "Home",
+      hlink: "Home",
+      about: "About",
+      alink: "t-about",
+      feature: "Features",
+      afeature: "t-features",
+      blog: "Blog",
+      blink: "EliminateTrafficJam",
       button1: "Log In",
       button2: "Sign Up",
     };
   },
 };
 </script>
+
+<style scoped>
+.ps_hover:hover{
+font-weight: bold;
+color: #ffdd57;
+}
+</style>

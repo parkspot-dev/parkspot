@@ -15,7 +15,12 @@
         />
       </span>
       <ul class="ps_searchbox">
-        <li  @click="flytosrp(result)"  :key="result" v-for="result in results.slice(0,3)" class="ps_searchbox_list">
+        <li
+          @click="flytosrp(result)"
+          :key="result"
+          v-for="result in results.slice(0, 3)"
+          class="ps_searchbox_list"
+        >
           {{ result }}
         </li>
       </ul>
@@ -40,17 +45,23 @@ export default {
       size: "sm",
       animation: "tada",
       placeholder: "Search your spot...",
+      value: "",
     };
   },
   props: {
     results: Array,
   },
   methods: {
+    //this is from input element
     search(value) {
+      // console.log(value)
+      // let searchData = ""
+      // searchData =  searchData + value.data 
       this.$emit("search", value);
     },
-    flytosrp(result){
-      this.$emit("flytosrp",result)
+    //this is from list of search results
+    flytosrp(result) {
+      this.$emit("flytosrp", result);
     },
     // flytosrps(){
     // this.$emit('flysrp',this.results[0])    on keyup.enter not working

@@ -26,6 +26,7 @@ export default {
   },
   methods: {
     async search(name) {
+      // console.log(name)
       if (!name.length) {
         this.results = [];
         return;
