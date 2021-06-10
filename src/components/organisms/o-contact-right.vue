@@ -3,16 +3,30 @@
     <form v-on:submit.prevent="onSubmit">
       <atom-input
         class="input mb-2"
+        v-model="userContact.name"
         :types="text"
         :placeholder="placeholder1"
+        :required="required"
       />
       <atom-input
         class="input mb-2"
+        v-model="userContact.email"
         :types="email"
         :placeholder="placeholder2"
+        :required="required"
       />
-      <atom-input class="input mb-2" :types="tel" :placeholder="placeholder3" />
-      <atom-textarea class="textarea mb-2" :placeholder="placeholder4" />
+      <atom-input
+        v-model="userContact.mno"
+        class="input mb-2"
+        :types="tel"
+        :placeholder="placeholder3"
+        :required="required"
+      />
+      <atom-textarea
+        v-model="userContact.msg"
+        class="textarea mb-2"
+        :placeholder="placeholder4"
+      />
       <atom-button class="button is-warning is-pulled-right" :text="submit" />
     </form>
   </div>
@@ -35,12 +49,44 @@ export default {
       placeholder3: "Mobile No.",
       placeholder4: "Your Questions...",
       submit: "Submit",
+      required: true,
+      userContact : {
+          name: "",
+          email: "",
+          mno: "",
+          msg: "",
+        }
     };
   },
-  methods:{
-    onSubmit(){
-      // this.$emit()
-    }
-  }
+  methods: {
+      async onSubmit() {
+       const user = JSON.parse(JSON.stringify(this.userContact));
+        // console.log(user) // getting proper object after stringify and parse
+        const res = await fetch("https://maya.parkspot.in/contact", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            User: {
+              FullName: user.name,
+              EmailID: user.email,
+              Mobile: user.mno,
+            },
+            Comments: user.msg,
+            // Flavour: this.flavor,
+          }),
+        });
+         const data = await res.json();
+        this.userContact.name= "";
+        this.userContact.email= "";
+        this.userContact.mno= "";
+        this.userContact.msg= ""
+        console.log(this.userContact)
+       
+      }
+  },
 };
 </script>
+

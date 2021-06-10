@@ -1,8 +1,8 @@
 <template>
-  <div class="m_footer_bottom  columns is-mobile">
+  <div class="m_footer_bottom columns is-mobile">
     <atom-text class="column is-size-7" :text="text1" />
-    <div class="column has-text-right-desktop">
-      <atom-router-link :link="link" class="is-size-7 " :text="text2" />
+    <div class="column has-text-centered-desktop">
+      <atom-router-link :link="link" class="is-size-7" :text="text2" />
     </div>
   </div>
 </template>
@@ -17,7 +17,7 @@ export default {
     return {
       text1: "© 2021 NeoSpot Pvt Ltd.- ALL RIGHTS RESERVED",
       text2: "Terms and Conditions",
-      link:"Terms"
+      link: "Terms",
     };
   },
 };

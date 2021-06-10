@@ -53,6 +53,9 @@ export default {
 .t_products{
   background-color: #F6F6F6;
 }
+.center{
+  margin: auto;
+}
 .ps_mb{
   margin-bottom: 50px;
 }

@@ -10,7 +10,7 @@
 </template>
 <script>
 import TAbout from "@/components/templates/t-about.vue";
-import TFeatures from "@/components/templates/t.features.vue";
+import TFeatures from "@/components/templates/t-features.vue";
 import TProduct from "@/components/templates/t-product.vue";
 import TTeam from "@/components/templates/t-team.vue";
 import TContact from "@/components/templates/t-contact.vue";

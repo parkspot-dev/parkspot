@@ -2,14 +2,9 @@ import Home from '@/views/Home.vue'
 import Thanks from '@/views/Thanks.vue'
 import Faq from '@/views/Faq.vue'
 import Terms from '@/views/Terms.vue'
-// import Phome from '@/views/atomicDesignPages/Phome.vue'
-// import PHome from '@/views/atomicDesignPages/PHome.vue'
-// import PSSrp from '@/views/Srp.vue'
-// import Blog1 from '@/views/Blog1.vue'
-// delete it after portal testing
-// import Portal from '@/views/Portal.vue'
-// import Parking from '@/views/Parking.vue'
-// import PSTemplate from '@/pages/Parking/components/PSTemplate.vue'
+import about from '@/components/templates/t-about.vue'
+import features from '@/components/templates/t-features.vue'
+import contact from '@/components/templates/t-contact.vue'
 
 
 export const routes = [
@@ -33,6 +28,21 @@ export const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: Thanks
+  },
+  {
+    path: '/about',
+    name: 't-about',
+    component: about
+  },
+  {
+    path: '/features',
+    name: 't-features',
+    component: features
+  },
+  {
+    path: '/contact',
+    name: 't-contact',
+    component: contact
   },
   {
   	path: '/srp',

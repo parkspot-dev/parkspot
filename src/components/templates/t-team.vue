@@ -71,7 +71,7 @@ export default {
           id: 3,
           src: require("@/assets/img/Rashmi.svg"),
           title: "Rashmi Kumari",
-          jobTitle: "-",
+          jobTitle: "HR & Business Analyst",
           git: "#",
           linkedin: "https://www.linkedin.com/in/rashmi-kumari-2ab18b13a",
           twitter: "#",
