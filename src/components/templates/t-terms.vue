@@ -1,6 +1,16 @@
 <template>
   <section class="t_terms section">
     <div class="container">
+      <!-- breadcrumb -->
+      <nav class="breadcrumb has-arrow-separator is-size-7" aria-label="breadcrumbs">
+        <ul>
+          <li><atom-router-link :text="home" :link="hlink"/></li>
+          <li class="is-active has-text-weight-semibold is-size-7">
+            <a href="#" aria-current="page">Terms & Conditions</a>
+          </li>
+        </ul>
+      </nav>
+      <!-- terms content start from here -->
       <atom-b-title
         class="
           is-size-3-desktop is-size-4-mobile
@@ -185,14 +195,17 @@
 </template>
 
 <script>
+import AtomRouterLink from '../atoms/atom-link/atom-router-link.vue';
 import AtomBSubtitle from "../atoms/atom-text/atom-b-subtitle.vue";
 import atomBTitle from "../atoms/atom-text/atom-b-title.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
-  components: { atomBTitle, AtomText, AtomBSubtitle },
+  components: { atomBTitle, AtomText, AtomBSubtitle, AtomRouterLink },
   name: "t-terms",
   data() {
     return {
+      home:"Home",
+      hlonk:"Home",
       title: "Terms and Conditions",
       firstLine:
         "Please read these terms and conditions carefully before using Our Service.",
@@ -241,6 +254,9 @@ export default {
   padding-inline-end: 0;
 }
 .t_terms {
-  background:#F6F6F6 ;
+  background: #f6f6f6;
+}
+.t_terms{
+  padding-top: 15px;
 }
 </style>
