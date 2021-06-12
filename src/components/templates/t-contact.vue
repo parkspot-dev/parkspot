@@ -24,10 +24,11 @@ import AtomBTitle from "@/components/atoms/atom-text/atom-b-title.vue";
 import oContactLeft from "@/components/organisms/o-contact-left.vue";
 import OContactRight from "@/components/organisms/o-contact-right.vue";
 export default {
-  components: { oContactLeft, OContactRight, AtomBTitle },
+  components: { oContactLeft, OContactRight, AtomBTitle},
   name: "t-contact",
   data() {
-    return {
+
+        return {
       title: "Have Some Questions?",
     };
   },
@@ -38,6 +39,7 @@ export default {
 .ps_mb {
   margin-bottom: 50px;
 }
+
 @media only screen and (min-width: 1024px) {
   .ps_mb {
     margin-bottom: 150px;

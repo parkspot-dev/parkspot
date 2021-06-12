@@ -205,7 +205,7 @@ export default {
   data() {
     return {
       home:"Home",
-      hlonk:"Home",
+      hlink:"Home",
       title: "Terms and Conditions",
       firstLine:
         "Please read these terms and conditions carefully before using Our Service.",
