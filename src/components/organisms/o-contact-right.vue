@@ -27,7 +27,7 @@
         class="textarea mb-2"
         :placeholder="placeholder4"
       />
-      <atom-button class="button is-warning is-pulled-right" :text="submit" />
+      <atom-button class="button is-warning is-pulled-right" :class="{'is-loading':toggle}" :text="submit" />
     </form>
   </div>
 </template>
@@ -50,6 +50,7 @@ export default {
       placeholder4: "Your Questions...",
       submit: "Submit",
       required: true,
+      toggle:false,
       userContact : {
           name: "",
           email: "",
@@ -60,6 +61,7 @@ export default {
   },
   methods: {
       async onSubmit() {
+        this.toggle = !this.toggle;
        const user = JSON.parse(JSON.stringify(this.userContact));
         // console.log(user) // getting proper object after stringify and parse
         const res = await fetch("https://maya.parkspot.in/contact", {
@@ -84,6 +86,8 @@ export default {
         this.userContact.mno= "";
         this.userContact.msg= ""
         console.log(this.userContact)
+        this.toggle=!this.toggle;
+        this.submit = "Thank You for Contacting Us!"
        
       }
   },
