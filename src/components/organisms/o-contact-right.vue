@@ -27,7 +27,11 @@
         class="textarea mb-2"
         :placeholder="placeholder4"
       />
-      <atom-button class="button is-warning is-pulled-right" :class="{'is-loading':toggle}" :text="submit" />
+      <atom-button
+        class="button is-warning is-pulled-right"
+        :class="{ 'is-loading': toggle }"
+        :text="submit"
+      />
     </form>
   </div>
 </template>
@@ -50,46 +54,44 @@ export default {
       placeholder4: "Your Questions...",
       submit: "Submit",
       required: true,
-      toggle:false,
-      userContact : {
-          name: "",
-          email: "",
-          mno: "",
-          msg: "",
-        }
+      toggle: false,
+      userContact: {
+        name: "",
+        email: "",
+        mno: "",
+        msg: "",
+      },
     };
   },
   methods: {
-      async onSubmit() {
-        this.toggle = !this.toggle;
-       const user = JSON.parse(JSON.stringify(this.userContact));
-        // console.log(user) // getting proper object after stringify and parse
-        const res = await fetch("https://maya.parkspot.in/contact", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
+    async onSubmit() {
+      this.toggle = !this.toggle;
+      const user = JSON.parse(JSON.stringify(this.userContact));
+      // console.log(user) // getting proper object after stringify and parse
+      const res = await fetch("https://maya.parkspot.in/contact", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          User: {
+            FullName: user.name,
+            EmailID: user.email,
+            Mobile: user.mno,
           },
-          body: JSON.stringify({
-            User: {
-              FullName: user.name,
-              EmailID: user.email,
-              Mobile: user.mno,
-            },
-            Comments: user.msg,
-            // Flavour: this.flavor,
-          }),
-        });
-         const data = await res.json();
-        this.userContact.name= "";
-        this.userContact.email= "";
-        this.userContact.mno= "";
-        this.userContact.msg= ""
-        console.log(this.userContact)
-        this.toggle=!this.toggle;
-        this.submit = "Thank You for Contacting Us!"
-       
-      }
+          Comments: user.msg,
+          // Flavour: this.flavor,
+        }),
+      });
+      const data = await res.json();
+      this.userContact.name = "";
+      this.userContact.email = "";
+      this.userContact.mno = "";
+      this.userContact.msg = "";
+      this.toggle = !this.toggle;
+      this.submit = "Thank You for Contacting Us!";
+    },
   },
 };
 </script>
