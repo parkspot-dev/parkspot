@@ -1,7 +1,7 @@
 <template>
   <div id="Home">
-    <t-map/>
-    <t-about  />
+    <t-map />
+    <t-about/>
     <t-features  />
     <t-product  />
     <t-team  />

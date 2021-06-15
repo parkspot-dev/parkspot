@@ -54,7 +54,7 @@ export default {
       placeholder4: "Your Questions...",
       submit: "Submit",
       required: true,
-      toggle: false,
+      toggle: false, // toggle used for showing loading animation of button
       userContact: {
         name: "",
         email: "",
@@ -66,8 +66,7 @@ export default {
   methods: {
     async onSubmit() {
       this.toggle = !this.toggle;
-      const user = JSON.parse(JSON.stringify(this.userContact));
-      // console.log(user) // getting proper object after stringify and parse
+      const user = JSON.parse(JSON.stringify(this.userContact)); // getting proper object after stringify and parse
       const res = await fetch("https://maya.parkspot.in/contact", {
         method: "POST",
         headers: {
@@ -81,7 +80,6 @@ export default {
             Mobile: user.mno,
           },
           Comments: user.msg,
-          // Flavour: this.flavor,
         }),
       });
       const data = await res.json();
@@ -90,7 +88,7 @@ export default {
       this.userContact.mno = "";
       this.userContact.msg = "";
       this.toggle = !this.toggle;
-      this.submit = "Thank You for Contacting Us!";
+      this.submit = "Thank You for Contacting Us!"; // changing the text of submit button after submitting the form
     },
   },
 };

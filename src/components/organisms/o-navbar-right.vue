@@ -59,8 +59,8 @@ export default {
 </script>
 
 <style scoped>
-.ps_hover:hover{
-font-weight: bold;
-color: #ffdd57;
+.ps_hover:hover {
+  font-weight: bold;
+  color: #ffdd57;
 }
 </style>
