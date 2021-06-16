@@ -20,7 +20,7 @@
         <atom-text class="is-size-6 mb-2" :text="text2" />
       </div>
       <div class="column">
-        <a href="https://www.instagram.com/parkspot/" target="_blank">
+        <a href="https://www.instagram.com/parkspot.in/" target="_blank">
           <atom-boxicon
             class="mx-2"
             :types="boxicons.insta.type"

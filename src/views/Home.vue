@@ -1,11 +1,11 @@
 <template>
   <div id="Home">
     <t-map />
-    <t-about/>
-    <t-features  />
-    <t-product  />
-    <t-team  />
-    <t-contact  />
+    <t-about />
+    <t-features />
+    <t-product />
+    <t-team />
+    <t-contact />
   </div>
 </template>
 <script>
