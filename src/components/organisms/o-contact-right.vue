@@ -27,7 +27,12 @@
         class="textarea mb-2"
         :placeholder="placeholder4"
       />
-      <atom-button class="button is-warning is-pulled-right" :class="{'is-loading':toggle}" :text="submit" />
+      <atom-button
+        class="button is-warning is-pulled-right"
+        :class="{ 'is-loading': toggle }"
+        :text="submit"
+      />
+      <p v-if="errors.error" class="has-text-danger">{{ errors.text }}</p>
     </form>
   </div>
 </template>
@@ -41,6 +46,7 @@ export default {
   name: "o-contact-right",
   data() {
     return {
+      // input details
       text: "text",
       email: "email",
       tel: "tel",
@@ -50,46 +56,58 @@ export default {
       placeholder4: "Your Questions...",
       submit: "Submit",
       required: true,
-      toggle:false,
-      userContact : {
-          name: "",
-          email: "",
-          mno: "",
-          msg: "",
-        }
+
+      toggle: false, // toggle used for showing loading animation of button
+      //contact details object
+      userContact: {
+        name: "",
+        email: "",
+        mno: "",
+        msg: "",
+      },
+      // errors object for validating phone number
+      errors: {
+        error: false,
+        text: "",
+      },
     };
   },
   methods: {
-      async onSubmit() {
-        this.toggle = !this.toggle;
-       const user = JSON.parse(JSON.stringify(this.userContact));
-        // console.log(user) // getting proper object after stringify and parse
-        const res = await fetch("https://maya.parkspot.in/contact", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            User: {
-              FullName: user.name,
-              EmailID: user.email,
-              Mobile: user.mno,
-            },
-            Comments: user.msg,
-            // Flavour: this.flavor,
-          }),
-        });
-         const data = await res.json();
-        this.userContact.name= "";
-        this.userContact.email= "";
-        this.userContact.mno= "";
-        this.userContact.msg= ""
-        console.log(this.userContact)
-        this.toggle=!this.toggle;
-        this.submit = "Thank You for Contacting Us!"
-       
+    async onSubmit() {
+      // validation check
+      const check = parseInt(this.userContact.mno);
+      if (isNaN(check)) {
+        this.errors.error = true;
+        this.errors.text = "Note:Please enter a valid Mobile No.!!";
+        this.userContact.mno = "";
+        return;
       }
+      this.toggle = !this.toggle;
+      const user = JSON.parse(JSON.stringify(this.userContact)); // getting proper object after stringify and parse
+      const res = await fetch("https://maya.parkspot.in/contact", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          User: {
+            FullName: user.name,
+            EmailID: user.email,
+            Mobile: user.mno,
+          },
+          Comments: user.msg,
+        }),
+      });
+      const data = await res.json();
+      this.userContact.name = "";
+      this.userContact.email = "";
+      this.userContact.mno = "";
+      this.userContact.msg = "";
+      this.toggle = !this.toggle;
+      this.errors.error = false; //removing error msg
+      this.submit = "Thank You for Contacting Us!"; // changing the text of submit button after submitting the form
+    },
   },
 };
 </script>

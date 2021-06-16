@@ -77,15 +77,6 @@ export const routes = [
 		name: 'Terms',
 		component: Terms
   },
- 
-  // {
-  //   path: '/atomic-design',
-	// 	name: 'atomic',
-	// 	component: Phome
-  // },
- 
-  
-  // delete above
   {
   path: '*',
 	beforeRouteEnter: (to, from, next)=>{
