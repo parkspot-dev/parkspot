@@ -1,18 +1,16 @@
 <template>
-	<div id="app">
-		<PSNavbar />
-		<BlogOne />
-		<PSFooter />
-	</div>
+  <div id="app">
+    <BlogOne />
+  </div>
 </template>
 <script>
-import BlogOne from '@/pages/blogs/components/Blog1.vue';
-export default{
-	name: 'Faq',
-	components: {
-		BlogOne,
-	}, 
-}
+import BlogOne from "@/pages/blogs/components/Blog1.vue";
+export default {
+  name: "Blog1",
+  components: {
+    BlogOne,
+  },
+};
 </script>
 <style>
 </style>

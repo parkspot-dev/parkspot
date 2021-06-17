@@ -56,7 +56,7 @@ export default {
     search(value) {
       // console.log(value)
       // let searchData = ""
-      // searchData =  searchData + value.data 
+      // searchData =  searchData + value.data
       this.$emit("search", value);
     },
     //this is from list of search results
