@@ -45,45 +45,41 @@ export const routes = [
     component: contact
   },
   {
-  	path: '/srp',
-		name: 'PSSrp',
+    path: '/srp',
+    name: 'PSSrp',
     //() => import('@/views/Srp.vue') is dynamic import , it is only get loaded when the route is loaded
-		component: () => import('@/views/Srp.vue')
-	},
-	{
-		path: '/blog/eliminating-reason-for-traffic-jam',
-		name: 'EliminateTrafficJam',
-		component: () => import('@/views/Blog1.vue')
-	},
+    component: () => import('@/views/Srp.vue')
+  },
+  {
+    path: '/blog/eliminating-reason-for-traffic-jam',
+    name: 'EliminateTrafficJam',
+    component: () => import('@/views/Blog1.vue')
+  },
   // delete
   {
     path: '/portal',
-		name: 'PSPortal',
-		component: () => import('@/views/Portal.vue')
+    name: 'PSPortal',
+    component: () => import('@/views/Portal.vue')
   },
   {
     path: '/parkspot-near-you',
-		name: 'Parking',
-		component: () => import('@/views/Parking.vue')
+    name: 'Parking',
+    component: () => import('@/views/Parking.vue')
   },
   {
     path: '/parkspot-near-you/:id',
-		name: 'PSTemplate',
-		component: () => import('@/pages/Parking/components/PSTemplate.vue'),
+    name: 'PSTemplate',
+    component: () => import('@/pages/Parking/components/PSTemplate.vue'),
     props: true
   },
   {
     path: '/terms-and-conditions',
-		name: 'Terms',
-		component: Terms
+    name: 'Terms',
+    component: Terms
   },
   {
-  path: '*',
-	beforeRouteEnter: (to, from, next)=>{
-		console.log(`route from ${to} to ${from}`)
-		next('/')
-	},
-	component: Home
+    path: '*',
+    component: Home
   }
 ]
 
