@@ -124,16 +124,16 @@ export default {
       return [ys / arr.length, xs / arr.length];
     },
     getLat: function () {
-      // var queryParam = new URLSearchParams(window.location.search)
-      // console.log(queryParam.get("lat"))
-      // return queryParam.get("lat")
-      return this.$route.query.lat;
+      var queryParam = new URLSearchParams(window.location.search);
+      console.log(queryParam.get("lat"));
+      return queryParam.get("lat");
+      // return this.$route.query.lat;
     },
     getLng: function () {
-      // var queryParam = new URLSearchParams(window.location.search)
-      // console.log(queryParam.get("lng"))
-      // return queryParam.get("lng")
-      return this.$route.query.lng;
+      var queryParam = new URLSearchParams(window.location.search);
+      console.log(queryParam.get("lng"));
+      return queryParam.get("lng");
+      // return this.$route.query.lng;
     },
   },
 };
