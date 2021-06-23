@@ -2,28 +2,34 @@
   <div class="o_srp">
     <!-- :key="card"
       v-for="card in cards" -->
-    <div class="columns">
-      <div class="column is-4 mt-6 ml-4">
+    <div class="columns reverse-columns">
+      <div class="column is-4 mt-4 mx-4">
         <m-srpcard
-          :distance="distance"
-          :img="img"
-          :location="location"
-          :rate="rate"
-          :slots="slots"
-          :title="title"
-          :vehicle="vehicle"
+          :key="srp.ID"
+          v-for="srp in pageOfItems"
+          :distance="srp.Distance"
+          :img="srp.IconURL"
+          :location="srp.Address"
+          :rate="srp.Fee.Amount"
+          :slots="srp.SlotsAvailable"
+          :title="srp.Name"
+          :vehicle="srp.VehicleType"
           :reviews="review"
+          :rating="srp.Rating"
+          :site-id="srp.ID"
+          @on-book="onBook"
         />
         <div class="card-footer pb-0 pt-3">
           <jw-pagination
-            :items="exampleItems"
+            :items="srpResults"
+            :pageSize="3"
             @changePage="onChangePage"
           ></jw-pagination>
         </div>
       </div>
 
       <div class="column is-8">
-        <m-mapbox />
+        <m-mapbox :data="markers" :center="center" v-if="show" />
         <m-search-box
           @search="search"
           @flytosrp="flyToSrp"
@@ -36,39 +42,94 @@
 </template>
 <script>
 // dummy
-const exampleItems = [...Array(150).keys()].map((i) => ({
-  id: i + 1,
-  name: "Item " + (i + 1),
-}));
-
+// const exampleItems = [...Array(150).keys()].map((i) => ({
+//   id: i + 1,
+//   name: "Item " + (i + 1),
+// }));
 import mSrpcard from "@/components/molecules/m-srpcard.vue";
 import mSearchBox from "@/components/molecules/m-search-box.vue";
 import MMapbox from "../molecules/m-mapbox.vue";
 export default {
   components: { mSrpcard, mSearchBox, MMapbox },
   name: "o-srp",
+
   data() {
     return {
-      exampleItems, //dummy
-      pageOfItems: [], //dummy
-      title: "SARJAPUR Apartment",
-      rate: " ₹ 1800/Month ",
-      distance: " 9.73 km",
-      location: "cHAMPIONS SQUARE, SARJAPUR BANGALORE",
-      vehicle: "Vehicle Type: FullSize",
-      slots: "Slots Available: 0/1",
-      img: require("../../assets/img/default.png"),
-      review: "112 reviews",
+      pageOfItems: [],
+      srpResults: [],
+      markers: [],
+      center: "",
+      show: false,
+      review: "112 reviews", //dummy
       results: [],
       cresults: [],
     };
   },
+  async mounted() {
+    // Calling Maya to get SRP details from the db
+    var lat = this.getLat(); //12.8576
+    var lng = this.getLng(); //77.7864
+    var center;
+
+    if (lat === null || lng === null) {
+      console.log("reverting to default lat long");
+      center = [77.7864, 12.8576]; //fallout lat long
+    } else {
+      center = [Number(lng), Number(lat)];
+    }
+
+    const res = await fetch(
+      `https://maya.parkspot.in/search?lat=${center[1]}&long=${center[0]}&start=20201115t1250&end=20201115t1400`
+    );
+    const data = await res.json();
+    for (let i = 0; i < data.Sites.length; i++) {
+      this.srpResults.push(data.Sites[i]);
+      let temp1 = Number(data.Sites[i].Long);
+      let temp2 = Number(data.Sites[i].Lat);
+      this.markers.push([temp1, temp2]);
+    }
+    // console.log(this.srpResults);
+    // console.log(`srp results${this.srpResults}`);
+    // console.log(`center.....${this.center}`);
+    // let temp = JSON.parse(JSON.stringify(this.markers));
+    this.center = this.calculateCentroid(this.markers);
+    this.show = true;
+
+    console.log("centererw", this.center);
+  },
   methods: {
-    // dummy
+    // Pagination method
     onChangePage(pageOfItems) {
       // update page of items
       this.pageOfItems = pageOfItems;
     },
+
+    // methods to get Lat and Long
+    getLat: function () {
+      var queryParam = new URLSearchParams(window.location.search);
+      console.log(queryParam.get("lat"));
+      return queryParam.get("lat");
+      // return this.$route.query.lat;
+    },
+    getLng: function () {
+      var queryParam = new URLSearchParams(window.location.search);
+      console.log(queryParam.get("lng"));
+      return queryParam.get("lng");
+      // return this.$route.query.lng;
+    },
+    // calculate center avg
+    calculateCentroid: function (arr) {
+      var ys = arr.reduce((a, e) => {
+        return a + e[0];
+      }, 0);
+      console.log(typeof xs);
+      var xs = arr.reduce((a, e) => {
+        return a + e[1];
+      }, 0);
+      return [ys / arr.length, xs / arr.length];
+    },
+
+    // Calling Search from Mapbox API
     async search(name) {
       // console.log(name)
       if (!name.length) {
@@ -93,7 +154,11 @@ export default {
           break;
         }
       }
-      this.$router.push({ name: "PSSrp", query: { lat: lat, lng: lng } });
+      this.$router.push({ name: "srp", query: { lat: lat, lng: lng } });
+    },
+    onBook(index) {
+      console.log("clicked    " + index);
+      this.$emit("on-book", index);
     },
   },
 };
@@ -109,5 +174,17 @@ export default {
   z-index: 1;
   top: 15%;
   left: 55%;
+}
+
+@media (max-width: 767px) {
+  /* <== You can change this break point as per your  needs */
+  .reverse-columns {
+    flex-direction: column-reverse;
+    display: flex;
+  }
+  .ps_search {
+    width: 60%;
+    left: 20%;
+  }
 }
 </style>

@@ -1,7 +1,8 @@
 <template>
   <section>
-    <SRP />
-    <PSSrpDetails @on-book="onBookFormtoggle" />
+    <!-- <SRP /> -->
+    <t-srp @on-book="onBookFormtoggle" />
+    <!-- <PSSrpDetails @on-book="onBookFormtoggle" /> -->
     <SrpBookForm
       v-if="showBookForm"
       :showBookForm="showBookForm"
@@ -17,6 +18,7 @@ import SRP from "@/pages/srp/components/PSSrp.vue";
 import PSSrpDetails from "@/pages/srp/components/PSSrpDetails.vue";
 import SrpBookForm from "@/pages/srp/components/SrpBookForm.vue";
 import BookMsg from "@/pages/srp/components/BookMsg.vue";
+import TSrp from "../components/templates/t-srp.vue";
 export default {
   name: "PSSrp",
   components: {
@@ -24,6 +26,7 @@ export default {
     PSSrpDetails,
     SrpBookForm,
     BookMsg,
+    TSrp,
   },
   data() {
     return {
@@ -57,7 +60,7 @@ export default {
           },
         }),
       });
-      console.log(res)
+      console.log(res);
       const data = await res.json();
       this.resMsg = data;
       this.resMsgflag = !this.resMsgflag;

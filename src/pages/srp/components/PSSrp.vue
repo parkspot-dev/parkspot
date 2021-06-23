@@ -43,7 +43,9 @@ export default {
       })
       .then((sites) => {
         var arr = [];
+        console.log(`checking.... ${sites}`);
         sites = sites["Sites"];
+        console.log(`doble checking...${sites}`);
         var markers = [];
         for (var i = 0; i < sites.length; i++) {
           var temp = {};
@@ -113,6 +115,7 @@ export default {
   methods: {
     calculateCentroid: function (arr) {
       console.log(arr);
+      console.log("preve check");
       var xs = arr.reduce((a, e) => {
         const cord = e["latLng"][0];
         return a + cord;
