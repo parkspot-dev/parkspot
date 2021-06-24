@@ -54,6 +54,12 @@ export const routes = [
   {
     path: '/srp',
     name: 'srp',
+    // beforeRouteUpdate(to, from, next) {
+    //   // react to route changes...
+    //   console.log(`to ${to} from ${from}`)
+    //   // don't forget to call next()
+    //   next()
+    // },
     //() => import('@/views/Srp.vue') is dynamic import , it is only get loaded when the route is loaded
     component: () => import('@/views/Srp.vue')
   },

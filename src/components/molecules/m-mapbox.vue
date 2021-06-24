@@ -16,7 +16,6 @@ export default {
       "pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ";
 
     this.repaint(this.center);
-    console.log(`mapbox temp checking..... ${this.data}`);
     for (let i = 0; i < this.data.length; i++) {
       // geojson.features.forEach(function (marker) {
       //   // create a HTML element for each feature

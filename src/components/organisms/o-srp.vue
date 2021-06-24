@@ -27,7 +27,7 @@
           ></jw-pagination>
         </div>
       </div>
-
+      <m-empty-page v-if="errorPage" :error="errorData" />
       <div class="column is-8">
         <m-mapbox :data="markers" :center="center" v-if="show" />
         <m-search-box
@@ -49,8 +49,9 @@
 import mSrpcard from "@/components/molecules/m-srpcard.vue";
 import mSearchBox from "@/components/molecules/m-search-box.vue";
 import MMapbox from "../molecules/m-mapbox.vue";
+import MEmptyPage from "../molecules/m-empty-page.vue";
 export default {
-  components: { mSrpcard, mSearchBox, MMapbox },
+  components: { mSrpcard, mSearchBox, MMapbox, MEmptyPage },
   name: "o-srp",
 
   data() {
@@ -63,6 +64,8 @@ export default {
       review: "112 reviews", //dummy
       results: [],
       cresults: [],
+      errorPage: false,
+      errorData: "",
     };
   },
   async mounted() {
@@ -81,7 +84,13 @@ export default {
     const res = await fetch(
       `https://maya.parkspot.in/search?lat=${center[1]}&long=${center[0]}&start=20201115t1250&end=20201115t1400`
     );
+
     const data = await res.json();
+    if (data.Sites === null) {
+      console.log(data);
+      this.errorPage = !this.errorPage;
+      this.errorData = data.DisplayMsg;
+    }
     for (let i = 0; i < data.Sites.length; i++) {
       this.srpResults.push(data.Sites[i]);
       let temp1 = Number(data.Sites[i].Long);
@@ -154,10 +163,13 @@ export default {
           break;
         }
       }
-      this.$router.push({ name: "srp", query: { lat: lat, lng: lng } });
+      console.log(this.$route);
+      this.$router
+        .push({ name: "srp", query: { lat: lat, lng: lng } })
+        .catch((err) => {});
     },
     onBook(index) {
-      console.log("clicked    " + index);
+      zconsole.log("clicked    " + index);
       this.$emit("on-book", index);
     },
   },
