@@ -11,7 +11,6 @@ export default {
   name: "t-srp",
   methods: {
     onBook(index) {
-      console.log("clicked    " + index);
       this.$emit("on-book", index);
     },
   },
