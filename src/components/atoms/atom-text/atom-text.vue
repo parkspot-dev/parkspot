@@ -1,12 +1,10 @@
 <template>
-    <p >{{text}}</p>
+  <p>{{ textLeft }}{{ text }}{{ textRight }}</p>
 </template>
 
 <script>
 export default {
-   name:'atom-text',
-   props:{
-       text:String
-   }
-}
+  name: "atom-text",
+  props: ["text", "textLeft", "textRight"],
+};
 </script>

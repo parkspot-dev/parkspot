@@ -13,8 +13,11 @@ module.exports = {
                 'https://www.parkspot.in/parkspot-near-you/Banashankari',
                 'https://www.parkspot.in/parkspot-near-you/Marathahalli',
                 'https://www.parkspot.in/parkspot-near-you/BTM%20Layout',
-                
+
             ]
         }
     },
+    configureWebpack: {
+        devtool: 'source-map'
+    }
 }

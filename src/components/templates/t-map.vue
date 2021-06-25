@@ -25,11 +25,11 @@ export default {
       toggleImg: false,
     };
   },
-  beforeCreate(){
-    this.toggleImg=false
+  beforeCreate() {
+    this.toggleImg = false;
   },
-  mounted(){
- this.toggleImg=true
+  mounted() {
+    this.toggleImg = true;
   },
   methods: {
     async search(name) {
@@ -56,7 +56,7 @@ export default {
           break;
         }
       }
-      this.$router.push({ name: "PSSrp", query: { lat: lat, lng: lng } });
+      this.$router.push({ name: "srp", query: { lat: lat, lng: lng } });
     },
   },
 };

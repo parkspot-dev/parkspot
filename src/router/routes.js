@@ -7,6 +7,7 @@ import features from '@/components/templates/t-features.vue'
 import contact from '@/components/templates/t-contact.vue'
 
 
+
 export const routes = [
   {
     path: '/',
@@ -44,9 +45,21 @@ export const routes = [
     name: 't-contact',
     component: contact
   },
+  // {
+  //   path: '/srp',
+  //   name: 'PSSrp',
+  //   //() => import('@/views/Srp.vue') is dynamic import , it is only get loaded when the route is loaded
+  //   component: () => import('@/views/Srp.vue')
+  // },
   {
     path: '/srp',
-    name: 'PSSrp',
+    name: 'srp',
+    // beforeRouteUpdate(to, from, next) {
+    //   // react to route changes...
+    //   console.log(`to ${to} from ${from}`)
+    //   // don't forget to call next()
+    //   next()
+    // },
     //() => import('@/views/Srp.vue') is dynamic import , it is only get loaded when the route is loaded
     component: () => import('@/views/Srp.vue')
   },
@@ -77,6 +90,7 @@ export const routes = [
     name: 'Terms',
     component: Terms
   },
+
   {
     path: '*',
     component: Home
