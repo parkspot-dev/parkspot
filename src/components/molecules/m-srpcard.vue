@@ -18,7 +18,7 @@
               :text-left="rating"
               :text="card.trating"
             />
-            <atom-text class="column is-size-7" :text="reviews" />
+            <!-- <atom-text class="column is-size-7" :text="reviews" /> -->
           </div>
           <!-- atom for private parking optional ...need to discuss with team -->
 
@@ -84,7 +84,6 @@ import AtomImg from "@/components/atoms/atom-img/atom-img.vue";
 import atomBTitle from "@/components/atoms/atom-text/atom-b-title.vue";
 import AtomText from "@/components/atoms/atom-text/atom-text.vue";
 import AtomBoxicon from "../atoms/atom-boxicons/atom-boxicon.vue";
-import AtomStarRating from "../atoms/atom-star/atom-star-rating.vue";
 export default {
   components: {
     atomBTitle,
@@ -92,7 +91,6 @@ export default {
     AtomImg,
     AtomButton,
     AtomBoxicon,
-    AtomStarRating,
   },
   name: "m-srpcard",
   props: {
@@ -103,7 +101,7 @@ export default {
     vehicle: String,
     slots: String,
     img: String,
-    reviews: String,
+    // reviews: String,
     rating: String,
     siteId: String,
   },

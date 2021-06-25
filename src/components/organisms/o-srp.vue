@@ -1,7 +1,5 @@
 <template>
   <div class="o_srp">
-    <!-- :key="card"
-      v-for="card in cards" -->
     <div class="columns reverse-columns">
       <div class="column is-4 mt-4 mx-4">
         <m-srpcard
@@ -41,11 +39,6 @@
   </div>
 </template>
 <script>
-// dummy
-// const exampleItems = [...Array(150).keys()].map((i) => ({
-//   id: i + 1,
-//   name: "Item " + (i + 1),
-// }));
 import mSrpcard from "@/components/molecules/m-srpcard.vue";
 import mSearchBox from "@/components/molecules/m-search-box.vue";
 import MMapbox from "../molecules/m-mapbox.vue";
@@ -97,10 +90,6 @@ export default {
       let temp2 = Number(data.Sites[i].Lat);
       this.markers.push([temp1, temp2]);
     }
-    // console.log(this.srpResults);
-    // console.log(`srp results${this.srpResults}`);
-    // console.log(`center.....${this.center}`);
-    // let temp = JSON.parse(JSON.stringify(this.markers));
     this.center = this.calculateCentroid(this.markers);
     this.show = true;
 
@@ -118,13 +107,11 @@ export default {
       var queryParam = new URLSearchParams(window.location.search);
       console.log(queryParam.get("lat"));
       return queryParam.get("lat");
-      // return this.$route.query.lat;
     },
     getLng: function () {
       var queryParam = new URLSearchParams(window.location.search);
       console.log(queryParam.get("lng"));
       return queryParam.get("lng");
-      // return this.$route.query.lng;
     },
     // calculate center avg
     calculateCentroid: function (arr) {
@@ -189,7 +176,6 @@ export default {
 }
 
 @media (max-width: 767px) {
-  /* <== You can change this break point as per your  needs */
   .reverse-columns {
     flex-direction: column-reverse;
     display: flex;
