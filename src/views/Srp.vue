@@ -60,7 +60,6 @@ export default {
           },
         }),
       });
-      console.log(res);
       const data = await res.json();
       this.resMsg = data;
       this.resMsgflag = !this.resMsgflag;

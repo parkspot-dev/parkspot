@@ -54,7 +54,7 @@ export default {
       markers: [],
       center: "",
       show: false,
-      review: "112 reviews", //dummy
+      // review: "112 reviews", //dummy
       results: [],
       cresults: [],
       errorPage: false,
@@ -156,7 +156,6 @@ export default {
         .catch((err) => {});
     },
     onBook(index) {
-      zconsole.log("clicked    " + index);
       this.$emit("on-book", index);
     },
   },
