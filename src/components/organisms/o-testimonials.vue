@@ -75,7 +75,7 @@ export default {
         },
         {
           testimony:
-            "A highly essential app for anyone in a metropolitan city, everyone knows the pains of finding a parking spot for your vehicle and this app makes it easy. The app allowed me to easily find any parking spots near me. The prices for the spots considering the duration was also very affordable. Would def...",
+            "A highly essential app for anyone in a metropolitan city, everyone knows the pains of finding a parking spot for your vehicle and this app makes it easy. The app allowed me to easily find any parking spots near me. The prices for the spots considering the duration was also very affordable. Would definitely recommend this to anyone who wants a painless experience to park their vehicles or to someone who has free spots to rent out and make some cash.",
           star: 5,
           show: false,
         },
