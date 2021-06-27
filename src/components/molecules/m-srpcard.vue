@@ -10,16 +10,15 @@
               :text="title"
             />
           </div>
-
-          <!-- rating  and review-->
-          <div class="columns is-mobile">
+          <!-- location -->
+          <div class="columns">
             <atom-text
               class="column is-size-7"
-              :text-left="rating"
-              :text="card.trating"
+              :text-left="card.location"
+              :text="location"
             />
-            <!-- <atom-text class="column is-size-7" :text="reviews" /> -->
           </div>
+
           <!-- atom for private parking optional ...need to discuss with team -->
 
           <!-- price and distance -->
@@ -40,13 +39,6 @@
               />
             </div>
           </div>
-          <div class="columns">
-            <atom-text
-              class="column is-size-7"
-              :text-left="card.location"
-              :text="location"
-            />
-          </div>
 
           <div class="columns is-mobile">
             <div class="column">
@@ -64,9 +56,20 @@
               />
             </div>
           </div>
+          <!-- rating  and review-->
+          <div class="columns is-mobile">
+            <!-- <div class="column is-6"></div> -->
+            <atom-text
+              class="column is-size-7"
+              :text-left="card.starRating"
+              :text="rating"
+              :text-right="card.trating"
+            />
+            <!-- <atom-text class="column is-size-7" :text="reviews" /> -->
+          </div>
         </div>
         <div class="column is-3 is-align-content-center ps_center">
-          <atom-img class="image" :src="img" />
+          <atom-img class="image mb-3" :src="img" />
 
           <atom-button
             class="button is-small is-rounded is-warning"
@@ -115,12 +118,13 @@ export default {
       //   xsmall: "xs",
       // },
       card: {
-        trating: "/5",
+        starRating: "Rating: ",
+        trating: "/5 ★",
         rate: "Rate: ₹",
         distance: "Distance: ",
         distanceUnit: "Km",
         type: "Type: ",
-        slot: "Slot: ",
+        slot: "Spot Available: ",
         location: "📍 ",
       },
     };

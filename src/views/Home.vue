@@ -4,6 +4,7 @@
     <t-about />
     <t-features />
     <t-product />
+    <t-testimonials />
     <t-team />
     <t-contact />
   </div>
@@ -15,6 +16,7 @@ import TProduct from "@/components/templates/t-product.vue";
 import TTeam from "@/components/templates/t-team.vue";
 import TContact from "@/components/templates/t-contact.vue";
 import TMap from "@/components/templates/t-map.vue";
+import TTestimonials from "../components/templates/t-testimonials.vue";
 export default {
   name: "Home",
   components: {
@@ -24,6 +26,7 @@ export default {
     TTeam,
     TProduct,
     TMap,
+    TTestimonials,
   },
 };
 </script>

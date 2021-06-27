@@ -22,7 +22,7 @@
         </a>
       </div>
 
-      <div id="ps__navbar" class="navbar-menu" :class="{'is-active': toggle}">
+      <div id="ps__navbar" class="navbar-menu" :class="{ 'is-active': toggle }">
         <div class="navbar-start"></div>
         <o-navbar-right class="navbar-end" />
       </div>
@@ -53,5 +53,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

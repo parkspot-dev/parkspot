@@ -2,27 +2,35 @@
   <div class="o_srp">
     <div class="columns reverse-columns">
       <div class="column is-4 mt-4 mx-4">
-        <m-srpcard
-          :key="srp.ID"
-          v-for="srp in pageOfItems"
-          :distance="srp.Distance"
-          :img="srp.IconURL"
-          :location="srp.Address"
-          :rate="srp.Fee.Amount"
-          :slots="srp.SlotsAvailable"
-          :title="srp.Name"
-          :vehicle="srp.VehicleType"
-          :reviews="review"
-          :rating="srp.Rating"
-          :site-id="srp.ID"
-          @on-book="onBook"
-        />
-        <div class="card-footer pb-0 pt-3">
-          <jw-pagination
-            :items="srpResults"
-            :pageSize="3"
-            @changePage="onChangePage"
-          ></jw-pagination>
+        <div class="columns reverse-columns-custom">
+          <div class="column">
+            <div class="card-footer pb-0 pt-3">
+              <jw-pagination
+                :items="srpResults"
+                :pageSize="3"
+                :maxPages="5"
+                @changePage="onChangePage"
+                :labels="customLabels"
+              ></jw-pagination>
+            </div>
+          </div>
+          <div class="column">
+            <m-srpcard
+              :key="srp.ID"
+              v-for="srp in pageOfItems"
+              :distance="srp.Distance"
+              :img="srp.IconURL"
+              :location="srp.Address"
+              :rate="srp.Fee.Amount"
+              :slots="srp.SlotsAvailable"
+              :title="srp.Name"
+              :vehicle="srp.VehicleType"
+              :reviews="review"
+              :rating="srp.Rating"
+              :site-id="srp.ID"
+              @on-book="onBook"
+            />
+          </div>
         </div>
       </div>
       <m-empty-page v-if="errorPage" :error="errorData" />
@@ -39,6 +47,26 @@
   </div>
 </template>
 <script>
+// pagination styles
+const customLabels = {
+  first: "<<",
+  last: ">>",
+  previous: "<",
+  next: ">",
+};
+// const customStyles = {
+//   ul: {
+//     border: "2px solid red",
+//   },
+//   li: {
+//     display: "inline-block",
+//     border: "2px dotted green",
+//   },
+//   a: {
+//     color: "blue",
+//   },
+// };
+
 import mSrpcard from "@/components/molecules/m-srpcard.vue";
 import mSearchBox from "@/components/molecules/m-search-box.vue";
 import MMapbox from "../molecules/m-mapbox.vue";
@@ -49,6 +77,8 @@ export default {
 
   data() {
     return {
+      // customStyles,
+      customLabels,
       pageOfItems: [],
       srpResults: [],
       markers: [],
@@ -174,6 +204,15 @@ export default {
   left: 55%;
 }
 
+/* pagination styles */
+/* .pagination .ul li.active {
+  background-color: #4caf50;
+  color: white;
+} */
+.reverse-columns-custom {
+  flex-direction: column-reverse;
+  display: flex;
+}
 @media (max-width: 767px) {
   .reverse-columns {
     flex-direction: column-reverse;
