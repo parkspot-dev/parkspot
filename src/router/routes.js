@@ -75,6 +75,11 @@ export const routes = [
     component: () => import('@/views/Portal.vue')
   },
   {
+    path: '/VO-portal',
+    name: 'VOPortal',
+    component: () => import('@/views/new-portal.vue')
+  },
+  {
     path: '/parkspot-near-you',
     name: 'Parking',
     component: () => import('@/views/Parking.vue')

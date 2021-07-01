@@ -1,8 +1,6 @@
 <template>
   <section>
-    <!-- <SRP /> -->
     <t-srp @on-book="onBookFormtoggle" />
-    <!-- <PSSrpDetails @on-book="onBookFormtoggle" /> -->
     <SrpBookForm
       v-if="showBookForm"
       :showBookForm="showBookForm"

@@ -1,6 +1,7 @@
 <template>
   <div id="Home">
     <t-map />
+    <o-portal-section />
     <t-about />
     <t-features />
     <t-product />
@@ -17,6 +18,7 @@ import TTeam from "@/components/templates/t-team.vue";
 import TContact from "@/components/templates/t-contact.vue";
 import TMap from "@/components/templates/t-map.vue";
 import TTestimonials from "../components/templates/t-testimonials.vue";
+import OPortalSection from "../components/organisms/o-portal-section.vue";
 export default {
   name: "Home",
   components: {
@@ -27,6 +29,7 @@ export default {
     TProduct,
     TMap,
     TTestimonials,
+    OPortalSection,
   },
 };
 </script>
