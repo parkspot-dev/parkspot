@@ -20,6 +20,16 @@
       :text="blog"
       :link="blink"
     />
+    <atom-router-link
+      class="navbar-item has-text-centered ps_hover"
+      :text="request"
+      :link="rlink"
+    />
+    <atom-router-link
+      class="navbar-item has-text-centered ps_hover"
+      :text="faq"
+      :link="flink"
+    />
     <!-- <div class="navbar-item has-text-centered ">
       <atom-button
         class="button is-warning is-rounded has-text-weight-semibold"
@@ -51,6 +61,10 @@ export default {
       afeature: "t-features",
       blog: "Blog",
       blink: "EliminateTrafficJam",
+      request: "Request your ParkSpot",
+      rlink: "VOPortal",
+      faq: "FAQ",
+      flink: "Faq",
       button1: "Log In",
       button2: "Sign Up",
     };

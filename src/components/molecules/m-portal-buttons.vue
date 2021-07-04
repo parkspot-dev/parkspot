@@ -2,7 +2,7 @@
   <div>
     <div class="columns">
       <div class="column ps_right">
-        <atom-button class="button is-large" :text="btntext1" />
+        <atom-button class="button is-large is-warning" :text="btntext1" />
       </div>
 
       <div class="column">

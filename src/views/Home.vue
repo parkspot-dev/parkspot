@@ -1,7 +1,7 @@
 <template>
   <div id="Home">
     <t-map />
-    <o-portal-section />
+    <!-- <o-portal-section /> -->
     <t-about />
     <t-features />
     <t-product />

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <select :name="name" :id="id">
+    <select v-model="currentValue">
       <option :key="i" v-for="(value, i) in values" :value="value">
         {{ value }}
       </option>
@@ -10,8 +10,7 @@
 <script>
 export default {
   props: {
-    name: String,
-    id: String,
+    value: String, //this is coming from parent v-model
     values: {
       type: Array,
       default() {
@@ -20,5 +19,15 @@ export default {
     },
   },
   name: "atom_select",
+  computed: {
+    currentValue: {
+      get() {
+        return this.value;
+      },
+      set(currentValue) {
+        this.$emit("input", currentValue);
+      },
+    },
+  },
 };
 </script>

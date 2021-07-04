@@ -1,5 +1,5 @@
 <template>
-  <div class="o_portal_section section mt-6">
+  <div class="o_portal_section section mb-0">
     <div class="container">
       <m-portal-buttons />
     </div>
@@ -14,4 +14,9 @@ export default {
   name: "o-portal-section",
 };
 </script>
+<style scoped>
+.o_portal_section {
+  background-color: #ececec;
+}
+</style>
 
