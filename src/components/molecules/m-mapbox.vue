@@ -5,10 +5,20 @@
 <script>
 export default {
   name: "m-mapbox",
-  props: { data: Array, center: Array },
+  props: {
+    data: Array,
+    center: Array,
+    drag: {
+      type: Boolean,
+      default() {
+        return false;
+      },
+    },
+  },
   data() {
     return {
       map: "", //map for mapbox
+      ltlng: "",
     };
   },
   mounted() {
@@ -23,10 +33,19 @@ export default {
       //   el.className = "marker";
 
       // make a marker for each feature and add it to the map
-      new mapboxgl.Marker({ color: "#ffdd57" })
+      var marker = new mapboxgl.Marker({
+        color: "#ffdd57",
+        draggable: this.drag,
+      })
         .setLngLat(this.data[i])
         .addTo(this.map);
       // });
+
+      marker.on("dragend", () => {
+        var lngLat = marker.getLngLat();
+        this.ltlng = lngLat;
+        this.$emit("location", this.ltlng);
+      });
     }
   },
   methods: {

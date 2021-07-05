@@ -14,6 +14,8 @@
     "boxicons": "^2.0.7",
     "buefy": "^0.9.3",
     "core-js": "^3.6.5",
+    "countries-list": "^2.6.1",
+    "country-state-city": "^3.0.0",
     "esm": "^3.2.25",
     "jw-vue-pagination": "^1.0.3",
     "mapbox-gl": "^1.12.0",
