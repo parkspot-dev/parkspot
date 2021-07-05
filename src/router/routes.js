@@ -34,7 +34,7 @@ export const routes = [
   {
     path: '/features',
     name: 't-features',
-    component: () => ('@/components/templates/t-features.vue')
+    component: () => import('@/components/templates/t-features.vue')
   },
   {
     path: '/contact',
