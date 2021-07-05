@@ -5,6 +5,7 @@ import Terms from '@/views/Terms.vue'
 import about from '@/components/templates/t-about.vue'
 import features from '@/components/templates/t-features.vue'
 import contact from '@/components/templates/t-contact.vue'
+import VOPortal from '@/views/new-portal.vue'
 
 
 
@@ -45,12 +46,6 @@ export const routes = [
     name: 't-contact',
     component: contact
   },
-  // {
-  //   path: '/srp',
-  //   name: 'PSSrp',
-  //   //() => import('@/views/Srp.vue') is dynamic import , it is only get loaded when the route is loaded
-  //   component: () => import('@/views/Srp.vue')
-  // },
   {
     path: '/srp',
     name: 'srp',
@@ -60,7 +55,6 @@ export const routes = [
     //   // don't forget to call next()
     //   next()
     // },
-    //() => import('@/views/Srp.vue') is dynamic import , it is only get loaded when the route is loaded
     component: () => import('@/views/Srp.vue')
   },
   {
@@ -70,25 +64,9 @@ export const routes = [
   },
   // delete
   {
-    path: '/portal',
-    name: 'PSPortal',
-    component: () => import('@/views/Portal.vue')
-  },
-  {
     path: '/request-your-parking-spot',
     name: 'VOPortal',
-    component: () => import('@/views/new-portal.vue')
-  },
-  {
-    path: '/parkspot-near-you',
-    name: 'Parking',
-    component: () => import('@/views/Parking.vue')
-  },
-  {
-    path: '/parkspot-near-you/:id',
-    name: 'PSTemplate',
-    component: () => import('@/pages/Parking/components/PSTemplate.vue'),
-    props: true
+    component: VOPortal
   },
   {
     path: '/terms-and-conditions',

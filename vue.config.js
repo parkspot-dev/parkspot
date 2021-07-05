@@ -17,6 +17,7 @@ module.exports = {
             ]
         }
     },
+    productionSourceMap: false, //Setting this to false can speed up production builds if you don't need source maps for production.
     configureWebpack: {
         devtool: 'source-map'
     }
