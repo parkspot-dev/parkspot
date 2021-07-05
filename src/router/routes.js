@@ -1,11 +1,6 @@
 import Home from '@/views/Home.vue'
 import Thanks from '@/views/Thanks.vue'
-import Faq from '@/views/Faq.vue'
-import Terms from '@/views/Terms.vue'
 import about from '@/components/templates/t-about.vue'
-import features from '@/components/templates/t-features.vue'
-import contact from '@/components/templates/t-contact.vue'
-import VOPortal from '@/views/new-portal.vue'
 
 
 
@@ -21,7 +16,7 @@ export const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: Faq
+    component: () => import('@/views/Faq.vue')
   },
   {
     path: '/thanks',
@@ -39,12 +34,12 @@ export const routes = [
   {
     path: '/features',
     name: 't-features',
-    component: features
+    component: () => ('@/components/templates/t-features.vue')
   },
   {
     path: '/contact',
     name: 't-contact',
-    component: contact
+    component: () => import('@/components/templates/t-contact.vue')
   },
   {
     path: '/srp',
@@ -66,12 +61,12 @@ export const routes = [
   {
     path: '/request-your-parking-spot',
     name: 'VOPortal',
-    component: VOPortal
+    component: () => import('@/views/new-portal.vue')
   },
   {
     path: '/terms-and-conditions',
     name: 'Terms',
-    component: Terms
+    component: () => import('@/views/Terms.vue')
   },
 
   {
