@@ -1,7 +1,7 @@
 <template>
   <div class="new_portal">
-    <t-vo-portal @submit="onSubmit" v-show="!show" />
-    <div class="ps_thank" v-show="show">
+    <t-vo-portal @submit="onSubmit" v-if="!show" />
+    <div class="ps_thank" v-if="show">
       <atom-img :src="img" />
       <atom-b-title class="is-size-3" :text="msg" />
       <atom-b-subtitle class="is-size-4" :text="msg2" />

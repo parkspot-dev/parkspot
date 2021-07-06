@@ -1,10 +1,6 @@
 import Home from '@/views/Home.vue'
 import Thanks from '@/views/Thanks.vue'
-import Faq from '@/views/Faq.vue'
-import Terms from '@/views/Terms.vue'
 import about from '@/components/templates/t-about.vue'
-import features from '@/components/templates/t-features.vue'
-import contact from '@/components/templates/t-contact.vue'
 
 
 
@@ -20,7 +16,7 @@ export const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: Faq
+    component: () => import('@/views/Faq.vue')
   },
   {
     path: '/thanks',
@@ -38,19 +34,13 @@ export const routes = [
   {
     path: '/features',
     name: 't-features',
-    component: features
+    component: () => import('@/components/templates/t-features.vue')
   },
   {
     path: '/contact',
     name: 't-contact',
-    component: contact
+    component: () => import('@/components/templates/t-contact.vue')
   },
-  // {
-  //   path: '/srp',
-  //   name: 'PSSrp',
-  //   //() => import('@/views/Srp.vue') is dynamic import , it is only get loaded when the route is loaded
-  //   component: () => import('@/views/Srp.vue')
-  // },
   {
     path: '/srp',
     name: 'srp',
@@ -60,7 +50,6 @@ export const routes = [
     //   // don't forget to call next()
     //   next()
     // },
-    //() => import('@/views/Srp.vue') is dynamic import , it is only get loaded when the route is loaded
     component: () => import('@/views/Srp.vue')
   },
   {
@@ -70,30 +59,14 @@ export const routes = [
   },
   // delete
   {
-    path: '/portal',
-    name: 'PSPortal',
-    component: () => import('@/views/Portal.vue')
-  },
-  {
     path: '/request-your-parking-spot',
     name: 'VOPortal',
     component: () => import('@/views/new-portal.vue')
   },
   {
-    path: '/parkspot-near-you',
-    name: 'Parking',
-    component: () => import('@/views/Parking.vue')
-  },
-  {
-    path: '/parkspot-near-you/:id',
-    name: 'PSTemplate',
-    component: () => import('@/pages/Parking/components/PSTemplate.vue'),
-    props: true
-  },
-  {
     path: '/terms-and-conditions',
     name: 'Terms',
-    component: Terms
+    component: () => import('@/views/Terms.vue')
   },
 
   {
