@@ -2,7 +2,7 @@
   <div class="t_vo_portal section">
     <div class="columns">
       <div class="column"></div>
-      <div class="column"><o-vo-details @submit="onSubmit" /></div>
+      <div class="column is-6"><o-vo-details @submit="onSubmit" /></div>
       <div class="column"></div>
     </div>
   </div>

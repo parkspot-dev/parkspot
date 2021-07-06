@@ -47,14 +47,14 @@
           <atom-select
             v-model="userForm.country"
             class="select"
-            :values="countryList"
+            :values="address.countryList"
           />
         </div>
         <div class="column">
           <atom-select
             v-model="userForm.state"
             class="select"
-            :values="stateList"
+            :values="address.stateList"
           />
         </div>
       </div>
@@ -124,7 +124,6 @@
 </template>
 
 <script>
-import { Country, State, City } from "country-state-city";
 import AtomButton from "../atoms/atom-button/atom-button.vue";
 import atomInput from "../atoms/atom-input/atom-input.vue";
 import atomSelect from "../atoms/atom-select/atom-select.vue";
@@ -154,7 +153,7 @@ export default {
       address: {
         City: "City",
         countryList: ["India"],
-        stateList: ["Karnataka"],
+        stateList: ["Karnataka", "coming soon..."],
         location: "Nearest Location Address",
       },
       preference: {
@@ -185,23 +184,6 @@ export default {
         mapPosLng: "",
       },
     };
-  },
-  computed: {
-    countryList() {
-      let countries = Country.getAllCountries();
-      for (let cntry of countries) {
-        this.address.countryList = [...this.address.countryList, cntry.name];
-      }
-      return this.address.countryList;
-    },
-    stateList() {
-      let state = State.getAllStates();
-      let res = state.filter((state) => state.countryCode === "IN");
-      for (let temp of res) {
-        this.address.stateList = [...this.address.stateList, temp.name];
-      }
-      return this.address.stateList;
-    },
   },
 
   methods: {

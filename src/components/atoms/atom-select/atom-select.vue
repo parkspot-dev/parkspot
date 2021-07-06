@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <select v-model="currentValue">
+  <div class="ps_width">
+    <select v-model="currentValue" class="ps_width">
       <option :key="i" v-for="(value, i) in values" :value="value">
         {{ value }}
       </option>
@@ -31,3 +31,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.ps_width {
+  width: 100%;
+}
+</style>
