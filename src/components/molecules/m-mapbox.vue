@@ -28,23 +28,19 @@ export default {
 
     this.repaint(this.center);
     for (let i = 0; i < this.data.length; i++) {
-      // geojson.features.forEach(function (marker) {
-      //   // create a HTML element for each feature
-      var el = document.createElement("div");
-      el.className = "marker";
-      el.style.backgroundImage = "url(" + this.img + ")";
-      el.style.width = "60px";
-      el.style.height = "60px";
-      el.style.backgroundSize = "100%";
+      var markerElement = document.createElement("div");
+      markerElement.className = "marker";
+      markerElement.style.backgroundImage = "url(" + this.img + ")";
+      markerElement.style.width = "60px";
+      markerElement.style.height = "60px";
+      markerElement.style.backgroundSize = "100%";
 
       // make a marker for each feature and add it to the map
-      var marker = new mapboxgl.Marker(el, {
-        // color: "#ffdd57"
+      var marker = new mapboxgl.Marker(markerElement, {
         draggable: this.drag,
       })
         .setLngLat(this.data[i])
         .addTo(this.map);
-      // });
 
       marker.on("dragend", () => {
         var lngLat = marker.getLngLat();

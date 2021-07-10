@@ -19,7 +19,6 @@ export default {
   name: "new-portal",
   data() {
     return {
-      toggle: false, // for submit button animation
       msg: "Thank You!",
       msg2: "Our supply team will soon contact you with right Parking Spot.",
       img: require("@/assets/img/request-sent.svg"),
