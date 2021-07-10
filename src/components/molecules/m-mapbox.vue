@@ -19,6 +19,7 @@ export default {
     return {
       map: "", //map for mapbox
       ltlng: "",
+      img: require("@/assets/img/pstopmini.png"),
     };
   },
   mounted() {
@@ -29,12 +30,16 @@ export default {
     for (let i = 0; i < this.data.length; i++) {
       // geojson.features.forEach(function (marker) {
       //   // create a HTML element for each feature
-      //   var el = document.createElement("div");
-      //   el.className = "marker";
+      var el = document.createElement("div");
+      el.className = "marker";
+      el.style.backgroundImage = "url(" + this.img + ")";
+      el.style.width = "60px";
+      el.style.height = "60px";
+      el.style.backgroundSize = "100%";
 
       // make a marker for each feature and add it to the map
-      var marker = new mapboxgl.Marker({
-        color: "#ffdd57",
+      var marker = new mapboxgl.Marker(el, {
+        // color: "#ffdd57"
         draggable: this.drag,
       })
         .setLngLat(this.data[i])
