@@ -117,7 +117,11 @@
 
       <!-- Button -->
       <div class="ps_center">
-        <atom-button class="button is-warning" :text="submit" />
+        <atom-button
+          class="button is-warning"
+          :class="{ 'is-loading': toggle }"
+          :text="submit"
+        />
       </div>
     </form>
   </div>
@@ -134,6 +138,7 @@ export default {
   name: "o-vo-details",
   data() {
     return {
+      toggle: false, // submit animation flag
       map: {
         temp: [77.586588, 12.969906],
         temp2: [[77.586588, 12.969906]],
@@ -193,6 +198,7 @@ export default {
     },
     onSubmit() {
       console.log(this.userForm);
+      this.toggle = true;
       this.$emit("submit", this.userForm);
     },
   },

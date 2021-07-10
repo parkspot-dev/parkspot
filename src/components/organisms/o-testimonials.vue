@@ -98,11 +98,11 @@ export default {
           console.log(i);
           this.$set(this.user, i, {
             ...tempUser,
-            color: !tempUser.color,
+            color: true,
           });
           this.$set(this.testimonies, i, {
             ...tempTest,
-            show: !tempTest.show,
+            show: true,
           });
         } else {
           this.$set(this.user, i, {

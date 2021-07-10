@@ -1,15 +1,15 @@
 <template>
   <div class="m_footer_middle">
     <div class="columns is-vcentered">
-      <div class="column">
+      <div class="column is-4">
         <atom-text class="is-size-6" :text="text1" />
       </div>
-      <div class="coulmn">
+      <div class="coulmn is-6">
         <a
           href="https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website"
           target="_blank"
         >
-          <atom-img class="has-text-centered" :src="src" />
+          <atom-img class="has-text-centered ps_img" :src="src" />
         </a>
       </div>
       <div class="column is-3"></div>
@@ -86,3 +86,9 @@ export default {
   },
 };
 </script>
+<style scoped>
+.ps_image {
+  min-height: 65px;
+  min-width: 170px;
+}
+</style>

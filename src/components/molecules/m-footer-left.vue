@@ -5,6 +5,7 @@
         <div class="column is-one-fifth" v-lazyload>
           <atom-img class="ps_img" :data-url="src" />
         </div>
+        <div class="column is-1"></div>
         <div class="column">
           <atom-b-title class="is-size-2" :text="brand" />
           <atom-b-subtitle class="has-text-centered" :text="hookup" />
@@ -36,7 +37,7 @@ export default {
 
 <style scoped>
 .ps_img {
-  max-width: 11vh;
-  max-height: 11vh;
+  max-width: 80px;
+  max-height: 80px;
 }
 </style>
