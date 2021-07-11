@@ -5,6 +5,7 @@
         @input="search"
         class="input has-text-weight-semibold"
         :placeholder="placeholder"
+        :value="value"
       />
       <span class="icon is-small is-right">
         <atom-boxicon
@@ -14,7 +15,7 @@
           :animation="animation"
         />
       </span>
-      <ul class="ps_searchbox">
+      <ul class="ps_searchbox" v-if="toggle">
         <li
           @click="flytosrp(result)"
           :key="result"
@@ -40,16 +41,26 @@ export default {
   },
   data() {
     return {
+      toggle: false, //search list
       name: "search",
       color: "black",
       size: "sm",
       animation: "tada",
-      placeholder: "Search your spot...",
+      placeholders: "Search your spot...",
       value: "",
     };
   },
   props: {
     results: Array,
+    fieldName: String,
+  },
+  computed: {
+    placeholder() {
+      if (this.fieldName) {
+        return (this.placeholders = this.fieldName);
+      }
+      return this.placeholders;
+    },
   },
   methods: {
     //this is from input element
@@ -57,10 +68,13 @@ export default {
       // console.log(value)
       // let searchData = ""
       // searchData =  searchData + value.data
+      this.toggle = true;
       this.$emit("search", value);
     },
     //this is from list of search results
     flytosrp(result) {
+      this.toggle = false;
+      this.value = result;
       this.$emit("flytosrp", result);
     },
     // flytosrps(){

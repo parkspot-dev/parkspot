@@ -169,6 +169,7 @@ export default {
       this.cresults = data.features;
       this.results = data.features.map((e) => e.place_name);
     },
+
     flyToSrp(value) {
       console.log(value);
       var lng = null;

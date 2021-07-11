@@ -68,11 +68,17 @@
           />
         </div>
         <div class="column">
-          <atom-input
+          <!-- <atom-input
             v-model="userForm.location"
             class="input"
             :placeholder="address.location"
             :required="required"
+          /> -->
+          <m-search-box
+            @search="search"
+            @flytosrp="flytosrp"
+            :results="results"
+            :fieldName="address.location"
           />
         </div>
       </div>
@@ -82,8 +88,10 @@
         </label>
         <m-mapbox
           style="height: 350px"
-          :center="map.temp"
-          :data="map.temp2"
+          :key="map.key"
+          :center="center"
+          :data="marker"
+          :zoom="zoom"
           :drag="map.drag"
           @location="getLocation"
         />
@@ -133,16 +141,28 @@ import atomInput from "../atoms/atom-input/atom-input.vue";
 import atomSelect from "../atoms/atom-select/atom-select.vue";
 import AtomBTitle from "../atoms/atom-text/atom-b-title.vue";
 import MMapbox from "../molecules/m-mapbox.vue";
+import MSearchBox from "../molecules/m-search-box.vue";
 export default {
-  components: { atomInput, atomSelect, AtomButton, AtomBTitle, MMapbox },
+  components: {
+    atomInput,
+    atomSelect,
+    AtomButton,
+    AtomBTitle,
+    MMapbox,
+    MSearchBox,
+  },
   name: "o-vo-details",
   data() {
     return {
       toggle: false, // submit animation flag
+      results: [],
+      cresults: [],
       map: {
         temp: [77.586588, 12.969906],
         temp2: [[77.586588, 12.969906]],
         drag: true,
+        key: 0,
+        zooms: 11,
       },
 
       title: "Fill the form to Request your Parking Spot",
@@ -190,7 +210,26 @@ export default {
       },
     };
   },
-
+  computed: {
+    center() {
+      if (this.userForm.location) {
+        return this.map.temp;
+      }
+      return this.map.temp;
+    },
+    marker() {
+      if (this.userForm.location) {
+        return this.map.temp2;
+      }
+      return this.map.temp2;
+    },
+    zoom() {
+      if (this.userForm.location) {
+        return (this.zooms = 13);
+      }
+      return this.zooms;
+    },
+  },
   methods: {
     getLocation(loc) {
       this.userForm.mapPosLat = loc.lat;
@@ -200,6 +239,30 @@ export default {
       console.log(this.userForm);
       this.toggle = true;
       this.$emit("submit", this.userForm);
+    },
+
+    async search(name) {
+      // console.log(name)
+      if (!name.length) {
+        this.results = [];
+        return;
+      }
+      const res = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${name}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ&proximity=77.4977,12.9716`
+      );
+      const data = await res.json();
+      this.cresults = data.features;
+      this.results = data.features.map((e) => e.place_name);
+    },
+    flytosrp(result) {
+      this.userForm.location = result;
+      for (let i = 0; i < this.results.length; i++) {
+        if (this.results[i] === result) {
+          this.map.key += 1;
+          this.map.temp = [...this.cresults[i].center];
+          this.map.temp2[0] = this.cresults[i].center;
+        }
+      }
     },
   },
 };
