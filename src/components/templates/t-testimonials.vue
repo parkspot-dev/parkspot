@@ -22,3 +22,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@media only screen and (min-width: 1024px) {
+  .t_testimonials {
+    padding-bottom: 250px;
+  }
+}
+</style>
