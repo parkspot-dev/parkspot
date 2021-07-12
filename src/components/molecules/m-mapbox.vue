@@ -8,6 +8,12 @@ export default {
   props: {
     data: Array,
     center: Array,
+    zoom: {
+      type: Number,
+      default() {
+        return 11;
+      },
+    },
     drag: {
       type: Boolean,
       default() {
@@ -55,7 +61,7 @@ export default {
         container: "m_mapbox", // container ID
         style: "mapbox://styles/mapbox/dark-v10", // style URL
         center: pos, //[(77.7864, 12.8576)], // starting position [lng, lat]
-        zoom: 11, // starting zoom
+        zoom: this.zoom, // starting zoom
       });
     },
   },

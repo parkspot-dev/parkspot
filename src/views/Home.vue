@@ -6,7 +6,7 @@
     <t-features />
     <t-product />
     <t-testimonials />
-    <t-team />
+    <!-- <t-team /> -->
     <t-contact />
   </div>
 </template>
@@ -14,7 +14,7 @@
 import TAbout from "@/components/templates/t-about.vue";
 import TFeatures from "@/components/templates/t-features.vue";
 import TProduct from "@/components/templates/t-product.vue";
-import TTeam from "@/components/templates/t-team.vue";
+// import TTeam from "@/components/templates/t-team.vue";
 import TContact from "@/components/templates/t-contact.vue";
 import TMap from "@/components/templates/t-map.vue";
 import TTestimonials from "../components/templates/t-testimonials.vue";
@@ -25,7 +25,7 @@ export default {
     TAbout,
     TFeatures,
     TContact,
-    TTeam,
+    // TTeam,
     TProduct,
     TMap,
     TTestimonials,

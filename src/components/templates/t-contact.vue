@@ -9,9 +9,7 @@
         <div class="columns">
           <div class="column is-2"></div>
           <o-contact-left class="column" />
-          <o-contact-right
-            class="column"
-          />
+          <o-contact-right class="column" />
           <!-- <div class="column"></div> -->
         </div>
       </div>
@@ -24,11 +22,10 @@ import AtomBTitle from "@/components/atoms/atom-text/atom-b-title.vue";
 import oContactLeft from "@/components/organisms/o-contact-left.vue";
 import OContactRight from "@/components/organisms/o-contact-right.vue";
 export default {
-  components: { oContactLeft, OContactRight, AtomBTitle},
+  components: { oContactLeft, OContactRight, AtomBTitle },
   name: "t-contact",
   data() {
-
-        return {
+    return {
       title: "Have Some Questions?",
     };
   },
@@ -38,6 +35,9 @@ export default {
 <style scoped>
 .ps_mb {
   margin-bottom: 50px;
+}
+.t_contact {
+  background-color: #ececec;
 }
 
 @media only screen and (min-width: 1024px) {
