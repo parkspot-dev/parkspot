@@ -6,6 +6,7 @@
         v-on:click="onClick(item.name)"
         class="has-text-link"
         v-for="item in pageOfItems"
+        askdknad
         :key="item.id"
         >{{ item.name }}</a
       >

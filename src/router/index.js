@@ -4,7 +4,6 @@ import { routes } from './routes.js'
 
 Vue.use(VueRouter)
 some changes
-
 //router.beforeEach((to, from, next)=>{
 //	if(to !== '/' || to != '/faq' || to != '/thanks'){
 //		console.log(`route from ${to} to ${from}`)
