@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import { routes } from './routes.js'
 
 Vue.use(VueRouter)
-
+some changes
 
 //router.beforeEach((to, from, next)=>{
 //	if(to !== '/' || to != '/faq' || to != '/thanks'){

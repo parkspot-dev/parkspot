@@ -15,6 +15,7 @@
 						| 5 min read
 					p.is-size-6.has-text-dark.noBottomMargin
 						|
+						some changes
 				hr
 				img(src="https://www.stevenvanbelleghem.com/wp-content/uploads/2020/04/Heavy-rains-lash-Delhi-NCR-traffic-snarls-at-many-places.jpg")
 				br
