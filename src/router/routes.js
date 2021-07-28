@@ -68,6 +68,11 @@ export const routes = [
     name: 'Terms',
     component: () => import('@/views/Terms.vue')
   },
+  {
+    path: '/landingBlog',
+    name: 'landingBlog',
+    component: () => import('@/views/landing-blog.vue')
+  },
 
   {
     path: '*',

@@ -1,5 +1,5 @@
 <template>
-  <img :src="src" :alt="alt"/>
+  <img :src="src" :alt="alt" />
 </template>
 
 <script>
@@ -18,7 +18,6 @@ export default {
         return "image.png";
       },
     },
-    
-    },
+  },
 };
 </script>
