@@ -68,6 +68,22 @@ export const routes = [
     name: 'Terms',
     component: () => import('@/views/Terms.vue')
   },
+  {
+    path: '/search-portal',
+    name: 'searchPortal',
+    component: () => import('@/views/search-portal.vue'),
+    beforeEnter: (to, from, next) => {
+      let userName = prompt("Enter User Name:");
+      let password = prompt("Enter Password:");
+      if (userName === "Admin" && password === "helllo") {
+        next()
+      }
+      else {
+        alert("You have Entered wrong credentials!! Please try again")
+        next("/search-portal")
+      }
+    }
+  },
 
   {
     path: '*',

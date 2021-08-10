@@ -1,0 +1,58 @@
+<template>
+  <tr>
+    <td><atom-text :text="details.ID" /></td>
+    <td><atom-text :text="details.CarModel" /></td>
+    <td><atom-text :text="details.nearestLocation" /></td>
+    <td><atom-text :text="details.Country" /></td>
+    <td><atom-text :text="details.State" /></td>
+    <td><atom-text :text="details.City" /></td>
+    <td><atom-text :text="details.Duration" /></td>
+    <td>
+      <atom-link
+        :href="mapUrl"
+        :text="`${details.Latitude}` + ' , ' + `${details.Longitude}`"
+      />
+    </td>
+    <td><atom-text :text="statusDetail" /></td>
+    <td><atom-textarea :disabled="true" /></td>
+    <!-- <td>{{ details }}</td> -->
+  </tr>
+</template>
+
+<script>
+import AtomTextarea from "../atoms/atom-input/atom-textarea.vue";
+import AtomLink from "../atoms/atom-link/atom-link.vue";
+import atomText from "../atoms/atom-text/atom-text.vue";
+export default {
+  components: { atomText, AtomLink, AtomTextarea },
+  name: "m-search-table-row",
+  props: {
+    details: Object,
+    mapUrl: String,
+  },
+  data() {
+    return {
+      statusDetails: "",
+    };
+  },
+  computed: {
+    statusDetail() {
+      if (this.details.Status === 0) {
+        return this.statusDetails + "Request Status Not Set";
+      } else if (this.details.Status === 1) {
+        return this.statusDetails + "Request Registered";
+      } else if (this.details.Status === 2) {
+        return this.statusDetails + "Request Processing";
+      } else if (this.details.Status === 3) {
+        return this.statusDetails + "Request Spot Suggested";
+      } else if (this.details.Status === 4) {
+        return this.statusDetails + "Request Spot Accepted";
+      } else if (this.details.Status === 5) {
+        return this.statusDetails + "Request Spot Denied";
+      } else {
+        return this.statusDetails;
+      }
+    },
+  },
+};
+</script>
