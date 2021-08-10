@@ -75,7 +75,7 @@ export const routes = [
     beforeEnter: (to, from, next) => {
       let userName = prompt("Enter User Name:");
       let password = prompt("Enter Password:");
-      if (userName === "Admin" && password === "helllo") {
+      if (userName === "Admin" && password === "Parksp0t") {
         next()
       }
       else {
