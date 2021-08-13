@@ -3,6 +3,7 @@
     <table class="table">
       <thead>
         <th><atom-text :text="ID" /></th>
+        <th><atom-text :text="tname" /></th>
         <th><atom-text :text="tcarModel" /></th>
         <th><atom-text :text="tnearestLocation" /></th>
         <th><atom-text :text="tcountry" /></th>
@@ -37,6 +38,7 @@ export default {
   data() {
     return {
       ID: "ID",
+      tname: "Name",
       tcountry: "Country",
       tstate: "State",
       tcity: "City",

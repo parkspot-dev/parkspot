@@ -1,6 +1,7 @@
 <template>
   <tr>
     <td><atom-text :text="details.ID" /></td>
+    <td><atom-text :text="details.Name" /></td>
     <td><atom-text :text="details.CarModel" /></td>
     <td><atom-text :text="details.nearestLocation" /></td>
     <td><atom-text :text="details.Country" /></td>
@@ -8,10 +9,9 @@
     <td><atom-text :text="details.City" /></td>
     <td><atom-text :text="details.Duration" /></td>
     <td>
-      <atom-link
-        :href="mapUrl"
-        :text="`${details.Latitude}` + ' , ' + `${details.Longitude}`"
-      />
+      <a v-on:click="toSrp" target="_blank"
+        >{{ details.Latitude }},{{ details.Longitude }},</a
+      >
     </td>
     <td><atom-text :text="statusDetail" /></td>
     <td><atom-textarea :disabled="true" /></td>
@@ -22,9 +22,10 @@
 <script>
 import AtomTextarea from "../atoms/atom-input/atom-textarea.vue";
 import AtomLink from "../atoms/atom-link/atom-link.vue";
+import AtomRouterLink from "../atoms/atom-link/atom-router-link.vue";
 import atomText from "../atoms/atom-text/atom-text.vue";
 export default {
-  components: { atomText, AtomLink, AtomTextarea },
+  components: { atomText, AtomLink, AtomTextarea, AtomRouterLink },
   name: "m-search-table-row",
   props: {
     details: Object,
@@ -52,6 +53,17 @@ export default {
       } else {
         return this.statusDetails;
       }
+    },
+  },
+  methods: {
+    toSrp() {
+      // console.log("ljdslafj");
+      let routeData = this.$router.resolve({
+        name: "srp",
+        query: { lat: this.details.Latitude, lng: this.details.Longitude },
+      });
+      // console.log(routeData);
+      window.open(routeData.href, "_blank");
     },
   },
 };
