@@ -73,6 +73,11 @@ export const routes = [
     name: 'landingBlog',
     component: () => import('@/views/landing-blog.vue')
   },
+  {
+    path: '/blog/:id',
+    name: 'mainBlog',
+    component: () => import('@/views/main-blog.vue')
+  },
 
   {
     path: '*',
