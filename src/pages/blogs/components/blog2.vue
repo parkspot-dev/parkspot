@@ -88,9 +88,9 @@
               The app has an interactive map that provides real-time data and
               helps users find and book a parking spot. The best part is that
               this online solution is user friendly and free of cost. ParkSpot
-              app is available on google play and app store. Download the app
-              for free and sign up. if you have any questions, just call at
-              650-230-8080, or email at
+              app is available on google play. Download the app for free and
+              sign up. if you have any questions, just call at +91 80929 96057,
+              or email at
               <a href="mailto:connect@parkspot.in">connect@parkspot.in</a>
             </p>
           </li>
