@@ -50,7 +50,7 @@ export default {
       home: "Home",
       hlink: "Home",
       blogs: "Blogs",
-      blink: "landingBlog",
+      blink: "blog",
     };
   },
 };
