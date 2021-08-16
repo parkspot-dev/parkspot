@@ -1,10 +1,10 @@
 <template>
   <div class="o_comment">
-    <atom-b-subtitle :text="commentTitle" />
-    <atom-textarea class="textarea" />
-    <atom-input class="input" />
-    <atom-input class="input" />
-    <atom-button class="button" :text="Submit" />
+    <atom-b-subtitle class="is-size-4 mb-2" :text="commentTitle" />
+    <atom-textarea class="textarea mb-2" />
+    <atom-input class="input mb-2" />
+    <atom-input class="input mb-2" />
+    <atom-button class="button is-warning is-pulled-right" :text="Submit" />
   </div>
 </template>
 <script>

@@ -60,7 +60,7 @@ export default {
       feature: "Features",
       afeature: "t-features",
       blog: "Blog",
-      blink: "EliminateTrafficJam",
+      blink: "blog",
       request: "Request ParkSpot",
       rlink: "VOPortal",
       faq: "FAQ",

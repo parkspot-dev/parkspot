@@ -21,7 +21,7 @@
         "
         :text="title"
       />
-      <o-blog-box />
+      <o-blog-box :noOfBlog="noOfBlog" />
     </div>
   </div>
 </template>
@@ -33,6 +33,9 @@ import oBlogBox from "../organisms/o-blog-box.vue";
 export default {
   components: { oBlogBox, AtomBTitle, AtomRouterLink },
   name: "t-blog-landing",
+  props: {
+    noOfBlog: Array,
+  },
   data() {
     return {
       home: "Home",

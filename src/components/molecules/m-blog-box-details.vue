@@ -3,7 +3,8 @@
     <div class="card">
       <div class="card-image">
         <figure class="image is-4by3">
-          <atom-img :src="src" />
+          <atom-img v-if="blogDetails.postImage" :src="blogDetails.postImage" />
+          <atom-img v-else :src="src" />
           <!-- <img
             src="https://bulma.io/images/placeholders/1280x960.png"
             alt="Placeholder image"
@@ -12,9 +13,9 @@
       </div>
       <div class="card-content">
         <div class="content">
-          <atom-b-subtitle :text="subtitle" />
-          <atom-text :text="text" />
-          <atom-link :text="read" />
+          <atom-b-subtitle class="is-size-4" :text="blogDetails.postTitle" />
+          <atom-text class="is-size-6" :text="blogDetails.postSummary" />
+          <atom-link class="is-size-6" :text="read" />
         </div>
       </div>
     </div>
@@ -29,6 +30,7 @@ import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
   components: { atomImg, AtomBSubtitle, AtomText, AtomLink },
   name: "m-blog-box-details",
+  props: ["blogDetails"],
   data() {
     return {
       src: "https://bulma.io/images/placeholders/1280x960.png",
