@@ -7,6 +7,7 @@
     cols="30"
     rows="5"
     :placeholder="placeholder"
+    :disabled="disabled"
   ></textarea>
 </template>
 
@@ -14,7 +15,13 @@
 export default {
   name: "atom-textarea",
   props: {
-    value:String,
+    value: String,
+    disabled: {
+      type: Boolean,
+      default() {
+        return false;
+      },
+    },
     placeholder: {
       type: String,
       default() {
@@ -22,7 +29,7 @@ export default {
       },
     },
   },
-  methods:{
+  methods: {
     handleInput(event) {
       this.$emit("input", event.target.value);
     },
@@ -32,6 +39,6 @@ export default {
     handleKeypress(value) {
       this.$emit("keypress", value);
     },
-  }
+  },
 };
 </script>
