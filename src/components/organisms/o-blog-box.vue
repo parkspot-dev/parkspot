@@ -1,6 +1,6 @@
 <template>
   <div class="o_blog-box mx-6">
-    <div class="columns">
+    <div class="columns is-centered">
       <m-blog-box-details
         v-on:click.native="getBlog(blog)"
         :key="blog.id"

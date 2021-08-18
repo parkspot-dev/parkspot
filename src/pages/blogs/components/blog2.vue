@@ -19,7 +19,7 @@
           Parking has been a major concern in major cities. Due to fewer parking
           spaces, people have to spend a lot of time searching for the right
           spot. Another concern is the parking charges. Especially when it comes
-          to San Francisco downtown, the charges are so high that it’s getting
+          to Bangalore downtown, the charges are so high that it’s getting
           difficult day by day to afford to park there. In spite of these
           issues, the majority of people prefer driving to the workplace than
           using public transport. They feel it is much more convenient. They do
@@ -31,8 +31,8 @@
         <br />
         <p>
           For some of the employees parking near the office has become an
-          everyday challenge especially in cities like San Francisco. Some of
-          these challenges include:
+          everyday challenge especially in cities like Bangalore. Some of these
+          challenges include:
         </p>
         <h2>Parking Challenges:</h2>
         <ol>
@@ -113,7 +113,7 @@ export default {
   name: "blog2",
   data() {
     return {
-      dp: require("@/assets/team/nik.jpg"),
+      dp: require("@/assets/img/blankProfile.png"),
       blogimg: require("@/assets/img/blog2.jpg"),
       parkspotimg: require("@/assets/img/pstopmini.png"),
     };
