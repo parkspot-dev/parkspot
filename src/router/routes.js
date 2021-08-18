@@ -53,12 +53,6 @@ export const routes = [
     component: () => import('@/views/Srp.vue')
   },
   {
-    path: '/blog/eliminating-reason-for-traffic-jam',
-    name: 'EliminateTrafficJam',
-    component: () => import('@/views/Blog1.vue')
-  },
-  // delete
-  {
     path: '/request-your-parking-spot',
     name: 'VOPortal',
     component: () => import('@/views/new-portal.vue')
@@ -67,6 +61,19 @@ export const routes = [
     path: '/terms-and-conditions',
     name: 'Terms',
     component: () => import('@/views/Terms.vue')
+  },
+  {
+    path: '/blog',
+    name: 'blog',
+    component: () => import('@/views/landing-blog.vue')
+  },
+  {
+    path: '/blog/:id',
+    name: 'mainBlog',
+    component: () => import('@/views/main-blog.vue'),
+    // props: (route) => ({
+    //   data: userData,
+    // })
   },
   {
     path: '/search-portal',
