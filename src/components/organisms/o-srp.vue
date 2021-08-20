@@ -28,6 +28,7 @@
               :reviews="review"
               :rating="srp.Rating"
               :site-id="srp.ID"
+              :log="srp"
               @on-book="onBook"
             />
           </div>

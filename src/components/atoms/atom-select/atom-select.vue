@@ -10,6 +10,7 @@
 <script>
 export default {
   props: {
+    disabled: Boolean,
     value: String, //this is coming from parent v-model
     values: {
       type: Array,

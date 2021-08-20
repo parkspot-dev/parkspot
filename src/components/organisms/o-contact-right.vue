@@ -21,6 +21,8 @@
         :types="tel"
         :placeholder="placeholder3"
         :required="required"
+        :pattern="pattern"
+        @invalid="validationCheck"
       />
       <atom-textarea
         v-model="userContact.msg"
@@ -32,7 +34,6 @@
         :class="{ 'is-loading': toggle }"
         :text="submit"
       />
-      <p v-if="errors.error" class="has-text-danger">{{ errors.text }}</p>
     </form>
   </div>
 </template>
@@ -65,23 +66,16 @@ export default {
         mno: "",
         msg: "",
       },
-      // errors object for validating phone number
-      errors: {
-        error: false,
-        text: "",
+      pattern: "[6789][0-9]{9}",
+      validation: {
+        mobile: {
+          msg: "Please enter a valid mobile no.!!",
+        },
       },
     };
   },
   methods: {
     async onSubmit() {
-      // validation check
-      const check = parseInt(this.userContact.mno);
-      if (isNaN(check)) {
-        this.errors.error = true;
-        this.errors.text = "Note:Please enter a valid Mobile No.!!";
-        this.userContact.mno = "";
-        return;
-      }
       this.toggle = !this.toggle;
       const user = JSON.parse(JSON.stringify(this.userContact)); // getting proper object after stringify and parse
       const res = await fetch("https://maya.parkspot.in/contact", {
@@ -107,6 +101,11 @@ export default {
       this.toggle = !this.toggle;
       this.errors.error = false; //removing error msg
       this.submit = "Thank You for Contacting Us!"; // changing the text of submit button after submitting the form
+    },
+    validationCheck(e) {
+      if (e.target.value) {
+        e.target.setCustomValidity(this.validation.mobile.msg);
+      }
     },
   },
 };

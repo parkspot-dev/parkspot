@@ -8,6 +8,7 @@
             <atom-b-title
               class="column is-size-6 has-text-weight-semibold"
               :text="title"
+              v-on:click.native="logging"
             />
           </div>
           <!-- location -->
@@ -97,6 +98,7 @@ export default {
   },
   name: "m-srpcard",
   props: {
+    log: Object,
     title: String,
     rate: String,
     distance: String,
@@ -133,6 +135,9 @@ export default {
     onBook() {
       // console.log("clicked    ", this.siteId);
       this.$emit("on-book", this.siteId);
+    },
+    logging() {
+      console.log(this.log);
     },
   },
 };
