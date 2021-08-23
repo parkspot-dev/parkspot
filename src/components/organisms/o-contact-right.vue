@@ -14,6 +14,8 @@
         :types="email"
         :placeholder="placeholder2"
         :required="required"
+        :validationCheck="validation.email.msg"
+        @invalid="validationCheck"
       />
       <atom-input
         v-model="userContact.mno"
@@ -22,6 +24,7 @@
         :placeholder="placeholder3"
         :required="required"
         :pattern="pattern"
+        :validationCheck="validation.mobile.msg"
         @invalid="validationCheck"
       />
       <atom-textarea
@@ -71,6 +74,9 @@ export default {
         mobile: {
           msg: "Please enter a valid mobile no.!!",
         },
+        email: {
+          msg: "An email address must contain a single @",
+        },
       },
     };
   },
@@ -102,9 +108,9 @@ export default {
       this.errors.error = false; //removing error msg
       this.submit = "Thank You for Contacting Us!"; // changing the text of submit button after submitting the form
     },
-    validationCheck(e) {
+    validationCheck(e, validation) {
       if (e.target.value) {
-        e.target.setCustomValidity(this.validation.mobile.msg);
+        e.target.setCustomValidity(validation);
       }
     },
   },

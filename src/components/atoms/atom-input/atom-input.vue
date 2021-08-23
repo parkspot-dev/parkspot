@@ -17,6 +17,7 @@
 export default {
   name: "atom-input",
   props: {
+    validationCheck: { type: String },
     title: {
       type: String,
       default() {
@@ -79,7 +80,7 @@ export default {
       this.$emit("keypress", value);
     },
     handleInvalid(event) {
-      this.$emit("invalid", event);
+      this.$emit("invalid", event, this.validationCheck);
     },
   },
 };

@@ -36,7 +36,12 @@
       </div>
       <m-empty-page v-if="errorPage" :error="errorData" />
       <div class="column is-8">
-        <m-mapbox :data="markers" :center="center" v-if="show" />
+        <m-mapbox
+          :data="markers"
+          :popupInfo="srpResults"
+          :center="center"
+          v-if="show"
+        />
         <m-search-box
           @search="search"
           @flytosrp="flyToSrp"
