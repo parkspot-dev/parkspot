@@ -23,7 +23,6 @@
             v-model="userForm.email"
             class="input"
             :placeholder="contact.email"
-            :required="required"
             :types="contact.emailType"
           />
         </div>
@@ -171,14 +170,14 @@ export default {
       contact: {
         fullName: "Full Name",
         mno: "Mobile No.",
-        email: "Email ID",
+        email: "Email ID (Optional)",
         emailType: "email",
         mobileType: "tel",
       },
       address: {
         City: "City",
         countryList: ["India"],
-        stateList: ["Karnataka", "coming soon..."],
+        stateList: ["Karnataka"],
         location: "Nearest Location Address",
       },
       preference: {

@@ -8,6 +8,7 @@ export default {
   props: {
     data: Array,
     center: Array,
+    popupInfo: Array,
     zoom: {
       type: Number,
       default() {
@@ -33,6 +34,28 @@ export default {
       "pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ";
 
     this.repaint(this.center);
+    console.log("this is popup");
+    console.log(this.popupInfo);
+
+    // var centerMarker = document.createElement("div");
+    // centerMarker.className = "marker";
+    // // centerMarker.style.backgroundImage = "url(" + this.img + ")";
+    // centerMarker.style.width = "60px";
+    // centerMarker.style.height = "60px";
+    // centerMarker.style.backgroundSize = "100%";
+
+    // // make a marker for each feature and add it to the map
+    // popup info
+    const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+      `<h1><b>Your current/searched location</b></h1>`
+    );
+    var marker = new mapboxgl.Marker({
+      draggable: this.drag,
+    })
+      .setPopup(popup)
+      .setLngLat(this.center)
+      .addTo(this.map);
+
     for (let i = 0; i < this.data.length; i++) {
       var markerElement = document.createElement("div");
       markerElement.className = "marker";
@@ -41,10 +64,15 @@ export default {
       markerElement.style.height = "60px";
       markerElement.style.backgroundSize = "100%";
 
+      // popup info
+      const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+        `<h1><b>${this.popupInfo[i].Name}</b></h1><h2>Distance : ${this.popupInfo[i].Distance} Km</h2>`
+      );
       // make a marker for each feature and add it to the map
       var marker = new mapboxgl.Marker(markerElement, {
         draggable: this.drag,
       })
+        .setPopup(popup)
         .setLngLat(this.data[i])
         .addTo(this.map);
 

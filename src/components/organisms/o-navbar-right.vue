@@ -1,34 +1,13 @@
 <template>
   <div class="o-navbar-right">
     <atom-router-link
+      :key="i"
+      v-for="(navlink, i) in navLinks"
       class="navbar-item has-text-centered ps_hover"
-      :text="home"
-      :link="hlink"
-    />
-    <atom-router-link
-      class="navbar-item has-text-centered ps_hover"
-      :text="about"
-      :link="alink"
-    />
-    <atom-router-link
-      class="navbar-item has-text-centered ps_hover"
-      :text="feature"
-      :link="afeature"
-    />
-    <atom-router-link
-      class="navbar-item has-text-centered ps_hover"
-      :text="blog"
-      :link="blink"
-    />
-    <atom-router-link
-      class="navbar-item has-text-centered ps_hover"
-      :text="request"
-      :link="rlink"
-    />
-    <atom-router-link
-      class="navbar-item has-text-centered ps_hover"
-      :text="faq"
-      :link="flink"
+      :class="[i === isActive ? 'ps_active' : '']"
+      v-on:click.native="psfilter(i)"
+      :text="navlink.text"
+      :link="navlink.link"
     />
     <!-- <div class="navbar-item has-text-centered ">
       <atom-button
@@ -53,21 +32,38 @@ export default {
   name: "o-navbar-right",
   data() {
     return {
-      home: "Home",
-      hlink: "Home",
-      about: "About",
-      alink: "t-about",
-      feature: "Features",
-      afeature: "t-features",
-      blog: "Blog",
-      blink: "blog",
-      request: "Request ParkSpot",
-      rlink: "VOPortal",
-      faq: "FAQ",
-      flink: "Faq",
+      navLinks: {
+        home: {
+          text: "Home",
+          link: "Home",
+        },
+        about: { text: "About", link: "t-about" },
+        features: {
+          text: "Features",
+          link: "t-features",
+        },
+        blog: {
+          text: "Blog",
+          link: "blog",
+        },
+        requestSpot: {
+          text: "Request ParkSpot",
+          link: "VOPortal",
+        },
+        faq: {
+          text: "FAQ",
+          link: "Faq",
+        },
+      },
       button1: "Log In",
       button2: "Sign Up",
+      isActive: "",
     };
+  },
+  methods: {
+    psfilter(i) {
+      this.isActive = i;
+    },
   },
 };
 </script>
@@ -76,5 +72,9 @@ export default {
 .ps_hover:hover {
   font-weight: bold;
   color: #ffdd57;
+  border-bottom: 2px solid blue;
+}
+.ps_active {
+  border-bottom: 2px solid blue;
 }
 </style>

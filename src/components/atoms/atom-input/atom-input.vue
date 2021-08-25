@@ -1,12 +1,15 @@
 <template>
   <input
     :value="value"
+    @invalid="handleInvalid"
     @input="handleInput"
     @change="handleChange"
     @keypress="handleKeypress"
     :type="types"
     :placeholder="placeholder"
     :required="required"
+    :pattern="pattern"
+    :title="title"
   />
 </template>
 
@@ -14,6 +17,19 @@
 export default {
   name: "atom-input",
   props: {
+    validationCheck: { type: String },
+    title: {
+      type: String,
+      default() {
+        return null;
+      },
+    },
+    pattern: {
+      type: String,
+      default() {
+        return null;
+      },
+    },
     value: String,
     required: {
       type: Boolean,
@@ -62,6 +78,9 @@ export default {
     },
     handleKeypress(value) {
       this.$emit("keypress", value);
+    },
+    handleInvalid(event) {
+      this.$emit("invalid", event, this.validationCheck);
     },
   },
 };
