@@ -3,7 +3,7 @@
     <atom-router-link
       :key="i"
       v-for="(navlink, i) in navLinks"
-      class="navbar-item has-text-centered ps_hover"
+      class="has-text-weight-bold navbar-item has-text-centered ps_hover"
       :class="[i === isActive ? 'ps_active' : '']"
       v-on:click.native="psfilter(i)"
       :text="navlink.text"

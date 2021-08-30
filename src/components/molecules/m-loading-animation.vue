@@ -1,5 +1,5 @@
 <template>
-  <div class="half-circle-spinner" v-if="isLoaded">
+  <div class="half-circle-spinner">
     <div class="circle circle-1"></div>
     <div class="circle circle-2"></div>
   </div>
@@ -13,13 +13,16 @@ export default {
       isLoaded: false,
     };
   },
-  mounted() {
-    document.onreadystatechange = () => {
-      if (document.readyState == "complete") {
-        this.isLoaded = true;
-      }
-    };
-  },
+  // mounted() {
+  //   document.onreadystatechange = () => {
+  //     if (document.readyState == "uninitialized") {
+  //       this.isLoaded = true;
+  //     }
+  //     if (document.readyState == "complete") {
+  //       this.isLoaded = false;
+  //     }
+  //   };
+  // },
 };
 </script>
 

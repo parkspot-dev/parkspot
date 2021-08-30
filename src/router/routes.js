@@ -8,7 +8,7 @@ export const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
   },
   {
     path: '/faq',
@@ -90,6 +90,22 @@ export const routes = [
         next("/search-portal")
       }
     }
+  },
+  {
+    path: '/payment-to-parkspot/:hashkey',
+    name: 'paymentGateway',
+    component: () => import('@/views/payment-gateway.vue'),
+    // beforeEnter: (to, from, next) => {
+    //   let userName = prompt("Enter User Name:");
+    //   let password = prompt("Enter Password:");
+    //   if (userName === "Admin" && password === "Parksp0t") {
+    //     next()
+    //   }
+    //   else {
+    //     alert("You have Entered wrong credentials!! Please try again")
+    //     next("/search-portal")
+    //   }
+    // }
   },
 
   {

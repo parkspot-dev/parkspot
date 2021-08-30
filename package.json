@@ -15,7 +15,6 @@
     "buefy": "^0.9.3",
     "buttercms": "^1.2.7",
     "core-js": "^3.6.5",
-    "country-state-city": "^3.0.0",
     "esm": "^3.2.25",
     "jw-vue-pagination": "^1.0.3",
     "mapbox-gl": "^1.12.0",
