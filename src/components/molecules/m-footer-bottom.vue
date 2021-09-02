@@ -1,6 +1,8 @@
 <template>
   <div class="m_footer_bottom columns is-mobile">
-    <atom-text class="column is-size-7" :text="text1" />
+    <div class="column is-size-7">
+      <atom-text :text="text1" />
+    </div>
     <div class="column has-text-centered-desktop">
       <atom-router-link :link="link" class="is-size-7" :text="text2" />
     </div>
@@ -24,5 +26,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

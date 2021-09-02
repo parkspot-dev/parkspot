@@ -43,6 +43,7 @@ export default {
 }
 
 .o_product_card_inner {
+  border-radius: 30px;
   position: relative;
   width: 100%;
   height: 100%;
@@ -57,11 +58,12 @@ export default {
 
 .o_product_card:hover .o_product_card_inner {
   transform: rotateY(180deg);
-  animation-play-state:paused;
+  animation-play-state: paused;
 }
 
 .card_front,
 .card_back {
+  border-radius: 30px;
   position: absolute;
   padding: 10px;
   width: 100%;
@@ -75,13 +77,12 @@ export default {
   }
   to {
     transform: rotateY(180deg);
-  } 
-    /* 0%   {transform: rotateY(0deg);}
+  }
+  /* 0%   {transform: rotateY(0deg);}
   25%  {transform: rotateY(180deg);}
   50%  {transform: rotateY(0deg);}
   75%  {transform: rotateY(180deg);}
   100% {transform: rotateY(0deg);} */
-
 }
 .card_back {
   transform: rotateY(180deg);

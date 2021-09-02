@@ -20,6 +20,10 @@ export default {
 };
 </script>
 <style scoped>
+.m_testimonial_user {
+  cursor: pointer;
+  border-radius: 20px;
+}
 .image {
   border-radius: 80%;
   width: 50px;

@@ -1,12 +1,12 @@
 <template>
-  <div ref="about"  class="t_about mt-4 section">
+  <div ref="about" class="t_about mt-4 section">
     <div class="container">
       <div class="columns">
         <div class="column is-1"></div>
         <div class="column is-4">
           <atom-img :src="src" />
         </div>
-        <o-about-right class="column"  />
+        <o-about-right class="column" />
         <div class="column is-1"></div>
       </div>
     </div>
@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style scoped>
-.t_about{
-  background-color: #ECECEC;
+.t_about {
+  background-color: #ececec;
 }
 </style>

@@ -27,12 +27,12 @@ export const routes = [
     component: Thanks
   },
   {
-    path: '/about',
+    path: '/#about',
     name: 't-about',
     component: about
   },
   {
-    path: '/features',
+    path: '/abc#features',
     name: 't-features',
     component: () => import('@/components/templates/t-features.vue')
   },

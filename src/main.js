@@ -9,6 +9,7 @@ import VueScrollReveal from 'vue-scroll-reveal';
 import LazyLoadDirective from "./directives/LazyLoadDirective.vue";
 import JwPagination from 'jw-vue-pagination';
 
+
 Vue.component('jw-pagination', JwPagination);
 
 

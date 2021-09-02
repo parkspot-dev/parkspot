@@ -39,6 +39,7 @@ export default {
 
 <style scoped>
 .card {
+  border-radius: 30px;
   padding: 80px 40px;
 }
 .ps_text {

@@ -1,6 +1,6 @@
 <template>
   <div class="o_testimonials">
-    <div class="columns is-vcentered">
+    <div class="columns">
       <div class="column is-4">
         <m-testimonial-user
           :key="i"
@@ -120,4 +120,5 @@ export default {
 };
 </script>
 
-    
+<style scoped>
+</style>

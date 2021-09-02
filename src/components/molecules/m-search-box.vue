@@ -3,6 +3,7 @@
     <div class="ps_search control has-icons-right">
       <atom-input
         @input="search"
+        v-on:click.native="history"
         class="input has-text-weight-semibold"
         :placeholder="placeholder"
         :value="value"
@@ -65,9 +66,6 @@ export default {
   methods: {
     //this is from input element
     search(value) {
-      // console.log(value)
-      // let searchData = ""
-      // searchData =  searchData + value.data
       this.toggle = true;
       this.$emit("search", value);
     },

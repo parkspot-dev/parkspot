@@ -6,7 +6,7 @@
         <h1 class="is-size-2">NO Parking</h1>
         <div id="authorDetails">
           <img class="round" :src="dp" alt="" />
-          <p class="has-text-success is-size-6">Anonymous</p>
+          <p class="has-text-success is-size-6">Ishwar Kumar</p>
           <p class="has-text-dark is-size-6">Aug 30, 2021</p>
           <p class="has-text-dark is-size-6">5 min read</p>
           <p></p>
@@ -124,7 +124,7 @@ export default {
   name: "blog3",
   data() {
     return {
-      dp: require("@/assets/img/blankProfile.png"),
+      dp: require("@/assets/img/ish.svg"),
       blogimg: require("@/assets/img/blog3.jpg"),
       parkspotimg: require("@/assets/img/pstopmini.png"),
     };

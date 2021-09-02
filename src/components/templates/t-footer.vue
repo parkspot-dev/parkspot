@@ -27,4 +27,9 @@ export default {
 .footer{
   padding-bottom: 100px;
 }
+@media only screen and (min-width: 1024px) {
+  .footer{
+  padding-bottom: 50px;
+}
+}
 </style>
