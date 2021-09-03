@@ -2,6 +2,7 @@
   <tr>
     <td><atom-text :text="details.ID" /></td>
     <td><atom-text :text="details.Name" /></td>
+    <td><atom-text :text="details.Mobile" /></td>
     <td><atom-text :text="details.CarModel" /></td>
     <td><atom-text :text="details.nearestLocation" /></td>
     <td><atom-text :text="details.Country" /></td>

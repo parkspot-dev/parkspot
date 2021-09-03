@@ -177,7 +177,6 @@ export default {
     },
 
     flyToSrp(value) {
-      console.log(value);
       var lng = null;
       var lat = null;
       for (var i = 0; i < this.cresults.length; i++) {
