@@ -3,6 +3,7 @@
     <div class="ps_search control has-icons-right">
       <atom-input
         @input="search"
+        v-on:click.native="history"
         class="input has-text-weight-semibold"
         :placeholder="placeholder"
         :value="value"
@@ -63,6 +64,11 @@ export default {
     },
   },
   methods: {
+    history() {
+      this.toggle = true;
+      let historyData = window.localStorage.getItem("sKey");
+      this.search(historyData.slice(0, 3));
+    },
     //this is from input element
     search(value) {
       // console.log(value)
@@ -75,6 +81,7 @@ export default {
     flytosrp(result) {
       this.toggle = false;
       this.value = result;
+      window.localStorage.setItem("sKey", this.value);
       this.$emit("flytosrp", result);
     },
     // flytosrps(){
@@ -87,14 +94,15 @@ export default {
 .ps_searchbox {
   position: absolute;
   width: 100%;
-  list-style-type: none;
+  list-style-type: disc;
   padding: 0;
   margin: 0;
   z-index: 2;
 }
 .ps_searchbox_list {
+  cursor: pointer;
   border: 1px solid #ddd;
-  margin-top: -1px; /* Prevent double borders */
+  margin-top: -1px;
   background-color: #f6f6f6;
   padding: 12px;
   text-decoration: none;
@@ -103,6 +111,6 @@ export default {
   display: block;
 }
 .ps_searchbox_list:hover {
-  background-color: #eee;
+  background-color: #ffdb4a;
 }
 </style>
