@@ -7,6 +7,7 @@
 <script>
 import TBlogLanding from "../components/templates/t-blog-landing.vue";
 export default {
+  title: "ParkSpot - Blogs",
   components: { TBlogLanding },
   name: "landing-blog",
   data() {

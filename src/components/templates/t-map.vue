@@ -55,7 +55,10 @@ export default {
           break;
         }
       }
-      this.$router.push({ name: "srp", query: { lat: lat, lng: lng } });
+      this.$router.push({
+        name: "srp",
+        query: { lat: lat, lng: lng, loc: value },
+      });
     },
   },
 };
@@ -76,7 +79,7 @@ export default {
   width: 100%;
 }
 .ps_map {
-  background-image: url("../../assets/img/mobile-home-map.svg");
+  background-image: url("../../assets/img/mobile-map-banner.png");
   position: absolute;
   top: 0;
   left: 0;
@@ -111,12 +114,12 @@ export default {
   background-color: #eee;
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 720px) {
   .t_map {
     height: 80vh;
   }
   .ps_map {
-    background-image: url("../../assets/img/home-map.svg");
+    background-image: url("../../assets/img/map-banner.png");
     min-height: 85vh;
   }
 }

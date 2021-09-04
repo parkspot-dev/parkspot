@@ -1,12 +1,16 @@
 <template>
   <section class="t_features section">
     <div class="container">
-        <atom-b-title
-          class="is-size-3-mobile is-size-2 ps_mb has-text-centered"
-          :text="title"
-        />
+      <atom-b-title
+        class="is-size-3-mobile is-size-2 ps_mb has-text-centered"
+        :text="title"
+      />
       <div class="columns">
-        <div class="column is-half has-text-centered"  :key="feature.id" v-for="feature in features1">
+        <div
+          class="column is-half has-text-centered"
+          :key="feature.id"
+          v-for="feature in features1"
+        >
           <div class="box">
             <o-features-details
               :subtitle="feature.title"
@@ -17,7 +21,11 @@
         </div>
       </div>
       <div class="columns">
-        <div class="column is-half has-text-centered"  :key="feature.id" v-for="feature in features2">
+        <div
+          class="column is-half has-text-centered"
+          :key="feature.id"
+          v-for="feature in features2"
+        >
           <div class="box">
             <o-features-details
               :subtitle="feature.title"
@@ -37,6 +45,7 @@ import AtomImg from "@/components/atoms/atom-img/atom-img.vue";
 import OFeaturesDetails from "@/components/organisms/o-features-details.vue";
 import AtomBTitle from "../atoms/atom-text/atom-b-title.vue";
 export default {
+  title: "ParkSpot - Features",
   components: { atomBTitle, AtomImg, OFeaturesDetails, AtomBTitle },
   name: "t-features",
   data() {
@@ -76,11 +85,12 @@ export default {
 </script>
 
 <style scoped>
-.ps_mb{
+.ps_mb {
   margin-bottom: 50px;
 }
 @media only screen and (min-width: 1024px) {
-.ps_mb{
-  margin-bottom: 60px;
-}}
+  .ps_mb {
+    margin-bottom: 60px;
+  }
+}
 </style>

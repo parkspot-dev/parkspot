@@ -6,6 +6,7 @@
 <script>
 import TTerms from "../components/templates/t-terms.vue";
 export default {
+  title: "ParkSpot - Terms & Conditions",
   name: "Terms",
   components: {
     TTerms,

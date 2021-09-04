@@ -7,6 +7,13 @@
 <script>
 import tMainBlog from "../components/templates/t-main-blog.vue";
 export default {
+  title() {
+    if (this.$route.params.postTitle) {
+      return `ParkSpot | Blogs - ${this.$route.params.postTitle} `;
+    } else {
+      return "Blogs";
+    }
+  },
   components: { tMainBlog },
   name: "main-blog",
   data() {
@@ -18,7 +25,6 @@ export default {
     },
     nextBlog() {
       let blogs = this.$route.params.data;
-
       return blogs;
     },
   },

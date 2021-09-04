@@ -188,7 +188,7 @@ export default {
       }
       console.log(this.$route);
       this.$router
-        .push({ name: "srp", query: { lat: lat, lng: lng } })
+        .push({ name: "srp", query: { lat: lat, lng: lng, loc: value } })
         .catch((err) => {});
     },
     onBook(index) {

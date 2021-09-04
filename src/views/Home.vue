@@ -20,6 +20,7 @@ import TMap from "@/components/templates/t-map.vue";
 import TTestimonials from "../components/templates/t-testimonials.vue";
 import OPortalSection from "../components/organisms/o-portal-section.vue";
 export default {
+  title: "Parkspot",
   name: "Home",
   components: {
     TAbout,

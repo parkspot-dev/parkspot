@@ -18,6 +18,9 @@ import SrpBookForm from "@/pages/srp/components/SrpBookForm.vue";
 import BookMsg from "@/pages/srp/components/BookMsg.vue";
 import TSrp from "../components/templates/t-srp.vue";
 export default {
+  title() {
+    return `ParkSpot | Search - ${this.$route.query.loc}`;
+  },
   name: "PSSrp",
   components: {
     SRP,
@@ -33,6 +36,10 @@ export default {
       resMsg: "",
       resMsgflag: false,
     };
+  },
+  mounted() {
+    console.log("srp0");
+    console.log(this.$route);
   },
   methods: {
     async onSubmit(book) {
