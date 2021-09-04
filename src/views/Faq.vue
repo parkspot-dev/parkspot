@@ -6,7 +6,6 @@
 <script>
 import PSFaq from "@/pages/faq/components/PSFaq.vue";
 export default {
-  title: "ParkSpot - Faq",
   name: "Faq",
   components: {
     PSFaq,

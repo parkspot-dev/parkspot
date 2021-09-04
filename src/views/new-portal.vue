@@ -15,7 +15,6 @@ import AtomBSubtitle from "../components/atoms/atom-text/atom-b-subtitle.vue";
 import AtomBTitle from "../components/atoms/atom-text/atom-b-title.vue";
 import tVoPortal from "../components/templates/t-vo-portal.vue";
 export default {
-  title: "Parkspot - Request your Parking Spot",
   components: { tVoPortal, AtomImg, AtomBTitle, AtomBSubtitle },
   name: "new-portal",
   data() {

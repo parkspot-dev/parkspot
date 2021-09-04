@@ -45,7 +45,6 @@ import AtomImg from "@/components/atoms/atom-img/atom-img.vue";
 import OFeaturesDetails from "@/components/organisms/o-features-details.vue";
 import AtomBTitle from "../atoms/atom-text/atom-b-title.vue";
 export default {
-  title: "ParkSpot - Features",
   components: { atomBTitle, AtomImg, OFeaturesDetails, AtomBTitle },
   name: "t-features",
   data() {

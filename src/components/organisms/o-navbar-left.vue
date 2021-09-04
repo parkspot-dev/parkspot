@@ -1,9 +1,9 @@
 <template>
   <div class="o_navbar_left">
-    <router-link to="/Home">
+    <router-link to="/">
       <atom-img id="ps_size_change" :src="src1" />
     </router-link>
-    <router-link to="/Home">
+    <router-link to="/">
       <atom-img class="ps_size_change_text" :src="src2" />
     </router-link>
   </div>

@@ -8,9 +8,7 @@ import 'boxicons'
 import VueScrollReveal from 'vue-scroll-reveal';
 import LazyLoadDirective from "./directives/LazyLoadDirective.vue";
 import JwPagination from 'jw-vue-pagination';
-import titleMixin from "./mixins/titleMixins"
 
-Vue.mixin(titleMixin);
 Vue.component('jw-pagination', JwPagination);
 Vue.directive("lazyload", LazyLoadDirective);
 Vue.use(VueResource);
