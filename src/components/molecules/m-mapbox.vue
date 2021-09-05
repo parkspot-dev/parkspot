@@ -49,12 +49,17 @@ export default {
     const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
       `<h1><b>Your current/searched location</b></h1>`
     );
-    var marker = new mapboxgl.Marker({
+    var marker2 = new mapboxgl.Marker({
       draggable: this.drag,
     })
       .setPopup(popup)
       .setLngLat(this.center)
       .addTo(this.map);
+    if (this.$route.name === "VOPortal") {
+      this.map.on("click", (e) => {
+        marker2.setPopup(popup).setLngLat(e.lngLat).addTo(this.map);
+      });
+    }
 
     for (let i = 0; i < this.data.length; i++) {
       var markerElement = document.createElement("div");

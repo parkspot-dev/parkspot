@@ -15,9 +15,6 @@ import TFooter from "@/components/templates/t-footer.vue";
 import MLoadingAnimation from "./components/molecules/m-loading-animation.vue";
 export default {
   components: { TNavbar, TFooter, MLoadingAnimation },
-  beforeMount() {
-    console.log(process.env);
-  },
 };
 </script>
 <style>

@@ -1,6 +1,7 @@
 <template>
   <div class="o_srp">
     <div class="columns reverse-columns">
+      <!-- <div class="column"></div> -->
       <div class="column is-4 mt-4 mx-4">
         <div class="columns reverse-columns-custom">
           <div class="column">
@@ -199,9 +200,6 @@ export default {
 </script>
 
 <style scoped>
-.o_srp {
-  background-color: #ececec;
-}
 .ps_search {
   position: absolute;
   width: 30%;
