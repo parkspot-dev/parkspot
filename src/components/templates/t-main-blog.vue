@@ -21,7 +21,7 @@
             <blog-2 v-if="currBlog.id == 2" />
             <!-- <div v-if="currBlog.id == 2">Blog 2</div> -->
           </article>
-          <o-comment style="width: 80%" />
+          <o-comment style="margin: 0 10% 0 10%" />
         </div>
         <o-recent class="column" :blogDetails="nextBlog" :check="currBlog.id" />
       </div>
