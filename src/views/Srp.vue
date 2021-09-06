@@ -12,19 +12,12 @@
   </section>
 </template>
 <script>
-import SRP from "@/pages/srp/components/PSSrp.vue";
-import PSSrpDetails from "@/pages/srp/components/PSSrpDetails.vue";
 import SrpBookForm from "@/pages/srp/components/SrpBookForm.vue";
 import BookMsg from "@/pages/srp/components/BookMsg.vue";
 import TSrp from "../components/templates/t-srp.vue";
 export default {
-  title() {
-    return `ParkSpot | Search - ${this.$route.query.loc}`;
-  },
   name: "PSSrp",
   components: {
-    SRP,
-    PSSrpDetails,
     SrpBookForm,
     BookMsg,
     TSrp,

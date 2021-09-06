@@ -1,5 +1,4 @@
-import Home from '@/views/Home.vue'
-import Thanks from '@/views/Thanks.vue'
+import Home from '../views/Home.vue'
 import about from '@/components/templates/t-about.vue'
 
 
@@ -24,20 +23,13 @@ export const routes = [
       title: "FAQ's - Get your all queries be answered..."
     }
   },
-  {
-    path: '/thanks',
-    name: 'Thanks',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: Thanks
-  },
+
   {
     path: '/about',
     name: 't-about',
     component: about,
     meta: {
-      title: "ParkSpot | About -  get Parking Spot , rent vacant spot"
+      title: "ParkSpot | About -  Get Parking Spot/Space , Rent Vacant Spot/Space"
     }
   },
   {
