@@ -50,23 +50,17 @@ export const routes = [
   {
     path: '/srp',
     name: 'srp',
-    // beforeRouteUpdate(to, from, next) {
-    //   // react to route changes...
-    //   console.log(`to ${to} from ${from}`)
-    //   // don't forget to call next()
-    //   next()
-    // },
     component: () => import('@/views/Srp.vue'),
     meta: {
       title: "ParkSpot | Search - "
     }
   },
   {
-    path: '/request-your-parking-spot',
+    path: '/get-parking-spot',
     name: 'VOPortal',
-    component: () => import('@/views/new-portal.vue'),
+    component: () => import('@/views/VO-portal.vue'),
     meta: {
-      title: "ParkSpot | Request Your Parking Spot"
+      title: "ParkSpot | Get parking spot"
     }
   },
   {

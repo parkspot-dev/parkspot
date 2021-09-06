@@ -16,7 +16,7 @@ import AtomBTitle from "../components/atoms/atom-text/atom-b-title.vue";
 import tVoPortal from "../components/templates/t-vo-portal.vue";
 export default {
   components: { tVoPortal, AtomImg, AtomBTitle, AtomBSubtitle },
-  name: "new-portal",
+  name: "VO-portal",
   data() {
     return {
       msg: "Thank You!",
@@ -45,8 +45,6 @@ export default {
             Latitude: data.mapPosLat,
             Longitude: data.mapPosLng,
             CarModel: data.carModel,
-            // MinPrice: 10,
-            // MaxPrice: 2000,
             Duration: data.duration,
           }),
         }

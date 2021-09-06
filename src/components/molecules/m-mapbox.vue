@@ -60,6 +60,9 @@ export default {
         marker2.setPopup(popup).setLngLat(e.lngLat).addTo(this.map);
       });
     }
+    var lngLat = marker2.getLngLat();
+    this.ltlng = lngLat;
+    this.$emit("location", this.ltlng);
 
     for (let i = 0; i < this.data.length; i++) {
       var markerElement = document.createElement("div");
@@ -80,12 +83,6 @@ export default {
         .setPopup(popup)
         .setLngLat(this.data[i])
         .addTo(this.map);
-
-      marker.on("dragend", () => {
-        var lngLat = marker.getLngLat();
-        this.ltlng = lngLat;
-        this.$emit("location", this.ltlng);
-      });
     }
   },
   methods: {
