@@ -75,10 +75,8 @@ methods:{
             name:this.name,
             email:this.email,
             mno:this.mno
-
         }
         // console.log(newBook)
-
         this.$emit("on-submit",newBook)
         
         this.name="";
@@ -88,7 +86,6 @@ methods:{
     onCancel(){
         this.$emit("on-cancel")
     }
-
 }
 };
 </script>

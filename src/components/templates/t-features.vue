@@ -1,12 +1,16 @@
 <template>
   <section class="t_features section">
     <div class="container">
-        <atom-b-title
-          class="is-size-3-mobile is-size-2 ps_mb has-text-centered"
-          :text="title"
-        />
+      <atom-b-title
+        class="is-size-3-mobile is-size-2 ps_mb has-text-centered"
+        :text="title"
+      />
       <div class="columns">
-        <div class="column is-half has-text-centered"  :key="feature.id" v-for="feature in features1">
+        <div
+          class="column is-half has-text-centered"
+          :key="feature.id"
+          v-for="feature in features1"
+        >
           <div class="box">
             <o-features-details
               :subtitle="feature.title"
@@ -17,7 +21,11 @@
         </div>
       </div>
       <div class="columns">
-        <div class="column is-half has-text-centered"  :key="feature.id" v-for="feature in features2">
+        <div
+          class="column is-half has-text-centered"
+          :key="feature.id"
+          v-for="feature in features2"
+        >
           <div class="box">
             <o-features-details
               :subtitle="feature.title"
@@ -76,11 +84,12 @@ export default {
 </script>
 
 <style scoped>
-.ps_mb{
+.ps_mb {
   margin-bottom: 50px;
 }
 @media only screen and (min-width: 1024px) {
-.ps_mb{
-  margin-bottom: 60px;
-}}
+  .ps_mb {
+    margin-bottom: 60px;
+  }
+}
 </style>

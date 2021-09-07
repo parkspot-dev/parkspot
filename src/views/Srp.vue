@@ -12,16 +12,12 @@
   </section>
 </template>
 <script>
-import SRP from "@/pages/srp/components/PSSrp.vue";
-import PSSrpDetails from "@/pages/srp/components/PSSrpDetails.vue";
 import SrpBookForm from "@/pages/srp/components/SrpBookForm.vue";
 import BookMsg from "@/pages/srp/components/BookMsg.vue";
 import TSrp from "../components/templates/t-srp.vue";
 export default {
   name: "PSSrp",
   components: {
-    SRP,
-    PSSrpDetails,
     SrpBookForm,
     BookMsg,
     TSrp,
@@ -33,6 +29,10 @@ export default {
       resMsg: "",
       resMsgflag: false,
     };
+  },
+  mounted() {
+    console.log("srp0");
+    console.log(this.$route);
   },
   methods: {
     async onSubmit(book) {
