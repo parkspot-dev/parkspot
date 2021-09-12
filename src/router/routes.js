@@ -109,6 +109,14 @@ export const routes = [
       }
     }
   },
+  {
+    path: '/parking-near-*',
+    name: 'discover',
+    component: () => import('@/views/discover-page.vue'),
+    meta: {
+      title: "ParkSpot | Blogs"
+    }
+  },
 
   {
     path: '*',

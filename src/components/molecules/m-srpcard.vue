@@ -1,85 +1,88 @@
 <template>
-  <div class="m_srpcard card">
-    <div class="card-content">
-      <div class="columns is-mobile">
-        <div class="column">
-          <!-- title -->
-          <div class="columns">
-            <atom-b-title
-              class="column is-size-6 has-text-weight-semibold"
-              :text="title"
-              v-on:click.native="logging"
+  <div class="m_srpcard">
+    <div class="card">
+      <div class="card-content">
+        <div class="columns is-mobile">
+          <div class="column">
+            <!-- title -->
+            <div class="columns">
+              <atom-b-title
+                class="column is-size-6 has-text-weight-semibold"
+                :text="title"
+                v-on:click.native="logging"
+              />
+            </div>
+            <!-- location -->
+            <div class="columns">
+              <atom-text
+                class="column is-size-7"
+                :text-left="card.location"
+                :text="location"
+              />
+            </div>
+
+            <!-- atom for private parking optional ...need to discuss with team -->
+
+            <!-- price and distance -->
+            <div class="columns is-mobile">
+              <div class="column">
+                <atom-text
+                  class="is-size-7"
+                  :text-left="card.rate"
+                  :text="rate"
+                />
+              </div>
+              <div class="column">
+                <atom-text
+                  class="is-size-7"
+                  :text-left="card.distance"
+                  :text="distance"
+                  :text-right="card.distanceUnit"
+                />
+              </div>
+            </div>
+
+            <div class="columns is-mobile">
+              <div class="column">
+                <atom-text
+                  class="is-size-7"
+                  :text-left="card.type"
+                  :text="vehicle"
+                />
+              </div>
+              <div class="column">
+                <atom-text
+                  class="is-size-7"
+                  :text-left="card.slot"
+                  :text="slots"
+                />
+              </div>
+            </div>
+            <!-- rating  and review-->
+            <div class="columns is-mobile">
+              <!-- <div class="column is-6"></div> -->
+              <atom-text
+                class="column is-size-7"
+                :text-left="card.starRating"
+                :text="rating"
+                :text-right="card.trating"
+              />
+              <!-- <atom-text class="column is-size-7" :text="reviews" /> -->
+            </div>
+          </div>
+          <div class="column is-3 is-align-content-center ps_center">
+            <atom-img class="image mb-3" :src="img" />
+
+            <atom-button
+              class="button is-small is-rounded is-warning"
+              :text="button"
+              v-on:click.native="onBook()"
             />
           </div>
-          <!-- location -->
-          <div class="columns">
-            <atom-text
-              class="column is-size-7"
-              :text-left="card.location"
-              :text="location"
-            />
-          </div>
-
-          <!-- atom for private parking optional ...need to discuss with team -->
-
-          <!-- price and distance -->
-          <div class="columns is-mobile">
-            <div class="column">
-              <atom-text
-                class="is-size-7"
-                :text-left="card.rate"
-                :text="rate"
-              />
-            </div>
-            <div class="column">
-              <atom-text
-                class="is-size-7"
-                :text-left="card.distance"
-                :text="distance"
-                :text-right="card.distanceUnit"
-              />
-            </div>
-          </div>
-
-          <div class="columns is-mobile">
-            <div class="column">
-              <atom-text
-                class="is-size-7"
-                :text-left="card.type"
-                :text="vehicle"
-              />
-            </div>
-            <div class="column">
-              <atom-text
-                class="is-size-7"
-                :text-left="card.slot"
-                :text="slots"
-              />
-            </div>
-          </div>
-          <!-- rating  and review-->
-          <div class="columns is-mobile">
-            <!-- <div class="column is-6"></div> -->
-            <atom-text
-              class="column is-size-7"
-              :text-left="card.starRating"
-              :text="rating"
-              :text-right="card.trating"
-            />
-            <!-- <atom-text class="column is-size-7" :text="reviews" /> -->
-          </div>
-        </div>
-        <div class="column is-3 is-align-content-center ps_center">
-          <atom-img class="image mb-3" :src="img" />
-
-          <atom-button
-            class="button is-small is-rounded is-warning"
-            :text="button"
-            v-on:click.native="onBook()"
-          />
         </div>
       </div>
     </div>
+    <br />
   </div>
 </template>
 <script>
@@ -158,7 +161,7 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-.m_srpcard {
+.card {
   border-bottom: 2px solid rgb(240, 224, 107);
 }
 .image {
