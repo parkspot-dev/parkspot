@@ -10,7 +10,7 @@
         <m-search-box
           class="search"
           @search="search"
-          @flytosrp="flytosrp"
+          @flytosrp="flytoSrp"
           :results="results"
         />
       </div>
@@ -56,15 +56,19 @@ export default {
       this.cresults = data.features;
       this.results = data.features.map((e) => e.place_name);
     },
-    flytosrp(result) {
-      this.userForm.location = result;
-      for (let i = 0; i < this.results.length; i++) {
-        if (this.results[i] === result) {
-          this.map.key += 1;
-          this.map.temp = [...this.cresults[i].center];
-          this.map.temp2[0] = this.cresults[i].center;
+    flytoSrp(value) {
+      var lng = null;
+      var lat = null;
+      for (var i = 0; i < this.cresults.length; i++) {
+        if (this.cresults[i].place_name === value) {
+          lng = this.cresults[i].center[0];
+          lat = this.cresults[i].center[1];
+          break;
         }
       }
+      this.$router
+        .push({ name: "srp", query: { lat: lat, lng: lng, loc: value } })
+        .catch((err) => {});
     },
   },
 };

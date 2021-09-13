@@ -76,6 +76,7 @@
             <atom-button
               class="button is-small is-rounded is-warning"
               :text="button"
+              :disabled="disabled"
               v-on:click.native="onBook()"
             />
           </div>
@@ -112,6 +113,12 @@ export default {
     // reviews: String,
     rating: String,
     siteId: String,
+    disabled: {
+      type: Boolean,
+      default() {
+        return false;
+      },
+    },
   },
   data() {
     return {

@@ -68,9 +68,9 @@ export default {
       var markerElement = document.createElement("div");
       markerElement.className = "marker";
       markerElement.style.backgroundImage = "url(" + this.img + ")";
-      markerElement.style.width = "60px";
-      markerElement.style.height = "60px";
-      markerElement.style.backgroundSize = "100%";
+      markerElement.style.width = "50px";
+      markerElement.style.height = "50px";
+      markerElement.style.backgroundSize = "110%";
 
       // popup info
       const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(

@@ -34,5 +34,18 @@ router.beforeEach((to, from, next) => {
   next()
 
 })
+router.beforeResolve((to, from, next) => {
+  // If this isn&apos;t an initial page load.
+  if (to.name) {
+    // Start the route progress bar.
+    NProgress.start()
+  }
+  next()
+})
+
+router.afterEach((to, from) => {
+  // Complete the animation of the route progress bar.
+  NProgress.done()
+})
 
 export default router

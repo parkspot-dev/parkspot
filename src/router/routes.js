@@ -29,7 +29,7 @@ export const routes = [
     name: 't-about',
     component: about,
     meta: {
-      title: "ParkSpot | About -  Get Parking Spot/Space , Rent Vacant Spot/Space"
+      title: "ParkSpot | About -  Get Parking Space , Rent Empty Space"
     }
   },
   {
@@ -109,6 +109,7 @@ export const routes = [
       }
     }
   },
+  // ! it will take " -mara/xyx"
   {
     path: '/bangalore/parking-near-*',
     name: 'discover',

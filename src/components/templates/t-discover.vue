@@ -41,6 +41,7 @@
             :rating="srp.Rating"
             :distance="srp.Distance"
             :site-id="srp.ID"
+            :disabled="srp.SlotsAvailable === 0 ? true : false"
           />
         </div>
         <br /><br />
