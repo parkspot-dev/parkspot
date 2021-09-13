@@ -11,7 +11,9 @@
           <ul>
             <li><atom-router-link :text="home" :link="hlink" /></li>
             <li class="is-active has-text-weight-semibold is-size-7">
-              <a href="#" aria-current="page">Parking near </a>
+              <a href="#" aria-current="page"
+                >Parking near {{ searchedText }}
+              </a>
             </li>
           </ul>
         </nav>
@@ -25,10 +27,16 @@
             :key="srp.ID"
             v-for="srp in cardData"
             :img="srp.IconURL"
-            :location="srp.Address"
+            :location="
+              srp.Address.slice(0, 36) +
+              (srp.Address.slice(36).length > 0 ? filler : empty)
+            "
             :rate="srp.Fee.Amount"
             :slots="srp.SlotsAvailable"
-            :title="srp.Name"
+            :title="
+              srp.Name.slice(0, 24) +
+              (srp.Name.slice(24).length > 0 ? filler : empty)
+            "
             :vehicle="srp.VehicleType"
             :rating="srp.Rating"
             :distance="srp.Distance"
@@ -36,7 +44,7 @@
           />
         </div>
         <br /><br />
-        <m-discover />
+        <m-discover :searchedText="searchedText" />
         <br /><br />
       </div>
     </div>
@@ -64,12 +72,15 @@ export default {
   name: "t-discover",
   props: {
     cardData: Array,
+    searchedText: String,
   },
   data() {
     return {
       home: "Home",
       hlink: "Home",
       card_title: "Parking near you",
+      filler: "...",
+      empty: "",
     };
   },
 };

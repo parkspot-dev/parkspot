@@ -110,11 +110,11 @@ export const routes = [
     }
   },
   {
-    path: '/parking-near-*',
+    path: '/bangalore/parking-near-*',
     name: 'discover',
     component: () => import('@/views/discover-page.vue'),
     meta: {
-      title: "ParkSpot | Blogs"
+      title: "Parking near "
     }
   },
 

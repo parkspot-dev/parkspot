@@ -1,8 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage";
-import { getFirestore } from "firebase/firestore";
 import { getDatabase, ref, get, child } from "firebase/database";
+
+
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -23,25 +23,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const firebase = initializeApp(firebaseConfig);
-const db = getDatabase(firebase)
-const dbref = ref(db);
-
-// seo-pages database
-const pageData = get(child(dbref, `seo-pages`)).then((snapshot) => {
-    if (snapshot.exists()) {
-
-        // console.log(snapshot.val());
-        return snapshot.val();
-    } else {
-        console.log("No data available");
-    }
-}).catch((error) => {
-    console.error(error);
-});
 
 export {
     firebase,
-    db,
-    dbref, pageData
+    getDatabase, ref, get, child
+    // dbref, pageData
     // app
 }
