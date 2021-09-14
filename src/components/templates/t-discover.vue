@@ -18,10 +18,20 @@
           </ul>
         </nav>
         <br />
-        <!-- <o-srp /> -->
-        <atom-text class="has-text-weight-semibold" :text="card_title" />
+
+        <atom-text
+          class="has-text-weight-semibold"
+          :text="card_title"
+          :textRight="show ? emptyMsg : ''"
+        />
+        <!--empty msg  -->
+
+        <figure style="text-align: center" class="mt-2">
+          <atom-img style="width: 250px" :src="emptyImg" v-if="show" />
+        </figure>
+
         <br />
-        <div class="columns">
+        <div class="columns" v-if="!show">
           <m-srpcard
             class="column"
             :key="srp.ID"
@@ -52,6 +62,7 @@
   </div>
 </template>
 <script>
+import AtomImg from "../atoms/atom-img/atom-img.vue";
 import AtomRouterLink from "../atoms/atom-link/atom-router-link.vue";
 import AtomBTitle from "../atoms/atom-text/atom-b-title.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
@@ -69,11 +80,13 @@ export default {
     AtomText,
     AtomBTitle,
     TDiscoverBanner,
+    AtomImg,
   },
   name: "t-discover",
   props: {
     cardData: Array,
     searchedText: String,
+    show: Boolean,
   },
   data() {
     return {
@@ -82,6 +95,8 @@ export default {
       card_title: "Parking near you",
       filler: "...",
       empty: "",
+      emptyImg: require("../../assets/stocks/empty.png"),
+      emptyMsg: " is currently not available!!",
     };
   },
 };

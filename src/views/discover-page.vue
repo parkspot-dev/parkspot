@@ -1,6 +1,10 @@
 <template>
   <div class="discover_page">
-    <t-discover :cardData="cardData" :searchedText="searchedText" />
+    <t-discover
+      :cardData="cardData"
+      :searchedText="searchedText"
+      :show="show"
+    />
   </div>
 </template>
 
@@ -15,6 +19,7 @@ export default {
     return {
       cardData: [],
       searchedText: "",
+      show: false,
     };
   },
   mounted() {
@@ -36,6 +41,7 @@ export default {
             return snapshot.val();
           } else {
             console.log("No data available");
+            this.show = !this.show;
           }
         })
         .catch((error) => {
