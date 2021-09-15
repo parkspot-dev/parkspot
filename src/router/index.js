@@ -25,11 +25,27 @@ router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title} ${to.params.postTitle}`
   } else if (to.name === "srp") {
     document.title = `${to.meta.title} ${to.query.loc}`
-  } else {
+  } else if (to.name === "discover") {
+    document.title = `${to.meta.title} ${to.params.pathMatch} - find and book best parking spot with ParkSpot`
+  }
+  else {
     document.title = `${to.meta.title}`
   }
   next()
 
+})
+router.beforeResolve((to, from, next) => {
+  // If this isn&apos;t an initial page load.
+  if (to.name) {
+    // Start the route progress bar.
+    NProgress.start()
+  }
+  next()
+})
+
+router.afterEach((to, from) => {
+  // Complete the animation of the route progress bar.
+  NProgress.done()
 })
 
 export default router

@@ -48,6 +48,7 @@
           @flytosrp="flyToSrp"
           :results="results"
           class="ps_search"
+          v-if="show"
         />
       </div>
     </div>
@@ -110,7 +111,7 @@ export default {
     } else {
       center = [Number(lng), Number(lat)];
     }
-
+    NProgress.start();
     const res = await fetch(
       `https://maya.parkspot.in/search?lat=${center[1]}&long=${center[0]}&start=20201115t1250&end=20201115t1400`
     );
@@ -129,7 +130,7 @@ export default {
     }
     this.center = this.calculateCentroid(this.markers);
     this.show = true;
-
+    NProgress.done();
     console.log("centererw", this.center);
   },
   methods: {

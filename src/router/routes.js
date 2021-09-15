@@ -29,7 +29,7 @@ export const routes = [
     name: 't-about',
     component: about,
     meta: {
-      title: "ParkSpot | About -  Get Parking Spot/Space , Rent Vacant Spot/Space"
+      title: "ParkSpot | About -  Get Parking Space , Rent Empty Space"
     }
   },
   {
@@ -107,6 +107,15 @@ export const routes = [
         alert("You have Entered wrong credentials!! Please try again")
         next("/search-portal")
       }
+    }
+  },
+  // ! it will take " -mara/xyx"
+  {
+    path: '/bangalore/parking-near-*',
+    name: 'discover',
+    component: () => import('@/views/discover-page.vue'),
+    meta: {
+      title: "Parking near "
     }
   },
 
