@@ -52,8 +52,8 @@ export default {
   transform-style: preserve-3d;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   animation: mymove infinite;
-  animation-duration: 4s;
-  animation-delay: 2s;
+  animation-duration: 8s;
+  animation-delay: 4s;
 }
 
 .o_product_card:hover .o_product_card_inner {
@@ -75,14 +75,27 @@ export default {
   from {
     transform: rotateY(0deg);
   }
-  to {
+  50% {
     transform: rotateY(180deg);
   }
-  /* 0%   {transform: rotateY(0deg);}
-  25%  {transform: rotateY(180deg);}
-  50%  {transform: rotateY(0deg);}
-  75%  {transform: rotateY(180deg);}
-  100% {transform: rotateY(0deg);} */
+  to {
+    transform: rotateY(360deg);
+  }
+  /* 0% {
+    transform: rotateY(0deg);
+  }
+  25% {
+    transform: rotateY(90deg);
+  }
+  50% {
+    transform: rotateY(180deg);
+  }
+  75% {
+    transform: rotateY(270deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  } */
 }
 .card_back {
   transform: rotateY(180deg);

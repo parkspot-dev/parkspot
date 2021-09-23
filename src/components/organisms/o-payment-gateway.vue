@@ -7,7 +7,7 @@
             <atom-text
               class="is-size-6-mobile is-size-5 has-text-weight-medium"
               :textLeft="nameText"
-              :text="dummy.name"
+              :text="bookingDetails.Name"
             />
             <atom-text
               class="is-size-6-mobile is-size-5 has-text-weight-medium"
@@ -73,13 +73,15 @@
             <span class="tooltiptext">{{ boxicon.netBanking.name }}</span>
           </div>
           <div class="media-content tooltip">
-            <atom-boxicon
-              style="cursor: pointer"
-              :types="boxicon.type"
-              :color="boxicon.color"
-              :size="boxicon.size"
-              :name="boxicon.wallet.name"
-            />
+            <a :href="dummy.paymentLink" target="_blank">
+              <atom-boxicon
+                style="cursor: pointer"
+                :types="boxicon.type"
+                :color="boxicon.color"
+                :size="boxicon.size"
+                :name="boxicon.wallet.name"
+              />
+            </a>
             <span class="tooltiptext">{{ boxicon.wallet.name }}</span>
           </div>
         </div>
@@ -96,12 +98,19 @@ import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
   components: { AtomText, AtomImg, AtomBoxicon },
   name: "o-payment-gateway",
+  props: {
+    bookingDetails: Object,
+    payGateDetails: Object,
+    payModeDetails: Object,
+  },
   data() {
     return {
       dummy: {
         name: "Sujeet Manjhi",
         date: "30th Aug 2021",
         amt: "2500",
+        paymentLink:
+          "https://payments-test.cashfree.com/order/#YL0gWcw1fSBh9oIKv2xn",
       },
       nameText: "Name:  ",
       dateText: "Due Date:  ",
@@ -169,6 +178,9 @@ export default {
       const data = await res.json();
       console.log("response cashfree");
       console.log(data);
+      const a = 10;
+      const b = 10;
+      console.log(a + b);
     },
   },
 };
@@ -190,31 +202,6 @@ export default {
   letter-spacing: 0.5px;
 }
 
-/* hover text  */
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 100px;
-  background-color: #ffdd57;
-  color: black;
-  text-align: center;
-  border-radius: 6px;
-  padding: 0.25px 0;
-  font-size: 12px;
-  letter-spacing: 0px;
-
-  /* Position the tooltip */
-  position: absolute;
-  z-index: 1;
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-}
 @media only screen and (min-width: 1024px) {
   .image {
     height: 65px;
@@ -226,6 +213,30 @@ export default {
     height: auto;
     width: 40vw;
     letter-spacing: 2px;
+  }
+  /* hover text  */
+  .tooltip {
+    position: relative;
+    display: inline-block;
+  }
+
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 100px;
+    background-color: #ffdd57;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 0.25px 0;
+    font-size: 12px;
+    letter-spacing: 0px;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+  }
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
   }
 }
 </style>

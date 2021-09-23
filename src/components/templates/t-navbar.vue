@@ -11,6 +11,7 @@
         <a
           role="button"
           class="navbar-burger"
+          :class="{ 'is-active': toggle }"
           aria-label="menu"
           aria-expanded="false"
           data-target="ps__navbar"

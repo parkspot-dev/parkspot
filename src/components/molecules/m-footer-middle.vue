@@ -16,10 +16,10 @@
     </div>
 
     <div class="columns is-vcentered">
-      <div class="column is-3">
+      <div class="column is-4">
         <atom-text class="is-size-6 mb-2" :text="text2" />
       </div>
-      <div class="column">
+      <div class="column is-6">
         <a href="https://www.instagram.com/parkspot.in/" target="_blank">
           <atom-boxicon
             class="mx-2"
@@ -61,7 +61,7 @@ export default {
   name: "m-footer-middle",
   data() {
     return {
-      text1: "Now Available on",
+      text1: "Available on",
       text2: "Follow us",
       src: require("@/assets/img/google-play-badge.png"),
       boxicons: {

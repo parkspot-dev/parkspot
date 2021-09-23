@@ -1,9 +1,24 @@
 <template>
   <div class="o_srp">
+    <div style="height: 100vh; position: relative" v-if="!show">
+      <vue-simple-spinner
+        style="
+          margin: 0;
+          position: relative;
+          top: 50%;
+          -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
+        "
+        size="large"
+        line-bg-color="#0085AD"
+        line-fg-color="#ffdd57"
+        message="Loading..."
+      />
+    </div>
     <div class="columns reverse-columns">
       <div class="column is-4 mt-4 mx-4">
         <div class="columns reverse-columns-custom">
-          <div class="column">
+          <div class="column" style="align-self: center">
             <div class="card-footer pb-0 pt-3">
               <jw-pagination
                 :items="srpResults"
@@ -11,6 +26,7 @@
                 :maxPages="5"
                 @changePage="onChangePage"
                 :labels="customLabels"
+                :styles="defaultStyles"
               ></jw-pagination>
             </div>
           </div>
@@ -35,6 +51,7 @@
         </div>
       </div>
       <m-empty-page v-if="errorPage" :error="errorData" />
+
       <div class="column is-8">
         <m-mapbox
           :data="markers"
@@ -57,33 +74,43 @@
 const customLabels = {
   first: "<<",
   last: ">>",
-  previous: "<",
-  next: ">",
+  previous: "Prev",
+  next: "Next",
 };
-// const customStyles = {
-//   ul: {
-//     border: "2px solid red",
-//   },
-//   li: {
-//     display: "inline-block",
-//     border: "2px dotted green",
-//   },
-//   a: {
-//     color: "blue",
-//   },
-// };
+const defaultStyles = {
+  ul: {
+    margin: 0,
+    padding: 0,
+    display: "inline-block",
+  },
+  li: {
+    listStyle: "none",
+    display: "inline",
+    textAlign: "center",
+  },
+  a: {
+    cursor: "pointer",
+    padding: "6px 12px",
+    display: "block",
+    float: "left",
+    border: "1px solid #ddd",
+    borderRadius: "20%",
+    // colorHover: "yellow",
+  },
+};
 
 import mSrpcard from "@/components/molecules/m-srpcard.vue";
 import mSearchBox from "@/components/molecules/m-search-box.vue";
 import MMapbox from "../molecules/m-mapbox.vue";
 import MEmptyPage from "../molecules/m-empty-page.vue";
+import VueSimpleSpinner from "vue-simple-spinner";
 export default {
-  components: { mSrpcard, mSearchBox, MMapbox, MEmptyPage },
+  components: { mSrpcard, mSearchBox, MMapbox, MEmptyPage, VueSimpleSpinner },
   name: "o-srp",
 
   data() {
     return {
-      // customStyles,
+      defaultStyles,
       customLabels,
       pageOfItems: [],
       srpResults: [],
@@ -210,14 +237,18 @@ export default {
   top: 15%;
   left: 55%;
 }
-
 /* pagination styles */
-/* .pagination .ul li.active {
-  background-color: #4caf50;
-  color: white;
-} */
+/* .pagination - Pagination component container (ul element)
+.pagination li - All list items in the pagination component
+.pagination li a - All pagination links including first, last, previous and next
+.pagination li.page-number - All page numbers (1, 2, 3 etc) pagination elements
+.pagination li.first - The 'First' pagination element
+.pagination li.last - The 'Last' pagination element
+.pagination li.previous - The 'Previous' pagination element
+.pagination li.next - The 'Next' pagination element */
+
 .reverse-columns-custom {
-  flex-direction: column-reverse;
+  flex-direction: column;
   display: flex;
 }
 @media (max-width: 767px) {

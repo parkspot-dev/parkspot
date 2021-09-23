@@ -72,9 +72,9 @@ export default {
 .ps_hover:hover {
   font-weight: bold;
   color: #ffdd57;
-  border-bottom: 2px solid blue;
+  border-bottom: 2px solid #0085ad;
 }
 .ps_active {
-  border-bottom: 2px solid blue;
+  border-bottom: 2px solid #0085ad;
 }
 </style>

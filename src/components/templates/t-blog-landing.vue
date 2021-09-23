@@ -30,6 +30,7 @@
 import AtomRouterLink from "../atoms/atom-link/atom-router-link.vue";
 import AtomBTitle from "../atoms/atom-text/atom-b-title.vue";
 import oBlogBox from "../organisms/o-blog-box.vue";
+
 export default {
   components: { oBlogBox, AtomBTitle, AtomRouterLink },
   name: "t-blog-landing",
