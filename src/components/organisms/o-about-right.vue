@@ -3,15 +3,13 @@
     <atom-b-title
       class="is-size-3-mobile is-size-2 mb-2 has-text-centered"
       :text="title"
-      v-scroll-reveal
     />
     <atom-b-subtitle
       class="is-size-7-mobile is-size-6 has-text-justified"
       :text="para"
-      v-scroll-reveal
     />
     <br />
-    <m-about-right-bottom v-scroll-reveal />
+    <m-about-right-bottom />
   </div>
 </template>
 

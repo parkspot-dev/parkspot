@@ -84,6 +84,9 @@ export default {
 </script>
 
 <style scoped>
+.box {
+  height: 100%;
+}
 .ps_mb {
   margin-bottom: 50px;
 }
