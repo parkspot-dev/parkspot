@@ -49,20 +49,28 @@ export default {
     const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
       `<h1><b>Your current/searched location</b></h1>`
     );
-    var marker = new mapboxgl.Marker({
+    var marker2 = new mapboxgl.Marker({
       draggable: this.drag,
     })
       .setPopup(popup)
       .setLngLat(this.center)
       .addTo(this.map);
+    if (this.$route.name === "VOPortal") {
+      this.map.on("click", (e) => {
+        marker2.setPopup(popup).setLngLat(e.lngLat).addTo(this.map);
+      });
+    }
+    var lngLat = marker2.getLngLat();
+    this.ltlng = lngLat;
+    this.$emit("location", this.ltlng);
 
     for (let i = 0; i < this.data.length; i++) {
       var markerElement = document.createElement("div");
       markerElement.className = "marker";
       markerElement.style.backgroundImage = "url(" + this.img + ")";
-      markerElement.style.width = "60px";
-      markerElement.style.height = "60px";
-      markerElement.style.backgroundSize = "100%";
+      markerElement.style.width = "50px";
+      markerElement.style.height = "50px";
+      markerElement.style.backgroundSize = "110%";
 
       // popup info
       const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
@@ -75,12 +83,6 @@ export default {
         .setPopup(popup)
         .setLngLat(this.data[i])
         .addTo(this.map);
-
-      marker.on("dragend", () => {
-        var lngLat = marker.getLngLat();
-        this.ltlng = lngLat;
-        this.$emit("location", this.ltlng);
-      });
     }
   },
   methods: {

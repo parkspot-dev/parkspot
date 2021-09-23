@@ -23,14 +23,15 @@
 
             <!-- <div v-if="currBlog.id == 2">Blog 2</div> -->
           </article>
+          <o-comment style="margin: 0 10% 0 10%" />
         </div>
         <o-recent class="column" :blogDetails="nextBlog" :check="currBlog.id" />
       </div>
-      <div class="columns">
-        <div class="column is-3"></div>
+      <!-- <div class="columns">
+        <div class="column is-1"></div>
         <o-comment class="column" />
-        <div class="column is-3"></div>
-      </div>
+        <div class="column is-4"></div>
+      </div> -->
     </div>
   </div>
 </template>

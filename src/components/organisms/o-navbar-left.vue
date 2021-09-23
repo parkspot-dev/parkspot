@@ -1,9 +1,9 @@
 <template>
   <div class="o_navbar_left">
-    <router-link to="/Home">
+    <router-link to="/">
       <atom-img id="ps_size_change" :src="src1" />
     </router-link>
-    <router-link to="/Home">
+    <router-link to="/">
       <atom-img class="ps_size_change_text" :src="src2" />
     </router-link>
   </div>
@@ -28,7 +28,7 @@ export default {
     padding:0;
 } */
 #ps_size_change {
-  width: 39px;
+  width: 45px;
   min-height: 36px;
 }
 .ps_size_change_text {
@@ -36,8 +36,8 @@ export default {
 }
 @media only screen and (min-width: 1024px) {
   #ps_size_change {
-    width: 71px;
-    min-height: 64px;
+    width: 65px;
+    min-height: 50px;
   }
   .ps_size_change_text {
     display: block;

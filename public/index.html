@@ -13,7 +13,9 @@
 		<!-- CSS only -->
 		<link rel="preload" href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" as="style"
 			onload="this.onload=null;this.rel='stylesheet'">
-		<title> Find and Book parking spaces nearby | Bangalore Delhi Mumbai Pune Bengaluru | Parkspot.in </title>
+		<title>
+			<%= process.env.VUE_APP_TITLE %>
+		</title>
 		<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description"
@@ -63,18 +65,19 @@
 		  "image" : "https://drive.google.com/file/d/1aMP5kWvStDh-mVRoZRtsoc2dZMZ0_f75/view?usp=sharing"
 		}
 	</script>
+		<!-- nprogess bar -->
+		<link href="https://unpkg.com/nprogress@0.2.0/nprogress.css" rel="stylesheet" />
+		<script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
 	</head>
 
 	<body>
-
 
 		<!-- Google Tag Manager (noscript) -->
 		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KDFHGZN" height="0" width="0"
 				style="display:none;visibility:hidden"></iframe></noscript>
 		<!-- End Google Tag Manager (noscript) -->
 		<noscript>
-			<strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript
-					enabled!
+			<strong>We're sorry but <%= process.env.Vue_APP_TITLE %> doesn't work properly without JavaScript enabled!
 					Please enable it to continue.</strong>
 		</noscript>
 		<div id="app"></div>

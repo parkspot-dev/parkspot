@@ -9,6 +9,7 @@
       :text="navlink.text"
       :link="navlink.link"
     />
+    <!-- <span></span> -->
     <!-- <div class="navbar-item has-text-centered ">
       <atom-button
         class="button is-warning is-rounded has-text-weight-semibold"
@@ -74,6 +75,11 @@ export default {
   color: #ffdd57;
   border-bottom: 2px solid #0085ad;
 }
+/* .ps_hover:hover:after {
+  opacity: 1;
+  visibility: visible;
+  height: 100%;
+} */
 .ps_active {
   border-bottom: 2px solid #0085ad;
 }

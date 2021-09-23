@@ -17,6 +17,7 @@
 import AtomImg from "@/components/atoms/atom-img/atom-img.vue";
 import OAboutRight from "@/components/organisms/o-about-right.vue";
 export default {
+  title: "ParkSpot - About",
   components: { AtomImg, OAboutRight },
   name: "t-about",
   data() {

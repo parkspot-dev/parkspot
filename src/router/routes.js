@@ -1,5 +1,4 @@
-import Home from '@/views/Home.vue'
-import Thanks from '@/views/Thanks.vue'
+import Home from '../views/Home.vue'
 import about from '@/components/templates/t-about.vue'
 
 
@@ -9,6 +8,9 @@ export const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+    meta: {
+      title: "Find and Book parking spaces nearby | Bangalore Delhi Mumbai Pune Bengaluru | Parkspot.in"
+    }
   },
   {
     path: '/faq',
@@ -16,56 +18,66 @@ export const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import('@/views/Faq.vue')
+    component: () => import('@/views/Faq.vue'),
+    meta: {
+      title: "FAQ's - Get your all queries be answered..."
+    }
   },
-  {
-    path: '/thanks',
-    name: 'Thanks',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: Thanks
-  },
+
   {
     path: '/#about',
     name: 't-about',
-    component: about
+    component: about,
+    meta: {
+      title: "ParkSpot | About -  Get Parking Space , Rent Empty Space"
+    }
   },
   {
     path: '/abc#features',
     name: 't-features',
-    component: () => import('@/components/templates/t-features.vue')
+    component: () => import('@/components/templates/t-features.vue'), meta: {
+      title: "ParkSpot | Features"
+    }
   },
   {
     path: '/contact',
     name: 't-contact',
-    component: () => import('@/components/templates/t-contact.vue')
+    component: () => import('@/components/templates/t-contact.vue'),
+    meta: {
+      title: "ParkSpot | Contact Us"
+    }
   },
   {
     path: '/srp',
     name: 'srp',
-    // beforeRouteUpdate(to, from, next) {
-    //   // react to route changes...
-    //   console.log(`to ${to} from ${from}`)
-    //   // don't forget to call next()
-    //   next()
-    // },
-    component: () => import('@/views/Srp.vue')
+    component: () => import('@/views/Srp.vue'),
+    meta: {
+      title: "ParkSpot | Search - "
+    }
   },
   {
-    path: '/request-your-parking-spot',
+    path: '/get-parking-spot',
     name: 'VOPortal',
-    component: () => import('@/views/new-portal.vue')
+    component: () => import('@/views/VO-portal.vue'),
+    meta: {
+      title: "ParkSpot | Get parking spot"
+    }
   },
   {
     path: '/terms-and-conditions',
     name: 'Terms',
-    component: () => import('@/views/Terms.vue')
+    component: () => import('@/views/Terms.vue'),
+    meta: {
+      title: "ParkSpot | Terms & Conditions"
+    }
   },
   {
     path: '/blog',
     name: 'blog',
-    component: () => import('@/views/landing-blog.vue')
+    component: () => import('@/views/landing-blog.vue'),
+    meta: {
+      title: "ParkSpot | Blogs"
+    }
   },
   {
     path: '/blog/:id',
@@ -74,11 +86,17 @@ export const routes = [
     // props: (route) => ({
     //   data: userData,
     // })
+    meta: {
+      title: "ParkSpot | Blogs - "
+    }
   },
   {
     path: '/search-portal',
     name: 'searchPortal',
     component: () => import('@/views/search-portal.vue'),
+    meta: {
+      title: "ParkSpot | Search Portal"
+    },
     beforeEnter: (to, from, next) => {
       let userName = prompt("Enter User Name:");
       let password = prompt("Enter Password:");
@@ -101,6 +119,15 @@ export const routes = [
 
   //   // }
   // },
+  // ! it will take " -mara/xyx"
+  {
+    path: '/bangalore/parking-near-*',
+    name: 'discover',
+    component: () => import('@/views/discover-page.vue'),
+    meta: {
+      title: "Parking near "
+    }
+  },
 
   {
     path: '*',

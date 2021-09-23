@@ -16,6 +16,7 @@
       />
     </div>
     <div class="columns reverse-columns">
+      <!-- <div class="column"></div> -->
       <div class="column is-4 mt-4 mx-4">
         <div class="columns reverse-columns-custom">
           <div class="column" style="align-self: center">
@@ -64,6 +65,7 @@
           @flytosrp="flyToSrp"
           :results="results"
           class="ps_search"
+          v-if="show"
         />
       </div>
     </div>
@@ -136,7 +138,7 @@ export default {
     } else {
       center = [Number(lng), Number(lat)];
     }
-
+    NProgress.start();
     const res = await fetch(
       `https://maya.parkspot.in/search?lat=${center[1]}&long=${center[0]}&start=20201115t1250&end=20201115t1400`
     );
@@ -155,7 +157,7 @@ export default {
     }
     this.center = this.calculateCentroid(this.markers);
     this.show = true;
-
+    NProgress.done();
     console.log("centererw", this.center);
   },
   methods: {
@@ -204,7 +206,6 @@ export default {
     },
 
     flyToSrp(value) {
-      console.log(value);
       var lng = null;
       var lat = null;
       for (var i = 0; i < this.cresults.length; i++) {
@@ -216,7 +217,7 @@ export default {
       }
       console.log(this.$route);
       this.$router
-        .push({ name: "srp", query: { lat: lat, lng: lng } })
+        .push({ name: "srp", query: { lat: lat, lng: lng, loc: value } })
         .catch((err) => {});
     },
     onBook(index) {
@@ -227,9 +228,6 @@ export default {
 </script>
 
 <style scoped>
-.o_srp {
-  background-color: #ececec;
-}
 .ps_search {
   position: absolute;
   width: 30%;

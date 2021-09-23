@@ -18,7 +18,6 @@ export default {
     },
     nextBlog() {
       let blogs = this.$route.params.data;
-
       return blogs;
     },
   },
