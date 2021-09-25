@@ -1,6 +1,6 @@
 <template>
   <div class="o_testimonials">
-    <div class="columns is-vcentered">
+    <div class="columns">
       <div class="column is-4">
         <m-testimonial-user
           :key="i"
@@ -120,4 +120,12 @@ export default {
 };
 </script>
 
-    
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>

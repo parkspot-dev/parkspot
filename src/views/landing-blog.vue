@@ -28,6 +28,13 @@ export default {
           postSummary:
             "Parking has been a major concern in major cities. Due to fewer parking spaces, people have to spend a lot of time searching for the...",
         },
+        {
+          id: 3,
+          postTitle: "NO Parking",
+          postImage: require("@/assets/img/blog3.jpg"),
+          postSummary:
+            "Parking problems have always been an issue and this issue has grown exponentially with the increase of population. In order to tackl...",
+        },
       ],
     };
   },

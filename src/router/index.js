@@ -14,10 +14,19 @@ Vue.use(VueRouter)
 //		next({path: "/"})
 //	}
 //})
+let scrollBehavior = (to, from, savedPosition) => {
+  // return desired position
+  if (savedPosition) {
+    return savedPosition
+  } else {
+    return { x: 0, y: 0 }
+  }
+}
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes
+  routes,
+  scrollBehavior
 })
 router.beforeEach((to, from, next) => {
   console.log(to)
@@ -34,18 +43,6 @@ router.beforeEach((to, from, next) => {
   next()
 
 })
-router.beforeResolve((to, from, next) => {
-  // If this isn&apos;t an initial page load.
-  if (to.name) {
-    // Start the route progress bar.
-    NProgress.start()
-  }
-  next()
-})
 
-router.afterEach((to, from) => {
-  // Complete the animation of the route progress bar.
-  NProgress.done()
-})
 
 export default router

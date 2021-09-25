@@ -19,6 +19,7 @@
         </div>
       </div>
     </div>
+    <br />
   </div>
 </template>
 
@@ -41,3 +42,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+.card {
+  cursor: pointer;
+  border-radius: 30px;
+}
+.card-image {
+  overflow: hidden;
+  border-radius: 30px;
+}
+</style>

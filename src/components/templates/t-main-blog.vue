@@ -19,6 +19,8 @@
           <article>
             <BlogOne v-if="currBlog.id == 1" />
             <blog-2 v-if="currBlog.id == 2" />
+            <blog-3 v-if="currBlog.id == 3" />
+
             <!-- <div v-if="currBlog.id == 2">Blog 2</div> -->
           </article>
           <o-comment style="margin: 0 10% 0 10%" />
@@ -41,10 +43,19 @@ import ORecent from "../organisms/o-recent.vue";
 import BlogOne from "@/pages/blogs/components/Blog1.vue";
 import OBlogBox from "../organisms/o-blog-box.vue";
 import Blog2 from "../../pages/blogs/components/blog2.vue";
+import Blog3 from "../../pages/blogs/components/blog3.vue";
 
 export default {
   name: "t-main-blog",
-  components: { AtomRouterLink, ORecent, OComment, BlogOne, OBlogBox, Blog2 },
+  components: {
+    AtomRouterLink,
+    ORecent,
+    OComment,
+    BlogOne,
+    OBlogBox,
+    Blog2,
+    Blog3,
+  },
   props: ["currBlog", "nextBlog"],
   data() {
     return {

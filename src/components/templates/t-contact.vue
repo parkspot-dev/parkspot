@@ -1,18 +1,16 @@
 <template>
-  <section class="t_contact hero is-medium">
-    <div class="hero-body">
+  <section class="t_contact section">
       <div class="container">
         <atom-b-title
-          class="is-size-3-mobile is-size-2 ps_mb has-text-centered"
+          class="is-size-3-mobile is-size-2 mb-6 has-text-centered"
           :text="title"
         />
         <div class="columns">
-          <div class="column is-2"></div>
+          
           <o-contact-left class="column" />
           <o-contact-right class="column" />
           <!-- <div class="column"></div> -->
         </div>
-      </div>
     </div>
   </section>
 </template>
@@ -33,16 +31,8 @@ export default {
 </script>
 
 <style scoped>
-.ps_mb {
-  margin-bottom: 50px;
-}
 .t_contact {
   background-color: #ececec;
 }
 
-@media only screen and (min-width: 1024px) {
-  .ps_mb {
-    margin-bottom: 150px;
-  }
-}
 </style>

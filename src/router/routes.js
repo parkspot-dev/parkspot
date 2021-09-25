@@ -25,7 +25,7 @@ export const routes = [
   },
 
   {
-    path: '/about',
+    path: '/#about',
     name: 't-about',
     component: about,
     meta: {
@@ -33,7 +33,7 @@ export const routes = [
     }
   },
   {
-    path: '/features',
+    path: '/abc#features',
     name: 't-features',
     component: () => import('@/components/templates/t-features.vue'), meta: {
       title: "ParkSpot | Features"
@@ -109,6 +109,16 @@ export const routes = [
       }
     }
   },
+  // {
+  //   path: '/payment/validate',
+  //   name: 'paymentGateway',
+  //   component: () => import('@/views/payment-gateway.vue'),
+  //   // beforeEnter: (to, from, next) => {
+  //   //   console.log(to.query)
+  //   //   next()
+
+  //   // }
+  // },
   // ! it will take " -mara/xyx"
   {
     path: '/bangalore/parking-near-*',

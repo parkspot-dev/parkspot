@@ -1,5 +1,5 @@
 <template>
-  <section class="t_features section">
+  <section class="t_features section" id="features">
     <div class="container">
       <atom-b-title
         class="is-size-3-mobile is-size-2 ps_mb has-text-centered"
@@ -84,6 +84,9 @@ export default {
 </script>
 
 <style scoped>
+.box {
+  height: 100%;
+}
 .ps_mb {
   margin-bottom: 50px;
 }

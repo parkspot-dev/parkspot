@@ -2,8 +2,8 @@
   <footer class="footer ps_footer_color">
     <div class="container">
       <o-footer-top />
-      <br>
-      <o-footer-bottom />
+      <br />
+      <o-footer-bottom class="ps_line" />
     </div>
   </footer>
 </template>
@@ -24,7 +24,16 @@ export default {
   background-color: #242329;
   color: white;
 }
-.footer{
+.footer {
   padding-bottom: 100px;
+}
+.ps_line {
+  border-top: 1px solid #8e8e8e;
+  padding-top: 30px;
+}
+@media only screen and (min-width: 1024px) {
+  .footer {
+    padding-bottom: 50px;
+  }
 }
 </style>

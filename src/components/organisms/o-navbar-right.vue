@@ -3,7 +3,7 @@
     <atom-router-link
       :key="i"
       v-for="(navlink, i) in navLinks"
-      class="navbar-item has-text-centered ps_hover"
+      class="has-text-weight-bold navbar-item has-text-centered ps_hover"
       :class="[i === isActive ? 'ps_active' : '']"
       v-on:click.native="psfilter(i)"
       :text="navlink.text"
@@ -73,7 +73,7 @@ export default {
 .ps_hover:hover {
   font-weight: bold;
   color: #ffdd57;
-  border-bottom: 2px solid blue;
+  border-bottom: 2px solid #0085ad;
 }
 /* .ps_hover:hover:after {
   opacity: 1;
@@ -81,6 +81,6 @@ export default {
   height: 100%;
 } */
 .ps_active {
-  border-bottom: 2px solid blue;
+  border-bottom: 2px solid #0085ad;
 }
 </style>

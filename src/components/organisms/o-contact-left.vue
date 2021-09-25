@@ -13,8 +13,7 @@ export default {
   name: "o-contact-left",
   data() {
     return {
-      para:
-        `If you have any questions or just want to get in touch with us, use the form beside.\n\nWe are looking forward to hear from you!`,
+      para: `If you have any questions or just want to get in touch with us, use the form beside.\n\nWe are looking forward to hear from you!`,
       src: require("@/assets/img/email.svg"),
     };
   },
@@ -27,6 +26,6 @@ export default {
 }
 .ps_img {
   display: block;
-  max-width: 65%;
+  max-width: 50%;
 }
 </style>

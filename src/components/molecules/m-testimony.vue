@@ -39,6 +39,7 @@ export default {
 
 <style scoped>
 .card {
+  border-radius: 30px;
   padding: 80px 40px;
 }
 .ps_text {
@@ -49,5 +50,13 @@ export default {
 }
 .star {
   float: right;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

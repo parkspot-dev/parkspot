@@ -71,9 +71,6 @@ export default {
     },
     //this is from input element
     search(value) {
-      // console.log(value)
-      // let searchData = ""
-      // searchData =  searchData + value.data
       this.toggle = true;
       this.$emit("search", value);
     },

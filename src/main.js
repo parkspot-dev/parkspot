@@ -8,6 +8,7 @@ import LazyLoadDirective from "./directives/LazyLoadDirective.vue";
 import JwPagination from 'jw-vue-pagination';
 import 'bulma/css/bulma.css'
 
+
 Vue.component('jw-pagination', JwPagination);
 Vue.directive("lazyload", LazyLoadDirective);
 Vue.use(VueResource);
