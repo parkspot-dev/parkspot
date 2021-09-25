@@ -25,7 +25,7 @@ export const routes = [
   },
 
   {
-    path: '/#about',
+    path: '/about',
     name: 't-about',
     component: about,
     meta: {
@@ -33,7 +33,7 @@ export const routes = [
     }
   },
   {
-    path: '/abc#features',
+    path: '/features',
     name: 't-features',
     component: () => import('@/components/templates/t-features.vue'), meta: {
       title: "ParkSpot | Features"
