@@ -13,12 +13,9 @@
         </div>
 
         <hr />
-        <img :src="blogimg" alt="" />
-<<<<<<< HEAD
-        <h1>Eliminating Traffic jams in India!</h1>
-=======
-        <h1>Parking Challenges in Office Area</h1>
->>>>>>> master
+        <img :src="blogimg" alt="Traffic jams in India" />
+        <br />
+        <br />
         <p>
           In the recent years all over the globe production and demand for motor
           vehicles has increased dramatically. Earlier motor vehicles were a
@@ -73,28 +70,16 @@
           for a parking space can use. This will help our weak parking
           infrastructure in the battle to curb traffic congestion.
         </p>
-<<<<<<< HEAD
-
-=======
         <br />
->>>>>>> master
         <p>
           Join hands with ParkSpot and help us win this fight against traffic
           jams
         </p>
 
         <br />
-<<<<<<< HEAD
-=======
-        <p>
-          send us mail to
-          <a href="mailto:connect@parkspot.in">connect@parkspot.in</a> to join
-          list your parking spots in our platform.
-        </p>
 
         <br />
         <br />
->>>>>>> master
         <img :src="parkspotimg" alt="" />
         <p>
           Let us know if you also have similar parking issues, and what solution
