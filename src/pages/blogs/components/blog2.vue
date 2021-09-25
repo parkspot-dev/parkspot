@@ -6,14 +6,14 @@
         <h1 class="is-size-2">Parking Challenges in Office Area</h1>
         <div id="authorDetails">
           <img class="round" :src="dp" alt="" />
-          <p class="has-text-success is-size-6">Anonymous</p>
+          <p class="has-text-success is-size-6">Sujeet Kumar</p>
           <p class="has-text-dark is-size-6">Aug 5, 2021</p>
           <p class="has-text-dark is-size-6">5 min read</p>
           <p></p>
         </div>
 
         <hr />
-        <img :src="blogimg" alt="" />
+        <img :src="blogimg" alt="Office Area" />
         <h1>Parking Challenges in Office Area</h1>
         <p>
           Parking has been a major concern in major cities. Due to fewer parking
