@@ -14,11 +14,8 @@
 
         <hr />
         <img :src="blogimg" alt="" />
-        <<<<<<< HEAD
         <h1>Eliminating Traffic jams in India!</h1>
-        =======
-        <h1>Parking Challenges in Office Area</h1>
-        >>>>>>> master
+
         <p>
           In the recent years all over the globe production and demand for motor
           vehicles has increased dramatically. Earlier motor vehicles were a
