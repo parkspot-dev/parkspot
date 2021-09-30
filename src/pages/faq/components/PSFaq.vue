@@ -88,6 +88,6 @@ export default {
   width: 80%;
 }
 .wrappermain {
-  background: hsl(48, 100%, 67%);
+  background-color: #ececec;
 }
 </style>

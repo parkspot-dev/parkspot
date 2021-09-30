@@ -1,8 +1,9 @@
 <template>
   <div class="o_footer_top columns">
-    <m-footer-left   class="column" />
+    <m-footer-left class="column" />
+    <div class="column" style="max-width: 9.283819628647215vh"></div>
     <m-footer-middle class="column" />
-    <m-footer-right  class="column"/>
+    <m-footer-right class="column" />
   </div>
 </template>
 <script>
