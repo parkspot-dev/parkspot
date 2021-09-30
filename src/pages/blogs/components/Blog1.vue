@@ -13,9 +13,9 @@
         </div>
 
         <hr />
-        <img :src="blogimg" alt="" />
-        <h1>Eliminating Traffic jams in India!</h1>
-
+        <img :src="blogimg" alt="Traffic jams in India" />
+        <br />
+        <br />
         <p>
           In the recent years all over the globe production and demand for motor
           vehicles has increased dramatically. Earlier motor vehicles were a
@@ -76,6 +76,9 @@
           jams
         </p>
 
+        <br />
+
+        <br />
         <br />
         <img :src="parkspotimg" alt="" />
         <p>
