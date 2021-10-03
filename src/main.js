@@ -7,6 +7,7 @@ import VueScrollReveal from 'vue-scroll-reveal';
 import LazyLoadDirective from "./directives/LazyLoadDirective.vue";
 import JwPagination from 'jw-vue-pagination';
 import 'bulma/css/bulma.css'
+import store from './store'
 
 
 Vue.component('jw-pagination', JwPagination);
@@ -26,5 +27,6 @@ Vue.use(VueScrollReveal, {
 
 new Vue({
   router,
+  store,
   render: (h) => h(App)
 }).$mount('#app');

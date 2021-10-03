@@ -4,7 +4,7 @@
     <br />
     <div class="mainp">
       <div class="content">
-        <div class="is-size-1 has-text-black">Frequently Asked Questions</div>
+        <h1 class="is-size-2 has-text-black">Frequently Asked Questions</h1>
       </div>
 
       <article class="message">
@@ -87,7 +87,16 @@ export default {
   margin: 0 auto;
   width: 80%;
 }
+.content {
+  text-align: center;
+}
 .wrappermain {
   background-color: #ececec;
+}
+.message-header {
+  background-color: #0085ad;
+}
+.message-body {
+  background-color: #ffdd57;
 }
 </style>

@@ -11,7 +11,14 @@ module.exports = {
                 // Absolute path to compiled SPA
                 staticDir: path.resolve(__dirname, './dist'),
                 // List of routes to prerender
-                routes: ['/about', '/contact', '/features', '/faq', '/blog', '/blog/1', '/blog/2', '/blog/3'],
+                routes: ['/about', '/contact', '/features', '/faq', '/blog', '/blog/1', '/blog/2', '/blog/3',
+                    '/bangalore/parking-near-jp-nagar',
+                    '/bangalore/parking-near-bommanahalli',
+                    '/bangalore/parking-near-banashankari',
+                    '/bangalore/parking-near-btm',
+                    '/bangalore/parking-near-rajajinagar',
+                    '/bangalore/parking-near-marathahalli',
+                ],
 
                 // * If some thing goes wrong then
                 // todo: In the Vue.config.js file, make headless to false. By default, 

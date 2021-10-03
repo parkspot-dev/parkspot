@@ -4,24 +4,9 @@
       :key="i"
       v-for="(navlink, i) in navLinks"
       class="has-text-weight-bold navbar-item has-text-centered ps_hover"
-      :class="[i === isActive ? 'ps_active' : '']"
-      v-on:click.native="psfilter(i)"
       :text="navlink.text"
       :link="navlink.link"
     />
-    <!-- <span></span> -->
-    <!-- <div class="navbar-item has-text-centered ">
-      <atom-button
-        class="button is-warning is-rounded has-text-weight-semibold"
-        :text="button1"
-      />
-    </div>
-    <div class="navbar-item has-text-centered">
-      <atom-button
-        class="button  is-rounded has-text-weight-semibold"
-        :text="button2"
-      />
-    </div> -->
   </div>
 </template>
 
@@ -58,29 +43,29 @@ export default {
       },
       button1: "Log In",
       button2: "Sign Up",
-      isActive: "",
     };
-  },
-  methods: {
-    psfilter(i) {
-      this.isActive = i;
-    },
   },
 };
 </script>
 
 <style scoped>
-.ps_hover:hover {
-  font-weight: bold;
-  color: #ffdd57;
-  border-bottom: 2px solid #0085ad;
+.ps_hover:before {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  left: 0px;
+  bottom: 0px;
+  content: "";
+  background: #ffe08a;
+  opacity: 0.3;
+  transition: all 0.3s;
 }
-/* .ps_hover:hover:after {
-  opacity: 1;
-  visibility: visible;
+.ps_hover:hover:before {
   height: 100%;
-} */
-.ps_active {
+}
+.router-link-exact-active {
   border-bottom: 2px solid #0085ad;
+  background: #ffe08a;
+  color: #0085ad;
 }
 </style>
