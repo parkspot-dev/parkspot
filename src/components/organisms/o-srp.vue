@@ -1,20 +1,6 @@
 <template>
   <div class="o_srp">
-    <div style="height: 100vh; position: relative" v-if="!show">
-      <vue-simple-spinner
-        style="
-          margin: 0;
-          position: relative;
-          top: 50%;
-          -ms-transform: translateY(-50%);
-          transform: translateY(-50%);
-        "
-        size="large"
-        line-bg-color="#0085AD"
-        line-fg-color="#ffdd57"
-        message="Loading..."
-      />
-    </div>
+    <m-loading-page v-if="!show" style="height: 100vh; position: relative" />
     <div class="columns reverse-columns">
       <!-- <div class="column"></div> -->
       <div class="column is-4 mt-4 mx-4">
@@ -105,9 +91,15 @@ import mSrpcard from "@/components/molecules/m-srpcard.vue";
 import mSearchBox from "@/components/molecules/m-search-box.vue";
 import MMapbox from "../molecules/m-mapbox.vue";
 import MEmptyPage from "../molecules/m-empty-page.vue";
-import VueSimpleSpinner from "vue-simple-spinner";
+import MLoadingPage from "../molecules/m-loading-page.vue";
 export default {
-  components: { mSrpcard, mSearchBox, MMapbox, MEmptyPage, VueSimpleSpinner },
+  components: {
+    mSrpcard,
+    mSearchBox,
+    MMapbox,
+    MEmptyPage,
+    MLoadingPage,
+  },
   name: "o-srp",
 
   data() {

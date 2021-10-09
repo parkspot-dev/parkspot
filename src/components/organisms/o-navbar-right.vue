@@ -1,12 +1,17 @@
 <template>
   <div class="o-navbar-right">
-    <atom-router-link
+    <div
+      class="navbar-item has-text-centered"
       :key="i"
       v-for="(navlink, i) in navLinks"
-      class="has-text-weight-bold navbar-item has-text-centered ps_hover"
-      :text="navlink.text"
-      :link="navlink.link"
-    />
+    >
+      <atom-router-link
+        class="has-text-weight-bold navlink"
+        :text="navlink.text"
+        :link="navlink.link"
+        v-on:click.native="isClose"
+      />
+    </div>
   </div>
 </template>
 
@@ -45,27 +50,28 @@ export default {
       button2: "Sign Up",
     };
   },
+  methods: {
+    isClose() {
+      this.$emit("toggle:close");
+    },
+  },
 };
 </script>
 
 <style scoped>
-.ps_hover:before {
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  left: 0px;
-  bottom: 0px;
-  content: "";
-  background: #ffe08a;
-  opacity: 0.3;
-  transition: all 0.3s;
+/* .o-navbar-right {
+  padding: 35px 0 35px;
+} */
+.navlink {
+  color: #4a4a4a;
 }
-.ps_hover:hover:before {
-  height: 100%;
+.navlink:hover {
+  border-bottom: 2px solid #0085ad;
+  color: #ffe08a;
 }
 .router-link-exact-active {
   border-bottom: 2px solid #0085ad;
-  background: #ffe08a;
+  /* background: #ffe08a; */
   color: #0085ad;
 }
 </style>

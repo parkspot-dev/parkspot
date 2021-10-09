@@ -1,5 +1,5 @@
 <template>
-  <section class="t_team section mt-2">
+  <section class="t_team section">
     <div class="container">
       <atom-b-title
         class="is-size-3-mobile is-size-2 ps_mb has-text-centered"
@@ -22,7 +22,11 @@
               :src="team.src"
             />
             <div class="ps_middle">
-              <o-team-card-back :git="team.git" :linkd="team.linkedin" :twitter="team.twitter"/>
+              <o-team-card-back
+                :git="team.git"
+                :linkd="team.linkedin"
+                :twitter="team.twitter"
+              />
             </div>
           </div>
         </slide>

@@ -2,8 +2,11 @@
   <div class="payment_gateway">
     <t-payment-gateway
       :bookingDetails="bookingDetails"
-      :payGateDetails="payGateDetails"
-      :payModeDetails="payModeDetails"
+      :paymentMode="paymentMode"
+      :status="status"
+      :error="error"
+      :success="success"
+      :pending="pending"
     />
   </div>
 </template>
@@ -15,12 +18,30 @@ export default {
   data() {
     return {
       bookingDetails: {},
-      payGateDetails: {},
-      payModeDetails: {},
+      paymentMode: {},
+      status: false,
+      error: false,
+      success: false,
+      pending: false,
     };
   },
+  computed: {
+    flavour() {
+      return this.$store.getters["device/getFlavour"];
+    },
+  },
   mounted() {
-    this.getBookingDetails();
+    let urlCheck = /status/;
+    if (urlCheck.test(this.$route.params.pathMatch)) {
+      this.status = !this.status;
+
+      console.log("hello");
+      this.getStatus();
+    } else {
+      this.getBookingDetails();
+    }
+    // console.log("check");
+    // console.log(this.$route);
   },
   methods: {
     async getBookingDetails() {
@@ -28,16 +49,48 @@ export default {
       const h = this.$route.query.h;
       const d = this.$route.query.d;
       const res = await fetch(
-        `https://maya.parkspot.in/payment/validate?b=${b}&h=${h}&d=${d}`
+        `https://maya.parkspot.in/payment/validate?b=${b}&h=${h}&d=${d}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            flavour: this.flavour,
+          },
+        }
       );
       const data = await res.json();
-      this.payGateDetails = { ...data.Payment.GatewayTokenMap };
-      this.payModeDetails = { ...data.Payment.ModeGatewayMap };
-      this.bookingDetails = { ...data.BookingInfo };
-      console.log(this.payGateDetails);
-      console.log(this.payModeDetails);
-      console.log(this.bookingDetails);
+      // console.log(data);
+      this.bookingDetails = {
+        name: data.BookingInfo.Name,
+        dueDate: data.DueDate,
+        amount: data.Fee.Amount,
+      };
+      this.paymentMode = { ...data.Payment };
+      // console.log(this.bookingDetails);
+    },
+    async getStatus() {
+      console.log(this.$route.query);
+      const o = this.$route.query.order_id;
+      const res = await fetch(
+        `https://maya.parkspot.in/payment/status?order_id=${o}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            flavour: this.flavour,
+          },
+        }
+      );
+      const data = await res.json();
+      console.log("data");
       console.log(data);
+      if (data === "PAID") {
+        this.success = !this.success;
+      } else if (data === "ACTIVE") {
+        this.pending = !this.pending;
+      } else {
+        this.error = !this.error;
+      }
     },
   },
 };

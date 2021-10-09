@@ -86,6 +86,7 @@ export default {
 <style scoped>
 .box {
   height: 100%;
+  border-radius: 35px;
 }
 .ps_mb {
   margin-bottom: 50px;

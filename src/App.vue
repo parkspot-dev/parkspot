@@ -32,6 +32,6 @@ export default {
 }
 .floatingNav {
   border-radius: 2px;
-  box-shadow: 0px 5px 10px #999;
+  box-shadow: 0px 2px 15px #999;
 }
 </style>

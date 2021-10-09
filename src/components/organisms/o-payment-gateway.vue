@@ -1,18 +1,19 @@
 <template>
   <div class="o_payment_gateway">
-    <div class="card">
+    <m-loading-page v-if="loading" />
+    <div class="card" v-if="!loading">
       <div class="card-content">
         <div class="media">
           <div class="media-content">
             <atom-text
               class="is-size-6-mobile is-size-5 has-text-weight-medium"
               :textLeft="nameText"
-              :text="bookingDetails.Name"
+              :text="bookingDetails.name"
             />
             <atom-text
               class="is-size-6-mobile is-size-5 has-text-weight-medium"
               :textLeft="dateText"
-              :text="dummy.date"
+              :text="bookingDetails.dueDate"
             />
             <div class="ps_inline">
               <atom-text
@@ -25,66 +26,47 @@
                   ml-3
                   has-text-weight-bold has-text-success
                 "
-                :text="dummy.amt"
+                :text="bookingDetails.amount"
                 :textRight="sign"
               />
             </div>
           </div>
-          <!-- <div class="media-right">
-            <atom-img class="image" :src="img" />
-          </div> -->
         </div>
-        <atom-text
+        <!-- <atom-text
           class="is-size-6-mobile is-size-5 has-text-weight-medium"
           :textLeft="paymentText"
           :text="name"
-        />
-        <div class="media">
-          <div class="media-content tooltip">
-            <atom-boxicon
-              style="cursor: pointer"
-              v-on:click.native="cardPayment"
-              :types="boxicon.type"
-              :color="boxicon.color"
-              :size="boxicon.size"
-              :name="boxicon.card.name"
-            />
-            <span class="tooltiptext">{{ boxicon.card.name }}</span>
-          </div>
-
-          <div class="media-content tooltip">
-            <atom-boxicon
-              style="cursor: pointer"
-              :types="boxicon.type"
-              :color="boxicon.color"
-              :size="boxicon.size"
-              :name="boxicon.card.name"
-            />
-            <span class="tooltiptext">{{ boxicon.card.name }}</span>
-          </div>
-          <div class="media-content tooltip">
-            <atom-boxicon
-              style="cursor: pointer"
-              :types="boxicon.type"
-              :color="boxicon.color"
-              :size="boxicon.size"
-              :name="boxicon.netBanking.name"
-            />
-            <span class="tooltiptext">{{ boxicon.netBanking.name }}</span>
-          </div>
-          <div class="media-content tooltip">
-            <a :href="dummy.paymentLink" target="_blank">
-              <atom-boxicon
-                style="cursor: pointer"
-                :types="boxicon.type"
-                :color="boxicon.color"
-                :size="boxicon.size"
-                :name="boxicon.wallet.name"
+        /> -->
+        <div class="media" style="border-top: 0">
+          <div class="media-content" style="text-align: center">
+            <a :href="paymentMode.PaymentLink">
+              <atom-button
+                class="button is-rounded"
+                style="background-color: #ffe08a; width: 80%"
+                :text="payNow"
+                v-on:click.native="isLoading"
               />
             </a>
-            <span class="tooltiptext">{{ boxicon.wallet.name }}</span>
           </div>
         </div>
+        <!-- <div class="media">
+          <div
+            :key="box"
+            class="media-content tooltip"
+            style="text-align: center"
+            v-for="box in boxicon"
+          >
+            <i class="qtip tip-bottom" :data-tip="box.tipText">
+              <atom-boxicon
+                style="cursor: pointer"
+                v-on:click.native="cardPayment"
+                :types="box.type"
+                :color="box.color"
+                :size="box.size"
+                :name="box.name"
+            /></i>
+          </div>
+        </div> -->
         <atom-text class="is-size-7" :textLeft="BillText" :text="bill" />
       </div>
     </div>
@@ -93,25 +75,19 @@
 
 <script>
 import AtomBoxicon from "../atoms/atom-boxicons/atom-boxicon.vue";
+import AtomButton from "../atoms/atom-button/atom-button.vue";
 import AtomImg from "../atoms/atom-img/atom-img.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
+import MLoadingPage from "../molecules/m-loading-page.vue";
 export default {
-  components: { AtomText, AtomImg, AtomBoxicon },
+  components: { AtomText, AtomImg, AtomBoxicon, AtomButton, MLoadingPage },
   name: "o-payment-gateway",
   props: {
     bookingDetails: Object,
-    payGateDetails: Object,
-    payModeDetails: Object,
+    paymentMode: Object,
   },
   data() {
     return {
-      dummy: {
-        name: "Sujeet Manjhi",
-        date: "30th Aug 2021",
-        amt: "2500",
-        paymentLink:
-          "https://payments-test.cashfree.com/order/#YL0gWcw1fSBh9oIKv2xn",
-      },
       nameText: "Name:  ",
       dateText: "Due Date:  ",
       amtText: "Amount:  ",
@@ -120,13 +96,15 @@ export default {
       BillText: "Bill description: ",
       bill: "Total : 2300 , discount : -300, GST : 500 , Total Amount: 2500 ",
       img: require("@/assets/logo.png"),
+      payNow: "Pay Now",
+      loading: false,
       boxicon: {
-        type: "solid",
-        color: "black",
-        size: "md",
         card: {
           name: "credit-card",
-
+          type: "solid",
+          color: "black",
+          size: "md",
+          tipText: "Credit-Card",
           //   rotate: "rotate",
           //   flip: "flip",
           //   border: "border",
@@ -134,63 +112,42 @@ export default {
           //   pull: "pull",
         },
         upi: {
+          type: "solid",
+          color: "black",
+          size: "md",
           name: "credit-card",
+          tipText: "UPI",
         },
         wallet: {
+          type: "solid",
+          color: "black",
+          size: "md",
           name: "wallet",
+          tipText: "Wallet",
         },
         netBanking: {
+          type: "solid",
+          color: "black",
+          size: "md",
           name: "bank",
+          tipText: "Net-Banking",
         },
       },
     };
   },
+  mounted() {
+    console.log("debug");
+    console.log(this.paymentMode.PaymentLink);
+  },
   methods: {
-    async cardPayment() {
-      let opts = {
-        payment_method: {
-          card: {
-            channel: "link",
-            card_cvv: "900",
-            card_expiry_yy: "22",
-            card_expiry_mm: "06",
-            card_holder_name: "Tushar Gupta",
-            card_number: "4111111111111111",
-          },
-        },
-        order_token: "mFmqz7bKdVE00okOodBY",
-      };
-
-      console.log("card payment");
-      const res = await fetch("https://sandbox.cashfree.com/pg/orders/pay", {
-        method: "POST",
-        mode: "cors", // no-cors, *cors, same-origin
-        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "same-origin", // include, *same-origin, omit
-        headers: {
-          "Content-Type": "application/json",
-          // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: "follow", // manual, *follow, error
-        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify(opts),
-      });
-      const data = await res.json();
-      console.log("response cashfree");
-      console.log(data);
-      const a = 10;
-      const b = 10;
-      console.log(a + b);
+    isLoading() {
+      this.loading = !this.loading;
     },
   },
 };
 </script>
 
 <style scoped>
-.image {
-  height: 55px;
-  /* max-height: 8vh; */
-}
 .ps_inline {
   display: inline-flex;
   flex-wrap: nowrap;
@@ -200,43 +157,79 @@ export default {
 }
 .card {
   letter-spacing: 0.5px;
+  border-radius: 30px;
 }
-
 @media only screen and (min-width: 1024px) {
-  .image {
-    height: 65px;
-    /* max-height: 8vh; */
-  }
   .card {
-    top: 50%;
-    left: 28%;
+    left: 50%;
+    transform: translateX(-50%);
     height: auto;
     width: 40vw;
     letter-spacing: 2px;
   }
-  /* hover text  */
-  .tooltip {
-    position: relative;
+  /* this is temp */
+  .qtip {
     display: inline-block;
+    position: relative;
+    cursor: pointer;
+    color: #3bb4e5;
+    border-bottom: 0.05em dotted #3bb4e5;
+    box-sizing: border-box;
+    font-style: normal;
+    transition: all 0.25s ease-in-out;
   }
-
-  .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 100px;
-    background-color: #ffdd57;
-    color: black;
-    text-align: center;
-    border-radius: 6px;
-    padding: 0.25px 0;
-    font-size: 12px;
-    letter-spacing: 0px;
-
-    /* Position the tooltip */
+  .qtip:hover {
+    color: #069;
+    border-bottom: 0.05em dotted #069;
+  }
+  .qtip:before {
+    content: attr(data-tip);
+    font-size: 14px;
     position: absolute;
-    z-index: 1;
+    background: rgba(10, 20, 30, 0.85);
+    color: #fff;
+    line-height: 1.2em;
+    padding: 0.5em;
+    font-style: normal;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    min-width: 120px;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    font-family: sans-serif;
+    letter-spacing: 0;
+    font-weight: 600;
   }
-  .tooltip:hover .tooltiptext {
+  .qtip:after {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    content: "";
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+  }
+  .qtip:hover:before,
+  .qtip:hover:after {
     visibility: visible;
+    opacity: 1;
+  }
+  .qtip.tip-bottom:before {
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, calc(100% + 8px));
+    box-sizing: border-box;
+    border-radius: 3px;
+  }
+  .qtip.tip-bottom:after {
+    border-width: 0 8px 8px 8px;
+    border-color: transparent transparent rgba(10, 20, 30, 0.85) transparent;
+    bottom: -8px;
+    left: 50%;
+    transform: translate(-50%, 0);
   }
 }
 </style>

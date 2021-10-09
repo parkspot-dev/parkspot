@@ -1,6 +1,6 @@
 <template>
   <div class="main_blog">
-    <t-main-blog :currBlog="currBlog" :nextBlog="nextBlog" />
+    <t-main-blog :activeBlog="activeBlog" />
   </div>
 </template>
 
@@ -10,25 +10,14 @@ export default {
   components: { tMainBlog },
   name: "main-blog",
   data() {
-    return {};
+    return { now: false };
   },
   computed: {
-    currBlog() {
-      return this.$route.params;
+    activeBlog() {
+      let temp = parseInt(this.$route.params.id);
+      this.$store.commit("blog/selectedBlog", { id: temp });
+      return temp;
     },
-    nextBlog() {
-      let blogs = this.$route.params.data;
-      return blogs;
-    },
-  },
-  methods: {
-    check() {
-      console.log("coming data", this.$route.params.data);
-      // this.currBlog = this.$route.params;
-    },
-  },
-  created() {
-    this.check();
   },
 };
 </script>

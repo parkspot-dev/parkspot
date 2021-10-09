@@ -11,9 +11,7 @@
           <ul>
             <li><atom-router-link :text="home" :link="hlink" /></li>
             <li class="is-active has-text-weight-semibold is-size-7">
-              <a href="#" aria-current="page"
-                >Parking near {{ searchedText }}
-              </a>
+              <a href="#" aria-current="page">Parking near {{ place }} </a>
             </li>
           </ul>
         </nav>
@@ -55,7 +53,7 @@
           />
         </div>
         <br /><br />
-        <m-discover :searchedText="searchedText" />
+        <m-discover :searchedText="place" />
         <br /><br />
       </div>
     </div>
@@ -87,6 +85,15 @@ export default {
     cardData: Array,
     searchedText: String,
     show: Boolean,
+  },
+  computed: {
+    place() {
+      const temp = this.searchedText.indexOf("/");
+      if (temp > 0) {
+        return this.searchedText.substring(0, temp);
+      }
+      return this.searchedText;
+    },
   },
   data() {
     return {

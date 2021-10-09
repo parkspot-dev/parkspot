@@ -2,12 +2,13 @@
   <div class="o_recent">
     <atom-b-subtitle class="is-size-3 mb-2" :text="recent" />
     <hr />
-    <m-blog-box-details
-      @click.native="getBlog(blog)"
-      :key="blog.id"
-      v-for="blog in blogDetail"
-      :blogDetails="blog"
-    />
+    <div :key="blog.id" v-for="blog in blogDetails">
+      <m-blog-box-details
+        @click.native="getBlog(blog)"
+        v-if="!blog.flag"
+        :blogDetails="blog"
+      />
+    </div>
   </div>
 </template>
 
@@ -23,25 +24,12 @@ export default {
       recent: "Recent Posts",
     };
   },
-  computed: {
-    blogDetail() {
-      return this.blogDetails.filter((blog) => {
-        if (blog.id != this.check) {
-          return blog;
-        }
-      });
-    },
-  },
   methods: {
     getBlog(blog) {
-      let blogs = JSON.parse(JSON.stringify(this.blogDetails));
       this.$router.push({
         name: "mainBlog",
         params: {
           id: `${blog.id}`,
-          data: blogs,
-          postImage: blog.postImage,
-          postSummary: blog.postSummary,
           postTitle: blog.postTitle,
         },
       });
