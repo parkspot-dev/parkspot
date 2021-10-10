@@ -11,7 +11,7 @@ module.exports = {
                 // Absolute path to compiled SPA
                 staticDir: path.resolve(__dirname, './dist'),
                 // List of routes to prerender
-                routes: ['/about', '/contact', '/features', '/faq', '/blog', '/blog/1', '/blog/2', '/blog/3',
+                routes: ['/about', '/contact', '/features', '/faq', '/blog', '/blog/1/Eliminating%20Traffic%20jams%20in%20India!', '/blog/2/Parking%20Challenges%20in%20Office%20Area!', '/blog/3/NO%20Parking',
                     '/bangalore/parking-near-jp-nagar',
                     '/bangalore/parking-near-bommanahalli',
                     '/bangalore/parking-near-banashankari',

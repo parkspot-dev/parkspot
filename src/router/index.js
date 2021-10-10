@@ -35,10 +35,10 @@ router.beforeEach((to, from, next) => {
   } else if (to.name === "srp") {
     document.title = `${to.meta.title} ${to.query.loc}`
   } else if (to.name === "discover") {
-    document.title = `${to.meta.title} ${to.params.pathMatch} - find and book best parking spot with ParkSpot`
+    document.title = `${to.meta.title} ${to.params.pathMatch.replace(/b*\//, '')} - Find and book best parking spot with ParkSpot`
   }
   else {
-    document.title = `${to.meta.title}`
+    document.title = `${to.meta.title} `
   }
   next()
 

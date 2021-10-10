@@ -26,9 +26,6 @@ export default {
         name: "mainBlog",
         params: {
           id: `${blog.id}`,
-          data: this.noOfBlog,
-          postImage: blog.postImage,
-          postSummary: blog.postSummary,
           postTitle: blog.postTitle,
         },
       });

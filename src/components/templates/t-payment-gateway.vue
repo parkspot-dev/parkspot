@@ -1,23 +1,36 @@
 <template>
   <div class="t_payment_gateway section">
-    <o-payment-gateway
-      :bookingDetails="bookingDetails"
-      :payGateDetails="payGateDetails"
-      :payModeDetails="payModeDetails"
-    />
+    <div class="container">
+      <o-payment-gateway
+        v-if="!this.status"
+        :bookingDetails="bookingDetails"
+        :paymentMode="paymentMode"
+      />
+      <o-payment-status
+        v-if="this.status"
+        :error="error"
+        :success="success"
+        :pending="pending"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import OPaymentGateway from "../organisms/o-payment-gateway.vue";
+import OPaymentStatus from "../organisms/o-payment-status.vue";
 export default {
   props: {
     bookingDetails: Object,
-    payGateDetails: Object,
-    payModeDetails: Object,
+    paymentMode: Object,
+    status: Boolean,
+    error: Boolean,
+    success: Boolean,
+    pending: Boolean,
   },
   components: {
     OPaymentGateway,
+    OPaymentStatus,
   },
   name: "t-payment-gateway",
 };
@@ -27,4 +40,16 @@ export default {
 .t_payment_gateway {
   background: url("../../assets/img/payment-wall.svg");
 }
+.card-template {
+  top: 50%;
+  transform: translateY(50%);
+  /* transform: translateX(-50%); */
+}
+/* @media only screen and (min-width: 1024px) {
+  .card-template {
+    top: 50%;
+    transform: translateY(50%);
+    transform: translateX(50%);
+  }
+} */
 </style>

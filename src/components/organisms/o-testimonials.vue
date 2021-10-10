@@ -50,19 +50,19 @@ export default {
         {
           name: "Bhumi Mehra",
           designation: "ParkSpot Customer",
-          img: require("@/assets/img/testimony1.png"),
+          img: require("@/assets/img/testimony1.webp"),
           color: true,
         },
         {
           name: "Nagarjun Prasad",
           designation: "ParkSpot Customer",
-          img: require("@/assets/img/testimony2.png"),
+          img: require("@/assets/img/testimony2.webp"),
           color: false,
         },
         {
           name: "Roshan Singh",
           designation: "ParkSpot Customer",
-          img: require("@/assets/img/testimony3.png"),
+          img: require("@/assets/img/testimony3.webp"),
           color: false,
         },
       ],

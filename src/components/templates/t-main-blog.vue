@@ -10,28 +10,23 @@
           <li><atom-router-link :text="home" :link="hlink" /></li>
           <li><atom-router-link :text="blogs" :link="blink" /></li>
           <li class="is-active has-text-weight-semibold is-size-7">
-            <a href="#" aria-current="page">{{ currBlog.postTitle }}</a>
+            <a href="#" aria-current="page">{{
+              getBlog[activeBlog - 1].postTitle
+            }}</a>
           </li>
         </ul>
       </nav>
       <div class="columns">
         <div class="column is-9">
           <article>
-            <BlogOne v-if="currBlog.id == 1" />
-            <blog-2 v-if="currBlog.id == 2" />
-            <blog-3 v-if="currBlog.id == 3" />
-
-            <!-- <div v-if="currBlog.id == 2">Blog 2</div> -->
+            <BlogOne v-if="getBlog[0].flag" />
+            <blog-2 v-if="getBlog[1].flag" />
+            <blog-3 v-if="getBlog[2].flag" />
           </article>
           <o-comment style="margin: 0 10% 0 10%" />
         </div>
-        <o-recent class="column" :blogDetails="nextBlog" :check="currBlog.id" />
+        <o-recent class="column" :blogDetails="getBlog" />
       </div>
-      <!-- <div class="columns">
-        <div class="column is-1"></div>
-        <o-comment class="column" />
-        <div class="column is-4"></div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -56,7 +51,7 @@ export default {
     Blog2,
     Blog3,
   },
-  props: ["currBlog", "nextBlog"],
+  props: ["activeBlog"],
   data() {
     return {
       home: "Home",
@@ -64,6 +59,11 @@ export default {
       blogs: "Blogs",
       blink: "blog",
     };
+  },
+  computed: {
+    getBlog() {
+      return this.$store.state.blog.blogs;
+    },
   },
 };
 </script>

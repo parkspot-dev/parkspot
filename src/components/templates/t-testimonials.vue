@@ -26,7 +26,7 @@ export default {
 <style scoped>
 @media only screen and (min-width: 1024px) {
   .t_testimonials {
-    padding-bottom: 250px;
+    height: 80vh;
   }
 }
 </style>

@@ -80,7 +80,7 @@ export const routes = [
     }
   },
   {
-    path: '/blog/:id',
+    path: '/blog/:id/:postTitle',
     name: 'mainBlog',
     component: () => import('@/views/main-blog.vue'),
     // props: (route) => ({
@@ -109,10 +109,26 @@ export const routes = [
       }
     }
   },
+  {
+    path: '/payment/*',
+    name: 'paymentGateway',
+    component: () => import('@/views/payment-gateway.vue'),
+    meta: {
+      title: "Payment | Parkspot.in "
+    }
+    // beforeEnter: (to, from, next) => {
+    //   console.log(to.query)
+    //   next()
+
+    // 
+  },
   // {
-  //   path: '/payment/validate',
+  //   path: '/payment/status',
   //   name: 'paymentGateway',
   //   component: () => import('@/views/payment-gateway.vue'),
+  //   meta: {
+  //     title: "Payment Status | Parkspot.in "
+  //   }
   //   // beforeEnter: (to, from, next) => {
   //   //   console.log(to.query)
   //   //   next()
@@ -129,14 +145,14 @@ export const routes = [
     }
   },
   // Todo Delete below code before deployment
-  // {
-  //   path: '/temp',
-  //   name: 'temp',
-  //   component: () => import('@/views/temp.vue'),
-  //   meta: {
-  //     title: "Parking near "
-  //   }
-  // },
+  {
+    path: '/temp',
+    name: 'temp',
+    component: () => import('@/views/temp.vue'),
+    meta: {
+      title: "Parking near "
+    }
+  },
 
   {
     path: '*',

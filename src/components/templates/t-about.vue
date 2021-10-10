@@ -2,12 +2,10 @@
   <div ref="about" class="t_about mt-4 section">
     <div class="container">
       <div class="columns">
-        <div class="column is-1"></div>
-        <div class="column is-4">
-          <atom-img :src="src" />
+        <div class="column">
+          <atom-img :src="src" class="about-img" />
         </div>
         <o-about-right class="column" />
-        <div class="column is-1"></div>
       </div>
     </div>
   </div>
@@ -31,5 +29,9 @@ export default {
 <style scoped>
 .t_about {
   background-color: #ececec;
+}
+.about-img {
+  width: 85vw;
+  height: 50vh;
 }
 </style>

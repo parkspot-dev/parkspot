@@ -25,7 +25,7 @@
 
       <div id="ps__navbar" class="navbar-menu" :class="{ 'is-active': toggle }">
         <div class="navbar-start"></div>
-        <o-navbar-right class="navbar-end" />
+        <o-navbar-right class="navbar-end" @toggle:close="isClose" />
       </div>
     </div>
   </nav>
@@ -48,6 +48,9 @@ export default {
   methods: {
     isToggle() {
       this.toggle = !this.toggle;
+    },
+    isClose() {
+      this.isToggle();
     },
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="field">
-    <div class="ps_search control has-icons-right">
+    <div class="ps_search control has-icons-left">
       <atom-input
         @input="search"
         v-on:click.native="history"
@@ -8,7 +8,8 @@
         :placeholder="placeholder"
         :value="value"
       />
-      <span class="icon is-small is-right">
+
+      <span class="icon is-small is-left">
         <atom-boxicon
           :name="name"
           :color="color"
@@ -16,16 +17,18 @@
           :animation="animation"
         />
       </span>
-      <ul class="ps_searchbox" v-if="toggle">
-        <li
-          @click="flytosrp(result)"
-          :key="result"
-          v-for="result in results.slice(0, 3)"
-          class="ps_searchbox_list"
-        >
-          {{ result }}
-        </li>
-      </ul>
+      <transition name="fade">
+        <ul class="ps_searchbox" v-show="toggle">
+          <li
+            @click="flytosrp(result)"
+            :key="result"
+            v-for="result in results.slice(0, 3)"
+            class="ps_searchbox_list"
+          >
+            {{ result }}
+          </li>
+        </ul>
+      </transition>
     </div>
   </div>
 </template>
@@ -88,14 +91,19 @@ export default {
 };
 </script>
 <style scoped>
+.input:focus {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
 .ps_searchbox {
   position: absolute;
-  width: 100%;
-  list-style-type: disc;
+  width: 99.849%;
+  left: 0.6px;
   padding: 0;
   margin: 0;
   z-index: 2;
 }
+
 .ps_searchbox_list {
   cursor: pointer;
   border: 1px solid #ddd;
@@ -107,7 +115,20 @@ export default {
   color: black;
   display: block;
 }
+.ps_searchbox_list:last-child {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
 .ps_searchbox_list:hover {
   background-color: #ffdb4a;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
