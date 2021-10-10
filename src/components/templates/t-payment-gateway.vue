@@ -6,7 +6,12 @@
         :bookingDetails="bookingDetails"
         :paymentMode="paymentMode"
       />
-      <o-payment-status v-if="this.status" :error="error" :success="success" />
+      <o-payment-status
+        v-if="this.status"
+        :error="error"
+        :success="success"
+        :pending="pending"
+      />
     </div>
   </div>
 </template>

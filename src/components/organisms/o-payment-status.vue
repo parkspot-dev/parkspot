@@ -16,7 +16,7 @@
             <atom-text class="is-size-6" :text="failInfo" />
           </div>
         </div>
-        <div class="media" v-if="true">
+        <div class="media" v-if="pending">
           <div class="media-content" style="text-align: center">
             <atom-img :src="pendingImg" :alt="pendingImgAlt" />
             <atom-text class="is-size-4" :text="pendingMsg" />
@@ -40,6 +40,7 @@ export default {
   props: {
     error: Boolean,
     success: Boolean,
+    pending: Boolean,
   },
   data() {
     return {
