@@ -1,5 +1,5 @@
 
-const getDevice = (details, regexp) => {
+const getFlavour = (details, regexp) => {
     let isMobileDevice = regexp.test(details);
 
     if (isMobileDevice) {
@@ -11,5 +11,5 @@ const getDevice = (details, regexp) => {
 
 
 export default {
-    getDevice
+    getFlavour
 }

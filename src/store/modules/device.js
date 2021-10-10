@@ -10,7 +10,7 @@ const state = () => ({
 // getters
 const getters = {
     getFlavour: (state) => {
-        return flavour.getDevice(state.details, state.regexp)
+        return flavour.getFlavour(state.details, state.regexp)
     }
 }
 

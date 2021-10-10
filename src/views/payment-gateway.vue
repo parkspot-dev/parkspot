@@ -64,6 +64,8 @@ export default {
         name: data.BookingInfo.Name,
         dueDate: data.DueDate,
         amount: data.Fee.Amount,
+        discount: data.Fee.Discount,
+        convenienceFee: data.Fee.ConvenienceFee,
       };
       this.paymentMode = { ...data.Payment };
       // console.log(this.bookingDetails);

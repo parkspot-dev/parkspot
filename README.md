@@ -21,5 +21,13 @@ npm run build
 yarn lint
 ```
 
+### Requirements
+```
+vue - 2.6.12
+vuex - 3.6.2
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+

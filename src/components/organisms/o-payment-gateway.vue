@@ -67,7 +67,11 @@
             /></i>
           </div>
         </div> -->
-        <atom-text class="is-size-7" :textLeft="BillText" :text="bill" />
+        <p class="is-size-7 has-text-centered">
+          Bill description: Total : {{ bookingDetails.amount }} , Discount :
+          {{ bookingDetails.discount }}, Convenience Fee :
+          {{ bookingDetails.convenienceFee }}
+        </p>
       </div>
     </div>
   </div>
@@ -93,46 +97,45 @@ export default {
       amtText: "Amount:  ",
       sign: "/-",
       paymentText: "Payment Mode: ",
-      BillText: "Bill description: ",
-      bill: "Total : 2300 , discount : -300, GST : 500 , Total Amount: 2500 ",
       img: require("@/assets/logo.png"),
       payNow: "Pay Now",
       loading: false,
-      boxicon: {
-        card: {
-          name: "credit-card",
-          type: "solid",
-          color: "black",
-          size: "md",
-          tipText: "Credit-Card",
-          //   rotate: "rotate",
-          //   flip: "flip",
-          //   border: "border",
-          //   animation: "animation",
-          //   pull: "pull",
-        },
-        upi: {
-          type: "solid",
-          color: "black",
-          size: "md",
-          name: "credit-card",
-          tipText: "UPI",
-        },
-        wallet: {
-          type: "solid",
-          color: "black",
-          size: "md",
-          name: "wallet",
-          tipText: "Wallet",
-        },
-        netBanking: {
-          type: "solid",
-          color: "black",
-          size: "md",
-          name: "bank",
-          tipText: "Net-Banking",
-        },
-      },
+      // ** Not needed as of now as we are using single Payment Link
+      // boxicon: {
+      //   card: {
+      //     name: "credit-card",
+      //     type: "solid",
+      //     color: "black",
+      //     size: "md",
+      //     tipText: "Credit-Card",
+      //     //   rotate: "rotate",
+      //     //   flip: "flip",
+      //     //   border: "border",
+      //     //   animation: "animation",
+      //     //   pull: "pull",
+      //   },
+      //   upi: {
+      //     type: "solid",
+      //     color: "black",
+      //     size: "md",
+      //     name: "credit-card",
+      //     tipText: "UPI",
+      //   },
+      //   wallet: {
+      //     type: "solid",
+      //     color: "black",
+      //     size: "md",
+      //     name: "wallet",
+      //     tipText: "Wallet",
+      //   },
+      //   netBanking: {
+      //     type: "solid",
+      //     color: "black",
+      //     size: "md",
+      //     name: "bank",
+      //     tipText: "Net-Banking",
+      //   },
+      // },
     };
   },
   mounted() {

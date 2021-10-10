@@ -1,5 +1,5 @@
 <template>
-  <div class="t_testimonials section" style="height: 80vh">
+  <div class="t_testimonials section">
     <div class="container">
       <atom-b-title
         class="is-size-3-mobile is-size-2 mb-6 has-text-centered"
@@ -24,4 +24,9 @@ export default {
 </script>
 
 <style scoped>
+@media only screen and (min-width: 1024px) {
+  .t_testimonials {
+    height: 80vh;
+  }
+}
 </style>

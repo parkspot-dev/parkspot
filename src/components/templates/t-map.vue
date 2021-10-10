@@ -79,7 +79,7 @@ export default {
   width: 100%;
 }
 .ps_map {
-  background-image: url("../../assets/img/mobile-map-banner.png");
+  background-image: url("../../assets/img/mobile-map-banner.webp");
   position: absolute;
   top: 0;
   left: 0;
@@ -119,7 +119,7 @@ export default {
     height: 80vh;
   }
   .ps_map {
-    background-image: url("../../assets/img/map-banner.png");
+    background-image: url("../../assets/img/map-banner.webp");
     min-height: 85vh;
   }
 }

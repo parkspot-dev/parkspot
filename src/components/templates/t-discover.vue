@@ -88,6 +88,7 @@ export default {
   },
   computed: {
     place() {
+      // ** it will remove the text after '/' like 'marathahalli/dsjl' to 'marathahalli'
       const temp = this.searchedText.indexOf("/");
       if (temp > 0) {
         return this.searchedText.substring(0, temp);

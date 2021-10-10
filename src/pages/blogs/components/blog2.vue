@@ -114,7 +114,7 @@ export default {
   data() {
     return {
       dp: require("@/assets/img/blankProfile.png"),
-      blogimg: require("@/assets/img/blog2.jpg"),
+      blogimg: require("@/assets/img/blog2.webp"),
       parkspotimg: require("@/assets/img/pstopmini.png"),
     };
   },
