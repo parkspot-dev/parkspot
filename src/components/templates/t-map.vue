@@ -95,24 +95,6 @@ export default {
   width: 60%;
   z-index: 1;
 }
-.ps_searchbox {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-.ps_searchbox_list {
-  border: 1px solid #ddd;
-  margin-top: -1px; /* Prevent double borders */
-  background-color: #f6f6f6;
-  padding: 12px;
-  text-decoration: none;
-  font-size: 12px;
-  color: black;
-  display: block;
-}
-.ps_searchbox_list:hover {
-  background-color: #eee;
-}
 
 @media only screen and (min-width: 720px) {
   .t_map {

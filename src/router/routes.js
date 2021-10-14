@@ -9,7 +9,7 @@ export const routes = [
     name: 'Home',
     component: Home,
     meta: {
-      title: "Find and Book parking spaces nearby | Bangalore Delhi Mumbai Pune Bengaluru | Parkspot.in"
+      title: "Find and Book Parking Spaces Nearby | Bangalore Delhi Mumbai Pune Bengaluru | Parkspot.in"
     }
   },
   {
@@ -20,7 +20,7 @@ export const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import('@/views/Faq.vue'),
     meta: {
-      title: "FAQ's - Get your all queries be answered..."
+      title: "FAQ's - Get Your All Queries be Answered..."
     }
   },
 
@@ -60,7 +60,7 @@ export const routes = [
     name: 'VOPortal',
     component: () => import('@/views/VO-portal.vue'),
     meta: {
-      title: "ParkSpot | Get parking spot"
+      title: "ParkSpot | Get Parking Spot"
     }
   },
   {
@@ -141,18 +141,18 @@ export const routes = [
     name: 'discover',
     component: () => import('@/views/discover-page.vue'),
     meta: {
-      title: "Parking near "
+      title: "Parking Near "
     }
   },
   // Todo Delete below code before deployment
-  {
-    path: '/temp',
-    name: 'temp',
-    component: () => import('@/views/temp.vue'),
-    meta: {
-      title: "Parking near "
-    }
-  },
+  // {
+  //   path: '/temp',
+  //   name: 'temp',
+  //   component: () => import('@/views/temp.vue'),
+  //   meta: {
+  //     title: "Parking Near "
+  //   }
+  // },
 
   {
     path: '*',

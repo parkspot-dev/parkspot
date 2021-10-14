@@ -31,11 +31,11 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   console.log(to)
   if (to.name === "mainBlog") {
-    document.title = `${to.meta.title} ${to.params.postTitle}`
+    document.title = `${to.meta.title} ${to.params.postTitle.replace(/-/g, ' ')}`
   } else if (to.name === "srp") {
     document.title = `${to.meta.title} ${to.query.loc}`
   } else if (to.name === "discover") {
-    document.title = `${to.meta.title} ${to.params.pathMatch.replace(/b*\//, '')} - Find and book best parking spot with ParkSpot`
+    document.title = `${to.meta.title} ${to.params.pathMatch.replace(/b*\//, '')} - Find and Book Best Parking Spot with ParkSpot`
   }
   else {
     document.title = `${to.meta.title} `
