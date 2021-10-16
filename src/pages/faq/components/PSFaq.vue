@@ -80,15 +80,16 @@
         <div class="message-body">
           <p>Follow below simple steps:-</p>
           <p>
-            1) Contact us directly via phone (+91 80929 96057).We will take some
-            details from you and your empty space is get listed on our platform.
+            1) Contact us directly via phone (+91 80929 96057). We will take
+            some details from you and your empty space is get listed on our
+            platform.
           </p>
           <p>
             2) Email us at
             <a href="mailto: connect@parkspot.in" style="color: black">
               connect@parkspot.in</a
             >
-            with the request.We will contact you and process the request.
+            with the request. We will contact you and process the request.
           </p>
         </div>
       </article>

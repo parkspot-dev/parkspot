@@ -20,7 +20,7 @@ export const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import('@/views/Faq.vue'),
     meta: {
-      title: "FAQ's - Get Your All Queries be Answered..."
+      title: "FAQ's - Get Your All Parking Related Queries be Answered..."
     }
   },
 
