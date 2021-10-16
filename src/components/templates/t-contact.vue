@@ -1,16 +1,14 @@
 <template>
   <section class="t_contact section">
-      <div class="container">
-        <atom-b-title
-          class="is-size-3-mobile is-size-2 mb-6 has-text-centered"
-          :text="title"
-        />
-        <div class="columns">
-          
-          <o-contact-left class="column" />
-          <o-contact-right class="column" />
-          <!-- <div class="column"></div> -->
-        </div>
+    <div class="container">
+      <atom-b-title
+        class="is-size-3-mobile is-size-2 mb-6 has-text-centered"
+        :text="title"
+      />
+      <div class="columns">
+        <o-contact-left class="column" />
+        <o-contact-right class="column" />
+      </div>
     </div>
   </section>
 </template>
@@ -34,5 +32,4 @@ export default {
 .t_contact {
   background-color: #ececec;
 }
-
 </style>

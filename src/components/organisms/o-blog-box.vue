@@ -22,11 +22,16 @@ export default {
   name: "o-blog-box",
   methods: {
     getBlog(blog) {
+      const regex = / /gi;
+      let title = blog.postTitle.replace(regex, "-");
+      title.indexOf("!") >= 0
+        ? (title = title.substring(0, title.length - 1))
+        : title;
       this.$router.push({
         name: "mainBlog",
         params: {
           id: `${blog.id}`,
-          postTitle: blog.postTitle,
+          postTitle: title,
         },
       });
     },

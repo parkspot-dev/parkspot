@@ -65,6 +65,7 @@ export default {
 .navlink {
   color: #4a4a4a;
 }
+
 .navlink:hover {
   border-bottom: 2px solid #0085ad;
   color: #ffe08a;

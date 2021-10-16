@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     onCancel() {
-      this.$router.push("Home");
+      this.$router.push("/");
     },
   },
 };
