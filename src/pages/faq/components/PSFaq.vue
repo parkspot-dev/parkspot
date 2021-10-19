@@ -116,8 +116,13 @@ export default {
 }
 .message-header {
   background-color: #0085ad;
+  color: white;
+  border-bottom: 2px solid #0085ad;
 }
 .message-body {
-  background-color: #ffdd57;
+  background-color: white;
+}
+.message {
+  box-shadow: 0 2px 15px #999;
 }
 </style>
