@@ -1,6 +1,6 @@
 <template>
   <div class="field">
-    <div class="ps_search control has-icons-left">
+    <div class="control has-icons-left">
       <atom-input
         @input="search"
         v-on:click.native="history"
@@ -18,11 +18,11 @@
         />
       </span>
       <transition name="fade">
-        <!-- <div class="list-wrapper" v-show="toggle">
-          <div class="list-wrapper-second-layer">
-            <div class="line-breaker"></div>
-            <div class="main-list">
-              <ul class="listbox" v-show="toggle">
+        <div class="list-wrapper" v-show="toggle">
+          <div class="list-wrapper__wrapper">
+            <div class="list-wrapper__seperator"></div>
+            <div class="list-wrapper__list-items-wrapper">
+              <ul class="list-wrapper__list-items" v-show="toggle">
                 <li
                   @click="flytosrp(result)"
                   :key="result"
@@ -30,11 +30,15 @@
                   class="list-item"
                 >
                   <div class="list-description">
-                    <span class="list-icon">
-                      <atom-boxicon :name="name" :color="color" :size="size" />
+                    <span class="list-description__icon">
+                      <atom-boxicon
+                        :name="name"
+                        :color="`#a3a3a3`"
+                        :size="size"
+                      />
                     </span>
-                    <div class="list-description-style">
-                      <div class="list-description-style-second">
+                    <div class="list-description__description">
+                      <div class="list-description__description-text">
                         <span>{{ result }}</span>
                       </div>
                     </div>
@@ -44,18 +48,7 @@
             </div>
             <ul class="last-list"></ul>
           </div>
-        </div> -->
-        <!-- //! Original Code is below commented -->
-        <ul class="ps_searchbox" v-show="toggle">
-          <li
-            @click="flytosrp(result)"
-            :key="result"
-            v-for="result in results.slice(0, 3)"
-            class="ps_searchbox_list"
-          >
-            {{ result }}
-          </li>
-        </ul>
+        </div>
       </transition>
     </div>
   </div>
@@ -119,58 +112,21 @@ export default {
 };
 </script>
 <style scoped>
-.input:focus {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.ps_searchbox {
-  position: absolute;
-  width: 99.849%;
-  left: 0.6px;
-  padding: 0;
-  margin: 0;
-  z-index: 2;
+.control.has-icons-left .icon.is-left {
+  left: 1px;
+  top: 5px;
 }
 
-.ps_searchbox_list {
-  cursor: pointer;
-  border: 1px solid #ddd;
-  margin-top: -1px;
-  background-color: #f6f6f6;
-  padding: 12px;
-  text-decoration: none;
-  font-size: 12px;
-  color: black;
-  display: block;
-}
-.ps_searchbox_list:last-child {
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
-.ps_searchbox_list:hover {
-  background-color: #ffdb4a;
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-/* //!  Experimental CSS Pls Delete */
-/* .list-wrapper {
+.list-wrapper {
   position: absolute;
   width: 100%;
   text-align: left;
   margin-top: -1px;
   z-index: 989;
   cursor: pointer;
-  -webkit-user-select: none;
+  /* -webkit-user-select: none; */
 }
-.list-wrapper-second-layer {
+.list-wrapper__wrapper {
   background: #fff;
   box-shadow: 0 9px 8px -3px rgb(64 60 67 / 24%),
     8px 0 8px -7px rgb(64 60 67 / 24%), -8px 0 8px -7px rgb(64 60 67 / 24%);
@@ -179,12 +135,14 @@ export default {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  border: 0;
-  border-radius: 0 0 24px 24px;
+  border-left: 1px solid rgb(92, 92, 223);
+  border-right: 1px solid rgb(92, 92, 223);
+  border-bottom: 1px solid rgb(92, 92, 223);
+  border-radius: 0 0 15px 15px;
   padding-bottom: 4px;
   overflow: hidden;
 }
-.line-breaker {
+.list-wrapper__seperator {
   border-top: 1px solid #e8eaed;
   margin: 0 14px;
   padding-bottom: 4px;
@@ -193,22 +151,11 @@ export default {
   flex: auto;
   padding-bottom: 16px;
 }
-.main-list {
+.list-wrapper__list-items-wrapper {
   margin: 0;
   padding: 0;
 }
-.list-box {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  padding: 0;
-  list-style-type: disc;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-  padding-inline-start: 40px;
-}
+
 .list-item {
   display: flex;
   align-items: center;
@@ -220,9 +167,10 @@ export default {
   flex: auto;
   display: flex;
   align-items: center;
-  margin: 0 20px 0 14px;
+  margin: 0 20px 0 10px;
+  gap: 0.5rem;
 }
-.list-description-style {
+.list-description__description {
   display: flex;
   flex: auto;
   flex-direction: column;
@@ -230,59 +178,37 @@ export default {
   max-height: none;
   padding: 6px 0;
 }
-.list-description-style-second {
+.list-description__description-text {
   display: flex;
-  font-size: 16px;
-  color: #212121;
+  font-size: 14px;
+  font-weight: 600;
+  color: #3a3a3a;
   flex: auto;
   align-items: center;
   word-break: break-word;
   padding-right: 8px;
 }
 .input {
-  border-radius: 14px;
+  border-radius: 15px;
   width: 100%;
 }
-.input:focus {
+.input:focus,
+.input:active {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  border-top-left-radius: 14px;
-  border-top-right-radius: 14px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 }
-.list-icon {
+.list-description__icon {
   min-height: 20px;
   min-width: 20px;
   height: 20px;
   width: 20px;
 }
-.list-icon::before {
+.list-description__icon::before {
   content: "";
   background-color: white;
   opacity: 0.5;
-}
-.ps_searchbox {
-  position: absolute;
-  width: 99.849%;
-  left: 0.6px;
-  padding: 0;
-  margin: 0;
-  z-index: 2;
-}
-
-.ps_searchbox_list {
-  cursor: pointer;
-  border: 1px solid #ddd;
-  margin-top: -1px;
-  background-color: #f6f6f6;
-  padding: 12px;
-  text-decoration: none;
-  font-size: 12px;
-  color: black;
-  display: block;
-}
-.ps_searchbox_list:last-child {
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
 }
 .list-item:hover {
   background-color: #ffdb4a;
@@ -295,5 +221,5 @@ export default {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-} */
+}
 </style>

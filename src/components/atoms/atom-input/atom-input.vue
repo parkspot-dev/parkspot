@@ -1,5 +1,6 @@
 <template>
   <input
+    class="input input_rounded"
     :value="value"
     @invalid="handleInvalid"
     @input="handleInput"
@@ -50,25 +51,6 @@ export default {
       },
     },
   },
-  // computed: {
-  //   inputListeners: function () {
-  //     var vm = this;
-  //     // `Object.assign` merges objects together to form a new object
-  //     return Object.assign(
-  //       {},
-  //       // We add all the listeners from the parent
-  //       this.$listeners,
-  //       // Then we can add custom listeners or override the
-  //       // behavior of some listeners.
-  //       {
-  //         // This ensures that the component works with v-model
-  //         input: function (event) {
-  //           vm.$emit("input", event.target.value);
-  //         },
-  //       }
-  //     );
-  //   },
-  // },
   methods: {
     handleInput(event) {
       this.$emit("input", event.target.value);
@@ -85,3 +67,14 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.input_rounded {
+  border-radius: 15px;
+  padding: 20px 16px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  font-size: 14px;
+  height: 3.5em;
+}
+</style>
