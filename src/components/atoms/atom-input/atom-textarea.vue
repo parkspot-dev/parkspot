@@ -1,5 +1,6 @@
 <template>
   <textarea
+    class="textarea textarea_rounded"
     :value="value"
     @input="handleInput"
     @change="handleChange"
@@ -42,3 +43,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.textarea_rounded {
+  border-radius: 15px;
+  padding: 20px 16px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  font-size: 14px;
+}
+</style>
