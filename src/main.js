@@ -9,6 +9,8 @@ import JwPagination from 'jw-vue-pagination';
 import 'bulma/css/bulma.css'
 import store from './store'
 
+import fbApp from './FB-App.vue'
+
 
 Vue.component('jw-pagination', JwPagination);
 Vue.directive("lazyload", LazyLoadDirective);
@@ -30,3 +32,27 @@ new Vue({
   store,
   render: (h) => h(App)
 }).$mount('#app');
+
+
+// testing purpose
+// Create the vue instance but don't mount it
+const vm = new Vue({
+  // template: '<div>I\'m mounted</div>',
+  created() {
+    console.log('Created');
+  },
+  mounted() {
+    console.log('Mounted');
+  },
+  render: (h) => h(fbApp)
+});
+
+// Some async task that creates a new element on the page which we can mount our instance to.
+setTimeout(() => {
+  // Inject Div into DOM
+  // var div = document.createElement('div');
+  // div.id = 'fb-app';
+  // document.body.appendChild(div);
+
+  vm.$mount('#fb-app');
+}, 10000)
