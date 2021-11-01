@@ -35,8 +35,6 @@ export default {
     const paymentURL = /payment|validate|p|h/;
     if (statusURL.test(this.$route.params.pathMatch)) {
       this.status = !this.status;
-
-      console.log("hello");
       this.getStatus();
     } else if (paymentURL.test(this.$route.params.pathMatch)) {
       this.getBookingDetails();
@@ -63,20 +61,17 @@ export default {
           throw new Error(response);
         } else {
           const data = await response.json();
-          // console.log(data);
           this.bookingDetails = {
             name: data.BookingInfo.Name,
             dueDate: data.DueDate,
-            amount: data.Fee.Amount,
-            discount: data.Fee.Discount,
-            convenienceFee: data.Fee.ConvenienceFee,
+            amount: data.PaymentInfo.Amount,
+            discount: data.PaymentInfo.Discount,
+            convenienceFee: data.PaymentInfo.ConvenienceFee,
           };
           this.paymentMode = { ...data.Payment };
-          // console.log(this.bookingDetails);
         }
       } catch (exception) {
-        // console.log("Error");
-        // console.log(exception);
+        console.log(exception);
         this.status = !this.status;
         this.getStatus();
       }
