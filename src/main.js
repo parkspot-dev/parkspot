@@ -34,25 +34,12 @@ new Vue({
 }).$mount('#app');
 
 
-// testing purpose
-// Create the vue instance but don't mount it
+// Created the vue instance for fb messenger app
 const vm = new Vue({
-  // template: '<div>I\'m mounted</div>',
-  created() {
-    console.log('Created');
-  },
-  mounted() {
-    console.log('Mounted');
-  },
   render: (h) => h(fbApp)
 });
 
-// Some async task that creates a new element on the page which we can mount our instance to.
+// Some async task that creates a new vue app on the page
 setTimeout(() => {
-  // Inject Div into DOM
-  // var div = document.createElement('div');
-  // div.id = 'fb-app';
-  // document.body.appendChild(div);
-
   vm.$mount('#fb-app');
-}, 10000)
+}, 1000)
