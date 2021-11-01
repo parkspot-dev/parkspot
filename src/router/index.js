@@ -29,7 +29,7 @@ const router = new VueRouter({
   scrollBehavior
 })
 router.beforeEach((to, from, next) => {
-  console.log(to)
+  // console.log(to)
   if (to.name === "mainBlog") {
     document.title = `${to.meta.title} ${to.params.postTitle.replace(/-/g, ' ')}`
   } else if (to.name === "srp") {
