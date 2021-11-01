@@ -42,4 +42,4 @@ const vm = new Vue({
 // Some async task that creates a new vue app on the page
 setTimeout(() => {
   vm.$mount('#fb-app');
-}, 1000)
+}, 5000)
