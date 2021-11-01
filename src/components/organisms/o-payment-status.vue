@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       successMsg: "Thank You!",
-      successInfo: "Your payment successful for the amount 2500",
+      successInfo: "Your payment was successful.",
       successImg: require("../../assets/img/success.png"),
       successImgAlt: "success.png",
       failMsg: "Oops! Something went wrong.",
