@@ -121,7 +121,7 @@ export default {
   position: absolute;
   width: 100%;
   text-align: left;
-  margin-top: -1px;
+  margin-top: -12px;
   z-index: 989;
   cursor: pointer;
   /* -webkit-user-select: none; */

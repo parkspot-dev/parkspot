@@ -14,6 +14,7 @@ import AtomImg from "../components/atoms/atom-img/atom-img.vue";
 import AtomBSubtitle from "../components/atoms/atom-text/atom-b-subtitle.vue";
 import AtomBTitle from "../components/atoms/atom-text/atom-b-title.vue";
 import tVoPortal from "../components/templates/t-vo-portal.vue";
+import mapbox from "../thirdparty/mapbox";
 export default {
   components: { tVoPortal, AtomImg, AtomBTitle, AtomBSubtitle },
   name: "VO-portal",
@@ -24,6 +25,9 @@ export default {
       img: require("@/assets/img/request-sent.svg"),
       show: false,
     };
+  },
+  mounted() {
+    mapbox.addMapboxScript();
   },
   methods: {
     async onSubmit(data) {
