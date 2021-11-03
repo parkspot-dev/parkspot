@@ -15,6 +15,7 @@
 import SrpBookForm from "@/pages/srp/components/SrpBookForm.vue";
 import BookMsg from "@/pages/srp/components/BookMsg.vue";
 import TSrp from "../components/templates/t-srp.vue";
+import mapbox from "../thirdparty/mapbox";
 export default {
   name: "PSSrp",
   components: {
@@ -33,6 +34,7 @@ export default {
   mounted() {
     console.log("srp0");
     console.log(this.$route);
+    mapbox.addMapboxScript();
   },
   methods: {
     async onSubmit(book) {
