@@ -60,7 +60,7 @@ export default {
   methods: {
     async getSpotDetails() {
       const res = await fetch(
-        "https://maya.parkspot.in/internal/parking-requets"
+        "https://maya.parkspot.in/internal/parking-requests"
       );
       const data = await res.json();
       this.spotDetails = data;
