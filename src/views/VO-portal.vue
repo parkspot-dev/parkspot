@@ -50,6 +50,7 @@ export default {
             Longitude: data.mapPosLng,
             CarModel: data.carModel,
             Duration: data.duration,
+            Landmark: data.location
           }),
         }
       );

@@ -4,7 +4,7 @@
     <td><atom-text :text="details.Name" /></td>
     <td><atom-text :text="details.Mobile" /></td>
     <td><atom-text :text="details.CarModel" /></td>
-    <td><atom-text :text="details.nearestLocation" /></td>
+    <td><atom-text :text="details.Landmark" /></td>
     <td><atom-text :text="details.Country" /></td>
     <td><atom-text :text="details.State" /></td>
     <td><atom-text :text="details.City" /></td>
@@ -15,7 +15,7 @@
       >
     </td>
     <td><atom-text :text="statusDetail" /></td>
-    <td><atom-textarea :disabled="true" /></td>
+    <td><atom-textarea :value="details.Comments" :disabled="true" /></td>
     <!-- <td>{{ details }}</td> -->
   </tr>
 </template>
