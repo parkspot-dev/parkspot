@@ -1,6 +1,6 @@
 <template>
   <div class="new_portal">
-    <t-vo-portal @submit="onSubmit" v-if="!show" />
+    <t-vo-portal @submit="onSubmit" v-if="!show" :mapShow="mapShow" />
     <div class="ps_thank" v-if="show">
       <atom-img :src="img" />
       <atom-b-title class="is-size-3" :text="msg" />
@@ -24,10 +24,16 @@ export default {
       msg2: "Our supply team will soon contact you with right Parking Spot.",
       img: require("@/assets/img/request-sent.svg"),
       show: false,
+      mapShow: false,
     };
   },
-  mounted() {
+  created() {
     mapbox.addMapboxScript();
+  },
+  mounted() {
+    setTimeout(() => {
+      this.mapShow = true;
+    }, 1000);
   },
   methods: {
     async onSubmit(data) {
@@ -50,7 +56,7 @@ export default {
             Longitude: data.mapPosLng,
             CarModel: data.carModel,
             Duration: data.duration,
-            Landmark: data.location
+            Landmark: data.location,
           }),
         }
       );

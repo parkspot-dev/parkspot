@@ -93,6 +93,7 @@
           :zoom="zoom"
           :drag="map.drag"
           @location="getLocation"
+          v-if="mapShow"
         />
       </div>
       <br />
@@ -149,6 +150,9 @@ export default {
     AtomBTitle,
     MMapbox,
     MSearchBox,
+  },
+  props: {
+    mapShow: Boolean,
   },
   name: "o-vo-details",
   data() {

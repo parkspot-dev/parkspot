@@ -15,7 +15,9 @@
       >
     </td>
     <td><atom-text :text="statusDetail" /></td>
-    <td><atom-textarea :value="details.Comments" :disabled="true" /></td>
+    <td>
+      <atom-textarea :value="details.Comments" :disabled="true" />
+    </td>
     <!-- <td>{{ details }}</td> -->
   </tr>
 </template>
