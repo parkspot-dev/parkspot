@@ -16,6 +16,13 @@
             <atom-text class="is-size-6" :text="failInfo" />
           </div>
         </div>
+        <div class="media" v-if="displayMsg">
+          <div class="media-content" style="text-align: center">
+            <atom-img :src="failImg" :alt="failImgAlt" />
+            <atom-text class="is-size-4" :text="displayMsgContent" />
+            <!-- <atom-text class="is-size-6" :text="failInfo" /> -->
+          </div>
+        </div>
         <div class="media" v-if="pending">
           <div class="media-content" style="text-align: center">
             <atom-img :src="pendingImg" :alt="pendingImgAlt" />
@@ -41,6 +48,8 @@ export default {
     error: Boolean,
     success: Boolean,
     pending: Boolean,
+    displayMsg: Boolean,
+    displayMsgContent: String,
   },
   data() {
     return {

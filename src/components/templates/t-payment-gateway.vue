@@ -11,6 +11,8 @@
         :error="error"
         :success="success"
         :pending="pending"
+        :displayMsg="displayMsg"
+        :displayMsgContent="displayMsgContent"
       />
     </div>
   </div>
@@ -27,6 +29,8 @@ export default {
     error: Boolean,
     success: Boolean,
     pending: Boolean,
+    displayMsg: Boolean,
+    displayMsgContent: String,
   },
   components: {
     OPaymentGateway,
