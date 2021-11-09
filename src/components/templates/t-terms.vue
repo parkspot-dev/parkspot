@@ -2,9 +2,12 @@
   <section class="t_terms section">
     <div class="container">
       <!-- breadcrumb -->
-      <nav class="breadcrumb has-arrow-separator is-size-7" aria-label="breadcrumbs">
+      <nav
+        class="breadcrumb has-arrow-separator is-size-7"
+        aria-label="breadcrumbs"
+      >
         <ul>
-          <li><atom-router-link :text="home" :link="hlink"/></li>
+          <li><atom-router-link :text="home" :link="hlink" /></li>
           <li class="is-active has-text-weight-semibold is-size-7">
             <a href="#" aria-current="page">Terms & Conditions</a>
           </li>
@@ -129,7 +132,26 @@
         </li>
       </ol>
       <br />
-      <div class="columns is-mobile">
+      <atom-b-subtitle
+        class="is-size-6-desktop is-size-7-mobile has-text-weight-semibold"
+        :text="privacy"
+      />
+      <ol>
+        <li>
+          <atom-text
+            class="is-size-6-desktop is-size-7-mobile"
+            :text="privacyLine"
+          />
+        </li>
+        <li>
+          <atom-text
+            class="is-size-6-desktop is-size-7-mobile"
+            :text="`${appPermission} ${appPermissionLine}`"
+          />
+        </li>
+      </ol>
+      <br />
+      <!-- <div class="columns is-mobile">
         <div class="column is-narrow">
           <atom-b-subtitle
             class="is-size-6-desktop is-size-7-mobile has-text-weight-semibold"
@@ -142,7 +164,21 @@
             :text="privacyLine"
           />
         </div>
-      </div>
+      </div> -->
+      <!-- <div class="columns is-mobile">
+        <div class="column is-narrow">
+          <atom-b-subtitle
+            class="is-size-6-desktop is-size-7-mobile has-text-weight-semibold"
+            :text="appPermission"
+          />
+        </div>
+        <div class="column">
+          <atom-text
+            class="is-size-6-desktop is-size-7-mobile"
+            :text="appPermissionLine"
+          />
+        </div>
+      </div> -->
       <div class="columns is-mobile">
         <div class="column is-narrow">
           <atom-b-subtitle
@@ -195,7 +231,7 @@
 </template>
 
 <script>
-import AtomRouterLink from '../atoms/atom-link/atom-router-link.vue';
+import AtomRouterLink from "../atoms/atom-link/atom-router-link.vue";
 import AtomBSubtitle from "../atoms/atom-text/atom-b-subtitle.vue";
 import atomBTitle from "../atoms/atom-text/atom-b-title.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
@@ -204,8 +240,8 @@ export default {
   name: "t-terms",
   data() {
     return {
-      home:"Home",
-      hlink:"Home",
+      home: "Home",
+      hlink: "Home",
       title: "Terms and Conditions",
       firstLine:
         "Please read these terms and conditions carefully before using Our Service.",
@@ -244,6 +280,9 @@ export default {
       changes: "Changes to These Terms and Conditions :",
       changesLine:
         "We reserve the right, at Our sole discretion, to modify or replace these Terms at any time.What constitutes a material change will be determined at Our sole discretion.By continuing to access or use Our Service after those revisions become effective, You agree to be bound by the revised terms. If You do not agree to the new terms, in whole or in part, please stop using the website and the Service.",
+      appPermission: "App Permission :",
+      appPermissionLine:
+        "User will have to give camera permission to our app as this is used to scan booking QR code.",
     };
   },
 };
@@ -256,7 +295,7 @@ export default {
 .t_terms {
   background: #f6f6f6;
 }
-.t_terms{
+.t_terms {
   padding-top: 15px;
 }
 </style>
