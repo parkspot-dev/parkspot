@@ -31,10 +31,12 @@ export default {
       resMsgflag: false,
     };
   },
+  created() {
+    mapbox.addMapboxScript();
+  },
   mounted() {
     console.log("srp0");
     console.log(this.$route);
-    mapbox.addMapboxScript();
   },
   methods: {
     async onSubmit(book) {

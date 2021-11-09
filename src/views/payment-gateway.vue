@@ -7,6 +7,8 @@
       :error="error"
       :success="success"
       :pending="pending"
+      :displayMsg="displayMsg"
+      :displayMsgContent="displayMsgContent"
     />
   </div>
 </template>
@@ -23,6 +25,8 @@ export default {
       error: false,
       success: false,
       pending: false,
+      displayMsg: false,
+      displayMsgContent: "",
     };
   },
   computed: {
@@ -57,21 +61,27 @@ export default {
             },
           }
         );
+        // console.log(response);
         if (!response.ok) {
           throw new Error(response);
         } else {
           const data = await response.json();
-          this.bookingDetails = {
-            name: data.BookingInfo.Name,
-            dueDate: data.DueDate,
-            amount: data.PaymentInfo.Amount,
-            discount: data.PaymentInfo.Discount,
-            convenienceFee: data.PaymentInfo.ConvenienceFee,
-          };
-          this.paymentMode = { ...data.Payment };
+          if (typeof data.DisplayMsg != undefined) {
+            this.status = !this.status;
+            this.displayMsg = !this.displayMsg;
+            this.displayMsgContent = data.DisplayMsg;
+          } else {
+            this.bookingDetails = {
+              name: data.BookingInfo.Name,
+              dueDate: data.DueDate,
+              amount: data.PaymentInfo.Amount,
+              discount: data.PaymentInfo.Discount,
+              convenienceFee: data.PaymentInfo.ConvenienceFee,
+            };
+            this.paymentMode = { ...data.Payment };
+          }
         }
       } catch (exception) {
-        console.log(exception);
         this.status = !this.status;
         this.getStatus();
       }

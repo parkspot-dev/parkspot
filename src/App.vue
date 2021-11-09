@@ -3,7 +3,7 @@
     <t-navbar class="is-fixed-top floatingNav" />
     <br />
     <router-view class="body-template" :key="$route.fullPath" />
-    <!-- :key="$route.fullPath" temporary fix ...as its only problem with this method is that every path in that router will update in the case of a path change. You may not want all that needless re-rendering, but that’s a decision for you to make.  -->
+    <!-- :key="$route.fullPath" temporary fix ,as its only problem with this method is that every path in that router will update in the case of a path change. You may not want all that needless re-rendering, but that’s a decision for you to make.  -->
     <t-footer />
   </div>
 </template>
