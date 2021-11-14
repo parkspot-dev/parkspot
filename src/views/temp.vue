@@ -1,17 +1,16 @@
 <template>
   <div class="section">
     <div class="container">
-      <div class="div">{{ count }}</div>
-      <m-search-box />
-      <!-- <m-loading-page /> -->
+      <atom-button> </atom-button>
     </div>
   </div>
 </template>
 <script>
+import AtomButton from "../components/atoms/atom-button/atom-button.vue";
 import mLoadingPage from "../components/molecules/m-loading-page.vue";
 import MSearchBox from "../components/molecules/m-search-box.vue";
 export default {
-  components: { mLoadingPage, MSearchBox },
+  components: { mLoadingPage, MSearchBox, AtomButton },
   name: "temp",
   computed: {
     count() {
