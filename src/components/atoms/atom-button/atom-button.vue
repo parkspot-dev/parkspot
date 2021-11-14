@@ -1,5 +1,7 @@
 <template>
-  <button :disabled="disabled">{{ text }}</button>
+  <button class="button btn-shadow is-rounded is-warning" :disabled="disabled">
+    {{ text }}
+  </button>
 </template>
 
 <script>
@@ -21,3 +23,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.btn-shadow {
+  box-shadow: 0 4px 30px -10px;
+}
+</style>
