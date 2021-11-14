@@ -145,14 +145,14 @@ export const routes = [
     }
   },
   // Todo Delete below code before deployment
-  {
-    path: '/temp',
-    name: 'temp',
-    component: () => import('@/views/temp.vue'),
-    meta: {
-      title: "Parking Near "
-    }
-  },
+  // {
+  //   path: '/temp',
+  //   name: 'temp',
+  //   component: () => import('@/views/temp.vue'),
+  //   meta: {
+  //     title: "Parking Near "
+  //   }
+  // },
 
   {
     path: '*',
