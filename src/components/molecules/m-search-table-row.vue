@@ -1,12 +1,11 @@
 <template>
   <tr>
     <td><atom-text :text="details.ID" /></td>
+    <td><atom-text :text="details.CreatedAt.split('T')[0]" /></td>
     <td><atom-text :text="details.Name" /></td>
     <td><atom-text :text="details.Mobile" /></td>
     <td><atom-text :text="details.CarModel" /></td>
     <td><atom-text :text="details.Landmark" /></td>
-    <td><atom-text :text="details.Country" /></td>
-    <td><atom-text :text="details.State" /></td>
     <td><atom-text :text="details.City" /></td>
     <td><atom-text :text="details.Duration" /></td>
     <td>
@@ -56,22 +55,22 @@ export default {
     statusDetail() {
       switch (this.details.Status) {
         case 0:
-          return this.statusDetails + "Request Status Not Set";
+          return this.statusDetails + "Not Set";
 
         case 1:
-          return this.statusDetails + "Request Registered";
+          return this.statusDetails + "Registered";
 
         case 2:
-          return this.statusDetails + "Request Processing";
+          return this.statusDetails + "Processing";
 
         case 3:
-          return this.statusDetails + "Request Spot Suggested";
+          return this.statusDetails + "Suggested";
 
         case 4:
-          return this.statusDetails + "Request Spot Accepted";
+          return this.statusDetails + "Accepted";
 
         case 5:
-          return this.statusDetails + "Request Spot Denied";
+          return this.statusDetails + "Denied";
       }
     },
   },

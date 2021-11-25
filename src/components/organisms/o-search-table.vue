@@ -4,12 +4,11 @@
       <table class="table is-narrow is-hoverable">
         <thead class="table__head">
           <th><atom-text :text="`ID`" /></th>
+          <th><atom-text :text="`Date Requested`" /></th>
           <th><atom-text :text="`Name`" /></th>
           <th><atom-text :text="`Mobile No.`" /></th>
           <th><atom-text :text="`Car Model`" /></th>
           <th><atom-text :text="`Nearest Location`" /></th>
-          <th><atom-text :text="`Country`" /></th>
-          <th><atom-text :text="`State`" /></th>
           <th><atom-text :text="`City`" /></th>
           <th><atom-text :text="`Duration`" /></th>
           <th><atom-text :text="`Map URL`" /></th>
