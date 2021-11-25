@@ -1,6 +1,22 @@
 import Home from '../views/Home.vue'
 import about from '@/components/templates/t-about.vue'
+import { firebase, getDatabase, ref, get, child } from "../firebase";
 
+const guardThisRoute = async (to, from, next) => {
+  const db = getDatabase(firebase);
+  const dbref = ref(db);
+  const res = await get(child(dbref, `portal-user`));
+  const credentials = await res.val();
+  let userName = prompt("Enter User Name:");
+  let password = prompt("Enter Password:");
+  if (userName === credentials.userName && password === credentials.password) {
+    next()
+  } else {
+    alert("Invalid username/password")
+    next('/search-portal')
+  }
+
+}
 
 
 export const routes = [
@@ -97,17 +113,7 @@ export const routes = [
     meta: {
       title: "ParkSpot | Search Portal"
     },
-    beforeEnter: (to, from, next) => {
-      let userName = prompt("Enter User Name:");
-      let password = prompt("Enter Password:");
-      if (userName === "Admin" && password === "Parksp0t") {
-        next()
-      }
-      else {
-        alert("You have Entered wrong credentials!! Please try again")
-        next("/search-portal")
-      }
-    }
+    beforeEnter: guardThisRoute
   },
   {
     path: '/payment/*',
@@ -116,25 +122,7 @@ export const routes = [
     meta: {
       title: "Payment | Parkspot.in "
     }
-    // beforeEnter: (to, from, next) => {
-    //   console.log(to.query)
-    //   next()
-
-    // 
   },
-  // {
-  //   path: '/payment/status',
-  //   name: 'paymentGateway',
-  //   component: () => import('@/views/payment-gateway.vue'),
-  //   meta: {
-  //     title: "Payment Status | Parkspot.in "
-  //   }
-  //   // beforeEnter: (to, from, next) => {
-  //   //   console.log(to.query)
-  //   //   next()
-
-  //   // }
-  // },
   // ! it will take " -mara/xyx"
   {
     path: '/bangalore/parking-near-*',
