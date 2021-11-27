@@ -5,8 +5,8 @@
     @input="handleInput"
     @change="handleChange"
     @keypress="handleKeypress"
-    cols="30"
-    rows="5"
+    :cols="columns"
+    :rows="rows"
     :placeholder="placeholder"
     :disabled="disabled"
   ></textarea>
@@ -27,6 +27,18 @@ export default {
       type: String,
       default() {
         return "";
+      },
+    },
+    rows: {
+      type: Number,
+      default() {
+        return 5;
+      },
+    },
+    columns: {
+      type: Number,
+      default() {
+        return 30;
       },
     },
   },
