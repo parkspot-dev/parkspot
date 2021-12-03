@@ -61,12 +61,11 @@ export default {
             },
           }
         );
-        // console.log(response);
         if (!response.ok) {
           throw new Error(response);
         } else {
           const data = await response.json();
-          if (typeof data.DisplayMsg != undefined) {
+          if (data.hasOwnProperty('ErrorCode')) {
             this.status = !this.status;
             this.displayMsg = !this.displayMsg;
             this.displayMsgContent = data.DisplayMsg;
