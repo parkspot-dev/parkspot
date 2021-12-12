@@ -24,7 +24,7 @@
               :distance="srp.Distance"
               :img="srp.IconURL"
               :location="srp.Address"
-              :rate="srp.Fee.Amount"
+              :rate="srp.Fee.BaseAmount"
               :slots="srp.SlotsAvailable"
               :title="srp.Name"
               :vehicle="srp.VehicleType"
