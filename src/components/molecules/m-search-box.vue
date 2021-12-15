@@ -91,7 +91,7 @@ export default {
     history() {
       this.toggle = true;
       let historyData = window.localStorage.getItem("sKey");
-      this.search(historyData.slice(0, 3));
+      this.search(historyData);
     },
     //this is from input element
     search(value) {
