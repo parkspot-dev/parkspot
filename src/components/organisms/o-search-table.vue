@@ -101,7 +101,9 @@ export default {
         }
       );
       const msg = await res.json();
-      // console.log(msg);
+      //  console.log(msg);
+
+      this.getSpotDetails();
     },
   },
 };
