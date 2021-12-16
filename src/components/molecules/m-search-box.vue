@@ -2,8 +2,13 @@
   <div class="field">
     <div class="control has-icons-left">
       <atom-input
+        ref="atomInput"
         @input="search"
         v-on:click.native="history"
+        v-closable="{
+          exclude: ['atomInput'],
+          handler: 'onClose',
+        }"
         class="input has-text-weight-semibold"
         :placeholder="placeholder"
         :value="value"
@@ -17,39 +22,37 @@
           :animation="animation"
         />
       </span>
-      <transition name="fade">
-        <div class="list-wrapper" v-show="toggle">
-          <div class="list-wrapper__wrapper">
-            <div class="list-wrapper__seperator"></div>
-            <div class="list-wrapper__list-items-wrapper">
-              <ul class="list-wrapper__list-items" v-show="toggle">
-                <li
-                  @click="flytosrp(result)"
-                  :key="result"
-                  v-for="result in results.slice(0, 3)"
-                  class="list-item"
-                >
-                  <div class="list-description">
-                    <span class="list-description__icon">
-                      <atom-boxicon
-                        :name="name"
-                        :color="`#a3a3a3`"
-                        :size="size"
-                      />
-                    </span>
-                    <div class="list-description__description">
-                      <div class="list-description__description-text">
-                        <span>{{ result }}</span>
-                      </div>
+      <div class="list-wrapper" v-show="toggle">
+        <div class="list-wrapper__wrapper">
+          <div class="list-wrapper__seperator"></div>
+          <div class="list-wrapper__list-items-wrapper">
+            <ul class="list-wrapper__list-items" v-show="toggle">
+              <li
+                @click="flytosrp(result)"
+                :key="result"
+                v-for="result in results.slice(0, 3)"
+                class="list-item"
+              >
+                <div class="list-description">
+                  <span class="list-description__icon">
+                    <atom-boxicon
+                      :name="name"
+                      :color="`#a3a3a3`"
+                      :size="size"
+                    />
+                  </span>
+                  <div class="list-description__description">
+                    <div class="list-description__description-text">
+                      <span>{{ result }}</span>
                     </div>
                   </div>
-                </li>
-              </ul>
-            </div>
-            <ul class="last-list"></ul>
+                </div>
+              </li>
+            </ul>
           </div>
+          <ul class="last-list"></ul>
         </div>
-      </transition>
+      </div>
     </div>
   </div>
 </template>
@@ -108,6 +111,9 @@ export default {
     // flytosrps(){
     // this.$emit('flysrp',this.results[0])    on keyup.enter not working
     // }
+    onClose() {
+      this.toggle = false;
+    },
   },
 };
 </script>
@@ -212,14 +218,5 @@ export default {
 }
 .list-item:hover {
   background-color: #ffdb4a;
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>
