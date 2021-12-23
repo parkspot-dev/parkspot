@@ -18,9 +18,11 @@ export default {
 };
 </script>
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap"); */
 #app {
   font-family: "Poppins", sans-serif;
+  font-weight: 300;
 }
 .body-template {
   margin-top: 1.5rem;

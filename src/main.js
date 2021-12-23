@@ -8,14 +8,14 @@ import LazyLoadDirective from "./directives/LazyLoadDirective.vue";
 import JwPagination from 'jw-vue-pagination';
 import 'bulma/css/bulma.css'
 import store from './store'
-import OutsideClickDirective from "./directives/OutsideClickDirective.vue"
+import ClickOutside from 'vue-click-outside'
 
 import fbApp from './FB-App.vue'
 
 
 Vue.component('jw-pagination', JwPagination);
 Vue.directive("lazyload", LazyLoadDirective);
-Vue.directive("closable", OutsideClickDirective);
+Vue.directive("ClickOutside", ClickOutside);
 Vue.use(VueResource);
 
 Vue.config.productionTip = false;

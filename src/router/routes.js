@@ -50,8 +50,8 @@ export const routes = [
   },
   {
     path: '/features',
-    name: 't-features',
-    component: () => import('@/components/templates/t-features.vue'), meta: {
+    name: 'features',
+    component: () => import('@/views/features.vue'), meta: {
       title: "ParkSpot | Features"
     }
   },
@@ -133,14 +133,14 @@ export const routes = [
     }
   },
   // Todo Delete below code before deployment
-  // {
-  //   path: '/temp',
-  //   name: 'temp',
-  //   component: () => import('@/views/temp.vue'),
-  //   meta: {
-  //     title: "Parking Near "
-  //   }
-  // },
+  {
+    path: '/temp',
+    name: 'temp',
+    component: () => import('@/views/features.vue'),
+    meta: {
+      title: "Parking Near "
+    }
+  },
 
   {
     path: '*',

@@ -6,7 +6,7 @@
       v-for="(navlink, i) in navLinks"
     >
       <atom-router-link
-        class="has-text-weight-bold navlink"
+        class="navlink"
         :text="navlink.text"
         :link="navlink.link"
         v-on:click.native="isClose"
@@ -31,7 +31,7 @@ export default {
         about: { text: "About", link: "t-about" },
         features: {
           text: "Features",
-          link: "t-features",
+          link: "features",
         },
         blog: {
           text: "Blog",

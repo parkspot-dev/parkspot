@@ -71,7 +71,7 @@ export default {
       );
       const data = await res.json();
       this.spotDetails = data;
-      console.log(this.spotDetails);
+      // console.log(this.spotDetails);
     },
     onEdit() {
       this.editComment = !this.editComment;
@@ -101,8 +101,6 @@ export default {
         }
       );
       const msg = await res.json();
-      //  console.log(msg);
-
       this.getSpotDetails();
     },
   },
