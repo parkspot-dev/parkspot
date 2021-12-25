@@ -15,7 +15,7 @@ export default {
     alt: {
       type: String,
       default() {
-        return "image.png";
+        return "parkspot.png";
       },
     },
   },

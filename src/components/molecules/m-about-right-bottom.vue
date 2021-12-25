@@ -6,7 +6,7 @@
     />
     <div class="column is-half">
       <a href="https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website"  target="_blank">
-        <atom-img class="ps_img" :src="src" />
+        <atom-img class="ps_img" :src="src" alt="parkspot_app" />
       </a>
     </div>
   </div>
