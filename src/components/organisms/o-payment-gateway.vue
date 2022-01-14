@@ -68,7 +68,7 @@
           </div>
         </div> -->
         <p class="is-size-7 has-text-centered">
-          Bill description: Total : {{ bookingDetails.amount }} , Discount :
+          Bill description: Rent : {{ bookingDetails.baseAmount }} , Discount :
           {{ bookingDetails.discount }}, Convenience Fee :
           {{ bookingDetails.convenienceFee }}
         </p>
