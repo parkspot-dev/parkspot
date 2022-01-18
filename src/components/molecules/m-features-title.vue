@@ -1,7 +1,7 @@
 <template>
   <div class="m-features-title">
     <h1 class="title--size">
-      Why Parking With ParkSpot Is <br />
+      Why Parking With ParkSpot Is
       <span class="title__second">GOOD</span>
     </h1>
   </div>
@@ -19,5 +19,10 @@ export default {
   font-size: 1.5em;
   color: #0085ad;
   font-weight: 700;
+}
+@media only screen and (min-width: 1024px) {
+  .title--size {
+    font-size: 2.5rem;
+  }
 }
 </style>

@@ -1,10 +1,7 @@
 <template>
   <div class="t_testimonials section">
     <div class="container">
-      <atom-b-title
-        class="is-size-3-mobile is-size-2 mb-6 has-text-centered"
-        :text="title"
-      />
+      <atom-b-title class="mb-6 has-text-centered" :text="title" />
       <o-testimonials />
     </div>
   </div>

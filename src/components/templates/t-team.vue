@@ -1,10 +1,7 @@
 <template>
   <section class="t_team section">
     <div class="container">
-      <atom-b-title
-        class="is-size-3-mobile is-size-2 ps_mb has-text-centered"
-        :text="title"
-      />
+      <atom-b-title class="ps_mb has-text-centered" :text="title" />
       <carousel
         :perPageCustom="[
           [360, 1],

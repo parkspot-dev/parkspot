@@ -4,30 +4,64 @@
     <div class="columns is-flex-wrap-wrap is-3">
       <div
         :key="data.id"
-        class="features-card column"
+        class="features-card column is-half"
         v-for="data of featuresData"
       >
         <transition name="expand">
           <m-features-details
+            v-if="data.textLimit"
+            :class="data.textLimit ? 'feature-card__details' : ''"
+            :featuresTitle="data.title"
+            :featuresText="data.text.substring(0, 300) + '...'"
+          ></m-features-details>
+          <m-features-details
+            v-if="!data.textLimit"
             :class="data.textLimit ? 'feature-card__details' : ''"
             :featuresTitle="data.title"
             :featuresText="data.text"
           ></m-features-details>
         </transition>
+
         <p
           v-if="data.textLimit"
           v-on:click="expand(data.id)"
-          class="feature-card__extra"
+          class="feature-card__show"
         >
-          show more
+          Show more
         </p>
         <p
           v-if="!data.textLimit"
           v-on:click="expand(data.id)"
-          class="feature-card__extra"
+          class="feature-card__hide"
         >
-          hide
+          Show Less
         </p>
+        <!-- <atom-button
+          v-if="data.textLimit"
+          v-on:click.native="expand(data.id)"
+          class="feature-card__show"
+          :text="'Show more↓'"
+        ></atom-button>
+        <atom-button
+          v-if="!data.textLimit"
+          v-on:click.native="expand(data.id)"
+          class="feature-card__hide"
+          :text="'Hide↑'"
+        ></atom-button> -->
+        <!-- <p
+          v-if="data.textLimit"
+          v-on:click="expand(data.id)"
+          class="feature-card__show"
+        >
+          Show more↓
+        </p>
+        <p
+          v-if="!data.textLimit"
+          v-on:click="expand(data.id)"
+          class="feature-card__hide"
+        >
+          Hide↑
+        </p> -->
         <!-- <div>{{ data.text.length }}</div> -->
       </div>
     </div>
@@ -35,12 +69,14 @@
 </template>
 
 <script>
+import AtomButton from "../atoms/atom-button/atom-button.vue";
 import MFeaturesDetails from "../molecules/m-features-details.vue";
 import MFeaturesMainHeading from "../molecules/m-features-main-heading.vue";
 export default {
   components: {
     MFeaturesDetails,
     MFeaturesMainHeading,
+    AtomButton,
   },
   name: "t-features-page",
   data() {
@@ -127,20 +163,25 @@ export default {
 
 <style scoped>
 .features-card {
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   border: solid 1px #eeeeee;
+  /* border-bottom: 0px; */
 }
 .feature-card__details {
-  height: 350px;
+  max-height: 300px;
   overflow: hidden;
 }
-.feature-card__extra {
+.feature-card__show,
+.feature-card__hide {
   text-align: center;
   cursor: pointer;
   color: #0085ad;
-  background-color: #9e9d9d;
-  box-shadow: 0px -8px 13px 2px #9e9d9d;
+  display: inline;
+  /* margin: 0% 50%; */
+  /* background-color: #000000; */
+  /* box-shadow: 0px -8px 13px 2px #9e9d9d; */
 }
+
 /* TRANSITION */
 /* always present */
 .expand-transition {

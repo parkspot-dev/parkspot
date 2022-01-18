@@ -1,9 +1,11 @@
 <template>
   <section class="section">
-    <m-features-main-heading
-      :featuresButton="'Learn More'"
-      :featuresButtonLink="'features'"
-    />
+    <div class="container">
+      <m-features-main-heading
+        :featuresButton="'Learn More'"
+        :featuresButtonLink="'features'"
+      />
+    </div>
   </section>
 </template>
 
