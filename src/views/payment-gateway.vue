@@ -76,6 +76,7 @@ export default {
               amount: data.PaymentInfo.Amount,
               discount: data.PaymentInfo.Discount,
               convenienceFee: data.PaymentInfo.ConvenienceFee,
+              baseAmount: data.PaymentInfo.BaseAmount
             };
             this.paymentMode = { ...data.Payment };
           }
