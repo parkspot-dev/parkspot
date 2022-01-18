@@ -1,14 +1,10 @@
 <template>
   <div class="o_about_right">
-    <atom-b-title
-      class="is-size-3-mobile is-size-2 mb-2 has-text-centered"
-      :text="title"
-    />
-    <atom-b-subtitle
-      class="is-size-7-mobile is-size-6 has-text-justified"
-      :text="para"
-    />
+    <atom-b-title class="mb-2 has-text-centered" :text="title" />
+
+    <atom-text class="about-text has-text-justified" :text="para" />
     <br />
+
     <m-about-right-bottom />
   </div>
 </template>
@@ -17,13 +13,14 @@
 import AtomBSubtitle from "@/components/atoms/atom-text/atom-b-subtitle.vue";
 import atomBTitle from "@/components/atoms/atom-text/atom-b-title.vue";
 import MAboutRightBottom from "../molecules/m-about-right-bottom.vue";
+import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
-  components: { atomBTitle, AtomBSubtitle, MAboutRightBottom },
+  components: { atomBTitle, AtomBSubtitle, MAboutRightBottom, AtomText },
   name: "o-about-right",
   data() {
     return {
       title: "About ParkSpot",
-      para: "We at ParkSpot strive to solve the trivial problem of finding/booking \
+      para: "We at ParkSpot strive to solve the trivial problem of finding or booking \
         available parking slots in vicinity which is faced by millions of people \
         on a daily basis. we vie for solutions which brings technology and life \
         closer and accessible. ParkSpot is part of this new initiative and \
@@ -37,4 +34,10 @@ export default {
 </script>
 
 <style scoped>
+@media only screen and (min-width: 1024px) {
+  .about-text {
+    font-size: 1.25rem;
+    line-height: 28px;
+  }
+}
 </style>

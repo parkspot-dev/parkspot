@@ -1,6 +1,6 @@
 <template>
   <div class="m_testimony card" v-if="show">
-    <atom-b-title class="ps_text" :text="comma" />
+    <atom-text class="ps_text" :text="comma" />
     <atom-text :text="testimony" />
     <br />
     <div class="star">

@@ -1,15 +1,15 @@
 <template>
   <div class="o_contact_left">
     <atom-img class="ps_img mb-2 mx-5" :src="src" />
-    <atom-b-subtitle class="ps_subtitle" :text="para" />
+    <atom-text class="ps_subtitle" :text="para" />
   </div>
 </template>
 
 <script>
 import atomImg from "@/components/atoms/atom-img/atom-img.vue";
-import AtomBSubtitle from "@/components/atoms/atom-text/atom-b-subtitle.vue";
+import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
-  components: { atomImg, AtomBSubtitle },
+  components: { atomImg, AtomText },
   name: "o-contact-left",
   data() {
     return {

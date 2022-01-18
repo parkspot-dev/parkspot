@@ -2,13 +2,9 @@
   <div class="field">
     <div class="control has-icons-left">
       <atom-input
-        ref="atomInput"
+        v-click-outside="onClose"
         @input="search"
         v-on:click.native="history"
-        v-closable="{
-          exclude: ['atomInput'],
-          handler: 'onClose',
-        }"
         class="input has-text-weight-semibold"
         :placeholder="placeholder"
         :value="value"
@@ -28,7 +24,6 @@
           <div class="list-wrapper__list-items-wrapper">
             <ul class="list-wrapper__list-items" v-show="toggle">
               <li
-                @click="flytosrp(result)"
                 :key="result"
                 v-for="result in results.slice(0, 3)"
                 class="list-item"
@@ -43,7 +38,7 @@
                   </span>
                   <div class="list-description__description">
                     <div class="list-description__description-text">
-                      <span>{{ result }}</span>
+                      <span @click="flytosrp(result)">{{ result }}</span>
                     </div>
                   </div>
                 </div>

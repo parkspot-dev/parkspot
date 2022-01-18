@@ -15,10 +15,7 @@
       </nav>
       <!-- terms content start from here -->
       <atom-b-title
-        class="
-          is-size-3-desktop is-size-4-mobile
-          has-text-weight-semibold has-text-centered-mobile
-        "
+        class="has-text-weight-semibold has-text-centered-mobile"
         :text="title"
       />
       <br />

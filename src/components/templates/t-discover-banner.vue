@@ -2,10 +2,7 @@
   <div class="t_discover_banner">
     <div class="section">
       <div class="container">
-        <atom-b-title
-          class="is-size-3 is-size-4-mobile has-text-weight-bold"
-          :text="banner_title"
-        />
+        <atom-b-title class="has-text-weight-bold" :text="banner_title" />
         <br />
         <m-search-box
           class="search"

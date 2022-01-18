@@ -13,14 +13,7 @@
           </li>
         </ul>
       </nav>
-      <atom-b-title
-        class="
-          is-size-2 is-size-3-mobile
-          has-text-weight-semibold has-text-centered
-          mb-5
-        "
-        :text="title"
-      />
+      <atom-b-title class="has-text-centered mb-5" :text="title" />
       <o-blog-box :noOfBlog="noOfBlog" />
     </div>
   </div>
