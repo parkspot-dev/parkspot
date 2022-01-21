@@ -5,6 +5,9 @@
         v-click-outside="onClose"
         @input="search"
         v-on:click.native="history"
+        v-on:keyup.down.native="onArrow"
+        v-on:keyup.up.native="onArrow"
+        v-on:keyup.enter.native="onEnter()"
         class="input has-text-weight-semibold"
         :placeholder="placeholder"
         :value="value"
@@ -22,12 +25,16 @@
         <div class="list-wrapper__wrapper">
           <div class="list-wrapper__seperator"></div>
           <div class="list-wrapper__list-items-wrapper">
-            <ul class="list-wrapper__list-items" v-show="toggle">
-              <li
-                :key="result"
-                v-for="result in results.slice(0, 3)"
-                class="list-item"
-              >
+            <ul
+              class="list-wrapper__list-items"
+              v-show="toggle"
+              :key="i"
+              v-for="(result, i) in data"
+              :class="
+                i === arrowCounter ? 'list-wrapper__list-items--active' : ''
+              "
+            >
+              <li @click="flytosrp(result)" class="list-item">
                 <div class="list-description">
                   <span class="list-description__icon">
                     <atom-boxicon
@@ -38,7 +45,7 @@
                   </span>
                   <div class="list-description__description">
                     <div class="list-description__description-text">
-                      <span @click="flytosrp(result)">{{ result }}</span>
+                      <span>{{ result }}</span>
                     </div>
                   </div>
                 </div>
@@ -71,6 +78,7 @@ export default {
       animation: "tada",
       placeholders: "Search your spot...",
       value: "",
+      arrowCounter: -1,
     };
   },
   props: {
@@ -83,6 +91,9 @@ export default {
         return (this.placeholders = this.fieldName);
       }
       return this.placeholders;
+    },
+    data() {
+      return this.results.slice(0, 3);
     },
   },
   methods: {
@@ -106,6 +117,22 @@ export default {
     // flytosrps(){
     // this.$emit('flysrp',this.results[0])    on keyup.enter not working
     // }
+    // arrow key functions
+    onArrow(event) {
+      this.arrowCounter =
+        event.code == "ArrowDown" ? ++this.arrowCounter : --this.arrowCounter;
+      if (this.arrowCounter >= this.data.length) {
+        this.arrowCounter = this.arrowCounter % this.data.length;
+      } else if (this.arrowCounter < 0) {
+        this.arrowCounter = this.data.length + this.arrowCounter;
+      }
+      this.value = this.data[this.arrowCounter];
+    },
+
+    onEnter() {
+      this.$emit("flytosrp", this.value);
+    },
+    // click outsite functions
     onClose() {
       this.toggle = false;
     },
@@ -212,6 +239,9 @@ export default {
   opacity: 0.5;
 }
 .list-item:hover {
+  background-color: #ffdb4a;
+}
+.list-wrapper__list-items--active {
   background-color: #ffdb4a;
 }
 </style>
