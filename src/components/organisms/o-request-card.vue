@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" :class="getBorderClass()">
     <div class="card-content">
       <div id="row1" class="columns">
         <m-text-title class="column" title="ID" :text="request.ID.toString()" />
@@ -43,6 +43,7 @@
           :text="request.Landmark"
         />
         <m-text-title class="column" title="City" :text="request.City" />
+        <m-text-title class="column" title="" />
       </div>
 
       <div id="row3" class="columns is-vcentered">
@@ -157,6 +158,15 @@ export default {
   },
 
   methods: {
+    getBorderClass() {
+      if (this.request.Priority == 3) {
+        return "card--high";
+      }
+      if (this.request.Priority == 2) {
+        return "card--medium";
+      }
+      return "card--low";
+    },
     async updateRequest() {
       console.log("updating request:", this.request);
       const res = await fetch(
@@ -170,7 +180,7 @@ export default {
         }
       );
       const msg = await res.json();
-      console.log({ msg });
+      alert("Success: " + msg.Success);
       // alert popup to show update success or failure
     },
     toSrp() {
@@ -189,5 +199,14 @@ export default {
   margin: 5px 25px;
   border: 2px solid;
   border-bottom: 10px solid rgb(240, 224, 107);
+}
+.card--high {
+  border-bottom: 10px solid rgb(255, 0, 0);
+}
+.card--medium {
+  border-bottom: 10px solid rgb(240, 224, 107);
+}
+.card--low {
+  border-bottom: 10px solid rgb(92, 92, 94);
 }
 </style>

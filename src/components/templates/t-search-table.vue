@@ -1,5 +1,5 @@
 <template>
-  <div id="requestCards">
+  <div >
      <br />
     <o-request-card
       :key="spot.ID"
