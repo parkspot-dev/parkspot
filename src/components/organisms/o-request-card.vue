@@ -1,49 +1,57 @@
 <template>
   <div class="card" :class="getBorderClass()">
     <div class="card-content">
-      <div id="row1" class="columns">
-        <m-text-title class="column" title="ID" :text="request.ID.toString()" />
+      <div class="columns is-multiline">
         <m-text-title
-          class="column"
+          class="column is-2"
+          title="ID"
+          :text="request.ID.toString()"
+        />
+        <m-text-title
+          class="column is-2"
           title="Date"
           :text="request.CreatedAt.substr(0, 10)"
         />
-        <m-text-title class="column" title="Name" :text="request.Name" />
-        <m-text-title class="column" title="Mobile" :text="request.Mobile" />
+        <m-text-title class="column is-2" title="Name" :text="request.Name" />
         <m-text-title
-          class="column"
+          class="column is-2"
+          title="Mobile"
+          :text="request.Mobile"
+        />
+        <m-text-title
+          class="column is-2"
           title="Car Model"
           :text="request.CarModel"
         />
         <m-text-title
-          class="column"
+          class="column is-2"
           title="Duration"
           :text="request.Duration"
         />
-      </div>
 
-      <div id="row2" class="columns">
         <m-text-title
-          class="column"
+          class="column is-2"
           title="Last Updated"
           :text="request.UpdatedAt.substr(0, 10)"
         />
-        <m-text-title class="column" title="Email" :text="request.EmailID" />
-        <a v-on:click="toSrp" target="_blank">
+        <m-text-title
+          class="column is-2"
+          title="Email"
+          :text="request.EmailID"
+        />
+        <a v-on:click="toSrp" target="_blank" class="column is-2">
           <m-text-title
-            class="column"
-            title="Lat/Lang"
+            title="Lat / Lang"
             :text="
               request.Latitude.toFixed(6) + '/' + request.Longitude.toFixed(6)
             "
         /></a>
         <m-text-title
-          class="column"
+          class="column is-2"
           title="Landmark"
           :text="request.Landmark"
         />
-        <m-text-title class="column" title="City" :text="request.City" />
-        <m-text-title class="column" title="" />
+        <m-text-title class="column is-2" title="City" :text="request.City" />
       </div>
 
       <div id="row3" class="columns is-vcentered">
@@ -101,7 +109,7 @@ export default {
         "SpotSuggested",
         "SpotAccepted",
         "SpotDenied",
-        "NotFulfiled",
+        "Archive",
       ],
       priorityList: ["Not Set", "Low", "Medium", "High"],
     };
