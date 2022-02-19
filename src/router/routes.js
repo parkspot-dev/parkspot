@@ -80,6 +80,14 @@ export const routes = [
     }
   },
   {
+    path: '/register-parking-spot',
+    name: 'SOPortal',
+    component: () => import('@/views/SO-portal.vue'),
+    meta: {
+      title: "ParkSpot | Register Parking Spot"
+    }
+  },
+  {
     path: '/terms-and-conditions',
     name: 'Terms',
     component: () => import('@/views/Terms.vue'),

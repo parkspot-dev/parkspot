@@ -5,6 +5,7 @@
         @search="search"
         @flytosrp="flyToSrp"
         :results="results"
+        :toggle="toggle"
         class="ps_search"
       />
       <div class="ps_map"></div>
@@ -60,6 +61,7 @@ export default {
         query: { lat: lat, lng: lng, loc: value },
       });
     },
+    
   },
 };
 </script>

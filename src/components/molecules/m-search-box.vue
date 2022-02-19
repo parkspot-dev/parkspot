@@ -1,8 +1,7 @@
 <template>
-  <div class="field">
+  <div class="field" v-click-outside="onClose">
     <div class="control has-icons-left">
       <atom-input
-        v-click-outside="onClose"
         @input="search"
         v-on:click.native="history"
         v-on:keyup.down.native="onArrow"
@@ -78,7 +77,7 @@ export default {
       animation: "tada",
       placeholders: "Search your spot...",
       value: "",
-      arrowCounter: -1,
+      arrowCounter: 0,
     };
   },
   props: {
@@ -130,6 +129,9 @@ export default {
     },
 
     onEnter() {
+      if (this.value.length == 0) {
+        this.value = this.data[0];
+      }
       this.$emit("flytosrp", this.value);
     },
     // click outsite functions
