@@ -43,12 +43,5 @@ export default {
     email: String,
     mno: Number,
   },
-  data() {
-    return {
-      //   fullName: "",
-      //   email: "",
-      //   mno: "",
-    };
-  },
 };
 </script>
