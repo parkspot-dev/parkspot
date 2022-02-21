@@ -1,5 +1,5 @@
-import Home from '../views/Home.vue'
-import about from '@/components/templates/t-about.vue'
+import Home from "../views/Home.vue";
+import about from "@/components/templates/t-about.vue";
 import { firebase, getDatabase, ref, get, child } from "../firebase";
 
 const guardThisRoute = async (to, from, next) => {
@@ -7,144 +7,169 @@ const guardThisRoute = async (to, from, next) => {
   const dbref = ref(db);
   const res = await get(child(dbref, `portal-user`));
   const credentials = await res.val();
-  let userName = prompt("Enter User Name:");
-  let password = prompt("Enter Password:");
-  if (userName === credentials.userName && password === credentials.password) {
-    next()
+  let userNameLocal = localStorage.getItem("searchPortalUser");
+  let userNamePwdLocal = localStorage.getItem("searchPortalUserPwd");
+  if (
+    userNameLocal === credentials.userName &&
+    userNamePwdLocal === credentials.password
+  ) {
+    next();
   } else {
-    alert("Invalid username/password")
-    next('/search-portal')
+    alert("Invalid username/password");
+    userNameLocal = prompt("Enter User Name:");
+    userNamePwdLocal = prompt("Enter Password:");
+    localStorage.setItem("searchPortalUser", userNameLocal);
+    localStorage.setItem("searchPortalUserPwd", userNamePwdLocal);
+    next("/search-portal");
   }
+};
 
-}
-
+export const pages = {
+  HOME: "/",
+  FAQ: "/faq",
+  ABOUT: "/about",
+  FEATURES: "/features",
+  CONTACT: "/contact",
+  SRP: "/srp",
+  VOPORTAL: "/get-parking-spot",
+  SOPORTAL: "/register-parking-spot",
+  TERMS: "/terms-and-conditions",
+  BLOG: "/blog",
+  MAINBLOG: "/blog/:id/:postTitle",
+  SEARCHPORTAL: "/search-portal",
+  PAYMENTGATEWAY: "/payment/*",
+  DISCOVER: "/bangalore/parking-near-*",
+  TEMP: "/temp",
+};
 
 export const routes = [
   {
-    path: '/',
-    name: 'Home',
+    path: pages.HOME,
+    name: "Home",
     component: Home,
     meta: {
-      title: "Find and Book Parking Spaces Nearby | Bangalore Delhi Mumbai Pune Bengaluru | Parkspot.in"
-    }
+      title:
+        "Find and Book Parking Spaces Nearby | Bangalore Delhi Mumbai Pune Bengaluru | Parkspot.in",
+    },
   },
   {
-    path: '/faq',
-    name: 'Faq',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import('@/views/Faq.vue'),
+    path: pages.FAQ,
+    name: "Faq",
+    component: () => import("@/views/Faq.vue"),
     meta: {
-      title: "FAQ's - Get Your All Parking Related Queries be Answered..."
-    }
+      title: "FAQ's - Get Your All Parking Related Queries be Answered...",
+    },
   },
 
   {
-    path: '/about',
-    name: 't-about',
+    path: pages.ABOUT,
+    name: "t-about",
     component: about,
     meta: {
-      title: "ParkSpot | About -  Get Parking Space , Rent Empty Space"
-    }
-  },
-  {
-    path: '/features',
-    name: 'features',
-    component: () => import('@/views/features.vue'), meta: {
-      title: "ParkSpot | Features"
-    }
-  },
-  {
-    path: '/contact',
-    name: 't-contact',
-    component: () => import('@/components/templates/t-contact.vue'),
-    meta: {
-      title: "ParkSpot | Contact Us"
-    }
-  },
-  {
-    path: '/srp',
-    name: 'srp',
-    component: () => import('@/views/Srp.vue'),
-    meta: {
-      title: "ParkSpot | Search - "
-    }
-  },
-  {
-    path: '/get-parking-spot',
-    name: 'VOPortal',
-    component: () => import('@/views/VO-portal.vue'),
-    meta: {
-      title: "ParkSpot | Get Parking Spot"
-    }
-  },
-  {
-    path: '/terms-and-conditions',
-    name: 'Terms',
-    component: () => import('@/views/Terms.vue'),
-    meta: {
-      title: "ParkSpot | Terms & Conditions"
-    }
-  },
-  {
-    path: '/blog',
-    name: 'blog',
-    component: () => import('@/views/landing-blog.vue'),
-    meta: {
-      title: "ParkSpot | Blogs"
-    }
-  },
-  {
-    path: '/blog/:id/:postTitle',
-    name: 'mainBlog',
-    component: () => import('@/views/main-blog.vue'),
-    // props: (route) => ({
-    //   data: userData,
-    // })
-    meta: {
-      title: "ParkSpot | Blogs - "
-    }
-  },
-  {
-    path: '/search-portal',
-    name: 'searchPortal',
-    component: () => import('@/views/search-portal.vue'),
-    meta: {
-      title: "ParkSpot | Search Portal"
+      title: "ParkSpot | About -  Get Parking Space , Rent Empty Space",
     },
-    beforeEnter: guardThisRoute
   },
   {
-    path: '/payment/*',
-    name: 'paymentGateway',
-    component: () => import('@/views/payment-gateway.vue'),
+    path: pages.FEATURES,
+    name: "features",
+    component: () => import("@/views/features.vue"),
     meta: {
-      title: "Payment | Parkspot.in "
-    }
+      title: "ParkSpot | Features",
+    },
+  },
+  {
+    path: pages.CONTACT,
+    name: "t-contact",
+    component: () => import("@/components/templates/t-contact.vue"),
+    meta: {
+      title: "ParkSpot | Contact Us",
+    },
+  },
+  {
+    path: pages.SRP,
+    name: "srp",
+    component: () => import("@/views/Srp.vue"),
+    meta: {
+      title: "ParkSpot | Search - ",
+    },
+  },
+  {
+    path: pages.VOPORTAL,
+    name: "VOPortal",
+    component: () => import("@/views/VO-portal.vue"),
+    meta: {
+      title: "ParkSpot | Get Parking Spot",
+    },
+  },
+  {
+    path: pages.SOPORTAL,
+    name: "SOPortal",
+    component: () => import("@/views/SO-portal.vue"),
+    meta: {
+      title: "ParkSpot | Register Parking Spot",
+    },
+  },
+  {
+    path: "/terms-and-conditions",
+    name: "Terms",
+    component: () => import("@/views/Terms.vue"),
+    meta: {
+      title: "ParkSpot | Terms & Conditions",
+    },
+  },
+  {
+    path: pages.BLOG,
+    name: "blog",
+    component: () => import("@/views/landing-blog.vue"),
+    meta: {
+      title: "ParkSpot | Blogs",
+    },
+  },
+  {
+    path: pages.MAINBLOG,
+    name: "mainBlog",
+    component: () => import("@/views/main-blog.vue"),
+    meta: {
+      title: "ParkSpot | Blogs - ",
+    },
+  },
+  {
+    path: pages.SEARCHPORTAL,
+    name: "searchPortal",
+    component: () => import("@/views/search-portal.vue"),
+    meta: {
+      title: "ParkSpot | Search Portal",
+    },
+    beforeEnter: guardThisRoute,
+  },
+  {
+    path: pages.PAYMENTGATEWAY,
+    name: "paymentGateway",
+    component: () => import("@/views/payment-gateway.vue"),
+    meta: {
+      title: "Payment | Parkspot.in ",
+    },
   },
   // ! it will take " -mara/xyx"
   {
-    path: '/bangalore/parking-near-*',
-    name: 'discover',
-    component: () => import('@/views/discover-page.vue'),
+    path: pages.DISCOVER,
+    name: "discover",
+    component: () => import("@/views/discover-page.vue"),
     meta: {
-      title: "Parking Near "
-    }
+      title: "Parking Near ",
+    },
   },
   // Todo Delete below code before deployment
   {
-    path: '/temp',
-    name: 'temp',
-    component: () => import('@/views/features.vue'),
+    path: pages.TEMP,
+    name: "temp",
+    component: () => import("@/views/features.vue"),
     meta: {
-      title: "Parking Near "
-    }
+      title: "Parking Near ",
+    },
   },
-
   {
-    path: '*',
-    component: Home
-  }
-]
-
+    path: "*",
+    component: Home,
+  },
+];
