@@ -1,0 +1,1 @@
+delete from users where user_name = 'dummy_test3'

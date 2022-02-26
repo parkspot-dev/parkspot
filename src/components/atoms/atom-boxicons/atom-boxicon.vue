@@ -14,62 +14,62 @@
 
 <script>
 export default {
-    name:"atom-boxicons",
-    props:{
-        types:{
-            type:String,
-            default(){
-                return "regular"
-            }
-        },
-        name:{
-            type:String,
-            default(){
-                return "alarms"
-            }
-        },
-        color:{
-            type:String,
-            default(){
-                return "white"
-            }
-        },
-        size:{
-            type:String,
-            default(){
-                return "md"
-            }
-        },
-        rotate:{
-            type:String,
-            default(){
-                return ""
-            }
-        },
-        flip:{
-            type:String,
-            default(){
-                return ""
-            }
-        },
-        animation:{
-            type:String,
-            default(){
-                return ""
-            }
-        },
-        pull:{
-            type:String,
-            default(){
-                return ""
-            }
-        },
-        border:{
-            type:String,
-            default(){
-                return ""
-            }
-        },
-    }
-}
+  name: "atom-boxicons",
+  props: {
+    types: {
+      type: String,
+      default() {
+        return "regular";
+      },
+    },
+    name: {
+      type: String,
+      default() {
+        return "alarms";
+      },
+    },
+    color: {
+      type: String,
+      default() {
+        return "white";
+      },
+    },
+    size: {
+      type: String,
+      default() {
+        return "md";
+      },
+    },
+    rotate: {
+      type: String,
+      default() {
+        return "";
+      },
+    },
+    flip: {
+      type: String,
+      default() {
+        return "";
+      },
+    },
+    animation: {
+      type: String,
+      default() {
+        return "";
+      },
+    },
+    pull: {
+      type: String,
+      default() {
+        return "";
+      },
+    },
+    border: {
+      type: String,
+      default() {
+        return "";
+      },
+    },
+  },
+};
 </script>

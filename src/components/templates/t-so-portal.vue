@@ -16,12 +16,13 @@ import oSoDetails from "../organisms/o-so-details.vue";
 export default {
   components: { oSoDetails },
   name: "t-so-portal",
+  emits: ["submit"],
   props: {
     mapShow: Boolean,
   },
   methods: {
-    onSubmit(data) {
-      this.$emit("submit", data);
+    onSubmit(registerData, logInData, kycData, contactData) {
+      this.$emit("submit", registerData, logInData, kycData, contactData);
     },
   },
 };
