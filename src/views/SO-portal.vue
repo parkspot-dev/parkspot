@@ -36,53 +36,46 @@ export default {
     }, 1000);
   },
   methods: {
-    async kyc(data) {
+    async register(registerData) {
+      const res = await fetch("https://maya.parkspot.in/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(registerData),
+      });
+    },
+    async login(logInData) {
+      const res = await fetch("https://maya.parkspot.in/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(logInData),
+      });
+    },
+    async kyc(kycData) {
       console.log("this is me kyc");
       const res = await fetch("https://maya.parkspot.in/kyc", {
         method: "PATCH",
-        body: JSON.stringify({
-          ContactNo: data.mno,
-          UserName: data.fullName, // user full name,
-          Owner: data.ownershipPicked,
-          // OwnerName: data.owner.fullName, // if user is not the owner,
-          // OwnerContactNo: data.owner.mno,
-          Relationship: data.ownershipPicked,
-          OwnershipDocument: data.ownershipDefault,
-          // IdentityDocument: data,
-          OwnershipDocumentImage: data.ownershipFile,
-          // IdentityDocumentImage: [1,2,3]
-        }),
+        body: JSON.stringify(kycData),
       });
     },
-    async onSubmit(data) {
-      this.kyc(data);
+    async contact(contactData) {
       const res = await fetch("https://maya.parkspot.in/contact", {
-        method: "Post",
+        method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          User: {
-            UserName: "noorVO", //only for logged in user
-            FullName: data.fullName,
-            City: data.city,
-            EmailID: data.email,
-            Mobile: data.mno,
-          },
-          Flavour: "dweb", //android, dweb, mweb
-          Comments: "Spot Registered",
-          RentDetails: {
-            VehicleType: "",
-            Rate: data.rent,
-            MinBookingDuration: data.durationDefault,
-            Availability: "",
-            SpecialService: data.checkedAmenties, //None/Camera/Security
-            TnC: data.terms,
-            Address: data.location,
-          },
-        }),
+        body: JSON.stringify(contactData),
       });
+    },
+    async onSubmit(registerData, logInData, kycData, contactData) {
+      await this.register(registerData);
+      await this.login(logInData);
+      await this.kyc(kycData);
+      await this.contact(contactData);
       this.show = true;
     },
   },

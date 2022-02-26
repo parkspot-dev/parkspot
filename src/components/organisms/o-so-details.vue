@@ -36,12 +36,6 @@
           />
         </div>
       </div>
-      <!-- <m-contact-details
-        :fullName="userForm.fullName"
-        :email="userForm.email"
-        :mno="userForm.mno"
-      /> -->
-
       <!-- Address  -->
       <label class="is-size-5 is-size-6-mobile"
         >Address <span style="color: red">*</span> :</label
@@ -72,12 +66,6 @@
           />
         </div>
         <div class="column">
-          <!-- <atom-input
-            v-model="userForm.location"
-            class="input"
-            :placeholder="address.location"
-            :required="required"
-          /> -->
           <m-search-box
             @search="search"
             @flytosrp="flytosrp"
@@ -108,19 +96,19 @@
       >
       <br />
       <div class="control">
-        <label class="radio" for="Yes">
-          <input type="radio" id="Yes" value="Yes" v-model="ownershipPicked" />
+        <label class="radio" for="yes">
+          <input type="radio" id="yes" value="yes" v-model="ownershipPicked" />
           Yes</label
         >
         <br />
 
-        <label class="radio" for="No">
-          <input type="radio" id="No" value="No" v-model="ownershipPicked" />
+        <label class="radio" for="no">
+          <input type="radio" id="no" value="no" v-model="ownershipPicked" />
           No</label
         >
       </div>
       <br />
-      <div v-if="ownershipPicked === 'No'">
+      <div v-if="ownershipPicked === 'no'">
         <label class="is-size-5 is-size-6-mobile"
           >Owner's Contact Details <span style="color: red">*</span> :</label
         >
@@ -178,24 +166,6 @@
         </div>
       </div>
       <br />
-      <div>
-        <label class="is-size-5 is-size-6-mobile">Photos of Parking Spot</label>
-        <br />
-        <div style="border-style: solid" @dragover.prevent @drop.prevent>
-          <input type="file" multiple @change="uploadFile" />
-          <div
-            @drop="dragFile"
-            style="background-color: green; margin-bottom: 10px; padding: 10px"
-          >
-            Or drag the file here
-            <div v-if="ownershipFile.length">
-              <ul v-for="file in ownershipFile" :key="file">
-                <li>{{ file.name }}</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
       <br />
       <div>
         <label class="is-size-5 is-size-6-mobile">Amenities</label>
@@ -329,6 +299,7 @@ export default {
     MSearchBox,
     MContactDetails,
   },
+  emits: ["submit"],
   props: {
     mapShow: Boolean,
   },
@@ -381,42 +352,56 @@ export default {
       rent: "",
     };
   },
+
   methods: {
-    async register() {
-      const res = await fetch("https://maya.parkspot.in/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          UserName: "dummy_test3",
-          Password: "dummy@123",
-          FullName: "dummy_test1",
-          City: "TestiCity",
-          EmailID: "test@test.in",
-        }),
-      });
-    },
     onSubmit() {
-      // console.log(this.userForm);
-      this.register();
-      let aggrData = {
-        ...this.userForm,
-        owner: { ...this.owner },
-        ownershipDefault: this.ownershipDefault,
-        ownershipList: this.ownershipList,
-        ownershipFile: this.ownershipFile,
-        ownerhipPicked: this.ownershipPicked,
-        checkedAmenities: this.checkedAmenities,
-        nofspotDefault: this.nofspotDefault,
-        durationDefault: this.durationDefault,
-        rent: this.rent,
-        terms: this.terms,
+      let registerData = {
+        UserName: "dummy_" + this.userForm.fullName,
+        Password: "dummy@123",
+        FullName: this.userForm.fullName,
+        City: this.userForm.City,
+        EmailID: this.userForm.email,
       };
-      console.log("this is the all the data");
-      console.log(aggrData);
-      this.toggle = true;
-      this.$emit("submit", this.userForm);
+
+      let logInData = {
+        Username: "dummy_" + this.userForm.fullName,
+        Password: "dummy@123",
+      };
+
+      let kycData = {
+        ContactNo: this.userForm.mno,
+        UserName: this.userForm.fullName,
+        Owner: this.ownershipPicked === "yes" ? true : false,
+        OwnerName: this.owner.fullName,
+        OwnerContactNo: this.owner.mno,
+        Relationship: "n/a--hardcoded",
+        OwnershipDocument: "n/a--hardcoded",
+        IdentityDocument: "n/a--hardcoded",
+        OwnershipDocumentImage: this.ownershipFile,
+        IdentityDocumentImage: [1, 2, 3],
+      };
+
+      let contactData = {
+        User: {
+          UserName: "noorVO", //only for logged in user
+          FullName: this.userForm.fullName,
+          City: this.userForm.city,
+          EmailID: this.userForm.email,
+          Mobile: this.userForm.mno,
+        },
+        Flavour: "dweb", //android, dweb, mweb
+        Comments: "Spot Registered",
+        RentDetails: {
+          VehicleType: "",
+          Rate: this.rent,
+          MinBookingDuration: this.durationDefault,
+          Availability: "",
+          SpecialService: this.checkedAmenities, //None/Camera/Security
+          TnC: this.terms,
+          Address: this.userForm.location,
+        },
+      };
+      this.$emit("submit", registerData, logInData, kycData, contactData);
     },
     uploadFile(e) {
       this.ownershipFile = e.target.files;

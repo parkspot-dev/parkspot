@@ -1,48 +1,41 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import { routes } from './routes.js'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import { routes } from "./routes.js";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
-
-//router.beforeEach((to, from, next)=>{
-//	if(to !== '/' || to != '/faq' || to != '/thanks'){
-//		console.log(`route from ${to} to ${from}`)
-//		next()
-//	}
-//	else{
-//		next({path: "/"})
-//	}
-//})
 let scrollBehavior = (to, from, savedPosition) => {
-  // return desired position
+  // initially "savedPosition" value will be null,
+  // coming back from page2 to page1 it will contain
+  // the last co-ordinate of page1.
   if (savedPosition) {
-    return savedPosition
+    return savedPosition;
   } else {
-    return { x: 0, y: 0 }
+    return { x: 0, y: 0 };
   }
-}
+};
+
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
-  scrollBehavior
-})
+  scrollBehavior,
+});
+
 router.beforeEach((to, from, next) => {
-  // console.log(to)
   if (to.name === "mainBlog") {
-    document.title = `${to.meta.title} ${to.params.postTitle.replace(/-/g, ' ')}`
+    document.title = `${to.meta.title}  
+    ${to.params.postTitle.replace(/-/g, " ")}`;
   } else if (to.name === "srp") {
-    document.title = `${to.meta.title} ${to.query.loc}`
+    document.title = `${to.meta.title} ${to.query.loc}`;
   } else if (to.name === "discover") {
-    document.title = `${to.meta.title} ${to.params.pathMatch.replace(/b*\//, '')} - Find and Book Best Parking Spot with ParkSpot`
+    document.title = `${to.meta.title} 
+    ${to.params.pathMatch.replace(/b*\//, "")} 
+    - Find and Book Best Parking Spot with ParkSpot`;
+  } else {
+    document.title = `${to.meta.title} `;
   }
-  else {
-    document.title = `${to.meta.title} `
-  }
-  next()
+  next();
+});
 
-})
-
-
-export default router
+export default router;

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <label class="is-size-5 is-size-6-mobile"
-      >Contact Details <span style="color: red">*</span> :</label
-    >
+    <label class="is-size-5 is-size-6-mobile">
+      Contact Details <span style="color: red">*</span> :
+    </label>
     <div class="columns">
       <div class="column">
         <atom-input
