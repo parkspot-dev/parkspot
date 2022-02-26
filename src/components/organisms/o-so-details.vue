@@ -6,9 +6,9 @@
     <br />
     <form v-on:submit.prevent="onSubmit">
       <!-- contact details -->
-      <label class="is-size-5 is-size-6-mobile"
-        >Contact Details <span style="color: red">*</span> :</label
-      >
+      <label class="is-size-5 is-size-6-mobile">
+        Contact Details <span style="color: red"> * </span> :
+      </label>
       <div class="columns">
         <div class="column">
           <atom-input
@@ -98,20 +98,20 @@
       <div class="control">
         <label class="radio" for="yes">
           <input type="radio" id="yes" value="yes" v-model="ownershipPicked" />
-          Yes</label
-        >
+          Yes
+        </label>
         <br />
 
         <label class="radio" for="no">
           <input type="radio" id="no" value="no" v-model="ownershipPicked" />
-          No</label
-        >
+          No
+        </label>
       </div>
       <br />
       <div v-if="ownershipPicked === 'no'">
-        <label class="is-size-5 is-size-6-mobile"
-          >Owner's Contact Details <span style="color: red">*</span> :</label
-        >
+        <label class="is-size-5 is-size-6-mobile">
+          Owner's Contact Details <span style="color: red"> * </span> :
+        </label>
         <div class="columns">
           <div class="column">
             <atom-input

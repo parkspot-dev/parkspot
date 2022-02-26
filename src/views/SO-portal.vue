@@ -34,6 +34,7 @@ export default {
     setTimeout(() => {
       this.mapShow = true;
     }, 1000);
+    console.log("hello UAT");
   },
   methods: {
     async register(registerData) {
