@@ -401,6 +401,8 @@ export default {
           Address: this.userForm.location,
         },
       };
+      console.log("this is the data");
+      console.log(contactData);
       this.$emit("submit", registerData, logInData, kycData, contactData);
     },
     uploadFile(e) {

@@ -46,7 +46,7 @@ export default {
       });
     },
     async login(logInData) {
-      const res = await fetch("https://maya.parkspot.in/auth/register", {
+      const res = await fetch("https://maya.parkspot.in/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +55,6 @@ export default {
       });
     },
     async kyc(kycData) {
-      console.log("this is me kyc");
       const res = await fetch("https://maya.parkspot.in/kyc", {
         method: "PATCH",
         body: JSON.stringify(kycData),

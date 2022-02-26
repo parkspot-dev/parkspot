@@ -83,21 +83,22 @@ export default {
   methods: {
     async onSubmit() {
       this.toggle = !this.toggle;
-      const user = JSON.parse(JSON.stringify(this.userContact)); // getting proper object after stringify and parse
+      // const user = JSON.parse(JSON.stringify(this.userContact)); // getting proper object after stringify and parse
+      const user = {
+        User: {
+          FullName: this.userContact.name,
+          EmailID: this.userContact.email,
+          Mobile: this.userContact.mno,
+        },
+        Comments: this.userContact.msg,
+      };
       const res = await fetch("https://maya.parkspot.in/contact", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          User: {
-            FullName: user.name,
-            EmailID: user.email,
-            Mobile: user.mno,
-          },
-          Comments: user.msg,
-        }),
+        body: JSON.stringify(user),
       });
       const data = await res.json();
       this.userContact.name = "";
