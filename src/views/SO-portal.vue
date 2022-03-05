@@ -44,6 +44,10 @@ export default {
         },
         body: JSON.stringify(registerData),
       });
+      if (!res.ok) {
+        console.log({ res });
+        throw Error("Registration Not Working!!");
+      }
     },
     async login(logInData) {
       const res = await fetch("https://maya.parkspot.in/auth/login", {
@@ -53,12 +57,20 @@ export default {
         },
         body: JSON.stringify(logInData),
       });
+      if (!res.ok) {
+        console.log({ res });
+        throw Error("Log In Not Working!!");
+      }
     },
     async kyc(kycData) {
       const res = await fetch("https://maya.parkspot.in/kyc", {
         method: "PATCH",
         body: JSON.stringify(kycData),
       });
+      if (!res.ok) {
+        console.log({ res });
+        throw Error("KYC Not Working!!");
+      }
     },
     async contact(contactData) {
       const res = await fetch("https://maya.parkspot.in/contact", {
@@ -69,12 +81,20 @@ export default {
         },
         body: JSON.stringify(contactData),
       });
+      if (!res.ok) {
+        console.log({ res });
+        throw Error("Contact Us Not Working!!");
+      }
     },
     async onSubmit(registerData, logInData, kycData, contactData) {
-      await this.register(registerData);
-      await this.login(logInData);
-      await this.kyc(kycData);
-      await this.contact(contactData);
+      try {
+        await this.register(registerData);
+        await this.login(logInData);
+        await this.kyc(kycData);
+        await this.contact(contactData);
+      } catch (error) {
+        console.error({ error });
+      }
       this.show = true;
     },
   },
