@@ -1,5 +1,10 @@
 <template>
   <div class="o_so_details">
+    <m-contact-detail
+      :personalInfo="personalInfo"
+      @input="handlePersonalInfo"
+    ></m-contact-detail>
+    <button @click="test">test</button>
     <div class="ps_center">
       <atom-b-title class="is-size-3 is-size-5-mobile" :text="title" />
     </div>
@@ -288,6 +293,7 @@ import AtomBTitle from "../atoms/atom-text/atom-b-title.vue";
 import MMapbox from "../molecules/m-mapbox.vue";
 import MSearchBox from "../molecules/m-search-box.vue";
 import { inputMixins } from "../../mixins/inputMixins.js";
+import MContactDetail from "../molecules/m-contact-detail.vue";
 export default {
   components: {
     atomInput,
@@ -296,6 +302,7 @@ export default {
     AtomBTitle,
     MMapbox,
     MSearchBox,
+    MContactDetail,
   },
   emits: ["submit"],
   props: {
@@ -305,6 +312,15 @@ export default {
   mixins: [inputMixins],
   data() {
     return {
+      // start of new component data
+      personalInfo: {
+        firstName: "abcd",
+        lastName: "dsfa",
+        email: "fads",
+        contactNo: "",
+      },
+
+      // end of new component data
       title: "Fill the form to Register your Parking Spot",
       ownershipPicked: "",
       owner: {
@@ -352,6 +368,12 @@ export default {
   },
 
   methods: {
+    // new component methods
+    handlePersonalInfo(e) {
+      this.personalInfo = e;
+    },
+
+    // end of new component methods
     onSubmit() {
       let registerData = {
         UserName: "dummy_" + this.userForm.fullName,

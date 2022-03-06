@@ -48,8 +48,9 @@ export default {
     placeholder: {
       type: String,
       default() {
-        return "";
+        return "Default Input";
       },
+      required: true,
     },
   },
   methods: {
