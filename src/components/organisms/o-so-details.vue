@@ -1,442 +1,296 @@
 <template>
-  <div class="o_so_details">
-    <m-contact-detail
-      :personalInfo="personalInfo"
-      @input="handlePersonalInfo"
-    ></m-contact-detail>
-    <button @click="test">test</button>
-    <div class="ps_center">
-      <atom-b-title class="is-size-3 is-size-5-mobile" :text="title" />
-    </div>
-    <br />
-    <form v-on:submit.prevent="onSubmit">
-      <!-- contact details -->
-      <label class="is-size-5 is-size-6-mobile"
-        >Contact Details <span style="color: red">*</span> :</label
-      >
-      <div class="columns">
-        <div class="column">
-          <atom-input
-            v-model="userForm.fullName"
-            class="input"
-            :placeholder="contact.fullName"
-            :required="required"
-          />
-        </div>
-        <div class="column">
-          <atom-input
-            v-model="userForm.email"
-            class="input"
-            :placeholder="contact.email"
-            :types="contact.emailType"
-          />
-        </div>
-        <div class="column">
-          <atom-input
-            v-model="userForm.mno"
-            class="input"
-            :placeholder="contact.mno"
-            :required="required"
-            :types="contact.mobileType"
-          />
-        </div>
+  <div class="form-box">
+    <h1 class="form-title">Register your parking spot</h1>
+    <form @submit.prevent="">
+      <div class="form-user-inputs mb-6">
+        <keep-alive>
+          <component
+            :is="activeInputPage"
+            :personalInfo="personalInfo"
+            :kycInfo="kycInfo"
+            :mapShow="mapShow"
+            @get-map-location="getMapLocation"
+          ></component>
+        </keep-alive>
       </div>
-      <!-- Address  -->
-      <label class="is-size-5 is-size-6-mobile"
-        >Address <span style="color: red">*</span> :</label
-      >
-      <div class="columns">
-        <div class="column">
-          <atom-select
-            v-model="userForm.country"
-            class="select"
-            :values="address.countryList"
-          />
-        </div>
-        <div class="column">
-          <atom-select
-            v-model="userForm.state"
-            class="select"
-            :values="address.stateList"
-          />
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column">
-          <atom-input
-            v-model="userForm.city"
-            class="input"
-            :placeholder="address.City"
-            :required="required"
-          />
-        </div>
-        <div class="column">
-          <m-search-box
-            @search="search"
-            @flytosrp="flytosrp"
-            :results="results"
-            :fieldName="address.location"
-          />
-        </div>
-      </div>
-      <div>
-        <label class="is-size-5 is-size-6-mobile"
-          >Map:Drag the Marker to pin point your location
-        </label>
-        <m-mapbox
-          style="height: 350px"
-          :key="map.key"
-          :center="center"
-          :data="marker"
-          :zoom="zoom"
-          :drag="map.drag"
-          @location="getLocation"
-          v-if="mapShow"
-        />
-      </div>
-      <br />
-      <!-- Additional info for SO -->
-      <label class="is-size-5 is-size-6-mobile"
-        >Are you the Owner of the Spot?</label
-      >
-      <br />
-      <div class="control">
-        <label class="radio" for="yes">
-          <input type="radio" id="yes" value="yes" v-model="ownershipPicked" />
-          Yes</label
-        >
-        <br />
 
-        <label class="radio" for="no">
-          <input type="radio" id="no" value="no" v-model="ownershipPicked" />
-          No</label
-        >
-      </div>
-      <br />
-      <div v-if="ownershipPicked === 'no'">
-        <label class="is-size-5 is-size-6-mobile"
-          >Owner's Contact Details <span style="color: red">*</span> :</label
-        >
-        <div class="columns">
-          <div class="column">
-            <atom-input
-              v-model="owner.fullName"
-              class="input"
-              :placeholder="contact.fullName"
-              :required="required"
-            />
-          </div>
-          <div class="column">
-            <atom-input
-              v-model="owner.email"
-              class="input"
-              :placeholder="contact.email"
-              :types="contact.emailType"
-            />
-          </div>
-          <div class="column">
-            <atom-input
-              v-model="owner.mno"
-              class="input"
-              :placeholder="contact.mno"
-              :required="required"
-              :types="contact.mobileType"
-            />
-          </div>
-        </div>
-      </div>
-      <br />
-      <div>
-        <label class="is-size-5 is-size-6-mobile">Ownership Proof</label>
-        <atom-select
-          v-model="ownershipDefault"
-          class="select"
-          :values="ownershipList"
-        />
-        <br />
-        <br />
-        <div style="border-style: solid" @dragover.prevent @drop.prevent>
-          <input type="file" multiple @change="uploadFile" />
-          <div
-            @drop="dragFile"
-            style="background-color: green; margin-bottom: 10px; padding: 10px"
-          >
-            Or drag the file here
-            <div v-if="ownershipFile.length">
-              <ul v-for="file in ownershipFile" :key="file">
-                <li>{{ file.name }}</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <br />
-      <br />
-      <div>
-        <label class="is-size-5 is-size-6-mobile">Amenities</label>
-        <br />
-        <div class="columns is-flex-wrap-wrap">
-          <div class="column is-one-third">
-            <label class="checkbox" for="Covered"
-              ><input
-                type="checkbox"
-                id="Covered"
-                value="Covered"
-                v-model="checkedAmenities"
-              />
-              Covered</label
-            >
-          </div>
-          <div class="column is-one-third">
-            <label class="checkbox" for="Gated"
-              ><input
-                type="checkbox"
-                id="Gated"
-                value="Gated"
-                v-model="checkedAmenities"
-              />
-              Gated</label
-            >
-          </div>
-
-          <div class="column is-one-third">
-            <label class="checkbox" for="CCTV">
-              <input
-                type="checkbox"
-                id="CCTV"
-                value="CCTV"
-                v-model="checkedAmenities"
-              />
-              CCTV Camera</label
-            >
-          </div>
-
-          <div class="column is-one-third">
-            <label class="checkbox" for="Security Guard">
-              <input
-                type="checkbox"
-                id="Security Guard"
-                value="Security Guard"
-                v-model="checkedAmenities"
-              />
-              Security Guard</label
-            >
-          </div>
-
-          <div class="column is-one-third">
-            <label class="checkbox" for="others"
-              ><input
-                type="checkbox"
-                id="others"
-                value="others"
-                v-model="checkedAmenities"
-              />
-              others</label
-            >
-          </div>
-        </div>
-        <br />
-      </div>
-      <div>
-        <!-- no. of spot available -->
-        <atom-select
-          v-model="nofspotDefault"
-          class="select"
-          :values="nofspot"
-        />
-      </div>
-      <br />
-      <div>
-        <!-- minimum duration if any -->
-        <atom-select
-          v-model="durationDefault"
-          class="select"
-          :values="durationList"
-        />
-      </div>
-      <br />
-      <div>
-        <atom-input
-          v-model="rent"
-          class="input"
-          :placeholder="'Expected Monthly Rent(Exclusive our Service Charge)'"
-          :required="required"
-        />
-      </div>
-      <br />
-      <div>
-        <label class="checkbox" for="terms">
-          <input type="checkbox" id="terms" value="terms" v-model="terms" />
-          I agree to the<router-link target="_blank" :to="{ name: 'Terms' }">
-            TERMS AND CONDITIONS</router-link
-          ></label
-        >
-      </div>
-      <br />
-      <!-- Button -->
-      <div class="ps_center">
+      <div class="form-button">
         <atom-button
-          class="button is-warning"
-          :class="{ 'is-loading': toggle }"
-          :text="submit"
-        />
+          class="form-button--left"
+          :text="backBtn"
+          :disabled="pageCount === 0"
+          @click.native="back"
+          name="normalBtn"
+        ></atom-button>
+        <atom-button
+          class="form-button--right"
+          :text="nextBtn"
+          @click.native="next"
+          name="submitBtn"
+        ></atom-button>
       </div>
+      <ul class="ps-form-indicator">
+        <li
+          class="ps-form-indicator-item"
+          :class="pageCount === 0 ? 'ps-form-indicator-item--fill' : ''"
+        >
+          &nbsp;
+        </li>
+        <li
+          class="ps-form-indicator-item"
+          :class="pageCount === 1 ? 'ps-form-indicator-item--fill' : ''"
+        >
+          &nbsp;
+        </li>
+        <li
+          class="ps-form-indicator-item"
+          :class="pageCount === 2 ? 'ps-form-indicator-item--fill' : ''"
+        >
+          &nbsp;
+        </li>
+      </ul>
     </form>
   </div>
 </template>
 
 <script>
 import AtomButton from "../atoms/atom-button/atom-button.vue";
-import atomInput from "../atoms/atom-input/atom-input.vue";
-import atomSelect from "../atoms/atom-select/atom-select.vue";
-import AtomBTitle from "../atoms/atom-text/atom-b-title.vue";
-import MMapbox from "../molecules/m-mapbox.vue";
-import MSearchBox from "../molecules/m-search-box.vue";
-import { inputMixins } from "../../mixins/inputMixins.js";
 import MContactDetail from "../molecules/m-contact-detail.vue";
+import MKycForm from "../molecules/m-kyc-form.vue";
+import MMapForm from "../molecules/m-map-form.vue";
+
 export default {
   components: {
-    atomInput,
-    atomSelect,
     AtomButton,
-    AtomBTitle,
-    MMapbox,
-    MSearchBox,
     MContactDetail,
+    MKycForm,
+    MMapForm,
   },
   emits: ["submit"],
-  props: {
-    mapShow: Boolean,
-  },
-  name: "o-so-details",
-  mixins: [inputMixins],
+  props: { mapShow: Boolean },
   data() {
     return {
-      // start of new component data
       personalInfo: {
-        firstName: "abcd",
-        lastName: "dsfa",
-        email: "fads",
-        contactNo: "",
-      },
-
-      // end of new component data
-      title: "Fill the form to Register your Parking Spot",
-      ownershipPicked: "",
-      owner: {
-        fullName: "",
+        firstName: "",
+        lastName: "",
         email: "",
-        mno: "",
+        contactNo: null,
+        state: "",
+        city: "",
       },
-      ownershipDefault: "Aadhar Card",
-      ownershipList: [
-        "Aadhar Card",
-        "Electricity Bill",
-        "Rent Agreement",
-        "Passport",
-        "Driving License",
-        "Other...",
-      ],
-      ownershipFile: [],
-      checkedAmenities: [],
-      nofspotDefault: "No. of Spot available",
-      nofspot: [
-        "No. of Spot available",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10+",
-      ],
-      durationDefault: "Minimum Duration if Any",
-      durationList: [
-        "Minimum Duration if Any",
-        "Less than 1 Month",
-        "1 - 3 Month",
-        "3 - 6 Month",
-        "6 - 9 Month",
-        "More than 9 Month",
-      ],
-      terms: "",
-      rent: "",
+      kycInfo: {
+        owner: 1,
+        ownershipDefault: "Adhaar Card",
+        ownershipFile: [],
+        checkedAmenities: [],
+        nofspotDefault: "Please specify the no. of spot",
+        durationDefault: "Minimum duration if any",
+        rent: "",
+      },
+      mapLocation: "",
+      pageCount: 0,
+      nextBtn: "Next",
+      backBtn: "Back",
+      flag: false,
     };
   },
-
-  methods: {
-    // new component methods
-    handlePersonalInfo(e) {
-      this.personalInfo = e;
+  computed: {
+    activeInputPage() {
+      if (this.pageCount === 0) {
+        return "MContactDetail";
+      }
+      if (this.pageCount === 1) {
+        return "MMapForm";
+      }
+      if (this.pageCount === 2) {
+        return "MKycForm";
+      }
     },
-
-    // end of new component methods
-    onSubmit() {
+  },
+  watch: {
+    pageCount() {
+      if (this.pageCount === 2) {
+        return (this.nextBtn = "Submit");
+      } else {
+        return (this.nextBtn = "Next");
+      }
+    },
+  },
+  methods: {
+    getMapLocation(data) {
+      if (this.pageCount == 1) {
+        this.mapLocation = data;
+      }
+    },
+    next() {
+      if (this.pageCount === 2) {
+        this.onSubmit();
+      } else {
+        this.pageCount++;
+      }
+    },
+    back() {
+      this.pageCount--;
+    },
+    async onSubmit() {
       let registerData = {
-        UserName: "dummy_" + this.userForm.fullName,
+        UserName:
+          "dummy_" + this.personalInfo.firstName + this.personalInfo.lastName,
         Password: "dummy@123",
-        FullName: this.userForm.fullName,
-        City: this.userForm.City,
-        EmailID: this.userForm.email,
+        FullName: this.personalInfo.firstName + this.personalInfo.lastName,
+        City: this.personalInfo.city,
+        EmailID: this.personalInfo.email,
       };
 
       let logInData = {
-        Username: "dummy_" + this.userForm.fullName,
+        Username:
+          "dummy_" + this.personalInfo.firstName + this.personalInfo.lastName,
         Password: "dummy@123",
       };
-
+      // var blob = new Blob(this.kycInfo.ownershipFile, { type: "text/plain" });
+      let convertedImgFile = await this.getConvertedData(
+        this.kycInfo.ownershipFile
+      );
+      console.log(this.kycInfo.ownershipFile);
       let kycData = {
-        ContactNo: this.userForm.mno,
-        UserName: this.userForm.fullName,
-        Owner: this.ownershipPicked === "yes" ? true : false,
-        OwnerName: this.owner.fullName,
-        OwnerContactNo: this.owner.mno,
-        Relationship: "n/a--hardcoded",
-        OwnershipDocument: "n/a--hardcoded",
-        IdentityDocument: "n/a--hardcoded",
-        OwnershipDocumentImage: this.ownershipFile,
+        ContactNo: this.personalInfo.contactNo,
+        UserName: this.personalInfo.firstName + this.personalInfo.lastName,
+        Owner: this.kycInfo.owner ? true : false,
+        OwnerName: "n/a",
+        OwnerContactNo: "n/a",
+        Relationship: "n/a",
+        OwnershipDocument: "n/a",
+        IdentityDocument: "n/a",
+        OwnershipDocumentImage: convertedImgFile,
         IdentityDocumentImage: [1, 2, 3],
       };
 
+      let convertedCheckedAminities = "";
+      for (let data of this.kycInfo.checkedAmenities) {
+        convertedCheckedAminities += data + ",";
+      }
+      convertedCheckedAminities = convertedCheckedAminities.substring(
+        0,
+        convertedCheckedAminities.length - 1
+      );
       let contactData = {
         User: {
           UserName: "noorVO", //only for logged in user
-          FullName: this.userForm.fullName,
-          City: this.userForm.city,
-          EmailID: this.userForm.email,
-          Mobile: this.userForm.mno,
+          FullName: this.personalInfo.firstName + this.personalInfo.lastName,
+          City: this.personalInfo.city,
+          EmailID: this.personalInfo.email,
+          Mobile: this.personalInfo.contactNo,
         },
-        Flavour: "dweb", //android, dweb, mweb
+        Flavour: this.$store.getters["device/getFlavour"], //android, dweb, mweb
         Comments: "Spot Registered",
         RentDetails: {
           VehicleType: "",
-          Rate: this.rent,
-          MinBookingDuration: this.durationDefault,
+          Rate: this.kycInfo.rent,
+          MinBookingDuration: this.kycInfo.durationDefault,
           Availability: "",
-          SpecialService: this.checkedAmenities, //None/Camera/Security
+          SpecialService: convertedCheckedAminities, //None/Camera/Security
           TnC: this.terms,
-          Address: this.userForm.location,
+          Address: this.mapLocation,
         },
       };
-      console.log("this is the data");
-      console.log(contactData);
       this.$emit("submit", registerData, logInData, kycData, contactData);
     },
-    uploadFile(e) {
-      this.ownershipFile = e.target.files;
+    getConvertedData(data) {
+      return new Promise((resolve, reject) => {
+        const selectedFile = data;
+        const reader = new FileReader();
+        const fileByteArray = [];
+
+        reader.readAsArrayBuffer(selectedFile);
+        reader.onloadend = (evt) => {
+          if (evt.target.readyState === FileReader.DONE) {
+            const arrayBuffer = evt.target.result,
+              array = new Uint8Array(arrayBuffer);
+            for (const a of array) {
+              fileByteArray.push(a);
+              console.log("fileByteArray");
+            }
+
+            resolve(fileByteArray);
+          }
+        };
+      });
     },
-    dragFile(e) {
-      this.ownershipFile = e.dataTransfer.files;
-    },
+    // getKycData() {
+    //   return new Promise((resolve, reject) => {
+    //     const selectedFile = this.kycInfo.ownershipFile[0];
+    //     const reader = new FileReader();
+    //     const fileByteArray = [];
+    //     reader.readAsArrayBuffer(selectedFile);
+    //     reader.onloadend = (evt) => {
+    //       if (evt.target.readyState === FileReader.DONE) {
+    //         const arrayBuffer = evt.target.result,
+    //           array = new Uint8Array(arrayBuffer);
+    //         for (const a of array) {
+    //           fileByteArray.push(a);
+    //           console.log("fileByteArray");
+    //         }
+
+    //         let data = {
+    //           ContactNo: this.personalInfo.contactNo,
+    //           UserName:
+    //             this.personalInfo.firstName + this.personalInfo.lastName,
+    //           Owner: this.kycInfo.owner,
+    //           OwnerName: "n/a",
+    //           OwnerContactNo: "n/a",
+    //           Relationship: "n/a",
+    //           OwnershipDocument: "n/a",
+    //           IdentityDocument: "n/a",
+    //           OwnershipDocumentImage: fileByteArray,
+    //           IdentityDocumentImage: [1, 2, 3],
+    //         };
+    //         resolve(data);
+    //       }
+    //     };
+    //   });
+    // },
   },
 };
 </script>
 
 <style scoped>
-.ps_center {
-  text-align: center;
+.form-title {
+  font-size: 3.25rem;
+  line-height: 1.01;
+  letter-spacing: -0.5px;
+  margin-bottom: 3rem;
+}
+.form-box {
+  margin: 0 10rem;
+  padding: 2rem 5rem;
+  background-color: #fff;
+  box-shadow: 0 1px 24px rgba(0, 0, 0, 0.2);
+  border-radius: 9px;
+}
+.form-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.form-button--left {
+  justify-self: start;
+}
+.form-button--right {
+  justify-self: end;
+}
+.ps-form-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.ps-form-indicator-item {
+  height: 12px;
+  width: 12px;
+  border: 2px solid #ffdd57;
+  border-radius: 50%;
+}
+.ps-form-indicator-item--fill {
+  background-color: #ffdd57;
 }
 </style>
+

@@ -1,14 +1,6 @@
 <template>
-  <div class="t_so_portal section">
-    <div class="container">
-      <div class="columns">
-        <div class="column"></div>
-        <div class="column is-6">
-          <o-so-details @submit="onSubmit" :mapShow="mapShow" />
-        </div>
-        <div class="column"></div>
-      </div>
-    </div>
+  <div class="ps-container">
+    <o-so-details @submit="onSubmit" :mapShow="mapShow" />
   </div>
 </template>
 <script>
@@ -28,7 +20,8 @@ export default {
 };
 </script>
 <style scoped>
-.t_so_portal {
-  background-color: #ececec;
+.ps-container {
+  max-width: 80rem;
+  margin: 0 auto;
 }
 </style>

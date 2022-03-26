@@ -1,13 +1,12 @@
 <template>
-  <div class="new_portal">
+  <section class="ps-so-portal-section">
     <t-so-portal @submit="onSubmit" v-if="!show" :mapShow="mapShow" />
     <div class="ps_thank" v-if="show">
       <atom-img :src="img" />
       <atom-b-title class="is-size-3" :text="msg" />
       <atom-b-subtitle class="is-size-4" :text="msg2" />
     </div>
-    <br />
-  </div>
+  </section>
 </template>
 <script>
 import AtomImg from "../components/atoms/atom-img/atom-img.vue";
@@ -51,6 +50,7 @@ export default {
     },
     async login(logInData) {
       const res = await fetch("https://maya.parkspot.in/auth/login", {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,6 +64,7 @@ export default {
     },
     async kyc(kycData) {
       const res = await fetch("https://maya.parkspot.in/kyc", {
+        credentials: "include",
         method: "PATCH",
         body: JSON.stringify(kycData),
       });
@@ -101,11 +102,15 @@ export default {
 };
 </script>
 <style scoped>
-.new_portal {
-  background-color: #ececec;
-}
 .ps_thank {
   text-align: center;
   padding: 50px;
+}
+
+/* new CSS */
+.ps-so-portal-section {
+  /* padding: 9.6rem auto; */
+  background-color: #fffcee;
+  padding: 9.6rem 0;
 }
 </style>
