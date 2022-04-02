@@ -1,6 +1,7 @@
 <template>
   <section class="ps-so-portal-section">
     <t-so-portal @submit="onSubmit" v-if="!show" :mapShow="mapShow" />
+    <!-- rename show variable to submitted-->
     <div class="ps_thank" v-if="show">
       <atom-img :src="img" />
       <atom-b-title class="is-size-3" :text="msg" />
@@ -65,6 +66,9 @@ export default {
     async kyc(kycData) {
       const res = await fetch("https://maya.parkspot.in/kyc", {
         credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },        
         method: "PATCH",
         body: JSON.stringify(kycData),
       });
@@ -92,7 +96,7 @@ export default {
         await this.register(registerData);
         await this.login(logInData);
         await this.kyc(kycData);
-        await this.contact(contactData);
+        await this.contact(contactData); // todo contact can be fired in parallel
       } catch (error) {
         console.error({ error });
       }

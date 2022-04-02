@@ -162,7 +162,6 @@ export default {
         OwnershipDocument: "n/a",
         IdentityDocument: "n/a",
         OwnershipDocumentImage: convertedImgFile,
-        IdentityDocumentImage: [1, 2, 3],
       };
 
       let convertedCheckedAminities = "";
@@ -208,9 +207,7 @@ export default {
               array = new Uint8Array(arrayBuffer);
             for (const a of array) {
               fileByteArray.push(a);
-              console.log("fileByteArray");
             }
-
             resolve(fileByteArray);
           }
         };
