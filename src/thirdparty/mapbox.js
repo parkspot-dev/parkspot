@@ -2,7 +2,6 @@ const addMapboxScript = () => {
     const element = document.querySelectorAll("script");
     for (var i = 0; i < element.length; i++) {
         if (element[i].src === "https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js") {
-            console.log(element[i].src)
             return
         }
     }
@@ -13,9 +12,6 @@ const addMapboxScript = () => {
     );
     document.head.appendChild(mapboxScript);
 }
-
-
-
 
 export default {
     addMapboxScript

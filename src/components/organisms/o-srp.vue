@@ -28,7 +28,6 @@
               :slots="srp.SlotsAvailable"
               :title="srp.Name"
               :vehicle="srp.VehicleType"
-              :reviews="review"
               :rating="srp.Rating"
               :site-id="srp.ID"
               :log="srp"
@@ -92,6 +91,8 @@ import mSearchBox from "@/components/molecules/m-search-box.vue";
 import MMapbox from "../molecules/m-mapbox.vue";
 import MEmptyPage from "../molecules/m-empty-page.vue";
 import MLoadingPage from "../molecules/m-loading-page.vue";
+import { mayaClient } from "@/services/api.js";
+
 export default {
   components: {
     mSrpcard,
@@ -111,7 +112,6 @@ export default {
       markers: [],
       center: "",
       show: false,
-      // review: "112 reviews", //dummy
       results: [],
       cresults: [],
       errorPage: false,
@@ -131,26 +131,20 @@ export default {
       center = [Number(lng), Number(lat)];
     }
 
-    const res = await fetch(
-      `https://maya.parkspot.in/search?lat=${center[1]}&long=${center[0]}&start=20201115t1250&end=20201115t1400`
+    const data = await mayaClient.get(
+      `/search?lat=${center[1]}&long=${center[0]}&start=20201115t1250&end=20201115t1400`
     );
-
-    const data = await res.json();
-    if (data.Sites === null) {
-      console.log(data);
-      this.errorPage = !this.errorPage;
-      this.errorData = data.DisplayMsg;
+    if (data && data.hasOwnProperty("Sites")) {
+      for (let i = 0; i < data.Sites.length; i++) {
+        this.srpResults.push(data.Sites[i]);
+        let temp1 = Number(data.Sites[i].Long);
+        let temp2 = Number(data.Sites[i].Lat);
+        this.markers.push([temp1, temp2]);
+      }
+      this.center = this.calculateCentroid(this.markers);
+      this.show = true;
     }
-    for (let i = 0; i < data.Sites.length; i++) {
-      this.srpResults.push(data.Sites[i]);
-      let temp1 = Number(data.Sites[i].Long);
-      let temp2 = Number(data.Sites[i].Lat);
-      this.markers.push([temp1, temp2]);
-    }
-    this.center = this.calculateCentroid(this.markers);
-    this.show = true;
-
-    console.log("centererw", this.center);
+    //TODO: handle failure cases.
   },
   methods: {
     // Pagination method
@@ -162,12 +156,10 @@ export default {
     // methods to get Lat and Long
     getLat: function () {
       var queryParam = new URLSearchParams(window.location.search);
-      console.log(queryParam.get("lat"));
       return queryParam.get("lat");
     },
     getLng: function () {
       var queryParam = new URLSearchParams(window.location.search);
-      console.log(queryParam.get("lng"));
       return queryParam.get("lng");
     },
     // calculate center avg
@@ -175,7 +167,6 @@ export default {
       var ys = arr.reduce((a, e) => {
         return a + e[0];
       }, 0);
-      console.log(typeof xs);
       var xs = arr.reduce((a, e) => {
         return a + e[1];
       }, 0);
@@ -184,7 +175,6 @@ export default {
 
     // Calling Search from Mapbox API
     async search(name) {
-      // console.log(name)
       if (!name.length) {
         this.results = [];
         return;
@@ -207,7 +197,6 @@ export default {
           break;
         }
       }
-      console.log(this.$route);
       this.$router
         .push({ name: "srp", query: { lat: lat, lng: lng, loc: value } })
         .catch((err) => {});

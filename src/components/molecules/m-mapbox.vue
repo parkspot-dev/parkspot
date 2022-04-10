@@ -34,15 +34,6 @@ export default {
       "pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ";
 
     this.repaint(this.center);
-    console.log("this is popup");
-    console.log(this.popupInfo);
-
-    // var centerMarker = document.createElement("div");
-    // centerMarker.className = "marker";
-    // // centerMarker.style.backgroundImage = "url(" + this.img + ")";
-    // centerMarker.style.width = "60px";
-    // centerMarker.style.height = "60px";
-    // centerMarker.style.backgroundSize = "100%";
 
     // // make a marker for each feature and add it to the map
     // popup info

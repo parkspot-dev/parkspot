@@ -20,9 +20,6 @@
                 :text="location"
               />
             </div>
-
-            <!-- atom for private parking optional ...need to discuss with team -->
-
             <!-- price and distance -->
             <div class="columns is-mobile">
               <div class="column">
@@ -60,14 +57,12 @@
             </div>
             <!-- rating  and review-->
             <div class="columns is-mobile">
-              <!-- <div class="column is-6"></div> -->
               <atom-text
                 class="column is-size-7"
                 :text-left="card.starRating"
                 :text="rating"
                 :text-right="card.trating"
               />
-              <!-- <atom-text class="column is-size-7" :text="reviews" /> -->
             </div>
           </div>
           <div class="column is-3 is-align-content-center ps_center">
@@ -104,14 +99,13 @@ export default {
   props: {
     log: Object,
     title: String,
-    rate: String,
-    distance: String,
+    rate: Number,
+    distance: Number,
     location: String,
     vehicle: String,
-    slots: String,
+    slots: Number,
     img: String,
-    // reviews: String,
-    rating: String,
+    rating: Number,
     siteId: String,
     disabled: {
       type: Boolean,
@@ -123,12 +117,6 @@ export default {
   data() {
     return {
       button: "Book",
-      // boxicon: {
-      //   star: "star",
-      //   solid: "solid",
-      //   black: "black",
-      //   xsmall: "xs",
-      // },
       card: {
         starRating: "Rating: ",
         trating: "/5 ★",
@@ -143,7 +131,6 @@ export default {
   },
   methods: {
     onBook() {
-      // console.log("clicked    ", this.siteId);
       this.$emit("on-book", this.siteId);
     },
     logging() {

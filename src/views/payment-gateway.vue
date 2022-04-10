@@ -43,8 +43,6 @@ export default {
     } else if (paymentURL.test(this.$route.params.pathMatch)) {
       this.getBookingDetails();
     }
-    // console.log("check");
-    // console.log(this.$route);
   },
   methods: {
     async getBookingDetails() {
@@ -87,7 +85,6 @@ export default {
       }
     },
     async getStatus() {
-      console.log(this.$route.query);
       const o = this.$route.query.order_id;
       const response = await fetch(
         `https://maya.parkspot.in/payment/status?order_id=${o}`,
@@ -100,8 +97,6 @@ export default {
         }
       );
       const data = await response.json();
-      // console.log("data");
-      console.log(data);
       if (data === "PAID") {
         this.success = !this.success;
       } else if (data === "ACTIVE") {

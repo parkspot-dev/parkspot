@@ -5,7 +5,6 @@
         @search="search"
         @flytosrp="flyToSrp"
         :results="results"
-        :toggle="toggle"
         class="ps_search"
       />
       <div class="ps_map"></div>

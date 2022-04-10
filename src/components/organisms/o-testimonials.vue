@@ -95,7 +95,6 @@ export default {
         const tempUser = { ...this.user[i] };
         const tempTest = { ...this.testimonies[i] };
         if (i == index) {
-          console.log(i);
           this.$set(this.user, i, {
             ...tempUser,
             color: true,

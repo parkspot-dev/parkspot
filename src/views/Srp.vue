@@ -34,14 +34,9 @@ export default {
   created() {
     mapbox.addMapboxScript();
   },
-  mounted() {
-    console.log("srp0");
-    console.log(this.$route);
-  },
   methods: {
     async onSubmit(book) {
       this.showBookForm = !this.showBookForm;
-      console.log(book);
       const res = await fetch("https://maya.parkspot.in/booking/tentative", {
         method: "POST",
         credentials: "include",
