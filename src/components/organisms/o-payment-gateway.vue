@@ -139,7 +139,6 @@ export default {
     };
   },
   mounted() {
-    console.log("debug");
     console.log(this.paymentMode.PaymentLink);
   },
   methods: {
