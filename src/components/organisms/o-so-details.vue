@@ -285,7 +285,6 @@ import AtomButton from "../atoms/atom-button/atom-button.vue";
 import atomInput from "../atoms/atom-input/atom-input.vue";
 import atomSelect from "../atoms/atom-select/atom-select.vue";
 import AtomBTitle from "../atoms/atom-text/atom-b-title.vue";
-import MContactDetails from "../molecules/m-contact-details.vue";
 import MMapbox from "../molecules/m-mapbox.vue";
 import MSearchBox from "../molecules/m-search-box.vue";
 import { inputMixins } from "../../mixins/inputMixins.js";
@@ -297,7 +296,6 @@ export default {
     AtomBTitle,
     MMapbox,
     MSearchBox,
-    MContactDetails,
   },
   emits: ["submit"],
   props: {

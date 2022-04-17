@@ -1,15 +1,15 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import device from './modules/device'
-import blog from './modules/blog'
+import Vue from "vue";
+import Vuex from "vuex";
+import device from "./modules/device";
+import blog from "./modules/blog";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
-    modules: {
-        device,
-        blog
-    },
-})
+  modules: {
+    device,
+    blog,
+  },
+});
 
-export default store
+export default store;

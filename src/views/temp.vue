@@ -7,10 +7,8 @@
 </template>
 <script>
 import AtomButton from "../components/atoms/atom-button/atom-button.vue";
-import mLoadingPage from "../components/molecules/m-loading-page.vue";
-import MSearchBox from "../components/molecules/m-search-box.vue";
 export default {
-  components: { mLoadingPage, MSearchBox, AtomButton },
+  components: { AtomButton },
   name: "temp",
   computed: {
     count() {

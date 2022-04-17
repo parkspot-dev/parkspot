@@ -18,7 +18,7 @@
 export default {
   name: "atom-input",
   props: {
-    validationCheck: { type: String },
+    validationCheck: { type: String, requried: false },
     title: {
       type: String,
       default() {

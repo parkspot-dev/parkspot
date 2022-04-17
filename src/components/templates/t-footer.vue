@@ -1,4 +1,4 @@
- <template >
+<template>
   <footer class="footer ps_footer_color">
     <div class="container">
       <m-footer-top-places class="ps_padding" />

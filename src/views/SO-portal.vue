@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     async register(registerData) {
-      const res = await fetch("https://maya.parkspot.in/auth/register", {
+      await fetch("https://maya.parkspot.in/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export default {
       });
     },
     async login(logInData) {
-      const res = await fetch("https://maya.parkspot.in/auth/login", {
+      await fetch("https://maya.parkspot.in/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,13 +55,13 @@ export default {
       });
     },
     async kyc(kycData) {
-      const res = await fetch("https://maya.parkspot.in/kyc", {
+      await fetch("https://maya.parkspot.in/kyc", {
         method: "PATCH",
         body: JSON.stringify(kycData),
       });
     },
     async contact(contactData) {
-      const res = await fetch("https://maya.parkspot.in/contact", {
+      await fetch("https://maya.parkspot.in/contact", {
         method: "POST",
         headers: {
           Accept: "application/json",

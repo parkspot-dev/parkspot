@@ -68,7 +68,7 @@ export default {
         `<h1><b>${this.popupInfo[i].Name}</b></h1><h2>Distance : ${this.popupInfo[i].Distance} Km</h2>`
       );
       // make a marker for each feature and add it to the map
-      var marker = new mapboxgl.Marker(markerElement, {
+      new mapboxgl.Marker(markerElement, {
         draggable: this.drag,
       })
         .setPopup(popup)

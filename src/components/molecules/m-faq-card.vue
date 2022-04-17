@@ -1,4 +1,4 @@
- <template>
+<template>
   <article class="message">
     <div class="message-header">
       <atom-text
