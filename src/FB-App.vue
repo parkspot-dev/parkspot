@@ -11,6 +11,8 @@
 </template>
 
 <script>
+const FB = window.FB;
+
 export default {
   mounted() {
     window.fbAsyncInit = function () {

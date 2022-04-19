@@ -3,6 +3,8 @@
 </template>
 
 <script>
+const mapboxgl = window.mapboxgl;
+
 export default {
   name: "m-mapbox",
   props: {
