@@ -1,7 +1,7 @@
 <template>
   <div class="modal is-active">
     <div class="modal-background"></div>
-    <div class="modal-content" style="width:auto">
+    <div class="modal-content" style="width: auto">
       <!-- Any other Bulma elements you want -->
       <article class="message is-success" v-if="resMsg.IsSuccess">
         <div class="message-header">
@@ -27,7 +27,7 @@
           ></button>
         </div>
         <div class="message-body">
-           <p>{{resMsg.DisplayMsg}}</p>
+          <p>{{ resMsg.DisplayMsg }}</p>
         </div>
       </article>
     </div>
@@ -48,5 +48,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

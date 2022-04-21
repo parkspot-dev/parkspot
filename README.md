@@ -18,7 +18,7 @@ npm run build
 
 ### Lints and fixes files
 ```
-yarn lint
+npm run lint
 ```
 
 ### Requirements
@@ -26,6 +26,8 @@ yarn lint
 vue - 2.6.12
 vuex - 3.6.2
 ```
+### Dev Dependencies
+[vue eslint](https://eslint.vuejs.org/user-guide/#installation)
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

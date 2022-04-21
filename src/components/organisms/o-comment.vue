@@ -43,7 +43,7 @@ export default {
   methods: {
     async postComment() {
       this.toggle = !this.toggle;
-      const res = await fetch("https://maya.parkspot.in/contact", {
+      fetch("https://maya.parkspot.in/contact", {
         method: "POST",
         headers: {
           Accept: "application/json",

@@ -25,4 +25,5 @@ export default {
   margin: 5px;
   margin-bottom: 0px;
 }
-</style>>
+</style>
+>

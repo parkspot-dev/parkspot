@@ -5,6 +5,19 @@
 <script>
 export default {
   name: "atom-text",
-  props: ["text", "textLeft", "textRight"],
+  props: {
+    text: {
+      type: String,
+      required: false,
+    },
+    textLeft: {
+      type: String,
+      required: false,
+    },
+    textRight: {
+      type: String,
+      required: false,
+    },
+  },
 };
 </script>

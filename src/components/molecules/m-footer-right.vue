@@ -17,7 +17,6 @@
 
 <script>
 import AtomText from "@/components/atoms/atom-text/atom-text.vue";
-import AtomBoxicon from "@/components/atoms/atom-boxicons/atom-boxicon.vue";
 import AtomBSubtitle from "../atoms/atom-text/atom-b-subtitle.vue";
 export default {
   name: "m-footer-right",
@@ -38,10 +37,8 @@ export default {
   },
   components: {
     AtomText,
-    AtomBoxicon,
     AtomBSubtitle,
   },
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

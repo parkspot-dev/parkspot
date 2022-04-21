@@ -1,22 +1,20 @@
-import flavour from '../../api/flavour'
+import flavour from "../../api/flavour";
 
 // state
 const state = () => ({
-    details: navigator.userAgent,
-    regexp: /android|iphone|kindle|ipad/i,
-})
-
+  details: navigator.userAgent,
+  regexp: /android|iphone|kindle|ipad/i,
+});
 
 // getters
 const getters = {
-    getFlavour: (state) => {
-        return flavour.getFlavour(state.details, state.regexp)
-    }
-}
-
+  getFlavour: (state) => {
+    return flavour.getFlavour(state.details, state.regexp);
+  },
+};
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-}
+  namespaced: true,
+  state,
+  getters,
+};

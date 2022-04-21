@@ -18,7 +18,6 @@ import TProduct from "@/components/templates/t-product.vue";
 import TContact from "@/components/templates/t-contact.vue";
 import TMap from "@/components/templates/t-map.vue";
 import TTestimonials from "../components/templates/t-testimonials.vue";
-import OPortalSection from "../components/organisms/o-portal-section.vue";
 export default {
   name: "Home",
   components: {
@@ -29,9 +28,7 @@ export default {
     TProduct,
     TMap,
     TTestimonials,
-    OPortalSection,
   },
 };
 </script>
-<style>
-</style>
+<style></style>

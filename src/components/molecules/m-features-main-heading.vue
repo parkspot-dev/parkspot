@@ -35,13 +35,12 @@
   </div>
 </template>
 <script>
-import atomButton from "../atoms/atom-button/atom-button.vue";
 import AtomImg from "../atoms/atom-img/atom-img.vue";
 import AtomRouterLink from "../atoms/atom-link/atom-router-link.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
 import MFeaturesTitle from "./m-features-title.vue";
 export default {
-  components: { atomButton, AtomText, MFeaturesTitle, AtomImg, AtomRouterLink },
+  components: { AtomText, MFeaturesTitle, AtomImg, AtomRouterLink },
   name: "m-features-main-heading",
   props: {
     featuresButton: {

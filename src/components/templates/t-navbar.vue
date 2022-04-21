@@ -30,15 +30,12 @@
     </div>
   </nav>
 </template>
- 
-
 
 <script>
 import ONavbarLeft from "@/components/organisms/o-navbar-left.vue";
-import AtomRouterLink from "@/components/atoms/atom-link/atom-router-link.vue";
 import ONavbarRight from "@/components/organisms/o-navbar-right.vue";
 export default {
-  components: { ONavbarLeft, AtomRouterLink, ONavbarRight },
+  components: { ONavbarLeft, ONavbarRight },
   name: "t-navbar",
   data() {
     return {
@@ -56,5 +53,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

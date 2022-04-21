@@ -37,29 +37,26 @@ export default {
   },
   methods: {
     async onSubmit(data) {
-      const res = await fetch(
-        "https://maya.parkspot.in/owner/parking-request",
-        {
-          method: "Post",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            Name: data.fullName,
-            Mobile: data.mno,
-            EmailID: data.email,
-            Country: data.country,
-            State: data.state,
-            City: data.city,
-            Latitude: data.mapPosLat,
-            Longitude: data.mapPosLng,
-            CarModel: data.carModel,
-            Duration: data.duration,
-            Landmark: data.location,
-          }),
-        }
-      );
+      await fetch("https://maya.parkspot.in/owner/parking-request", {
+        method: "Post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Name: data.fullName,
+          Mobile: data.mno,
+          EmailID: data.email,
+          Country: data.country,
+          State: data.state,
+          City: data.city,
+          Latitude: data.mapPosLat,
+          Longitude: data.mapPosLng,
+          CarModel: data.carModel,
+          Duration: data.duration,
+          Landmark: data.location,
+        }),
+      });
       this.show = true;
     },
   },
