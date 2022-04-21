@@ -81,7 +81,7 @@ class MayaApiService extends BaseApiService {
       Accept: "application/json",
       Flavour: flavour,
     };
-    super(mayaDomain, baseHeaderMap, 2000, true);
+    super(mayaDomain, baseHeaderMap, 5000, true);
   }
 
   // errorInterceptor is used to handle status codes in accordance with Maya's contract.

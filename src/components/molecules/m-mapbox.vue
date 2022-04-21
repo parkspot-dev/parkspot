@@ -3,7 +3,7 @@
 </template>
 
 <script>
-const mapboxgl = window.mapboxgl;
+import mapboxgl from "mapbox-gl";
 
 export default {
   name: "m-mapbox",
@@ -37,7 +37,7 @@ export default {
 
     this.repaint(this.center);
 
-    // // make a marker for each feature and add it to the map
+    // make a marker for each feature and add it to the map
     // popup info
     const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
       `<h1><b>Your current/searched location</b></h1>`
