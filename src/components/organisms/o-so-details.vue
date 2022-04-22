@@ -105,6 +105,7 @@ export default {
       if (this.pageCount === 2) {
         return "MKycForm";
       }
+      return "MContactDetail"; // default value
     },
   },
   watch: {
@@ -195,7 +196,7 @@ export default {
       this.$emit("submit", registerData, logInData, kycData, contactData);
     },
     getConvertedData(data) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         const selectedFile = data;
         const reader = new FileReader();
         const fileByteArray = [];
@@ -290,4 +291,3 @@ export default {
   background-color: #ffdd57;
 }
 </style>
-

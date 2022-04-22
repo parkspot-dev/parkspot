@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import mapboxgl from "mapbox-gl";
+
 export default {
   name: "m-mapbox",
   props: {
@@ -35,7 +37,7 @@ export default {
 
     this.repaint(this.center);
 
-    // // make a marker for each feature and add it to the map
+    // make a marker for each feature and add it to the map
     // popup info
     const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
       `<h1><b>Your current/searched location</b></h1>`
@@ -68,7 +70,7 @@ export default {
         `<h1><b>${this.popupInfo[i].Name}</b></h1><h2>Distance : ${this.popupInfo[i].Distance} Km</h2>`
       );
       // make a marker for each feature and add it to the map
-      var marker = new mapboxgl.Marker(markerElement, {
+      new mapboxgl.Marker(markerElement, {
         draggable: this.drag,
       })
         .setPopup(popup)

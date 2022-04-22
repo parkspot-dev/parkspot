@@ -7,11 +7,19 @@
         :color="boxicons.twitter.color"
       />
     </a>
-    <a :href="git" class="column"  target="_blank">
-      <atom-boxicon :types="boxicons.git.type" :name="boxicons.git.icon" :color="boxicons.git.color"/>
+    <a :href="git" class="column" target="_blank">
+      <atom-boxicon
+        :types="boxicons.git.type"
+        :name="boxicons.git.icon"
+        :color="boxicons.git.color"
+      />
     </a>
     <a :href="linkd" class="column" target="_blank">
-      <atom-boxicon :types="boxicons.linkd.type" :name="boxicons.linkd.icon" :color="boxicons.linkd.color"/>
+      <atom-boxicon
+        :types="boxicons.linkd.type"
+        :name="boxicons.linkd.icon"
+        :color="boxicons.linkd.color"
+      />
     </a>
   </div>
 </template>
@@ -50,6 +58,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

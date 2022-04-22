@@ -86,14 +86,12 @@ import AtomButton from "@/components/atoms/atom-button/atom-button.vue";
 import AtomImg from "@/components/atoms/atom-img/atom-img.vue";
 import atomBTitle from "@/components/atoms/atom-text/atom-b-title.vue";
 import AtomText from "@/components/atoms/atom-text/atom-text.vue";
-import AtomBoxicon from "../atoms/atom-boxicons/atom-boxicon.vue";
 export default {
   components: {
     atomBTitle,
     AtomText,
     AtomImg,
     AtomButton,
-    AtomBoxicon,
   },
   name: "m-srpcard",
   props: {

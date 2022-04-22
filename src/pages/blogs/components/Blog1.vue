@@ -93,8 +93,7 @@
   </div>
 </template>
 
-  
-  <script>
+<script>
 export default {
   name: "Blog1",
   data() {

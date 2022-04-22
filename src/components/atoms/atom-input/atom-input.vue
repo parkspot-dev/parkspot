@@ -19,7 +19,7 @@ export default {
   name: "atom-input",
   emits: ["input", "change", "keypress", "invalid"],
   props: {
-    validationCheck: { type: String },
+    validationCheck: { type: String, requried: false },
     title: {
       type: String,
       default() {

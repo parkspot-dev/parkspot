@@ -14,9 +14,8 @@
 
 <script>
 import mSearchBox from "@/components/molecules/m-search-box.vue";
-import AtomImg from "@/components/atoms/atom-img/atom-img.vue";
 export default {
-  components: { mSearchBox, AtomImg },
+  components: { mSearchBox },
   name: "t-map",
   data() {
     return {
@@ -60,7 +59,6 @@ export default {
         query: { lat: lat, lng: lng, loc: value },
       });
     },
-    
   },
 };
 </script>

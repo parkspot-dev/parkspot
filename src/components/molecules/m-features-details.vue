@@ -13,9 +13,8 @@
 <script>
 import AtomImg from "../atoms/atom-img/atom-img.vue";
 import atomBSubtitle from "../atoms/atom-text/atom-b-subtitle.vue";
-import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
-  components: { atomBSubtitle, AtomText, AtomImg },
+  components: { atomBSubtitle, AtomImg },
   name: "m-features-details",
   props: {
     featuresTitle: String,

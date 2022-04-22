@@ -47,6 +47,11 @@ export default {
       // mapShow: true,
     };
   },
+  created() {
+    if (this.location) {
+      this.zooms = 13;
+    }
+  },
   computed: {
     center() {
       if (this.location) {
@@ -61,9 +66,6 @@ export default {
       return this.map.temp2;
     },
     zoom() {
-      if (this.location) {
-        return (this.zooms = 13);
-      }
       return this.zooms;
     },
   },

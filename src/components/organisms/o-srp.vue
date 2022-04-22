@@ -134,7 +134,7 @@ export default {
     const data = await mayaClient.get(
       `/search?lat=${center[1]}&long=${center[0]}&start=20201115t1250&end=20201115t1400`
     );
-    if (data && data.hasOwnProperty("Sites")) {
+    if (data && Object.prototype.hasOwnProperty.call(data, "Sites")) {
       for (let i = 0; i < data.Sites.length; i++) {
         this.srpResults.push(data.Sites[i]);
         let temp1 = Number(data.Sites[i].Long);
@@ -199,7 +199,9 @@ export default {
       }
       this.$router
         .push({ name: "srp", query: { lat: lat, lng: lng, loc: value } })
-        .catch((err) => {});
+        .catch((err) => {
+          console.error("flyToSrp err", err);
+        });
     },
     onBook(index) {
       this.$emit("on-book", index);

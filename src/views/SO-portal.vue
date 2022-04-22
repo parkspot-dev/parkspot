@@ -68,7 +68,7 @@ export default {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
-        },        
+        },
         method: "PATCH",
         body: JSON.stringify(kycData),
       });

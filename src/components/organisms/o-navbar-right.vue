@@ -17,9 +17,8 @@
 
 <script>
 import atomRouterLink from "@/components/atoms/atom-link/atom-router-link.vue";
-import AtomButton from "@/components/atoms/atom-button/atom-button.vue";
 export default {
-  components: { atomRouterLink, AtomButton },
+  components: { atomRouterLink },
   name: "o-navbar-right",
   data() {
     return {

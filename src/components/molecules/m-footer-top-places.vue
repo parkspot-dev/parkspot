@@ -68,10 +68,9 @@
   </div>
 </template>
 <script>
-import AtomRouterLink from "../atoms/atom-link/atom-router-link.vue";
 import atomText from "../atoms/atom-text/atom-text.vue";
 export default {
-  components: { atomText, AtomRouterLink },
+  components: { atomText },
   name: "m-footer-top-places",
   data() {
     return {

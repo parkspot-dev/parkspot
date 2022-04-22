@@ -36,7 +36,6 @@ import AtomRouterLink from "../atoms/atom-link/atom-router-link.vue";
 import OComment from "../organisms/o-comment.vue";
 import ORecent from "../organisms/o-recent.vue";
 import BlogOne from "@/pages/blogs/components/Blog1.vue";
-import OBlogBox from "../organisms/o-blog-box.vue";
 import Blog2 from "../../pages/blogs/components/blog2.vue";
 import Blog3 from "../../pages/blogs/components/blog3.vue";
 
@@ -47,7 +46,6 @@ export default {
     ORecent,
     OComment,
     BlogOne,
-    OBlogBox,
     Blog2,
     Blog3,
   },

@@ -17,10 +17,9 @@
 </template>
 <script>
 import AtomBoxicon from "../atoms/atom-boxicons/atom-boxicon.vue";
-import AtomBTitle from "../atoms/atom-text/atom-b-title.vue";
 import atomText from "../atoms/atom-text/atom-text.vue";
 export default {
-  components: { atomText, AtomBTitle, AtomBoxicon },
+  components: { atomText, AtomBoxicon },
   props: ["testimony", "star", "show"],
   name: "m-testimony",
   data() {

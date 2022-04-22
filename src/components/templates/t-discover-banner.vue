@@ -65,7 +65,9 @@ export default {
       }
       this.$router
         .push({ name: "srp", query: { lat: lat, lng: lng, loc: value } })
-        .catch((err) => {});
+        .catch((err) => {
+          console.err("flyToSrp err", err);
+        });
     },
   },
 };

@@ -75,20 +75,23 @@ export default {
       color: "black",
       size: "sm",
       animation: "tada",
-      placeholders: "Search your spot...",
+      placeholders: "",
       value: "",
       arrowCounter: 0,
     };
   },
   props: {
     results: Array,
-    fieldName: String,
+    fieldName: {
+      type: String,
+      default: "Search your spot...",
+    },
+  },
+  mounted() {
+    this.placeholders = this.fieldName;
   },
   computed: {
     placeholder() {
-      if (this.fieldName) {
-        return (this.placeholders = this.fieldName);
-      }
       return this.placeholders;
     },
     data() {

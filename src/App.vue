@@ -8,13 +8,11 @@
   </div>
 </template>
 
-
 <script>
 import TNavbar from "@/components/templates/t-navbar.vue";
 import TFooter from "@/components/templates/t-footer.vue";
-import MLoadingAnimation from "./components/molecules/m-loading-animation.vue";
 export default {
-  components: { TNavbar, TFooter, MLoadingAnimation },
+  components: { TNavbar, TFooter },
 };
 </script>
 <style>

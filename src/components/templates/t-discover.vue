@@ -62,21 +62,17 @@
 <script>
 import AtomImg from "../atoms/atom-img/atom-img.vue";
 import AtomRouterLink from "../atoms/atom-link/atom-router-link.vue";
-import AtomBTitle from "../atoms/atom-text/atom-b-title.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
 import MDiscover from "../molecules/m-discover.vue";
-import mSearchBox from "../molecules/m-search-box.vue";
 import MSrpcard from "../molecules/m-srpcard.vue";
 import TDiscoverBanner from "./t-discover-banner.vue";
 // import OSrp from "../organisms/o-srp.vue";
 export default {
   components: {
-    mSearchBox,
     MSrpcard,
     MDiscover,
     AtomRouterLink,
     AtomText,
-    AtomBTitle,
     TDiscoverBanner,
     AtomImg,
   },

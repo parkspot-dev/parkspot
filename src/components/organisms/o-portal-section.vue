@@ -19,4 +19,3 @@ export default {
   background-color: #ececec;
 }
 </style>
-

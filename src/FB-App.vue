@@ -14,7 +14,7 @@
 export default {
   mounted() {
     window.fbAsyncInit = function () {
-      FB.init({
+      window.FB.init({
         xfbml: true,
         version: "v10.0",
       });

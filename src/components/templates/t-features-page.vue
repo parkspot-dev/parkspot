@@ -69,14 +69,12 @@
 </template>
 
 <script>
-import AtomButton from "../atoms/atom-button/atom-button.vue";
 import MFeaturesDetails from "../molecules/m-features-details.vue";
 import MFeaturesMainHeading from "../molecules/m-features-main-heading.vue";
 export default {
   components: {
     MFeaturesDetails,
     MFeaturesMainHeading,
-    AtomButton,
   },
   name: "t-features-page",
   data() {

@@ -21,11 +21,7 @@
                 :textLeft="amtText"
               />
               <atom-text
-                class="
-                  is-size-4-mobile is-size-3
-                  ml-3
-                  has-text-weight-bold has-text-success
-                "
+                class="is-size-4-mobile is-size-3 ml-3 has-text-weight-bold has-text-success"
                 :text="bookingDetails.amount"
                 :textRight="sign"
               />
@@ -78,13 +74,11 @@
 </template>
 
 <script>
-import AtomBoxicon from "../atoms/atom-boxicons/atom-boxicon.vue";
 import AtomButton from "../atoms/atom-button/atom-button.vue";
-import AtomImg from "../atoms/atom-img/atom-img.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
 import MLoadingPage from "../molecules/m-loading-page.vue";
 export default {
-  components: { AtomText, AtomImg, AtomBoxicon, AtomButton, MLoadingPage },
+  components: { AtomText, AtomButton, MLoadingPage },
   name: "o-payment-gateway",
   props: {
     bookingDetails: Object,

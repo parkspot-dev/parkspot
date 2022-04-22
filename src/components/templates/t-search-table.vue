@@ -1,6 +1,6 @@
 <template>
-  <div >
-     <br />
+  <div>
+    <br />
     <o-request-card
       :key="spot.ID"
       v-for="spot in spotDetails"
@@ -32,7 +32,6 @@ export default {
       const data = await res.json();
       this.spotDetails = data;
     },
-  
   },
 };
 </script>

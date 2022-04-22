@@ -92,7 +92,7 @@ export default {
         },
         Comments: this.userContact.msg,
       };
-      const res = await fetch("https://maya.parkspot.in/contact", {
+      fetch("https://maya.parkspot.in/contact", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -100,13 +100,12 @@ export default {
         },
         body: JSON.stringify(user),
       });
-      const data = await res.json();
       this.userContact.name = "";
       this.userContact.email = "";
       this.userContact.mno = "";
       this.userContact.msg = "";
       this.toggle = !this.toggle;
-      this.errors.error = false; //removing error msg
+      this.errors.error = false; //removing error msg //TODO: check why not listening to errors.
       this.submit = "Thank You for Contacting Us!"; // changing the text of submit button after submitting the form
     },
     validationCheck(e, validation) {
@@ -117,4 +116,3 @@ export default {
   },
 };
 </script>
-

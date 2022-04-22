@@ -10,12 +10,11 @@
 </template>
 
 <script>
-import AtomBSubtitle from "@/components/atoms/atom-text/atom-b-subtitle.vue";
 import atomBTitle from "@/components/atoms/atom-text/atom-b-title.vue";
 import MAboutRightBottom from "../molecules/m-about-right-bottom.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
-  components: { atomBTitle, AtomBSubtitle, MAboutRightBottom, AtomText },
+  components: { atomBTitle, MAboutRightBottom, AtomText },
   name: "o-about-right",
   data() {
     return {

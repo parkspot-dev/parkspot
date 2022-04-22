@@ -63,7 +63,7 @@ export default {
           throw new Error(response);
         } else {
           const data = await response.json();
-          if (data.hasOwnProperty('ErrorCode')) {
+          if (Object.prototype.hasOwnProperty.call(data, "ErrorCode")) {
             this.status = !this.status;
             this.displayMsg = !this.displayMsg;
             this.displayMsgContent = data.DisplayMsg;
@@ -74,7 +74,7 @@ export default {
               amount: data.PaymentInfo.Amount,
               discount: data.PaymentInfo.Discount,
               convenienceFee: data.PaymentInfo.ConvenienceFee,
-              baseAmount: data.PaymentInfo.BaseAmount
+              baseAmount: data.PaymentInfo.BaseAmount,
             };
             this.paymentMode = { ...data.Payment };
           }

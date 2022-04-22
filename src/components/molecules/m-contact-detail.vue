@@ -38,11 +38,10 @@
 </template>
 
 <script>
-import { ValidationProvider, extend, required, email } from "vee-validate";
 import atomInput from "../atoms/atom-input/atom-input.vue";
 
 export default {
-  components: { atomInput, ValidationProvider },
+  components: { atomInput },
   emits: ["input"],
   props: ["personalInfo"],
   data() {
@@ -51,7 +50,7 @@ export default {
     };
   },
   methods: {
-    handleInput(e) {
+    handleInput() {
       this.$emit("input", this.userPersonalInfo);
     },
   },
