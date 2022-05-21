@@ -15,8 +15,8 @@ import AtomBTitle from "@/components/atoms/atom-text/atom-b-title.vue";
 import oContactLeft from "@/components/organisms/o-contact-left.vue";
 import OContactRight from "@/components/organisms/o-contact-right.vue";
 export default {
+  name: "TContact",
   components: { oContactLeft, OContactRight, AtomBTitle },
-  name: "t-contact",
   data() {
     return {
       title: "Have Some Questions?",

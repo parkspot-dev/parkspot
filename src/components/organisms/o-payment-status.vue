@@ -2,28 +2,28 @@
   <div class="o_payment_status">
     <div class="card">
       <div class="card-content">
-        <div class="media" v-if="success">
+        <div v-if="success" class="media">
           <div class="media-content" style="text-align: center">
             <atom-img :src="successImg" :alt="successImgAlt" />
             <atom-text class="is-size-4" :text="successMsg" />
             <atom-text class="is-size-6" :text="successInfo" />
           </div>
         </div>
-        <div class="media" v-if="error">
+        <div v-if="error" class="media">
           <div class="media-content" style="text-align: center">
             <atom-img :src="failImg" :alt="failImgAlt" />
             <atom-text class="is-size-4" :text="failMsg" />
             <atom-text class="is-size-6" :text="failInfo" />
           </div>
         </div>
-        <div class="media" v-if="displayMsg">
+        <div v-if="displayMsg" class="media">
           <div class="media-content" style="text-align: center">
             <atom-img :src="failImg" :alt="failImgAlt" />
             <atom-text class="is-size-4" :text="displayMsgContent" />
             <!-- <atom-text class="is-size-6" :text="failInfo" /> -->
           </div>
         </div>
-        <div class="media" v-if="pending">
+        <div v-if="pending" class="media">
           <div class="media-content" style="text-align: center">
             <atom-img :src="pendingImg" :alt="pendingImgAlt" />
             <atom-text class="is-size-4" :text="pendingMsg" />
@@ -42,8 +42,8 @@
 import AtomImg from "../atoms/atom-img/atom-img.vue";
 import atomText from "../atoms/atom-text/atom-text.vue";
 export default {
+  name: "OPaymentStatus",
   components: { atomText, AtomImg },
-  name: "o-payment-status",
   props: {
     error: Boolean,
     success: Boolean,

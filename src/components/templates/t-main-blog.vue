@@ -25,7 +25,7 @@
           </article>
           <o-comment style="margin: 0 10% 0 10%" />
         </div>
-        <o-recent class="column" :blogDetails="getBlog" />
+        <o-recent class="column" :blog-details="getBlog" />
       </div>
     </div>
   </div>
@@ -40,7 +40,7 @@ import Blog2 from "../../pages/blogs/components/blog2.vue";
 import Blog3 from "../../pages/blogs/components/blog3.vue";
 
 export default {
-  name: "t-main-blog",
+  name: "TMainBlog",
   components: {
     AtomRouterLink,
     ORecent,

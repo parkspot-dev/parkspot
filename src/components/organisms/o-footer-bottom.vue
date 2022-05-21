@@ -7,7 +7,7 @@
 <script>
 import mFooterBottom from "../molecules/m-footer-bottom.vue";
 export default {
+  name: "OFooterBottom",
   components: { mFooterBottom },
-  name: "o-footer-bottom",
 };
 </script>

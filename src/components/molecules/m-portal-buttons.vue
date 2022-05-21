@@ -18,8 +18,8 @@
 <script>
 import AtomButton from "../atoms/atom-button/atom-button.vue";
 export default {
+  name: "MPortalButtons",
   components: { AtomButton },
-  name: "m-portal-buttons",
   data() {
     return {
       btntext1: "Request your parking spot",

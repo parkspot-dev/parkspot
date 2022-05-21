@@ -6,11 +6,16 @@
 import mapboxgl from "mapbox-gl";
 
 export default {
-  name: "m-mapbox",
+  name: "MMapbox",
   props: {
-    data: Array,
     center: Array,
-    popupInfo: Array,
+    popupInfo: {
+      type: Array,
+      default() {
+        return [];
+      },
+      required: false,
+    },
     zoom: {
       type: Number,
       default() {
@@ -23,41 +28,52 @@ export default {
         return false;
       },
     },
+    isLocationPicker: {
+      type: Boolean,
+      default() {
+        return false;
+      },
+    },
   },
   data() {
     return {
-      map: "", //map for mapbox
+      map: null, //map for mapbox
       ltlng: "",
       img: require("@/assets/img/pstopmini.png"),
+      currLocationMarker: null,
     };
   },
   mounted() {
     mapboxgl.accessToken =
       "pk.eyJ1IjoiYmZyaWVkbHkiLCJhIjoiY2p4bHd1OXdpMGFycDN0bzFiNWR4d2VyNyJ9.3hQjvgyoPoCuRx-Hqr_BFQ";
 
-    this.repaint(this.center);
+    this.createMap(this.center);
 
     // make a marker for each feature and add it to the map
     // popup info
-    const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+    const currLocationPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
       `<h1><b>Your current/searched location</b></h1>`
     );
-    var marker2 = new mapboxgl.Marker({
+    this.currLocationMarker = new mapboxgl.Marker({
       draggable: this.drag,
     })
-      .setPopup(popup)
+      .setPopup(currLocationPopup)
       .setLngLat(this.center)
       .addTo(this.map);
-    if (this.$route.name === "VOPortal") {
+    if (this.isLocationPicker) {
       this.map.on("click", (e) => {
-        marker2.setPopup(popup).setLngLat(e.lngLat).addTo(this.map);
+        this.currLocationMarker
+          .setPopup(currLocationPopup)
+          .setLngLat(e.lngLat)
+          .addTo(this.map);
+        this.$emit("location", this.currLocationMarker.getLngLat());
+      });
+      this.currLocationMarker.on("dragend", () => {
+        this.$emit("location", this.currLocationMarker.getLngLat());
       });
     }
-    var lngLat = marker2.getLngLat();
-    this.ltlng = lngLat;
-    this.$emit("location", this.ltlng);
 
-    for (let i = 0; i < this.data.length; i++) {
+    for (let i = 0; i < this.popupInfo.length; i++) {
       var markerElement = document.createElement("div");
       markerElement.className = "marker";
       markerElement.style.backgroundImage = "url(" + this.img + ")";
@@ -74,18 +90,27 @@ export default {
         draggable: this.drag,
       })
         .setPopup(popup)
-        .setLngLat(this.data[i])
+        .setLngLat([this.popupInfo[i].Long, this.popupInfo[i].Lat])
         .addTo(this.map);
     }
   },
+  watch: {
+    center() {
+      this.flyto(this.center);
+    },
+  },
   methods: {
-    repaint(pos) {
+    createMap(pos) {
       this.map = new mapboxgl.Map({
         container: "m_mapbox", // container ID
         style: "mapbox://styles/mapbox/dark-v10", // style URL
-        center: pos, //[(77.7864, 12.8576)], // starting position [lng, lat]
+        center: pos, // starting position [lng, lat]
         zoom: this.zoom, // starting zoom
       });
+    },
+    flyto(center) {
+      this.map.flyTo({ center: center });
+      this.currLocationMarker.setLngLat(this.center);
     },
   },
 };

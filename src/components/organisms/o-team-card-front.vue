@@ -17,8 +17,8 @@ import atomImg from "@/components/atoms/atom-img/atom-img.vue";
 import AtomText from "@/components/atoms/atom-text/atom-text.vue";
 import AtomBSubtitle from "@/components/atoms/atom-text/atom-b-subtitle.vue";
 export default {
+  name: "OTeamCardFront",
   components: { atomImg, AtomText, AtomBSubtitle },
-  name: "o-team-card-front",
   props: {
     src: String,
     title: String,

@@ -3,12 +3,12 @@
     <t-srp @on-book="onBookFormtoggle" />
     <SrpBookForm
       v-if="showBookForm"
-      :showBookForm="showBookForm"
+      :show-book-form="showBookForm"
       :index="index"
       @on-cancel="onBookFormtoggles"
       @on-submit="onSubmit"
     />
-    <BookMsg :resMsg="resMsg" v-if="resMsgflag" @on-cancel="onCancel" />
+    <BookMsg v-if="resMsgflag" :res-msg="resMsg" @on-cancel="onCancel" />
   </section>
 </template>
 <script>

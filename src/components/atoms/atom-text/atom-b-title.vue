@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "atom-b-title",
+  name: "AtomBTitle",
   props: {
     text: {
       type: String,

@@ -7,8 +7,8 @@
 <script>
 import tFeaturesPage from "../components/templates/t-features-page.vue";
 export default {
+  name: "Features",
   components: { tFeaturesPage },
-  name: "features",
 };
 </script>
 

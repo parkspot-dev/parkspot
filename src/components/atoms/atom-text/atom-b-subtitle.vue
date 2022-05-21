@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "atom-b-subtitle",
+  name: "AtomBSubtitle",
   props: {
     text: {
       type: String,

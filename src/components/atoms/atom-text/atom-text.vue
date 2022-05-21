@@ -4,10 +4,10 @@
 
 <script>
 export default {
-  name: "atom-text",
+  name: "AtomText",
   props: {
     text: {
-      type: String,
+      type: [String, Number],
       required: false,
     },
     textLeft: {

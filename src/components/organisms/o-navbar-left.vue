@@ -12,8 +12,8 @@
 <script>
 import atomImg from "@/components/atoms/atom-img/atom-img.vue";
 export default {
+  name: "ONavbarVue",
   components: { atomImg },
-  name: "o-navbar-vue",
   data() {
     return {
       src1: require("@/assets/img/pstopmini.png"),

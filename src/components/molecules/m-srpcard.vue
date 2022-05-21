@@ -9,7 +9,7 @@
               <atom-b-title
                 class="column is-size-6 has-text-weight-semibold"
                 :text="title"
-                v-on:click.native="logging"
+                @click.native="logging"
               />
             </div>
             <!-- location -->
@@ -72,7 +72,7 @@
               class="button is-small is-rounded is-warning"
               :text="button"
               :disabled="disabled"
-              v-on:click.native="onBook()"
+              @click.native="onBook()"
             />
           </div>
         </div>
@@ -87,13 +87,13 @@ import AtomImg from "@/components/atoms/atom-img/atom-img.vue";
 import atomBTitle from "@/components/atoms/atom-text/atom-b-title.vue";
 import AtomText from "@/components/atoms/atom-text/atom-text.vue";
 export default {
+  name: "MSrpcard",
   components: {
     atomBTitle,
     AtomText,
     AtomImg,
     AtomButton,
   },
-  name: "m-srpcard",
   props: {
     log: Object,
     title: String,

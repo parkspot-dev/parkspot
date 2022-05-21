@@ -1,8 +1,8 @@
 <template>
   <div class="discover_page">
     <t-discover
-      :cardData="cardData"
-      :searchedText="searchedText"
+      :card-data="cardData"
+      :searched-text="searchedText"
       :show="show"
     />
   </div>
@@ -13,8 +13,8 @@
 import { firebase, getDatabase, ref, get, child } from "../firebase";
 import tDiscover from "../components/templates/t-discover.vue";
 export default {
+  name: "DiscoverPage",
   components: { tDiscover },
-  name: "discover-page",
   data() {
     return {
       cardData: [],

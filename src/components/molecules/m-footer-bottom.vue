@@ -25,8 +25,8 @@
 import AtomRouterLink from "@/components/atoms/atom-link/atom-router-link.vue";
 import atomText from "@/components/atoms/atom-text/atom-text.vue";
 export default {
+  name: "MFooterBottom",
   components: { atomText, AtomRouterLink },
-  name: "m-footer-bottom",
   data() {
     return {
       text1: "© 2021 NeoSpot Pvt Ltd.- ALL RIGHTS RESERVED",

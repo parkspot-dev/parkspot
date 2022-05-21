@@ -1,14 +1,14 @@
 <template>
   <div class="main_blog">
-    <t-main-blog :activeBlog="activeBlog" />
+    <t-main-blog :active-blog="activeBlog" />
   </div>
 </template>
 
 <script>
 import tMainBlog from "../components/templates/t-main-blog.vue";
 export default {
+  name: "MainBlog",
   components: { tMainBlog },
-  name: "main-blog",
   data() {
     return { now: false };
   },

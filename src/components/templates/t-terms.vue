@@ -233,8 +233,8 @@ import AtomBSubtitle from "../atoms/atom-text/atom-b-subtitle.vue";
 import atomBTitle from "../atoms/atom-text/atom-b-title.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
+  name: "TTerms",
   components: { atomBTitle, AtomText, AtomBSubtitle, AtomRouterLink },
-  name: "t-terms",
   data() {
     return {
       home: "Home",

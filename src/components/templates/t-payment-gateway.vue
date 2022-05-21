@@ -3,16 +3,16 @@
     <div class="container">
       <o-payment-gateway
         v-if="!this.status"
-        :bookingDetails="bookingDetails"
-        :paymentMode="paymentMode"
+        :booking-details="bookingDetails"
+        :payment-mode="paymentMode"
       />
       <o-payment-status
         v-if="this.status"
         :error="error"
         :success="success"
         :pending="pending"
-        :displayMsg="displayMsg"
-        :displayMsgContent="displayMsgContent"
+        :display-msg="displayMsg"
+        :display-msg-content="displayMsgContent"
       />
     </div>
   </div>
@@ -22,6 +22,11 @@
 import OPaymentGateway from "../organisms/o-payment-gateway.vue";
 import OPaymentStatus from "../organisms/o-payment-status.vue";
 export default {
+  name: "TPaymentGateway",
+  components: {
+    OPaymentGateway,
+    OPaymentStatus,
+  },
   props: {
     bookingDetails: Object,
     paymentMode: Object,
@@ -32,11 +37,6 @@ export default {
     displayMsg: Boolean,
     displayMsgContent: String,
   },
-  components: {
-    OPaymentGateway,
-    OPaymentStatus,
-  },
-  name: "t-payment-gateway",
 };
 </script>
 

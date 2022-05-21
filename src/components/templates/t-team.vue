@@ -3,7 +3,7 @@
     <div class="container">
       <atom-b-title class="ps_mb has-text-centered" :text="title" />
       <carousel
-        :perPageCustom="[
+        :per-page-custom="[
           [360, 1],
           [480, 1],
           [1024, 4],
@@ -11,11 +11,11 @@
         :mouse-drag="false"
       >
         <!-- :navigate-to="someLocalProperty" -->
-        <slide class="mx-2" :key="team.id" v-for="team in teams">
+        <slide v-for="team in teams" :key="team.id" class="mx-2">
           <div class="ps_container">
             <o-team-card-front
               :title="team.title"
-              :jobTitle="team.jobTitle"
+              :job-title="team.jobTitle"
               :src="team.src"
             />
             <div class="ps_middle">
@@ -38,7 +38,7 @@ import AtomBTitle from "@/components/atoms/atom-text/atom-b-title.vue";
 import OTeamCardFront from "../organisms/o-team-card-front.vue";
 import OTeamCardBack from "../organisms/o-team-card-back.vue";
 export default {
-  name: "t-team",
+  name: "TTeam",
   components: {
     Carousel,
     Slide,

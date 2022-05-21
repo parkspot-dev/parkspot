@@ -4,7 +4,7 @@
       <atom-b-title class="is-size-3 is-size-5-mobile" :text="title" />
     </div>
     <br />
-    <form v-on:submit.prevent="onSubmit">
+    <form @submit.prevent="onSubmit">
       <!-- contact details -->
       <label class="is-size-5 is-size-6-mobile"
         >Contact Details <span style="color: red">*</span> :</label
@@ -79,10 +79,10 @@
             :required="required"
           /> -->
           <m-search-box
+            :results="results"
+            :field-name="address.location"
             @search="search"
             @flytosrp="flytosrp"
-            :results="results"
-            :fieldName="address.location"
           />
         </div>
       </div>
@@ -91,14 +91,14 @@
           >Map:Drag the Marker to pin point your location
         </label>
         <m-mapbox
-          style="height: 350px"
+          v-if="mapShow"
           :key="map.key"
+          style="height: 350px"
           :center="center"
           :data="marker"
           :zoom="zoom"
           :drag="map.drag"
           @location="getLocation"
-          v-if="mapShow"
         />
       </div>
       <br />
@@ -149,6 +149,7 @@ import MMapbox from "../molecules/m-mapbox.vue";
 import MSearchBox from "../molecules/m-search-box.vue";
 import { inputMixins } from "../../mixins/inputMixins.js";
 export default {
+  name: "OVoDetails",
   components: {
     atomInput,
     atomSelect,
@@ -157,11 +158,10 @@ export default {
     MMapbox,
     MSearchBox,
   },
+  mixins: [inputMixins],
   props: {
     mapShow: Boolean,
   },
-  name: "o-vo-details",
-  mixins: [inputMixins],
   data() {
     return {
       title: "Fill the form to Register your Parking Spot",

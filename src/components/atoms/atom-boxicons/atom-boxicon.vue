@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "atom-boxicons",
+  name: "AtomBoxicons",
   props: {
     types: {
       type: String,

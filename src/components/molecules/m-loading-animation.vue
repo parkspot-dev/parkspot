@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: "m-loading-animation",
+  name: "MLoadingAnimation",
   data() {
     return {
       isLoaded: false,

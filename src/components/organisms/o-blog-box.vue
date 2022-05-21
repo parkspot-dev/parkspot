@@ -2,11 +2,11 @@
   <div class="o_blog-box mx-6">
     <div class="columns is-centered">
       <m-blog-box-details
-        v-on:click.native="getBlog(blog)"
-        :key="blog.id"
         v-for="blog in noOfBlog"
-        :blogDetails="blog"
+        :key="blog.id"
+        :blog-details="blog"
         class="column is-4"
+        @click.native="getBlog(blog)"
       />
     </div>
   </div>
@@ -15,11 +15,11 @@
 <script>
 import mBlogBoxDetails from "../molecules/m-blog-box-details.vue";
 export default {
+  name: "OBlogBox",
   components: { mBlogBoxDetails },
   props: {
     noOfBlog: Array,
   },
-  name: "o-blog-box",
   methods: {
     getBlog(blog) {
       const regex = / /gi;

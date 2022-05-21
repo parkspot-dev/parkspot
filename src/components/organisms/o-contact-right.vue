@@ -1,20 +1,20 @@
 <template>
   <div class="o_contact_right">
-    <form v-on:submit.prevent="onSubmit">
+    <form @submit.prevent="onSubmit">
       <atom-input
-        class="input mb-2"
         v-model="userContact.name"
+        class="input mb-2"
         :types="text"
         :placeholder="placeholder1"
         :required="required"
       />
       <atom-input
-        class="input mb-2"
         v-model="userContact.email"
+        class="input mb-2"
         :types="email"
         :placeholder="placeholder2"
         :required="required"
-        :validationCheck="validation.email.msg"
+        :validation-check="validation.email.msg"
         @invalid="validationCheck"
       />
       <atom-input
@@ -24,7 +24,7 @@
         :placeholder="placeholder3"
         :required="required"
         :pattern="pattern"
-        :validationCheck="validation.mobile.msg"
+        :validation-check="validation.mobile.msg"
         @invalid="validationCheck"
       />
       <atom-textarea
@@ -46,8 +46,8 @@ import AtomButton from "@/components/atoms/atom-button/atom-button.vue";
 import atomInput from "@/components/atoms/atom-input/atom-input.vue";
 import AtomTextarea from "@/components/atoms/atom-input/atom-textarea.vue";
 export default {
+  name: "OContactRight",
   components: { atomInput, AtomTextarea, AtomButton },
-  name: "o-contact-right",
   data() {
     return {
       // input details

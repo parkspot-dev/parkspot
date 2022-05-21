@@ -2,8 +2,8 @@
   <div>
     <br />
     <o-request-card
-      :key="spot.ID"
       v-for="spot in spotDetails"
+      :key="spot.ID"
       :request="spot"
     />
   </div>
@@ -12,10 +12,10 @@
 <script>
 import ORequestCard from "@/components/organisms/o-request-card.vue";
 export default {
+  name: "TSearchTable",
   components: {
     ORequestCard,
   },
-  name: "t-search-table",
   data() {
     return {
       spotDetails: [],

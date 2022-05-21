@@ -24,8 +24,8 @@ import atomImg from "@/components/atoms/atom-img/atom-img.vue";
 import MProductBack from "@/components/molecules/m-product-back.vue";
 import AtomBSubtitle from "@/components/atoms/atom-text/atom-b-subtitle.vue";
 export default {
+  name: "OProductCard",
   components: { atomImg, MProductBack, AtomBSubtitle },
-  name: "o-product-card",
   props: {
     title: String,
     text: String,

@@ -4,7 +4,7 @@
       <div class="columns">
         <div class="column"></div>
         <div class="column is-6">
-          <o-vo-details @submit="onSubmit" :mapShow="mapShow" />
+          <o-vo-details :map-show="mapShow" @submit="onSubmit" />
         </div>
         <div class="column"></div>
       </div>
@@ -14,8 +14,8 @@
 <script>
 import oVoDetails from "../organisms/o-vo-details.vue";
 export default {
+  name: "TVoPortal",
   components: { oVoDetails },
-  name: "t-vo-portal",
   props: {
     mapShow: Boolean,
   },

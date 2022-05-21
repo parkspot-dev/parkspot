@@ -10,8 +10,8 @@
 import AtomBTitle from "../atoms/atom-text/atom-b-title.vue";
 import oTestimonials from "../organisms/o-testimonials.vue";
 export default {
+  name: "TTestimonials",
   components: { oTestimonials, AtomBTitle },
-  name: "t-testimonials",
   data() {
     return {
       title: "Our Testimonials",

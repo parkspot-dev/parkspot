@@ -1,29 +1,34 @@
 <template>
   <section class="ps-so-portal-section">
-    <t-so-portal @submit="onSubmit" v-if="!show" :mapShow="mapShow" />
-    <!-- rename show variable to submitted-->
-    <div class="ps_thank" v-if="show">
+    <t-so-portal
+      v-if="!isFormSubmitted"
+      :map-show="mapShow"
+      @submit="onSubmit"
+    />
+    <div v-if="isFormSubmitted" class="ps_thank">
       <atom-img :src="img" />
       <atom-b-title class="is-size-3" :text="msg" />
       <atom-b-subtitle class="is-size-4" :text="msg2" />
     </div>
   </section>
 </template>
+
 <script>
 import AtomImg from "../components/atoms/atom-img/atom-img.vue";
 import AtomBSubtitle from "../components/atoms/atom-text/atom-b-subtitle.vue";
 import AtomBTitle from "../components/atoms/atom-text/atom-b-title.vue";
 import tSoPortal from "../components/templates/t-so-portal.vue";
 import mapbox from "../thirdparty/mapbox";
+import { mayaClient } from "@/services/api";
 export default {
+  name: "SOPortal",
   components: { tSoPortal, AtomImg, AtomBTitle, AtomBSubtitle },
-  name: "SO-portal",
   data() {
     return {
       msg: "Thank You!",
       msg2: "Our supply team will soon contact you with right Parking Spot.",
       img: require("@/assets/img/request-sent.svg"),
-      show: false,
+      isFormSubmitted: false,
       mapShow: false,
     };
   },
@@ -37,59 +42,16 @@ export default {
   },
   methods: {
     async register(registerData) {
-      const res = await fetch("https://maya.parkspot.in/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(registerData),
-      });
-      if (!res.ok) {
-        console.log({ res });
-        throw Error("Registration Not Working!!");
-      }
+      mayaClient.post("/auth/register", registerData);
     },
     async login(logInData) {
-      const res = await fetch("https://maya.parkspot.in/auth/login", {
-        credentials: "include",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(logInData),
-      });
-      if (!res.ok) {
-        console.log({ res });
-        throw Error("Log In Not Working!!");
-      }
+      mayaClient.post("/auth/login", logInData);
     },
     async kyc(kycData) {
-      const res = await fetch("https://maya.parkspot.in/kyc", {
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "PATCH",
-        body: JSON.stringify(kycData),
-      });
-      if (!res.ok) {
-        console.log({ res });
-        throw Error("KYC Not Working!!");
-      }
+      mayaClient.post("/kyc", kycData);
     },
     async contact(contactData) {
-      const res = await fetch("https://maya.parkspot.in/contact", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(contactData),
-      });
-      if (!res.ok) {
-        console.log({ res });
-        throw Error("Contact Us Not Working!!");
-      }
+      mayaClient.post("/contact", contactData);
     },
     async onSubmit(registerData, logInData, kycData, contactData) {
       try {
@@ -100,7 +62,7 @@ export default {
       } catch (error) {
         console.error({ error });
       }
-      this.show = true;
+      this.isFormSubmitted = true;
     },
   },
 };

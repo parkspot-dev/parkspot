@@ -2,24 +2,30 @@
   <input
     class="input input_rounded"
     :value="value"
-    @invalid="handleInvalid"
-    @input="handleInput"
-    @change="handleChange"
-    @keypress="handleKeypress"
     :type="types"
     :placeholder="placeholder"
     :required="required"
     :pattern="pattern"
     :title="title"
+    @invalid="handleInvalid"
+    @input="handleInput"
+    @change="handleChange"
+    @keypress="handleKeypress"
   />
 </template>
 
 <script>
 export default {
-  name: "atom-input",
+  name: "AtomInput",
   emits: ["input", "change", "keypress", "invalid"],
   props: {
-    validationCheck: { type: String, requried: false },
+    validationCheck: {
+      type: String,
+      default() {
+        return "";
+      },
+      requried: false,
+    },
     title: {
       type: String,
       default() {

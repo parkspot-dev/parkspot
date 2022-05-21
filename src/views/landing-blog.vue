@@ -1,14 +1,14 @@
 <template>
   <section>
-    <t-blog-landing :noOfBlog="noOfBlog" />
+    <t-blog-landing :no-of-blog="noOfBlog" />
   </section>
 </template>
 
 <script>
 import TBlogLanding from "../components/templates/t-blog-landing.vue";
 export default {
+  name: "LandingBlog",
   components: { TBlogLanding },
-  name: "landing-blog",
 
   computed: {
     noOfBlog() {

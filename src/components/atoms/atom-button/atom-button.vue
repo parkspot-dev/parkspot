@@ -1,12 +1,16 @@
 <template>
-  <button class="button btn-shadow is-rounded is-warning" :disabled="disabled">
+  <button
+    class="button btn-shadow is-rounded is-warning"
+    :disabled="disabled"
+    :type="type"
+  >
     {{ text }}
   </button>
 </template>
 
 <script>
 export default {
-  name: "atom-button",
+  name: "AtomButton",
   props: {
     disabled: {
       type: Boolean,
@@ -18,6 +22,12 @@ export default {
       type: String,
       default() {
         return "Button";
+      },
+    },
+    type: {
+      type: String,
+      default() {
+        return "submit";
       },
     },
   },

@@ -2,7 +2,7 @@
   <div class="m_footer_left columns">
     <div class="column">
       <div class="columns is-mobile">
-        <div class="column is-one-fifth" v-lazyload>
+        <div v-lazyload class="column is-one-fifth">
           <atom-img class="ps_img" :data-url="src" />
         </div>
         <div class="column is-1"></div>
@@ -19,18 +19,18 @@ import AtomImg from "@/components/atoms/atom-img/atom-img.vue";
 import AtomBSubtitle from "@/components/atoms/atom-text/atom-b-subtitle.vue";
 import AtomBTitle from "@/components/atoms/atom-text/atom-b-title.vue";
 export default {
-  name: "m-footer-left",
+  name: "MFooterLeft",
+  components: {
+    AtomImg,
+    AtomBTitle,
+    AtomBSubtitle,
+  },
   data() {
     return {
       src: require("@/assets/img/pstopmini.png"),
       brand: "ParkSpot",
       hookup: "Get the Spot",
     };
-  },
-  components: {
-    AtomImg,
-    AtomBTitle,
-    AtomBSubtitle,
   },
 };
 </script>

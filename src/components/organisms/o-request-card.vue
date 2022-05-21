@@ -39,7 +39,7 @@
           title="Email"
           :text="request.EmailID"
         />
-        <a v-on:click="toSrp" target="_blank" class="column is-2">
+        <a target="_blank" class="column is-2" @click="toSrp">
           <m-text-title
             title="Lat / Lang"
             :text="
@@ -77,9 +77,9 @@
           />
         </div>
         <atom-button
-          @click.native="updateRequest"
           class="column is-one-fifth"
           text="Update"
+          @click.native="updateRequest"
         />
       </div>
     </div>
@@ -93,44 +93,12 @@ import MTextTitle from "@/components/molecules/m-text-title.vue";
 import AtomSelect from "@/components/atoms/atom-select/atom-select.vue";
 
 export default {
-  name: "o-request-card",
+  name: "ORequestCard",
   components: {
     AtomButton,
     AtomTextarea,
     MTextTitle,
     AtomSelect,
-  },
-  data() {
-    return {
-      statusList: [
-        "StatusNotSet",
-        "Registered",
-        "Processing",
-        "SpotSuggested",
-        "SpotAccepted",
-        "SpotDenied",
-        "Archive",
-      ],
-      priorityList: ["Not Set", "Low", "Medium", "High"],
-    };
-  },
-  computed: {
-    statusString: {
-      get() {
-        return this.statusList[this.request.Status];
-      },
-      set(statusString) {
-        this.request.Status = this.statusList.indexOf(statusString);
-      },
-    },
-    priorityString: {
-      get() {
-        return this.priorityList[this.request.Priority];
-      },
-      set(priorityString) {
-        this.request.Priority = this.priorityList.indexOf(priorityString);
-      },
-    },
   },
   props: {
     request: {
@@ -164,6 +132,38 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      statusList: [
+        "StatusNotSet",
+        "Registered",
+        "Processing",
+        "SpotSuggested",
+        "SpotAccepted",
+        "SpotDenied",
+        "Archive",
+      ],
+      priorityList: ["Not Set", "Low", "Medium", "High"],
+    };
+  },
+  computed: {
+    statusString: {
+      get() {
+        return this.statusList[this.request.Status];
+      },
+      set(statusString) {
+        this.request.Status = this.statusList.indexOf(statusString);
+      },
+    },
+    priorityString: {
+      get() {
+        return this.priorityList[this.request.Priority];
+      },
+      set(priorityString) {
+        this.request.Priority = this.priorityList.indexOf(priorityString);
+      },
+    },
+  },
 
   methods: {
     getBorderClass() {
@@ -176,7 +176,6 @@ export default {
       return "card--low";
     },
     async updateRequest() {
-      console.log("updating request:", this.request);
       const res = await fetch(
         "https://maya.parkspot.in/owner/request-comments",
         {

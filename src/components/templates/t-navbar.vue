@@ -15,7 +15,7 @@
           aria-label="menu"
           aria-expanded="false"
           data-target="ps__navbar"
-          v-on:click="isToggle"
+          @click="isToggle"
         >
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -35,8 +35,8 @@
 import ONavbarLeft from "@/components/organisms/o-navbar-left.vue";
 import ONavbarRight from "@/components/organisms/o-navbar-right.vue";
 export default {
+  name: "TNavbar",
   components: { ONavbarLeft, ONavbarRight },
-  name: "t-navbar",
   data() {
     return {
       toggle: false,

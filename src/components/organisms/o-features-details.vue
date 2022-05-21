@@ -14,15 +14,15 @@ import AtomBSubtitle from "@/components/atoms/atom-text/atom-b-subtitle.vue";
 import atomText from "@/components/atoms/atom-text/atom-text.vue";
 import AtomImg from "../atoms/atom-img/atom-img.vue";
 export default {
+  name: "OFeaturesDetailsVue",
   components: { atomText, AtomBSubtitle, AtomImg },
-  name: "o-features-details.vue",
-  data() {
-    return {};
-  },
   props: {
     subtitle: String,
     text: String,
     src: String,
+  },
+  data() {
+    return {};
   },
 };
 </script>

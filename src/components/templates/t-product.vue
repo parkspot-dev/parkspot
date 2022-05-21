@@ -4,8 +4,8 @@
       <atom-b-title class="mb-6 has-text-centered" :text="title" />
       <div class="columns">
         <o-product-card
-          :key="product.id"
           v-for="product in products"
+          :key="product.id"
           class="column center"
           :title="product.title"
           :text="product.text"
@@ -20,8 +20,8 @@
 import oProductCard from "@/components/organisms/o-product-card.vue";
 import AtomBTitle from "@/components/atoms/atom-text/atom-b-title.vue";
 export default {
+  name: "TProduct",
   components: { oProductCard, AtomBTitle },
-  name: "t-product",
   data() {
     return {
       title: "Our Products",
