@@ -1,7 +1,7 @@
 <template>
   <section class="t_map hero">
     <div class="hero-body">
-      <m-search-box class="ps_search" @search="search" @flytosrp="flyToSrp" />
+      <m-search-box class="ps_search" @flytosrp="flyToSrp" />
       <div class="ps_map"></div>
     </div>
   </section>
