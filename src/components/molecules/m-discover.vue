@@ -19,9 +19,17 @@
 <script>
 import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
+  name: "MDiscover",
   components: { AtomText },
   props: {
     searchedText: String,
+  },
+  data() {
+    return {
+      discover_text: "Find and book parking spaces near ",
+      discover_para2: `
+    Want to earn extra money? Rent your vacant space at our platform and start earning extra.`,
+    };
   },
   computed: {
     discover_para() {
@@ -32,14 +40,6 @@ export default {
        Choose the new way of parking near  ${this.searchedText}  , choose the smart way of parking, CHOOSE ParkSpot .
        Think about the stress avoided, fuel & time saved.`;
     },
-  },
-  name: "m-discover",
-  data() {
-    return {
-      discover_text: "Find and book parking spaces near ",
-      discover_para2: `
-    Want to earn extra money? Rent your vacant space at our platform and start earning extra.`,
-    };
   },
 };
 </script>

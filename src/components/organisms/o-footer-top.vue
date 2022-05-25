@@ -11,7 +11,7 @@ import MFooterLeft from "@/components/molecules/m-footer-left.vue";
 import MFooterMiddle from "@/components/molecules/m-footer-middle.vue";
 import MFooterRight from "@/components/molecules/m-footer-right.vue";
 export default {
-  name: "o-footer-top",
+  name: "OFooterTop",
   components: {
     MFooterLeft,
     MFooterMiddle,

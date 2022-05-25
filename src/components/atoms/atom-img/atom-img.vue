@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "atom-img",
+  name: "AtomImg",
   props: {
     src: {
       type: String,

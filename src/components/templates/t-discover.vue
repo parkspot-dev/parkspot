@@ -20,20 +20,20 @@
         <atom-text
           class="has-text-weight-semibold"
           :text="card_title"
-          :textRight="show ? emptyMsg : ''"
+          :text-right="show ? emptyMsg : ''"
         />
         <!--empty msg  -->
 
         <figure style="text-align: center" class="mt-2">
-          <atom-img style="width: 250px" :src="emptyImg" v-if="show" />
+          <atom-img v-if="show" style="width: 250px" :src="emptyImg" />
         </figure>
 
         <br />
-        <div class="columns" v-if="!show">
+        <div v-if="!show" class="columns">
           <m-srpcard
-            class="column"
-            :key="srp.ID"
             v-for="srp in cardData"
+            :key="srp.ID"
+            class="column"
             :img="srp.IconURL"
             :location="
               srp.Address.slice(0, 36) +
@@ -53,7 +53,7 @@
           />
         </div>
         <br /><br />
-        <m-discover :searchedText="place" />
+        <m-discover :searched-text="place" />
         <br /><br />
       </div>
     </div>
@@ -68,6 +68,7 @@ import MSrpcard from "../molecules/m-srpcard.vue";
 import TDiscoverBanner from "./t-discover-banner.vue";
 // import OSrp from "../organisms/o-srp.vue";
 export default {
+  name: "TDiscover",
   components: {
     MSrpcard,
     MDiscover,
@@ -76,21 +77,10 @@ export default {
     TDiscoverBanner,
     AtomImg,
   },
-  name: "t-discover",
   props: {
     cardData: Array,
     searchedText: String,
     show: Boolean,
-  },
-  computed: {
-    place() {
-      // ** it will remove the text after '/' like 'marathahalli/dsjl' to 'marathahalli'
-      const temp = this.searchedText.indexOf("/");
-      if (temp > 0) {
-        return this.searchedText.substring(0, temp);
-      }
-      return this.searchedText;
-    },
   },
   data() {
     return {
@@ -102,6 +92,16 @@ export default {
       emptyImg: require("../../assets/stocks/empty.png"),
       emptyMsg: " is currently not available!!",
     };
+  },
+  computed: {
+    place() {
+      // ** it will remove the text after '/' like 'marathahalli/dsjl' to 'marathahalli'
+      const temp = this.searchedText.indexOf("/");
+      if (temp > 0) {
+        return this.searchedText.substring(0, temp);
+      }
+      return this.searchedText;
+    },
   },
 };
 </script>

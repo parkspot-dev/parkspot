@@ -57,8 +57,8 @@ import atomText from "@/components/atoms/atom-text/atom-text.vue";
 import AtomImg from "@/components/atoms/atom-img/atom-img.vue";
 import AtomBoxicon from "../atoms/atom-boxicons/atom-boxicon.vue";
 export default {
+  name: "MFooterMiddle",
   components: { atomText, AtomImg, AtomBoxicon },
-  name: "m-footer-middle",
   data() {
     return {
       text1: "Available on",

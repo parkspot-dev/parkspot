@@ -6,7 +6,7 @@
 <script>
 import TSearchTable from "../components/templates/t-search-table.vue";
 export default {
+  name: "SearchPortal",
   components: { TSearchTable },
-  name: "search-portal",
 };
 </script>

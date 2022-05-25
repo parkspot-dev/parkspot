@@ -19,7 +19,11 @@
 import AtomText from "@/components/atoms/atom-text/atom-text.vue";
 import AtomBSubtitle from "../atoms/atom-text/atom-b-subtitle.vue";
 export default {
-  name: "m-footer-right",
+  name: "MFooterRight",
+  components: {
+    AtomText,
+    AtomBSubtitle,
+  },
   data() {
     return {
       title: "Contact Us",
@@ -34,10 +38,6 @@ export default {
         },
       },
     };
-  },
-  components: {
-    AtomText,
-    AtomBSubtitle,
   },
 };
 </script>

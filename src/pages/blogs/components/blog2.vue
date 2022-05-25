@@ -110,7 +110,7 @@
 </template>
 <script>
 export default {
-  name: "blog2",
+  name: "Blog2",
   data() {
     return {
       dp: require("@/assets/img/blankProfile.png"),

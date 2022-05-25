@@ -1,22 +1,22 @@
 <template>
   <div class="payment_gateway">
     <t-payment-gateway
-      :bookingDetails="bookingDetails"
-      :paymentMode="paymentMode"
+      :booking-details="bookingDetails"
+      :payment-mode="paymentMode"
       :status="status"
       :error="error"
       :success="success"
       :pending="pending"
-      :displayMsg="displayMsg"
-      :displayMsgContent="displayMsgContent"
+      :display-msg="displayMsg"
+      :display-msg-content="displayMsgContent"
     />
   </div>
 </template>
 <script>
 import tPaymentGateway from "../components/templates/t-payment-gateway.vue";
 export default {
+  name: "PaymentGateway",
   components: { tPaymentGateway },
-  name: "payment-gateway",
   data() {
     return {
       bookingDetails: {},

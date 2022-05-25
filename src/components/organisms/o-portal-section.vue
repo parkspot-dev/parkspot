@@ -9,9 +9,8 @@
 <script>
 import MPortalButtons from "../molecules/m-portal-buttons.vue";
 export default {
+  name: "OPortalSection",
   components: { MPortalButtons },
-
-  name: "o-portal-section",
 };
 </script>
 <style scoped>

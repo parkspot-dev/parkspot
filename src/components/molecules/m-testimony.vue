@@ -1,12 +1,12 @@
 <template>
-  <div class="m_testimony card" v-if="show">
+  <div v-if="show" class="m_testimony card">
     <atom-text class="ps_text" :text="comma" />
     <atom-text :text="testimony" />
     <br />
     <div class="star">
       <atom-boxicon
-        :key="i"
         v-for="i in star"
+        :key="i"
         :types="boxicon.solid"
         :name="boxicon.star"
         :color="boxicon.orange"
@@ -19,9 +19,9 @@
 import AtomBoxicon from "../atoms/atom-boxicons/atom-boxicon.vue";
 import atomText from "../atoms/atom-text/atom-text.vue";
 export default {
+  name: "MTestimony",
   components: { atomText, AtomBoxicon },
   props: ["testimony", "star", "show"],
-  name: "m-testimony",
   data() {
     return {
       boxicon: {

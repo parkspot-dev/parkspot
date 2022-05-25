@@ -1,6 +1,6 @@
 <template>
   <div class="o_comment">
-    <form v-on:submit.prevent="postComment">
+    <form @submit.prevent="postComment">
       <atom-b-subtitle class="is-size-4 mb-2" :text="commentTitle" />
       <atom-text class="is-size-7 mx-2" :text="comment" />
       <atom-textarea v-model="commentDetails.comment" class="textarea mb-2" />
@@ -23,8 +23,8 @@ import AtomTextarea from "../atoms/atom-input/atom-textarea.vue";
 import atomBSubtitle from "../atoms/atom-text/atom-b-subtitle.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
+  name: "OComment",
   components: { atomBSubtitle, AtomTextarea, AtomInput, AtomButton, AtomText },
-  name: "o-comment",
   data() {
     return {
       commentTitle: "Leave A Comment",

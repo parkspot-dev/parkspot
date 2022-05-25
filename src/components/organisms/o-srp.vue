@@ -9,18 +9,18 @@
             <div class="card-footer pb-0 pt-3">
               <jw-pagination
                 :items="srpResults"
-                :pageSize="3"
-                :maxPages="5"
-                @changePage="onChangePage"
+                :page-size="3"
+                :max-pages="5"
                 :labels="customLabels"
                 :styles="defaultStyles"
+                @changePage="onChangePage"
               ></jw-pagination>
             </div>
           </div>
           <div class="column">
             <m-srpcard
-              :key="srp.ID"
               v-for="srp in pageOfItems"
+              :key="srp.ID"
               :distance="srp.Distance"
               :img="srp.IconURL"
               :location="srp.Address"
@@ -39,19 +39,8 @@
       <m-empty-page v-if="errorPage" :error="errorData" />
 
       <div class="column is-8">
-        <m-mapbox
-          :data="markers"
-          :popupInfo="srpResults"
-          :center="center"
-          v-if="show"
-        />
-        <m-search-box
-          @search="search"
-          @flytosrp="flyToSrp"
-          :results="results"
-          class="ps_search"
-          v-if="show"
-        />
+        <m-mapbox v-if="show" :popup-info="srpResults" :center="center" />
+        <m-search-box v-if="show" class="ps_search" @flytosrp="flyToSrp" />
       </div>
     </div>
   </div>
@@ -94,6 +83,7 @@ import MLoadingPage from "../molecules/m-loading-page.vue";
 import { mayaClient } from "@/services/api.js";
 
 export default {
+  name: "OSrp",
   components: {
     mSrpcard,
     mSearchBox,
@@ -101,7 +91,6 @@ export default {
     MEmptyPage,
     MLoadingPage,
   },
-  name: "o-srp",
 
   data() {
     return {
@@ -112,8 +101,6 @@ export default {
       markers: [],
       center: "",
       show: false,
-      results: [],
-      cresults: [],
       errorPage: false,
       errorData: "",
     };
@@ -135,13 +122,8 @@ export default {
       `/search?lat=${center[1]}&long=${center[0]}&start=20201115t1250&end=20201115t1400`
     );
     if (data && Object.prototype.hasOwnProperty.call(data, "Sites")) {
-      for (let i = 0; i < data.Sites.length; i++) {
-        this.srpResults.push(data.Sites[i]);
-        let temp1 = Number(data.Sites[i].Long);
-        let temp2 = Number(data.Sites[i].Lat);
-        this.markers.push([temp1, temp2]);
-      }
-      this.center = this.calculateCentroid(this.markers);
+      this.srpResults = data.Sites;
+      this.center = this.calculateCentroid(this.srpResults);
       this.show = true;
     }
     //TODO: handle failure cases.
@@ -163,46 +145,26 @@ export default {
       return queryParam.get("lng");
     },
     // calculate center avg
-    calculateCentroid: function (arr) {
-      var ys = arr.reduce((a, e) => {
-        return a + e[0];
+    calculateCentroid: function (sites) {
+      var ys = sites.reduce((long, site) => {
+        return long + site.Long;
       }, 0);
-      var xs = arr.reduce((a, e) => {
-        return a + e[1];
+      var xs = sites.reduce((a, site) => {
+        return a + site.Lat;
       }, 0);
-      return [ys / arr.length, xs / arr.length];
+      return [ys / sites.length, xs / sites.length];
     },
 
-    // Calling Search from Mapbox API
-    async search(name) {
-      if (!name.length) {
-        this.results = [];
-        return;
-      }
-      const res = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${name}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ&proximity=77.4977,12.9716`
-      );
-      const data = await res.json();
-      this.cresults = data.features;
-      this.results = data.features.map((e) => e.place_name);
-    },
-
-    flyToSrp(value) {
-      var lng = null;
-      var lat = null;
-      for (var i = 0; i < this.cresults.length; i++) {
-        if (this.cresults[i].place_name === value) {
-          lng = this.cresults[i].center[0];
-          lat = this.cresults[i].center[1];
-          break;
-        }
-      }
+    flyToSrp(location) {
+      var lng = location.lng;
+      var lat = location.lat;
       this.$router
-        .push({ name: "srp", query: { lat: lat, lng: lng, loc: value } })
+        .push({ name: "srp", query: { lat: lat, lng: lng } })
         .catch((err) => {
           console.error("flyToSrp err", err);
         });
     },
+
     onBook(index) {
       this.$emit("on-book", index);
     },

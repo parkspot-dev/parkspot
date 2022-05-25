@@ -1,7 +1,7 @@
 <template>
   <div class="select select_rounded">
     <select v-model="currentValue" class="select_rounded select_padding">
-      <option :key="i" v-for="(value, i) in values" :value="value">
+      <option v-for="(value, i) in values" :key="i" :value="value">
         {{ value }}
       </option>
     </select>
@@ -9,6 +9,7 @@
 </template>
 <script>
 export default {
+  name: "AtomSelect",
   props: {
     value: String, //this is coming from parent v-model
     values: {
@@ -18,7 +19,6 @@ export default {
       },
     },
   },
-  name: "atom_select",
   computed: {
     currentValue: {
       get() {

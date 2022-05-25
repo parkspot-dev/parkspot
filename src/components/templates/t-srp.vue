@@ -7,8 +7,8 @@
 <script>
 import oSrp from "../organisms/o-srp.vue";
 export default {
+  name: "TSrp",
   components: { oSrp },
-  name: "t-srp",
   methods: {
     onBook(index) {
       this.$emit("on-book", index);

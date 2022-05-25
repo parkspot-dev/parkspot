@@ -14,7 +14,7 @@
 import AtomText from "@/components/atoms/atom-text/atom-text.vue";
 
 export default {
-  name: "m-faq-card",
+  name: "MFaqCard",
   components: { AtomText },
   props: { question: String, answer: String },
 };

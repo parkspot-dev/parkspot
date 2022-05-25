@@ -8,7 +8,7 @@
 </template>
 <script>
 export default {
-  name: "m-features-title",
+  name: "MFeaturesTitle",
 };
 </script>
 <style scoped>

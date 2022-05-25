@@ -1,15 +1,15 @@
 <template>
   <div class="o-navbar-right">
     <div
-      class="navbar-item has-text-centered"
-      :key="i"
       v-for="(navlink, i) in navLinks"
+      :key="i"
+      class="navbar-item has-text-centered"
     >
       <atom-router-link
         class="navlink"
         :text="navlink.text"
         :link="navlink.link"
-        v-on:click.native="isClose"
+        @click.native="isClose"
       />
     </div>
   </div>
@@ -18,8 +18,8 @@
 <script>
 import atomRouterLink from "@/components/atoms/atom-link/atom-router-link.vue";
 export default {
+  name: "ONavbarRight",
   components: { atomRouterLink },
-  name: "o-navbar-right",
   data() {
     return {
       navLinks: {
@@ -39,6 +39,10 @@ export default {
         requestSpot: {
           text: "Request ParkSpot",
           link: "VOPortal",
+        },
+        registerSpot: {
+          text: "Register Spot",
+          link: "SOPortal",
         },
         faq: {
           text: "FAQ",

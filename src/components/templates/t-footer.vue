@@ -13,7 +13,7 @@ import OFooterTop from "@/components/organisms/o-footer-top.vue";
 import OFooterBottom from "@/components/organisms/o-footer-bottom.vue";
 import MFooterTopPlaces from "../molecules/m-footer-top-places.vue";
 export default {
-  name: "t-footer",
+  name: "TFooter",
   components: {
     OFooterTop,
     OFooterBottom,

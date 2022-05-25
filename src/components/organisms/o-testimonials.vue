@@ -3,21 +3,21 @@
     <div class="columns">
       <div class="column is-4">
         <m-testimonial-user
-          :key="i"
           v-for="(temp, i) in user"
+          :key="i"
           :src="temp.img"
           :name="temp.name"
           :designation="temp.designation"
-          v-on:click.native="onClick(i)"
           :color="temp.color"
+          @click.native="onClick(i)"
         />
       </div>
       <div class="column is-1"></div>
       <div class="column is-7">
         <div class="container">
           <m-testimony
-            :key="i"
             v-for="(temp, i) in testimonies"
+            :key="i"
             :show="temp.show"
             :testimony="temp.testimony"
             :star="temp.star"
@@ -41,8 +41,8 @@
 import MTestimonialUser from "../molecules/m-testimonial-user.vue";
 import mTestimony from "../molecules/m-testimony.vue";
 export default {
+  name: "OTestimonials",
   components: { mTestimony, MTestimonialUser },
-  name: "o-testimonials",
   data() {
     return {
       te: "sdfasdf",

@@ -5,11 +5,7 @@
       <div class="modal-card">
         <header class="modal-card-head">
           <p class="modal-card-title">Booking</p>
-          <button
-            v-on:click="onCancel"
-            class="delete"
-            aria-label="close"
-          ></button>
+          <button class="delete" aria-label="close" @click="onCancel"></button>
         </header>
         <section class="modal-card-body">
           <!-- Content ... -->
@@ -65,7 +61,7 @@
         </section>
         <footer class="modal-card-foot">
           <button class="button is-success">Submit</button>
-          <button v-on:click="onCancel" class="button">Cancel</button>
+          <button class="button" @click="onCancel">Cancel</button>
         </footer>
       </div>
     </div>
@@ -75,16 +71,16 @@
 <script>
 export default {
   name: "SrpBookForm",
+  props: {
+    showBookForm: Boolean,
+    index: String,
+  },
   data() {
     return {
       name: "",
       email: "",
       mno: "",
     };
-  },
-  props: {
-    showBookForm: Boolean,
-    index: String,
   },
   methods: {
     onSubmit(e) {

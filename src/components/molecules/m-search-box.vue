@@ -1,15 +1,15 @@
 <template>
-  <div class="field" v-click-outside="onClose">
+  <div v-click-outside="onClose" class="field">
     <div class="control has-icons-left">
       <atom-input
-        @input="search"
-        v-on:click.native="history"
-        v-on:keyup.down.native="onArrow"
-        v-on:keyup.up.native="onArrow"
-        v-on:keyup.enter.native="onEnter()"
         class="input has-text-weight-semibold"
         :placeholder="placeholder"
-        :value="value"
+        :value="location.address"
+        @input="search"
+        @click.native="history"
+        @keyup.down.native="onArrow"
+        @keyup.up.native="onArrow"
+        @keyup.enter.native="onEnter()"
       />
 
       <span class="icon is-small is-left">
@@ -20,20 +20,20 @@
           :animation="animation"
         />
       </span>
-      <div class="list-wrapper" v-show="toggle">
+      <div v-show="showSuggestions" class="list-wrapper">
         <div class="list-wrapper__wrapper">
           <div class="list-wrapper__seperator"></div>
           <div class="list-wrapper__list-items-wrapper">
             <ul
-              class="list-wrapper__list-items"
-              v-show="toggle"
+              v-for="(result, i) in suggestions"
+              v-show="showSuggestions"
               :key="i"
-              v-for="(result, i) in data"
+              class="list-wrapper__list-items"
               :class="
                 i === arrowCounter ? 'list-wrapper__list-items--active' : ''
               "
             >
-              <li @click="flytosrp(result)" class="list-item">
+              <li class="list-item" @click="flytosrp(result)">
                 <div class="list-description">
                   <span class="list-description__icon">
                     <atom-boxicon
@@ -44,7 +44,7 @@
                   </span>
                   <div class="list-description__description">
                     <div class="list-description__description-text">
-                      <span>{{ result }}</span>
+                      <span>{{ result.address }}</span>
                     </div>
                   </div>
                 </div>
@@ -63,83 +63,102 @@ import AtomInput from "@/components/atoms/atom-input/atom-input.vue";
 import AtomBoxicon from "../atoms/atom-boxicons/atom-boxicon.vue";
 
 export default {
-  name: "m-search-box",
+  name: "MSearchBox",
   components: {
     AtomInput,
     AtomBoxicon,
   },
-  data() {
-    return {
-      toggle: false, //search list
-      name: "search",
-      color: "black",
-      size: "sm",
-      animation: "tada",
-      placeholders: "",
-      value: "",
-      arrowCounter: 0,
-    };
-  },
   props: {
-    results: Array,
+    proximity: {
+      type: Array,
+      default() {
+        return [77.4977, 12.9716];
+      },
+    },
     fieldName: {
       type: String,
       default: "Search your spot...",
     },
   },
-  mounted() {
-    this.placeholders = this.fieldName;
+  data() {
+    return {
+      showSuggestions: false, //search list
+      name: "search",
+      color: "black",
+      size: "sm",
+      animation: "tada",
+      placeholders: "",
+      arrowCounter: 0,
+      location: {
+        address: "",
+        lat: null,
+        lng: null,
+      },
+      suggestions: [],
+    };
   },
   computed: {
     placeholder() {
       return this.placeholders;
     },
-    data() {
-      return this.results.slice(0, 3);
-    },
+  },
+  mounted() {
+    this.placeholders = this.fieldName;
   },
   methods: {
     history() {
-      this.toggle = true;
+      this.showSuggestions = true;
       let historyData = window.localStorage.getItem("sKey");
       this.search(historyData);
     },
     //this is from input element
-    search(value) {
-      this.toggle = true;
-      this.$emit("search", value);
+    async search(query) {
+      this.showSuggestions = true;
+      if (!query.length) {
+        this.suggestions = [];
+        return;
+      }
+      const res = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ&proximity=${this.proximity[0]},${this.proximity[1]}`
+      );
+      const data = await res.json();
+      this.suggestions = data.features.slice(0, 3).map(this.extractLocation);
     },
-    //this is from list of search results
-    flytosrp(result) {
-      this.toggle = false;
-      this.value = result;
-      window.localStorage.setItem("sKey", this.value);
-      this.$emit("flytosrp", result);
+    extractLocation(features) {
+      return {
+        address: features.place_name,
+        lat: features.center[1],
+        lng: features.center[0],
+      };
     },
-    // flytosrps(){
-    // this.$emit('flysrp',this.results[0])    on keyup.enter not working
-    // }
+    flytosrp(location) {
+      this.showSuggestions = false;
+      this.location = location;
+      window.localStorage.setItem("sKey", this.location.address);
+      this.$emit("flytosrp", location);
+    },
+
     // arrow key functions
     onArrow(event) {
       this.arrowCounter =
         event.code == "ArrowDown" ? ++this.arrowCounter : --this.arrowCounter;
-      if (this.arrowCounter >= this.data.length) {
-        this.arrowCounter = this.arrowCounter % this.data.length;
+      if (this.arrowCounter >= this.suggestions.length) {
+        this.arrowCounter = this.arrowCounter % this.suggestions.length;
       } else if (this.arrowCounter < 0) {
-        this.arrowCounter = this.data.length + this.arrowCounter;
+        this.arrowCounter = this.suggestions.length + this.arrowCounter;
       }
-      this.value = this.data[this.arrowCounter];
+      this.location = this.suggestions[this.arrowCounter];
     },
 
     onEnter() {
-      if (this.value.length == 0) {
-        this.value = this.data[0];
+      if (this.location.length == 0) {
+        this.location = this.suggestions[0];
       }
-      this.$emit("flytosrp", this.value);
+      this.$emit("flytosrp", this.location);
     },
     // click outsite functions
     onClose() {
-      this.toggle = false;
+      this.showSuggestions = false;
     },
   },
 };

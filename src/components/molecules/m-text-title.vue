@@ -9,7 +9,7 @@
 <script>
 import AtomText from "@/components/atoms/atom-text/atom-text.vue";
 export default {
-  name: "m-text-title",
+  name: "MTextTitle",
   components: {
     AtomText,
   },

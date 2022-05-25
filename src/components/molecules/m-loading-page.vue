@@ -18,9 +18,9 @@
 <script>
 import VueSimpleSpinner from "vue-simple-spinner";
 export default {
+  name: "MLoadingPage",
   components: {
     VueSimpleSpinner,
   },
-  name: "m-loading-page",
 };
 </script>

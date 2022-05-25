@@ -1,7 +1,7 @@
 <template>
   <div class="new_portal">
-    <t-vo-portal @submit="onSubmit" v-if="!show" :mapShow="mapShow" />
-    <div class="ps_thank" v-if="show">
+    <t-vo-portal v-if="!show" :map-show="mapShow" @submit="onSubmit" />
+    <div v-if="show" class="ps_thank">
       <atom-img :src="img" />
       <atom-b-title class="is-size-3" :text="msg" />
       <atom-b-subtitle class="is-size-4" :text="msg2" />
@@ -16,8 +16,8 @@ import AtomBTitle from "../components/atoms/atom-text/atom-b-title.vue";
 import tVoPortal from "../components/templates/t-vo-portal.vue";
 import mapbox from "../thirdparty/mapbox";
 export default {
+  name: "VOPortal",
   components: { tVoPortal, AtomImg, AtomBTitle, AtomBSubtitle },
-  name: "VO-portal",
   data() {
     return {
       msg: "Thank You!",

@@ -8,9 +8,9 @@
           <div class="message-header">
             <p>Notice</p>
             <button
-              v-on:click="onCancel"
               class="delete"
               aria-label="delete"
+              @click="onCancel"
             ></button>
           </div>
           <div class="message-body">
@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: "m-empty-page",
+  name: "MEmptyPage",
   props: {
     error: String,
   },

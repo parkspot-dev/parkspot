@@ -121,7 +121,7 @@
 </template>
 <script>
 export default {
-  name: "blog3",
+  name: "Blog3",
   data() {
     return {
       dp: require("@/assets/img/ish.svg"),

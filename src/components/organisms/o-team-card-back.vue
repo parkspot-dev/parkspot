@@ -27,8 +27,13 @@
 <script>
 import atomBoxicon from "../atoms/atom-boxicons/atom-boxicon.vue";
 export default {
+  name: "OTeamCardBack",
   components: { atomBoxicon },
-  name: "o-team-card-back",
+  props: {
+    linkd: String,
+    twitter: String,
+    git: String,
+  },
   data() {
     return {
       boxicons: {
@@ -49,11 +54,6 @@ export default {
         },
       },
     };
-  },
-  props: {
-    linkd: String,
-    twitter: String,
-    git: String,
   },
 };
 </script>

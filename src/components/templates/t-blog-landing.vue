@@ -14,7 +14,7 @@
         </ul>
       </nav>
       <atom-b-title class="has-text-centered mb-5" :text="title" />
-      <o-blog-box :noOfBlog="noOfBlog" />
+      <o-blog-box :no-of-blog="noOfBlog" />
     </div>
   </div>
 </template>
@@ -25,8 +25,8 @@ import AtomBTitle from "../atoms/atom-text/atom-b-title.vue";
 import oBlogBox from "../organisms/o-blog-box.vue";
 
 export default {
+  name: "TBlogLanding",
   components: { oBlogBox, AtomBTitle, AtomRouterLink },
-  name: "t-blog-landing",
   props: {
     noOfBlog: Array,
   },

@@ -14,8 +14,8 @@ import atomBTitle from "@/components/atoms/atom-text/atom-b-title.vue";
 import MAboutRightBottom from "../molecules/m-about-right-bottom.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
+  name: "OAboutRight",
   components: { atomBTitle, MAboutRightBottom, AtomText },
-  name: "o-about-right",
   data() {
     return {
       title: "About ParkSpot",

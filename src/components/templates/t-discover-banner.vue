@@ -4,12 +4,7 @@
       <div class="container">
         <atom-b-title class="has-text-weight-bold" :text="banner_title" />
         <br />
-        <m-search-box
-          class="search"
-          @search="search"
-          @flytosrp="flytoSrp"
-          :results="results"
-        />
+        <m-search-box class="search" :results="results" @flytosrp="flytoSrp" />
       </div>
     </div>
   </div>
@@ -18,8 +13,8 @@
 import atomBTitle from "../atoms/atom-text/atom-b-title.vue";
 import MSearchBox from "../molecules/m-search-box.vue";
 export default {
+  name: "TDiscoverBanner",
   components: { atomBTitle, MSearchBox },
-  name: "t-discover-banner",
   data() {
     return {
       banner_title: "Book Your Parking Spot",
@@ -53,18 +48,9 @@ export default {
       this.cresults = data.features;
       this.results = data.features.map((e) => e.place_name);
     },
-    flytoSrp(value) {
-      var lng = null;
-      var lat = null;
-      for (var i = 0; i < this.cresults.length; i++) {
-        if (this.cresults[i].place_name === value) {
-          lng = this.cresults[i].center[0];
-          lat = this.cresults[i].center[1];
-          break;
-        }
-      }
+    flytoSrp(location) {
       this.$router
-        .push({ name: "srp", query: { lat: lat, lng: lng, loc: value } })
+        .push({ name: "srp", query: { lat: location.lat, lng: location.lng } })
         .catch((err) => {
           console.err("flyToSrp err", err);
         });

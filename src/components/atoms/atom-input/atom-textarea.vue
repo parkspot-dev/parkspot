@@ -2,19 +2,19 @@
   <textarea
     class="textarea textarea_rounded"
     :value="value"
-    @input="handleInput"
-    @change="handleChange"
-    @keypress="handleKeypress"
     :cols="columns"
     :rows="rows"
     :placeholder="placeholder"
     :disabled="disabled"
+    @input="handleInput"
+    @change="handleChange"
+    @keypress="handleKeypress"
   ></textarea>
 </template>
 
 <script>
 export default {
-  name: "atom-textarea",
+  name: "AtomTextarea",
   props: {
     value: String,
     disabled: {

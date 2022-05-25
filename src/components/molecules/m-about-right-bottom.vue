@@ -19,7 +19,7 @@
 import AtomImg from "@/components/atoms/atom-img/atom-img.vue";
 import atomBTitle from "@/components/atoms/atom-text/atom-b-title.vue";
 export default {
-  name: "m-about-right-bottom",
+  name: "MAboutRightBottom",
   components: {
     AtomImg,
     atomBTitle,

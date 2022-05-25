@@ -1,12 +1,7 @@
 <template>
   <section class="t_map hero">
     <div class="hero-body">
-      <m-search-box
-        @search="search"
-        @flytosrp="flyToSrp"
-        :results="results"
-        class="ps_search"
-      />
+      <m-search-box class="ps_search" @flytosrp="flyToSrp" />
       <div class="ps_map"></div>
     </div>
   </section>
@@ -15,12 +10,10 @@
 <script>
 import mSearchBox from "@/components/molecules/m-search-box.vue";
 export default {
+  name: "TMap",
   components: { mSearchBox },
-  name: "t-map",
   data() {
     return {
-      results: [],
-      cresults: [],
       toggleImg: false,
     };
   },
@@ -31,32 +24,10 @@ export default {
     this.toggleImg = true;
   },
   methods: {
-    async search(name) {
-      // console.log(name)
-      if (!name.length) {
-        this.results = [];
-        return;
-      }
-      const res = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${name}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ&proximity=77.4977,12.9716`
-      );
-      const data = await res.json();
-      this.cresults = data.features;
-      this.results = data.features.map((e) => e.place_name);
-    },
-    flyToSrp(value) {
-      var lng = null;
-      var lat = null;
-      for (var i = 0; i < this.cresults.length; i++) {
-        if (this.cresults[i].place_name === value) {
-          lng = this.cresults[i].center[0];
-          lat = this.cresults[i].center[1];
-          break;
-        }
-      }
+    flyToSrp(location) {
       this.$router.push({
         name: "srp",
-        query: { lat: lat, lng: lng, loc: value },
+        query: { lat: location.lat, lng: location.lng },
       });
     },
   },

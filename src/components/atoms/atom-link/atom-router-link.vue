@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "atom-router-link",
+  name: "AtomRouterLink",
   props: {
     link: {
       type: String,

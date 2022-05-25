@@ -14,9 +14,9 @@
 import atomImg from "../atoms/atom-img/atom-img.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
+  name: "MTestimonialUser",
   components: { atomImg, AtomText },
   props: ["src", "name", "designation", "color"],
-  name: "m-testimonial-user",
 };
 </script>
 <style scoped>

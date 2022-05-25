@@ -70,8 +70,8 @@
 <script>
 import atomText from "../atoms/atom-text/atom-text.vue";
 export default {
+  name: "MFooterTopPlaces",
   components: { atomText },
-  name: "m-footer-top-places",
   data() {
     return {
       title: "Top Searched Places",

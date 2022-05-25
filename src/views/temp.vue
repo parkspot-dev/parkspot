@@ -8,8 +8,8 @@
 <script>
 import AtomButton from "../components/atoms/atom-button/atom-button.vue";
 export default {
+  name: "Temp",
   components: { AtomButton },
-  name: "temp",
   computed: {
     count() {
       return this.$store.getters["device/getFlavour"];

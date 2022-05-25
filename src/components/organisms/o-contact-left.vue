@@ -9,8 +9,8 @@
 import atomImg from "@/components/atoms/atom-img/atom-img.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
+  name: "OContactLeft",
   components: { atomImg, AtomText },
-  name: "o-contact-left",
   data() {
     return {
       para: `If you have any questions or just want to get in touch with us, use the form beside.\n\nWe are looking forward to hear from you!`,

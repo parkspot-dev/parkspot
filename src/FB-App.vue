@@ -11,7 +11,6 @@
 </template>
 
 <script>
-
 export default {
   mounted() {
     window.fbAsyncInit = function () {

@@ -40,8 +40,8 @@ import AtomRouterLink from "../atoms/atom-link/atom-router-link.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
 import MFeaturesTitle from "./m-features-title.vue";
 export default {
+  name: "MFeaturesMainHeading",
   components: { AtomText, MFeaturesTitle, AtomImg, AtomRouterLink },
-  name: "m-features-main-heading",
   props: {
     featuresButton: {
       type: String,

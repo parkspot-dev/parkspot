@@ -1,29 +1,29 @@
 <template>
   <div class="o_payment_gateway">
     <m-loading-page v-if="loading" />
-    <div class="card" v-if="!loading">
+    <div v-if="!loading" class="card">
       <div class="card-content">
         <div class="media">
           <div class="media-content">
             <atom-text
               class="is-size-6-mobile is-size-5 has-text-weight-medium"
-              :textLeft="nameText"
+              :text-left="nameText"
               :text="bookingDetails.name"
             />
             <atom-text
               class="is-size-6-mobile is-size-5 has-text-weight-medium"
-              :textLeft="dateText"
+              :text-left="dateText"
               :text="bookingDetails.dueDate"
             />
             <div class="ps_inline">
               <atom-text
                 class="is-size-6-mobile is-size-5 has-text-weight-medium"
-                :textLeft="amtText"
+                :text-left="amtText"
               />
               <atom-text
                 class="is-size-4-mobile is-size-3 ml-3 has-text-weight-bold has-text-success"
                 :text="bookingDetails.amount"
-                :textRight="sign"
+                :text-right="sign"
               />
             </div>
           </div>
@@ -40,7 +40,7 @@
                 class="button is-rounded"
                 style="background-color: #ffe08a; width: 80%"
                 :text="payNow"
-                v-on:click.native="isLoading"
+                @click.native="isLoading"
               />
             </a>
           </div>
@@ -78,8 +78,8 @@ import AtomButton from "../atoms/atom-button/atom-button.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
 import MLoadingPage from "../molecules/m-loading-page.vue";
 export default {
+  name: "OPaymentGateway",
   components: { AtomText, AtomButton, MLoadingPage },
-  name: "o-payment-gateway",
   props: {
     bookingDetails: Object,
     paymentMode: Object,
@@ -131,9 +131,6 @@ export default {
       //   },
       // },
     };
-  },
-  mounted() {
-    console.log(this.paymentMode.PaymentLink);
   },
   methods: {
     isLoading() {

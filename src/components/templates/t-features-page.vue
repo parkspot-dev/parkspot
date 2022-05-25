@@ -3,36 +3,36 @@
     <m-features-main-heading></m-features-main-heading>
     <div class="columns is-flex-wrap-wrap is-3">
       <div
+        v-for="data of featuresData"
         :key="data.id"
         class="features-card column is-half"
-        v-for="data of featuresData"
       >
         <transition name="expand">
           <m-features-details
             v-if="data.textLimit"
             :class="data.textLimit ? 'feature-card__details' : ''"
-            :featuresTitle="data.title"
-            :featuresText="data.text.substring(0, 300) + '...'"
+            :features-title="data.title"
+            :features-text="data.text.substring(0, 300) + '...'"
           ></m-features-details>
           <m-features-details
             v-if="!data.textLimit"
             :class="data.textLimit ? 'feature-card__details' : ''"
-            :featuresTitle="data.title"
-            :featuresText="data.text"
+            :features-title="data.title"
+            :features-text="data.text"
           ></m-features-details>
         </transition>
 
         <p
           v-if="data.textLimit"
-          v-on:click="expand(data.id)"
           class="feature-card__show"
+          @click="expand(data.id)"
         >
           Show more
         </p>
         <p
           v-if="!data.textLimit"
-          v-on:click="expand(data.id)"
           class="feature-card__hide"
+          @click="expand(data.id)"
         >
           Show Less
         </p>
@@ -72,11 +72,11 @@
 import MFeaturesDetails from "../molecules/m-features-details.vue";
 import MFeaturesMainHeading from "../molecules/m-features-main-heading.vue";
 export default {
+  name: "TFeaturesPage",
   components: {
     MFeaturesDetails,
     MFeaturesMainHeading,
   },
-  name: "t-features-page",
   data() {
     return {
       featuresData: [

@@ -29,8 +29,8 @@ import AtomLink from "../atoms/atom-link/atom-link.vue";
 import AtomBSubtitle from "../atoms/atom-text/atom-b-subtitle.vue";
 import AtomText from "../atoms/atom-text/atom-text.vue";
 export default {
+  name: "MBlogBoxDetails",
   components: { atomImg, AtomBSubtitle, AtomText, AtomLink },
-  name: "m-blog-box-details",
   props: ["blogDetails"],
   data() {
     return {
