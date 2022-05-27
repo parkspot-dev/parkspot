@@ -173,7 +173,7 @@ export default {
 .feature-card__hide {
   text-align: center;
   cursor: pointer;
-  color: #0085ad;
+  color: var(--secondary-color);
   display: inline;
   /* margin: 0% 50%; */
   /* background-color: #000000; */

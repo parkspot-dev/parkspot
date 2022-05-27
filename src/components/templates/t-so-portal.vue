@@ -254,10 +254,10 @@ export default {
 .ps-form-indicator-item {
   height: 12px;
   width: 12px;
-  border: 2px solid #ffdd57;
+  border: 2px solid var(--primary-color);
   border-radius: 50%;
 }
 .ps-form-indicator-item--fill {
-  background-color: #ffdd57;
+  background-color: var(--primary-color);
 }
 </style>

@@ -17,7 +17,7 @@ export default {
 }
 .title__second {
   font-size: 1.5em;
-  color: #0085ad;
+  color: var(--secondary-color);
   font-weight: 700;
 }
 @media only screen and (min-width: 1024px) {

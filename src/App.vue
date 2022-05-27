@@ -15,8 +15,10 @@ export default {
   components: { TNavbar, TFooter },
 };
 </script>
+
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Rubik:wght@400;500;600;700&display=swap");
+@import "./assets/styles/variables.css";
 #app {
   font-family: "Poppins", sans-serif;
   color: #555;

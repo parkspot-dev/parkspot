@@ -9,8 +9,8 @@
         transform: translate(-50%, -50%);
       "
       size="large"
-      line-bg-color="#0085AD"
-      line-fg-color="#ffdd57"
+      line-bg-color="var(--secondary-color)"
+      line-fg-color="var(--primary-color)"
       message="Loading..."
     />
   </div>

@@ -44,7 +44,7 @@ export default {
 .ps_text {
   font-size: 140px;
   font-family: sans-serif;
-  color: #ffdd57;
+  color: var(--primary-color);
   line-height: 0;
 }
 .star {

@@ -172,7 +172,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .ps_search {
   position: absolute;
   width: 30%;
@@ -190,6 +190,11 @@ export default {
 .pagination li.previous - The 'Previous' pagination element
 .pagination li.next - The 'Next' pagination element */
 
+.pagination .active .page-link {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  font-weight: bold;
+}
 .reverse-columns-custom {
   flex-direction: column;
   display: flex;

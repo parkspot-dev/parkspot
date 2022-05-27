@@ -62,20 +62,16 @@ export default {
 </script>
 
 <style scoped>
-/* .o-navbar-right {
-  padding: 35px 0 35px;
-} */
 .navlink {
   color: #4a4a4a;
 }
 
 .navlink:hover {
-  border-bottom: 2px solid #0085ad;
-  color: #ffe08a;
+  border-bottom: 2px solid var(--secondary-color);
+  color: var(--primary-color);
 }
 .router-link-exact-active {
-  border-bottom: 2px solid #0085ad;
-  /* background: #ffe08a; */
-  color: #0085ad;
+  border-bottom: 2px solid var(--secondary-color);
+  color: var(--secondary-color);
 }
 </style>
