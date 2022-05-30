@@ -173,6 +173,7 @@ export default {
 </script>
 
 <style>
+/* can NOT make is scoped, becuase of pagination styles*/
 .ps_search {
   position: absolute;
   width: 30%;
