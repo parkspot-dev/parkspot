@@ -23,7 +23,7 @@ export default {
 .m_testimonial_user {
   cursor: pointer;
   border-radius: 20px;
-  /* border: 2px solid #0085ad; */
+  /* border: 2px solid var(--secondary-color); */
   padding: 10px;
 }
 .image {
@@ -32,8 +32,8 @@ export default {
 }
 .is-color {
   /* border-right-style: solid;
-  border-color: #0085ad;
+  border-color: var(--secondary-color);
   border-left-style: solid; */
-  border: 2px solid #0085ad;
+  border: 2px solid var(--secondary-color);
 }
 </style>

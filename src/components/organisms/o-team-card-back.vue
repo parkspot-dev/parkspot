@@ -40,17 +40,17 @@ export default {
         twitter: {
           type: "logo",
           icon: "twitter",
-          color: "#ffdd57",
+          color: "var(--primary-color)",
         },
         git: {
           type: "logo",
           icon: "git",
-          color: "#ffdd57",
+          color: "var(--primary-color)",
         },
         linkd: {
           type: "logo",
           icon: "linkedin",
-          color: "#ffdd57",
+          color: "var(--primary-color)",
         },
       },
     };

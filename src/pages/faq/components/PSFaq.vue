@@ -123,9 +123,9 @@ export default {
   background-color: #ececec;
 }
 .message-header {
-  background-color: #0085ad;
+  background-color: var(--secondary-color);
   color: white;
-  border-bottom: 2px solid #0085ad;
+  border-bottom: 2px solid var(--secondary-color);
 }
 .message-body {
   background-color: white;

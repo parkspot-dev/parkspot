@@ -55,12 +55,12 @@ export default {
 }
 
 .half-circle-spinner .circle.circle-1 {
-  border-top-color: #ffdd57;
+  border-top-color: var(--primary-color);
   animation: half-circle-spinner-animation 1s infinite;
 }
 
 .half-circle-spinner .circle.circle-2 {
-  border-bottom-color: #ffdd57;
+  border-bottom-color: var(--primary-color);
   animation: half-circle-spinner-animation 1s infinite alternate;
 }
 
