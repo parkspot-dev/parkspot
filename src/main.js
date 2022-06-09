@@ -10,8 +10,11 @@ import "bulma/css/bulma.css";
 import store from "./store";
 import ClickOutside from "vue-click-outside";
 import fbApp from "./FB-App.vue";
+import Datepicker from "vuejs-datepicker";
+
 
 Vue.component("jw-pagination", JwPagination);
+Vue.component("Datepicker", Datepicker);
 Vue.directive("lazyload", LazyLoadDirective);
 Vue.directive("ClickOutside", ClickOutside);
 Vue.use(VueResource);

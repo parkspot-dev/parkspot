@@ -52,16 +52,12 @@
           :text="request.Landmark"
         />
         <m-text-title class="column is-2" title="City" :text="request.City" />
+        <m-text-title class="column is-2" title="Priority" :text="request.Priority" />
       </div>
 
       <div id="row3" class="columns is-vcentered">
         <div class="column is-one-fifth">
-          <atom-select
-            id="priority"
-            v-model="priorityString"
-            class="select"
-            :values="priorityList"
-          />
+          <Datepicker :highlighted="highlighted" input-class="nextCallInput" format="yyyy-MM-dd" v-model="nextCallString" @input="setNextCall"></Datepicker>
           <atom-select
             id="status"
             v-model="statusString"
@@ -91,6 +87,7 @@ import AtomButton from "@/components/atoms/atom-button/atom-button.vue";
 import AtomTextarea from "@/components/atoms/atom-input/atom-textarea.vue";
 import MTextTitle from "@/components/molecules/m-text-title.vue";
 import AtomSelect from "@/components/atoms/atom-select/atom-select.vue";
+
 
 export default {
   name: "ORequestCard",
@@ -128,6 +125,7 @@ export default {
           Status: 2,
           Priority: 3,
           Comments: "Received Tentative Request.",
+          NextCall: "2022-01-18T09:56:27.3321676Z"
         };
       },
     },
@@ -144,6 +142,11 @@ export default {
         "Archive",
       ],
       priorityList: ["Not Set", "Low", "Medium", "High"],
+      highlighted : {
+        dates: [
+          new Date()
+        ]
+    }
     };
   },
   computed: {
@@ -163,6 +166,12 @@ export default {
         this.request.Priority = this.priorityList.indexOf(priorityString);
       },
     },
+    nextCallString:{
+      get() {
+        return this.request.NextCall.substr(0, 10);
+      }
+    }
+    
   },
 
   methods: {
@@ -175,7 +184,12 @@ export default {
       }
       return "card--low";
     },
+    setNextCall(nextCall)
+    {
+        this.request.NextCall = nextCall
+    },
     async updateRequest() {
+
       const res = await fetch(
         "https://maya.parkspot.in/owner/request-comments",
         {
@@ -217,3 +231,15 @@ export default {
   border-bottom: 10px solid rgb(92, 92, 94);
 }
 </style>
+ <style>
+        .nextCallInput{
+            width: 100%;
+            border-radius: 15px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            font-size: 14px;
+            height: 3.5em;
+            margin-bottom: 5px;
+            text-align: center;
+           }
+    </style>
