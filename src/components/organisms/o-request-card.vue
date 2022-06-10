@@ -52,7 +52,7 @@
           :text="request.Landmark"
         />
         <m-text-title class="column is-2" title="City" :text="request.City" />
-        <m-text-title class="column is-2" title="Priority" :text="request.Priority" />
+        <m-text-title class="column is-2" title="Priority" :text="priorityString" />
       </div>
 
       <div id="row3" class="columns is-vcentered">
@@ -240,6 +240,7 @@ export default {
             font-size: 14px;
             height: 3.5em;
             margin-bottom: 5px;
-            text-align: center;
+            text-align: left;
+            padding: 10px 
            }
     </style>
