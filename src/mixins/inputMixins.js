@@ -10,6 +10,7 @@ export const inputMixins = {
         drag: true,
         key: 0,
         zooms: 11,
+        defaultCenter: [77.586588, 12.969906],
       },
 
       required: true,
@@ -50,9 +51,11 @@ export const inputMixins = {
         carModel: "",
         duration: "Duration",
         typeParking: "Type of Parking",
-        location: "",
-        mapPosLat: "",
-        mapPosLng: "",
+        location: {
+          address: "",
+          lat: 0.0,
+          lng: 0.0,
+        },
       },
     };
   },
