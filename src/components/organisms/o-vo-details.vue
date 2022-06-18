@@ -72,17 +72,13 @@
           />
         </div>
         <div class="column">
-          <!-- <atom-input
-            v-model="userForm.location"
-            class="input"
-            :placeholder="address.location"
-            :required="required"
-          /> -->
           <m-search-box
             :results="results"
             :field-name="address.location"
-            @search="search"
             @flytosrp="flytosrp"
+            :isLocationPicker="true"
+            :center="center"
+            @location="getLocation"
           />
         </div>
       </div>
@@ -158,20 +154,37 @@ export default {
     MMapbox,
     MSearchBox,
   },
-  mixins: [inputMixins],
+  mixins: [inputMixins], // TODO: refactor mixins
   props: {
     mapShow: Boolean,
   },
   data() {
     return {
       title: "Fill the form to Register your Parking Spot",
+      location: null,
     };
+  },
+  computed: {
+    center() {
+      if (this.location) {
+        return [this.location.lng, this.location.lat];
+      }
+      return this.map.defaultCenter;
+    },
   },
   methods: {
     onSubmit() {
-      console.log(this.userForm);
+      this.userForm.location = this.location;
       this.toggle = true;
       this.$emit("submit", this.userForm);
+    },
+
+    getLocation(loc) {
+      this.location = loc;
+    },
+
+    flytosrp(loc) {
+      this.location = loc;
     },
   },
 };
