@@ -33,3 +33,6 @@ vuex - 3.6.2
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
+### Troubleshoot
+1   If there are lot of linting errors while setting up the project run `npm install eslint`.
+
