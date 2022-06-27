@@ -10,7 +10,7 @@
         <m-text-title
           class="column is-2"
           title="Date"
-          :text="request.CreatedAt.substr(0, 10)"
+          :text="getDateString(request.CreatedAt)"
         />
         <m-text-title class="column is-2" title="Name" :text="request.Name" />
         <m-text-title
@@ -32,7 +32,7 @@
         <m-text-title
           class="column is-2"
           title="Last Updated"
-          :text="request.UpdatedAt.substr(0, 10)"
+          :text="getDateString(request.UpdatedAt)"
         />
         <m-text-title
           class="column is-2"
@@ -87,6 +87,7 @@ import AtomButton from "@/components/atoms/atom-button/atom-button.vue";
 import AtomTextarea from "@/components/atoms/atom-input/atom-textarea.vue";
 import MTextTitle from "@/components/molecules/m-text-title.vue";
 import AtomSelect from "@/components/atoms/atom-select/atom-select.vue";
+import Datepicker from "vuejs-datepicker";
 
 
 export default {
@@ -96,6 +97,7 @@ export default {
     AtomTextarea,
     MTextTitle,
     AtomSelect,
+    Datepicker
   },
   props: {
     request: {
@@ -168,7 +170,7 @@ export default {
     },
     nextCallString:{
       get() {
-        return this.request.NextCall.substr(0, 10);
+        return this.getDateString(this.request.NextCall);
       }
     }
     
@@ -187,6 +189,10 @@ export default {
     setNextCall(nextCall)
     {
         this.request.NextCall = nextCall
+    },
+    getDateString(date)
+    {
+        return date.substr(0, 10)
     },
     async updateRequest() {
 
