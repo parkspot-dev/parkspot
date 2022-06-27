@@ -11,6 +11,7 @@ import store from "./store";
 import ClickOutside from "vue-click-outside";
 import fbApp from "./FB-App.vue";
 
+
 Vue.component("jw-pagination", JwPagination);
 Vue.directive("lazyload", LazyLoadDirective);
 Vue.directive("ClickOutside", ClickOutside);
