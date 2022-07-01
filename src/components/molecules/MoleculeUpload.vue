@@ -5,8 +5,8 @@
     :rules="rules"
     v-slot="{ errors }"
   >
-    <AtomUploads></AtomUploads>
-    <span>{{ errors[0] }}</span>
+    <AtomUploads class="mb-5"></AtomUploads>
+    <span class="has-text-danger">{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
 
@@ -26,11 +26,6 @@ export default {
       default: "field",
     },
   },
-  //   data() {
-  //     return {
-  //       list: ["Yes", "No"],
-  //     };
-  //   },
   methods: {
     async handleChange(data) {
       const { valid } = await this.$refs.provider.validate(data);

@@ -8,8 +8,10 @@
       v-model="innerValue"
       :placeholder="placeholder"
       :type="inputType"
-      :labelMessage="errors"
-      :labelType="{ 'is-danger': errors[0], 'is-success': valid }"
+      :errorMessage="errors"
+      :errorType="{ 'is-danger': errors[0], 'is-success': valid }"
+      :label="label"
+      class="mb-4"
     >
     </AtomInputs>
   </ValidationProvider>
@@ -47,6 +49,9 @@ export default {
     fieldName: {
       type: String,
       required: true,
+    },
+    label: {
+      type: String,
     },
   },
   data() {

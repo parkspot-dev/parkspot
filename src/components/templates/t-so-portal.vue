@@ -54,6 +54,23 @@
         </ul>
       </form>
     </div>
+    <div class="checking various items">
+      <ValidationObserver ref="observer" v-slot="{ handleSubmit }">
+        <MoleculeRadioButton
+          :fieldName="'radio'"
+          :rules="'required'"
+          :values="values"
+          @data="radioData"
+        ></MoleculeRadioButton>
+        <MoleculeUpload></MoleculeUpload>
+        <MoleculeCheckbox
+          :rules="'required'"
+          :fieldName="'checkbox'"
+          :values="['a', 'b', 'c', 'd', 'e']"
+        ></MoleculeCheckbox>
+        <button @click="handleSubmit(submit)">ok</button>
+      </ValidationObserver>
+    </div>
   </div>
 </template>
 <script>
@@ -61,6 +78,10 @@ import AtomButton from "../atoms/atom-button/atom-button.vue";
 import OContactDetail from "../organisms/o-contact-detail.vue";
 import OKycForm from "../organisms/o-kyc-form.vue";
 import OMapForm from "../organisms/o-map-form.vue";
+import MoleculeRadioButton from "../molecules/MoleculeRadioButton.vue";
+import MoleculeUpload from "../molecules/MoleculeUpload.vue";
+import MoleculeCheckbox from "../molecules/MoleculeCheckbox.vue";
+import { ValidationObserver } from "vee-validate";
 
 export default {
   components: {
@@ -68,11 +89,17 @@ export default {
     OContactDetail,
     OKycForm,
     OMapForm,
+    MoleculeRadioButton,
+    MoleculeUpload,
+    MoleculeCheckbox,
+    ValidationObserver,
   },
   emits: ["submit"],
   props: { mapShow: Boolean },
   data() {
     return {
+      values: ["Yes", "No"],
+      chekc: "hello",
       personalInfo: {
         firstName: "",
         lastName: "",
@@ -121,6 +148,15 @@ export default {
     },
   },
   methods: {
+    submit() {
+      console.log("this is test");
+    },
+    radioData(data) {
+      console.log(data);
+    },
+    okClik() {
+      console.log(this.chekc);
+    },
     next() {
       if (this.pageCount === 2) {
         this.onSubmit();

@@ -1,6 +1,6 @@
 <template>
   <component :is="wrapper">
-    <b-field :label="label" :message="labelMessage" :type="labelType">
+    <b-field :label="label" :message="errorMessage" :type="errorType">
       <b-input
         :id="id"
         :disabled="disabled"
@@ -84,7 +84,7 @@ export default {
      * Label type for validation
      * @value is-danger, is-success
      */
-    labelType: {
+    errorType: {
       type: Object,
       default: null,
     },
@@ -92,7 +92,7 @@ export default {
      * Label message displayed after
      * validation completed
      */
-    labelMessage: {
+    errorMessage: {
       type: Array,
       default: null,
     },

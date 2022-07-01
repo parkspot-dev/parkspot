@@ -1,23 +1,23 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
+import store from "./store";
+import fbApp from "./FB-App.vue";
+
 import VueResource from "vue-resource";
 import "boxicons";
 import VueScrollReveal from "vue-scroll-reveal";
 import LazyLoadDirective from "./directives/LazyLoadDirective.vue";
 import JwPagination from "jw-vue-pagination";
+
 import "bulma/css/bulma.css";
-import store from "./store";
 import ClickOutside from "vue-click-outside";
-import fbApp from "./FB-App.vue";
+import Buefy from "buefy";
+import "buefy/dist/buefy.css";
+import "./inlcudes/VeeValidate";
 
-Vue.component("jw-pagination", JwPagination);
-Vue.directive("lazyload", LazyLoadDirective);
-Vue.directive("ClickOutside", ClickOutside);
+Vue.use(Buefy);
 Vue.use(VueResource);
-
-Vue.config.productionTip = false;
-
 Vue.use(VueScrollReveal, {
   // A CSS class applied to elements with the
   // v-scroll-reveal directive; useful for animation overrides.
@@ -27,6 +27,13 @@ Vue.use(VueScrollReveal, {
   distance: "20px",
   mobile: true,
 });
+
+Vue.component("jw-pagination", JwPagination);
+
+Vue.directive("lazyload", LazyLoadDirective);
+Vue.directive("ClickOutside", ClickOutside);
+
+Vue.config.productionTip = false;
 
 // main app instance created and mounted
 // on #app
