@@ -5,8 +5,13 @@
     :rules="rules"
     v-slot="{ errors }"
   >
-    <AtomCheckboxs :values="values"></AtomCheckboxs>
-    <span class="has-text-danger">{{ errors[0] }}</span>
+    <label class="label"><slot></slot></label>
+    <AtomCheckboxs
+      @change.native="handleChange"
+      :values="values"
+      class="mb-5"
+    ></AtomCheckboxs>
+    <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
 
@@ -30,6 +35,21 @@ export default {
     },
     values: {
       type: Array,
+    },
+  },
+  emits: ["data"],
+  data() {
+    return {
+      checkboxData: [],
+    };
+  },
+  methods: {
+    async handleChange(data) {
+      const { valid } = await this.$refs.provider.validate(data);
+      if (valid) {
+        this.checkboxData.push(data.target.value);
+        this.$emit("data", this.checkboxData);
+      }
     },
   },
 };

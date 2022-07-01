@@ -163,7 +163,7 @@ export const routes = [
   {
     path: pages.TEMP,
     name: "temp",
-    component: () => import("@/views/features.vue"),
+    component: () => import("@/views/temp.vue"),
     meta: {
       title: "Parking Near ",
     },

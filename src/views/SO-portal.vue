@@ -1,4 +1,42 @@
 <template>
+  <section>
+    <TemplateSOPortal @finalSubmit="onFinalSubmit"></TemplateSOPortal>
+  </section>
+</template>
+
+<script>
+import TemplateSOPortal from "../components/templates/TemplateSOPortal.vue";
+import { mapActions } from "vuex";
+export default {
+  name: "SOPortal",
+  components: {
+    TemplateSOPortal,
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    ...mapActions({
+      register: "soportal/register",
+      login: "soportal/login",
+      kyc: "soportal/kyc",
+      contact: "soportal/contact",
+    }),
+    async onFinalSubmit() {
+      try {
+        await this.register();
+        await this.login();
+        await this.kyc();
+        await this.contact(); // todo contact can be fired in parallel
+      } catch (error) {
+        console.error({ error });
+      }
+    },
+  },
+};
+</script>
+<!-- 
+<template>
   <section class="ps-so-portal-section">
     <t-so-portal
       v-if="!isFormSubmitted"
@@ -79,4 +117,4 @@ export default {
   background-color: #fffcee;
   padding: 9.6rem 0;
 }
-</style>
+</style> -->

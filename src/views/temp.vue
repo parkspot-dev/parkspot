@@ -1,15 +1,17 @@
 <template>
   <div class="section">
     <div class="container">
-      <atom-button> </atom-button>
+      <MoleculeUpload></MoleculeUpload>
+      <MoleculeRadioButton></MoleculeRadioButton>
     </div>
   </div>
 </template>
 <script>
-import AtomButton from "../components/atoms/atom-button/atom-button.vue";
+import MoleculeUpload from "../components/molecules/MoleculeUpload.vue";
+import MoleculeRadioButton from "../components/molecules/MoleculeRadioButton.vue";
 export default {
   name: "Temp",
-  components: { AtomButton },
+  components: { MoleculeUpload, MoleculeRadioButton },
   computed: {
     count() {
       return this.$store.getters["device/getFlavour"];

@@ -1,9 +1,15 @@
 <template>
-  <b-select placeholder="Select a name">
-    <option v-for="option in data" :value="option.id" :key="option.id">
-      {{ option.name }}
-    </option>
-  </b-select>
+  <b-field :label="label" :type="errorType" :message="errorMessage">
+    <b-select
+      :placeholder="placeholder"
+      @input.native="onInput($event.target.value)"
+      expanded
+    >
+      <option v-for="option in list" :value="option.id" :key="option.id">
+        {{ option.name }}
+      </option>
+    </b-select>
+  </b-field>
 </template>
 
 <script>
@@ -20,12 +26,29 @@ export default {
     },
     /**
      * The data is list of data
-     * @values Object expecting
-     * e.g. {id:1, name:'list1'}
+     * @values Array of Object expecting
+     * e.g. [{id:1, name:'list1'},{id:2, name:'list2'}]
      */
-    data: {
+    list: {
+      type: Array,
+      default: null,
+    },
+    errorMessage: {
+      type: Array,
+      default: null,
+    },
+    errorType: {
       type: Object,
       default: null,
+    },
+    label: {
+      type: String,
+    },
+  },
+  emits: ["input"],
+  methods: {
+    onInput(value) {
+      this.$emit("input", this.list[value]);
     },
   },
 };

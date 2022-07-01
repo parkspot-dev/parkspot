@@ -1,5 +1,5 @@
 <template>
-  <div class="columns">
+  <div class="columns mb-5">
     <div class="column">
       <label class="label"><slot></slot></label>
     </div>
@@ -14,7 +14,7 @@
           @change.native="handleChange"
           :values="values"
         ></AtomRadioButtons>
-        <span>{{ errors[0] }}</span>
+        <span class="has-text-danger">{{ errors[0] }}</span>
       </ValidationProvider>
     </div>
   </div>

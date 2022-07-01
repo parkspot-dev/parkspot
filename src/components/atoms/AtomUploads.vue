@@ -1,15 +1,13 @@
 <template>
   <section>
-    <b-field class="file">
-      <b-upload v-model="file" expanded>
-        <a class="button is-primary is-fullwidth">
-          <b-icon icon="upload"></b-icon>
-          <span>{{ file.name || "Click to upload" }}</span>
-        </a>
-      </b-upload>
-    </b-field>
     <b-field>
-      <b-upload v-model="dropFiles" multiple drag-drop expanded>
+      <b-upload
+        @input="upload($event)"
+        :value="dropFiles"
+        multiple
+        drag-drop
+        expanded
+      >
         <section class="section">
           <div class="content has-text-centered">
             <p>
@@ -35,21 +33,29 @@
         ></button>
       </span>
     </div>
+    <!-- <button @click="testClick">test</button> -->
   </section>
 </template>
 
 <script>
 export default {
   name: "AtomUploads",
+  emits: ["uploadFiles"],
   data() {
     return {
-      file: {},
       dropFiles: [],
     };
   },
   methods: {
     deleteDropFile(index) {
       this.dropFiles.splice(index, 1);
+    },
+    upload(event) {
+      console.log(event);
+      const files = [...this.dropFiles];
+      console.log("drop files");
+      console.log(files);
+      this.$emit("uploadFiles", files);
     },
   },
 };
