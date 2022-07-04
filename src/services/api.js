@@ -59,6 +59,16 @@ class BaseApiService {
       this.handleErrors(err);
     }
   }
+
+  async patch(resource, payload = {}) {
+    try {
+      const response = await this.client.patch(resource, payload);
+      return response.data;
+    } catch (err) {
+      this.handleErrors(err);
+    }
+  }
+
   async get(resource) {
     try {
       const response = await this.client.get(resource);

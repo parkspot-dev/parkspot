@@ -5,6 +5,7 @@
       v-for="value in values"
       v-model="checkboxGroup"
       :native-value="value"
+      type="is-warning"
     >
       {{ value }}
     </b-checkbox>

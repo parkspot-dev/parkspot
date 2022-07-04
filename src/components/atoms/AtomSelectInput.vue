@@ -48,7 +48,8 @@ export default {
   emits: ["input"],
   methods: {
     onInput(value) {
-      this.$emit("input", this.list[value]);
+      // value - 1 because of one extra list generated for placeholder
+      this.$emit("input", this.list[value - 1]);
     },
   },
 };
