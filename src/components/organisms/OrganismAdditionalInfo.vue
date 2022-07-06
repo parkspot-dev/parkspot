@@ -72,7 +72,7 @@ export default {
         amenities: "required",
         spot: "required",
         minDur: "required",
-        rent: "required",
+        rent: "required|integer",
       },
     };
   },

@@ -67,7 +67,7 @@ export default {
         fname: "required",
         lname: "required",
         email: "required|email",
-        cno: "required",
+        cno: "required|integer",
       },
       CONTACT_FORM: FORM,
     };

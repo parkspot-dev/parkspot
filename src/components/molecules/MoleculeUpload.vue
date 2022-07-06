@@ -6,7 +6,7 @@
     v-slot="{ errors }"
   >
     <AtomUploads @uploadFiles="handleUpload" class="mb-5"></AtomUploads>
-    <span class="has-text-danger">{{ errors[0] }}</span>
+    <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
 

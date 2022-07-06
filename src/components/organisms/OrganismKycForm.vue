@@ -16,7 +16,11 @@
       :placeholder="'Select documents'"
       :label="'Documents'"
     ></MoleculeSelectInput>
-    <MoleculeUpload @data="updateImg"></MoleculeUpload>
+    <MoleculeUpload
+      @data="updateImg"
+      :fieldName="'document'"
+      :rules="validation.img"
+    ></MoleculeUpload>
   </ValidationObserver>
 </template>
 
@@ -53,6 +57,7 @@ export default {
       validation: {
         radio: "required",
         documentSelect: "required",
+        img: "required|image",
       },
       model: {
         radioData: "",
@@ -96,7 +101,6 @@ export default {
       this.model.documentData = data.name;
     },
     updateImg(data) {
-      console.log("updateImg");
       console.log(data);
       this.model.imgData = data;
     },
