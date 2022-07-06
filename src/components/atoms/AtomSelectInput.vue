@@ -1,10 +1,7 @@
 <template>
   <b-field :label="label" :type="errorType" :message="errorMessage">
-    <b-select
-      :placeholder="placeholder"
-      @input.native="onInput($event.target.value)"
-      expanded
-    >
+    <b-select :placeholder="placeholder" v-model="innerValue" expanded>
+      <option value>{{ placeholder }}</option>
       <option v-for="option in list" :value="option.id" :key="option.id">
         {{ option.name }}
       </option>
@@ -44,13 +41,36 @@ export default {
     label: {
       type: String,
     },
+    value: {
+      type: null,
+    },
   },
   emits: ["input"],
-  methods: {
-    onInput(value) {
-      // value - 1 because of one extra list generated for placeholder
-      this.$emit("input", this.list[value - 1]);
+  data() {
+    return {
+      innerValue: "",
+    };
+  },
+  // methods: {
+  //   onInput(value) {
+  //     // value - 1 because of one extra list generated for placeholder
+  //     this.$emit("input", this.list[value - 1]);
+  //   },
+  // },
+  watch: {
+    // Handles internal model changes.
+    innerValue(newVal) {
+      this.$emit("input", newVal);
     },
+    // Handles external model changes.
+    value(newVal) {
+      this.innerValue = newVal;
+    },
+  },
+  created() {
+    if (this.value) {
+      this.innerValue = this.value;
+    }
   },
 };
 </script>
