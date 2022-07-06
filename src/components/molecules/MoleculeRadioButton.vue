@@ -14,7 +14,7 @@
           @change.native="handleChange"
           :values="values"
         ></AtomRadioButtons>
-        <span class="has-text-danger">{{ errors[0] }}</span>
+        <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
       </ValidationProvider>
     </div>
   </div>
@@ -37,7 +37,7 @@ export default {
     },
     fieldName: {
       type: String,
-      default: "field",
+      required: true,
     },
   },
   emits: ["data"],

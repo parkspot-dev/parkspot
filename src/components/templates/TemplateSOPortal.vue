@@ -38,12 +38,12 @@
 
           <b-step-item
             :step="3"
-            label="Finish"
+            label="Step 3"
             :clickable="isStepsClickable"
             disabled
             :type="AddInfoFormStep ? 'is-success' : 'is-warning'"
           >
-            <h1 class="title has-text-centered">Finish</h1>
+            <h1 class="title has-text-centered">Additional Details</h1>
             <OrganismAdditionalInfo
               :formSubmitted="AddInfoForm"
               @formValidate="AddInfoFormValidate"
@@ -58,7 +58,7 @@
                 icon-pack="mdi"
                 :icon-left="prevIcon"
                 :disabled="previous.disabled"
-                @click.prevent="previous.action"
+                @click.prevent="btnPrev(previous)"
                 class="mr-4"
               >
                 Prev
@@ -71,7 +71,7 @@
                 :disabled="false"
                 @click.prevent="btnNext(next)"
               >
-                Next
+                {{ nextText }}
               </b-button>
             </div>
           </template>
@@ -115,29 +115,33 @@ export default {
       kycForm: false,
       AddInfoForm: false,
       nextEnable: null,
+      nextText: "Next",
     };
   },
   methods: {
     btnNext(next) {
-      if (this.contactForm && this.kycForm && this.AddInfoForm) {
-        this.$emit("finalSubmit");
-      }
       if (!this.contactForm) {
-        console.log(1);
         this.contactFormValidate(this.contactForm);
         this.contactForm = true; // this is to trigger validation in the form
       } else if (!this.kycForm) {
-        console.log(2);
         this.kycFormValidate(this.kycForm);
         this.kycForm = true;
       } else if (!this.AddInfoForm) {
-        console.log(3);
         this.AddInfoFormValidate(this.AddInfoForm);
         this.AddInfoForm = true;
       } else {
         this.nextEnable.action(); // this is for when previous is clicked and want to click next
       }
       this.nextEnable = next;
+    },
+    btnPrev(previous) {
+      if (this.contactForm || this.kycForm || this.AddInfoForm) {
+        this.contactForm = false;
+        this.kycForm = false;
+        this.AddInfoForm = false;
+        this.nextText = "Next";
+      }
+      previous.action();
     },
     contactFormValidate(val) {
       this.contactForm = val;
@@ -149,12 +153,14 @@ export default {
       this.kycForm = val;
       if (this.kycForm) {
         this.nextEnable.action();
+        this.nextText = "Finish";
       }
     },
     AddInfoFormValidate(val) {
       this.AddInfoForm = val;
       if (this.AddInfoForm) {
         this.nextEnable.action();
+        this.$emit("finalSubmit");
       }
     },
   },
@@ -163,7 +169,7 @@ export default {
 
 <style scoped>
 .cmargin {
-  margin: 0 10rem;
+  margin: 0 15rem;
 }
 .footer-buttons {
   display: flex;

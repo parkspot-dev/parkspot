@@ -49,11 +49,12 @@ const actions = {
       UserName: state.login.UserName,
       Owner: state.kycForm.radioData,
       OwnerName: "none",
-      // OwnerContactNo: "none",
+      OwnerContactNo: "none",
       Relationship: "none",
-      OwnershipDocument: "none",
-      // IdentityDocument: "none",
-      // OwnershipDocumentImage: "none",
+      OwnershipDocument: state.kycForm.documentData,
+      IdentityDocument: state.kycForm.documentData,
+      OwnershipDocumentImage: state.kycForm.imgData,
+      IdentityDocumentImage: state.kycForm.imgData,
     };
     mayaClient.patch("/kyc", req);
   },

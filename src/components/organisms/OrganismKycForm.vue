@@ -1,7 +1,7 @@
 <template>
   <ValidationObserver ref="observer" v-slot="{}">
     <MoleculeRadioButton
-      :fieldName="'field'"
+      :fieldName="'radio'"
       :rules="validation.radio"
       :values="radioValues"
       @data="updateRadioData"
@@ -9,15 +9,14 @@
       Are you the Owner?
     </MoleculeRadioButton>
     <MoleculeSelectInput
-      :fieldName="'field'"
+      :fieldName="'input'"
       :list="documentValues"
-      :placeholder="'Select documents'"
-      :rules="validation.documentSelect"
-      :label="'Documents'"
       @input="updateDocumentData"
+      :rules="validation.documentSelect"
+      :placeholder="'Select documents'"
+      :label="'Documents'"
     ></MoleculeSelectInput>
-    <MoleculeUpload></MoleculeUpload>
-    <button type="submit" @click="submit">ok</button>
+    <MoleculeUpload @data="updateImg"></MoleculeUpload>
   </ValidationObserver>
 </template>
 
@@ -58,6 +57,7 @@ export default {
       model: {
         radioData: "",
         documentData: null,
+        imgData: null,
       },
     };
   },
@@ -94,6 +94,11 @@ export default {
     },
     updateDocumentData(data) {
       this.model.documentData = data.name;
+    },
+    updateImg(data) {
+      console.log("updateImg");
+      console.log(data);
+      this.model.imgData = data;
     },
   },
 };

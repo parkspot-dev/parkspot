@@ -5,7 +5,7 @@
     :rules="rules"
     v-slot="{ errors }"
   >
-    <AtomUploads class="mb-5"></AtomUploads>
+    <AtomUploads @uploadFiles="handleUpload" class="mb-5"></AtomUploads>
     <span class="has-text-danger">{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
@@ -13,6 +13,7 @@
 <script>
 import { ValidationProvider } from "vee-validate";
 import AtomUploads from "../atoms/AtomUploads.vue";
+import { getConvertedImage } from "../../inlcudes/ConvertImageToByte";
 export default {
   name: "MoleculeUpload",
   components: { ValidationProvider, AtomUploads },
@@ -27,10 +28,11 @@ export default {
     },
   },
   methods: {
-    async handleChange(data) {
+    async handleUpload(data) {
       const { valid } = await this.$refs.provider.validate(data);
       if (valid) {
-        this.$emit("data", data.target.value);
+        const imgArray = await getConvertedImage(data[0]);
+        this.$emit("data", imgArray);
       }
     },
   },

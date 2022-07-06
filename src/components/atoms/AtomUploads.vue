@@ -33,7 +33,6 @@
         ></button>
       </span>
     </div>
-    <!-- <button @click="testClick">test</button> -->
   </section>
 </template>
 
@@ -50,11 +49,8 @@ export default {
     deleteDropFile(index) {
       this.dropFiles.splice(index, 1);
     },
-    upload(event) {
-      console.log(event);
+    upload() {
       const files = [...this.dropFiles];
-      console.log("drop files");
-      console.log(files);
       this.$emit("uploadFiles", files);
     },
   },
