@@ -31,3 +31,12 @@ extend("image", {
   ...image,
   message: "This {_field_} must be an image.",
 });
+
+extend("phone", {
+  validate: (value) => {
+    var phoneRegex = new RegExp("^([6-9]{1})([0-9]{9})$");
+    if (value == "") return true;
+    return phoneRegex.test(value);
+  },
+  message: `The {_field_} is not valid.`,
+});

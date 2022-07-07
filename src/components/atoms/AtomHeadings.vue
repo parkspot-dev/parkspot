@@ -23,4 +23,35 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+h1 {
+  letter-spacing: -2px;
+  font-size: 3rem;
+  font-weight: semi-bold;
+}
+h2 {
+  /* letter-spacing: $spacing-xs; */
+  font-size: 2.5rem;
+  /* font-weight: $weight-semi-bold; */
+}
+h3 {
+  /* letter-spacing: $spacing-xs; */
+  font-size: 2rem;
+  /* font-weight: $weight-semi-bold; */
+}
+h4 {
+  /* letter-spacing: $spacing-xs; */
+  font-size: 1.5rem;
+  /* font-weight: $weight-semi-bold; */
+}
+h5 {
+  /* letter-spacing: $spacing-xs; */
+  font-size: 1.25rem;
+  /* font-weight: $weight-semi-bold; */
+}
+h6 {
+  /* letter-spacing: $spacing-xs; */
+  font-size: 1rem;
+  /* font-weight: $weight-semi-bold; */
+}
+</style>
