@@ -25,7 +25,7 @@ jobs:
       with:
         commit_message: Apply automatic changes
         branch: ${{ github.head_ref }}
-        commit_user_name: arrogant-ant
+        commit_user_name: SwechchhaSinha
         commit_user_email: sudhanshuambastha@live.com
         commit_author: Author <sudhanshuambastha@live.com> 
       env:
