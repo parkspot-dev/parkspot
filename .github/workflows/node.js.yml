@@ -4,14 +4,14 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ "master" ]
+  pull_request_review:
+    types: [submitted]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    if: ${{ (github.event.review.state == 'approved') }}
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
