@@ -7,6 +7,17 @@ export const FORM = {
   CONTACT_NO: "Contact No.",
 };
 
+export const KYC = {
+  RADIO_DATA: ["Yes", "No"],
+  DOCUMENT_DATA: [
+    { id: 1, name: "Adhaar Card" },
+    { id: 2, name: "Electricity Bills" },
+    { id: 3, name: "Driving License" },
+    { id: 4, name: "Rent Agreement" },
+  ],
+  DOCUMENT_INFO_MSG:
+    "Note: Document must contain the address proof of the spot registered.",
+};
 export const ADD_INFO = {
   AMENITIES: "Amenities",
   SPOTS: "Spots",
@@ -31,4 +42,8 @@ export const ADD_INFO = {
     { id: 3, name: "3 - 5 months" },
     { id: 4, name: "More than 6 months" },
   ],
+};
+
+export const ICON = {
+  INFO: "information-outline",
 };
