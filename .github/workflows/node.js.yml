@@ -23,6 +23,7 @@ jobs:
     - run: npm run build --if-present
     - uses: stefanzweifel/git-auto-commit-action@v4
       with:
+        ref: ${{ github.event.pull_request.head.ref }}
         commit_message: Apply automatic changes
         branch: ${{ github.head_ref }}
         commit_user_name: SwechchhaSinha
