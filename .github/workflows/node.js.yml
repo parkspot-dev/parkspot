@@ -14,16 +14,15 @@ jobs:
     if: ${{ (github.event.review.state == 'approved') }}
     steps:
     - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: 16.13.0
         cache: 'npm'
     - run: npm ci
-    - run: npm run build --if-present
-    - uses: actions/checkout@v2
-      with:
-        ref: ${{ github.event.pull_request.head.ref }}
+    - run: npm run build --if-present      
     - uses: stefanzweifel/git-auto-commit-action@v4
       with:
         commit_message: Apply automatic changes
