@@ -14,11 +14,11 @@
             step="1"
             label="Step 1"
             :clickable="isStepsClickable"
-            :type="contactFormStep ? 'is-success' : 'is-warning'"
+            :type="btnStack[0] ? 'is-success' : 'is-warning'"
           >
             <h1 class="title has-text-centered">Contact Details</h1>
             <OrganismContactForm
-              :formSubmitted="contactForm"
+              :formSubmitted="btnStack[0]"
               @formValidate="contactFormValidate"
             ></OrganismContactForm>
           </b-step-item>
@@ -27,11 +27,11 @@
             step="2"
             label="Step 2"
             :clickable="isStepsClickable"
-            :type="KYCFormStep ? 'is-success' : 'is-warning'"
+            :type="btnStack[1] ? 'is-success' : 'is-warning'"
           >
             <h1 class="title has-text-centered">KYC Details</h1>
             <OrganismKycForm
-              :formSubmitted="kycForm"
+              :formSubmitted="btnStack[1]"
               @formValidate="kycFormValidate"
             ></OrganismKycForm>
           </b-step-item>
@@ -41,11 +41,11 @@
             label="Step 3"
             :clickable="isStepsClickable"
             disabled
-            :type="AddInfoFormStep ? 'is-success' : 'is-warning'"
+            :type="btnStack[2] ? 'is-success' : 'is-warning'"
           >
             <h1 class="title has-text-centered">Additional Details</h1>
             <OrganismAdditionalInfo
-              :formSubmitted="AddInfoForm"
+              :formSubmitted="btnStack[2]"
               @formValidate="AddInfoFormValidate"
             ></OrganismAdditionalInfo>
           </b-step-item>
@@ -78,6 +78,7 @@
         </b-steps>
       </div>
     </div>
+    <p>{{ this.btnStack[0] }}</p>
   </section>
 </template>
 
@@ -111,54 +112,42 @@ export default {
 
       isStepsClickable: false,
 
-      contactForm: false,
-      kycForm: false,
-      AddInfoForm: false,
       nextEnable: null,
       nextText: "Next",
+      btnStack: [false, false, false],
+      top: 0,
     };
   },
   methods: {
     btnNext(next) {
-      if (!this.contactForm) {
-        this.contactFormValidate(this.contactForm);
-        this.contactForm = true; // this is to trigger validation in the form
-      } else if (!this.kycForm) {
-        this.kycFormValidate(this.kycForm);
-        this.kycForm = true;
-      } else if (!this.AddInfoForm) {
-        this.AddInfoFormValidate(this.AddInfoForm);
-        this.AddInfoForm = true;
-      } else {
-        this.nextEnable.action(); // this is for when previous is clicked and want to click next
-      }
+      // this.btnStack[this.top] = true; // this is not updating the array in vue
+      this.btnStack.splice(this.top, 1, true); // this is to trigger validation in the form
       this.nextEnable = next;
     },
     btnPrev(previous) {
-      if (this.contactForm || this.kycForm || this.AddInfoForm) {
-        this.contactForm = false;
-        this.kycForm = false;
-        this.AddInfoForm = false;
-        this.nextText = "Next";
-      }
+      this.top--;
+      this.btnStack.splice(this.top, 1, false);
+      this.nextText = "Next";
       previous.action();
     },
     contactFormValidate(val) {
-      this.contactForm = val;
-      if (this.contactForm) {
+      this.btnStack.splice(this.top, 1, val);
+      if (this.btnStack[this.top]) {
         this.nextEnable.action();
+        this.top++;
       }
     },
     kycFormValidate(val) {
-      this.kycForm = val;
-      if (this.kycForm) {
+      this.btnStack.splice(this.top, 1, val);
+      if (this.btnStack[this.top]) {
         this.nextEnable.action();
         this.nextText = "Finish";
+        this.top++;
       }
     },
     AddInfoFormValidate(val) {
-      this.AddInfoForm = val;
-      if (this.AddInfoForm) {
+      this.btnStack.splice(this.top, 1, val);
+      if (this.btnStack[this.top]) {
         this.nextEnable.action();
         this.$emit("finalSubmit");
       }

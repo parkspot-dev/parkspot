@@ -100,7 +100,6 @@ export default {
       this.model.documentData = data.name;
     },
     updateImg(data) {
-      console.log(data);
       this.model.imgData = data;
     },
   },

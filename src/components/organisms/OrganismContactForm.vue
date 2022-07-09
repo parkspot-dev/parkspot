@@ -74,7 +74,6 @@ export default {
   },
   watch: {
     formSubmitted(newVal) {
-      console.log("organism contact form");
       if (newVal) {
         this.$refs.observer
           .validate()
@@ -97,7 +96,6 @@ export default {
       updateContact: "soportal/update-contact",
     }),
     submit() {
-      console.log("Form submitted yay!");
       this.updateContact(this.model);
     },
     resetForm() {
