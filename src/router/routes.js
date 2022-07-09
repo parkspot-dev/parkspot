@@ -40,6 +40,8 @@ export const pages = {
   PAYMENTGATEWAY: "/payment/*",
   DISCOVER: "/bangalore/parking-near-*",
   TEMP: "/temp",
+  THANK_YOU: "/thank-you",
+  ERROR: "/error",
 };
 
 export const routes = [
@@ -155,6 +157,22 @@ export const routes = [
     path: pages.DISCOVER,
     name: "discover",
     component: () => import("@/views/discover-page.vue"),
+    meta: {
+      title: "Parking Near ",
+    },
+  },
+  {
+    path: pages.THANK_YOU,
+    name: "thankYou",
+    component: () => import("@/views/PageThankYou.vue"),
+    meta: {
+      title: "Parking Near ",
+    },
+  },
+  {
+    path: pages.ERROR,
+    name: "error",
+    component: () => import("@/views/PageError.vue"),
     meta: {
       title: "Parking Near ",
     },
