@@ -4,7 +4,11 @@
     :rules="rules"
     :name="fieldName"
     v-slot="{ errors, valid }"
+    class="custom-wrapper"
   >
+    <AtomTooltip v-if="tooltip" class="custom-tooltip" :label="tooltipMsg">
+      <AtomIcon :icon="ICON.INFO" :size="'is-small'"></AtomIcon>
+    </AtomTooltip>
     <AtomSelectInput
       :errorMessage="errors"
       :errorType="{ 'is-danger': errors[0], 'is-success': valid }"
@@ -20,11 +24,16 @@
 <script>
 import { ValidationProvider } from "vee-validate";
 import AtomSelectInput from "../atoms/AtomSelectInput.vue";
+import AtomIcon from "../atoms/AtomIcon.vue";
+import AtomTooltip from "../atoms/AtomTooltip.vue";
+import { ICON } from "../../constant/constant";
 export default {
   name: "MoleculeSelectInput",
   components: {
     ValidationProvider,
     AtomSelectInput,
+    AtomIcon,
+    AtomTooltip,
   },
   props: {
     rules: {
@@ -46,6 +55,15 @@ export default {
     label: {
       type: String,
     },
+    //for tooltip
+    tooltip: {
+      type: Boolean,
+      default: false,
+    },
+    tooltipMsg: {
+      type: String,
+      default: "Please write something meaningful if you are using this.",
+    },
     // must be included in props
     value: {
       type: null,
@@ -54,6 +72,7 @@ export default {
   data() {
     return {
       innerValue: "",
+      ICON,
     };
   },
   watch: {
@@ -74,4 +93,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.custom-wrapper {
+  position: relative;
+}
+.custom-tooltip {
+  position: absolute;
+  left: 95px;
+  top: 2px;
+}
+</style>

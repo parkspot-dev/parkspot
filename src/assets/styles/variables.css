@@ -2,4 +2,13 @@
   /* color naming: https://material.io/design/color/the-color-system.html */
   --primary-color: #ffdd57;
   --secondary-color: #0085ad;
+
+  /* typography */
+  --regular-font: 400;
+  --semi-bold-font: 500;
+  --bold-font: 600;
+  /* - Line height:*/
+    --lh-default:1;
+    --lh-small:1.05;
+    --lh-para:1.6;
 }

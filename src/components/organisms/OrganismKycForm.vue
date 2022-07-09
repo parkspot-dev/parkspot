@@ -15,6 +15,8 @@
       :rules="validation.documentSelect"
       :placeholder="'Select documents'"
       :label="'Documents'"
+      :tooltip="true"
+      :tooltipMsg="KYC.DOCUMENT_INFO_MSG"
     ></MoleculeSelectInput>
     <MoleculeUpload
       @data="updateImg"
@@ -30,6 +32,7 @@ import MoleculeRadioButton from "../molecules/MoleculeRadioButton.vue";
 import MoleculeSelectInput from "../molecules/MoleculeSelectInput.vue";
 import MoleculeUpload from "../molecules/MoleculeUpload.vue";
 import { mapMutations } from "vuex";
+import { KYC } from "../../constant/constant";
 export default {
   name: "OrganismKycForm",
   components: {
@@ -47,13 +50,9 @@ export default {
   emits: ["formValidate"],
   data() {
     return {
-      radioValues: ["Yes", "No"],
-      documentValues: [
-        { id: 1, name: "Adhaar Card" },
-        { id: 2, name: "Electricity Bills" },
-        { id: 3, name: "Driving License" },
-        { id: 4, name: "Rent Agreement" },
-      ],
+      KYC,
+      radioValues: KYC.RADIO_DATA,
+      documentValues: KYC.DOCUMENT_DATA,
       validation: {
         radio: "required",
         documentSelect: "required",
@@ -101,7 +100,6 @@ export default {
       this.model.documentData = data.name;
     },
     updateImg(data) {
-      console.log(data);
       this.model.imgData = data;
     },
   },

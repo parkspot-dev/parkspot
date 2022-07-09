@@ -38,6 +38,7 @@ export default {
         this.$buefy.toast.open({
           message: "ParkSpot registered successfully!",
           type: "is-success",
+          duration: 2000,
         });
         this.$router.push({ name: "Home" });
       } catch (error) {
@@ -45,6 +46,7 @@ export default {
         this.$buefy.toast.open({
           message: `Something went wrong!`,
           type: "is-danger",
+          duration: 2000,
         });
         this.$router.push({ name: "SOPortal" });
       }
