@@ -78,7 +78,6 @@
         </b-steps>
       </div>
     </div>
-    <p>{{ this.btnStack[0] }}</p>
   </section>
 </template>
 
