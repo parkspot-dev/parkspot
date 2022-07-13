@@ -25,6 +25,7 @@
       :label="CONTACT_FORM.CONTACT_NO"
     >
     </MoleculeNameInput>
+    <AtomTextarea v-if="textArea"></AtomTextarea>
   </ValidationObserver>
 </template>
 
@@ -33,15 +34,21 @@ import { ValidationObserver } from "vee-validate";
 import { FORM } from "../../constant/constant";
 import { mapMutations } from "vuex";
 import MoleculeNameInput from "../molecules/MoleculeNameInput.vue";
+import AtomTextarea from "../atoms/AtomTextarea.vue";
 
 export default {
   name: "OrganismContactForm",
   components: {
     ValidationObserver,
     MoleculeNameInput,
+    AtomTextarea,
   },
   props: {
     formSubmitted: {
+      type: Boolean,
+      default: false,
+    },
+    textArea: {
       type: Boolean,
       default: false,
     },

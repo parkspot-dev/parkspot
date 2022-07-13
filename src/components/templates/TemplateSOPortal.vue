@@ -15,7 +15,9 @@
           :clickable="isStepsClickable"
           :type="btnStack[0] ? 'is-success' : 'is-warning'"
         >
-          <h1 class="title has-text-centered">Contact Details</h1>
+          <AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+            Contact Details
+          </AtomHeadings>
           <OrganismContactForm
             :formSubmitted="btnStack[0]"
             @formValidate="contactFormValidate"
@@ -28,7 +30,9 @@
           :clickable="isStepsClickable"
           :type="btnStack[1] ? 'is-success' : 'is-warning'"
         >
-          <h1 class="title has-text-centered">KYC Details</h1>
+          <AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+            KYC Details
+          </AtomHeadings>
           <OrganismKycForm
             :formSubmitted="btnStack[1]"
             @formValidate="kycFormValidate"
@@ -41,7 +45,9 @@
           :clickable="isStepsClickable"
           :type="btnStack[2] ? 'is-success' : 'is-warning'"
         >
-          <h1 class="title has-text-centered">Location Details</h1>
+          <AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+            Location Details
+          </AtomHeadings>
           <OrganismAddressForm
             :formSubmitted="btnStack[2]"
             @formValidate="addressFormValidate"
@@ -54,8 +60,9 @@
           :clickable="isStepsClickable"
           disabled
           :type="btnStack[3] ? 'is-success' : 'is-warning'"
-        >
-          <h1 class="title has-text-centered">Additional Details</h1>
+          ><AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+            Additional Details
+          </AtomHeadings>
           <OrganismAdditionalInfo
             :formSubmitted="btnStack[3]"
             @formValidate="AddInfoFormValidate"
@@ -98,6 +105,7 @@ import OrganismKycForm from "../organisms/OrganismKycForm.vue";
 import OrganismAdditionalInfo from "../organisms/OrganismAdditionalInfo.vue";
 import OrganismAddressForm from "../organisms/OrganismAddressForm.vue";
 import Wrapper from "../extras/Wrapper.vue";
+import AtomHeadings from "../atoms/AtomHeadings.vue";
 export default {
   name: "TemplateSOPortal",
   components: {
@@ -105,6 +113,7 @@ export default {
     OrganismKycForm,
     OrganismAdditionalInfo,
     OrganismAddressForm,
+    AtomHeadings,
     Wrapper,
   },
   emits: ["finalSubmit"],
@@ -125,6 +134,8 @@ export default {
       mobileMode: "minimalist",
 
       isStepsClickable: false,
+
+      headingLevel: "h3",
 
       nextEnable: null,
       nextText: "Next",
