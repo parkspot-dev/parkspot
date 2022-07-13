@@ -82,7 +82,7 @@ export const routes = [
   {
     path: pages.CONTACT,
     name: "t-contact",
-    component: () => import("@/components/templates/t-contact.vue"),
+    component: () => import("@/views/PageContactUs"),
     meta: {
       title: "ParkSpot | Contact Us",
     },

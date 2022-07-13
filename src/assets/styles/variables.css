@@ -2,10 +2,14 @@
   /* color naming: https://material.io/design/color/the-color-system.html */
   --primary-color: #ffdd57;
   --secondary-color: #0085ad;
+  --primary-text:#555;
   
   /* shades */
   --grey-shade: 	#A9A9A9;
 
+  /* border radius */
+  --border-default: 9px;
+  --border-circle: 1000%;
   
   
   /* typography */
