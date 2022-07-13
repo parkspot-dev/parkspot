@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build && cp _redirects dist",
     "lint": "vue-cli-service lint",
     "build-report": "vue-cli-service build --report"
