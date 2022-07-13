@@ -31,6 +31,20 @@
       v-model="model.rent"
       :label="ADD_INFO.RENT"
     ></MoleculeNameInput>
+    <MoleculeCheckbox
+      :fieldName="ADD_INFO.TERMS"
+      :rules="validation.terms"
+      :values="termData"
+      @data="updateTermsData"
+    >
+      <template v-slot:extra>
+        <p class="custom-terms">
+          <a href="https://www.parkspot.in/terms-and-conditions" target="_blank"
+            >T&C</a
+          >
+        </p>
+      </template>
+    </MoleculeCheckbox>
   </ValidationObserver>
 </template>
 
@@ -62,17 +76,20 @@ export default {
       checkboxData: ADD_INFO.AMENITIES_DATA,
       spotData: ADD_INFO.SPOTS_DATA,
       minDurData: ADD_INFO.MINIMUM_DURATION_DATA,
+      termData: ADD_INFO.TERMS_DATA,
       model: {
         amenities: "",
         spot: "",
         minDur: "",
         rent: "",
+        terms: "",
       },
       validation: {
         amenities: "required",
         spot: "required",
         minDur: "required",
         rent: "required|integer",
+        terms: "required",
       },
     };
   },
@@ -112,8 +129,16 @@ export default {
     updateAmenitiesData(data) {
       this.model.amenities = data;
     },
+    updateTermsData(data) {
+      this.model.terms = data;
+    },
   },
 };
 </script>
-
-<style></style>
+<style scoped>
+.custom-terms {
+  position: absolute;
+  top: -2px;
+  left: 111px;
+}
+</style>

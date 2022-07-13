@@ -120,6 +120,18 @@ class MayaApiService extends BaseApiService {
   }
 }
 
+class MapBoxApiService extends BaseApiService {
+  constructor() {
+    let mapBoxDomain = "http://api.mapbox.com"; //TODO: we can pick from .env files.
+    let baseHeaderMap = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      // Flavour: flavour,
+    };
+    super(mapBoxDomain, baseHeaderMap, 5000, false);
+  }
+}
+
 function getFlavour() {
   const details = navigator.userAgent;
   const regexp = /android|iphone|kindle|ipad/i;
@@ -133,5 +145,6 @@ function getFlavour() {
 }
 
 const mayaClient = new MayaApiService(getFlavour());
+const mapBoxClient = new MapBoxApiService();
 
-export { mayaClient };
+export { mayaClient, mapBoxClient };

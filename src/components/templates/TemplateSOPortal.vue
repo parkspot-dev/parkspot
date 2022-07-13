@@ -36,15 +36,28 @@
         </b-step-item>
 
         <b-step-item
-          :step="3"
+          step="3"
           label="Step 3"
           :clickable="isStepsClickable"
-          disabled
           :type="btnStack[2] ? 'is-success' : 'is-warning'"
+        >
+          <h1 class="title has-text-centered">Location Details</h1>
+          <OrganismAddressForm
+            :formSubmitted="btnStack[2]"
+            @formValidate="addressFormValidate"
+          ></OrganismAddressForm>
+        </b-step-item>
+
+        <b-step-item
+          :step="4"
+          label="Step 4"
+          :clickable="isStepsClickable"
+          disabled
+          :type="btnStack[3] ? 'is-success' : 'is-warning'"
         >
           <h1 class="title has-text-centered">Additional Details</h1>
           <OrganismAdditionalInfo
-            :formSubmitted="btnStack[2]"
+            :formSubmitted="btnStack[3]"
             @formValidate="AddInfoFormValidate"
           ></OrganismAdditionalInfo>
         </b-step-item>
@@ -83,6 +96,7 @@
 import OrganismContactForm from "../organisms/OrganismContactForm.vue";
 import OrganismKycForm from "../organisms/OrganismKycForm.vue";
 import OrganismAdditionalInfo from "../organisms/OrganismAdditionalInfo.vue";
+import OrganismAddressForm from "../organisms/OrganismAddressForm.vue";
 import Wrapper from "../extras/Wrapper.vue";
 export default {
   name: "TemplateSOPortal",
@@ -90,6 +104,7 @@ export default {
     OrganismContactForm,
     OrganismKycForm,
     OrganismAdditionalInfo,
+    OrganismAddressForm,
     Wrapper,
   },
   emits: ["finalSubmit"],
@@ -113,7 +128,7 @@ export default {
 
       nextEnable: null,
       nextText: "Next",
-      btnStack: [false, false, false],
+      btnStack: [false, false, false, false],
       top: 0,
     };
   },
@@ -137,6 +152,13 @@ export default {
       }
     },
     kycFormValidate(val) {
+      this.btnStack.splice(this.top, 1, val);
+      if (this.btnStack[this.top]) {
+        this.nextEnable.action();
+        this.top++;
+      }
+    },
+    addressFormValidate(val) {
       this.btnStack.splice(this.top, 1, val);
       if (this.btnStack[this.top]) {
         this.nextEnable.action();

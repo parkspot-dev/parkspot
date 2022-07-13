@@ -5,6 +5,7 @@ const state = {
   kycForm: {},
   additionalInfo: {},
   login: {},
+  locationDetails: {},
 };
 
 const getters = {};
@@ -21,6 +22,9 @@ const mutations = {
   },
   "update-login"(state, data = {}) {
     state.login = data;
+  },
+  "update-location-details"(state, data = {}) {
+    state.locationDetails = data;
   },
 };
 
@@ -71,11 +75,10 @@ const actions = {
       User: {
         UserName: state.login.UserName, //only for logged in user
         FullName: state.contactForm.fname + " " + state.contactForm.lname,
-        City: "none",
+        City: state.locationDetails.locName,
         EmailID: state.contactForm.email,
         Mobile: state.contactForm.cno,
       },
-      // Flavour: this.$store.getters["device/getFlavour"], //android, dweb, mweb
       Comments: "Spot Registered",
       RentDetails: {
         VehicleType: "",
@@ -84,7 +87,7 @@ const actions = {
         Availability: "",
         SpecialService: convertedAmenities, //None/Camera/Security
         TnC: "none",
-        Address: "none",
+        Address: state.locationDetails.locName,
       },
     };
     mayaClient.post("/contact", req);

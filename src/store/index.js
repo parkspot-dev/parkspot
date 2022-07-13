@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import device from "./device";
 import blog from "./blog";
 import soportal from "./soportal";
+import map from "./map";
 
 Vue.use(Vuex);
 
@@ -11,6 +12,7 @@ const store = new Vuex.Store({
     device,
     blog,
     soportal,
+    map,
   },
 });
 

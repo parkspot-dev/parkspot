@@ -1,14 +1,18 @@
 <template>
-  <TemplateError></TemplateError>
+  <Wrapper>
+    <OrganismAddressForm></OrganismAddressForm>
+  </Wrapper>
 </template>
 <script>
-import TemplateError from "../components/templates/TemplateError.vue";
+import Wrapper from "../components/extras/Wrapper.vue";
+import OrganismAddressForm from "../components/organisms/OrganismAddressForm.vue";
+
 export default {
   /**
    * This page is used for development testing purposes.
    */
   name: "Temp",
-  components: { TemplateError },
+  components: { OrganismAddressForm, Wrapper },
   data() {
     return {};
   },

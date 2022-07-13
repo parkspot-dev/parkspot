@@ -9,6 +9,9 @@
 <script>
 export default {
   name: "Wrapper",
+  /**
+   * wrapper gives proper padding and margin
+   */
 };
 </script>
 

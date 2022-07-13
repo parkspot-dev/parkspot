@@ -42,6 +42,8 @@ export const ADD_INFO = {
     { id: 3, name: "3 - 5 months" },
     { id: 4, name: "More than 6 months" },
   ],
+  TERMS: "Terms & Conditions",
+  TERMS_DATA: ["I agree to "],
 };
 
 export const ICON = {
