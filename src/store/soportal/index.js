@@ -31,9 +31,9 @@ const mutations = {
 const actions = {
   register({ commit, state }) {
     const req = {
-      UserName: "dummy_" + state.contactForm.fname + Date.now(),
+      UserName: "dummy_" + state.contactForm.fullname + Date.now(),
       Password: "dummy@123",
-      FullName: state.contactForm.fname + " " + state.contactForm.lname,
+      FullName: state.contactForm.fullname,
       City: "",
       EmailID: state.contactForm.email,
     };
@@ -74,7 +74,7 @@ const actions = {
     const req = {
       User: {
         UserName: state.login.UserName, //only for logged in user
-        FullName: state.contactForm.fname + " " + state.contactForm.lname,
+        FullName: state.contactForm.fullname,
         City: state.locationDetails.locName,
         EmailID: state.contactForm.email,
         Mobile: state.contactForm.cno,

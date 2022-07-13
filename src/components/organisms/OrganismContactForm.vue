@@ -1,19 +1,11 @@
 <template>
   <ValidationObserver ref="observer" v-slot="{}">
     <MoleculeNameInput
-      :rules="validation.fname"
-      :fieldName="CONTACT_FORM.FIRSTNAME"
-      v-model="model.fname"
-      :placeholder="CONTACT_FORM.FIRSTNAME"
-      :label="CONTACT_FORM.FIRSTNAME"
-    >
-    </MoleculeNameInput>
-    <MoleculeNameInput
-      :rules="validation.lname"
-      :fieldName="CONTACT_FORM.LASTNAME"
-      v-model="model.lname"
-      :placeholder="CONTACT_FORM.LASTNAME"
-      :label="CONTACT_FORM.LASTNAME"
+      :rules="validation.fullname"
+      :fieldName="CONTACT_FORM.FULLNAME"
+      v-model="model.fullname"
+      :placeholder="CONTACT_FORM.FULLNAME"
+      :label="CONTACT_FORM.FULLNAME"
     >
     </MoleculeNameInput>
     <MoleculeNameInput
@@ -58,14 +50,12 @@ export default {
   data() {
     return {
       model: {
-        fname: "",
-        lname: "",
+        fullname: "",
         email: "",
         cno: "",
       },
       validation: {
-        fname: "required",
-        lname: "required",
+        fullname: "required",
         email: "required|email",
         cno: "required|integer|phone",
       },
@@ -99,8 +89,7 @@ export default {
       this.updateContact(this.model);
     },
     resetForm() {
-      this.model.fname = "";
-      this.model.lname = "";
+      this.model.fullname = "";
       this.model.email = "";
       this.model.cno = "";
       requestAnimationFrame(() => {
