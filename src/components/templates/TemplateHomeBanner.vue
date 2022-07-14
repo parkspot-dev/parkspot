@@ -9,7 +9,9 @@
         </h2>
         <SearchInput class="banner-input"></SearchInput>
         <div class="btn-wrapper">
-          <AtomButtons class="banner-btn">Search ParkSpots</AtomButtons>
+          <AtomButtons class="banner-btn" @click.native="flyToSrp">
+            Search ParkSpots
+          </AtomButtons>
         </div>
       </div>
     </div>
@@ -26,6 +28,12 @@ export default {
     Wrapper,
     SearchInput,
     AtomButtons,
+  },
+  emits: ["flyToSrp"],
+  methods: {
+    flyToSrp() {
+      this.$emit("flyToSrp");
+    },
   },
 };
 </script>
@@ -78,16 +86,16 @@ export default {
 }
 
 @media only screen and (max-width: 800px) {
-  .banner-wrapper {
-    text-align: center;
-  }
-
   .banner-header {
     padding: 0 3rem;
   }
 
   .banner-title {
     font-size: 2.25rem;
+    text-align: center;
+  }
+  .banner-subtitle {
+    text-align: center;
   }
 }
 </style>

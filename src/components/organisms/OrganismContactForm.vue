@@ -25,7 +25,7 @@
       :label="CONTACT_FORM.CONTACT_NO"
     >
     </MoleculeNameInput>
-    <AtomTextarea v-if="textArea"></AtomTextarea>
+    <AtomTextarea v-if="textArea" v-model="model.msg"></AtomTextarea>
   </ValidationObserver>
 </template>
 
@@ -60,6 +60,7 @@ export default {
         fullname: "",
         email: "",
         cno: "",
+        msg: "",
       },
       validation: {
         fullname: "required",
@@ -76,8 +77,8 @@ export default {
           .validate()
           .then((el) => {
             if (el) {
-              this.$emit("formValidate", el);
               this.submit();
+              this.$emit("formValidate", el);
             } else {
               this.$emit("formValidate", el);
             }

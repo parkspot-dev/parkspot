@@ -4,6 +4,7 @@
       :maxlength="maxlength"
       type="textarea"
       :placeholder="placeholder"
+      @input.native="onInput($event.target.value)"
     ></b-input>
   </b-field>
 </template>
@@ -26,6 +27,12 @@ export default {
     placeholder: {
       type: String,
       default: "Message",
+    },
+  },
+  emits: ["input"],
+  methods: {
+    onInput(value) {
+      this.$emit("input", value);
     },
   },
 };
