@@ -1,33 +1,12 @@
 <template>
   <Wrapper>
-    <b-carousel-list v-model="test" :data="items" :items-to-show="2">
+    <AtomParagraph class="custom-subtitle">Types of Products</AtomParagraph>
+    <AtomHeadings class="custom-title" :level="'h2'"
+      >Our Parking Products</AtomHeadings
+    >
+    <b-carousel-list v-model="test" :data="items" v-bind="al">
       <template #item="list">
-        <div class="card">
-          <div class="card-image">
-            <AtomImage
-              :alt="'image'"
-              :src="list.image"
-              :ratio="'5by4'"
-            ></AtomImage>
-            <b-tag type="is-danger" rounded style="position: absolute; top: 0">
-              <b>50% OFF</b>
-            </b-tag>
-          </div>
-
-          <div class="card-content custom-content-wrapper">
-            <div class="content">
-              <div class="content-text">
-                <p class="content-text-title">{{ list.title }}</p>
-                <p class="content-text-desc">
-                  {{ list.desc }}
-                </p>
-              </div>
-              <div class="content-btn">
-                <AtomIcon :icon="'arrow-right'" :size="'is-medium'"></AtomIcon>
-              </div>
-            </div>
-          </div>
-        </div>
+        <MoleculeProductCard :items="list"></MoleculeProductCard>
       </template>
     </b-carousel-list>
   </Wrapper>
@@ -35,29 +14,26 @@
 
 <script>
 import Wrapper from "../extras/Wrapper.vue";
-import AtomImage from "../atoms/AtomImage.vue";
-import AtomIcon from "../atoms/AtomIcon.vue";
+import MoleculeProductCard from "../molecules/MoleculeProductCard.vue";
+import AtomHeadings from "../atoms/AtomHeadings.vue";
+import AtomParagraph from "../atoms/AtomParagraph.vue";
+
 export default {
   name: "TemplateOurProducts",
   components: {
     Wrapper,
-    AtomImage,
-    AtomIcon,
+    MoleculeProductCard,
+    AtomHeadings,
+    AtomParagraph,
   },
   data() {
     return {
       test: 0,
       items: [
         {
-          title: "ParkSpot for Malls/ Hotels",
-          image: require("@/assets/Parkspot-malls.jpg"),
-          desc: `Digitized park spot for better monetization and seamless
-                customer experience`,
-        },
-        {
-          title: "ParkSpot for Corporates",
-          image: require("@/assets/Parkspot-corporates.jpg"),
-          desc: `Give your employees the gift of easy parking`,
+          title: "ParkSpot for Parking Owners",
+          image: require("@/assets/Parkspot-owners.jpg"),
+          desc: `Want to monetize your idle parking spots?`,
         },
         {
           title: "ParkSpot for Societies",
@@ -65,11 +41,28 @@ export default {
           desc: `Secure your society and enable seamless entry/exit for residents.`,
         },
         {
-          title: "ParkSpot for Parking Owners",
-          image: require("@/assets/Parkspot-owners.jpg"),
-          desc: `Want to monetize your idle parking spots?`,
+          title: "ParkSpot for Corporates",
+          image: require("@/assets/Parkspot-corporates.jpg"),
+          desc: `Give your employees the gift of easy parking`,
+        },
+        {
+          title: "ParkSpot for Malls",
+          image: require("@/assets/Parkspot-malls.jpg"),
+          desc: `Digitized park spot for better monetization and seamless
+                  customer experience`,
         },
       ],
+      al: {
+        itemsToShow: 1,
+        breakpoints: {
+          768: {
+            itemsToShow: 2,
+          },
+          960: {
+            itemsToShow: 3,
+          },
+        },
+      },
     };
   },
   methods: {
@@ -81,25 +74,13 @@ export default {
 </script>
 
 <style scoped>
-.custom-content-wrapper {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translate(-50%, 0);
-  background: white;
-  width: 300px;
+.custom-title {
+  text-align: center;
+  margin-bottom: 4rem;
 }
-.content-text {
-  margin-bottom: 0.25rem;
-}
-.content-btn {
-  text-align: end;
-}
-
-.content-text-title {
-  font-weight: var(--bold-font);
-}
-.content-text-desc {
-  font-size: 0.75rem;
+.custom-subtitle {
+  text-align: center;
+  font-weight: var(--semi-bold-font);
+  color: var(--secondary-color);
 }
 </style>
