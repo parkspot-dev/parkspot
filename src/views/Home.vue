@@ -7,9 +7,10 @@
     <t-about />
     <t-features />
     <!-- <t-product /> -->
-    <t-testimonials />
+    <!-- <t-testimonials /> -->
     <!-- <t-team /> -->
     <!-- <t-contact /> -->
+    <TemplateTestimonial></TemplateTestimonial>
     <TemplateContactUs></TemplateContactUs>
   </div>
 </template>
@@ -20,10 +21,11 @@ import TFeatures from "@/components/templates/t-features.vue";
 // import TTeam from "@/components/templates/t-team.vue";
 // import TContact from "@/components/templates/t-contact.vue";
 // import TMap from "@/components/templates/t-map.vue";
-import TTestimonials from "../components/templates/t-testimonials.vue";
+// import TTestimonials from "../components/templates/t-testimonials.vue";
 import TemplateContactUs from "../components/templates/TemplateContactUs.vue";
 import TemplateHomeBanner from "../components/templates/TemplateHomeBanner.vue";
 import TemplateOurProducts from "../components/templates/TemplateOurProducts.vue";
+import TemplateTestimonial from "../components/templates/TemplateTestimonial.vue";
 export default {
   name: "Home",
   components: {
@@ -35,7 +37,8 @@ export default {
     // TTeam,
     // TProduct,
     // TMap,
-    TTestimonials,
+    // TTestimonials,
+    TemplateTestimonial,
     TemplateOurProducts,
   },
 };

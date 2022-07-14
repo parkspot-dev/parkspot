@@ -1,22 +1,20 @@
 <template>
   <Wrapper>
-    <!-- <MoleculeProductCard></MoleculeProductCard> -->
-    <TemplateOurProducts></TemplateOurProducts>
+    <TemplateTestimonial></TemplateTestimonial>
   </Wrapper>
 </template>
 <script>
-import TemplateOurProducts from "../components/templates/TemplateOurProducts.vue";
-// import MoleculeProductCard from "../components/molecules/MoleculeProductCard.vue";
 import Wrapper from "../components/extras/Wrapper.vue";
+import TemplateTestimonial from "../components/templates/TemplateTestimonial.vue";
 export default {
   /**
    * This page is used for development testing purposes.
    */
   name: "Temp",
   components: {
-    TemplateOurProducts,
     Wrapper,
     // MoleculeProductCard,
+    TemplateTestimonial,
   },
   data() {
     return {};
