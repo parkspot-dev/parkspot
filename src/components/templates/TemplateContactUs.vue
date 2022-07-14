@@ -29,6 +29,7 @@ export default {
     OrganismContactForm,
     AtomButtons,
   },
+  emits: ["contactUs"],
   data() {
     return {
       formSubmitted: false,
@@ -40,7 +41,8 @@ export default {
     },
     contactFormValidate(flag) {
       if (flag) {
-        console.log("heloo");
+        console.log("template contact us");
+        this.$emit("contactUs");
       }
       this.formSubmitted = false;
     },

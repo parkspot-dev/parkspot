@@ -34,7 +34,7 @@ const actions = {
       UserName: "dummy_" + state.contactForm.fullname + Date.now(),
       Password: "dummy@123",
       FullName: state.contactForm.fullname,
-      City: "",
+      City: state.locationDetails.locName,
       EmailID: state.contactForm.email,
     };
     const loginReq = {
@@ -89,6 +89,18 @@ const actions = {
         TnC: "none",
         Address: state.locationDetails.locName,
       },
+    };
+    mayaClient.post("/contact", req);
+  },
+  onlyContact({ state }) {
+    let comments = "From the Home Page ----->" + state.contactForm.msg;
+    const req = {
+      User: {
+        FullName: state.contactForm.fullname,
+        EmailID: state.contactForm.email,
+        Mobile: state.contactForm.cno,
+      },
+      Comments: comments,
     };
     mayaClient.post("/contact", req);
   },

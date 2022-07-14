@@ -95,14 +95,13 @@ export default {
   },
   watch: {
     formSubmitted(newVal) {
-      console.log("organism contact form");
       if (newVal) {
         this.$refs.observer
           .validate()
           .then((el) => {
             if (el) {
-              this.$emit("formValidate", el);
               this.submit();
+              this.$emit("formValidate", el);
             } else {
               this.$emit("formValidate", el);
             }
