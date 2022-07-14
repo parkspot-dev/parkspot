@@ -53,6 +53,7 @@ export default {
   max-width: 960px;
   margin: 10rem auto;
 }
+
 .banner-header {
   margin: 0 auto;
   padding: 0 10rem;
@@ -74,5 +75,19 @@ export default {
 }
 .btn-wrapper {
   text-align: center;
+}
+
+@media only screen and (max-width: 800px) {
+  .banner-wrapper {
+    text-align: center;
+  }
+
+  .banner-header {
+    padding: 0 3rem;
+  }
+
+  .banner-title {
+    font-size: 2.25rem;
+  }
 }
 </style>
