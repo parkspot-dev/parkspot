@@ -1,96 +1,120 @@
 <template>
-  <section class="section">
-    <div class="container">
-      <div class="card p-6 cmargin">
-        <b-steps
-          v-model="activeStep"
-          :has-navigation="hasNavigation"
-          :icon-prev="prevIcon"
-          :icon-next="nextIcon"
-          :label-position="labelPosition"
-          :mobile-mode="mobileMode"
+  <Wrapper>
+    <div class="card p-6 cmargin">
+      <b-steps
+        v-model="activeStep"
+        :has-navigation="hasNavigation"
+        :icon-prev="prevIcon"
+        :icon-next="nextIcon"
+        :label-position="labelPosition"
+        :mobile-mode="mobileMode"
+      >
+        <b-step-item
+          step="1"
+          label="Step 1"
+          :clickable="isStepsClickable"
+          :type="btnStack[0] ? 'is-success' : 'is-warning'"
         >
-          <b-step-item
-            step="1"
-            label="Step 1"
-            :clickable="isStepsClickable"
-            :type="btnStack[0] ? 'is-success' : 'is-warning'"
-          >
-            <h1 class="title has-text-centered">Contact Details</h1>
-            <OrganismContactForm
-              :formSubmitted="btnStack[0]"
-              @formValidate="contactFormValidate"
-            ></OrganismContactForm>
-          </b-step-item>
+          <AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+            Contact Details
+          </AtomHeadings>
+          <OrganismContactForm
+            :formSubmitted="btnStack[0]"
+            @formValidate="contactFormValidate"
+          ></OrganismContactForm>
+        </b-step-item>
 
-          <b-step-item
-            step="2"
-            label="Step 2"
-            :clickable="isStepsClickable"
-            :type="btnStack[1] ? 'is-success' : 'is-warning'"
-          >
-            <h1 class="title has-text-centered">KYC Details</h1>
-            <OrganismKycForm
-              :formSubmitted="btnStack[1]"
-              @formValidate="kycFormValidate"
-            ></OrganismKycForm>
-          </b-step-item>
+        <b-step-item
+          step="2"
+          label="Step 2"
+          :clickable="isStepsClickable"
+          :type="btnStack[1] ? 'is-success' : 'is-warning'"
+        >
+          <AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+            KYC Details
+          </AtomHeadings>
+          <OrganismKycForm
+            :formSubmitted="btnStack[1]"
+            @formValidate="kycFormValidate"
+          ></OrganismKycForm>
+        </b-step-item>
 
-          <b-step-item
-            :step="3"
-            label="Step 3"
-            :clickable="isStepsClickable"
-            disabled
-            :type="btnStack[2] ? 'is-success' : 'is-warning'"
-          >
-            <h1 class="title has-text-centered">Additional Details</h1>
-            <OrganismAdditionalInfo
-              :formSubmitted="btnStack[2]"
-              @formValidate="AddInfoFormValidate"
-            ></OrganismAdditionalInfo>
-          </b-step-item>
+        <b-step-item
+          step="3"
+          label="Step 3"
+          :clickable="isStepsClickable"
+          :type="btnStack[2] ? 'is-success' : 'is-warning'"
+        >
+          <AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+            Location Details
+          </AtomHeadings>
+          <OrganismAddressForm
+            :formSubmitted="btnStack[2]"
+            @formValidate="addressFormValidate"
+          ></OrganismAddressForm>
+        </b-step-item>
 
-          <template v-if="customNavigation" #navigation="{ previous, next }">
-            <div class="footer-buttons">
-              <b-button
-                outlined
-                type="is-danger"
-                icon-pack="mdi"
-                :icon-left="prevIcon"
-                :disabled="previous.disabled"
-                @click.prevent="btnPrev(previous)"
-                class="mr-4"
-              >
-                Prev
-              </b-button>
-              <b-button
-                outlined
-                type="is-success"
-                icon-pack="mdi"
-                :icon-right="nextIcon"
-                :disabled="false"
-                @click.prevent="btnNext(next)"
-              >
-                {{ nextText }}
-              </b-button>
-            </div>
-          </template>
-        </b-steps>
-      </div>
+        <b-step-item
+          :step="4"
+          label="Step 4"
+          :clickable="isStepsClickable"
+          disabled
+          :type="btnStack[3] ? 'is-success' : 'is-warning'"
+          ><AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+            Additional Details
+          </AtomHeadings>
+          <OrganismAdditionalInfo
+            :formSubmitted="btnStack[3]"
+            @formValidate="AddInfoFormValidate"
+          ></OrganismAdditionalInfo>
+        </b-step-item>
+
+        <template v-if="customNavigation" #navigation="{ previous, next }">
+          <div class="footer-buttons">
+            <b-button
+              outlined
+              type="is-danger"
+              icon-pack="mdi"
+              :icon-left="prevIcon"
+              :disabled="previous.disabled"
+              @click.prevent="btnPrev(previous)"
+              class="mr-4"
+            >
+              Prev
+            </b-button>
+            <b-button
+              outlined
+              type="is-success"
+              icon-pack="mdi"
+              :icon-right="nextIcon"
+              :disabled="false"
+              @click.prevent="btnNext(next)"
+            >
+              {{ nextText }}
+            </b-button>
+          </div>
+        </template>
+      </b-steps>
     </div>
-  </section>
+  </Wrapper>
 </template>
 
 <script>
 import OrganismContactForm from "../organisms/OrganismContactForm.vue";
 import OrganismKycForm from "../organisms/OrganismKycForm.vue";
 import OrganismAdditionalInfo from "../organisms/OrganismAdditionalInfo.vue";
+import OrganismAddressForm from "../organisms/OrganismAddressForm.vue";
+import Wrapper from "../extras/Wrapper.vue";
+import AtomHeadings from "../atoms/AtomHeadings.vue";
 export default {
   name: "TemplateSOPortal",
   components: {
     OrganismContactForm,
     OrganismKycForm,
     OrganismAdditionalInfo,
+    OrganismAddressForm,
+    AtomHeadings,
+    Wrapper,
   },
   emits: ["finalSubmit"],
   data() {
@@ -111,9 +135,11 @@ export default {
 
       isStepsClickable: false,
 
+      headingLevel: "h3",
+
       nextEnable: null,
       nextText: "Next",
-      btnStack: [false, false, false],
+      btnStack: [false, false, false, false],
       top: 0,
     };
   },
@@ -137,6 +163,13 @@ export default {
       }
     },
     kycFormValidate(val) {
+      this.btnStack.splice(this.top, 1, val);
+      if (this.btnStack[this.top]) {
+        this.nextEnable.action();
+        this.top++;
+      }
+    },
+    addressFormValidate(val) {
       this.btnStack.splice(this.top, 1, val);
       if (this.btnStack[this.top]) {
         this.nextEnable.action();

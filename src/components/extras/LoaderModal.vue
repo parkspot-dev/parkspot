@@ -9,6 +9,9 @@
 <script>
 export default {
   name: "LoaderModal",
+  /**
+   * show loading animation
+   */
   props: {
     isLoading: {
       type: Boolean,

@@ -1,5 +1,14 @@
 <template>
-  <b-button :type="type"><slot></slot></b-button>
+  <b-button
+    @click="onClick"
+    :icon-left="left"
+    :type="type"
+    :icon-right="right"
+    :outlined="outlined"
+    :inverted="inverted"
+  >
+    <slot></slot>
+  </b-button>
 </template>
 
 <script>
@@ -13,9 +22,31 @@ export default {
     type: {
       type: String,
       default: "is-warning",
-      validator: (value) => {
-        return value.match(/(is-danger)/);
-      },
+    },
+    /**
+     * icons for the button
+     * Material Design icons are used
+     * for more icon details https://materialdesignicons.com/
+     */
+    left: {
+      type: String,
+    },
+    right: {
+      type: String,
+    },
+    outlined: {
+      type: Boolean,
+      default: false,
+    },
+    inverted: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  emits: ["btnClick"],
+  methods: {
+    onClick() {
+      this.$emit("btnClick");
     },
   },
 };

@@ -122,6 +122,7 @@ export default {
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ&proximity=${this.proximity[0]},${this.proximity[1]}`
       );
       const data = await res.json();
+      console.log(data);
       this.suggestions = data.features.slice(0, 3).map(this.extractLocation);
     },
     extractLocation(features) {

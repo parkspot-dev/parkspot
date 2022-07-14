@@ -4,6 +4,7 @@
     :name="fieldName"
     :rules="rules"
     v-slot="{ errors }"
+    class="custom-wrapper"
   >
     <label class="label"><slot></slot></label>
     <AtomCheckboxs
@@ -11,6 +12,7 @@
       :values="values"
       class="mb-5"
     ></AtomCheckboxs>
+    <slot name="extra"></slot>
     <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
@@ -55,4 +57,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.custom-wrapper {
+  position: relative;
+}
+</style>
