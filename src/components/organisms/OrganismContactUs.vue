@@ -17,11 +17,7 @@
           <AtomIcon :icon="'email'"> </AtomIcon>
           <span> connect@parkspot.in </span>
         </a>
-        <a
-          class="options"
-          href="https://www.google.com/maps/dir//Nextcoworks,+Ranka+Colony+Rd,+Munivenkatppa+Layout,+Bilekahalli,+Bengaluru,+Karnataka+560076/@12.9035521,77.6045287,18.26z/data=!4m16!1m6!3m5!1s0x3bae1503ac2c2bc5:0x8b4a7cefbd0adbfd!2sNextcoworks!8m2!3d12.9033359!4d77.6050157!4m8!1m0!1m5!1m1!1s0x3bae1503ac2c2bc5:0x8b4a7cefbd0adbfd!2m2!1d77.6050157!2d12.9033359!3e2"
-          target="_blank"
-        >
+        <a class="options" :href="gMapLoc" target="_blank">
           <AtomIcon :icon="'map-marker'"> </AtomIcon>
           <span>
             2nd Floor, Nextcoworks BTM Layout, BTM 2nd Stage, Bengaluru,
@@ -55,6 +51,15 @@ export default {
     AtomHeadings,
     AtomParagraph,
     AtomIcon,
+  },
+  data() {
+    return {
+      gMapLoc: `https://www.google.com/maps/dir//Nextcoworks,+Ranka+Colony+Rd,
+          +Munivenkatppa+Layout,+Bilekahalli,+Bengaluru,+Karnataka+560076/@12.9035521,
+          77.6045287,18.26z/data=!4m16!1m6!3m5!1s0x3bae1503ac2c2bc5:0x8b4a7cefbd0adbfd!
+          2sNextcoworks!8m2!3d12.9033359!4d77.6050157!4m8!1m0!1m5!1m1!1s0x3bae1503ac2c2bc5
+          :0x8b4a7cefbd0adbfd!2m2!1d77.6050157!2d12.9033359!3e2`,
+    };
   },
 };
 </script>

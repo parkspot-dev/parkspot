@@ -1,5 +1,6 @@
 export const FORM = {
   USERNAME: "Username",
+  NAME: "full-name",
   FULLNAME: "Full Name",
   FIRSTNAME: "First Name",
   LASTNAME: "Last Name",
