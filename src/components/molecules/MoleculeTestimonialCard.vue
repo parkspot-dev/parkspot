@@ -23,7 +23,10 @@
       <div class="content">
         {{ items.quote }}
         <br />
-        <time datetime="2020-29-7">11:09 PM - 29 Jul 2020</time>
+        <div class="quote-bottom">
+          <AtomRating class="rating" :rate="items.rate"></AtomRating>
+          <time :datetime="items.datetime">{{ items.date }}</time>
+        </div>
       </div>
     </div>
   </div>
@@ -32,11 +35,13 @@
 <script>
 import AtomImage from "../atoms/AtomImage.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
+import AtomRating from "../atoms/AtomRating.vue";
 export default {
   name: "MoleculeTestimonialCard",
   components: {
     AtomImage,
     AtomParagraph,
+    AtomRating,
   },
   props: {
     items: {
@@ -65,5 +70,13 @@ export default {
 }
 .testimony-name {
   font-weight: var(--semi-bold-font);
+}
+.quote-bottom {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+.rating {
+  margin: 0 !important;
 }
 </style>

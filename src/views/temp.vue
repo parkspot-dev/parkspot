@@ -1,11 +1,11 @@
 <template>
   <Wrapper>
-    <TemplateTestimonial></TemplateTestimonial>
+    <AtomRating :rate="4.4"></AtomRating>
   </Wrapper>
 </template>
 <script>
 import Wrapper from "../components/extras/Wrapper.vue";
-import TemplateTestimonial from "../components/templates/TemplateTestimonial.vue";
+import AtomRating from "../components/atoms/AtomRating.vue";
 export default {
   /**
    * This page is used for development testing purposes.
@@ -14,7 +14,7 @@ export default {
   components: {
     Wrapper,
     // MoleculeProductCard,
-    TemplateTestimonial,
+    AtomRating,
   },
   data() {
     return {};
