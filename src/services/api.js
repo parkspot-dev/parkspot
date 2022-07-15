@@ -122,7 +122,7 @@ class MayaApiService extends BaseApiService {
 
 class MapBoxApiService extends BaseApiService {
   constructor() {
-    let mapBoxDomain = "http://api.mapbox.com"; //TODO: we can pick from .env files.
+    let mapBoxDomain = "https://api.mapbox.com"; //TODO: we can pick from .env files.
     let baseHeaderMap = {
       "Content-Type": "application/json",
       Accept: "application/json",
