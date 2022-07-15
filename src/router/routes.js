@@ -57,7 +57,7 @@ export const routes = [
   {
     path: pages.FAQ,
     name: "Faq",
-    component: () => import("@/views/Faq.vue"),
+    component: () => import("@/views/PageFaq.vue"),
     meta: {
       title: "FAQ's - Get Your All Parking Related Queries be Answered...",
     },

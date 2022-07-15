@@ -1,11 +1,9 @@
 <template>
-  <Wrapper>
-    <AtomRating :rate="4.4"></AtomRating>
-  </Wrapper>
+  <Wrapper> <TemplateFaq></TemplateFaq> </Wrapper>
 </template>
 <script>
 import Wrapper from "../components/extras/Wrapper.vue";
-import AtomRating from "../components/atoms/AtomRating.vue";
+import TemplateFaq from "../components/templates/TemplateFaq.vue";
 export default {
   /**
    * This page is used for development testing purposes.
@@ -14,7 +12,7 @@ export default {
   components: {
     Wrapper,
     // MoleculeProductCard,
-    AtomRating,
+    TemplateFaq,
   },
   data() {
     return {};
