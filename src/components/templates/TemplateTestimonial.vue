@@ -50,7 +50,7 @@ export default {
            very affordable. Would definitely recommend this to anyone who wants a 
            painless experience to park their vehicles or to someone who has free 
            spots to rent out and make some cash.`,
-          rate: 3,
+          rate: 4.7,
           date: "15 Feb 2021",
           datetime: "2021-2-15",
         },
