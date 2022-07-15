@@ -1,7 +1,7 @@
 <template>
   <div id="Home">
     <TemplateHomeBanner @flyToSrp="flyToSrp"></TemplateHomeBanner>
-    <TemplateOurProducts></TemplateOurProducts>
+    <TemplateOurProducts @arrowBtn="onArrowBtn"></TemplateOurProducts>
     <t-about />
     <t-features />
     <TemplateTestimonial></TemplateTestimonial>
@@ -74,6 +74,9 @@ export default {
         name: "srp",
         query: { lat: this.location[1], lng: this.location[0] },
       });
+    },
+    onArrowBtn() {
+      this.$router.push({ name: "t-contact" });
     },
   },
 };

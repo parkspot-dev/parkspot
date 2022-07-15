@@ -20,7 +20,12 @@
             </p>
           </div>
           <div class="content-btn">
-            <AtomIcon :icon="'arrow-right'" :size="'is-medium'"></AtomIcon>
+            <AtomIcon
+              class="btn-arrow"
+              @click.native="onArrowBtn"
+              :icon="'arrow-right'"
+              :size="'is-medium'"
+            ></AtomIcon>
           </div>
         </div>
       </div>
@@ -43,10 +48,14 @@ export default {
       required: true,
     },
   },
+  emits: ["arrowBtn"],
   data() {
-    return {
-      image: require("@/assets/Parkspot-malls.jpg"),
-    };
+    return {};
+  },
+  methods: {
+    onArrowBtn() {
+      this.$emit("arrowBtn");
+    },
   },
 };
 </script>
@@ -83,5 +92,12 @@ export default {
 }
 .content-btn {
   align-self: end;
+}
+.btn-arrow {
+  cursor: pointer;
+}
+.btn-arrow:hover {
+  cursor: pointer;
+  color: var(--primary-color);
 }
 </style>

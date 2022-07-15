@@ -36,6 +36,9 @@ export default {
           quote: `I am new to Bangalore and It was very difficult for me to find parking.
            A friend suggested me this app and it really helped me finding nearby parking with real
            time feeds like parking availability, rates, etc`,
+          rate: 4.9,
+          date: "29 Jul 2020",
+          datetime: "2020-7-29",
         },
         {
           name: "Nagarjun Prasad",
@@ -47,12 +50,18 @@ export default {
            very affordable. Would definitely recommend this to anyone who wants a 
            painless experience to park their vehicles or to someone who has free 
            spots to rent out and make some cash.`,
+          rate: 4.7,
+          date: "15 Feb 2021",
+          datetime: "2021-2-15",
         },
         {
           name: "Roshan Singh",
           image: require("@/assets/img/testimony3.webp"),
           quote: `Amazing app which solves all that hustle-bustle for 
           placement of your vehicle and ensures 100% security when you are not taking care of it`,
+          rate: 4.5,
+          date: "7 jan 2022",
+          datetime: "2022-1-7",
         },
       ],
       al: {

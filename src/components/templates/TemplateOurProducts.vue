@@ -6,7 +6,10 @@
     >
     <b-carousel-list v-model="test" :data="items" v-bind="al">
       <template #item="list">
-        <MoleculeProductCard :items="list"></MoleculeProductCard>
+        <MoleculeProductCard
+          @arrowBtn="onArrowBtn"
+          :items="list"
+        ></MoleculeProductCard>
       </template>
     </b-carousel-list>
   </Wrapper>
@@ -26,6 +29,7 @@ export default {
     AtomHeadings,
     AtomParagraph,
   },
+  emits: ["arrowBtn"],
   data() {
     return {
       test: 0,
@@ -68,6 +72,9 @@ export default {
   methods: {
     info(value) {
       this.test = value;
+    },
+    onArrowBtn() {
+      this.$emit("arrowBtn");
     },
   },
 };

@@ -1,11 +1,9 @@
 <template>
-  <Wrapper>
-    <TemplateTestimonial></TemplateTestimonial>
-  </Wrapper>
+  <Wrapper> <TemplateFaq></TemplateFaq> </Wrapper>
 </template>
 <script>
 import Wrapper from "../components/extras/Wrapper.vue";
-import TemplateTestimonial from "../components/templates/TemplateTestimonial.vue";
+import TemplateFaq from "../components/templates/TemplateFaq.vue";
 export default {
   /**
    * This page is used for development testing purposes.
@@ -14,7 +12,7 @@ export default {
   components: {
     Wrapper,
     // MoleculeProductCard,
-    TemplateTestimonial,
+    TemplateFaq,
   },
   data() {
     return {};
