@@ -25,7 +25,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.name === "mainBlog") {
     document.title = `${to.meta.title}  
-    ${to.params.postTitle.replace(/-/g, " ")}`;
+    ${to.params.id}`;
   } else if (to.name === "srp") {
     document.title = `${to.meta.title} ${to.query.loc}`;
   } else if (to.name === "discover") {

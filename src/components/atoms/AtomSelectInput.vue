@@ -22,7 +22,7 @@ export default {
       default: "Select anything from list",
     },
     /**
-     * The data is list of data
+     * The list is list of data
      * @values Array of Object expecting
      * e.g. [{id:1, name:'list1'},{id:2, name:'list2'}]
      */

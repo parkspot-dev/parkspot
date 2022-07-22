@@ -35,7 +35,7 @@ export const pages = {
   SOPORTAL: "/register-parking-spot",
   TERMS: "/terms-and-conditions",
   BLOG: "/blog",
-  MAINBLOG: "/blog/:id/:postTitle",
+  MAINBLOG: "/blog/:id",
   SEARCHPORTAL: "/search-portal",
   PAYMENTGATEWAY: "/payment/*",
   DISCOVER: "/bangalore/parking-near-*",
@@ -122,7 +122,7 @@ export const routes = [
   {
     path: pages.BLOG,
     name: "blog",
-    component: () => import("@/views/landing-blog.vue"),
+    component: () => import("@/views/PageBlogHome.vue"),
     meta: {
       title: "ParkSpot | Blogs",
     },
@@ -130,7 +130,7 @@ export const routes = [
   {
     path: pages.MAINBLOG,
     name: "mainBlog",
-    component: () => import("@/views/main-blog.vue"),
+    component: () => import("@/views/PageBlogPost.vue"),
     meta: {
       title: "ParkSpot | Blogs - ",
     },

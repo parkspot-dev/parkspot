@@ -1,19 +1,14 @@
 <template>
-  <Wrapper> <TemplateFaq></TemplateFaq> </Wrapper>
+  <TemplateBlogHome></TemplateBlogHome>
 </template>
 <script>
-import Wrapper from "../components/extras/Wrapper.vue";
-import TemplateFaq from "../components/templates/TemplateFaq.vue";
+import TemplateBlogHome from "../components/templates/TemplateBlogHome.vue";
 export default {
   /**
    * This page is used for development testing purposes.
    */
   name: "Temp",
-  components: {
-    Wrapper,
-    // MoleculeProductCard,
-    TemplateFaq,
-  },
+  components: { TemplateBlogHome },
   data() {
     return {};
   },

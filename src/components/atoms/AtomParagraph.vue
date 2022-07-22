@@ -55,6 +55,7 @@ export default {
 }
 .paragraph.large {
   font-size: 1.5rem;
+  font-weight: var(--semi-bold-font);
 }
 .paragraph.small {
   font-size: 0.75rem;

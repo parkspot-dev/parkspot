@@ -20,6 +20,7 @@
     "jw-vue-pagination": "^1.0.3",
     "lodash": "^4.17.21",
     "mapbox-gl": "^1.13.2",
+    "marked": "^4.0.18",
     "vee-validate": "^3.4.14",
     "vue": "^2.6.12",
     "vue-carousel": "^0.18.0",

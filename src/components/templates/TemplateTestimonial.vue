@@ -1,9 +1,9 @@
 <template>
   <Wrapper>
     <AtomParagraph class="custom-subtitle">Testimonials</AtomParagraph>
-    <AtomHeadings class="custom-title" :level="'h2'"
-      >Our Parking Testimonials</AtomHeadings
-    >
+    <AtomHeadings class="custom-title" :level="'h2'">
+      What Our Customers Say
+    </AtomHeadings>
     <b-carousel-list v-model="test" :data="items" v-bind="al">
       <template #item="list">
         <MoleculeTestimonialCard :items="list"></MoleculeTestimonialCard>
