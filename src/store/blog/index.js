@@ -5,6 +5,7 @@ const state = {
       id: "Eliminating-Traffic-jams-in-India",
       title: "Eliminating Traffic jams in India!",
       author: "Nikhil Surya Mukhi",
+      author_img: require("@/assets/team/nik.jpg"),
       img: "https://www.stevenvanbelleghem.com/wp-content/uploads/2020/04/Heavy-rains-lash-Delhi-NCR-traffic-snarls-at-many-places.jpg",
       desc: `In the recent years all over the globe production 
       and demand for motor vehicles has increased dramatically.
@@ -16,6 +17,7 @@ const state = {
       id: "Parking-Challenges-in-Office-Area",
       title: "Parking Challenges in Office Area!",
       author: "Sujeet Kumar",
+      author_img: require("@/assets/team/sujeet.jpg"),
       img: require("@/assets/img/blog2.jpg"),
       desc: `Parking has been a major concern in major cities. Due
       to fewer parking spaces, people have to spend a lot of time
@@ -27,6 +29,7 @@ const state = {
       id: "NO-Parking",
       title: "NO Parking",
       author: "Ishwar Kumar",
+      author_img: require("@/assets/team/ish.jpg"),
       img: require("@/assets/img/blog3.jpg"),
       desc: `Parking problems have always been an issue and this issue
       has grown exponentially with the increase of population.
@@ -55,9 +58,18 @@ const mutations = {
   },
 };
 
+// actions
+const actions = {
+  getContentById(state, id) {
+    let result = require(`../../blogs/${id}.json`);
+    return result.content;
+  },
+};
+
 export default {
   namespaced: true,
   state,
   getters,
   mutations,
+  actions,
 };
