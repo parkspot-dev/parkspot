@@ -18,7 +18,12 @@
             </div>
           </div>
           <div class="column">
-            <m-srpcard
+            <MoleculeSRPCard
+              v-for="srp in pageOfItems"
+              :key="srp.ID"
+              :spot="srp"
+            ></MoleculeSRPCard>
+            <!-- <m-srpcard
               v-for="srp in pageOfItems"
               :key="srp.ID"
               :distance="srp.Distance"
@@ -32,7 +37,7 @@
               :site-id="srp.ID"
               :log="srp"
               @on-book="onBook"
-            />
+            /> -->
           </div>
         </div>
       </div>
@@ -75,21 +80,23 @@ const defaultStyles = {
   },
 };
 
-import mSrpcard from "@/components/molecules/m-srpcard.vue";
+// import mSrpcard from "@/components/molecules/m-srpcard.vue";
 import mSearchBox from "@/components/molecules/m-search-box.vue";
 import MMapbox from "../molecules/m-mapbox.vue";
 import MEmptyPage from "../molecules/m-empty-page.vue";
 import MLoadingPage from "../molecules/m-loading-page.vue";
+import MoleculeSRPCard from "../molecules/MoleculeSRPCard.vue";
 import { mayaClient } from "@/services/api.js";
 
 export default {
   name: "OSrp",
   components: {
-    mSrpcard,
+    // mSrpcard,
     mSearchBox,
     MMapbox,
     MEmptyPage,
     MLoadingPage,
+    MoleculeSRPCard,
   },
 
   data() {

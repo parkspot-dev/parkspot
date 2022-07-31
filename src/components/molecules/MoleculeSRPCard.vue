@@ -1,0 +1,116 @@
+<template>
+  <div class="custom-card">
+    <AtomImage
+      class="card-img"
+      :alt="'parking spot image'"
+      :src="spot.IconURL"
+      :ratio="'24x24'"
+    ></AtomImage>
+    <AtomRating class="card-rating" :rate="spot.Rating"></AtomRating>
+    <AtomParagraph class="card-title" :type="'span'">
+      {{ spot.Name }}
+    </AtomParagraph>
+    <div class="card-location">
+      <span><AtomIcon :icon="'map-marker-radius'"></AtomIcon></span>
+      <AtomParagraph :type="'span'">
+        {{ spot.Address }}
+      </AtomParagraph>
+    </div>
+    <AtomParagraph class="card-distance" :type="'span'">
+      <strong>Distance : </strong> {{ spot.Distance }} KM
+    </AtomParagraph>
+    <AtomParagraph class="card-type" :type="'span'">
+      <strong>Type : </strong> {{ spot.VehicleType }}
+    </AtomParagraph>
+    <AtomParagraph class="card-rate" :type="'span'">
+      <strong>Rate : </strong> ₹ {{ spot.Rate }} / {{ spot.RentUnit }}
+    </AtomParagraph>
+    <AtomParagraph class="card-spot" :type="'span'">
+      <strong>Available Spot : </strong> {{ spot.SlotsAvailable }}
+    </AtomParagraph>
+    <AtomButtons class="card-btn"> Book Spot </AtomButtons>
+  </div>
+</template>
+
+<script>
+import AtomRating from "../atoms/AtomRating.vue";
+import AtomParagraph from "../atoms/AtomParagraph.vue";
+import AtomButtons from "../atoms/AtomButtons.vue";
+import AtomImage from "../atoms/AtomImage.vue";
+import AtomIcon from "../atoms/AtomIcon.vue";
+export default {
+  name: "MoleculeSRPCard",
+  components: {
+    AtomRating,
+    AtomParagraph,
+    AtomButtons,
+    AtomImage,
+    AtomIcon,
+  },
+  props: {
+    spot: {
+      type: Object,
+    },
+  },
+};
+</script>
+
+<style scoped>
+.custom-card {
+  display: grid;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto auto auto;
+  row-gap: 0.5rem;
+  column-gap: 0.75rem;
+  padding: 2rem;
+  border-radius: var(--border-default);
+  max-width: 100%;
+  margin: 0.5rem;
+  overflow: hidden;
+}
+.card-img {
+  grid-column: 1 / 1;
+  grid-row: 1 / 5;
+}
+.card-title {
+  grid-column: 2 / 4;
+  grid-row: 1 / 1;
+  font-weight: var(--bold-font);
+}
+.card-btn {
+  grid-column: 2 / 4;
+}
+.card-location {
+  grid-column: 2 / 4;
+  grid-row: 2 / 2;
+  max-height: calc(1.4rem * 2);
+  overflow: hidden;
+  position: relative;
+  font-size: var(--sp-size-sm);
+}
+.card-location::before {
+  content: "...";
+  position: absolute;
+  bottom: -5px;
+  right: 0;
+}
+.card-location::after {
+  content: "";
+  position: absolute;
+  right: 0; /* note: not using bottom */
+  width: 1rem;
+  height: 1rem;
+  background: white;
+}
+.card-rating {
+  grid-row: 5 / 5;
+  margin: auto;
+}
+.card-distance,
+.card-type,
+.card-rate,
+.card-spot {
+  font-size: var(--sp-size-sm);
+}
+</style>

@@ -38,7 +38,7 @@ export const pages = {
   MAINBLOG: "/blog/:id",
   SEARCHPORTAL: "/search-portal",
   PAYMENTGATEWAY: "/payment/*",
-  DISCOVER: "/bangalore/parking-near-*",
+  NEARBY: "/bangalore/parking-near-*",
   TEMP: "/temp",
   THANK_YOU: "/thank-you",
   ERROR: "/error",
@@ -154,9 +154,9 @@ export const routes = [
   },
   // ! it will take " -mara/xyx"
   {
-    path: pages.DISCOVER,
+    path: pages.NEARBY,
     name: "discover",
-    component: () => import("@/views/discover-page.vue"),
+    component: () => import("@/views/PageNearBy.vue"),
     meta: {
       title: "Parking Near ",
     },
