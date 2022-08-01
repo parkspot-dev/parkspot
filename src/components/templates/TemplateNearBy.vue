@@ -8,13 +8,16 @@
           {{ locationWithCaps }}
         </b-breadcrumb-item>
       </b-breadcrumb>
-      <div>
+      <!-- <div>
         <SearchInput></SearchInput>
-      </div>
+      </div> -->
     </HeaderBanner>
 
     <Wrapper>
-      <div class="columns">
+      <AtomHeadings class="mb-4" :level="'h4'">
+        Parking near {{ locationWithCaps }}
+      </AtomHeadings>
+      <div class="columns mb-6">
         <MoleculeSRPCard
           class="column"
           :key="spot.ID"
@@ -22,27 +25,36 @@
           :spot="spot"
         ></MoleculeSRPCard>
       </div>
+      <div class="nearbyText-container">
+        <AtomHeadings :level="'h3'">
+          Find and book parking spaces near {{ locationWithCaps }}
+        </AtomHeadings>
+        <AtomParagraph class="custom-nearby">{{ nearByText }}</AtomParagraph>
+        <br />
+        <AtomParagraph class="custom-nearby">
+          Want to earn extra money? Rent your vacant space at our platform and
+          start earning extra.
+        </AtomParagraph>
+      </div>
     </Wrapper>
-
-    <section>
-      {{ nearByText }}
-    </section>
   </div>
 </template>
 
 <script>
 import HeaderBanner from "../extras/HeaderBanner.vue";
-import SearchInput from "../extras/SearchInput.vue";
+// import SearchInput from "../extras/SearchInput.vue";
 import AtomHeadings from "../atoms/AtomHeadings.vue";
 import MoleculeSRPCard from "../molecules/MoleculeSRPCard.vue";
+import AtomParagraph from "../atoms/AtomParagraph.vue";
 import Wrapper from "../extras/Wrapper.vue";
 export default {
   name: "TemplateNearBy",
   components: {
     HeaderBanner,
-    SearchInput,
+    // SearchInput,
     AtomHeadings,
     MoleculeSRPCard,
+    AtomParagraph,
     Wrapper,
   },
   props: {
@@ -62,7 +74,7 @@ export default {
        Searching parking space near ${this.nearByLocation}  ? Book the cheap and best space for yourself near  ${this.nearByLocation}  with ParkSpot.
        With us, you can leave the uncertainty of not finding parking space for your Car or Bike. 
        We do short term as well as long term parking as per your need with the minimum cost. 
-       Choose the new way of parking near  ${this.nearByLocation}  , choose the smart way of parking, CHOOSE ParkSpot .
+       Choose the new way of parking near  ${this.nearByLocation}, choose the smart way of parking, CHOOSE ParkSpot .
        Think about the stress avoided, fuel & time saved.`;
     },
     locationWithCaps() {
@@ -78,6 +90,15 @@ export default {
 <style scoped>
 .custom-title {
   text-align: center;
+  margin-bottom: 1rem;
+}
+
+.nearbyText-container {
+  max-width: 960px;
+  margin: auto;
+}
+.custom-nearby {
+  color: var(--grey-shade);
   margin-bottom: 1rem;
 }
 </style>

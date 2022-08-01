@@ -1,11 +1,8 @@
 <template>
   <div class="custom-card">
-    <AtomImage
-      class="card-img"
-      :alt="'parking spot image'"
-      :src="spot.IconURL"
-      :ratio="'24x24'"
-    ></AtomImage>
+    <figure class="card-img image is-96x96">
+      <img :alt="'parking spot image'" :src="spot.IconURL" />
+    </figure>
     <AtomRating class="card-rating" :rate="spot.Rating"></AtomRating>
     <AtomParagraph class="card-title" :type="'span'">
       {{ spot.Name }}
@@ -36,7 +33,6 @@
 import AtomRating from "../atoms/AtomRating.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
 import AtomButtons from "../atoms/AtomButtons.vue";
-import AtomImage from "../atoms/AtomImage.vue";
 import AtomIcon from "../atoms/AtomIcon.vue";
 export default {
   name: "MoleculeSRPCard",
@@ -44,7 +40,6 @@ export default {
     AtomRating,
     AtomParagraph,
     AtomButtons,
-    AtomImage,
     AtomIcon,
   },
   props: {
@@ -58,10 +53,11 @@ export default {
 <style scoped>
 .custom-card {
   display: grid;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: auto auto auto auto auto;
-  row-gap: 0.5rem;
+  box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%),
+    0 0 0 1px rgb(10 10 10 / 2%);
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(6, auto);
+  row-gap: 0.25rem;
   column-gap: 0.75rem;
   padding: 2rem;
   border-radius: var(--border-default);
@@ -74,17 +70,17 @@ export default {
   grid-row: 1 / 5;
 }
 .card-title {
-  grid-column: 2 / 4;
+  grid-column: 2 / 6;
   grid-row: 1 / 1;
   font-weight: var(--bold-font);
 }
 .card-btn {
-  grid-column: 2 / 4;
+  grid-column: 2 / 6;
 }
 .card-location {
-  grid-column: 2 / 4;
+  grid-column: 2 / 6;
   grid-row: 2 / 2;
-  max-height: calc(1.4rem * 2);
+  max-height: calc(1.2rem * 2);
   overflow: hidden;
   position: relative;
   font-size: var(--sp-size-sm);
@@ -107,6 +103,15 @@ export default {
   grid-row: 5 / 5;
   margin: auto;
 }
+.card-distance,
+.card-rate {
+  grid-column: 2 / 4;
+}
+.card-type,
+.card-spot {
+  grid-column: 4 / 6;
+}
+
 .card-distance,
 .card-type,
 .card-rate,
