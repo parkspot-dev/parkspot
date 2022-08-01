@@ -47,6 +47,16 @@ export const ADD_INFO = {
   TERMS_DATA: ["I agree to "],
 };
 
+export const PREFERENCE = {
+  PARKING_TYPE: "Types of parking",
+  DURATION: "Duration",
+  MODEL: "Car Model",
+  PARKING_TYPE_LIST: [
+    { id: 1, name: "Covered Parking" },
+    { id: 2, name: "Open Parking" },
+  ],
+};
+
 export const ICON = {
   INFO: "information-outline",
 };

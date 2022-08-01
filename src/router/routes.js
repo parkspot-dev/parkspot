@@ -98,7 +98,7 @@ export const routes = [
   {
     path: pages.VOPORTAL,
     name: "VOPortal",
-    component: () => import("@/views/VO-portal.vue"),
+    component: () => import("@/views/PageVOPortal.vue"),
     meta: {
       title: "ParkSpot | Get Parking Spot",
     },

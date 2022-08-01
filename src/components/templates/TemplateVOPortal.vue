@@ -1,7 +1,7 @@
 <template>
   <Wrapper>
     <AtomHeadings class="mb-5 has-text-centered">
-      Fill the form to Register your Parking Spot
+      Fill the form to Request your Parking Spot
     </AtomHeadings>
     <div class="card p-6 cmargin">
       <b-steps
@@ -34,42 +34,27 @@
           :type="btnStack[1] ? 'is-success' : 'is-warning'"
         >
           <AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
-            KYC Details
-          </AtomHeadings>
-          <OrganismKycForm
-            :formSubmitted="btnStack[1]"
-            @formValidate="kycFormValidate"
-          ></OrganismKycForm>
-        </b-step-item>
-
-        <b-step-item
-          step="3"
-          label="Step 3"
-          :clickable="isStepsClickable"
-          :type="btnStack[2] ? 'is-success' : 'is-warning'"
-        >
-          <AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
             Location Details
           </AtomHeadings>
           <OrganismAddressForm
-            :formSubmitted="btnStack[2]"
+            :formSubmitted="btnStack[1]"
             @formValidate="addressFormValidate"
           ></OrganismAddressForm>
         </b-step-item>
 
         <b-step-item
-          :step="4"
-          label="Step 4"
+          :step="3"
+          label="Step 3"
           :clickable="isStepsClickable"
           disabled
-          :type="btnStack[3] ? 'is-success' : 'is-warning'"
+          :type="btnStack[2] ? 'is-success' : 'is-warning'"
           ><AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
             Additional Details
           </AtomHeadings>
-          <OrganismAdditionalInfo
-            :formSubmitted="btnStack[3]"
+          <OrganismPreferenceForm
+            :formSubmitted="btnStack[2]"
             @formValidate="AddInfoFormValidate"
-          ></OrganismAdditionalInfo>
+          ></OrganismPreferenceForm>
         </b-step-item>
 
         <template v-if="customNavigation" #navigation="{ previous, next }">
@@ -104,17 +89,15 @@
 
 <script>
 import OrganismContactForm from "../organisms/OrganismContactForm.vue";
-import OrganismKycForm from "../organisms/OrganismKycForm.vue";
-import OrganismAdditionalInfo from "../organisms/OrganismAdditionalInfo.vue";
+import OrganismPreferenceForm from "../organisms/OrganismPreferenceForm.vue";
 import OrganismAddressForm from "../organisms/OrganismAddressForm.vue";
 import Wrapper from "../extras/Wrapper.vue";
 import AtomHeadings from "../atoms/AtomHeadings.vue";
 export default {
-  name: "TemplateSOPortal",
+  name: "TemplateVOPortal",
   components: {
     OrganismContactForm,
-    OrganismKycForm,
-    OrganismAdditionalInfo,
+    OrganismPreferenceForm,
     OrganismAddressForm,
     AtomHeadings,
     Wrapper,
@@ -142,7 +125,7 @@ export default {
 
       nextEnable: null,
       nextText: "Next",
-      btnStack: [false, false, false, false],
+      btnStack: [false, false, false],
       top: 0,
     };
   },
