@@ -1,7 +1,7 @@
 <template>
-  <component :is="type" :class="['paragraph', variation]"
-    ><slot></slot
-  ></component>
+  <component :is="type" :class="['paragraph', variation]">
+    <slot></slot>
+  </component>
 </template>
 
 <script>
