@@ -1,15 +1,15 @@
 <template>
-  <TemplateNearBy></TemplateNearBy>
+  <TemplateTerms></TemplateTerms>
 </template>
 <script>
-import TemplateNearBy from "../components/templates/TemplateNearBy.vue";
+import TemplateTerms from "../components/templates/TemplateTerms.vue";
 
 export default {
   /**
    * This page is used for development testing purposes.
    */
   name: "Temp",
-  components: { TemplateNearBy },
+  components: { TemplateTerms },
   data() {
     return {};
   },

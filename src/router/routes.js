@@ -114,7 +114,7 @@ export const routes = [
   {
     path: "/terms-and-conditions",
     name: "Terms",
-    component: () => import("@/views/Terms.vue"),
+    component: () => import("@/views/PageTerms.vue"),
     meta: {
       title: "ParkSpot | Terms & Conditions",
     },
