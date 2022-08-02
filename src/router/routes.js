@@ -90,7 +90,7 @@ export const routes = [
   {
     path: pages.SRP,
     name: "srp",
-    component: () => import("@/views/Srp.vue"),
+    component: () => import("@/views/PageSrp.vue"),
     meta: {
       title: "ParkSpot | Search - ",
     },
