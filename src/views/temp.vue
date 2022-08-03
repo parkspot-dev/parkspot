@@ -1,15 +1,17 @@
 <template>
-  <TemplateInventory></TemplateInventory>
+  <PagePaymentGateway></PagePaymentGateway>
 </template>
 <script>
-import TemplateInventory from "../components/templates/TemplateInventory.vue";
+import PagePaymentGateway from "./PagePaymentGateway.vue";
 
 export default {
   /**
    * This page is used for development testing purposes.
    */
   name: "Temp",
-  components: { TemplateInventory },
+  components: {
+    PagePaymentGateway,
+  },
   data() {
     return {};
   },

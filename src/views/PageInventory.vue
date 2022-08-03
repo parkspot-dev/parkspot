@@ -1,27 +1,19 @@
 <template>
-  <div>
-    <br />
-    <o-request-card
-      v-for="spot in spotDetails"
-      :key="spot.ID"
-      :request="spot"
-    />
-  </div>
+  <TemplateInventory :lists="spotDetails"></TemplateInventory>
 </template>
-
 <script>
-import ORequestCard from "@/components/organisms/o-request-card.vue";
+import TemplateInventory from "../components/templates/TemplateInventory.vue";
 export default {
-  name: "TSearchTable",
+  name: "PageInventory",
   components: {
-    ORequestCard,
+    TemplateInventory,
   },
   data() {
     return {
       spotDetails: [],
     };
   },
-  mounted() {
+  created() {
     this.getSpotDetails();
   },
   methods: {

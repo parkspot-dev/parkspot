@@ -36,7 +36,7 @@ export const pages = {
   TERMS: "/terms-and-conditions",
   BLOG: "/blog",
   MAINBLOG: "/blog/:id",
-  SEARCHPORTAL: "/search-portal",
+  INVENTORY: "/search-portal",
   PAYMENTGATEWAY: "/payment/*",
   NEARBY: "/bangalore/parking-near-*",
   TEMP: "/temp",
@@ -136,9 +136,9 @@ export const routes = [
     },
   },
   {
-    path: pages.SEARCHPORTAL,
-    name: "searchPortal",
-    component: () => import("@/views/search-portal.vue"),
+    path: pages.INVENTORY,
+    name: "Inventory",
+    component: () => import("@/views/PageInventory.vue"),
     meta: {
       title: "ParkSpot | Search Portal",
     },
@@ -147,7 +147,7 @@ export const routes = [
   {
     path: pages.PAYMENTGATEWAY,
     name: "paymentGateway",
-    component: () => import("@/views/payment-gateway.vue"),
+    component: () => import("@/views/PagePaymentGateway.vue"),
     meta: {
       title: "Payment | Parkspot.in ",
     },

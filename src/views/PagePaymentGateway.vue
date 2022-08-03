@@ -10,13 +10,22 @@
       :display-msg="displayMsg"
       :display-msg-content="displayMsgContent"
     />
+    <TemplatePaymentGateway
+      :bookingDetails="bookingDetails"
+      :paymentMode="paymentMode"
+    >
+    </TemplatePaymentGateway>
   </div>
 </template>
 <script>
 import tPaymentGateway from "../components/templates/t-payment-gateway.vue";
+import TemplatePaymentGateway from "../components/templates/TemplatePaymentGateway.vue";
 export default {
-  name: "PaymentGateway",
-  components: { tPaymentGateway },
+  name: "PagePaymentGateway",
+  components: {
+    tPaymentGateway,
+    TemplatePaymentGateway,
+  },
   data() {
     return {
       bookingDetails: {},
