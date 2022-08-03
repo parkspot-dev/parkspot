@@ -25,7 +25,11 @@
       :label="CONTACT_FORM.CONTACT_NO"
     >
     </MoleculeNameInput>
-    <AtomTextarea v-if="textArea" v-model="model.msg"></AtomTextarea>
+    <AtomTextarea
+      v-if="textArea"
+      v-model="model.msg"
+      :label="'Message'"
+    ></AtomTextarea>
   </ValidationObserver>
 </template>
 

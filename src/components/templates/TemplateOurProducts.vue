@@ -1,9 +1,9 @@
 <template>
   <Wrapper>
     <AtomParagraph class="custom-subtitle">Types of Products</AtomParagraph>
-    <AtomHeadings class="custom-title" :level="'h2'"
-      >Our Parking Products</AtomHeadings
-    >
+    <AtomHeadings class="custom-title" :level="'h2'">
+      Our Parking Products
+    </AtomHeadings>
     <b-carousel-list v-model="test" :data="items" v-bind="al">
       <template #item="list">
         <MoleculeProductCard

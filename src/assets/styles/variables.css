@@ -16,6 +16,7 @@
   --regular-font: 400;
   --semi-bold-font: 500;
   --bold-font: 600;
+  --sp-size-sm: 0.75rem;
   /* - Line height:*/
     --lh-default:1;
     --lh-small:1.05;

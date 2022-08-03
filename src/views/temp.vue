@@ -1,21 +1,26 @@
 <template>
-  <Wrapper> <TemplateFaq></TemplateFaq> </Wrapper>
+  <PagePaymentGateway></PagePaymentGateway>
 </template>
 <script>
-import Wrapper from "../components/extras/Wrapper.vue";
-import TemplateFaq from "../components/templates/TemplateFaq.vue";
+import PagePaymentGateway from "./PagePaymentGateway.vue";
+
 export default {
   /**
    * This page is used for development testing purposes.
    */
   name: "Temp",
   components: {
-    Wrapper,
-    // MoleculeProductCard,
-    TemplateFaq,
+    PagePaymentGateway,
   },
   data() {
     return {};
   },
 };
 </script>
+
+<style scoped>
+.custom-wrapper {
+  max-width: 960px;
+  margin: auto;
+}
+</style>

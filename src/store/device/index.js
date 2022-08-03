@@ -1,5 +1,3 @@
-import flavour from "../../api/flavour";
-
 // state
 const state = () => ({
   details: navigator.userAgent,
@@ -7,11 +5,7 @@ const state = () => ({
 });
 
 // getters
-const getters = {
-  getFlavour: (state) => {
-    return flavour.getFlavour(state.details, state.regexp);
-  },
-};
+const getters = {};
 
 export default {
   namespaced: true,

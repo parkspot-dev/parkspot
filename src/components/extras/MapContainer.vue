@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       accessToken: process.env.VUE_APP_MAP_ACCESS_TOKEN,
-      img: require("@/assets/img/pstopmini.png"),
+      img: require("@/assets/pstopmini.png"),
       map: null, // map for mapbox
       marker: null, // marker for location
     };

@@ -4,6 +4,8 @@
       :maxlength="maxlength"
       type="textarea"
       :placeholder="placeholder"
+      :value="value"
+      @blur="onChange($event.target.value)"
       @input.native="onInput($event.target.value)"
     ></b-input>
   </b-field>
@@ -18,7 +20,7 @@ export default {
      */
     label: {
       type: String,
-      default: "Message",
+      default: "",
     },
     maxlength: {
       type: Number,
@@ -28,11 +30,21 @@ export default {
       type: String,
       default: "Message",
     },
+    /**
+     *  User input value in the input field
+     */
+    value: {
+      type: String,
+      default: null,
+    },
   },
-  emits: ["input"],
+  emits: ["input", "onChange"],
   methods: {
     onInput(value) {
       this.$emit("input", value);
+    },
+    onChange(value) {
+      this.$emit("onChange", value);
     },
   },
 };

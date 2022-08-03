@@ -1,28 +1,28 @@
 <template>
   <div id="Home">
     <TemplateHomeBanner @flyToSrp="flyToSrp"></TemplateHomeBanner>
+    <TemplateFeatureHome></TemplateFeatureHome>
     <TemplateOurProducts @arrowBtn="onArrowBtn"></TemplateOurProducts>
-    <t-about />
-    <t-features />
+    <PageAbout></PageAbout>
     <TemplateTestimonial></TemplateTestimonial>
     <TemplateContactUs @contactUs="fireContact"></TemplateContactUs>
     <LoaderModal :isLoading="isLoading"></LoaderModal>
   </div>
 </template>
 <script>
-import TAbout from "@/components/templates/t-about.vue";
-import TFeatures from "@/components/templates/t-features.vue";
+import TemplateFeatureHome from "@/components/templates/TemplateFeatureHome.vue";
 import TemplateContactUs from "../components/templates/TemplateContactUs.vue";
 import TemplateHomeBanner from "../components/templates/TemplateHomeBanner.vue";
 import TemplateOurProducts from "../components/templates/TemplateOurProducts.vue";
 import TemplateTestimonial from "../components/templates/TemplateTestimonial.vue";
 import LoaderModal from "../components/extras/LoaderModal.vue";
+import PageAbout from "./PageAbout.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Home",
   components: {
-    TAbout,
-    TFeatures,
+    PageAbout,
+    TemplateFeatureHome,
     TemplateContactUs,
     TemplateHomeBanner,
     TemplateTestimonial,
