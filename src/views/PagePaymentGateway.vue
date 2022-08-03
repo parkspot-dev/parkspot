@@ -1,29 +1,21 @@
 <template>
-  <div class="payment_gateway">
-    <t-payment-gateway
-      :booking-details="bookingDetails"
-      :payment-mode="paymentMode"
-      :status="status"
-      :error="error"
-      :success="success"
-      :pending="pending"
-      :display-msg="displayMsg"
-      :display-msg-content="displayMsgContent"
-    />
-    <TemplatePaymentGateway
-      :bookingDetails="bookingDetails"
-      :paymentMode="paymentMode"
-    >
-    </TemplatePaymentGateway>
-  </div>
+  <TemplatePaymentGateway
+    :bookingDetails="bookingDetails"
+    :paymentMode="paymentMode"
+    :status="status"
+    :error="error"
+    :success="success"
+    :pending="pending"
+    :displayMsg="displayMsg"
+    :displayMsgContent="displayMsgContent"
+  >
+  </TemplatePaymentGateway>
 </template>
 <script>
-import tPaymentGateway from "../components/templates/t-payment-gateway.vue";
 import TemplatePaymentGateway from "../components/templates/TemplatePaymentGateway.vue";
 export default {
   name: "PagePaymentGateway",
   components: {
-    tPaymentGateway,
     TemplatePaymentGateway,
   },
   data() {
