@@ -41,4 +41,3 @@ export default {
   color: var(--secondary-color);
 }
 </style>
- 

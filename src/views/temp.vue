@@ -1,15 +1,15 @@
 <template>
-  <TemplateFeatureHome></TemplateFeatureHome>
+  <TemplateInventory></TemplateInventory>
 </template>
 <script>
-import TemplateFeatureHome from "../components/templates/TemplateFeatureHome.vue";
+import TemplateInventory from "../components/templates/TemplateInventory.vue";
 
 export default {
   /**
    * This page is used for development testing purposes.
    */
   name: "Temp",
-  components: { TemplateFeatureHome },
+  components: { TemplateInventory },
   data() {
     return {};
   },
