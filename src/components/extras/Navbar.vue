@@ -20,7 +20,7 @@
       <b-navbar-item tag="router-link" :to="{ name: 'blog' }">
         Blog
       </b-navbar-item>
-      <b-navbar-dropdown label="Service">
+      <b-navbar-dropdown label="Service" hoverable active>
         <b-navbar-item tag="router-link" :to="{ name: 'VOPortal' }">
           Request Spot
         </b-navbar-item>
@@ -47,4 +47,18 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.navbar-item:hover,
+.router-link-active:hover,
+.router-link-exact-active:hover {
+  color: var(--secondary-color);
+}
+
+.router-link-exact-active:visited {
+  color: var(--secondary-color);
+}
+
+.navbar-item .navbar-link {
+  color: yellow;
+}
+</style>
