@@ -1,15 +1,15 @@
 <template>
-  <TemplateTerms></TemplateTerms>
+  <TemplateFeatureHome></TemplateFeatureHome>
 </template>
 <script>
-import TemplateTerms from "../components/templates/TemplateTerms.vue";
+import TemplateFeatureHome from "../components/templates/TemplateFeatureHome.vue";
 
 export default {
   /**
    * This page is used for development testing purposes.
    */
   name: "Temp",
-  components: { TemplateTerms },
+  components: { TemplateFeatureHome },
   data() {
     return {};
   },

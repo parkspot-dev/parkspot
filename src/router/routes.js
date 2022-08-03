@@ -1,5 +1,5 @@
 import Home from "../views/Home.vue";
-import about from "@/components/templates/t-about.vue";
+import PageAbout from "@/views/PageAbout.vue";
 import { firebase, getDatabase, ref, get, child } from "../firebase";
 
 const guardThisRoute = async (to, from, next) => {
@@ -66,7 +66,7 @@ export const routes = [
   {
     path: pages.ABOUT,
     name: "t-about",
-    component: about,
+    component: PageAbout,
     meta: {
       title: "ParkSpot | About -  Get Parking Space , Rent Empty Space",
     },
