@@ -48,6 +48,9 @@ export default {
 </script>
 
 <style scoped>
+.navbar-item img {
+  max-height: 2rem;
+}
 .navbar-item:hover,
 .router-link-active:hover,
 .router-link-exact-active:hover {
@@ -56,9 +59,5 @@ export default {
 
 .router-link-exact-active:visited {
   color: var(--secondary-color);
-}
-
-.navbar-item .navbar-link {
-  color: yellow;
 }
 </style>
