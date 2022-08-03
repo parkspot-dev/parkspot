@@ -3,45 +3,35 @@
     <div class="main-heading__text column is-one-third">
       <m-features-title> </m-features-title>
       <br />
-      <atom-text
-        class="main-heading__para"
-        :text="'Finding cheap and best parking space with ease. \
-        Providing a lot of features that no other parking platforms provide.\
-        '"
-      >
-      </atom-text>
-      <atom-text
-        class="main-heading__para"
+      <p class="main-heading__para">
+        Finding cheap and best parking space with ease. Providing a lot of
+        features that no other parking platforms provide.
+      </p>
+      <p class="main-heading__para">
         :text="'Navigation, Booking, Searching, Safety & Security and many\
-         others services at ParkSpot which makes your parking experience better than ever'"
-      >
-      </atom-text>
+        others services at ParkSpot which makes your parking experience better
+        than ever'"
+      </p>
       <br />
       <!-- <atom-button :text="featuresButton"> -->
-      <atom-router-link
-        class="button btn-shadow is-rounded is-warning"
-        :text="featuresButton"
-        :link="featuresButtonLink"
-      />
+
+      <router-link to="/home">Home</router-link>
       <!-- </atom-button> -->
     </div>
     <div class="main-heading__img column">
       <div class="img-wrapper">
         <div class="img-wrapper__img-width">
-          <atom-img :src="src"></atom-img>
+          <img :src="src" />
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import AtomImg from "../atoms/atom-img/atom-img.vue";
-import AtomRouterLink from "../atoms/atom-link/atom-router-link.vue";
-import AtomText from "../atoms/atom-text/atom-text.vue";
 import MFeaturesTitle from "./m-features-title.vue";
 export default {
   name: "MFeaturesMainHeading",
-  components: { AtomText, MFeaturesTitle, AtomImg, AtomRouterLink },
+  components: { MFeaturesTitle },
   props: {
     featuresButton: {
       type: String,

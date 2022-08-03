@@ -30,11 +30,6 @@ export default {
       displayMsgContent: "",
     };
   },
-  computed: {
-    flavour() {
-      return this.$store.getters["device/getFlavour"];
-    },
-  },
   mounted() {
     const statusURL = /status|order_id/;
     const paymentURL = /payment|validate|p|h/;
@@ -56,7 +51,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
               // 'Content-Type': 'application/x-www-form-urlencoded',
-              flavour: this.flavour,
+              flavour: "this.flavour",
             },
           }
         );
@@ -93,7 +88,7 @@ export default {
           headers: {
             "Content-Type": "application/json",
             // 'Content-Type': 'application/x-www-form-urlencoded',
-            flavour: this.flavour,
+            flavour: "this.flavour",
           },
         }
       );

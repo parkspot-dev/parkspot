@@ -1,21 +1,16 @@
 <template>
   <div class="m-features-details">
-    <atom-img class="m-features-details__img" :src="src" />
-    <atom-b-subtitle
-      class="m-features-details__title"
-      :text="featuresTitle"
-    ></atom-b-subtitle>
+    <img class="m-features-details__img" :src="src" />
+    <h2 class="m-features-details__title">{{ featuresTitle }}</h2>
     <br />
     <p class="m-features-details__text" v-html="featuresText"></p>
   </div>
 </template>
 
 <script>
-import AtomImg from "../atoms/atom-img/atom-img.vue";
-import atomBSubtitle from "../atoms/atom-text/atom-b-subtitle.vue";
 export default {
   name: "MFeaturesDetails",
-  components: { atomBSubtitle, AtomImg },
+  components: {},
   props: {
     featuresTitle: String,
     featuresText: String,
