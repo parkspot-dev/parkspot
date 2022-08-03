@@ -64,7 +64,7 @@ export default {
 
 .banner-header {
   margin: 0 auto;
-  padding: 0 10rem;
+  padding: 2rem 10rem;
   color: white;
 }
 

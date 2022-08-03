@@ -8,16 +8,18 @@
       ></AtomImage>
       <div class="about-desc">
         <AtomHeadings class="mb-3"> Why Choose Us? </AtomHeadings>
-        <AtomParagraph class="mb-6">
+        <AtomParagraph class="mb-2">
           We at ParkSpot strive to solve the trivial problem of finding or
           booking available parking slots in vicinity which is faced by millions
           of people on a daily basis. we view for solutions which brings
-          technology and life closer and accessible. ParkSpot is part of this
-          new initiative and incorporates various features aimed at improving
-          the parking experience for residents and visitors. These will include
-          removing the need for entry barriers at car park entrances and exits
-          for a seamless flow of traffic, as vehicle plates will be registered
-          via cameras.
+          technology and life closer and accessible.
+        </AtomParagraph>
+        <AtomParagraph class="mb-6">
+          ParkSpot is part of this new initiative and incorporates various
+          features aimed at improving the parking experience for residents and
+          visitors. These will include removing the need for entry barriers at
+          car park entrances and exits for a seamless flow of traffic, as
+          vehicle plates will be registered via cameras.
         </AtomParagraph>
         <div class="about-links">
           <AtomParagraph :variation="'large'"> Get ParkSpot App </AtomParagraph>
