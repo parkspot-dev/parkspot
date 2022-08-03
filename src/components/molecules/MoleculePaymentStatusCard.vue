@@ -31,9 +31,9 @@ export default {
   },
   data() {
     return {
-      successImg: require("../../assets/img/success.png"),
-      failImg: require("../../assets/img/error.png"),
-      pendingImg: require("../../assets/img/pending.png"),
+      successImg: require("../../assets/success.png"),
+      failImg: require("../../assets/error.png"),
+      pendingImg: require("../../assets/pending.png"),
     };
   },
 };

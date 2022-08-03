@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      src: require("../../assets/img/features-tick.svg"),
+      src: require("../../assets/features-tick.svg"),
     };
   },
 };

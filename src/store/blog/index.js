@@ -18,7 +18,7 @@ const state = {
       title: "Parking Challenges in Office Area!",
       author: "Sujeet Kumar",
       author_img: require("@/assets/team/sujeet.jpg"),
-      img: require("@/assets/img/blog2.jpg"),
+      img: require("@/assets/blog/blog2.jpg"),
       desc: `Parking has been a major concern in major cities. Due
       to fewer parking spaces, people have to spend a lot of time
       searching for the...`,
@@ -30,7 +30,7 @@ const state = {
       title: "NO Parking",
       author: "Ishwar Kumar",
       author_img: require("@/assets/team/ish.jpg"),
-      img: require("@/assets/img/blog3.jpg"),
+      img: require("@/assets/blog/blog3.jpg"),
       desc: `Parking problems have always been an issue and this issue
       has grown exponentially with the increase of population.
       In order to tackl...`,

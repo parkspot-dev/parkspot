@@ -52,8 +52,8 @@ export default {
   },
   data() {
     return {
-      appLinkImg: require("@/assets/img/google-play-badge.png"),
-      aboutImg: require("@/assets/img/about.svg"),
+      appLinkImg: require("@/assets/google-play-badge.png"),
+      aboutImg: require("@/assets/about.svg"),
     };
   },
 };

@@ -48,14 +48,14 @@ export default {
   },
   data() {
     return {
-      src: require("../../assets/img/features.png"),
+      src: require("../../assets/features.png"),
     };
   },
 };
 </script>
 <style scoped>
 .main-heading {
-  background: url("../../assets/img/main-header-blob.svg");
+  background: url("../../assets/main-header-blob.svg");
   background-repeat: no-repeat;
 }
 

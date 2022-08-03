@@ -213,7 +213,7 @@ export default {
   data() {
     return {
       psfooterImg: require("@/assets/psfooterlogo.png"),
-      appLinkImg: require("@/assets/img/google-play-badge.png"),
+      appLinkImg: require("@/assets/google-play-badge.png"),
     };
   },
 };

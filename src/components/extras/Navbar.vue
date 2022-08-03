@@ -40,8 +40,8 @@ export default {
   name: "Navbar",
   data() {
     return {
-      parkspotIcon: require("@/assets/img/pstopmini.png"),
-      parkspotText: require("@/assets/img/pstoptext.png"),
+      parkspotIcon: require("@/assets/pstopmini.png"),
+      parkspotText: require("@/assets/pstoptext.png"),
     };
   },
 };

@@ -10,7 +10,7 @@ export default {};
 
 <style scoped>
 .custom-banner {
-  background: url("../../assets/img/discover-banner.svg");
+  background: url("../../assets/discover-banner.svg");
   height: 35vh;
   padding-top: 3rem;
 }
