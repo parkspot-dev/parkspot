@@ -29,15 +29,16 @@ export default {
 <style scoped>
 .custom-card {
   padding: 2rem 3rem;
-  border: 1px dotted black;
+  border: 2px dotted var(--secondary-color);
   border-radius: var(--border-default);
+  border-style: dashed;
   transition: transform 0.3s ease;
 }
 .custom-card:hover,
 .custom-card:focus {
   background-color: var(--primary-color);
   transform: scale(1.05);
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   color: var(--secondary-color);
 }
 </style>
