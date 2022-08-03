@@ -1,7 +1,10 @@
 <template>
   <div class="main-heading columns">
     <div class="main-heading__text column is-one-third">
-      <m-features-title> </m-features-title>
+      <h1 class="title--size">
+        Why Parking With ParkSpot Is
+        <span class="title__second">GOOD</span>
+      </h1>
       <br />
       <p class="main-heading__para">
         Finding cheap and best parking space with ease. Providing a lot of
@@ -28,10 +31,9 @@
   </div>
 </template>
 <script>
-import MFeaturesTitle from "./m-features-title.vue";
 export default {
   name: "MFeaturesMainHeading",
-  components: { MFeaturesTitle },
+  components: {},
   props: {
     featuresButton: {
       type: String,
@@ -78,6 +80,19 @@ export default {
   .main-heading__para {
     font-size: 1.25rem;
     line-height: 28px;
+  }
+}
+.title--size {
+  font-size: 2rem;
+}
+.title__second {
+  font-size: 1.5em;
+  color: var(--secondary-color);
+  font-weight: 700;
+}
+@media only screen and (min-width: 1024px) {
+  .title--size {
+    font-size: 2.5rem;
   }
 }
 </style>
