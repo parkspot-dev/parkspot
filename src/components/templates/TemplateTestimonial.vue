@@ -35,7 +35,7 @@ export default {
           image: require("@/assets/testimony1.webp"),
           quote: `I am new to Bangalore and It was very difficult for me to find parking.
            A friend suggested me this app and it really helped me finding nearby parking with real
-           time feeds like parking availability, rates, etc`,
+           time feeds like parking availability, rates, etc.`,
           rate: 4.9,
           date: "29 Jul 2020",
           datetime: "2020-7-29",
@@ -58,7 +58,7 @@ export default {
           name: "Roshan Singh",
           image: require("@/assets/testimony3.webp"),
           quote: `Amazing app which solves all that hustle-bustle for 
-          placement of your vehicle and ensures 100% security when you are not taking care of it`,
+          placement of your vehicle and ensures 100% security when you are not taking care of it.`,
           rate: 4.5,
           date: "7 jan 2022",
           datetime: "2022-1-7",

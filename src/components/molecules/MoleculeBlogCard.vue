@@ -51,7 +51,7 @@ export default {
   cursor: pointer;
 }
 .blog-header:hover {
-  color: var(--primary-color) !important;
+  color: var(--secondary-color) !important;
 }
 .blog-content {
   color: var(--grey-shade);

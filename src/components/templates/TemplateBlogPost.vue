@@ -1,7 +1,9 @@
 <template>
   <div>
     <HeaderBanner>
-      <AtomHeadings class="custom-title">Parking Blogs</AtomHeadings>
+      <AtomHeadings :level="'h2'" class="custom-title">
+        Parking Blogs
+      </AtomHeadings>
       <b-breadcrumb align="is-centered" size="is-small">
         <b-breadcrumb-item tag="router-link" to="/"> Home </b-breadcrumb-item>
         <b-breadcrumb-item tag="router-link" to="/blog">
@@ -16,7 +18,7 @@
     <Wrapper>
       <article class="article-wrapper">
         <header class="mb-6">
-          <AtomHeadings :level="'h2'"> {{ blog.title }} </AtomHeadings>
+          <AtomHeadings class="mb-2"> {{ blog.title }} </AtomHeadings>
           <div class="custom-author">
             <figure class="author-img image is-48x48">
               <img
@@ -25,7 +27,7 @@
                 alt="Placeholder image"
               />
             </figure>
-            <AtomParagraph :variation="'small'"> by </AtomParagraph>
+            <!-- <AtomParagraph :variation="'small'"> &nbsp; </AtomParagraph> -->
             <AtomParagraph class="author-name" :variation="'small'">
               {{ blog.author }}
             </AtomParagraph>
@@ -77,7 +79,7 @@ export default {
 <style scoped>
 .custom-title {
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .article-wrapper {
@@ -87,18 +89,18 @@ export default {
 .custom-author {
   display: inline-grid;
   grid-template-columns: auto auto auto;
-  grid-template-rows: 1fr 1fr 1fr;
-  column-gap: 1rem;
+  grid-template-rows: 1fr 1fr;
+  column-gap: 2rem;
 }
 .author-img {
   grid-row: 1 / 4;
   margin: auto;
 }
-.author-name {
+.author-timestamp {
   grid-row: 2 / 2;
   color: var(--grey-shade);
 }
-.author-timestamp {
+.author-name {
   grid-column: 2 / 4;
   color: var(--grey-shade);
 }

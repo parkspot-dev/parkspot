@@ -35,7 +35,7 @@ export default {
       test: 0,
       items: [
         {
-          title: "ParkSpot for Parking Owners",
+          title: "ParkSpot for Owners",
           image: require("@/assets/Parkspot-owners.jpg"),
           desc: `Want to monetize your idle parking spots?`,
         },
@@ -47,13 +47,13 @@ export default {
         {
           title: "ParkSpot for Corporates",
           image: require("@/assets/Parkspot-corporates.jpg"),
-          desc: `Give your employees the gift of easy parking`,
+          desc: `Give your employees the gift of easy parking.`,
         },
         {
           title: "ParkSpot for Malls",
           image: require("@/assets/Parkspot-malls.jpg"),
-          desc: `Digitized park spot for better monetization and seamless
-                  customer experience`,
+          desc: `Digitized parkspot for better monetization and seamless
+                customer experience.`,
         },
       ],
       al: {
