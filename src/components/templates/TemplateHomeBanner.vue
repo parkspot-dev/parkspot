@@ -50,7 +50,7 @@ export default {
     url("../../assets/Home-Banner.jpg");
   /* Full height */
   height: 100vh;
-
+  max-height: 1000px;
   /* Center and scale the image nicely */
   background-position: center;
   background-repeat: no-repeat;

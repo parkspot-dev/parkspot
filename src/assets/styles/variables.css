@@ -21,4 +21,7 @@
     --lh-default:1;
     --lh-small:1.05;
     --lh-para:1.6;
+
+    /* background colors */
+    --bg-color-secondary:#F7F8FF ;
 }

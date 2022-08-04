@@ -1,5 +1,5 @@
 <template>
-  <Wrapper class="custom-bg">
+  <Wrapper>
     <div class="columns">
       <OrganismContactUs class="column is-half"></OrganismContactUs>
       <div class="column is-half">
@@ -50,7 +50,4 @@ export default {
 };
 </script>
 <style scoped>
-.custom-bg {
-  background-color: #9fddf0;
-}
 </style>

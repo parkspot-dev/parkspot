@@ -1,24 +1,26 @@
 <template>
-  <Wrapper>
-    <div class="featureContainer">
-      <MoleculeFeatureCard :featureHeading="'Save Money'">
-        Save up to 20% on our site compared to the cost of other parking
-        platform.
-      </MoleculeFeatureCard>
-      <MoleculeFeatureCard :featureHeading="'Save Time'">
-        It's easy to compare parking spot. Booking a reservation is quick and
-        simple.
-      </MoleculeFeatureCard>
-      <MoleculeFeatureCard :featureHeading="'Save Stress'">
-        Guarantee your parking spot by booking in advance. Can't make it?
-        Cancellations are free.
-      </MoleculeFeatureCard>
-      <MoleculeFeatureCard :featureHeading="'Safety & Security'">
-        Don't worry, we got you covered. Choose the safety features like CCTV,
-        Securtiy guard etc.
-      </MoleculeFeatureCard>
-    </div>
-  </Wrapper>
+  <div class="bg-wrap">
+    <Wrapper>
+      <div class="featureContainer">
+        <MoleculeFeatureCard :featureHeading="'Save Money'">
+          Save up to 20% on our site compared to the cost of other parking
+          platform.
+        </MoleculeFeatureCard>
+        <MoleculeFeatureCard :featureHeading="'Save Time'">
+          It's easy to compare parking spot. Booking a reservation is quick and
+          simple.
+        </MoleculeFeatureCard>
+        <MoleculeFeatureCard :featureHeading="'Save Stress'">
+          Guarantee your parking spot by booking in advance. Can't make it?
+          Cancellations are free.
+        </MoleculeFeatureCard>
+        <MoleculeFeatureCard :featureHeading="'Safety & Security'">
+          Don't worry, we got you covered. Choose the safety features like CCTV,
+          Securtiy guard etc.
+        </MoleculeFeatureCard>
+      </div>
+    </Wrapper>
+  </div>
 </template>
 
 <script>
@@ -34,6 +36,9 @@ export default {
 </script>
 
 <style scoped>
+.bg-wrap {
+  background-color: var(--bg-color-secondary);
+}
 .featureContainer {
   display: flex;
   gap: 1.5rem;

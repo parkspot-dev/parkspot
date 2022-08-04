@@ -1,5 +1,7 @@
 <template>
-  <TemplateAbout></TemplateAbout>
+  <div class="bg-wrap">
+    <TemplateAbout></TemplateAbout>
+  </div>
 </template>
 
 <script>
@@ -12,4 +14,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.bg-wrap {
+  background-color: var(--bg-color-secondary);
+}
+</style>
