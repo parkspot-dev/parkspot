@@ -11,15 +11,11 @@
         features that no other parking platforms provide.
       </p>
       <p class="main-heading__para">
-        :text="'Navigation, Booking, Searching, Safety & Security and many\
-        others services at ParkSpot which makes your parking experience better
-        than ever'"
+        Navigation, Booking, Searching, Safety & Security and many others
+        services at ParkSpot which makes your parking experience better than
+        ever'"
       </p>
       <br />
-      <!-- <atom-button :text="featuresButton"> -->
-
-      <router-link to="/home">Home</router-link>
-      <!-- </atom-button> -->
     </div>
     <div class="main-heading__img column">
       <div class="img-wrapper">

@@ -181,13 +181,25 @@
             </AtomParagraph>
           </div>
           <div class="social-groups">
-            <a class="social-icon" href="">
+            <a
+              class="social-icon"
+              href="https://www.facebook.com/parkspot.in"
+              target="_blank"
+            >
               <AtomIcon :icon="'facebook'" :size="'is-medium'"> </AtomIcon>
             </a>
-            <a class="social-icon" href="">
+            <a
+              class="social-icon"
+              href="https://www.instagram.com/parkspot.in/"
+              target="_blank"
+            >
               <AtomIcon :icon="'instagram'" :size="'is-medium'"></AtomIcon>
             </a>
-            <a class="social-icon" href="">
+            <a
+              class="social-icon"
+              href="https://www.linkedin.com/company/parkspot-in/"
+              target="_blank"
+            >
               <AtomIcon :icon="'linkedin'" :size="'is-medium'"> </AtomIcon>
             </a>
           </div>
