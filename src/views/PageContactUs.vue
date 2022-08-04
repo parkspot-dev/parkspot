@@ -57,6 +57,7 @@ export default {
 <style scoped>
 .bg-wrap {
   background-color: var(--bg-color-secondary);
+  padding: 2.5rem 0;
   position: relative;
 }
 .bg-wrap:before {
@@ -70,5 +71,13 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+@media only screen and (max-width: 760px) {
+  .bg-wrap:before {
+    width: calc(50vw + 360px);
+    -webkit-clip-path: polygon(300px 70%, 100% 33%, 100% 100%, 0% 100%);
+    clip-path: polygon(300px 70%, 100% 33%, 100% 100%, 0% 100%);
+  }
 }
 </style>
