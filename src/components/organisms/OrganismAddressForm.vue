@@ -16,7 +16,11 @@
       <AtomParagraph
         >Note: Drag the marker to pin the exact location.</AtomParagraph
       >
-      <MapContainer :drag="true" @location="validate"></MapContainer>
+      <MapContainer
+        :key="reRender"
+        :drag="true"
+        @location="validate"
+      ></MapContainer>
       <span>{{ errors[0] }}</span>
     </ValidationProvider>
   </ValidationObserver>
@@ -41,6 +45,10 @@ export default {
     formSubmitted: {
       type: Boolean,
       default: false,
+    },
+    reRender: {
+      type: Number,
+      default: 0,
     },
   },
   emits: ["formValidate"],

@@ -39,6 +39,7 @@
           <OrganismAddressForm
             :formSubmitted="btnStack[1]"
             @formValidate="addressFormValidate"
+            :reRender="reRender"
           ></OrganismAddressForm>
         </b-step-item>
 
@@ -127,10 +128,16 @@ export default {
       nextText: "Next",
       btnStack: [false, false, false],
       top: 0,
+
+      reRender: 0,
     };
   },
   methods: {
     btnNext(next) {
+      // map fix setTimeout out to load compeletely
+      setTimeout(() => {
+        this.reRender++;
+      }, 10);
       // this.btnStack[this.top] = true; // this is not updating the array in vue
       this.btnStack.splice(this.top, 1, true); // this is to trigger validation in the form
       this.nextEnable = next;

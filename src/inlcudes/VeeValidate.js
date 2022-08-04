@@ -9,12 +9,12 @@ import { extend } from "vee-validate";
 
 extend("required", {
   ...required,
-  message: "This {_field_} is required.",
+  message: "{_field_} is required.",
 });
 
 extend("email", {
   ...email,
-  message: "This Email is not valid.",
+  message: "Email is not valid.",
 });
 
 extend("regex", {
@@ -29,7 +29,7 @@ extend("integer", {
 
 extend("image", {
   ...image,
-  message: "This {_field_} must be an image.",
+  message: "{_field_} must be an image.",
 });
 
 extend("phone", {

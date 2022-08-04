@@ -1,19 +1,19 @@
 <template>
   <div>
     <TemplateBlogPost :blog="blog" :content="content"></TemplateBlogPost>
-    <TemplateContactUs @contactUs="fireContact"></TemplateContactUs>
+    <PageContactUs></PageContactUs>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import TemplateBlogPost from "../components/templates/TemplateBlogPost.vue";
-import TemplateContactUs from "../components/templates/TemplateContactUs.vue";
+import PageContactUs from "./PageContactUs.vue";
 export default {
   name: "PageBlogPost",
   components: {
     TemplateBlogPost,
-    TemplateContactUs,
+    PageContactUs,
   },
   data() {
     return {
