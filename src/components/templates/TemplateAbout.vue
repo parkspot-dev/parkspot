@@ -71,6 +71,11 @@ export default {
   align-items: center;
   gap: 2rem;
 }
+@media only screen and (max-width: 750px) {
+  .aboutContainer {
+    flex-direction: column;
+  }
+}
 .about-img {
   flex: 30%;
 }
