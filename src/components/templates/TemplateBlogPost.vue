@@ -4,7 +4,7 @@
       <AtomHeadings :level="'h2'" class="custom-title">
         Parking Blogs
       </AtomHeadings>
-      <b-breadcrumb align="is-centered" size="is-small">
+      <b-breadcrumb align="is-centered" size="is-medium">
         <b-breadcrumb-item tag="router-link" to="/"> Home </b-breadcrumb-item>
         <b-breadcrumb-item tag="router-link" to="/blog">
           Blogs

@@ -32,7 +32,7 @@ export default {
   font-weight: 400;
 }
 .body-container {
-  margin-top: 35px;
+  margin-top: 15px;
 }
 @media only screen and (max-width: 1024px) {
   .body-container {

@@ -12,6 +12,7 @@ export default {};
 .custom-banner {
   background: url("../../assets/discover-banner.svg");
   height: 35vh;
+  max-height: 300px;
   padding: 6rem;
 }
 </style>
