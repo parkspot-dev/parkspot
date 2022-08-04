@@ -6,7 +6,7 @@
         :alt="'About Image'"
         class="about-img"
       ></AtomImage>
-      <div class="about-desc">
+      <div class="about-desc" data-aos="zoom-in">
         <AtomHeadings class="mb-3"> Why Choose Us? </AtomHeadings>
         <AtomParagraph class="mb-2">
           We at ParkSpot strive to solve the trivial problem of finding or

@@ -2,7 +2,7 @@
   <Wrapper>
     <div class="columns">
       <OrganismContactUs class="column is-half"></OrganismContactUs>
-      <div class="column is-half">
+      <div class="column is-half" data-aos="slide-up">
         <div class="card px-6 py-5">
           <OrganismContactForm
             :textArea="true"

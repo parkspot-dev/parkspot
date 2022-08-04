@@ -2,11 +2,14 @@
   <div class="bg-wrap">
     <Wrapper>
       <div class="featureContainer">
-        <MoleculeFeatureCard :featureHeading="'Save Money'">
+        <MoleculeFeatureCard :featureHeading="'Save Money'" data-aos="slide-up">
           Save up to 20% on our site compared to the cost of other parking
           platform.
         </MoleculeFeatureCard>
-        <MoleculeFeatureCard :featureHeading="'Save Time'">
+        <MoleculeFeatureCard
+          :featureHeading="'Save Time'"
+          data-aos="slide-down"
+        >
           It's easy to compare parking spot. Booking a reservation is quick and
           simple.
         </MoleculeFeatureCard>
@@ -14,7 +17,10 @@
           Guarantee your parking spot by booking in advance. Can't make it?
           Cancellations are free.
         </MoleculeFeatureCard>
-        <MoleculeFeatureCard :featureHeading="'Safety & Security'">
+        <MoleculeFeatureCard
+          :featureHeading="'Safety & Security'"
+          data-aos="slide-down"
+        >
           Don't worry, we got you covered. Choose the safety features like CCTV,
           Securtiy guard etc.
         </MoleculeFeatureCard>

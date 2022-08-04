@@ -3,8 +3,10 @@
     <!-- <h1>hello</h1> -->
     <div class="banner-wrapper">
       <div class="banner-header">
-        <h1 class="banner-title">Find Amazing Parking Spot Near You</h1>
-        <h2 class="banner-subtitle">
+        <h1 class="banner-title" data-aos="zoom-in">
+          Find Amazing Parking Spot Near You
+        </h1>
+        <h2 class="banner-subtitle" data-aos="zoom-in">
           Instantly book your spot today.Trusted by many.
         </h2>
         <SearchInput class="banner-input"></SearchInput>

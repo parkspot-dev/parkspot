@@ -1,5 +1,5 @@
 <template>
-  <Wrapper>
+  <Wrapper data-aos="fade-out">
     <AtomParagraph class="custom-subtitle">Types of Products</AtomParagraph>
     <AtomHeadings class="custom-title" :level="'h2'">
       Our Parking Products
