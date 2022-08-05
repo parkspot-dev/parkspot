@@ -1,5 +1,5 @@
 <template>
-  <Wrapper>
+  <div class="custom-wrap">
     <b-table
       :data="isEmpty ? [] : lists"
       :bordered="true"
@@ -9,118 +9,135 @@
       :mobile-cards="hasMobileCards"
       :scrollable="true"
       :sticky-header="true"
-      height="600"
+      height="800"
     >
-      <b-table-column field="id" label="ID" width="40" numeric v-slot="props">
+      <b-table-column
+        field="ID"
+        label="ID"
+        width="40"
+        numeric
+        v-slot="props"
+        sortable
+      >
         {{ props.row.ID }}
       </b-table-column>
 
-      <b-table-column field="priority" label="Priority" v-slot="props">
-        {{ getPriority(props.row.Priority) }}
+      <b-table-column
+        field="CreatedAt"
+        label="Date"
+        centered
+        v-slot="props"
+        sortable
+      >
+        <span class="tag is-success">
+          {{ new Date(props.row.CreatedAt).toLocaleDateString() }}
+        </span>
       </b-table-column>
 
-      <b-table-column field="name" label="Name" v-slot="props">
-        {{ props.row.Name }}
+      <b-table-column field="Priority" label="Priority" v-slot="props" sortable>
+        <span
+          class="tag"
+          :class="{
+            'is-low': props.row.Priority === 1,
+            'is-medium': props.row.Priority === 2,
+            'is-high': props.row.Priority === 3,
+          }"
+        >
+          {{ getPriority(props.row.Priority) }}
+        </span>
       </b-table-column>
 
-      <b-table-column field="mobile" label="Mobile" v-slot="props">
-        {{ props.row.Mobile }}
-      </b-table-column>
-
-      <b-table-column field="email" label="Email" v-slot="props">
-        {{ props.row.EmailID }}
+      <b-table-column field="contact" label="Contact Details" v-slot="props">
+        <p>
+          Name: <strong>{{ props.row.Name }}</strong>
+        </p>
+        <p>
+          Mobile: <strong>{{ props.row.Mobile }}</strong>
+        </p>
+        <p>
+          Email: <strong>{{ props.row.EmailID }}</strong>
+        </p>
+        <p>
+          Landmark : <strong>{{ props.row.Landmark }}</strong>
+        </p>
+        <p>City: {{ props.row.City }}</p>
+        <p>Duration : {{ props.row.Duration }}</p>
+        <p>Car Model: {{ props.row.CarModel }}</p>
       </b-table-column>
 
       <b-table-column field="comments" label="Comments" v-slot="props">
         <AtomTextarea
           :value="props.row.Comments"
           class="custom-colComment"
-          @onChange="onCommentUpdate"
+          @changed="onCommentUpdate(props.row, ...arguments)"
         ></AtomTextarea>
       </b-table-column>
 
       <b-table-column
-        field="status"
-        label="Status"
+        field="status_nextCall"
+        label="Status/Next Call"
         width="100px"
         v-slot="props"
       >
+        <span class="tag is-warning">
+          {{ statusList[props.row.Status].name }}
+        </span>
         <AtomSelectInput
           :list="statusList"
           class="custom-columnWidth"
-          :value="props.row.Status + 1"
-          @changed="onStatusUpdate"
-        ></AtomSelectInput>
-      </b-table-column>
-
-      <b-table-column field="next_call" label="Next Call" v-slot="props">
-        <!-- {{ new Date(props.row.NextCall) }} -->
+          @changed="onStatusUpdate(props.row, ...arguments)"
+        >
+        </AtomSelectInput>
+        <span
+          class="tag is-warning"
+          :class="{ 'is-danger': getStatus(props.row.NextCall) }"
+        >
+          <span>
+            {{ getStatus(props.row.NextCall) ? "delayed " : "upcoming " }}
+          </span>
+          <strong>
+            {{ new Date(props.row.NextCall).toLocaleDateString() }}
+          </strong>
+        </span>
         <AtomDatePicker
           class="custom-columnWidth"
-          :assignedDate="props.row.NextCall"
-          @changed="onDateUpdate"
-        ></AtomDatePicker>
+          @changed="onDateUpdate(props.row, ...arguments)"
+        >
+        </AtomDatePicker>
       </b-table-column>
 
       <b-table-column
-        field="last_update"
+        field="UpdatedAt"
         label="Last Updated"
         centered
         v-slot="props"
+        sortable
       >
         <span class="tag is-success">
           {{ new Date(props.row.UpdatedAt).toLocaleDateString() }}
         </span>
       </b-table-column>
 
-      <b-table-column field="duration" label="Duration" v-slot="props">
-        {{ props.row.Duration }}
-      </b-table-column>
-
-      <b-table-column field="car_model" label="Car Model" v-slot="props">
-        {{ props.row.CarModel }}
-      </b-table-column>
-
-      <b-table-column field="location" label="Location" v-slot="props">
+      <b-table-column field="lat_lng" label="Lat/Lng" v-slot="props">
         {{
           props.row.Latitude.toFixed(6) + "/" + props.row.Longitude.toFixed(6)
         }}
       </b-table-column>
 
-      <b-table-column field="landmark" label="Landmark" v-slot="props">
-        {{ props.row.Landmark }}
-      </b-table-column>
-
-      <b-table-column field="city" label="City" v-slot="props">
-        {{ props.row.City }}
-      </b-table-column>
-
-      <b-table-column field="date" label="Date" centered v-slot="props">
-        <span class="tag is-success">
-          {{ new Date(props.row.CreatedAt).toLocaleDateString() }}
-        </span>
-      </b-table-column>
-
-      <b-table-column> <AtomButton> Update </AtomButton> </b-table-column>
-
       <template #empty>
         <div class="has-text-centered">No records</div>
       </template>
     </b-table>
-  </Wrapper>
+  </div>
 </template>
 
 <script>
-import Wrapper from "../extras/Wrapper.vue";
-import AtomButton from "../atoms/AtomButton.vue";
 import AtomTextarea from "../atoms/AtomTextarea.vue";
 import AtomSelectInput from "../atoms/AtomSelectInput.vue";
 import AtomDatePicker from "../atoms/AtomDatePicker.vue";
 export default {
   name: "TemplateInventory",
   components: {
-    Wrapper,
-    AtomButton,
     AtomTextarea,
     AtomSelectInput,
     AtomDatePicker,
@@ -129,7 +146,11 @@ export default {
     lists: {
       type: Array,
     },
+    isLoading: {
+      type: Boolean,
+    },
   },
+  emits: ["updateRequest"],
   data() {
     return {
       isEmpty: false,
@@ -138,7 +159,6 @@ export default {
       isNarrowed: false,
       isHoverable: false,
       isFocusable: false,
-      isLoading: false,
       hasMobileCards: true,
 
       statusList: [
@@ -156,8 +176,12 @@ export default {
         { id: 3, name: "Medium" },
         { id: 4, name: "High" },
       ],
-      statusColumn: "",
-      priorityColumn: "",
+
+      model: {
+        comments: "",
+        status: "",
+        nextCall: "",
+      },
     };
   },
   methods: {
@@ -172,27 +196,49 @@ export default {
       }
     },
     getStatus(val) {
-      console.log(val);
-      this.statusColumn = val;
+      if (new Date().getTime() > new Date(val).getTime()) {
+        return true;
+      } else {
+        return false;
+      }
     },
-    onDateUpdate(date) {
-      console.log("chekcing", date);
+    onDateUpdate(spotData, date) {
+      spotData["NextCall"] = date.toJSON();
+      this.$emit("updateRequest", spotData);
     },
-    onCommentUpdate() {
-      console.log("chekcing");
+    onCommentUpdate(spotData, comments) {
+      spotData["Comments"] = comments;
+      this.$emit("updateRequest", spotData);
     },
-    onStatusUpdate(status) {
-      console.log("chekcing", status);
+    onStatusUpdate(spotData, status) {
+      spotData["Status"] = status - 1;
+      this.$emit("updateRequest", spotData);
     },
   },
 };
 </script>
 
 <style scoped>
+.custom-wrap {
+  padding: 1rem;
+}
 .custom-columnWidth {
   width: 200px;
 }
 .custom-colComment {
   width: 400px;
+}
+
+.is-high {
+  background-color: red;
+  color: white;
+}
+.is-medium {
+  background-color: rgb(233, 221, 161);
+  color: white;
+}
+.is-low {
+  background-color: var(--primary-color);
+  color: white;
 }
 </style>

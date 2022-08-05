@@ -14,7 +14,7 @@ export default {
   name: "AtomDatePicker",
   props: {
     assignedDate: {
-      type: String,
+      type: Date,
     },
   },
   emits: ["changed"],
