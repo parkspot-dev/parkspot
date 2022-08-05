@@ -38,13 +38,13 @@ export default {
       default: null,
     },
   },
-  emits: ["input", "onChange"],
+  emits: ["input", "changed"],
   methods: {
     onInput(value) {
       this.$emit("input", value);
     },
     onChange(value) {
-      this.$emit("onChange", value);
+      this.$emit("changed", value);
     },
   },
 };

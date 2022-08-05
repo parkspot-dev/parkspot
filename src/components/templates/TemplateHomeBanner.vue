@@ -12,7 +12,7 @@
         <SearchInput class="banner-input"></SearchInput>
         <div class="btn-wrapper">
           <AtomButton class="banner-btn" @click.native="flyToSrp">
-            Search ParkSpots
+            Search ParkSpot
           </AtomButton>
         </div>
       </div>

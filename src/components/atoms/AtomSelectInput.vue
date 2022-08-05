@@ -61,6 +61,7 @@ export default {
     // Handles internal model changes.
     innerValue(newVal) {
       this.$emit("input", newVal);
+      this.$emit("changed", newVal);
     },
     // Handles external model changes.
     value(newVal) {
