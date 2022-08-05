@@ -22,7 +22,7 @@
           Blog
         </b-navbar-item>
         <div class="navbar-item custom-drop">
-          <a aria-haspopup="true" tabindex="0" class="navbar-item">
+          <a aria-haspopup="true" tabindex="0" class="navbar-item anchor">
             Services
           </a>
           <div class="dropList">
@@ -112,5 +112,24 @@ export default {
 }
 .custom-drop:hover .dropList {
   display: block;
+}
+@media only screen and (max-width: 1024px) {
+  .custom-drop {
+    padding: 0;
+  }
+  .custom-drop .dropList {
+    display: block;
+    position: relative;
+    border: 0;
+    box-shadow: none;
+    font-size: 1rem;
+    padding: 0;
+  }
+  .custom-drop .anchor {
+    display: none;
+  }
+  .custom-drop::after {
+    display: none;
+  }
 }
 </style>
