@@ -112,8 +112,8 @@ const actions = {
   async requestSpot({ state }) {
     const req = {
       Name: state.contactForm.fullname,
-      Mobile: state.contactForm.email,
-      EmailID: state.contactForm.cno,
+      Mobile: state.contactForm.cno,
+      EmailID: state.contactForm.email,
       Country: state.locationDetails.locDetails.country,
       State: state.locationDetails.locDetails.state,
       City: state.locationDetails.locDetails.city,

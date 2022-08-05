@@ -42,7 +42,7 @@ export default {
           type: "is-danger",
           duration: 2000,
         });
-        this.$router.push({ name: "VOPortal" });
+        this.$router.push({ name: "error" });
       }
     },
   },
