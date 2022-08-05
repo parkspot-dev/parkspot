@@ -91,7 +91,11 @@
                 Corporate Office Address :
               </AtomParagraph>
               <span>
-                <AtomIcon :icon="'map-marker-radius'" :size="'is-medium'">
+                <AtomIcon
+                  class="location-icon"
+                  :icon="'map-marker-radius'"
+                  :size="'is-medium'"
+                >
                 </AtomIcon>
               </span>
               <AtomParagraph :type="'span'">
@@ -102,8 +106,10 @@
             <div>
               <AtomParagraph class="mb-2"> Customer Service: </AtomParagraph>
               <span>
-                <AtomIcon :icon="'phone-classic'" :size="'is-medium'">
-                </AtomIcon>
+                <a href="tel:+918092996057" class="phone-contact">
+                  <AtomIcon :icon="'phone-classic'" :size="'is-medium'">
+                  </AtomIcon>
+                </a>
               </span>
               <AtomParagraph :type="'span'"> +91 80929 96057 </AtomParagraph>
             </div>
@@ -306,5 +312,15 @@ export default {
   font-size: 25px;
   left: -19px;
   top: -7px;
+}
+.location-icon {
+  color: var(--primary-color);
+}
+.phone-contact {
+  color: var(--secondary-color);
+  cursor: pointer;
+}
+.phone-contact:hover {
+  color: var(--primary-color);
 }
 </style>

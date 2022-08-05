@@ -1,5 +1,6 @@
 <template>
   <section class="custom-bg">
+    <div class="bg-decor"></div>
     <TemplateSOPortal @finalSubmit="onFinalSubmit"></TemplateSOPortal>
     <LoaderModal :isLoading="isLoading"></LoaderModal>
   </section>
@@ -57,6 +58,16 @@ export default {
 
 <style scoped>
 .custom-bg {
-  background-color: #ecf0f1;
+  background-color: var(--bg-color-tertiary);
+}
+.bg-decor {
+  width: 100%;
+  height: 526px;
+  background-color: white;
+  -webkit-clip-path: polygon(0 0, 100% 0, 50% 100%);
+  clip-path: polygon(-54% 0, 184% 0, 50% 100%);
+  position: absolute;
+  top: calc(0% - 7px);
+  left: 0;
 }
 </style>

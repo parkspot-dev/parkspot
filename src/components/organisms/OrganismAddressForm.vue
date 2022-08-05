@@ -6,7 +6,7 @@
       v-slot="{ validate, errors }"
     >
       <SearchInput @change.native="validate" class="mb-4"></SearchInput>
-      <span>{{ errors[0] }}</span>
+      <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
     </ValidationProvider>
     <ValidationProvider
       name="map"
@@ -21,7 +21,7 @@
         :drag="true"
         @location="validate"
       ></MapContainer>
-      <span>{{ errors[0] }}</span>
+      <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
     </ValidationProvider>
   </ValidationObserver>
 </template>

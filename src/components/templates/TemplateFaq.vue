@@ -4,6 +4,7 @@
       <AtomHeading class="custom-title">
         Frequently Asked Questions!
       </AtomHeading>
+
       <b-collapse
         class="card"
         animation="slide"

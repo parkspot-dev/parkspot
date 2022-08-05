@@ -65,7 +65,7 @@ export default {
   display: block;
   width: calc(50vw + 150px);
   height: 100%;
-  background-color: #171c37;
+  background-color: var(--bg-color-tertiary);
   -webkit-clip-path: polygon(300px 0, 100% 0, 100% 100%, 0 100%);
   clip-path: polygon(300px 0, 100% 0, 100% 100%, 0 100%);
   position: absolute;
