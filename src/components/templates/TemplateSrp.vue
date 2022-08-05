@@ -9,7 +9,11 @@
       ></MoleculeSRPCard>
     </div>
     <div class="srp-map">
-      <MapContainer class="mapContainer"></MapContainer>
+      <MapContainer
+        class="mapContainer"
+        :spotsList="spots"
+        :key="reRender"
+      ></MapContainer>
       <SearchInput class="mapSearch"></SearchInput>
     </div>
   </div>
@@ -35,6 +39,9 @@ export default {
     totals: {
       type: Number,
     },
+    reRender: {
+      type: Number,
+    },
   },
   emits: ["changed"],
   methods: {
@@ -48,11 +55,10 @@ export default {
 <style scoped>
 .srp-container {
   display: flex;
-  padding-top: 2rem;
   padding-left: 3rem;
-  padding-bottom: 3rem;
   gap: 2rem;
 }
+
 .srp-lists {
   flex: 20%;
   padding-top: 2rem;
@@ -61,7 +67,7 @@ export default {
   flex: 60%;
 }
 .mapContainer {
-  height: 100vh;
+  height: 130vh;
   position: relative;
 }
 .mapSearch {
@@ -69,5 +75,32 @@ export default {
   top: 20%;
   left: 50%;
   width: 500px;
+}
+@media only screen and (max-width: 1024px) {
+  .srp-container {
+    flex-direction: column-reverse;
+    padding-left: 0;
+  }
+  .srp-lists {
+    padding: 2rem 8rem;
+  }
+  .mapContainer {
+    height: 50vh;
+  }
+  .mapSearch {
+    left: 5%;
+    top: 10%;
+    width: 50vw;
+  }
+}
+@media only screen and (max-width: 700px) {
+  .srp-lists {
+    padding: 2rem 4rem;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .srp-lists {
+    padding: 2rem 1rem;
+  }
 }
 </style>

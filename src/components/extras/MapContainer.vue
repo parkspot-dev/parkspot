@@ -15,6 +15,9 @@ export default {
       type: Boolean,
       default: false,
     },
+    spotsList: {
+      type: Array,
+    },
   },
   emits: ["location"],
   data() {
@@ -47,31 +50,45 @@ export default {
       "Your current location."
     );
 
-    // create DOM element for the marker
-    var markerElement = document.createElement("div");
-    markerElement.className = "marker";
-    markerElement.style.backgroundImage = "url(" + this.img + ")";
-    markerElement.style.width = "50px";
-    markerElement.style.height = "50px";
-    markerElement.style.backgroundSize = "110%";
-
     // create the marker
-    this.marker = new mapboxgl.Marker(markerElement, {
+    this.marker = new mapboxgl.Marker({
       draggable: this.drag,
     })
       .setLngLat(this.mapConfig.center)
       .setPopup(popup)
       .addTo(this.map);
+
     if (this.drag) {
       this.map.on("click", (e) => {
         this.marker.setPopup(popup).setLngLat(e.lngLat).addTo(this.map);
         this.updateMapConfig(this.marker.getLngLat());
         this.$emit("location", this.marker.getLngLat());
       });
+
       this.marker.on("dragend", () => {
         this.updateMapConfig(this.marker.getLngLat());
         this.$emit("location", this.marker.getLngLat());
       });
+    }
+
+    // create DOM element for the parking site marker
+    for (let spots of this.spotsList) {
+      var psMarker = document.createElement("div");
+
+      psMarker.className = "marker";
+      psMarker.style.backgroundImage = "url(" + this.img + ")";
+      psMarker.style.width = "50px";
+      psMarker.style.height = "50px";
+      psMarker.style.backgroundSize = "110%";
+
+      const psPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+        `<p><strong>${spots.Name}</strong></p><p><strong>Distance :</strong> ${spots.Distance} Km</p>`
+      );
+
+      new mapboxgl.Marker(psMarker)
+        .setLngLat([spots.Long, spots.Lat])
+        .setPopup(psPopup)
+        .addTo(this.map);
     }
   },
   methods: {

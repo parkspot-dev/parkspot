@@ -22,25 +22,19 @@ export default {
   },
   methods: {
     ...mapActions({
-      register: "soportal/register",
-      login: "soportal/login",
-      kyc: "soportal/kyc",
-      contact: "soportal/contact",
+      requestSpot: "soportal/requestSpot",
     }),
     async onFinalSubmit() {
       try {
         this.isLoading = true;
-        await this.register();
-        await this.login();
-        await this.kyc();
-        await this.contact(); // todo contact can be fired in parallel
+        await this.requestSpot();
         this.isLoading = false;
         this.$buefy.toast.open({
           message: "ParkSpot registered successfully!",
           type: "is-success",
           duration: 2000,
         });
-        this.$router.push({ name: "Home" });
+        this.$router.push({ name: "thankYou" });
       } catch (error) {
         console.error({ error });
         this.$buefy.toast.open({
@@ -48,7 +42,7 @@ export default {
           type: "is-danger",
           duration: 2000,
         });
-        this.$router.push({ name: "SOPortal" });
+        this.$router.push({ name: "VOPortal" });
       }
     },
   },

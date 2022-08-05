@@ -26,7 +26,6 @@ export default {
      */
     ratio: {
       type: String,
-      required: true,
     },
   },
 };

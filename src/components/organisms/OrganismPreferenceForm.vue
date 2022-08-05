@@ -3,7 +3,7 @@
     <MoleculeSelectInput
       :fieldName="PREFERENCE.PARKING_TYPE"
       :list="parkingTypeData"
-      :rules="validation.type"
+      :rules="validation.parkingType"
       @input="updateType"
       :placeholder="'Type of Parking'"
       :label="PREFERENCE.PARKING_TYPE"
@@ -73,13 +73,12 @@ export default {
         carModel: "",
         minDur: "",
         terms: "",
-        type: "",
       },
       validation: {
         carModel: "required",
         minDur: "required",
         terms: "required",
-        type: "required",
+        parkingType: "required",
       },
     };
   },
@@ -104,16 +103,16 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateAddInfo: "soportal/update-additional-info",
+      updatePreference: "soportal/update-preference",
     }),
     submit() {
-      this.updateAddInfo(this.model);
+      this.updatePreference(this.model);
     },
-    updateMinDur(data) {
-      this.model.minDur = data.name;
+    updateMinDur(val) {
+      this.model.minDur = this.minDurData[val].name;
     },
-    updateType(data) {
-      this.model.spot = data.name;
+    updateType(val) {
+      this.model.spot = this.parkingTypeData[val].name;
     },
     updateTermsData(data) {
       this.model.terms = data;

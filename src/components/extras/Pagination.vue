@@ -3,6 +3,7 @@
     <b-pagination
       :total="totals"
       v-model="data"
+      :size="'is-small'"
       :per-page="3"
       @change="onChange"
     >

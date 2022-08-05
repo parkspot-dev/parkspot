@@ -54,7 +54,7 @@
           </AtomHeadings>
           <OrganismPreferenceForm
             :formSubmitted="btnStack[2]"
-            @formValidate="AddInfoFormValidate"
+            @formValidate="preferenceFormValidate"
           ></OrganismPreferenceForm>
         </b-step-item>
 
@@ -170,7 +170,7 @@ export default {
         this.top++;
       }
     },
-    AddInfoFormValidate(val) {
+    preferenceFormValidate(val) {
       this.btnStack.splice(this.top, 1, val);
       if (this.btnStack[this.top]) {
         this.nextEnable.action();

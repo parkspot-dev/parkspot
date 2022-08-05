@@ -62,11 +62,17 @@ export default {
     selected(newValue) {
       this.updateMapConfig([newValue.center[0], newValue.center[1]]); // needed for recentering of map.
       this.updateSelectedLocation(newValue.place_name); // get the actual value of selected option.
+      this.updateSelectedCity(newValue.context[0].text); // update selected city
+      this.updateSelectedState(newValue.context[1].text); // update selected state
+      this.updateSelectedCountry(newValue.context[2].text); // update selected country
     },
   },
   methods: {
     ...mapMutations({
       updateSelectedLocation: "map/update-selected-location",
+      updateSelectedCity: "map/update-selected-city",
+      updateSelectedState: "map/update-selected-state",
+      updateSelectedCountry: "map/update-selected-country",
       updateMapConfig: "map/update-map-config",
     }),
     ...mapActions({

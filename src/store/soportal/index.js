@@ -6,6 +6,7 @@ const state = {
   additionalInfo: {},
   login: {},
   locationDetails: {},
+  preference: {},
 };
 
 const getters = {};
@@ -25,6 +26,9 @@ const mutations = {
   },
   "update-location-details"(state, data = {}) {
     state.locationDetails = data;
+  },
+  "update-preference"(state, data = {}) {
+    state.preference = data;
   },
 };
 
@@ -86,7 +90,7 @@ const actions = {
         MinBookingDuration: state.additionalInfo.minDur,
         Availability: "",
         SpecialService: convertedAmenities, //None/Camera/Security
-        TnC: "none",
+        TnC: "I Agree",
         Address: state.locationDetails.locName,
       },
     };
@@ -103,6 +107,23 @@ const actions = {
       Comments: comments,
     };
     mayaClient.post("/contact", req);
+  },
+
+  async requestSpot({ state }) {
+    const req = {
+      Name: state.contactForm.fullname,
+      Mobile: state.contactForm.email,
+      EmailID: state.contactForm.cno,
+      Country: state.locationDetails.locDetails.country,
+      State: state.locationDetails.locDetails.state,
+      City: state.locationDetails.locDetails.city,
+      Latitude: state.locationDetails.lnglat.lat,
+      Longitude: state.locationDetails.lnglat.lng,
+      CarModel: state.preference.CarModel,
+      Duration: state.preference.minDur,
+      Landmark: state.locationDetails.locDetails.city.country,
+    };
+    mayaClient.post("/owner/parking-request", req);
   },
 };
 
