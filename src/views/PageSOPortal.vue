@@ -40,7 +40,7 @@ export default {
           type: "is-success",
           duration: 2000,
         });
-        this.$router.push({ name: "Home" });
+        this.$router.push({ name: "thankYou" });
       } catch (error) {
         console.error({ error });
         this.$buefy.toast.open({
@@ -48,7 +48,7 @@ export default {
           type: "is-danger",
           duration: 2000,
         });
-        this.$router.push({ name: "SOPortal" });
+        this.$router.push({ name: "error" });
       }
     },
   },

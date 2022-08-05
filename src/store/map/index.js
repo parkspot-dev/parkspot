@@ -3,7 +3,12 @@ import _ from "lodash";
 
 const state = {
   locations: [],
-  selectedLocation: null,
+  selectedLocation: {
+    city: "",
+    state: "",
+    country: "",
+    locName: "",
+  },
   mapConfig: {
     container: "map",
     style: "mapbox://styles/mapbox/streets-v11",
@@ -26,9 +31,9 @@ const getters = {
   getNewMapCenter(state) {
     return state.center;
   },
-  getLocWithLatLng(state) {
+  getLocDetails(state) {
     return {
-      locName: state.selectedLocation,
+      locDetails: state.selectedLocation,
       lnglat: state.center,
     };
   },
@@ -48,7 +53,16 @@ const mutations = {
     state.locations = data;
   },
   "update-selected-location"(state, data) {
-    state.selectedLocation = data;
+    state.selectedLocation.locName = data;
+  },
+  "update-selected-city"(state, data) {
+    state.selectedLocation.city = data;
+  },
+  "update-selected-state"(state, data) {
+    state.selectedLocation.state = data;
+  },
+  "update-selected-country"(state, data) {
+    state.selectedLocation.country = data;
   },
   "update-map-config"(state, data) {
     state.mapConfig.center = data;
@@ -69,17 +83,17 @@ const mutations = {
       state.paginateSrpResults.push(state.srpResults[i]);
     }
   },
-  "update-center-srp"(state) {
+  "update-center-srp"({ state, commit }) {
     let ys = state.paginateSrpResults.reduce((long, site) => {
       return long + site.Long;
     }, 0);
     let xs = state.paginateSrpResults.reduce((a, site) => {
       return a + site.Lat;
     }, 0);
-    state.mapConfig.center = [
+    commit("update-map-config", [
       ys / state.paginateSrpResults.length,
       xs / state.paginateSrpResults.length,
-    ];
+    ]);
   },
 };
 

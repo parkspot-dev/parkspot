@@ -13,9 +13,9 @@
       rules="required"
       v-slot="{ validate, errors }"
     >
-      <AtomParagraph
-        >Note: Drag the marker to pin the exact location.</AtomParagraph
-      >
+      <AtomParagraph>
+        Note: Drag the marker to pin the exact location.
+      </AtomParagraph>
       <MapContainer
         :key="reRender"
         :drag="true"
@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      locWithLatLng: "map/getLocWithLatLng",
+      locDetails: "map/getLocDetails",
     }),
   },
   watch: {
@@ -84,7 +84,7 @@ export default {
       updateLocationDetails: "soportal/update-location-details",
     }),
     submit() {
-      this.updateLocationDetails(this.locWithLatLng);
+      this.updateLocationDetails(this.locDetails);
     },
   },
 };
