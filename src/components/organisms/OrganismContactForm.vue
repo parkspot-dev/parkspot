@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateContact: "soportal/update-contact",
+      updateContact: "user/update-contact",
     }),
     submit() {
       this.updateContact(this.model);

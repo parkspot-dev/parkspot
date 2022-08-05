@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateKyc: "soportal/update-kyc",
+      updateKyc: "user/update-kyc",
     }),
     submit() {
       this.updateKyc(this.model);

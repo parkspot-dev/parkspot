@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateLocationDetails: "soportal/update-location-details",
+      updateLocationDetails: "user/update-location-details",
     }),
     submit() {
       this.updateLocationDetails(this.locDetails);

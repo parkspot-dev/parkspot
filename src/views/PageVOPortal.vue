@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      requestSpot: "soportal/requestSpot",
+      requestSpot: "user/requestSpot",
     }),
     async onFinalSubmit() {
       try {

@@ -114,7 +114,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateAddInfo: "soportal/update-additional-info",
+      updateAddInfo: "user/update-additional-info",
     }),
     submit() {
       this.updateAddInfo(this.model);

@@ -36,7 +36,7 @@ export default {
   methods: {
     ...mapActions({
       getContentById: "blog/getContentById",
-      onlyContact: "soportal/onlyContact",
+      onlyContact: "user/onlyContact",
     }),
     async fireContact() {
       try {

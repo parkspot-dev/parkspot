@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updatePreference: "soportal/update-preference",
+      updatePreference: "user/update-preference",
     }),
     submit() {
       this.updatePreference(this.model);

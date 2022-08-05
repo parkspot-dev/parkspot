@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      onlyContact: "soportal/onlyContact",
+      onlyContact: "user/onlyContact",
     }),
     async fireContact() {
       try {

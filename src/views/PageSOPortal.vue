@@ -22,10 +22,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      register: "soportal/register",
-      login: "soportal/login",
-      kyc: "soportal/kyc",
-      contact: "soportal/contact",
+      register: "user/register",
+      login: "user/login",
+      kyc: "user/kyc",
+      contact: "user/contact",
     }),
     async onFinalSubmit() {
       try {
