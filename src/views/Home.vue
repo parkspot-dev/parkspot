@@ -42,7 +42,7 @@ export default {
       });
     },
     onArrowBtn() {
-      this.$router.push({ name: "t-contact" });
+      this.$router.push({ name: "contactUs" });
     },
   },
 };

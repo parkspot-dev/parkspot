@@ -5,9 +5,11 @@
         <section class="primary-footerContainer">
           <div class="custom-parkspot">
             <div class="mb-2">
-              <figure class="image parkspot-logo">
-                <img :src="psfooterImg" :alt="'parkspot footer logo'" />
-              </figure>
+              <router-link class="topSearch-link" :to="{ name: 'Home' }">
+                <figure class="image parkspot-logo">
+                  <img :src="psfooterImg" :alt="'parkspot footer logo'" />
+                </figure>
+              </router-link>
             </div>
             <AtomParagraph class="pl-4 mb-5">
               We provide the cheap and best parking spot in India. You can't
@@ -32,7 +34,7 @@
             <div>
               <p>
                 <router-link
-                  style="color: #888d93"
+                  class="topSearch-link"
                   :to="{ path: '/bangalore/parking-near-jp-nagar' }"
                 >
                   Parking Spot in JP-Nagar
@@ -40,7 +42,7 @@
               </p>
               <p>
                 <router-link
-                  style="color: #888d93"
+                  class="topSearch-link"
                   :to="{ path: '/bangalore/parking-near-btm' }"
                 >
                   Parking Spot in BTM
@@ -48,7 +50,7 @@
               </p>
               <p>
                 <router-link
-                  style="color: #888d93"
+                  class="topSearch-link"
                   :to="{ path: '/bangalore/parking-near-bommanahalli' }"
                 >
                   Parking Spot in Bommanahalli
@@ -56,14 +58,14 @@
               </p>
               <p>
                 <router-link
-                  style="color: #888d93"
+                  class="topSearch-link"
                   :to="{ path: '/bangalore/parking-near-rajajinagar' }"
                   >Parking Spot in Rajajinagar</router-link
                 >
               </p>
               <p>
                 <router-link
-                  style="color: #888d93"
+                  class="topSearch-link"
                   :to="{ path: '/bangalore/parking-near-banashankari' }"
                 >
                   Parking Spot in Banashankari
@@ -71,7 +73,7 @@
               </p>
               <p>
                 <router-link
-                  style="color: #888d93"
+                  class="topSearch-link"
                   :to="{ path: '/bangalore/parking-near-marathahalli' }"
                 >
                   Parking Spot in marathahalli
@@ -116,7 +118,7 @@
                 <li>
                   <p>
                     <router-link
-                      style="color: #888d93"
+                      class="topSearch-link"
                       :to="{ name: 'features' }"
                     >
                       Features
@@ -125,7 +127,7 @@
                 </li>
                 <li>
                   <p>
-                    <router-link style="color: #888d93" :to="{ name: 'blog' }">
+                    <router-link class="topSearch-link" :to="{ name: 'blog' }">
                       Blogs
                     </router-link>
                   </p>
@@ -133,7 +135,7 @@
                 <li>
                   <p>
                     <router-link
-                      style="color: #888d93"
+                      class="topSearch-link"
                       :to="{ name: 'VOPortal' }"
                     >
                       Request Spot
@@ -143,7 +145,7 @@
                 <li>
                   <p>
                     <router-link
-                      style="color: #888d93"
+                      class="topSearch-link"
                       :to="{ name: 'SOPortal' }"
                     >
                       Register Spot
@@ -152,7 +154,7 @@
                 </li>
                 <li>
                   <p>
-                    <router-link style="color: #888d93" :to="{ name: 'Faq' }">
+                    <router-link class="topSearch-link" :to="{ name: 'Faq' }">
                       Faq
                     </router-link>
                   </p>
@@ -235,9 +237,14 @@ export default {
 .parkspot-logo {
   width: 250px;
 }
-.custom-footer {
+.custom-footer,
+.topSearch-link {
   color: #888d93;
 }
+.topSearch-link:hover {
+  color: var(--primary-color);
+}
+
 .primary-footer {
   background-color: #1f2e3b;
 }
@@ -253,6 +260,11 @@ export default {
   flex-wrap: wrap;
   gap: 2rem;
 }
+@media only screen and (max-width: 600px) {
+  .primary-footerContainer {
+    flex-direction: column;
+  }
+}
 .custom-parkspot {
   display: flex;
   flex-direction: column;
@@ -264,6 +276,7 @@ export default {
 .topSearch {
   flex: 25%;
 }
+
 .footer-discovery {
   flex: 20%;
 }

@@ -6,6 +6,7 @@
         v-for="spot in spots"
         :key="spot.ID"
         :spot="spot"
+        @booked="onBook"
       ></MoleculeSRPCard>
     </div>
     <div class="srp-map">
@@ -47,6 +48,9 @@ export default {
   methods: {
     onPageChange(page) {
       this.$emit("changed", page);
+    },
+    onBook() {
+      this.$router.push({ name: "contactUs" });
     },
   },
 };

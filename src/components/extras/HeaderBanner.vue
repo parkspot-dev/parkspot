@@ -5,7 +5,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "HeaderBanner",
+};
 </script>
 
 <style scoped>
@@ -14,5 +16,10 @@ export default {};
   height: 35vh;
   max-height: 300px;
   padding: 6rem;
+}
+@media only screen and (max-width: 1024px) {
+  .custom-banner {
+    padding: 3rem;
+  }
 }
 </style>

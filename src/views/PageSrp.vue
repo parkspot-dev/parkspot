@@ -32,8 +32,8 @@ export default {
     await this.updateMapCenter([this.getLng(), this.getLat()]);
     await this.srpCall();
     this.updatePaginatedSrpData(this.pageStart);
-    this.updateCenterSrp();
     this.reRender++;
+    this.updateCenterSrp();
   },
   methods: {
     ...mapMutations({

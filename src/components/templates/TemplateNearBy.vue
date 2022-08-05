@@ -23,6 +23,7 @@
           :key="spot.ID"
           v-for="spot in spots"
           :spot="spot"
+          @booked="onBook"
         ></MoleculeSRPCard>
       </div>
       <div class="nearbyText-container">
@@ -84,6 +85,11 @@ export default {
       );
     },
   },
+  methods: {
+    onBook() {
+      this.$router.push({ name: "contactUs" });
+    },
+  },
 };
 </script>
 
@@ -93,6 +99,11 @@ export default {
   margin-bottom: 1rem;
 }
 
+/* @media only screen and (max-width: 1024px) {
+  .custom-title {
+    font-size: 2rem;
+  }
+} */
 .nearbyText-container {
   max-width: 960px;
   margin: auto;

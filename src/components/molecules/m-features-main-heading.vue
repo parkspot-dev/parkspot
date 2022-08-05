@@ -40,7 +40,7 @@ export default {
     featuresButtonLink: {
       type: String,
       default() {
-        return "t-contact";
+        return "contactUs";
       },
     },
   },

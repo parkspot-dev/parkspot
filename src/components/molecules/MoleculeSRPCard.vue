@@ -25,7 +25,7 @@
     <AtomParagraph class="card-spot" :type="'span'">
       <strong>Available Spot : </strong> {{ spot.SlotsAvailable }}
     </AtomParagraph>
-    <AtomButton class="card-btn"> Book Spot </AtomButton>
+    <AtomButton class="card-btn" @click.native="onBook"> Book Spot </AtomButton>
   </div>
 </template>
 
@@ -45,6 +45,12 @@ export default {
   props: {
     spot: {
       type: Object,
+    },
+  },
+  emits: ["booked"],
+  methods: {
+    onBook() {
+      this.$emit("booked");
     },
   },
 };

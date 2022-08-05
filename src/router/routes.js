@@ -81,7 +81,7 @@ export const routes = [
   },
   {
     path: pages.CONTACT,
-    name: "t-contact",
+    name: "contactUs",
     component: () => import("@/views/PageContactUs"),
     meta: {
       title: "ParkSpot | Contact Us",
