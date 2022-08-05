@@ -4,6 +4,7 @@
       :spots="paginatedSrpResults"
       :totals="totalPages"
       @changed="onPageChange"
+      :reRender="reRender"
     ></TemplateSrp>
   </section>
 </template>
@@ -17,8 +18,8 @@ export default {
   },
   data() {
     return {
-      pageStart: 0,
-      pageEnd: 2,
+      pageStart: 1,
+      reRender: 0,
     };
   },
   computed: {
@@ -30,27 +31,24 @@ export default {
   async mounted() {
     await this.updateMapCenter([this.getLng(), this.getLat()]);
     await this.srpCall();
-    this.updatePaginatedSrpData({
-      from: this.pageStart,
-      to: this.pageStart + 3,
-    });
-    this.pageStart = this.pageStart + 3;
+    this.updatePaginatedSrpData(this.pageStart);
+    this.updateCenterSrp();
+    this.reRender++;
   },
   methods: {
     ...mapMutations({
       updateMapCenter: "map/update-map-center",
       updatePaginatedSrpData: "map/update-paginated-srp-data",
+      updateCenterSrp: "map/update-center-srp",
     }),
     ...mapActions({
       srpCall: "map/srpCall",
     }),
 
-    onPageChange() {
-      this.updatePaginatedSrpData({
-        from: this.pageStart,
-        to: this.pageStart + 3,
-      });
-      this.pageStart = this.pageStart + 3;
+    onPageChange(pageNum) {
+      this.updatePaginatedSrpData(pageNum);
+      this.updateCenterSrp();
+      this.reRender++;
     },
     // methods to get Lat and Long
     getLat: function () {
