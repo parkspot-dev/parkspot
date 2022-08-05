@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: "AtomButtons",
+  name: "AtomButton",
   props: {
     /**
      * Type of Button

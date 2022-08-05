@@ -1,9 +1,9 @@
 <template>
   <div>
     <HeaderBanner>
-      <AtomHeadings :level="'h2'" class="custom-title">
+      <AtomHeading :level="'h2'" class="custom-title">
         Parking Blogs
-      </AtomHeadings>
+      </AtomHeading>
       <b-breadcrumb align="is-centered" size="is-medium">
         <b-breadcrumb-item tag="router-link" to="/"> Home </b-breadcrumb-item>
         <b-breadcrumb-item tag="router-link" to="/blog">
@@ -18,7 +18,7 @@
     <Wrapper>
       <article class="article-wrapper">
         <header class="mb-6">
-          <AtomHeadings class="mb-2"> {{ blog.title }} </AtomHeadings>
+          <AtomHeading class="mb-2"> {{ blog.title }} </AtomHeading>
           <div class="custom-author">
             <figure class="author-img image is-48x48">
               <img
@@ -50,7 +50,7 @@
 
 <script>
 import HeaderBanner from "../extras/HeaderBanner.vue";
-import AtomHeadings from "../atoms/AtomHeadings.vue";
+import AtomHeading from "../atoms/AtomHeading.vue";
 import Wrapper from "../extras/Wrapper.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
 import AtomImage from "../atoms/AtomImage.vue";
@@ -58,7 +58,7 @@ export default {
   name: "TemplateBlogPost",
   components: {
     HeaderBanner,
-    AtomHeadings,
+    AtomHeading,
     AtomParagraph,
     AtomImage,
     Wrapper,

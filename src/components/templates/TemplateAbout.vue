@@ -7,7 +7,7 @@
         class="about-img"
       ></AtomImage>
       <div class="about-desc" data-aos="zoom-in">
-        <AtomHeadings class="mb-3"> Why Choose Us? </AtomHeadings>
+        <AtomHeading class="mb-3"> Why Choose Us? </AtomHeading>
         <AtomParagraph class="mb-2">
           We at ParkSpot strive to solve the trivial problem of finding or
           booking available parking slots in vicinity which is faced by millions
@@ -41,14 +41,14 @@
 
 <script>
 import Wrapper from "../extras/Wrapper.vue";
-import AtomHeadings from "../atoms/AtomHeadings.vue";
+import AtomHeading from "../atoms/AtomHeading.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
 import AtomImage from "../atoms/AtomImage.vue";
 export default {
   name: "TemplateAbout",
   components: {
     Wrapper,
-    AtomHeadings,
+    AtomHeading,
     AtomParagraph,
     AtomImage,
   },

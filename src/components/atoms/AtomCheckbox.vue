@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "AtomCheckboxs",
+  name: "AtomCheckbox",
   props: {
     /**
      * list of checkbox items

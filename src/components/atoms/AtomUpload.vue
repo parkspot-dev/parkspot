@@ -38,7 +38,7 @@
 
 <script>
 export default {
-  name: "AtomUploads",
+  name: "AtomUpload",
   emits: ["uploadFiles"],
   data() {
     return {

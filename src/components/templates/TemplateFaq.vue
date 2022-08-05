@@ -1,9 +1,9 @@
 <template>
   <Wrapper>
     <div class="custom-wrapper">
-      <AtomHeadings class="custom-title">
+      <AtomHeading class="custom-title">
         Frequently Asked Questions!
-      </AtomHeadings>
+      </AtomHeading>
       <b-collapse
         class="card"
         animation="slide"
@@ -41,12 +41,12 @@
 </template>
 
 <script>
-import AtomHeadings from "../atoms/AtomHeadings.vue";
+import AtomHeading from "../atoms/AtomHeading.vue";
 import Wrapper from "../extras/Wrapper.vue";
 export default {
   name: "TemplateFaq",
   components: {
-    AtomHeadings,
+    AtomHeading,
     Wrapper,
   },
   data() {

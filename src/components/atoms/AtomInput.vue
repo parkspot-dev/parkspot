@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: "AtomInputs",
+  name: "AtomInput",
   props: {
     /**
      * The html element name used for the wrapper.

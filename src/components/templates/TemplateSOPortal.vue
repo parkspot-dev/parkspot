@@ -1,8 +1,8 @@
 <template>
   <Wrapper>
-    <AtomHeadings class="mb-5 has-text-centered">
+    <AtomHeading class="mb-5 has-text-centered">
       Fill the form to Register your Parking Spot
-    </AtomHeadings>
+    </AtomHeading>
     <div class="card p-6 cmargin">
       <b-steps
         v-model="activeStep"
@@ -18,9 +18,9 @@
           :clickable="isStepsClickable"
           :type="btnStack[0] ? 'is-success' : 'is-warning'"
         >
-          <AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+          <AtomHeading :level="headingLevel" class="mb-5 has-text-centered">
             Contact Details
-          </AtomHeadings>
+          </AtomHeading>
           <OrganismContactForm
             :formSubmitted="btnStack[0]"
             @formValidate="contactFormValidate"
@@ -33,9 +33,9 @@
           :clickable="isStepsClickable"
           :type="btnStack[1] ? 'is-success' : 'is-warning'"
         >
-          <AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+          <AtomHeading :level="headingLevel" class="mb-5 has-text-centered">
             KYC Details
-          </AtomHeadings>
+          </AtomHeading>
           <OrganismKycForm
             :formSubmitted="btnStack[1]"
             @formValidate="kycFormValidate"
@@ -48,9 +48,9 @@
           :clickable="isStepsClickable"
           :type="btnStack[2] ? 'is-success' : 'is-warning'"
         >
-          <AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+          <AtomHeading :level="headingLevel" class="mb-5 has-text-centered">
             Location Details
-          </AtomHeadings>
+          </AtomHeading>
           <OrganismAddressForm
             :formSubmitted="btnStack[2]"
             @formValidate="addressFormValidate"
@@ -64,9 +64,9 @@
           :clickable="isStepsClickable"
           disabled
           :type="btnStack[3] ? 'is-success' : 'is-warning'"
-          ><AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+          ><AtomHeading :level="headingLevel" class="mb-5 has-text-centered">
             Additional Details
-          </AtomHeadings>
+          </AtomHeading>
           <OrganismAdditionalInfo
             :formSubmitted="btnStack[3]"
             @formValidate="AddInfoFormValidate"
@@ -109,7 +109,7 @@ import OrganismKycForm from "../organisms/OrganismKycForm.vue";
 import OrganismAdditionalInfo from "../organisms/OrganismAdditionalInfo.vue";
 import OrganismAddressForm from "../organisms/OrganismAddressForm.vue";
 import Wrapper from "../extras/Wrapper.vue";
-import AtomHeadings from "../atoms/AtomHeadings.vue";
+import AtomHeading from "../atoms/AtomHeading.vue";
 export default {
   name: "TemplateSOPortal",
   components: {
@@ -117,7 +117,7 @@ export default {
     OrganismKycForm,
     OrganismAdditionalInfo,
     OrganismAddressForm,
-    AtomHeadings,
+    AtomHeading,
     Wrapper,
   },
   emits: ["finalSubmit"],

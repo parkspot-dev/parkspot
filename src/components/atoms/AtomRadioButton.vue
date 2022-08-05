@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: "AtomRadioButtons",
+  name: "AtomRadioButton",
   data() {
     return {
       radio: "",

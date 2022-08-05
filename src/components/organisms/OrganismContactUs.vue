@@ -1,7 +1,7 @@
 <template>
   <div class="contactUs">
     <div class="contactUs-header mg-large">
-      <AtomHeadings class="mb-2">Got a question?</AtomHeadings>
+      <AtomHeading class="mb-2">Got a question?</AtomHeading>
       <AtomParagraph>
         Fill up the form and our Team will get back to you within 24 hours.
       </AtomParagraph>
@@ -54,13 +54,13 @@
 </template>
 
 <script>
-import AtomHeadings from "../atoms/AtomHeadings.vue";
+import AtomHeading from "../atoms/AtomHeading.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
 import AtomIcon from "../atoms/AtomIcon.vue";
 export default {
   name: "OrganismContactUs",
   components: {
-    AtomHeadings,
+    AtomHeading,
     AtomParagraph,
     AtomIcon,
   },

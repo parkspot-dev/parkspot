@@ -4,7 +4,7 @@
     :rules="rules"
     v-slot="{ errors, valid }"
   >
-    <AtomInputs
+    <AtomInput
       v-model="innerValue"
       :placeholder="placeholder"
       :type="inputType"
@@ -13,18 +13,18 @@
       :label="label"
       class="mb-4"
     >
-    </AtomInputs>
+    </AtomInput>
   </ValidationProvider>
 </template>
 
 <script>
 import { ValidationProvider } from "vee-validate";
-import AtomInputs from "../atoms/AtomInputs.vue";
+import AtomInput from "../atoms/AtomInput.vue";
 export default {
   name: "MoleculeNameInput",
   components: {
     ValidationProvider,
-    AtomInputs,
+    AtomInput,
   },
   props: {
     value: {

@@ -9,7 +9,7 @@
             :formSubmitted="formSubmitted"
             @formValidate="contactFormValidate"
           ></OrganismContactForm>
-          <AtomButtons @click.native="sendMsg">Send Message</AtomButtons>
+          <AtomButton @click.native="sendMsg">Send Message</AtomButton>
         </div>
       </div>
     </div>
@@ -20,14 +20,14 @@
 import Wrapper from "../extras/Wrapper.vue";
 import OrganismContactUs from "../organisms/OrganismContactUs.vue";
 import OrganismContactForm from "../organisms/OrganismContactForm.vue";
-import AtomButtons from "../atoms/AtomButtons.vue";
+import AtomButton from "../atoms/AtomButton.vue";
 export default {
   name: "TemplateContactUs",
   components: {
     Wrapper,
     OrganismContactUs,
     OrganismContactForm,
-    AtomButtons,
+    AtomButton,
   },
   emits: ["contactUs"],
   data() {

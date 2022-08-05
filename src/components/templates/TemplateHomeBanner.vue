@@ -11,9 +11,9 @@
         </h2>
         <SearchInput class="banner-input"></SearchInput>
         <div class="btn-wrapper">
-          <AtomButtons class="banner-btn" @click.native="flyToSrp">
+          <AtomButton class="banner-btn" @click.native="flyToSrp">
             Search ParkSpots
-          </AtomButtons>
+          </AtomButton>
         </div>
       </div>
     </div>
@@ -23,13 +23,13 @@
 <script>
 import Wrapper from "../extras/Wrapper.vue";
 import SearchInput from "../extras/SearchInput.vue";
-import AtomButtons from "../atoms/AtomButtons.vue";
+import AtomButton from "../atoms/AtomButton.vue";
 export default {
   name: "TemplateHomeBanner",
   components: {
     Wrapper,
     SearchInput,
-    AtomButtons,
+    AtomButton,
   },
   emits: ["flyToSrp"],
   methods: {

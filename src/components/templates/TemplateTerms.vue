@@ -1,7 +1,7 @@
 <template>
   <Wrapper>
     <div class="terms-container">
-      <AtomHeadings class="mb-6"> Terms and Conditions </AtomHeadings>
+      <AtomHeading class="mb-6"> Terms and Conditions </AtomHeading>
 
       <AtomParagraph class="mb-3">
         Please read these terms and conditions carefully before using Our
@@ -175,13 +175,13 @@
 
 <script>
 import Wrapper from "../extras/Wrapper.vue";
-import AtomHeadings from "../atoms/AtomHeadings.vue";
+import AtomHeading from "../atoms/AtomHeading.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
 export default {
   name: "TemplateTerms",
   components: {
     Wrapper,
-    AtomHeadings,
+    AtomHeading,
     AtomParagraph,
   },
 };

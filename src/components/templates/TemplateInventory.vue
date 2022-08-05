@@ -101,7 +101,7 @@
         </span>
       </b-table-column>
 
-      <b-table-column> <AtomButtons> Update </AtomButtons> </b-table-column>
+      <b-table-column> <AtomButton> Update </AtomButton> </b-table-column>
 
       <template #empty>
         <div class="has-text-centered">No records</div>
@@ -112,7 +112,7 @@
 
 <script>
 import Wrapper from "../extras/Wrapper.vue";
-import AtomButtons from "../atoms/AtomButtons.vue";
+import AtomButton from "../atoms/AtomButton.vue";
 import AtomTextarea from "../atoms/AtomTextarea.vue";
 import AtomSelectInput from "../atoms/AtomSelectInput.vue";
 import AtomDatePicker from "../atoms/AtomDatePicker.vue";
@@ -120,7 +120,7 @@ export default {
   name: "TemplateInventory",
   components: {
     Wrapper,
-    AtomButtons,
+    AtomButton,
     AtomTextarea,
     AtomSelectInput,
     AtomDatePicker,

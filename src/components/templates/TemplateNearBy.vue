@@ -1,7 +1,7 @@
 <template>
   <div>
     <HeaderBanner>
-      <AtomHeadings class="custom-title"> Book Your Parking Spot </AtomHeadings>
+      <AtomHeading class="custom-title"> Book Your Parking Spot </AtomHeading>
       <b-breadcrumb align="is-centered" size="is-medium">
         <b-breadcrumb-item tag="router-link" to="/"> Home </b-breadcrumb-item>
         <b-breadcrumb-item tag="router-link" to="/blog" active>
@@ -14,9 +14,9 @@
     </HeaderBanner>
 
     <Wrapper>
-      <AtomHeadings class="mb-4" :level="'h4'">
+      <AtomHeading class="mb-4" :level="'h4'">
         Parking near {{ locationWithCaps }}
-      </AtomHeadings>
+      </AtomHeading>
       <div class="columns mb-6">
         <MoleculeSRPCard
           class="column"
@@ -26,9 +26,9 @@
         ></MoleculeSRPCard>
       </div>
       <div class="nearbyText-container">
-        <AtomHeadings :level="'h3'">
+        <AtomHeading :level="'h3'">
           Find and book parking spaces near {{ locationWithCaps }}
-        </AtomHeadings>
+        </AtomHeading>
         <AtomParagraph class="custom-nearby">{{ nearByText }}</AtomParagraph>
         <br />
         <AtomParagraph class="custom-nearby">
@@ -43,7 +43,7 @@
 <script>
 import HeaderBanner from "../extras/HeaderBanner.vue";
 // import SearchInput from "../extras/SearchInput.vue";
-import AtomHeadings from "../atoms/AtomHeadings.vue";
+import AtomHeading from "../atoms/AtomHeading.vue";
 import MoleculeSRPCard from "../molecules/MoleculeSRPCard.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
 import Wrapper from "../extras/Wrapper.vue";
@@ -52,7 +52,7 @@ export default {
   components: {
     HeaderBanner,
     // SearchInput,
-    AtomHeadings,
+    AtomHeading,
     MoleculeSRPCard,
     AtomParagraph,
     Wrapper,

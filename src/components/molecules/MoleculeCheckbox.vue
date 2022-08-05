@@ -7,11 +7,11 @@
     class="custom-wrapper"
   >
     <label class="label"><slot></slot></label>
-    <AtomCheckboxs
+    <AtomCheckbox
       @change.native="handleChange"
       :values="values"
       class="mb-5"
-    ></AtomCheckboxs>
+    ></AtomCheckbox>
     <slot name="extra"></slot>
     <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
   </ValidationProvider>
@@ -19,12 +19,12 @@
 
 <script>
 import { ValidationProvider } from "vee-validate";
-import AtomCheckboxs from "../atoms/AtomCheckboxs.vue";
+import AtomCheckbox from "../atoms/AtomCheckbox.vue";
 export default {
   name: "MoleculeCheckBox",
   components: {
     ValidationProvider,
-    AtomCheckboxs,
+    AtomCheckbox,
   },
   props: {
     rules: {

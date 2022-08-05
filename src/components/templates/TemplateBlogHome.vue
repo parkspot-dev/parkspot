@@ -1,7 +1,7 @@
 <template>
   <div>
     <HeaderBanner>
-      <AtomHeadings class="custom-title">Parking Blogs</AtomHeadings>
+      <AtomHeading class="custom-title">Parking Blogs</AtomHeading>
       <b-breadcrumb align="is-centered" size="is-medium">
         <b-breadcrumb-item tag="router-link" to="/"> Home </b-breadcrumb-item>
         <b-breadcrumb-item tag="router-link" to="/blog" active>
@@ -25,14 +25,14 @@
 
 <script>
 import Wrapper from "../extras/Wrapper.vue";
-import AtomHeadings from "../atoms/AtomHeadings.vue";
+import AtomHeading from "../atoms/AtomHeading.vue";
 import HeaderBanner from "../extras/HeaderBanner.vue";
 import MoleculeBlogCard from "../molecules/MoleculeBlogCard.vue";
 export default {
   name: "TemplateBlogHome",
   components: {
     Wrapper,
-    AtomHeadings,
+    AtomHeading,
     HeaderBanner,
     MoleculeBlogCard,
   },

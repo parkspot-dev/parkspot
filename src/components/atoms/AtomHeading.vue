@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "AtomHeadings",
+  name: "AtomHeading",
   props: {
     /**
      * The heading level used for the heading

@@ -10,10 +10,10 @@
         :rules="rules"
         v-slot="{ errors }"
       >
-        <AtomRadioButtons
+        <AtomRadioButton
           @change.native="handleChange"
           :values="values"
-        ></AtomRadioButtons>
+        ></AtomRadioButton>
         <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
       </ValidationProvider>
     </div>
@@ -22,10 +22,10 @@
 
 <script>
 import { ValidationProvider } from "vee-validate";
-import AtomRadioButtons from "../atoms/AtomRadioButtons.vue";
+import AtomRadioButton from "../atoms/AtomRadioButton.vue";
 export default {
   name: "MoleculeRadioButton",
-  components: { ValidationProvider, AtomRadioButtons },
+  components: { ValidationProvider, AtomRadioButton },
   props: {
     values: {
       type: Array,

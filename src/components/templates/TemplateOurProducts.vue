@@ -1,9 +1,9 @@
 <template>
   <Wrapper data-aos="fade-out">
     <AtomParagraph class="custom-subtitle">Types of Products</AtomParagraph>
-    <AtomHeadings class="custom-title" :level="'h2'">
+    <AtomHeading class="custom-title" :level="'h2'">
       Our Parking Products
-    </AtomHeadings>
+    </AtomHeading>
     <b-carousel-list v-model="test" :data="items" v-bind="al">
       <template #item="list">
         <MoleculeProductCard
@@ -18,7 +18,7 @@
 <script>
 import Wrapper from "../extras/Wrapper.vue";
 import MoleculeProductCard from "../molecules/MoleculeProductCard.vue";
-import AtomHeadings from "../atoms/AtomHeadings.vue";
+import AtomHeading from "../atoms/AtomHeading.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
 
 export default {
@@ -26,7 +26,7 @@ export default {
   components: {
     Wrapper,
     MoleculeProductCard,
-    AtomHeadings,
+    AtomHeading,
     AtomParagraph,
   },
   emits: ["arrowBtn"],

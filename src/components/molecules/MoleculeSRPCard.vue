@@ -25,21 +25,21 @@
     <AtomParagraph class="card-spot" :type="'span'">
       <strong>Available Spot : </strong> {{ spot.SlotsAvailable }}
     </AtomParagraph>
-    <AtomButtons class="card-btn"> Book Spot </AtomButtons>
+    <AtomButton class="card-btn"> Book Spot </AtomButton>
   </div>
 </template>
 
 <script>
 import AtomRating from "../atoms/AtomRating.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
-import AtomButtons from "../atoms/AtomButtons.vue";
+import AtomButton from "../atoms/AtomButton.vue";
 import AtomIcon from "../atoms/AtomIcon.vue";
 export default {
   name: "MoleculeSRPCard",
   components: {
     AtomRating,
     AtomParagraph,
-    AtomButtons,
+    AtomButton,
     AtomIcon,
   },
   props: {

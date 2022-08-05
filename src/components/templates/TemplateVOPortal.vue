@@ -1,8 +1,8 @@
 <template>
   <Wrapper>
-    <AtomHeadings class="mb-5 has-text-centered">
+    <AtomHeading class="mb-5 has-text-centered">
       Fill the form to Request your Parking Spot
-    </AtomHeadings>
+    </AtomHeading>
     <div class="card p-6 cmargin">
       <b-steps
         v-model="activeStep"
@@ -18,9 +18,9 @@
           :clickable="isStepsClickable"
           :type="btnStack[0] ? 'is-success' : 'is-warning'"
         >
-          <AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+          <AtomHeading :level="headingLevel" class="mb-5 has-text-centered">
             Contact Details
-          </AtomHeadings>
+          </AtomHeading>
           <OrganismContactForm
             :formSubmitted="btnStack[0]"
             @formValidate="contactFormValidate"
@@ -33,9 +33,9 @@
           :clickable="isStepsClickable"
           :type="btnStack[1] ? 'is-success' : 'is-warning'"
         >
-          <AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+          <AtomHeading :level="headingLevel" class="mb-5 has-text-centered">
             Location Details
-          </AtomHeadings>
+          </AtomHeading>
           <OrganismAddressForm
             :formSubmitted="btnStack[1]"
             @formValidate="addressFormValidate"
@@ -49,9 +49,9 @@
           :clickable="isStepsClickable"
           disabled
           :type="btnStack[2] ? 'is-success' : 'is-warning'"
-          ><AtomHeadings :level="headingLevel" class="mb-5 has-text-centered">
+          ><AtomHeading :level="headingLevel" class="mb-5 has-text-centered">
             Additional Details
-          </AtomHeadings>
+          </AtomHeading>
           <OrganismPreferenceForm
             :formSubmitted="btnStack[2]"
             @formValidate="preferenceFormValidate"
@@ -93,14 +93,14 @@ import OrganismContactForm from "../organisms/OrganismContactForm.vue";
 import OrganismPreferenceForm from "../organisms/OrganismPreferenceForm.vue";
 import OrganismAddressForm from "../organisms/OrganismAddressForm.vue";
 import Wrapper from "../extras/Wrapper.vue";
-import AtomHeadings from "../atoms/AtomHeadings.vue";
+import AtomHeading from "../atoms/AtomHeading.vue";
 export default {
   name: "TemplateVOPortal",
   components: {
     OrganismContactForm,
     OrganismPreferenceForm,
     OrganismAddressForm,
-    AtomHeadings,
+    AtomHeading,
     Wrapper,
   },
   emits: ["finalSubmit"],

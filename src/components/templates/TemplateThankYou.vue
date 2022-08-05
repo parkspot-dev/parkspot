@@ -10,9 +10,9 @@
       >We've registered the parkspot for you.</AtomParagraph
     >
     <div class="custom-button">
-      <AtomButtons @btnClick="homeBtn" :left="'arrow-left'">
+      <AtomButton @btnClick="homeBtn" :left="'arrow-left'">
         Back Home
-      </AtomButtons>
+      </AtomButton>
     </div>
     <AtomParagraph :type="'p'" class="custom-para"
       >If you have any issues. Call +91 80929 96057
@@ -24,14 +24,14 @@
 import Wrapper from "../extras/Wrapper.vue";
 import AtomImage from "../atoms/AtomImage.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
-import AtomButtons from "../atoms/AtomButtons.vue";
+import AtomButton from "../atoms/AtomButton.vue";
 export default {
   name: "TemplateThankYou",
   components: {
     Wrapper,
     AtomImage,
     AtomParagraph,
-    AtomButtons,
+    AtomButton,
   },
   emits: ["homeBtn"],
   data() {

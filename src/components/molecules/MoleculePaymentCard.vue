@@ -10,7 +10,7 @@
       <strong> Amount: {{ bookingDetails.amount }} </strong>
     </AtomParagraph>
     <a :href="paymentMode.PaymentLink">
-      <AtomButtons> Pay Now </AtomButtons>
+      <AtomButton> Pay Now </AtomButton>
     </a>
 
     <AtomParagraph>
@@ -23,12 +23,12 @@
 
 <script>
 import AtomParagraph from "../atoms/AtomParagraph.vue";
-import AtomButtons from "../atoms/AtomButtons.vue";
+import AtomButton from "../atoms/AtomButton.vue";
 export default {
   name: "MoleculePaymentCard",
   components: {
     AtomParagraph,
-    AtomButtons,
+    AtomButton,
   },
   props: {
     bookingDetails: {

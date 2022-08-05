@@ -1,8 +1,8 @@
 <template>
   <div class="custom-card">
-    <AtomHeadings :level="'h4'" class="mb-3">
+    <AtomHeading :level="'h4'" class="mb-3">
       {{ featureHeading }}
-    </AtomHeadings>
+    </AtomHeading>
     <AtomParagraph :variation="'small'">
       <slot></slot>
     </AtomParagraph>
@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import AtomHeadings from "../atoms/AtomHeadings.vue";
+import AtomHeading from "../atoms/AtomHeading.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
 export default {
   name: "MoleculeFeatureCard",
   components: {
-    AtomHeadings,
+    AtomHeading,
     AtomParagraph,
   },
   props: {
