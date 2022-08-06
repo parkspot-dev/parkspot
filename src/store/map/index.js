@@ -25,24 +25,30 @@ const getters = {
       getMapConfig(state) {
             return state.mapConfig;
       },
+
       getLocationName(state) {
             return state.locations;
       },
+
       getNewMapCenter(state) {
             return state.center;
       },
+
       getLocDetails(state) {
             return {
                   locDetails: state.selectedLocation,
                   lnglat: state.center,
             };
       },
+
       getSrpResults(state) {
             return state.srpResults;
       },
+
       getPaginateSrpResults(state) {
             return state.paginateSrpResults;
       },
+
       getTotalPages() {
             return state.totalPages;
       },
@@ -52,37 +58,47 @@ const mutations = {
       "update-location"(state, data) {
             state.locations = data;
       },
+
       "update-selected-location"(state, data) {
             state.selectedLocation.locName = data;
       },
+
       "update-selected-city"(state, data) {
             state.selectedLocation.city = data;
       },
+
       "update-selected-state"(state, data) {
             state.selectedLocation.state = data;
       },
+
       "update-selected-country"(state, data) {
             state.selectedLocation.country = data;
       },
+
       "update-map-config"(state, data) {
             state.mapConfig.center = data;
             state.center = data;
       },
+
       "update-total-pages"(state, data) {
             state.totalPages = data;
       },
+
       "update-srp-results"(state, data) {
             state.srpResults = data;
       },
+
       "update-map-center"(state, data) {
             state.center = data;
       },
+
       "update-paginated-srp-data"(state, pageNum) {
             state.paginateSrpResults = [];
             for (let i = (pageNum - 1) * 3; i < pageNum * 3; i++) {
                   state.paginateSrpResults.push(state.srpResults[i]);
             }
       },
+
       "update-center-srp"({ state, commit }) {
             let ys = state.paginateSrpResults.reduce((long, site) => {
                   return long + site.Long;

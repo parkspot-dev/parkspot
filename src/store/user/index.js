@@ -15,18 +15,23 @@ const mutations = {
       "update-contact"(state, data = {}) {
             state.contactForm = data;
       },
+
       "update-kyc"(state, data = {}) {
             state.kycForm = data;
       },
+
       "update-additional-info"(state, data = {}) {
             state.additionalInfo = data;
       },
+
       "update-login"(state, data = {}) {
             state.login = data;
       },
+
       "update-location-details"(state, data = {}) {
             state.locationDetails = data;
       },
+
       "update-preference"(state, data = {}) {
             state.preference = data;
       },
@@ -48,9 +53,11 @@ const actions = {
             commit("update-login", loginReq);
             mayaClient.post("/auth/register", req);
       },
+
       login({ state }) {
             mayaClient.post("/auth/login", state.login);
       },
+
       kyc({ state }) {
             const req = {
                   ContactNo: state.contactForm.cno,
@@ -66,6 +73,7 @@ const actions = {
             };
             mayaClient.patch("/kyc", req);
       },
+
       contact({ state }) {
             let convertedAmenities;
             state.additionalInfo.amenities.forEach((data) => {
@@ -96,6 +104,7 @@ const actions = {
             };
             mayaClient.post("/contact", req);
       },
+
       onlyContact({ state }) {
             let comments = "From the Home Page ----->" + state.contactForm.msg;
             const req = {

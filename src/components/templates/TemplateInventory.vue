@@ -94,10 +94,11 @@
                   </b-table-column>
 
                   <b-table-column
-                        field="status_nextCall"
+                        field="NextCall"
                         label="Status/Next Call"
                         width="100px"
                         v-slot="props"
+                        sortable
                   >
                         <span class="tag is-warning">
                               {{ statusList[props.row.Status].name }}
@@ -162,6 +163,16 @@
                               "/" +
                               props.row.Longitude.toFixed(6)
                         }}
+
+                        <p>Lat :</p>
+                        <AtomInput
+                              @changed="updateLat(props.row, ...arguments)"
+                        ></AtomInput>
+
+                        <p>Lng :</p>
+                        <AtomInput
+                              @changed="updateLng(props.row, ...arguments)"
+                        ></AtomInput>
                   </b-table-column>
 
                   <template #empty>
@@ -175,12 +186,14 @@
 import AtomTextarea from "../atoms/AtomTextarea.vue";
 import AtomSelectInput from "../atoms/AtomSelectInput.vue";
 import AtomDatePicker from "../atoms/AtomDatePicker.vue";
+import AtomInput from "../atoms/AtomInput.vue";
 export default {
       name: "TemplateInventory",
       components: {
             AtomTextarea,
             AtomSelectInput,
             AtomDatePicker,
+            AtomInput,
       },
       props: {
             lists: {
@@ -235,6 +248,7 @@ export default {
                               return "High";
                   }
             },
+
             getStatus(val) {
                   if (new Date().getTime() > new Date(val).getTime()) {
                         return true;
@@ -242,16 +256,29 @@ export default {
                         return false;
                   }
             },
+
             onDateUpdate(spotData, date) {
                   spotData["NextCall"] = date.toJSON();
                   this.$emit("updateRequest", spotData);
             },
+
             onCommentUpdate(spotData, comments) {
                   spotData["Comments"] = comments;
                   this.$emit("updateRequest", spotData);
             },
+
             onStatusUpdate(spotData, status) {
                   spotData["Status"] = status - 1;
+                  this.$emit("updateRequest", spotData);
+            },
+
+            updateLat(spotData, lat) {
+                  spotData["Latitude"] = parseInt(lat);
+                  this.$emit("updateRequest", spotData);
+            },
+
+            updateLng(spotData, lng) {
+                  spotData["Longitude"] = parseInt(lng);
                   this.$emit("updateRequest", spotData);
             },
       },
