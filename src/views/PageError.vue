@@ -1,5 +1,5 @@
 <template>
-      <TemplateError @homeBtn="homeBtn"></TemplateError>
+      <TemplateError @homeBtn="homeBtn" :msg="msg"></TemplateError>
 </template>
 
 <script>
@@ -10,11 +10,20 @@ export default {
             TemplateError,
       },
       data() {
-            return {};
+            return {
+                  msg: "",
+            };
+      },
+      mounted() {
+            this.getMsg();
       },
       methods: {
             homeBtn() {
                   this.$router.push({ name: "Home" });
+            },
+
+            getMsg() {
+                  this.msg = this.$route.params.msg;
             },
       },
 };

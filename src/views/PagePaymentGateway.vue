@@ -1,15 +1,19 @@
 <template>
-      <TemplatePaymentGateway
-            :bookingDetails="bookingDetails"
-            :paymentMode="paymentMode"
-            :status="status"
-            :error="error"
-            :success="success"
-            :pending="pending"
-            :displayMsg="displayMsg"
-            :displayMsgContent="displayMsgContent"
-      >
-      </TemplatePaymentGateway>
+      <div class="custom-bg">
+            <div class="bg-decor"></div>
+
+            <TemplatePaymentGateway
+                  :bookingDetails="bookingDetails"
+                  :paymentMode="paymentMode"
+                  :status="status"
+                  :error="error"
+                  :success="success"
+                  :pending="pending"
+                  :displayMsg="displayMsg"
+                  :displayMsgContent="displayMsgContent"
+            >
+            </TemplatePaymentGateway>
+      </div>
 </template>
 <script>
 import TemplatePaymentGateway from "../components/templates/TemplatePaymentGateway.vue";
@@ -87,6 +91,7 @@ export default {
                         this.getStatus();
                   }
             },
+
             async getStatus() {
                   const o = this.$route.query.order_id;
                   const response = await fetch(
@@ -101,13 +106,23 @@ export default {
                   );
                   const data = await response.json();
                   if (data === "PAID") {
-                        this.success = !this.success;
+                        this.$router.push({
+                              name: "thankYou",
+                              params: { msg: "You have paid the amount." },
+                        });
                   } else if (data === "ACTIVE") {
-                        this.pending = !this.pending;
+                        this.$router.push({
+                              name: "error",
+                              params: { msg: "Your order is still pending!" },
+                        });
                   } else {
-                        this.error = !this.error;
+                        this.$router.push({
+                              name: "error",
+                        });
                   }
             },
       },
 };
 </script>
+<style scoped>
+</style>

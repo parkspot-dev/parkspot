@@ -10,9 +10,9 @@
                   </div>
             </div>
             <h1 class="custom-header">Oops!</h1>
-            <AtomParagraph :type="'p'" class="custom-para"
-                  >Something went wrong...!</AtomParagraph
-            >
+            <AtomParagraph :type="'p'" class="custom-para">
+                  {{ msg }}
+            </AtomParagraph>
             <div class="custom-button">
                   <AtomButton @btnClick="homeBtn" :left="'arrow-left'">
                         Back Home
@@ -36,6 +36,12 @@ export default {
             AtomImage,
             AtomParagraph,
             AtomButton,
+      },
+      props: {
+            msg: {
+                  type: String,
+                  default: "Something went wrong...!",
+            },
       },
       emits: ["homeBtn"],
       data() {

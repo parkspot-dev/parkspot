@@ -10,9 +10,9 @@
                   </div>
             </div>
             <h1 class="custom-header">Thank You, enjoy!</h1>
-            <AtomParagraph :type="'p'" class="custom-para"
-                  >We've registered the parkspot for you.</AtomParagraph
-            >
+            <AtomParagraph :type="'p'" class="custom-para">
+                  {{ msg }}
+            </AtomParagraph>
             <div class="custom-button">
                   <AtomButton @btnClick="homeBtn" :left="'arrow-left'">
                         Back Home
@@ -36,6 +36,12 @@ export default {
             AtomImage,
             AtomParagraph,
             AtomButton,
+      },
+      props: {
+            msg: {
+                  type: String,
+                  default: "We've registered the parkspot for you.",
+            },
       },
       emits: ["homeBtn"],
       data() {

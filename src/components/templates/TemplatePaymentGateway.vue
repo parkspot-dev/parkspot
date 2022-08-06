@@ -6,27 +6,17 @@
                   :paymentMode="paymentMode"
             >
             </MoleculePaymentCard>
-            <MoleculePaymentStatusCard
-                  v-if="this.status"
-                  :error="error"
-                  :success="success"
-                  :pending="pending"
-                  :displayMsg="displayMsg"
-                  :displayMsgContent="displayMsgContent"
-            ></MoleculePaymentStatusCard>
       </Wrapper>
 </template>
 
 <script>
 import Wrapper from "../extras/Wrapper.vue";
 import MoleculePaymentCard from "../molecules/MoleculePaymentCard.vue";
-import MoleculePaymentStatusCard from "../molecules/MoleculePaymentStatusCard.vue";
 export default {
       name: "TemplatePaymentGateway",
       components: {
             Wrapper,
             MoleculePaymentCard,
-            MoleculePaymentStatusCard,
       },
       props: {
             bookingDetails: {

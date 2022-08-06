@@ -1,5 +1,5 @@
 <template>
-      <TemplateThankYou @homeBtn="homeBtn"></TemplateThankYou>
+      <TemplateThankYou @homeBtn="homeBtn" :msg="msg"></TemplateThankYou>
 </template>
 
 <script>
@@ -10,11 +10,20 @@ export default {
             TemplateThankYou,
       },
       data() {
-            return {};
+            return {
+                  msg: "",
+            };
+      },
+      mounted() {
+            this.getMsg();
       },
       methods: {
             homeBtn() {
                   this.$router.push({ name: "Home" });
+            },
+
+            getMsg() {
+                  this.msg = this.$route.params.msg;
             },
       },
 };
