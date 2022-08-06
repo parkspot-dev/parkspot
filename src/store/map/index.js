@@ -98,19 +98,6 @@ const mutations = {
                   state.paginateSrpResults.push(state.srpResults[i]);
             }
       },
-
-      "update-center-srp"({ state, commit }) {
-            let ys = state.paginateSrpResults.reduce((long, site) => {
-                  return long + site.Long;
-            }, 0);
-            let xs = state.paginateSrpResults.reduce((a, site) => {
-                  return a + site.Lat;
-            }, 0);
-            commit("update-map-config", [
-                  ys / state.paginateSrpResults.length,
-                  xs / state.paginateSrpResults.length,
-            ]);
-      },
 };
 
 const actions = {
@@ -130,8 +117,23 @@ const actions = {
             if (data && Object.prototype.hasOwnProperty.call(data, "Sites")) {
                   commit("update-srp-results", data.Sites);
                   commit("update-total-pages", data.Sites.length);
+                  commit("update-paginated-srp-data", 1); // paginated srp result stored
                   state.srpResults = data.Sites;
             }
+      },
+
+      updateCenterSrp({ state, commit }) {
+            console.log("update center srp", state);
+            let ys = state.paginateSrpResults.reduce((long, site) => {
+                  return long + site.Long;
+            }, 0);
+            let xs = state.paginateSrpResults.reduce((a, site) => {
+                  return a + site.Lat;
+            }, 0);
+            commit("update-map-config", [
+                  ys / state.paginateSrpResults.length,
+                  xs / state.paginateSrpResults.length,
+            ]);
       },
 };
 

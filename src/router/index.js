@@ -27,7 +27,7 @@ router.beforeEach((to, from, next) => {
             document.title = `${to.meta.title}  
     ${to.params.id}`;
       } else if (to.name === "srp") {
-            document.title = `${to.meta.title} ${to.query.loc}`;
+            document.title = `${to.meta.title} ${to.params.location || ""}`;
       } else if (to.name === "discover") {
             document.title = `${to.meta.title} 
     ${to.params.pathMatch.replace(/b*\//, "")} 

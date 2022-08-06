@@ -1,7 +1,7 @@
 <template>
       <div class="bg-wrap">
             <Wrapper>
-                  <div class="featureContainer">
+                  <div class="featureContainer" data-aos="fade-left">
                         <MoleculeFeatureCard :featureHeading="'Save Money'">
                               Save up to 20% on our site compared to the cost of
                               other parking platform.
@@ -49,6 +49,21 @@ export default {
       gap: 1.5rem;
       padding: 5rem;
 }
+/* .feature-animate {
+      animation-duration: 3s;
+      animation-name: slidein;
+}
+@keyframes slidein {
+      from {
+            margin-left: 100%;
+            width: 300%;
+      }
+
+      to {
+            margin-left: 0%;
+            width: 100%;
+      }
+} */
 
 @media only screen and (max-width: 1200px) {
       .featureContainer {

@@ -2,7 +2,7 @@
       <b-loading
             :is-full-page="isFullPage"
             v-model="isLoading"
-            :can-cancel="true"
+            :can-cancel="false"
       ></b-loading>
 </template>
 

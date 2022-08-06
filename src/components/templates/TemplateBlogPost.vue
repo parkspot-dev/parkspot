@@ -18,7 +18,7 @@
             </HeaderBanner>
 
             <Wrapper>
-                  <article class="article-wrapper">
+                  <article class="article-wrapper" data-aos="fade-up">
                         <header class="mb-6">
                               <AtomHeading class="mb-2">
                                     {{ blog.title }}

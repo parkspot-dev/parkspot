@@ -158,11 +158,21 @@
                         label="Lat/Lng"
                         v-slot="props"
                   >
-                        {{
-                              props.row.Latitude.toFixed(6) +
-                              "/" +
-                              props.row.Longitude.toFixed(6)
-                        }}
+                        <a
+                              target="_blank"
+                              @click="
+                                    toSrp(
+                                          props.row.Latitude,
+                                          props.row.Longitude
+                                    )
+                              "
+                        >
+                              {{
+                                    props.row.Latitude.toFixed(6) +
+                                    "/" +
+                                    props.row.Longitude.toFixed(6)
+                              }}
+                        </a>
 
                         <p>Lat :</p>
                         <AtomInput
@@ -203,7 +213,7 @@ export default {
                   type: Boolean,
             },
       },
-      emits: ["updateRequest"],
+      emits: ["updateRequest", "toSrp"],
       data() {
             return {
                   isEmpty: false,
@@ -263,8 +273,10 @@ export default {
             },
 
             onCommentUpdate(spotData, comments) {
-                  spotData["Comments"] = comments;
-                  this.$emit("updateRequest", spotData);
+                  if (spotData["Comments"] !== comments) {
+                        spotData["Comments"] = comments;
+                        this.$emit("updateRequest", spotData);
+                  }
             },
 
             onStatusUpdate(spotData, status) {
@@ -280,6 +292,10 @@ export default {
             updateLng(spotData, lng) {
                   spotData["Longitude"] = parseInt(lng);
                   this.$emit("updateRequest", spotData);
+            },
+
+            toSrp(lat, lng) {
+                  this.$emit("toSrp", lat, lng);
             },
       },
 };

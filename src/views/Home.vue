@@ -31,14 +31,20 @@ export default {
       },
       computed: {
             ...mapGetters({
-                  location: "map/getNewMapCenter",
+                  LocDetails: "map/getLocDetails",
             }),
       },
       methods: {
             flyToSrp() {
                   this.$router.push({
                         name: "srp",
-                        query: { lat: this.location[1], lng: this.location[0] },
+                        query: {
+                              lat: this.LocDetails.lnglat[1],
+                              lng: this.LocDetails.lnglat[0],
+                        },
+                        params: {
+                              location: this.LocDetails.locDetails.locName,
+                        },
                   });
             },
             onArrowBtn() {

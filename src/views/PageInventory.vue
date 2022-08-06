@@ -3,6 +3,7 @@
             :lists="spotDetails"
             :isLoading="isLoading"
             @updateRequest="updateRequest"
+            @toSrp="toSrp"
       ></TemplateInventory>
 </template>
 <script>
@@ -31,6 +32,7 @@ export default {
                   this.spotDetails = data;
                   this.isLoading = false;
             },
+
             async updateRequest(request) {
                   try {
                         this.isLoading = true;
@@ -63,6 +65,17 @@ export default {
                   }
 
                   this.isLoading = false;
+            },
+
+            toSrp(lat, lng) {
+                  let routeData = this.$router.resolve({
+                        name: "srp",
+                        query: {
+                              lat: lat,
+                              lng: lng,
+                        },
+                  });
+                  window.open(routeData.href, "_blank");
             },
       },
 };

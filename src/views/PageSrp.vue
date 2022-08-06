@@ -6,20 +6,23 @@
                   @changed="onPageChange"
                   :reRender="reRender"
             ></TemplateSrp>
+            <LoaderModal :isLoading="isLoading"></LoaderModal>
       </section>
 </template>
 <script>
 import TemplateSrp from "../components/templates/TemplateSrp.vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
+import LoaderModal from "../components/extras/LoaderModal.vue";
 export default {
       name: "PageSrp",
       components: {
             TemplateSrp,
+            LoaderModal,
       },
       data() {
             return {
-                  pageStart: 1,
                   reRender: 0,
+                  isLoading: false,
             };
       },
       computed: {
@@ -29,26 +32,29 @@ export default {
             }),
       },
       async mounted() {
-            await this.updateMapCenter([this.getLng(), this.getLat()]);
+            this.isLoading = true;
+            await this.updateMapConfig([this.getLng(), this.getLat()]);
             await this.srpCall();
-            this.updatePaginatedSrpData(this.pageStart);
             this.reRender++;
-            this.updateCenterSrp();
+            this.isLoading = false;
       },
       methods: {
             ...mapMutations({
                   updateMapCenter: "map/update-map-center",
+                  updateMapConfig: "map/update-map-config",
                   updatePaginatedSrpData: "map/update-paginated-srp-data",
-                  updateCenterSrp: "map/update-center-srp",
             }),
             ...mapActions({
                   srpCall: "map/srpCall",
+                  updateCenterSrp: "map/update-center-srp",
             }),
 
             onPageChange(pageNum) {
+                  this.isLoading = true;
                   this.updatePaginatedSrpData(pageNum);
                   this.updateCenterSrp();
                   this.reRender++;
+                  this.isLoading = false;
             },
             // methods to get Lat and Long
             getLat: function () {

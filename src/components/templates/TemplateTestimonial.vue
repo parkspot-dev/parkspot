@@ -1,5 +1,5 @@
 <template>
-      <Wrapper data-aos="fade-out">
+      <Wrapper data-aos="fade-up">
             <AtomParagraph class="custom-subtitle">Testimonials</AtomParagraph>
             <AtomHeading class="custom-title" :level="'h2'">
                   What Our Customers Say
