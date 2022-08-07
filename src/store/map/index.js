@@ -70,11 +70,13 @@ const mutations = {
             if (lsRecentID !== undefined) {
                   state.recentID = lsRecentID;
             }
+
             let objData = {
                   id: state.recentID,
                   fromLS: true,
                   ...data,
             };
+
             state.recentID = state.recentID + 1;
             localStorage.setItem("recentID", state.recentID);
 

@@ -11,6 +11,7 @@
                         :loading="isFetching"
                         @typing="getAsyncData"
                         @select="(option) => (selected = option)"
+                        keep-first
                         :open-on-focus="true"
                         @click.native="addRecentSearches()"
                   >
@@ -18,18 +19,25 @@
                               <div class="media">
                                     <!-- fromLS should be renamed -->
                                     <div
-                                          class="media-left"
+                                          class="media-left custom-color"
                                           v-show="props.option.fromLS"
                                     >
                                           <AtomIcon :icon="'history'">
                                           </AtomIcon>
                                     </div>
 
-                                    <div class="media-content">
+                                    <div
+                                          class="media-content"
+                                          :class="{
+                                                'custom-color':
+                                                      props.option.fromLS,
+                                          }"
+                                    >
                                           {{ props.option.place_name }}
                                     </div>
                               </div>
                         </template>
+                        <template #empty>No results for {{ search }}</template>
                   </b-autocomplete>
             </b-field>
       </section>
@@ -124,3 +132,9 @@ export default {
       },
 };
 </script>
+
+<style scoped>
+.custom-color {
+      color: var(--grey-shade);
+}
+</style>
