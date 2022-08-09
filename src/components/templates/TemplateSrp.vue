@@ -74,7 +74,7 @@ export default {
       flex: 60%;
 }
 .mapContainer {
-      height: 130vh;
+      height: 100%;
       position: relative;
 }
 .mapSearch {

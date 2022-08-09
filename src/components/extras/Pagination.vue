@@ -5,16 +5,27 @@
                   v-model="data"
                   :size="'is-small'"
                   :per-page="3"
+                  :range-before="2"
+                  :range-after="2"
+                  :order="'is-centered'"
                   @change="onChange"
             >
                   <template #previous="props">
-                        <b-pagination-button :page="props.page" tag="button">
+                        <b-pagination-button
+                              :page="props.page"
+                              tag="button"
+                              class="pagination-btn"
+                        >
                               Previous
                         </b-pagination-button>
                   </template>
 
                   <template #next="props">
-                        <b-pagination-button :page="props.page" tag="button">
+                        <b-pagination-button
+                              :page="props.page"
+                              tag="button"
+                              class="pagination-btn"
+                        >
                               Next
                         </b-pagination-button>
                   </template>
@@ -54,4 +65,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style >
+.pagination-link.is-current {
+      background-color: var(--secondary-color) !important;
+}
+.pagination-btn {
+      background-color: var(--primary-color);
+      cursor: pointer;
+}
+</style>

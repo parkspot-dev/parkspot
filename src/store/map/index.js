@@ -19,6 +19,8 @@ const state = {
       totalPages: 1, // default page number
       srpResults: [],
       paginateSrpResults: [],
+      recentSearch: [],
+      recentID: 0,
 };
 
 const getters = {
@@ -56,11 +58,38 @@ const getters = {
 
 const mutations = {
       "update-location"(state, data) {
-            state.locations = data;
+            let newData = [...state.recentSearch, ...data];
+            state.locations = [...newData];
+            console.log(state.locations);
       },
 
       "update-selected-location"(state, data) {
-            state.selectedLocation.locName = data;
+            state.selectedLocation.locName = data.place_name;
+
+            let lsRecentID = JSON.parse(localStorage.getItem("recentID"));
+            if (lsRecentID !== undefined) {
+                  state.recentID = lsRecentID;
+            }
+
+            let objData = {
+                  id: state.recentID,
+                  fromLS: true,
+                  ...data,
+            };
+
+            state.recentID = state.recentID + 1;
+            localStorage.setItem("recentID", state.recentID);
+
+            // performing LIFO in size of 3.
+            if (state.recentSearch.length >= 3) {
+                  state.recentSearch.pop();
+                  state.recentSearch.unshift(objData);
+            } else {
+                  state.recentSearch.unshift(objData);
+            }
+
+            // JSON used to store array as string in LS
+            localStorage.setItem("recent", JSON.stringify(state.recentSearch));
       },
 
       "update-selected-city"(state, data) {
@@ -119,11 +148,12 @@ const actions = {
                   commit("update-total-pages", data.Sites.length);
                   commit("update-paginated-srp-data", 1); // paginated srp result stored
                   state.srpResults = data.Sites;
+            } else {
+                  console.log("srpCall", data);
             }
       },
 
       updateCenterSrp({ state, commit }) {
-            console.log("update center srp", state);
             let ys = state.paginateSrpResults.reduce((long, site) => {
                   return long + site.Long;
             }, 0);
@@ -134,6 +164,11 @@ const actions = {
                   ys / state.paginateSrpResults.length,
                   xs / state.paginateSrpResults.length,
             ]);
+      },
+
+      getFromRecent({ state }) {
+            state.recentSearch = JSON.parse(localStorage.getItem("recent"));
+            return state.recentSearch;
       },
 };
 
