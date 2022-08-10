@@ -58,9 +58,12 @@ const getters = {
 
 const mutations = {
       "update-location"(state, data) {
+            if (state.recentSearch.length == 0) {
+                  state.locations = data;
+                  return;
+            }
             let newData = [...state.recentSearch, ...data];
             state.locations = [...newData];
-            console.log(state.locations);
       },
 
       "update-selected-location"(state, data) {
