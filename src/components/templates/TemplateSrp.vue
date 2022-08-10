@@ -18,7 +18,10 @@
                         :spotsList="spots"
                         :key="reRender"
                   ></MapContainer>
-                  <SearchInput class="mapSearch"></SearchInput>
+                  <SearchInput
+                        class="mapSearch"
+                        @changed="onChange"
+                  ></SearchInput>
             </div>
       </div>
 </template>
@@ -47,13 +50,17 @@ export default {
                   type: Number,
             },
       },
-      emits: ["changed"],
+      emits: ["changed", "flyToSrp"],
+
       methods: {
             onPageChange(page) {
                   this.$emit("changed", page);
             },
             onBook() {
                   this.$router.push({ name: "contactUs" });
+            },
+            onChange() {
+                  this.$emit("flyToSrp");
             },
       },
 };
@@ -82,6 +89,11 @@ export default {
       top: 20%;
       left: 50%;
       width: 500px;
+}
+.mapSearch-btn {
+      position: absolute;
+      top: 20%;
+      left: 50%;
 }
 @media only screen and (max-width: 1024px) {
       .srp-container {
