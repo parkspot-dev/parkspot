@@ -58,10 +58,6 @@ const getters = {
 
 const mutations = {
       "update-location"(state, data) {
-            if (state.recentSearch.length == 0) {
-                  state.locations = data;
-                  return;
-            }
             let newData = [...state.recentSearch, ...data];
             state.locations = [...newData];
       },
@@ -173,6 +169,9 @@ const actions = {
 
       getFromRecent({ state }) {
             state.recentSearch = JSON.parse(localStorage.getItem("recent"));
+            if (state.recentSearch === null) {
+                  return (state.recentSearch = []);
+            }
             return state.recentSearch;
       },
 };
