@@ -176,11 +176,13 @@
 
                         <p>Lat :</p>
                         <AtomInput
+                              :value="props.row.Latitude.toFixed(6)"
                               @changed="updateLat(props.row, ...arguments)"
                         ></AtomInput>
 
                         <p>Lng :</p>
                         <AtomInput
+                              :value="props.row.Longitude.toFixed(6)"
                               @changed="updateLng(props.row, ...arguments)"
                         ></AtomInput>
                   </b-table-column>
@@ -285,13 +287,23 @@ export default {
             },
 
             updateLat(spotData, lat) {
-                  spotData["Latitude"] = parseInt(lat);
-                  this.$emit("updateRequest", spotData);
+                  if (
+                        spotData["Latitude"].toString() !==
+                        parseFloat(lat).toString()
+                  ) {
+                        spotData["Latitude"] = parseFloat(lat);
+                        this.$emit("updateRequest", spotData);
+                  }
             },
 
             updateLng(spotData, lng) {
-                  spotData["Longitude"] = parseInt(lng);
-                  this.$emit("updateRequest", spotData);
+                  if (
+                        spotData["Longitude"].toString() !==
+                        parseFloat(lng).toString()
+                  ) {
+                        spotData["Longitude"] = parseFloat(lng);
+                        this.$emit("updateRequest", spotData);
+                  }
             },
 
             toSrp(lat, lng) {
