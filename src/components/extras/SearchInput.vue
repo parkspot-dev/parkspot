@@ -10,7 +10,7 @@
                         icon="magnify"
                         :loading="isFetching"
                         @typing="getAsyncData"
-                        @select="(option) => (selected = option)"
+                        @select="onSelect"
                         keep-first
                         :open-on-focus="true"
                         @click.native="addRecentSearches()"
@@ -61,6 +61,7 @@ export default {
                   type: String,
             },
       },
+      emits: ["changed"],
       data() {
             return {
                   selected: null,
@@ -128,6 +129,11 @@ export default {
                               this.LocationName.push(value);
                         }
                   }
+            },
+
+            onSelect(option) {
+                  this.selected = option;
+                  this.$emit("changed");
             },
       },
 };
