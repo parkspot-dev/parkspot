@@ -64,6 +64,7 @@ export default {
       watch: {
             // Handles internal model changes.
             innerValue(newVal) {
+                  console.log("select", newVal);
                   this.$emit("input", newVal);
                   this.$emit("changed", newVal);
             },

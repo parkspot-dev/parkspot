@@ -97,44 +97,62 @@
                         field="NextCall"
                         label="Status/Next Call"
                         width="100px"
-                        v-slot="props"
                         sortable
+                        searchable
                   >
-                        <span class="tag is-warning">
-                              {{ statusList[props.row.Status].name }}
-                        </span>
-                        <AtomSelectInput
-                              :list="statusList"
-                              class="custom-columnWidth"
-                              @changed="onStatusUpdate(props.row, ...arguments)"
-                        >
-                        </AtomSelectInput>
-                        <span
-                              class="tag is-warning"
-                              :class="{
-                                    'is-danger': getStatus(props.row.NextCall),
-                              }"
-                        >
-                              <span>
-                                    {{
-                                          getStatus(props.row.NextCall)
-                                                ? "delayed "
-                                                : "upcoming "
-                                    }}
+                        <template #searchable="props">
+                              <AtomSelectInput
+                                    :list="statusList"
+                                    class="custom-columnWidth"
+                                    v-model="props.filters['Status']"
+                              ></AtomSelectInput>
+                        </template>
+                        <template v-slot="props">
+                              <span class="tag is-warning">
+                                    {{ statusList[props.row.Status].name }}
                               </span>
-                              <strong>
-                                    {{
-                                          new Date(
+                              <AtomSelectInput
+                                    :list="statusList"
+                                    class="custom-columnWidth"
+                                    @changed="
+                                          onStatusUpdate(
+                                                props.row,
+                                                ...arguments
+                                          )
+                                    "
+                              >
+                              </AtomSelectInput>
+                              <span
+                                    class="tag is-warning"
+                                    :class="{
+                                          'is-danger': getStatus(
                                                 props.row.NextCall
-                                          ).toLocaleDateString()
-                                    }}
-                              </strong>
-                        </span>
-                        <AtomDatePicker
-                              class="custom-columnWidth"
-                              @changed="onDateUpdate(props.row, ...arguments)"
-                        >
-                        </AtomDatePicker>
+                                          ),
+                                    }"
+                              >
+                                    <span>
+                                          {{
+                                                getStatus(props.row.NextCall)
+                                                      ? "delayed "
+                                                      : "upcoming "
+                                          }}
+                                    </span>
+                                    <strong>
+                                          {{
+                                                new Date(
+                                                      props.row.NextCall
+                                                ).toLocaleDateString()
+                                          }}
+                                    </strong>
+                              </span>
+                              <AtomDatePicker
+                                    class="custom-columnWidth"
+                                    @changed="
+                                          onDateUpdate(props.row, ...arguments)
+                                    "
+                              >
+                              </AtomDatePicker>
+                        </template>
                   </b-table-column>
 
                   <b-table-column
@@ -227,19 +245,13 @@ export default {
                   hasMobileCards: true,
 
                   statusList: [
-                        { id: 1, name: "StatusNotSet" },
-                        { id: 2, name: "Registered" },
-                        { id: 3, name: "Processing" },
-                        { id: 4, name: "SpotSuggested" },
-                        { id: 5, name: "SpotAccepted" },
-                        { id: 6, name: "SpotDenied" },
-                        { id: 7, name: "Archive" },
-                  ],
-                  priorityList: [
-                        { id: 1, name: "Not Set" },
-                        { id: 2, name: "Low" },
-                        { id: 3, name: "Medium" },
-                        { id: 4, name: "High" },
+                        { id: 0, name: "StatusNotSet" },
+                        { id: 1, name: "Registered" },
+                        { id: 2, name: "Processing" },
+                        { id: 3, name: "SpotSuggested" },
+                        { id: 4, name: "SpotAccepted" },
+                        { id: 5, name: "SpotDenied" },
+                        { id: 6, name: "Archive" },
                   ],
 
                   model: {
@@ -282,7 +294,7 @@ export default {
             },
 
             onStatusUpdate(spotData, status) {
-                  spotData["Status"] = status - 1;
+                  spotData["Status"] = status;
                   this.$emit("updateRequest", spotData);
             },
 
@@ -308,6 +320,10 @@ export default {
 
             toSrp(lat, lng) {
                   this.$emit("toSrp", lat, lng);
+            },
+
+            filterData(val) {
+                  console.log("filterData", val);
             },
       },
 };
