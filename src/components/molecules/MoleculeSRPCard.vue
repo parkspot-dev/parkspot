@@ -1,7 +1,7 @@
 <template>
   <div class="custom-card">
     <figure class="card-img image is-96x96">
-      <img :alt="'parking spot image'" :src="spot.IconURL" />
+      <img :alt="'Parking spot image'" :src="spot.IconURL" />
     </figure>
     <AtomRating class="card-rating" :rate="spot.Rating"></AtomRating>
     <AtomParagraph class="card-title" :type="'span'">
