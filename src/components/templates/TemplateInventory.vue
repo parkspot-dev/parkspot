@@ -1,215 +1,196 @@
 <template>
-      <div class="custom-wrap">
-            <b-table
-                  :data="isEmpty ? [] : lists"
-                  :bordered="true"
-                  :hoverable="true"
-                  :loading="isLoading"
-                  :focusable="true"
-                  :mobile-cards="hasMobileCards"
-                  :scrollable="true"
-                  :sticky-header="true"
-                  height="800"
+    <div class="custom-wrap">
+        <b-table
+            :data="isEmpty ? [] : lists"
+            :bordered="true"
+            :hoverable="true"
+            :loading="isLoading"
+            :focusable="true"
+            :mobile-cards="hasMobileCards"
+            :scrollable="true"
+            :sticky-header="true"
+            height="800"
+        >
+            <b-table-column
+                field="ID"
+                label="ID"
+                width="40"
+                numeric
+                v-slot="props"
+                sortable
             >
-                  <b-table-column
-                        field="ID"
-                        label="ID"
-                        width="40"
-                        numeric
-                        v-slot="props"
-                        sortable
-                  >
-                        {{ props.row.ID }}
-                  </b-table-column>
+                {{ props.row.ID }}
+            </b-table-column>
 
-                  <b-table-column
-                        field="CreatedAt"
-                        label="Date"
-                        centered
-                        v-slot="props"
-                        sortable
-                  >
-                        <span class="tag is-success">
-                              {{
-                                    new Date(
-                                          props.row.CreatedAt
-                                    ).toLocaleDateString()
-                              }}
+            <b-table-column
+                field="CreatedAt"
+                label="Date"
+                centered
+                v-slot="props"
+                sortable
+            >
+                <span class="tag is-success">
+                    {{ new Date(props.row.CreatedAt).toLocaleDateString() }}
+                </span>
+            </b-table-column>
+
+            <b-table-column
+                field="Priority"
+                label="Priority"
+                v-slot="props"
+                sortable
+            >
+                <span
+                    class="tag"
+                    :class="{
+                        'is-low': props.row.Priority === 1,
+                        'is-medium': props.row.Priority === 2,
+                        'is-high': props.row.Priority === 3,
+                    }"
+                >
+                    {{ getPriority(props.row.Priority) }}
+                </span>
+            </b-table-column>
+
+            <b-table-column
+                field="contact"
+                label="Contact Details"
+                v-slot="props"
+            >
+                <p>
+                    Name:
+                    <strong>{{ props.row.Name }}</strong>
+                </p>
+                <p>
+                    Mobile:
+                    <strong>{{ props.row.Mobile }}</strong>
+                </p>
+                <p>
+                    Email:
+                    <strong>{{ props.row.EmailID }}</strong>
+                </p>
+                <p>
+                    Landmark :
+                    <strong>{{ props.row.Landmark }}</strong>
+                </p>
+                <p>
+                    City:
+                    {{ props.row.City }}
+                </p>
+                <p>
+                    Duration :
+                    {{ props.row.Duration }}
+                </p>
+                <p>
+                    Car Model:
+                    {{ props.row.CarModel }}
+                </p>
+            </b-table-column>
+
+            <b-table-column field="comments" label="Comments" v-slot="props">
+                <AtomTextarea
+                    :value="props.row.Comments"
+                    class="custom-colComment"
+                    @changed="onCommentUpdate(props.row, ...arguments)"
+                ></AtomTextarea>
+            </b-table-column>
+
+            <b-table-column
+                field="NextCall"
+                label="Status/Next Call"
+                width="100px"
+                sortable
+                searchable
+            >
+                <template #searchable="props">
+                    <AtomSelectInput
+                        :list="statusList"
+                        class="custom-columnWidth"
+                        v-model="props.filters['Status']"
+                    >
+                    </AtomSelectInput>
+                </template>
+                <template v-slot="props">
+                    <span class="tag is-warning">
+                        {{ statusList[props.row.Status].name }}
+                    </span>
+                    <AtomSelectInput
+                        :list="statusList"
+                        class="custom-columnWidth"
+                        @changed="onStatusUpdate(props.row, ...arguments)"
+                    >
+                    </AtomSelectInput>
+                    <span
+                        class="tag is-warning"
+                        :class="{
+                            'is-danger': getStatus(props.row.NextCall),
+                        }"
+                    >
+                        <span>
+                            {{
+                                getStatus(props.row.NextCall)
+                                    ? "delayed "
+                                    : "upcoming "
+                            }}
                         </span>
-                  </b-table-column>
+                        <strong>
+                            {{
+                                new Date(
+                                    props.row.NextCall
+                                ).toLocaleDateString()
+                            }}
+                        </strong>
+                    </span>
+                    <AtomDatePicker
+                        class="custom-columnWidth"
+                        @changed="onDateUpdate(props.row, ...arguments)"
+                    >
+                    </AtomDatePicker>
+                </template>
+            </b-table-column>
 
-                  <b-table-column
-                        field="Priority"
-                        label="Priority"
-                        v-slot="props"
-                        sortable
-                  >
-                        <span
-                              class="tag"
-                              :class="{
-                                    'is-low': props.row.Priority === 1,
-                                    'is-medium': props.row.Priority === 2,
-                                    'is-high': props.row.Priority === 3,
-                              }"
-                        >
-                              {{ getPriority(props.row.Priority) }}
-                        </span>
-                  </b-table-column>
+            <b-table-column
+                field="UpdatedAt"
+                label="Last Updated"
+                centered
+                v-slot="props"
+                sortable
+            >
+                <span class="tag is-success">
+                    {{ new Date(props.row.UpdatedAt).toLocaleDateString() }}
+                </span>
+            </b-table-column>
 
-                  <b-table-column
-                        field="contact"
-                        label="Contact Details"
-                        v-slot="props"
-                  >
-                        <p>
-                              Name: <strong>{{ props.row.Name }}</strong>
-                        </p>
-                        <p>
-                              Mobile: <strong>{{ props.row.Mobile }}</strong>
-                        </p>
-                        <p>
-                              Email: <strong>{{ props.row.EmailID }}</strong>
-                        </p>
-                        <p>
-                              Landmark :
-                              <strong>{{ props.row.Landmark }}</strong>
-                        </p>
-                        <p>City: {{ props.row.City }}</p>
-                        <p>Duration : {{ props.row.Duration }}</p>
-                        <p>Car Model: {{ props.row.CarModel }}</p>
-                  </b-table-column>
+            <b-table-column field="lat_lng" label="Lat/Lng" v-slot="props">
+                <a
+                    target="_blank"
+                    @click="toSrp(props.row.Latitude, props.row.Longitude)"
+                >
+                    {{
+                        props.row.Latitude.toFixed(6) +
+                        "/" +
+                        props.row.Longitude.toFixed(6)
+                    }}
+                </a>
 
-                  <b-table-column
-                        field="comments"
-                        label="Comments"
-                        v-slot="props"
-                  >
-                        <AtomTextarea
-                              :value="props.row.Comments"
-                              class="custom-colComment"
-                              @changed="
-                                    onCommentUpdate(props.row, ...arguments)
-                              "
-                        ></AtomTextarea>
-                  </b-table-column>
+                <p>Lat :</p>
+                <AtomInput
+                    :value="props.row.Latitude.toFixed(6)"
+                    @changed="updateLat(props.row, ...arguments)"
+                ></AtomInput>
 
-                  <b-table-column
-                        field="NextCall"
-                        label="Status/Next Call"
-                        width="100px"
-                        sortable
-                        searchable
-                  >
-                        <template #searchable="props">
-                              <AtomSelectInput
-                                    :list="statusList"
-                                    class="custom-columnWidth"
-                                    v-model="props.filters['Status']"
-                              ></AtomSelectInput>
-                        </template>
-                        <template v-slot="props">
-                              <span class="tag is-warning">
-                                    {{ statusList[props.row.Status].name }}
-                              </span>
-                              <AtomSelectInput
-                                    :list="statusList"
-                                    class="custom-columnWidth"
-                                    @changed="
-                                          onStatusUpdate(
-                                                props.row,
-                                                ...arguments
-                                          )
-                                    "
-                              >
-                              </AtomSelectInput>
-                              <span
-                                    class="tag is-warning"
-                                    :class="{
-                                          'is-danger': getStatus(
-                                                props.row.NextCall
-                                          ),
-                                    }"
-                              >
-                                    <span>
-                                          {{
-                                                getStatus(props.row.NextCall)
-                                                      ? "delayed "
-                                                      : "upcoming "
-                                          }}
-                                    </span>
-                                    <strong>
-                                          {{
-                                                new Date(
-                                                      props.row.NextCall
-                                                ).toLocaleDateString()
-                                          }}
-                                    </strong>
-                              </span>
-                              <AtomDatePicker
-                                    class="custom-columnWidth"
-                                    @changed="
-                                          onDateUpdate(props.row, ...arguments)
-                                    "
-                              >
-                              </AtomDatePicker>
-                        </template>
-                  </b-table-column>
+                <p>Lng :</p>
+                <AtomInput
+                    :value="props.row.Longitude.toFixed(6)"
+                    @changed="updateLng(props.row, ...arguments)"
+                ></AtomInput>
+            </b-table-column>
 
-                  <b-table-column
-                        field="UpdatedAt"
-                        label="Last Updated"
-                        centered
-                        v-slot="props"
-                        sortable
-                  >
-                        <span class="tag is-success">
-                              {{
-                                    new Date(
-                                          props.row.UpdatedAt
-                                    ).toLocaleDateString()
-                              }}
-                        </span>
-                  </b-table-column>
-
-                  <b-table-column
-                        field="lat_lng"
-                        label="Lat/Lng"
-                        v-slot="props"
-                  >
-                        <a
-                              target="_blank"
-                              @click="
-                                    toSrp(
-                                          props.row.Latitude,
-                                          props.row.Longitude
-                                    )
-                              "
-                        >
-                              {{
-                                    props.row.Latitude.toFixed(6) +
-                                    "/" +
-                                    props.row.Longitude.toFixed(6)
-                              }}
-                        </a>
-
-                        <p>Lat :</p>
-                        <AtomInput
-                              :value="props.row.Latitude.toFixed(6)"
-                              @changed="updateLat(props.row, ...arguments)"
-                        ></AtomInput>
-
-                        <p>Lng :</p>
-                        <AtomInput
-                              :value="props.row.Longitude.toFixed(6)"
-                              @changed="updateLng(props.row, ...arguments)"
-                        ></AtomInput>
-                  </b-table-column>
-
-                  <template #empty>
-                        <div class="has-text-centered">No records</div>
-                  </template>
-            </b-table>
-      </div>
+            <template #empty>
+                <div class="has-text-centered">No records</div>
+            </template>
+        </b-table>
+    </div>
 </template>
 
 <script>
@@ -218,138 +199,135 @@ import AtomSelectInput from "../atoms/AtomSelectInput.vue";
 import AtomDatePicker from "../atoms/AtomDatePicker.vue";
 import AtomInput from "../atoms/AtomInput.vue";
 export default {
-      name: "TemplateInventory",
-      components: {
-            AtomTextarea,
-            AtomSelectInput,
-            AtomDatePicker,
-            AtomInput,
-      },
-      props: {
-            lists: {
-                  type: Array,
-            },
-            isLoading: {
-                  type: Boolean,
-            },
-      },
-      emits: ["updateRequest", "toSrp"],
-      data() {
-            return {
-                  isEmpty: false,
-                  isBordered: false,
-                  isStriped: false,
-                  isNarrowed: false,
-                  isHoverable: false,
-                  isFocusable: false,
-                  hasMobileCards: true,
+    name: "TemplateInventory",
+    components: {
+        AtomTextarea,
+        AtomSelectInput,
+        AtomDatePicker,
+        AtomInput,
+    },
+    props: {
+        lists: {
+            type: Array,
+        },
+        isLoading: {
+            type: Boolean,
+        },
+    },
+    emits: ["updateRequest", "toSrp"],
+    data() {
+        return {
+            isEmpty: false,
+            isBordered: false,
+            isStriped: false,
+            isNarrowed: false,
+            isHoverable: false,
+            isFocusable: false,
+            hasMobileCards: true,
 
-                  statusList: [
-                        { id: 0, name: "StatusNotSet" },
-                        { id: 1, name: "Registered" },
-                        { id: 2, name: "Processing" },
-                        { id: 3, name: "SpotSuggested" },
-                        { id: 4, name: "SpotAccepted" },
-                        { id: 5, name: "SpotDenied" },
-                        { id: 6, name: "Archive" },
-                  ],
+            statusList: [
+                { id: 0, name: "StatusNotSet" },
+                { id: 1, name: "Registered" },
+                { id: 2, name: "Processing" },
+                {
+                    id: 3,
+                    name: "SpotSuggested",
+                },
+                { id: 4, name: "SpotAccepted" },
+                { id: 5, name: "SpotDenied" },
+                { id: 6, name: "Archive" },
+            ],
 
-                  model: {
-                        comments: "",
-                        status: "",
-                        nextCall: "",
-                  },
-            };
-      },
-      methods: {
-            getPriority(val) {
-                  switch (val) {
-                        case 1:
-                              return "Low";
-                        case 2:
-                              return "Medium";
-                        case 3:
-                              return "High";
-                  }
+            model: {
+                comments: "",
+                status: "",
+                nextCall: "",
             },
+        };
+    },
+    methods: {
+        getPriority(val) {
+            switch (val) {
+                case 1:
+                    return "Low";
+                case 2:
+                    return "Medium";
+                case 3:
+                    return "High";
+            }
+        },
 
-            getStatus(val) {
-                  if (new Date().getTime() > new Date(val).getTime()) {
-                        return true;
-                  } else {
-                        return false;
-                  }
-            },
+        getStatus(val) {
+            if (new Date().getTime() > new Date(val).getTime()) {
+                return true;
+            } else {
+                return false;
+            }
+        },
 
-            onDateUpdate(spotData, date) {
-                  spotData["NextCall"] = date.toJSON();
-                  this.$emit("updateRequest", spotData);
-            },
+        onDateUpdate(spotData, date) {
+            spotData["NextCall"] = date.toJSON();
+            this.$emit("updateRequest", spotData);
+        },
 
-            onCommentUpdate(spotData, comments) {
-                  if (spotData["Comments"] !== comments) {
-                        spotData["Comments"] = comments;
-                        this.$emit("updateRequest", spotData);
-                  }
-            },
+        onCommentUpdate(spotData, comments) {
+            if (spotData["Comments"] !== comments) {
+                spotData["Comments"] = comments;
+                this.$emit("updateRequest", spotData);
+            }
+        },
 
-            onStatusUpdate(spotData, status) {
-                  spotData["Status"] = status;
-                  this.$emit("updateRequest", spotData);
-            },
+        onStatusUpdate(spotData, status) {
+            spotData["Status"] = status;
+            this.$emit("updateRequest", spotData);
+        },
 
-            updateLat(spotData, lat) {
-                  if (
-                        spotData["Latitude"].toString() !==
-                        parseFloat(lat).toString()
-                  ) {
-                        spotData["Latitude"] = parseFloat(lat);
-                        this.$emit("updateRequest", spotData);
-                  }
-            },
+        updateLat(spotData, lat) {
+            if (
+                spotData["Latitude"].toString() !== parseFloat(lat).toString()
+            ) {
+                spotData["Latitude"] = parseFloat(lat);
+                this.$emit("updateRequest", spotData);
+            }
+        },
 
-            updateLng(spotData, lng) {
-                  if (
-                        spotData["Longitude"].toString() !==
-                        parseFloat(lng).toString()
-                  ) {
-                        spotData["Longitude"] = parseFloat(lng);
-                        this.$emit("updateRequest", spotData);
-                  }
-            },
+        updateLng(spotData, lng) {
+            if (
+                spotData["Longitude"].toString() !== parseFloat(lng).toString()
+            ) {
+                spotData["Longitude"] = parseFloat(lng);
+                this.$emit("updateRequest", spotData);
+            }
+        },
 
-            toSrp(lat, lng) {
-                  this.$emit("toSrp", lat, lng);
-            },
-
-            filterData(val) {
-                  console.log("filterData", val);
-            },
-      },
+        toSrp(lat, lng) {
+            this.$emit("toSrp", lat, lng);
+        },
+    },
 };
 </script>
 
 <style scoped>
 .custom-wrap {
-      padding: 1rem;
+    padding: 1rem;
 }
 .custom-columnWidth {
-      width: 200px;
+    width: 200px;
 }
 .custom-colComment {
-      width: 400px;
+    width: 400px;
 }
 
 .is-high {
-      background-color: red;
-      color: white;
+    background-color: red;
+    color: white;
 }
 .is-medium {
-      background-color: rgb(233, 221, 161);
-      color: white;
+    background-color: rgb(233, 221, 161);
+    color: white;
 }
 .is-low {
-      background-color: var(--primary-color);
-      color: white;
+    background-color: var(--primary-color);
+    color: white;
 }
 </style>

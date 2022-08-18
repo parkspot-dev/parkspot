@@ -4,19 +4,15 @@
             <main class="body-container">
                   <router-view :key="$route.fullPath" />
             </main>
-            <!-- :key="$route.fullPath" temporary fix ,as its only problem with this method is that every path in that router will update in the case of a path change. You may not want all that needless re-rendering, but that’s a decision for you to make.  -->
-            <!-- <t-footer /> -->
             <TemplateFooter></TemplateFooter>
       </div>
 </template>
 
 <script>
-// import TFooter from "@/components/templates/t-footer.vue";
 import TemplateFooter from "./components/templates/TemplateFooter.vue";
 import Navbar from "./components/extras/Navbar.vue";
 export default {
       components: {
-            // TFooter,
             TemplateFooter,
             Navbar,
       },
