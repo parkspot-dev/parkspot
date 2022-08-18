@@ -1,32 +1,32 @@
 <template>
-      <!-- <example :messages="messages"></example> -->
-      <div>
-            <h1>Sign Up</h1>
-      </div>
+    <!-- <example :messages="messages"></example> -->
+    <div>
+        <h1>Sign Up</h1>
+    </div>
 </template>
 <script>
 // import example from "./example.vue";
 export default {
-      /**
-       * This page is used for development testing purposes.
-       */
-      name: "Temp",
+    /**
+     * This page is used for development testing purposes.
+     */
+    name: 'Temp',
 
-      data: () => ({
-            count: 0,
-      }),
+    data: () => ({
+        count: 0,
+    }),
 
-      methods: {
-            increment() {
-                  this.count++;
-            },
-      },
+    methods: {
+        increment() {
+            this.count++;
+        },
+    },
 };
 </script>
 
 <style scoped>
 .custom-wrapper {
-      max-width: 960px;
-      margin: auto;
+    max-width: 960px;
+    margin: auto;
 }
 </style>

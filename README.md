@@ -28,6 +28,7 @@ vuex - 3.6.2
 ```
 ### Dev Dependencies
 [vue eslint](https://eslint.vuejs.org/user-guide/#installation)
+[prettier style guide](https://willyadrianp.medium.com/vs-code-setup-for-vue-js-with-eslint-airbnb-config-and-prettier-1ddc3fa14eb9)
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

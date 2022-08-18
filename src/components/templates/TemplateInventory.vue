@@ -129,14 +129,14 @@
                         <span>
                             {{
                                 getStatus(props.row.NextCall)
-                                    ? "delayed "
-                                    : "upcoming "
+                                    ? 'delayed '
+                                    : 'upcoming '
                             }}
                         </span>
                         <strong>
                             {{
                                 new Date(
-                                    props.row.NextCall
+                                    props.row.NextCall,
                                 ).toLocaleDateString()
                             }}
                         </strong>
@@ -168,7 +168,7 @@
                 >
                     {{
                         props.row.Latitude.toFixed(6) +
-                        "/" +
+                        '/' +
                         props.row.Longitude.toFixed(6)
                     }}
                 </a>
@@ -194,12 +194,12 @@
 </template>
 
 <script>
-import AtomTextarea from "../atoms/AtomTextarea.vue";
-import AtomSelectInput from "../atoms/AtomSelectInput.vue";
-import AtomDatePicker from "../atoms/AtomDatePicker.vue";
-import AtomInput from "../atoms/AtomInput.vue";
+import AtomTextarea from '../atoms/AtomTextarea.vue';
+import AtomSelectInput from '../atoms/AtomSelectInput.vue';
+import AtomDatePicker from '../atoms/AtomDatePicker.vue';
+import AtomInput from '../atoms/AtomInput.vue';
 export default {
-    name: "TemplateInventory",
+    name: 'TemplateInventory',
     components: {
         AtomTextarea,
         AtomSelectInput,
@@ -214,7 +214,7 @@ export default {
             type: Boolean,
         },
     },
-    emits: ["updateRequest", "toSrp"],
+    emits: ['updateRequest', 'toSrp'],
     data() {
         return {
             isEmpty: false,
@@ -226,22 +226,22 @@ export default {
             hasMobileCards: true,
 
             statusList: [
-                { id: 0, name: "StatusNotSet" },
-                { id: 1, name: "Registered" },
-                { id: 2, name: "Processing" },
+                { id: 0, name: 'StatusNotSet' },
+                { id: 1, name: 'Registered' },
+                { id: 2, name: 'Processing' },
                 {
                     id: 3,
-                    name: "SpotSuggested",
+                    name: 'SpotSuggested',
                 },
-                { id: 4, name: "SpotAccepted" },
-                { id: 5, name: "SpotDenied" },
-                { id: 6, name: "Archive" },
+                { id: 4, name: 'SpotAccepted' },
+                { id: 5, name: 'SpotDenied' },
+                { id: 6, name: 'Archive' },
             ],
 
             model: {
-                comments: "",
-                status: "",
-                nextCall: "",
+                comments: '',
+                status: '',
+                nextCall: '',
             },
         };
     },
@@ -249,11 +249,11 @@ export default {
         getPriority(val) {
             switch (val) {
                 case 1:
-                    return "Low";
+                    return 'Low';
                 case 2:
-                    return "Medium";
+                    return 'Medium';
                 case 3:
-                    return "High";
+                    return 'High';
             }
         },
 
@@ -266,42 +266,42 @@ export default {
         },
 
         onDateUpdate(spotData, date) {
-            spotData["NextCall"] = date.toJSON();
-            this.$emit("updateRequest", spotData);
+            spotData['NextCall'] = date.toJSON();
+            this.$emit('updateRequest', spotData);
         },
 
         onCommentUpdate(spotData, comments) {
-            if (spotData["Comments"] !== comments) {
-                spotData["Comments"] = comments;
-                this.$emit("updateRequest", spotData);
+            if (spotData['Comments'] !== comments) {
+                spotData['Comments'] = comments;
+                this.$emit('updateRequest', spotData);
             }
         },
 
         onStatusUpdate(spotData, status) {
-            spotData["Status"] = status;
-            this.$emit("updateRequest", spotData);
+            spotData['Status'] = status;
+            this.$emit('updateRequest', spotData);
         },
 
         updateLat(spotData, lat) {
             if (
-                spotData["Latitude"].toString() !== parseFloat(lat).toString()
+                spotData['Latitude'].toString() !== parseFloat(lat).toString()
             ) {
-                spotData["Latitude"] = parseFloat(lat);
-                this.$emit("updateRequest", spotData);
+                spotData['Latitude'] = parseFloat(lat);
+                this.$emit('updateRequest', spotData);
             }
         },
 
         updateLng(spotData, lng) {
             if (
-                spotData["Longitude"].toString() !== parseFloat(lng).toString()
+                spotData['Longitude'].toString() !== parseFloat(lng).toString()
             ) {
-                spotData["Longitude"] = parseFloat(lng);
-                this.$emit("updateRequest", spotData);
+                spotData['Longitude'] = parseFloat(lng);
+                this.$emit('updateRequest', spotData);
             }
         },
 
         toSrp(lat, lng) {
-            this.$emit("toSrp", lat, lng);
+            this.$emit('toSrp', lat, lng);
         },
     },
 };

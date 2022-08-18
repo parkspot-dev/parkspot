@@ -33,12 +33,12 @@
 </template>
 
 <script>
-import AtomRating from "../atoms/AtomRating.vue";
-import AtomParagraph from "../atoms/AtomParagraph.vue";
-import AtomButton from "../atoms/AtomButton.vue";
-import AtomIcon from "../atoms/AtomIcon.vue";
+import AtomRating from '../atoms/AtomRating.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
+import AtomButton from '../atoms/AtomButton.vue';
+import AtomIcon from '../atoms/AtomIcon.vue';
 export default {
-    name: "MoleculeSRPCard",
+    name: 'MoleculeSRPCard',
     components: {
         AtomRating,
         AtomParagraph,
@@ -50,10 +50,10 @@ export default {
             type: Object,
         },
     },
-    emits: ["booked"],
+    emits: ['booked'],
     methods: {
         onBook() {
-            this.$emit("booked");
+            this.$emit('booked');
         },
     },
 };
@@ -95,13 +95,13 @@ export default {
     font-size: var(--sp-size-sm);
 }
 .card-location::before {
-    content: "...";
+    content: '...';
     position: absolute;
     bottom: -5px;
     right: 0;
 }
 .card-location::after {
-    content: "";
+    content: '';
     position: absolute;
     right: 0; /* note: not using bottom */
     width: 1rem;
