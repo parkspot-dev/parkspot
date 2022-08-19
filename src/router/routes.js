@@ -180,7 +180,7 @@ export const routes = [
     {
         path: pages.TEMP,
         name: 'temp',
-        component: () => import('@/views/temp.vue'),
+        component: () => import('@/views/PageTemp.vue'),
         meta: {
             title: 'Parking Near ',
         },

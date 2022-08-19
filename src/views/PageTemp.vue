@@ -10,7 +10,7 @@ export default {
     /**
      * This page is used for development testing purposes.
      */
-    name: 'Temp',
+    name: 'PageTemp',
 
     data: () => ({
         count: 0,

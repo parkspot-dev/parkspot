@@ -8,8 +8,8 @@ const state = {
             author_img: require('@/assets/team/nik.jpg'),
             img: 'https://www.stevenvanbelleghem.com/wp-content/uploads/2020/04/Heavy-rains-lash-Delhi-NCR-traffic-snarls-at-many-places.jpg',
             desc: `In the recent years all over the globe production 
-                        and demand for motor vehicles has increased dramatically.
-                        Earlier motor vehicles...`,
+                and demand for motor vehicles has increased dramatically.
+                Earlier motor vehicles...`,
             time: 'Nov 2, 2020',
             dateTime: '2020-02-11',
         },
@@ -20,8 +20,8 @@ const state = {
             author_img: require('@/assets/team/sujeet.jpg'),
             img: require('@/assets/blog/blog2.jpg'),
             desc: `Parking has been a major concern in major cities. Due
-                        to fewer parking spaces, people have to spend a lot of time
-                        searching for the...`,
+                to fewer parking spaces, people have to spend a lot of time
+                searching for the...`,
             time: 'Aug 30, 2021',
             dateTime: '2021-30-07',
         },
@@ -32,8 +32,8 @@ const state = {
             author_img: require('@/assets/team/ish.jpg'),
             img: require('@/assets/blog/blog3.jpg'),
             desc: `Parking problems have always been an issue and this issue
-                        has grown exponentially with the increase of population.
-                        In order to tackl...`,
+                has grown exponentially with the increase of population.
+                In order to tackl...`,
             time: 'Aug 5, 2021',
             dateTime: '2021-05-07',
         },
@@ -61,7 +61,7 @@ const mutations = {
 // actions
 const actions = {
     getContentById(state, id) {
-        let result = require(`../../blogs/${id}.json`);
+        const result = require(`../../blogs/${id}.json`);
         return result.content;
     },
 };

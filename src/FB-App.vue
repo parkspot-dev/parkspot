@@ -21,6 +21,7 @@ export default {
         };
 
         (function (d, s, id) {
+            /* eslint-disable */
             var js,
                 fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;
