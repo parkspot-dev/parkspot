@@ -1,7 +1,10 @@
 <template>
     <div class="srp-container">
         <div class="srp-lists">
-            <Pagination :totals="totals" @changed="onPageChange"></Pagination>
+            <PaginationBody
+                :totals="totals"
+                @changed="onPageChange"
+            ></PaginationBody>
             <MoleculeSRPCard
                 v-for="spot in spots"
                 :key="spot.ID"
@@ -21,14 +24,14 @@
 </template>
 
 <script>
-import Pagination from '../extras/Pagination.vue';
+import PaginationBody from '../extras/PaginationBody.vue';
 import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import SearchInput from '../extras/SearchInput.vue';
 export default {
     name: 'TemplateSrp',
     components: {
-        Pagination,
+        PaginationBody,
         MoleculeSRPCard,
         MapContainer,
         SearchInput,

@@ -10,7 +10,7 @@
 
 <script>
 import TemplateFooter from './components/templates/TemplateFooter.vue';
-import Navbar from './components/extras/Navbar.vue';
+import Navbar from './components/extras/NavbarBody.vue';
 export default {
     components: {
         TemplateFooter,

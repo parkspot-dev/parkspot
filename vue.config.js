@@ -1,7 +1,6 @@
 const zlib = require('zlib');
 const PrerenderSPAPlugin = require('prerender-spa-plugin');
 const path = require('path');
-const StyleLintPlugin = require('stylelint-webpack-plugin');
 module.exports = {
     productionSourceMap: false, //  Setting this to false can speed up production builds if you don't need source maps for production.
     configureWebpack: (config) => {
@@ -34,9 +33,6 @@ module.exports = {
                         // * If some thing goes wrong then
                         // todo: In the Vue.config.js file, make headless to false. By default,
                         // todo: it comes false, but in case you have turned it to true then make it false.
-                    }),
-                    new StyleLintPlugin({
-                        files: ['**/*.{vue,htm,html,css,sss,less,scss,sass}'],
                     }),
                 ],
             };

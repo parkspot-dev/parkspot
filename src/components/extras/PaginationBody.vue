@@ -35,7 +35,7 @@
 
 <script>
 export default {
-    name: 'Pagination',
+    name: 'PaginationBody',
     props: {
         totals: {
             type: Number,

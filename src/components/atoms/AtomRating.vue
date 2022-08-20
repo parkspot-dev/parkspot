@@ -1,6 +1,6 @@
 <template>
     <b-rate
-        v-model="rate"
+        :value="rate"
         :icon-pack="packs"
         :icon="icons"
         :max="maxs"

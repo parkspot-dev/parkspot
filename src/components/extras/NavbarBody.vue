@@ -39,7 +39,7 @@
 
 <script>
 export default {
-    name: 'Navbar',
+    name: 'NavbarBody',
     data() {
         return {
             parkspotIcon: require('@/assets/pstopmini.png'),
