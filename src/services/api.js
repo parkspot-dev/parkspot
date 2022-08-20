@@ -31,7 +31,10 @@ class BaseApiService {
             this.errorInterceptor,
         );
     }
-    // interceptor to catch network/server errors.
+    /**
+     * interceptor to catch network/server errors.
+     * @param { any } error - .
+     */
     errorInterceptor(error) {
         // check if it's a server error
         if (!error.response) {
@@ -46,7 +49,10 @@ class BaseApiService {
     // Interceptor for responses
     responseInterceptor = (response) => response;
 
-    // handleError is used to log http errors.
+    /**
+     * handleError is used to log http errors.
+     * @param { any } error - .
+     */
     handleErrors(error) {
         if (!error.request) {
             console.log({ 'Http server/network error': error });
@@ -59,6 +65,11 @@ class BaseApiService {
         });
     }
 
+    /**
+     * handle post request api call.
+     * @param { any } resource - url .
+     * @param { object } payload -  .
+     */
     async post(resource, payload = {}) {
         try {
             const response = await this.client.post(resource, payload);
@@ -68,6 +79,11 @@ class BaseApiService {
         }
     }
 
+    /**
+     * handle patch request api call.
+     * @param { any } resource - url .
+     * @param { object } payload -  .
+     */
     async patch(resource, payload = {}) {
         try {
             const response = await this.client.patch(resource, payload);
@@ -77,6 +93,10 @@ class BaseApiService {
         }
     }
 
+    /**
+     * handle get request api call.
+     * @param { any } resource - url .
+     */
     async get(resource) {
         try {
             const response = await this.client.get(resource);
@@ -98,7 +118,7 @@ class MayaApiService extends BaseApiService {
      *  @param { function } flavour - getFlavour function.
      */
     constructor(flavour) {
-        const mayaDomain = 'https://maya.parkspot.in'; //TODO: we can pick from .env files.
+        const mayaDomain = 'https://maya.parkspot.in'; //   TODO: we can pick from .env files.
         const baseHeaderMap = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -107,7 +127,10 @@ class MayaApiService extends BaseApiService {
         super(mayaDomain, baseHeaderMap, 5000, true);
     }
 
-    // errorInterceptor is used to handle status codes in accordance with Maya's contract.
+    /**
+     * errorInterceptor is used to handle status codes in accordance with Maya's contract.
+     * @param { any } error -  .
+     */
     errorInterceptor(error) {
         super.errorInterceptor(error);
         if (!error.response) {
