@@ -85,7 +85,7 @@ const actions = {
         );
         const req = {
             User: {
-                UserName: state.login.UserName, //only for logged in user
+                UserName: state.login.UserName, //  only for logged in user
                 FullName: state.contactForm.fullname,
                 City: state.locationDetails.locName,
                 EmailID: state.contactForm.email,
@@ -97,7 +97,7 @@ const actions = {
                 Rate: state.additionalInfo.rent,
                 MinBookingDuration: state.additionalInfo.minDur,
                 Availability: '',
-                SpecialService: convertedAmenities, //None/Camera/Security
+                SpecialService: convertedAmenities, //  None/Camera/Security
                 TnC: 'I Agree',
                 Address: state.locationDetails.locName,
             },
@@ -106,7 +106,7 @@ const actions = {
     },
 
     onlyContact({ state }) {
-        let comments = 'From the Home Page ----->' + state.contactForm.msg;
+        const comments = 'From the Home Page ----->' + state.contactForm.msg;
         const req = {
             User: {
                 FullName: state.contactForm.fullname,

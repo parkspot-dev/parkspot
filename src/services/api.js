@@ -1,7 +1,15 @@
 import axios from 'axios';
 
 // BaseApiService create http client with basic configurations and error handling.
+/** Class representing a BaseApiService. */
 class BaseApiService {
+    /**
+     * Create a BaseApiService.
+     *  @param { string } domain - .
+     *  @param { object } commonHeaders - .
+     *  @param { number } timeout - .
+     *  @param { boolean } withCredentials - .
+     */
     constructor(
         domain,
         commonHeaders = {},
@@ -83,10 +91,15 @@ class BaseApiService {
 }
 
 // MayaApiService inherits BaseApiService to create http clients for Maya services.
+/** Class representing a MayaApiService extends BaseApiService. */
 class MayaApiService extends BaseApiService {
+    /**
+     * Create a MayaApiService.
+     *  @param { function } flavour - getFlavour function.
+     */
     constructor(flavour) {
-        let mayaDomain = 'https://maya.parkspot.in'; //TODO: we can pick from .env files.
-        let baseHeaderMap = {
+        const mayaDomain = 'https://maya.parkspot.in'; //TODO: we can pick from .env files.
+        const baseHeaderMap = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Flavour': flavour,
@@ -120,22 +133,30 @@ class MayaApiService extends BaseApiService {
     }
 }
 
+/** Class representing a MapBoxApiService extends BaseApiService */
 class MapBoxApiService extends BaseApiService {
+    /**
+     * Create a MapBoxApiService.
+     */
     constructor() {
-        let mapBoxDomain = 'https://api.mapbox.com'; //TODO: we can pick from .env files.
-        let baseHeaderMap = {
+        const mapBoxDomain = 'https://api.mapbox.com'; //   TODO: we can pick from .env files.
+        const baseHeaderMap = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            // Flavour: flavour,
+            // 'Flavour': flavour,
         };
         super(mapBoxDomain, baseHeaderMap, 5000, false);
     }
 }
 
+/**
+ * get the device mobile or desktop
+ * @return {string} mweb or dweb.
+ */
 function getFlavour() {
     const details = navigator.userAgent;
     const regexp = /android|iphone|kindle|ipad/i;
-    let isMobileDevice = regexp.test(details);
+    const isMobileDevice = regexp.test(details);
 
     if (isMobileDevice) {
         return 'mweb';

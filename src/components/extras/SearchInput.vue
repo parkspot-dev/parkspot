@@ -104,9 +104,12 @@ export default {
             searchLocation: 'map/searchLocation',
             getFromRecent: 'map/getFromRecent',
         }),
-        // You have to install and import debounce to use it,
-        // it's not mandatory though.
+
         getAsyncData: _.debounce(async function (name) {
+            /* eslint-disable */
+            /*  'this' is working as expected here but
+                eslint is showing error so it is disabled
+                fot this function   */
             this.isFetching = true;
             try {
                 await this.searchLocation(name);
@@ -118,9 +121,9 @@ export default {
         }, 500),
 
         async addRecentSearches() {
-            let recentLocations = await this.getFromRecent();
+            const recentLocations = await this.getFromRecent();
             if (this.LocationName.length === 0) {
-                for (let value of recentLocations) {
+                for (const value of recentLocations) {
                     this.LocationName.push(value);
                 }
             }

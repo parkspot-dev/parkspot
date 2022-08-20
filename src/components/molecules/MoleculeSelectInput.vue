@@ -55,7 +55,7 @@ export default {
         label: {
             type: String,
         },
-        //for tooltip
+        //  for tooltip
         tooltip: {
             type: Boolean,
             default: false,

@@ -12,7 +12,7 @@ const state = {
     mapConfig: {
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: [77.5946, 12.9716], //default bengaluru lat, lng.
+        center: [77.5946, 12.9716], //  default bengaluru lat, lng.
         zoom: 11,
     },
     center: null,
@@ -58,19 +58,19 @@ const getters = {
 
 const mutations = {
     'update-location'(state, data) {
-        let newData = [...state.recentSearch, ...data];
+        const newData = [...state.recentSearch, ...data];
         state.locations = [...newData];
     },
 
     'update-selected-location'(state, data) {
         state.selectedLocation.locName = data.place_name;
 
-        let lsRecentID = JSON.parse(localStorage.getItem('recentID'));
+        const lsRecentID = JSON.parse(localStorage.getItem('recentID'));
         if (lsRecentID !== undefined) {
             state.recentID = lsRecentID;
         }
 
-        let objData = {
+        const objData = {
             id: state.recentID,
             fromLS: true,
             ...data,
@@ -130,9 +130,9 @@ const mutations = {
 
 const actions = {
     async searchLocation({ commit }, query) {
-        let token =
+        const token =
             'pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ';
-        let url = `/geocoding/v5/mapbox.places/${query}.json?access_token=${token}&proximity=77.4977,12.9716`;
+        const url = `/geocoding/v5/mapbox.places/${query}.json?access_token=${token}&proximity=77.4977,12.9716`;
         const data = await mapBoxClient.get(url);
         const result = _.get(data, 'features', []);
         commit('update-location', result);
@@ -155,10 +155,10 @@ const actions = {
     },
 
     updateCenterSrp({ state, commit }) {
-        let ys = state.paginateSrpResults.reduce((long, site) => {
+        const ys = state.paginateSrpResults.reduce((long, site) => {
             return long + site.Long;
         }, 0);
-        let xs = state.paginateSrpResults.reduce((a, site) => {
+        const xs = state.paginateSrpResults.reduce((a, site) => {
             return a + site.Lat;
         }, 0);
         commit('update-map-config', [

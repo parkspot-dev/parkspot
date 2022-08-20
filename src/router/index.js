@@ -4,7 +4,7 @@ import { routes } from './routes.js';
 
 Vue.use(VueRouter);
 
-let scrollBehavior = (to, from, savedPosition) => {
+const scrollBehavior = (to, from, savedPosition) => {
     // initially "savedPosition" value will be null,
     // coming back from page2 to page1 it will contain
     // the last co-ordinate of page1.
