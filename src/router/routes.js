@@ -1,4 +1,4 @@
-import Home from '../views/Home.vue';
+import Home from '../views/PageHome.vue';
 import PageAbout from '@/views/PageAbout.vue';
 import { firebase, getDatabase, ref, get, child } from '../firebase';
 
@@ -73,7 +73,7 @@ export const routes = [
     {
         path: pages.FEATURES,
         name: 'features',
-        component: () => import('@/views/features.vue'),
+        component: () => import('@/views/pagefeatures.vue'),
         meta: {
             title: 'ParkSpot | Features',
         },

@@ -1,5 +1,5 @@
 <template>
-    <Wrapper>
+    <BodyWrapper>
         <div class="custom-img-wrapper">
             <div class="custom-img">
                 <AtomImage
@@ -21,18 +21,18 @@
         <AtomParagraph :type="'p'" class="custom-para"
             >If you have any issues. Call +91 80929 96057
         </AtomParagraph>
-    </Wrapper>
+    </BodyWrapper>
 </template>
 
 <script>
-import Wrapper from '../extras/Wrapper.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomImage from '../atoms/AtomImage.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 export default {
     name: 'TemplateThankYou',
     components: {
-        Wrapper,
+        BodyWrapper,
         AtomImage,
         AtomParagraph,
         AtomButton,

@@ -1,6 +1,6 @@
 <template>
     <div class="bg-wrap">
-        <Wrapper>
+        <BodyWrapper>
             <div class="featureContainer" data-aos="fade-left">
                 <MoleculeFeatureCard :featureHeading="'Save Money'">
                     Save up to 20% on our site compared to the cost of other
@@ -22,17 +22,17 @@
                     like CCTV, Securtiy guard etc.
                 </MoleculeFeatureCard>
             </div>
-        </Wrapper>
+        </BodyWrapper>
     </div>
 </template>
 
 <script>
-import Wrapper from '../extras/Wrapper.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 import MoleculeFeatureCard from '../molecules/MoleculeFeatureCard.vue';
 export default {
     name: 'TemplateFeatureHome',
     components: {
-        Wrapper,
+        BodyWrapper,
         MoleculeFeatureCard,
     },
 };

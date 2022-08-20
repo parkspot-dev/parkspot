@@ -28,7 +28,7 @@ export default {
     font-weight: 400;
 }
 .body-container {
-    margin-top: 15px;
+    margin-top: 10px;
 }
 @media only screen and (max-width: 1024px) {
     .body-container {

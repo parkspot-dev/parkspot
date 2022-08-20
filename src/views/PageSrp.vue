@@ -65,11 +65,11 @@ export default {
         },
         // methods to get Lat and Long
         getLat: function () {
-            var queryParam = new URLSearchParams(window.location.search);
+            const queryParam = new URLSearchParams(window.location.search);
             return queryParam.get('lat');
         },
         getLng: function () {
-            var queryParam = new URLSearchParams(window.location.search);
+            const queryParam = new URLSearchParams(window.location.search);
             return queryParam.get('lng');
         },
 

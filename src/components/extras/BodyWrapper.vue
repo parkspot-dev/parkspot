@@ -8,7 +8,7 @@
 
 <script>
 export default {
-    name: 'Wrapper',
+    name: 'BodyWrapper',
     /**
      * wrapper gives proper padding and margin
      */

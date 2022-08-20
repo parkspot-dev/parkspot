@@ -1,5 +1,5 @@
 <template>
-    <Wrapper data-aos="fade-up">
+    <BodyWrapper data-aos="fade-up">
         <AtomParagraph class="custom-subtitle">Testimonials</AtomParagraph>
         <AtomHeading class="custom-title" :level="'h2'">
             What Our Customers Say
@@ -11,11 +11,11 @@
                 ></MoleculeTestimonialCard>
             </template>
         </b-carousel-list>
-    </Wrapper>
+    </BodyWrapper>
 </template>
 
 <script>
-import Wrapper from '../extras/Wrapper.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 import MoleculeTestimonialCard from '../molecules/MoleculeTestimonialCard.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
@@ -23,7 +23,7 @@ import AtomParagraph from '../atoms/AtomParagraph.vue';
 export default {
     name: 'TemplateOurProducts',
     components: {
-        Wrapper,
+        BodyWrapper,
         MoleculeTestimonialCard,
         AtomHeading,
         AtomParagraph,

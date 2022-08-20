@@ -1,5 +1,5 @@
 <template>
-    <Wrapper>
+    <BodyWrapper>
         <AtomHeading class="mb-5 has-text-centered">
             Fill the form to Request your Parking Spot
         </AtomHeading>
@@ -97,14 +97,14 @@
                 </template>
             </b-steps>
         </div>
-    </Wrapper>
+    </BodyWrapper>
 </template>
 
 <script>
 import OrganismContactForm from '../organisms/OrganismContactForm.vue';
 import OrganismPreferenceForm from '../organisms/OrganismPreferenceForm.vue';
 import OrganismAddressForm from '../organisms/OrganismAddressForm.vue';
-import Wrapper from '../extras/Wrapper.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 export default {
     name: 'TemplateVOPortal',
@@ -113,7 +113,7 @@ export default {
         OrganismPreferenceForm,
         OrganismAddressForm,
         AtomHeading,
-        Wrapper,
+        BodyWrapper,
     },
     emits: ['finalSubmit'],
     data() {

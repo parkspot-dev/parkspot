@@ -1,5 +1,5 @@
 <template>
-    <Wrapper>
+    <BodyWrapper>
         <div class="columns">
             <OrganismContactUs class="column is-half"></OrganismContactUs>
             <div class="column is-half" data-aos="slide-up">
@@ -15,18 +15,18 @@
                 </div>
             </div>
         </div>
-    </Wrapper>
+    </BodyWrapper>
 </template>
 
 <script>
-import Wrapper from '../extras/Wrapper.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 import OrganismContactUs from '../organisms/OrganismContactUs.vue';
 import OrganismContactForm from '../organisms/OrganismContactForm.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 export default {
     name: 'TemplateContactUs',
     components: {
-        Wrapper,
+        BodyWrapper,
         OrganismContactUs,
         OrganismContactForm,
         AtomButton,

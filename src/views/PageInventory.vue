@@ -68,7 +68,7 @@ export default {
         },
 
         toSrp(lat, lng) {
-            let routeData = this.$router.resolve({
+            const routeData = this.$router.resolve({
                 name: 'srp',
                 query: {
                     lat: lat,

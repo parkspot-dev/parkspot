@@ -1,5 +1,5 @@
 <template>
-    <Wrapper>
+    <BodyWrapper>
         <div class="custom-wrapper">
             <AtomHeading class="custom-title">
                 Frequently Asked Questions!
@@ -43,17 +43,17 @@
                 </div>
             </b-collapse>
         </div>
-    </Wrapper>
+    </BodyWrapper>
 </template>
 
 <script>
 import AtomHeading from '../atoms/AtomHeading.vue';
-import Wrapper from '../extras/Wrapper.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 export default {
     name: 'TemplateFaq',
     components: {
         AtomHeading,
-        Wrapper,
+        BodyWrapper,
     },
     data() {
         return {

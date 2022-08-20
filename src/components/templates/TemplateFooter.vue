@@ -1,7 +1,7 @@
 <template>
     <footer class="custom-footer">
         <section class="primary-footer">
-            <Wrapper>
+            <BodyWrapper>
                 <section class="primary-footerContainer">
                     <div class="custom-parkspot">
                         <div class="mb-2">
@@ -225,11 +225,11 @@
                         </div>
                     </div>
                 </section>
-            </Wrapper>
+            </BodyWrapper>
         </section>
 
         <section class="secondary-footer">
-            <Wrapper>
+            <BodyWrapper>
                 <section class="secondary-footerContainer">
                     <div>
                         <AtomParagraph>
@@ -273,20 +273,20 @@
                         </a>
                     </div>
                 </section>
-            </Wrapper>
+            </BodyWrapper>
         </section>
     </footer>
 </template>
 
 <script>
-import Wrapper from '../extras/Wrapper.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
 // import AtomImage from "../atoms/AtomImage.vue";
 export default {
     name: 'TemplateFooter',
     components: {
-        Wrapper,
+        BodyWrapper,
         AtomParagraph,
         AtomIcon,
         // AtomImage,

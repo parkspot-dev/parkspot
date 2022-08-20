@@ -1,5 +1,5 @@
 <template>
-    <Wrapper>
+    <BodyWrapper>
         <AtomHeading class="mb-5 has-text-centered">
             Fill the form to Register your Parking Spot
         </AtomHeading>
@@ -115,7 +115,7 @@
                 </template>
             </b-steps>
         </div>
-    </Wrapper>
+    </BodyWrapper>
 </template>
 
 <script>
@@ -123,7 +123,7 @@ import OrganismContactForm from '../organisms/OrganismContactForm.vue';
 import OrganismKycForm from '../organisms/OrganismKycForm.vue';
 import OrganismAdditionalInfo from '../organisms/OrganismAdditionalInfo.vue';
 import OrganismAddressForm from '../organisms/OrganismAddressForm.vue';
-import Wrapper from '../extras/Wrapper.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 export default {
     name: 'TemplateSOPortal',
@@ -133,7 +133,7 @@ export default {
         OrganismAdditionalInfo,
         OrganismAddressForm,
         AtomHeading,
-        Wrapper,
+        BodyWrapper,
     },
     emits: ['finalSubmit'],
     data() {

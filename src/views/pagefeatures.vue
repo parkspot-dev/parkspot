@@ -7,7 +7,10 @@
 <script>
 import tFeaturesPage from '../components/templates/t-features-page.vue';
 export default {
-    name: 'Features',
+    /**
+     * note: This page will be redeveloped soon
+     */
+    name: 'PageFeatures',
     components: { tFeaturesPage },
 };
 </script>

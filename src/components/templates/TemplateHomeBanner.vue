@@ -1,5 +1,5 @@
 <template>
-    <Wrapper class="homeBanner">
+    <BodyWrapper class="homeBanner">
         <!-- <h1>hello</h1> -->
         <div class="banner-wrapper">
             <div class="banner-header">
@@ -17,17 +17,17 @@
                 </div>
             </div>
         </div>
-    </Wrapper>
+    </BodyWrapper>
 </template>
 
 <script>
-import Wrapper from '../extras/Wrapper.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 import SearchInput from '../extras/SearchInput.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 export default {
     name: 'TemplateHomeBanner',
     components: {
-        Wrapper,
+        BodyWrapper,
         SearchInput,
         AtomButton,
     },

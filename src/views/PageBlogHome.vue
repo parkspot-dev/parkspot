@@ -21,7 +21,7 @@ export default {
     },
     methods: {
         onBlogClick(id) {
-            let blog = this.getBlogById(id);
+            const blog = this.getBlogById(id);
             this.$router.push({
                 name: 'mainBlog',
                 params: {

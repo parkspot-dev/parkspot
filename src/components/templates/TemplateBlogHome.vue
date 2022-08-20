@@ -12,7 +12,7 @@
             </b-breadcrumb>
         </HeaderBanner>
 
-        <wrapper>
+        <BodyWrapper>
             <div class="grid-container">
                 <MoleculeBlogCard
                     :key="blog.id"
@@ -22,19 +22,19 @@
                     data-aos="zoom-in-up"
                 ></MoleculeBlogCard>
             </div>
-        </wrapper>
+        </BodyWrapper>
     </div>
 </template>
 
 <script>
-import Wrapper from '../extras/Wrapper.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import HeaderBanner from '../extras/HeaderBanner.vue';
 import MoleculeBlogCard from '../molecules/MoleculeBlogCard.vue';
 export default {
     name: 'TemplateBlogHome',
     components: {
-        Wrapper,
+        BodyWrapper,
         AtomHeading,
         HeaderBanner,
         MoleculeBlogCard,

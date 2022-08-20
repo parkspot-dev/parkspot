@@ -1,5 +1,5 @@
 <template>
-    <Wrapper data-aos="fade-up">
+    <BodyWrapper data-aos="fade-up">
         <AtomParagraph class="custom-subtitle">Types of Products</AtomParagraph>
         <AtomHeading class="custom-title" :level="'h2'">
             Our Parking Products
@@ -12,11 +12,11 @@
                 ></MoleculeProductCard>
             </template>
         </b-carousel-list>
-    </Wrapper>
+    </BodyWrapper>
 </template>
 
 <script>
-import Wrapper from '../extras/Wrapper.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 import MoleculeProductCard from '../molecules/MoleculeProductCard.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
@@ -24,7 +24,7 @@ import AtomParagraph from '../atoms/AtomParagraph.vue';
 export default {
     name: 'TemplateOurProducts',
     components: {
-        Wrapper,
+        BodyWrapper,
         MoleculeProductCard,
         AtomHeading,
         AtomParagraph,

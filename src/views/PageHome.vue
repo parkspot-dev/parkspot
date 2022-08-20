@@ -17,7 +17,7 @@ import TemplateTestimonial from '../components/templates/TemplateTestimonial.vue
 import PageAbout from './PageAbout.vue';
 import { mapGetters } from 'vuex';
 export default {
-    name: 'Home',
+    name: 'PageHome',
     components: {
         PageAbout,
         TemplateFeatureHome,

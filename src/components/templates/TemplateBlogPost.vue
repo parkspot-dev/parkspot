@@ -17,7 +17,7 @@
             </b-breadcrumb>
         </HeaderBanner>
 
-        <Wrapper>
+        <BodyWrapper>
             <article class="article-wrapper" data-aos="fade-up">
                 <header class="mb-6">
                     <AtomHeading class="mb-2">
@@ -51,14 +51,14 @@
                 ></AtomImage>
                 <section v-html="content"></section>
             </article>
-        </Wrapper>
+        </BodyWrapper>
     </div>
 </template>
 
 <script>
 import HeaderBanner from '../extras/HeaderBanner.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
-import Wrapper from '../extras/Wrapper.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomImage from '../atoms/AtomImage.vue';
 export default {
@@ -68,7 +68,7 @@ export default {
         AtomHeading,
         AtomParagraph,
         AtomImage,
-        Wrapper,
+        BodyWrapper,
     },
     props: {
         blog: {

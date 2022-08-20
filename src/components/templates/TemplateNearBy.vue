@@ -17,7 +17,7 @@
       </div> -->
         </HeaderBanner>
 
-        <Wrapper>
+        <BodyWrapper>
             <AtomHeading class="mb-4" :level="'h4'">
                 Parking near {{ locationWithCaps }}
             </AtomHeading>
@@ -44,7 +44,7 @@
                     platform and start earning extra.
                 </AtomParagraph>
             </div>
-        </Wrapper>
+        </BodyWrapper>
     </div>
 </template>
 
@@ -54,7 +54,7 @@ import HeaderBanner from '../extras/HeaderBanner.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
-import Wrapper from '../extras/Wrapper.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 export default {
     name: 'TemplateNearBy',
     components: {
@@ -63,7 +63,7 @@ export default {
         AtomHeading,
         MoleculeSRPCard,
         AtomParagraph,
-        Wrapper,
+        BodyWrapper,
     },
     props: {
         nearByLocation: {
