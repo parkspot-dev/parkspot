@@ -46,8 +46,8 @@ export default {
     background-image: url('../../assets/Home-Banner.jpg');
     background-image: linear-gradient(
             to right bottom,
-            rgba(28 26 18 35%),
-            rgba(21 19 13 35%)
+            rgba(35, 30, 20, 45%),
+            rgba(35, 30, 20, 45%)
         ),
         url('../../assets/Home-Banner.jpg');
 

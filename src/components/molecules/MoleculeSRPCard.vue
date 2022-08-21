@@ -62,8 +62,8 @@ export default {
 <style scoped>
 .custom-card {
     border-radius: var(--border-default);
-    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%),
-        0 0 0 1px rgb(10 10 10 / 2%);
+    box-shadow: 0 0.5em 1em -0.125em rgb(10, 10, 10 / 10%),
+        0 0 0 1px rgb(10, 10, 10 / 2%);
     column-gap: 0.75rem;
     display: grid;
     grid-template-columns: repeat(5, 1fr);

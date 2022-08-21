@@ -68,8 +68,8 @@ export default {
 <style scoped>
 .payment-card {
     border-radius: var(--border-default);
-    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%),
-        0 0 0 1px rgb(10 10 10 / 2%);
+    box-shadow: 0 0.5em 1em -0.125em rgb(10, 10, 10 / 10%),
+        0 0 0 1px rgb(10, 10, 10 / 2%);
     margin: auto;
     max-width: 500px;
     padding: 2rem;

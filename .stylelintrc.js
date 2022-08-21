@@ -10,5 +10,6 @@ module.exports = {
         'font-family-name-quotes': 'always-unless-keyword',
         'selector-max-id': 2,
         'import-notation': 'url',
+        'color-function-notation': 'legacy',
     },
 };
