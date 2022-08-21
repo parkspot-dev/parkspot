@@ -140,12 +140,22 @@ export default {
 .social-icon {
     color: var(--primary-text);
     padding: 0.5rem;
+    position: relative;
+    z-index: 1;
 }
 
 .social-icon:hover {
-    /* border: 2px solid black; */
-    background-color: var(--secondary-color);
-    border-radius: var(--border-circle);
     color: var(--primary-color);
+}
+
+.social-icon:hover::after {
+    background-color: var(--secondary-color);
+    border-radius: 100%;
+    content: '';
+    left: -5px;
+    padding: 1.75rem;
+    position: absolute;
+    top: -4px;
+    z-index: -1;
 }
 </style>
