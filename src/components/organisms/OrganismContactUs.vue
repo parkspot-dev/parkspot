@@ -1,6 +1,6 @@
 <template>
-    <div class="contactUs">
-        <div class="contactUs-header mg-large">
+    <div class="contact-us">
+        <div class="contact-us-header mg-large">
             <AtomHeading class="mb-2">Got a question?</AtomHeading>
             <AtomParagraph>
                 Fill up the form and our Team will get back to you within 24
@@ -9,7 +9,7 @@
         </div>
 
         <div>
-            <div class="contactUs-options mg-medium">
+            <div class="contact-us-options mg-medium">
                 <a class="options" href="tel:+918092996057">
                     <AtomIcon :icon="'phone'"> </AtomIcon>
                     <span> +91 80929 96057 </span>
@@ -82,30 +82,34 @@ export default {
 };
 </script>
 <style scoped>
-.contactUs {
+.contact-us {
     padding-left: 4rem;
     padding-right: 12rem;
 }
+
 @media only screen and (max-width: 1200px) {
-    .contactUs {
+    .contact-us {
         padding-left: 2rem;
         padding-right: 8rem;
     }
 }
+
 @media only screen and (max-width: 1000px) {
-    .contactUs {
+    .contact-us {
         padding: 2rem;
     }
 }
+
 .options {
-    display: block;
-    color: var(--primary-text);
-    padding: 1rem 0.5rem;
     border: 2px solid transparent;
     border-radius: var(--border-default);
+    color: var(--primary-text);
+    display: block;
     margin-bottom: 0.75rem;
+    padding: 1rem 0.5rem;
     transition: all 0.3s;
 }
+
 .options:hover {
     border: 2px solid var(--secondary-color);
 }
@@ -113,6 +117,7 @@ export default {
 .mg-large {
     margin-bottom: 5rem;
 }
+
 .mg-medium {
     margin-bottom: 3rem;
 }
@@ -121,22 +126,26 @@ export default {
     .mg-large {
         margin-bottom: 3rem;
     }
+
     .mg-medium {
         margin-bottom: 1rem;
     }
 }
+
 .social-groups {
     display: flex;
     gap: 15%;
 }
+
 .social-icon {
     color: var(--primary-text);
     padding: 0.5rem;
 }
+
 .social-icon:hover {
     /* border: 2px solid black; */
-    border-radius: var(--border-circle);
     background-color: var(--secondary-color);
+    border-radius: var(--border-circle);
     color: var(--primary-color);
 }
 </style>

@@ -90,7 +90,7 @@
             <b-table-column field="comments" label="Comments" v-slot="props">
                 <AtomTextarea
                     :value="props.row.Comments"
-                    class="custom-colComment"
+                    class="comment-width"
                     @changed="onCommentUpdate(props.row, ...arguments)"
                 ></AtomTextarea>
             </b-table-column>
@@ -105,7 +105,7 @@
                 <template #searchable="props">
                     <AtomSelectInput
                         :list="statusList"
-                        class="custom-columnWidth"
+                        class="column-width"
                         v-model="props.filters['Status']"
                     >
                     </AtomSelectInput>
@@ -116,7 +116,7 @@
                     </span>
                     <AtomSelectInput
                         :list="statusList"
-                        class="custom-columnWidth"
+                        class="column-width"
                         @changed="onStatusUpdate(props.row, ...arguments)"
                     >
                     </AtomSelectInput>
@@ -142,7 +142,7 @@
                         </strong>
                     </span>
                     <AtomDatePicker
-                        class="custom-columnWidth"
+                        class="column-width"
                         @changed="onDateUpdate(props.row, ...arguments)"
                     >
                     </AtomDatePicker>
@@ -311,23 +311,27 @@ export default {
 .custom-wrap {
     padding: 1rem;
 }
-.custom-columnWidth {
+
+.column-width {
     width: 200px;
 }
-.custom-colComment {
+
+.comment-width {
     width: 400px;
 }
 
 .is-high {
-    background-color: red;
-    color: white;
+    background-color: #f00;
+    color: #fff;
 }
+
 .is-medium {
-    background-color: rgb(233, 221, 161);
-    color: white;
+    background-color: #fdda0d;
+    color: #fff;
 }
+
 .is-low {
     background-color: var(--primary-color);
-    color: white;
+    color: #fff;
 }
 </style>

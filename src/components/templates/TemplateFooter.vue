@@ -2,11 +2,11 @@
     <footer class="custom-footer">
         <section class="primary-footer">
             <BodyWrapper>
-                <section class="primary-footerContainer">
+                <section class="primary-container">
                     <div class="custom-parkspot">
                         <div class="mb-2">
                             <router-link
-                                class="topSearch-link"
+                                class="top-search-link"
                                 :to="{ name: 'Home' }"
                             >
                                 <figure class="image parkspot-logo">
@@ -36,7 +36,7 @@
                         </span>
                     </div>
 
-                    <div class="topSearch">
+                    <div class="top-search">
                         <AtomParagraph
                             :variation="'large'"
                             class="footer-heading"
@@ -46,7 +46,7 @@
                         <div>
                             <p>
                                 <router-link
-                                    class="topSearch-link"
+                                    class="top-search-link"
                                     :to="{
                                         path: '/bangalore/parking-near-jp-nagar',
                                     }"
@@ -56,7 +56,7 @@
                             </p>
                             <p>
                                 <router-link
-                                    class="topSearch-link"
+                                    class="top-search-link"
                                     :to="{
                                         path: '/bangalore/parking-near-btm',
                                     }"
@@ -66,7 +66,7 @@
                             </p>
                             <p>
                                 <router-link
-                                    class="topSearch-link"
+                                    class="top-search-link"
                                     :to="{
                                         path: '/bangalore/parking-near-bommanahalli',
                                     }"
@@ -76,7 +76,7 @@
                             </p>
                             <p>
                                 <router-link
-                                    class="topSearch-link"
+                                    class="top-search-link"
                                     :to="{
                                         path: '/bangalore/parking-near-rajajinagar',
                                     }"
@@ -85,7 +85,7 @@
                             </p>
                             <p>
                                 <router-link
-                                    class="topSearch-link"
+                                    class="top-search-link"
                                     :to="{
                                         path: '/bangalore/parking-near-banashankari',
                                     }"
@@ -95,7 +95,7 @@
                             </p>
                             <p>
                                 <router-link
-                                    class="topSearch-link"
+                                    class="top-search-link"
                                     :to="{
                                         path: '/bangalore/parking-near-marathahalli',
                                     }"
@@ -159,12 +159,12 @@
                         >
                             Discover
                         </AtomParagraph>
-                        <div class="footer-discoveryList">
+                        <div class="footer-discovery-list">
                             <ul>
                                 <li>
                                     <p>
                                         <router-link
-                                            class="topSearch-link"
+                                            class="top-search-link"
                                             :to="{
                                                 name: 'features',
                                             }"
@@ -176,7 +176,7 @@
                                 <li>
                                     <p>
                                         <router-link
-                                            class="topSearch-link"
+                                            class="top-search-link"
                                             :to="{
                                                 name: 'blog',
                                             }"
@@ -188,7 +188,7 @@
                                 <li>
                                     <p>
                                         <router-link
-                                            class="topSearch-link"
+                                            class="top-search-link"
                                             :to="{
                                                 name: 'VOPortal',
                                             }"
@@ -200,7 +200,7 @@
                                 <li>
                                     <p>
                                         <router-link
-                                            class="topSearch-link"
+                                            class="top-search-link"
                                             :to="{
                                                 name: 'SOPortal',
                                             }"
@@ -212,7 +212,7 @@
                                 <li>
                                     <p>
                                         <router-link
-                                            class="topSearch-link"
+                                            class="top-search-link"
                                             :to="{
                                                 name: 'Faq',
                                             }"
@@ -230,7 +230,7 @@
 
         <section class="secondary-footer">
             <BodyWrapper>
-                <section class="secondary-footerContainer">
+                <section class="secondary-container">
                     <div>
                         <AtomParagraph>
                             © 2021 NeoSpot Pvt Ltd.- ALL RIGHTS RESERVED
@@ -304,81 +304,99 @@ export default {
 .parkspot-logo {
     width: 250px;
 }
+
 .custom-footer,
-.topSearch-link {
+.top-search-link {
     color: #888d93;
 }
-.topSearch-link:hover {
+
+.top-search-link:hover {
     color: var(--primary-color);
 }
 
 .primary-footer {
     background-color: #1f2e3b;
 }
+
 .secondary-footer {
     background-color: #162029;
 }
+
 .footer-heading {
-    color: white;
+    color: #fff;
     margin-bottom: 1rem;
 }
-.primary-footerContainer {
+
+.primary-container {
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
 }
+
 @media only screen and (max-width: 600px) {
-    .primary-footerContainer {
+    .primary-container {
         flex-direction: column;
     }
 }
+
 .custom-parkspot {
     display: flex;
-    flex-direction: column;
     flex: 22%;
+    flex-direction: column;
 }
+
 .contact-info {
     flex: 25%;
 }
-.topSearch {
+
+.top-search {
     flex: 25%;
 }
 
 .footer-discovery {
     flex: 20%;
 }
-.secondary-footerContainer {
+
+.secondary-container {
     display: flex;
     justify-content: space-between;
 }
+
 .social-icon {
     color: var(--primary-text);
     padding: 0.5rem;
 }
+
 .social-icon:hover {
     color: var(--primary-color);
 }
-.footer-discoveryList ul {
+
+.footer-discovery-list ul {
     padding-left: 1rem;
 }
-.footer-discoveryList li {
+
+.footer-discovery-list li {
     position: relative;
 }
-.footer-discoveryList ul li::before {
-    content: '\2022';
+
+.footer-discovery-list ul li::before {
     color: var(--primary-color);
-    position: absolute;
+    content: '\2022';
     font-size: 25px;
     left: -19px;
+    position: absolute;
     top: -7px;
 }
+
 .location-icon {
     color: var(--primary-color);
 }
+
 .phone-contact {
     color: var(--secondary-color);
     cursor: pointer;
 }
+
 .phone-contact:hover {
     color: var(--primary-color);
 }

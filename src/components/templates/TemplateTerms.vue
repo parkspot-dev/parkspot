@@ -200,7 +200,7 @@ export default {
 
 <style scoped>
 .terms-container {
-    max-width: 960px;
     margin: auto;
+    max-width: 960px;
 }
 </style>

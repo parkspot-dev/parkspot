@@ -30,7 +30,7 @@
                     @booked="onBook"
                 ></MoleculeSRPCard>
             </div>
-            <div class="nearbyText-container">
+            <div class="nearbytext-container">
                 <AtomHeading :level="'h3'">
                     Find and book parking spaces near
                     {{ locationWithCaps }}
@@ -102,19 +102,15 @@ export default {
 
 <style scoped>
 .custom-title {
-    text-align: center;
     margin-bottom: 1rem;
+    text-align: center;
 }
 
-/* @media only screen and (max-width: 1024px) {
-  .custom-title {
-    font-size: 2rem;
-  }
-} */
-.nearbyText-container {
-    max-width: 960px;
+.nearbytext-container {
     margin: auto;
+    max-width: 960px;
 }
+
 .custom-nearby {
     color: var(--grey-shade);
     margin-bottom: 1rem;

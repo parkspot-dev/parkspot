@@ -1,9 +1,9 @@
 <template>
     <div class="m-features-details">
-        <img class="m-features-details__img" :src="src" />
-        <h2 class="m-features-details__title">{{ featuresTitle }}</h2>
+        <img class="m-features-details-img" :src="src" />
+        <h2 class="m-features-details-title">{{ featuresTitle }}</h2>
         <br />
-        <p class="m-features-details__text" v-html="featuresText"></p>
+        <p class="m-features-details-text" v-html="featuresText"></p>
     </div>
 </template>
 
@@ -24,16 +24,16 @@ export default {
 </script>
 
 <style scoped>
-.m-features-details__title {
+.m-features-details-title {
     font-size: 2rem;
-}
-.m-features-details__img {
-    max-width: 2.5rem;
-}
-.m-features-details__title {
     font-weight: 600;
 }
-.m-features-details__text {
+
+.m-features-details-img {
+    max-width: 2.5rem;
+}
+
+.m-features-details-text {
     font-size: 1rem;
 }
 </style>

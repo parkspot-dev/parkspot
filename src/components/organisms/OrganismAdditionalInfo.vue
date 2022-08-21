@@ -138,8 +138,8 @@ export default {
 </script>
 <style scoped>
 .custom-terms {
+    left: 111px;
     position: absolute;
     top: -2px;
-    left: 111px;
 }
 </style>

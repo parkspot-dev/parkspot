@@ -1,6 +1,6 @@
 <template>
     <BodyWrapper>
-        <div class="aboutContainer">
+        <div class="about-container">
             <AtomImage
                 :src="aboutImg"
                 :alt="'About Image'"
@@ -70,22 +70,26 @@ export default {
 
 <style scoped>
 .about-links {
-    display: flex;
     align-items: center;
+    display: flex;
 }
-.aboutContainer {
-    display: flex;
+
+.about-container {
     align-items: center;
+    display: flex;
     gap: 2rem;
 }
+
 @media only screen and (max-width: 750px) {
-    .aboutContainer {
+    .about-container {
         flex-direction: column;
     }
 }
+
 .about-img {
     flex: 30%;
 }
+
 .about-desc {
     flex: 50%;
 }

@@ -70,17 +70,21 @@ export default {
     background-color: var(--secondary-color) !important;
     border-color: var(--secondary-color);
 }
+
 .pagination-btn {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     cursor: pointer;
 }
+
 .pagination-btn:visited {
     border-color: var(--primary-color);
 }
+
 .pagination-btn:hover {
     border-color: var(--primary-color);
 }
+
 .pagination-btn:active {
     border-color: var(--primary-color);
 }

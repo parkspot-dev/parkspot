@@ -216,15 +216,18 @@ export default {
 .cmargin {
     margin: 0 15rem;
 }
+
 .footer-buttons {
     display: flex;
     justify-content: space-between;
 }
+
 @media only screen and (max-width: 800px) {
     .cmargin {
         margin: 0 5rem;
     }
 }
+
 @media only screen and (max-width: 600px) {
     .cmargin {
         margin: 0;

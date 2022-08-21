@@ -61,61 +61,70 @@ export default {
 
 <style scoped>
 .custom-card {
-    display: grid;
+    border-radius: var(--border-default);
     box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%),
         0 0 0 1px rgb(10 10 10 / 2%);
+    column-gap: 0.75rem;
+    display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(6, auto);
-    row-gap: 0.25rem;
-    column-gap: 0.75rem;
-    padding: 2rem;
-    border-radius: var(--border-default);
-    max-width: 100%;
     margin: 0.5rem;
+    max-width: 100%;
     overflow: hidden;
+    padding: 2rem;
+    row-gap: 0.25rem;
 }
+
 .card-img {
     grid-column: 1 / 1;
     grid-row: 1 / 5;
 }
+
 .card-title {
+    font-weight: var(--bold-font);
     grid-column: 2 / 6;
     grid-row: 1 / 1;
-    font-weight: var(--bold-font);
 }
+
 .card-btn {
     grid-column: 2 / 6;
 }
+
 .card-location {
+    font-size: var(--sp-size-sm);
     grid-column: 2 / 6;
     grid-row: 2 / 2;
     max-height: calc(1.2rem * 2);
     overflow: hidden;
     position: relative;
-    font-size: var(--sp-size-sm);
 }
+
 .card-location::before {
+    bottom: -5px;
     content: '...';
     position: absolute;
-    bottom: -5px;
     right: 0;
 }
+
 .card-location::after {
+    background: #fff;
     content: '';
+    height: 1rem;
     position: absolute;
     right: 0; /* note: not using bottom */
     width: 1rem;
-    height: 1rem;
-    background: white;
 }
+
 .card-rating {
     grid-row: 5 / 5;
     margin: auto;
 }
+
 .card-distance,
 .card-rate {
     grid-column: 2 / 4;
 }
+
 .card-type,
 .card-spot {
     grid-column: 4 / 6;

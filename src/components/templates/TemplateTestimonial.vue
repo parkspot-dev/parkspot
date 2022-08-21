@@ -1,14 +1,13 @@
 <template>
     <BodyWrapper data-aos="fade-up">
-        <AtomParagraph class="custom-subtitle">Testimonials</AtomParagraph>
+        <AtomParagraph class="custom-subtitle"> Testimonials </AtomParagraph>
         <AtomHeading class="custom-title" :level="'h2'">
             What Our Customers Say
         </AtomHeading>
         <b-carousel-list v-model="test" :data="items" v-bind="al">
             <template #item="list">
-                <MoleculeTestimonialCard
-                    :items="list"
-                ></MoleculeTestimonialCard>
+                <MoleculeTestimonialCard :items="list">
+                </MoleculeTestimonialCard>
             </template>
         </b-carousel-list>
     </BodyWrapper>
@@ -89,12 +88,13 @@ export default {
 
 <style scoped>
 .custom-title {
-    text-align: center;
     margin-bottom: 4rem;
-}
-.custom-subtitle {
     text-align: center;
-    font-weight: var(--semi-bold-font);
+}
+
+.custom-subtitle {
     color: var(--secondary-color);
+    font-weight: var(--semi-bold-font);
+    text-align: center;
 }
 </style>

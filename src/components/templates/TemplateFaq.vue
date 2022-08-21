@@ -145,17 +145,20 @@ export default {
 
 <style scoped>
 .custom-wrapper {
-    max-width: 960px;
     margin: 0 auto;
+    max-width: 960px;
 }
+
 .custom-title {
-    text-align: center;
     margin-bottom: 4rem;
+    text-align: center;
 }
+
 .custom-header {
     background: var(--secondary-color);
 }
+
 .custom-header-title {
-    color: white;
+    color: #fff;
 }
 </style>

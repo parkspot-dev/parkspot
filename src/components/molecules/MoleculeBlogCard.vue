@@ -46,19 +46,22 @@ export default {
 .custom-image {
     cursor: pointer;
     opacity: 1;
-    -webkit-transition: 0.3s ease-in-out;
     transition: 0.3s ease-in-out;
 }
+
 .custom-image:hover {
     opacity: 0.5;
 }
+
 .blog-header {
-    margin-bottom: 2rem;
     cursor: pointer;
+    margin-bottom: 2rem;
 }
+
 .blog-header:hover {
     color: var(--secondary-color) !important;
 }
+
 .blog-content {
     color: var(--grey-shade);
 }

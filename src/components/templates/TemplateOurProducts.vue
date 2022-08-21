@@ -82,12 +82,13 @@ export default {
 
 <style scoped>
 .custom-title {
-    text-align: center;
     margin-bottom: 4rem;
-}
-.custom-subtitle {
     text-align: center;
-    font-weight: var(--semi-bold-font);
+}
+
+.custom-subtitle {
     color: var(--secondary-color);
+    font-weight: var(--semi-bold-font);
+    text-align: center;
 }
 </style>

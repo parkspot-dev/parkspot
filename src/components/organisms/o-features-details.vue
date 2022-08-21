@@ -1,6 +1,6 @@
 <template>
     <div class="o_features_details">
-        <img class="ps_img" :src="src" />
+        <img class="ps-img" :src="src" />
         <atom-b-subtitle
             class="is-size-4 has-text-weight-semibold"
             :text="subtitle"
@@ -29,9 +29,9 @@ export default {
 
 <style scoped>
 @media only screen and (min-width: 1024px) {
-    .ps_img {
-        max-width: 150px;
+    .ps-img {
         height: 150px;
+        max-width: 150px;
     }
 }
 </style>

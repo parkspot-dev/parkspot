@@ -97,9 +97,10 @@ export default {
 .custom-wrapper {
     position: relative;
 }
+
 .custom-tooltip {
-    position: absolute;
     left: 95px;
+    position: absolute;
     top: 2px;
 }
 </style>

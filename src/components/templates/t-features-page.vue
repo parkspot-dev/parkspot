@@ -10,13 +10,13 @@
                 <transition name="expand">
                     <m-features-details
                         v-if="data.textLimit"
-                        :class="data.textLimit ? 'feature-card__details' : ''"
+                        :class="data.textLimit ? 'feature-card-details' : ''"
                         :features-title="data.title"
                         :features-text="data.text.substring(0, 300) + '...'"
                     ></m-features-details>
                     <m-features-details
                         v-if="!data.textLimit"
-                        :class="data.textLimit ? 'feature-card__details' : ''"
+                        :class="data.textLimit ? 'feature-card-details' : ''"
                         :features-title="data.title"
                         :features-text="data.text"
                     ></m-features-details>
@@ -24,14 +24,14 @@
 
                 <p
                     v-if="data.textLimit"
-                    class="feature-card__show"
+                    class="feature-card-show"
                     @click="expand(data.id)"
                 >
                     Show more
                 </p>
                 <p
                     v-if="!data.textLimit"
-                    class="feature-card__hide"
+                    class="feature-card-hide"
                     @click="expand(data.id)"
                 >
                     Show Less
@@ -134,32 +134,26 @@ export default {
 
 <style scoped>
 .features-card {
-    /* margin-bottom: 1rem; */
-    border: solid 1px #eeeeee;
-    /* border-bottom: 0px; */
+    border: solid 1px #eee;
 }
-.feature-card__details {
+
+.feature-card-details {
     max-height: 300px;
     overflow: hidden;
 }
-.feature-card__show,
-.feature-card__hide {
-    text-align: center;
-    cursor: pointer;
+
+.feature-card-show,
+.feature-card-hide {
     color: var(--secondary-color);
+    cursor: pointer;
     display: inline;
-    /* margin: 0% 50%; */
-    /* background-color: #000000; */
-    /* box-shadow: 0px -8px 13px 2px #9e9d9d; */
+    text-align: center;
 }
 
-/* TRANSITION */
-/* always present */
 .expand-transition {
     transition: all 1.5s ease;
 }
-/* .expand-enter defines the starting state for entering */
-/* .expand-leave defines the ending state for leaving */
+
 .expand-enter,
 .expand-leave {
     height: 0;

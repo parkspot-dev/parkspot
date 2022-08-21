@@ -28,17 +28,18 @@ export default {
 
 <style scoped>
 .custom-card {
-    padding: 2rem 3rem;
     border: 2px dotted var(--secondary-color);
     border-radius: var(--border-default);
     border-style: dashed;
+    padding: 2rem 3rem;
     transition: transform 0.3s ease;
 }
+
 .custom-card:hover,
 .custom-card:focus {
     background-color: var(--primary-color);
-    transform: scale(1.05);
     border: 2px solid transparent;
     color: var(--secondary-color);
+    transform: scale(1.05);
 }
 </style>

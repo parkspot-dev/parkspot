@@ -60,24 +60,23 @@ export default {
     padding: 2.5rem 0;
     position: relative;
 }
-.bg-wrap:before {
+
+.bg-wrap::before {
+    background-color: var(--bg-color-tertiary);
+    clip-path: polygon(300px 0, 100% 0, 100% 100%, 0 100%);
     content: '';
     display: block;
-    width: calc(50vw + 150px);
     height: 100%;
-    background-color: var(--bg-color-tertiary);
-    -webkit-clip-path: polygon(300px 0, 100% 0, 100% 100%, 0 100%);
-    clip-path: polygon(300px 0, 100% 0, 100% 100%, 0 100%);
     position: absolute;
-    top: 0;
     right: 0;
+    top: 0;
+    width: calc(50vw + 150px);
 }
 
 @media only screen and (max-width: 760px) {
-    .bg-wrap:before {
-        width: calc(50vw + 360px);
-        -webkit-clip-path: polygon(300px 70%, 100% 33%, 100% 100%, 0% 100%);
+    .bg-wrap::before {
         clip-path: polygon(300px 70%, 100% 33%, 100% 100%, 0% 100%);
+        width: calc(50vw + 360px);
     }
 }
 </style>

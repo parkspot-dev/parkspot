@@ -1,5 +1,5 @@
 <template>
-    <BodyWrapper class="homeBanner">
+    <BodyWrapper class="home-banner">
         <!-- <h1>hello</h1> -->
         <div class="banner-wrapper">
             <div class="banner-header">
@@ -41,33 +41,35 @@ export default {
 </script>
 
 <style scoped>
-.homeBanner {
+.home-banner {
     /* The image used */
     background-image: url('../../assets/Home-Banner.jpg');
     background-image: linear-gradient(
             to right bottom,
-            rgba(28, 26, 18, 0.35),
-            rgba(21, 19, 13, 0.35)
+            rgba(28 26 18 35%),
+            rgba(21 19 13 35%)
         ),
         url('../../assets/Home-Banner.jpg');
-    /* Full height */
-    height: 100vh;
-    max-height: 1000px;
+
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+
+    /* Full height */
+    height: 100vh;
+    max-height: 1000px;
 }
 
 .banner-wrapper {
-    max-width: 960px;
     margin: 10rem auto;
+    max-width: 960px;
 }
 
 .banner-header {
+    color: #fff;
     margin: 0 auto;
     padding: 2rem 6rem;
-    color: white;
 }
 
 .banner-title {
@@ -80,9 +82,11 @@ export default {
 .banner-subtitle {
     margin-bottom: 3rem;
 }
+
 .banner-input {
     margin-bottom: 1.25rem;
 }
+
 .btn-wrapper {
     text-align: center;
 }
@@ -96,6 +100,7 @@ export default {
         font-size: 2.25rem;
         text-align: center;
     }
+
     .banner-subtitle {
         text-align: center;
     }

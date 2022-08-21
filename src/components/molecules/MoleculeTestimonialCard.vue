@@ -67,21 +67,26 @@ export default {
 .quote {
     width: 64px;
 }
+
 .testimony {
     display: flex;
     gap: 1rem;
 }
+
 .testimony-right {
     align-self: center;
 }
+
 .testimony-name {
     font-weight: var(--semi-bold-font);
 }
+
 .quote-bottom {
     display: flex;
     justify-content: space-between;
     margin-top: 1rem;
 }
+
 .rating {
     margin: 0 !important;
 }

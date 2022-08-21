@@ -64,20 +64,24 @@ export default {
     font-weight: var(--semi-bold-font);
     text-align: center;
 }
+
 .custom-para {
     color: var(--grey-shade);
-    text-align: center;
     margin-bottom: 2rem;
-}
-.custom-button {
     text-align: center;
-    margin-bottom: 3rem;
 }
+
+.custom-button {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
 .custom-img-wrapper {
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: center;
 }
+
 .custom-img {
     width: 250px;
 }

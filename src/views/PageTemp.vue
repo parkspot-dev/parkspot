@@ -26,7 +26,7 @@ export default {
 
 <style scoped>
 .custom-wrapper {
-    max-width: 960px;
     margin: auto;
+    max-width: 960px;
 }
 </style>

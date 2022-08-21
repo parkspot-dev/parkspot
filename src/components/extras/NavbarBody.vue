@@ -53,11 +53,13 @@ export default {
 .custom-navpad {
     padding: 0.25rem 2rem;
 }
+
 @media only screen and (max-width: 1024px) {
     .custom-navpad {
         padding: 0.25rem 0;
     }
 }
+
 .navbar-item img {
     max-height: 2rem;
 }
@@ -65,12 +67,15 @@ export default {
 .navbar-end .navbar-item:hover {
     color: var(--secondary-color);
 }
+
 .navbar-end .navbar-item:active {
     color: var(--secondary-color);
 }
+
 .router-link-exact-active:visited {
     color: var(--secondary-color);
 }
+
 .navbar-item.router-link-exact-active.router-link-active {
     color: var(--secondary-color);
 }
@@ -78,9 +83,11 @@ export default {
 .navbar-item .navbar-link:hover {
     color: var(--secondary-color);
 }
+
 .navbar-item .navbar-link.is-active {
     color: var(--secondary-color);
 }
+
 .navbar-item .navbar-link:not(.is-arrowless)::after {
     border-color: var(--secondary-color);
 }

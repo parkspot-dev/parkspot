@@ -14,11 +14,11 @@
         </div>
         <div class="srp-map">
             <MapContainer
-                class="mapContainer"
+                class="map-container"
                 :spotsList="spots"
                 :key="reRender"
             ></MapContainer>
-            <SearchInput class="mapSearch" @changed="onChange"></SearchInput>
+            <SearchInput class="map-search" @changed="onChange"></SearchInput>
         </div>
     </div>
 </template>
@@ -66,54 +66,58 @@ export default {
 <style scoped>
 .srp-container {
     display: flex;
-    padding-left: 3rem;
     gap: 2rem;
+    padding-left: 3rem;
 }
 
 .srp-lists {
     flex: 20%;
     padding-top: 2rem;
 }
+
 .srp-map {
     flex: 60%;
 }
-.mapContainer {
+
+.map-container {
     height: 100%;
     position: relative;
 }
-.mapSearch {
+
+.map-search {
+    left: 50%;
     position: absolute;
     top: 20%;
-    left: 50%;
     width: 500px;
 }
-.mapSearch-btn {
-    position: absolute;
-    top: 20%;
-    left: 50%;
-}
+
 @media only screen and (max-width: 1024px) {
     .srp-container {
         flex-direction: column-reverse;
         padding-left: 0;
     }
+
     .srp-lists {
         padding: 2rem 8rem;
     }
-    .mapContainer {
+
+    .map-container {
         height: 50vh;
     }
-    .mapSearch {
+
+    .map-search {
         left: 5%;
         top: 10%;
         width: 50vw;
     }
 }
+
 @media only screen and (max-width: 700px) {
     .srp-lists {
         padding: 2rem 4rem;
     }
 }
+
 @media only screen and (max-width: 500px) {
     .srp-lists {
         padding: 2rem 1rem;

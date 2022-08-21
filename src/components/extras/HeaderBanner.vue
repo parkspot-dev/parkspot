@@ -17,6 +17,7 @@ export default {
     max-height: 300px;
     padding: 6rem;
 }
+
 @media only screen and (max-width: 1024px) {
     .custom-banner {
         padding: 3rem;

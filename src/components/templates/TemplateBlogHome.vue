@@ -57,12 +57,13 @@ export default {
 
 <style scoped>
 .custom-title {
-    text-align: center;
     margin-bottom: 1rem;
+    text-align: center;
 }
+
 .grid-container {
     display: grid;
-    grid-template-columns: auto auto;
     gap: 2rem;
+    grid-template-columns: auto auto;
 }
 </style>

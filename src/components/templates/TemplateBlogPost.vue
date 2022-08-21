@@ -85,30 +85,34 @@ export default {
 </script>
 <style scoped>
 .custom-title {
-    text-align: center;
     margin-bottom: 2rem;
+    text-align: center;
 }
 
 .article-wrapper {
-    max-width: 960px;
     margin: auto;
+    max-width: 960px;
 }
+
 .custom-author {
+    column-gap: 2rem;
     display: inline-grid;
     grid-template-columns: auto auto auto;
     grid-template-rows: 1fr 1fr;
-    column-gap: 2rem;
 }
+
 .author-img {
     grid-row: 1 / 4;
     margin: auto;
 }
+
 .author-timestamp {
+    color: var(--grey-shade);
     grid-row: 2 / 2;
-    color: var(--grey-shade);
 }
+
 .author-name {
-    grid-column: 2 / 4;
     color: var(--grey-shade);
+    grid-column: 2 / 4;
 }
 </style>

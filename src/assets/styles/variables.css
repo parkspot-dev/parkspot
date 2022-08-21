@@ -1,27 +1,28 @@
 :root {
-  /* color naming: https://material.io/design/color/the-color-system.html */
-  --primary-color: #ffdd57;
-  --secondary-color: #0085ad;
-  --primary-text: #555;
-  
-  /* shades */
-  --grey-shade: #a9a9a9;
+    /* color naming: https://material.io/design/color/the-color-system.html */
+    --primary-color: #ffdd57;
+    --secondary-color: #0085ad;
+    --primary-text: #555;
 
-  /* border radius */
-  --border-default: 9px;
-  --border-circle: 1000%;
-  
-  /* typography */
-  --regular-font: 400;
-  --semi-bold-font: 500;
-  --bold-font: 600;
-  --sp-size-sm: 0.75rem;
-  /* - Line height:*/
+    /* shades */
+    --grey-shade: #a9a9a9;
+
+    /* border radius */
+    --border-default: 9px;
+    --border-circle: 1000%;
+
+    /* typography */
+    --regular-font: 400;
+    --semi-bold-font: 500;
+    --bold-font: 600;
+    --sp-size-sm: 0.75rem;
+
+    /* - Line height */
     --lh-default: 1;
     --lh-small: 1.05;
-    --lh-para:  1.6;
+    --lh-para: 1.6;
 
     /* background colors */
-    --bg-color-secondary: #F7F8FF ;
+    --bg-color-secondary: #f7f8ff;
     --bg-color-tertiary: #171c37;
 }

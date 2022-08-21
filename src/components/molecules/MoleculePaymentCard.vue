@@ -67,22 +67,25 @@ export default {
 
 <style scoped>
 .payment-card {
-    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%),
-        0 0px 0 1px rgb(10 10 10 / 2%);
     border-radius: var(--border-default);
-    padding: 2rem;
-    max-width: 500px;
+    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%),
+        0 0 0 1px rgb(10 10 10 / 2%);
     margin: auto;
+    max-width: 500px;
+    padding: 2rem;
 }
+
 .card-grp {
+    align-items: center;
     display: flex;
     gap: 1rem;
-    align-items: center;
 }
+
 .card-amt {
+    color: #50c878;
     font-size: 2rem;
-    color: hsl(141, 53%, 53%);
 }
+
 .card-btn {
     text-align: center;
 }
