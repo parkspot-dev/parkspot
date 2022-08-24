@@ -8,7 +8,10 @@
 
 <script>
 export default {
-    name: 'list',
+    name: 'ExampleComponent',
     props: ['messages'],
+    created() {
+        alert(this.messages);
+    },
 };
 </script>

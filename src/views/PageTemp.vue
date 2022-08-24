@@ -1,20 +1,25 @@
 <template>
-    <!-- <example :messages="messages"></example> -->
-    <div>
+    <ExampleComponent :messages="messages"></ExampleComponent>
+    <!-- <div>
         <h1>Sign Up</h1>
-    </div>
+    </div> -->
 </template>
 <script>
-// import example from "./example.vue";
+import ExampleComponent from './ExampleComponent.vue';
 export default {
     /**
      * This page is used for development testing purposes.
      */
     name: 'PageTemp',
+    components: {
+        ExampleComponent,
+    },
 
-    data: () => ({
-        count: 0,
-    }),
+    data() {
+        return {
+            messages: ['a', 'b', 'c'],
+        };
+    },
 
     methods: {
         increment() {
