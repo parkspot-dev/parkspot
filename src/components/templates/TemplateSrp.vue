@@ -10,6 +10,7 @@
                 :key="spot.ID"
                 :spot="spot"
                 @booked="onBook"
+                @click.native="selected(spot)"
             ></MoleculeSRPCard>
         </div>
         <div class="srp-map">
@@ -58,6 +59,9 @@ export default {
         },
         onChange() {
             this.$emit('flyToSrp');
+        },
+        selected(spot) {
+            console.log(spot);
         },
     },
 };
