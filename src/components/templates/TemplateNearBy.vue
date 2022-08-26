@@ -1,51 +1,45 @@
 <template>
-      <div>
-            <HeaderBanner>
-                  <AtomHeading class="custom-title">
-                        Book Your Parking Spot
-                  </AtomHeading>
-                  <b-breadcrumb align="is-centered" size="is-medium">
-                        <b-breadcrumb-item tag="router-link" to="/">
-                              Home
-                        </b-breadcrumb-item>
-                        <b-breadcrumb-item tag="router-link" to="/blog" active>
-                              {{ locationWithCaps }}
-                        </b-breadcrumb-item>
-                  </b-breadcrumb>
-                  <!-- <div>
+  <div>
+    <HeaderBanner>
+      <AtomHeading class="custom-title"> Book Your Parking Spot </AtomHeading>
+      <b-breadcrumb align="is-centered" size="is-medium">
+        <b-breadcrumb-item tag="router-link" to="/"> Home </b-breadcrumb-item>
+        <b-breadcrumb-item tag="router-link" to="/blog" active>
+          {{ locationWithCaps }}
+        </b-breadcrumb-item>
+      </b-breadcrumb>
+      <!-- <div>
         <SearchInput></SearchInput>
       </div> -->
-            </HeaderBanner>
+    </HeaderBanner>
 
-            <Wrapper>
-                  <AtomHeading class="mb-4" :level="'h4'">
-                        Parking near {{ locationWithCaps }}
-                  </AtomHeading>
-                  <div class="columns mb-6">
-                        <MoleculeSRPCard
-                              class="column"
-                              :key="spot.ID"
-                              v-for="spot in spots"
-                              :spot="spot"
-                              @booked="onBook"
-                        ></MoleculeSRPCard>
-                  </div>
-                  <div class="nearbyText-container">
-                        <AtomHeading :level="'h3'">
-                              Find and book parking spaces near
-                              {{ locationWithCaps }}
-                        </AtomHeading>
-                        <AtomParagraph class="custom-nearby">{{
-                              nearByText
-                        }}</AtomParagraph>
-                        <br />
-                        <AtomParagraph class="custom-nearby">
-                              Want to earn extra money? Rent your vacant space
-                              at our platform and start earning extra.
-                        </AtomParagraph>
-                  </div>
-            </Wrapper>
+    <Wrapper>
+      <AtomHeading class="mb-4" :level="'h4'">
+        Parking near {{ locationWithCaps }}
+      </AtomHeading>
+      <div class="columns mb-6">
+        <MoleculeSRPCard
+          class="column"
+          :key="spot.ID"
+          v-for="spot in spots"
+          :spot="spot"
+          @booked="onBook"
+        ></MoleculeSRPCard>
       </div>
+      <div class="nearbyText-container">
+        <AtomHeading :level="'h3'">
+          Find and book parking spaces near
+          {{ locationWithCaps }}
+        </AtomHeading>
+        <AtomParagraph class="custom-nearby">{{ nearByText }}</AtomParagraph>
+        <br />
+        <AtomParagraph class="custom-nearby">
+          Want to earn extra money? Rent your vacant space at our platform and
+          start earning extra.
+        </AtomParagraph>
+      </div>
+    </Wrapper>
+  </div>
 </template>
 
 <script>
@@ -56,54 +50,54 @@ import MoleculeSRPCard from "../molecules/MoleculeSRPCard.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
 import Wrapper from "../extras/Wrapper.vue";
 export default {
-      name: "TemplateNearBy",
-      components: {
-            HeaderBanner,
-            // SearchInput,
-            AtomHeading,
-            MoleculeSRPCard,
-            AtomParagraph,
-            Wrapper,
-      },
-      props: {
-            nearByLocation: {
-                  type: String,
-            },
-            spots: {
-                  type: Array,
-            },
-      },
-      data() {
-            return {};
-      },
-      computed: {
-            nearByText() {
-                  return `
+  name: "TemplateNearBy",
+  components: {
+    HeaderBanner,
+    // SearchInput,
+    AtomHeading,
+    MoleculeSRPCard,
+    AtomParagraph,
+    Wrapper,
+  },
+  props: {
+    nearByLocation: {
+      type: String,
+    },
+    spots: {
+      type: Array,
+    },
+  },
+  data() {
+    return {};
+  },
+  computed: {
+    nearByText() {
+      return `
        Searching parking space near ${this.nearByLocation}  ? Book the cheap and best space for yourself near  ${this.nearByLocation}  with ParkSpot.
        With us, you can leave the uncertainty of not finding parking space for your Car or Bike. 
        We do short term as well as long term parking as per your need with the minimum cost. 
        Choose the new way of parking near  ${this.nearByLocation}, choose the smart way of parking, CHOOSE ParkSpot .
        Think about the stress avoided, fuel & time saved.`;
-            },
-            locationWithCaps() {
-                  return (
-                        this.nearByLocation.charAt(0).toUpperCase() +
-                        this.nearByLocation.slice(1)
-                  );
-            },
-      },
-      methods: {
-            onBook() {
-                  this.$router.push({ name: "contactUs" });
-            },
-      },
+    },
+    locationWithCaps() {
+      return (
+        this.nearByLocation.charAt(0).toUpperCase() +
+        this.nearByLocation.slice(1)
+      );
+    },
+  },
+  methods: {
+    onBook() {
+      this.$router.push({ name: "contactUs" });
+    },
+  },
 };
 </script>
 
 <style scoped>
 .custom-title {
-      text-align: center;
-      margin-bottom: 1rem;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 /* @media only screen and (max-width: 1024px) {
@@ -112,11 +106,11 @@ export default {
   }
 } */
 .nearbyText-container {
-      max-width: 960px;
-      margin: auto;
+  max-width: 960px;
+  margin: auto;
 }
 .custom-nearby {
-      color: var(--grey-shade);
-      margin-bottom: 1rem;
+  color: var(--grey-shade);
+  margin-bottom: 1rem;
 }
 </style>
