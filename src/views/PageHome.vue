@@ -36,11 +36,12 @@ export default {
     },
     methods: {
         flyToSrp() {
+            let latlng = [...this.LocDetails.lnglat];
+            latlng = latlng.reverse().toString();
             this.$router.push({
                 name: 'srp',
                 query: {
-                    lat: this.LocDetails.lnglat[1],
-                    lng: this.LocDetails.lnglat[0],
+                    latlng,
                 },
                 params: {
                     location: this.LocDetails.locDetails.locName,

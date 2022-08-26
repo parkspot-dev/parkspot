@@ -103,9 +103,9 @@ const mutations = {
         state.selectedLocation.country = data;
     },
 
-    'update-map-config'(state, data) {
-        state.mapConfig.center = data;
-        state.center = data;
+    'update-map-config'(state, center) {
+        state.mapConfig.center = center;
+        state.center = center;
     },
 
     'update-total-pages'(state, data) {

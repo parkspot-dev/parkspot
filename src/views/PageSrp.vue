@@ -36,7 +36,7 @@ export default {
     async mounted() {
         try {
             this.isLoading = true;
-            await this.updateMapConfig([this.getLng(), this.getLat()]);
+            await this.updateMapConfig(this.getLatLng()); // map center takes [lng, lat]
             await this.srpCall();
             this.reRender++;
             this.isLoading = false;
@@ -64,22 +64,22 @@ export default {
             this.isLoading = false;
         },
         // methods to get Lat and Long
-        getLat: function () {
+
+        getLatLng() {
             const queryParam = new URLSearchParams(window.location.search);
-            return queryParam.get('lat');
-        },
-        getLng: function () {
-            const queryParam = new URLSearchParams(window.location.search);
-            return queryParam.get('lng');
+            const latlng = queryParam.get('latlng').split(',');
+            latlng.reverse(); // map center takes [lng, lat] so reverse() used
+            return latlng;
         },
 
         flyToSrp() {
             this.$nextTick(() => {
+                let latlng = [...this.LocDetails.lnglat];
+                latlng = latlng.reverse().toString();
                 this.$router.push({
                     name: 'srp',
                     query: {
-                        lat: this.LocDetails.lnglat[1],
-                        lng: this.LocDetails.lnglat[0],
+                        latlng,
                     },
                     params: {
                         location: this.LocDetails.locDetails.locName,
