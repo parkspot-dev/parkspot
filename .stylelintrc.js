@@ -11,5 +11,6 @@ module.exports = {
         'selector-max-id': 2,
         'import-notation': 'url',
         'color-function-notation': 'legacy',
+        'value-no-vendor-prefix': null,
     },
 };

@@ -27,7 +27,9 @@
             </div>
 
             <div class="content">
-                {{ items.quote }}
+                <span class="content-text">
+                    {{ items.quote }}
+                </span>
                 <br />
                 <div class="quote-bottom">
                     <AtomRating class="rating" :rate="items.rate"></AtomRating>
@@ -90,4 +92,11 @@ export default {
 .rating {
     margin: 0 !important;
 }
+
+/* .content-text {
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+} */
 </style>

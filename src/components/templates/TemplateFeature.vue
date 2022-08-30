@@ -1,54 +1,33 @@
 <template>
-    <div class="container">
-        <m-features-main-heading></m-features-main-heading>
-        <div class="columns is-flex-wrap-wrap is-3">
-            <div
-                v-for="data of featuresData"
-                :key="data.id"
-                class="features-card column is-half"
+    <BodyWrapper>
+        <MoleculeFeatureHeader></MoleculeFeatureHeader>
+        <div class="feature-container">
+            <MoleculeFeatureBody
+                v-for="feature of featuresData"
+                :key="feature.id"
+                :features-title="feature.title"
             >
-                <transition name="expand">
-                    <m-features-details
-                        v-if="data.textLimit"
-                        :class="data.textLimit ? 'feature-card-details' : ''"
-                        :features-title="data.title"
-                        :features-text="data.text.substring(0, 300) + '...'"
-                    ></m-features-details>
-                    <m-features-details
-                        v-if="!data.textLimit"
-                        :class="data.textLimit ? 'feature-card-details' : ''"
-                        :features-title="data.title"
-                        :features-text="data.text"
-                    ></m-features-details>
-                </transition>
-
-                <p
-                    v-if="data.textLimit"
-                    class="feature-card-show"
-                    @click="expand(data.id)"
-                >
-                    Show more
+                <p class="mb-2">
+                    {{ feature.para }}
                 </p>
-                <p
-                    v-if="!data.textLimit"
-                    class="feature-card-hide"
-                    @click="expand(data.id)"
-                >
-                    Show Less
+                <p>
+                    {{ feature.para2 }}
                 </p>
-            </div>
+            </MoleculeFeatureBody>
         </div>
-    </div>
+    </BodyWrapper>
 </template>
 
 <script>
-import MFeaturesDetails from '../molecules/m-features-details.vue';
-import MFeaturesMainHeading from '../molecules/m-features-main-heading.vue';
+import MoleculeFeatureBody from '../molecules/MoleculeFeatureBody.vue';
+import MoleculeFeatureHeader from '../molecules/MoleculeFeatureHeader.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 export default {
-    name: 'TFeaturesPage',
+    name: 'TemplateFeature',
     components: {
-        MFeaturesDetails,
-        MFeaturesMainHeading,
+        MoleculeFeatureBody,
+        MoleculeFeatureHeader,
+        BodyWrapper,
     },
     data() {
         return {
@@ -56,23 +35,23 @@ export default {
                 {
                     id: 1,
                     title: `Navigation`,
-                    text: `It is very difficult to go to an unknown place. 
+                    para: `It is very difficult to go to an unknown place. 
                         People usually search on Google Maps to reach a particular\
                         location but sometimes it happens that people don’t get\
                         the exact address from the map.It is easy to find places\
                         like malls, hospitals, and much more popular sites, but \
                         when it comes to finding a specific location like a house, \
-                        it’s really hard.<br> <br> ParkSpot helps in this situation. \
+                        it’s really hard.`,
+                    para2: ` ParkSpot helps in this situation. \
                         ParkSpot stores the exact location of the parking location \
                         and gives a navigation feature that will direct the ParkSpot \
                         user to navigate to the desired parking space.This easy-finding \
                         feature helps let users experience a hassle-free parking experience.`,
-                    textLimit: true,
                 },
                 {
                     id: 2,
                     title: `Booking`,
-                    text: `Who doesn’t want to reserve a spot? It is easy to park \
+                    para: `Who doesn’t want to reserve a spot? It is easy to park \
                         vehicles beside the roadside but everyone knows what might be \
                         the consequences.The usual consequences will be that the user’s \
                         vehicle might get towed away. Just like people going to Movie \
@@ -80,7 +59,8 @@ export default {
                         about the availability of tickets after going to the Theatre, users \
                         can also book their car parking space by using our platform and \
                          will be assured that there will be a parking space reserved for \
-                        their vehicles. <br> <br> ParkSpot helps in this situation. Our platform \
+                        their vehicles. `,
+                    para2: `ParkSpot helps in this situation. Our platform \
                         provides short term booking as well as long term rental booking. \
                         So if people want to go out of the station for a few days and people \
                         who do not have a parking area in their apartment and do not have \
@@ -88,75 +68,44 @@ export default {
                         afford airport parking rates and malls do not allow longtime booking. \
                         ParkSpot can be of help in this situation. ParkSpot helps users to book \
                         the best, cheap and secure parking space for the long term at a very reasonable price.`,
-                    textLimit: true,
                 },
                 {
                     id: 3,
                     title: `Searching`,
-                    text: `People love their cars and hence they would want to keep their \
+                    para: `People love their cars and hence they would want to keep their \
                         vehicles in a safe and secure parking area. They would want a parking \
                         area where there will be security guards, CCTV cameras, etc. ParkSpot \
                         provides a genuine and authentic parking space for its users so that \
                         no mishappening will be done to the user’s property. ParkSpot provides \
                         security to private property as well so that users don’t need to worry \
                         about the place where they are keeping their vehicles.`,
-                    textLimit: true,
                 },
                 {
                     id: 4,
                     title: `Safety & Security`,
-                    text: `People go to places like shopping malls, hospitals, and many local \
+                    para: `People go to places like shopping malls, hospitals, and many local \
                         areas with their cars, without thinking that there may not be available car \
                         parking spaces. Maps can help you search popular sites but ParkSpot along \
                         with search provides additional information like current availability, \
                         rates, distance, etc. ParkSpot also helps users to search apartment parking areas.`,
-                    textLimit: true,
                 },
             ],
         };
-    },
-    methods: {
-        expand(id) {
-            const updFeaturesData = [];
-            for (let data of this.featuresData) {
-                if (data.id === id) {
-                    data = { ...data, textLimit: !data.textLimit };
-                    updFeaturesData.push(data);
-                } else {
-                    updFeaturesData.push(data);
-                }
-            }
-            this.featuresData = updFeaturesData;
-        },
     },
 };
 </script>
 
 <style scoped>
-.features-card {
-    border: solid 1px #eee;
+.feature-container {
+    column-gap: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 1rem;
 }
 
-.feature-card-details {
-    max-height: 300px;
-    overflow: hidden;
-}
-
-.feature-card-show,
-.feature-card-hide {
-    color: var(--secondary-color);
-    cursor: pointer;
-    display: inline;
-    text-align: center;
-}
-
-.expand-transition {
-    transition: all 1.5s ease;
-}
-
-.expand-enter,
-.expand-leave {
-    height: 0;
-    opacity: 0;
+@media only screen and (max-width: 800px) {
+    .feature-container {
+        grid-template-columns: 1fr;
+    }
 }
 </style>

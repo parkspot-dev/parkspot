@@ -73,7 +73,7 @@ export const routes = [
     {
         path: pages.FEATURES,
         name: 'features',
-        component: () => import('@/views/pagefeatures.vue'),
+        component: () => import('@/views/PageFeature.vue'),
         meta: {
             title: 'ParkSpot | Features',
         },

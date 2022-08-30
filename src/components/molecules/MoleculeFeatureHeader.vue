@@ -28,7 +28,7 @@
 </template>
 <script>
 export default {
-    name: 'MFeaturesMainHeading',
+    name: 'MoleculeFeatureHeader',
     components: {},
     props: {
         featuresButton: {

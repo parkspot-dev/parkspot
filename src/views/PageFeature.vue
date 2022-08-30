@@ -1,17 +1,17 @@
 <template>
     <section class="section">
-        <t-features-page></t-features-page>
+        <TemplateFeature></TemplateFeature>
     </section>
 </template>
 
 <script>
-import tFeaturesPage from '../components/templates/t-features-page.vue';
+import TemplateFeature from '../components/templates/TemplateFeature.vue';
 export default {
     /**
      * note: This page will be redeveloped soon
      */
     name: 'PageFeatures',
-    components: { tFeaturesPage },
+    components: { TemplateFeature },
 };
 </script>
 

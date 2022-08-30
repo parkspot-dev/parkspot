@@ -8,8 +8,10 @@
             {{ spot.Name }}
         </AtomParagraph>
         <div class="card-location">
-            <span><AtomIcon :icon="'map-marker-radius'"></AtomIcon></span>
-            <AtomParagraph :type="'span'">
+            <span class="location-icon">
+                <AtomIcon :icon="'map-marker-radius'"></AtomIcon>
+            </span>
+            <AtomParagraph class="location-text" :type="'span'">
                 {{ spot.Address }}
             </AtomParagraph>
         </div>
@@ -91,28 +93,24 @@ export default {
 }
 
 .card-location {
+    align-items: center;
+    display: flex;
     font-size: var(--sp-size-sm);
+    gap: 10px;
     grid-column: 2 / 6;
     grid-row: 2 / 2;
-    max-height: calc(1.2rem * 2);
-    overflow: hidden;
     position: relative;
 }
 
-.card-location::before {
-    bottom: -5px;
-    content: '...';
-    position: absolute;
-    right: 0;
+.location-icon {
+    font-size: 20px;
 }
 
-.card-location::after {
-    background: #fff;
-    content: '';
-    height: 1rem;
-    position: absolute;
-    right: 0; /* note: not using bottom */
-    width: 1rem;
+.location-text {
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
 }
 
 .card-rating {
