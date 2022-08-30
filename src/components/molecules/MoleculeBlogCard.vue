@@ -9,9 +9,9 @@
         </div>
         <div class="card-content">
             <div class="blog-header">
-                <AtomParagraph :variation="'large'">{{
-                    blog.title
-                }}</AtomParagraph>
+                <AtomParagraph :variation="'large'">
+                    {{ blog.title }}
+                </AtomParagraph>
                 <AtomParagraph>by {{ blog.author }}</AtomParagraph>
             </div>
 
@@ -43,6 +43,10 @@ export default {
 </script>
 
 <style scoped>
+.card {
+    cursor: pointer;
+}
+
 .custom-image {
     cursor: pointer;
     opacity: 1;

@@ -26,7 +26,8 @@
             {{ spot.RentUnit }}
         </AtomParagraph>
         <AtomParagraph class="card-spot" :type="'span'">
-            <strong>Available Spot : </strong> {{ spot.SlotsAvailable }}
+            <strong>Available Spot : </strong>
+            {{ spot.SlotsAvailable | available }}
         </AtomParagraph>
         <AtomButton class="card-btn" @click.native="onBook">
             Book Spot
@@ -53,6 +54,15 @@ export default {
         },
     },
     emits: ['booked'],
+    filters: {
+        available(slotAvailable) {
+            if (slotAvailable === 0) {
+                return 'N/A';
+            } else {
+                return slotAvailable;
+            }
+        },
+    },
     methods: {
         onBook() {
             this.$emit('booked');
