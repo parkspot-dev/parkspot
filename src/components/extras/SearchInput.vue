@@ -12,19 +12,8 @@
       >
         <template slot-scope="props">
           <div class="media">
-            <!-- <div class="media-left">
-              <img
-                width="32"
-                :src="`https://image.tmdb.org/t/p/w500/${props.option.poster_path}`"
-              />
-            </div> -->
             <div class="media-content">
               {{ props.option.place_name }}
-              <!-- <br />
-              <small>
-                Released at {{ props.option.release_date }}, rated
-                <b>{{ props.option.vote_average }}</b>
-              </small> -->
             </div>
           </div>
         </template>
@@ -59,12 +48,15 @@ export default {
     }),
   },
   watch: {
-    selected(newValue) {
-      this.updateMapConfig([newValue.center[0], newValue.center[1]]); // needed for recentering of map.
-      this.updateSelectedLocation(newValue.place_name); // get the actual value of selected option.
-      this.updateSelectedCity(newValue.context[0].text); // update selected city
-      this.updateSelectedState(newValue.context[1].text); // update selected state
-      this.updateSelectedCountry(newValue.context[2].text); // update selected country
+    selected(newSelectedVal) {
+      this.updateMapConfig([
+        newSelectedVal.center[0],
+        newSelectedVal.center[1],
+      ]); // needed for recentering of map.
+      this.updateSelectedLocation(newSelectedVal.place_name); // get the actual value of selected option.
+      this.updateSelectedCity(newSelectedVal.context[0].text); // update selected city
+      this.updateSelectedState(newSelectedVal.context[1].text); // update selected state
+      this.updateSelectedCountry(newSelectedVal.context[2].text); // update selected country
     },
   },
   methods: {

@@ -54,6 +54,7 @@ export default {
       type: String,
     },
   },
+  emits: ["input"],
   data() {
     return {
       innerValue: "",

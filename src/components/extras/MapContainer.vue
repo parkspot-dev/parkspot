@@ -36,7 +36,7 @@ export default {
   },
   watch: {
     mapCenter(newCenter) {
-      this.reCenterMap(newCenter);
+      this.recenterMap(newCenter);
     },
   },
   mounted() {
@@ -95,7 +95,7 @@ export default {
     ...mapMutations({
       updateMapConfig: "map/update-map-config",
     }),
-    reCenterMap(center) {
+    recenterMap(center) {
       this.map.flyTo({
         center: center,
       });

@@ -106,12 +106,12 @@
             <div>
               <AtomParagraph class="mb-2"> Customer Service: </AtomParagraph>
               <span>
-                <a href="tel:+918092996057" class="phone-contact">
+                <a href="tel:+917488239471" class="phone-contact">
                   <AtomIcon :icon="'phone-classic'" :size="'is-medium'">
                   </AtomIcon>
                 </a>
               </span>
-              <AtomParagraph :type="'span'"> +91 80929 96057 </AtomParagraph>
+              <AtomParagraph :type="'span'"> +91 748823 9471 </AtomParagraph>
             </div>
           </div>
 
@@ -221,14 +221,12 @@
 import Wrapper from "../extras/Wrapper.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
 import AtomIcon from "../atoms/AtomIcon.vue";
-// import AtomImage from "../atoms/AtomImage.vue";
 export default {
   name: "TemplateFooter",
   components: {
     Wrapper,
     AtomParagraph,
     AtomIcon,
-    // AtomImage,
   },
   data() {
     return {
