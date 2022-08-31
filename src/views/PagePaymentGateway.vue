@@ -50,8 +50,6 @@ export default {
           {
             headers: {
               "Content-Type": "application/json",
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-              flavour: "this.flavour",
             },
           }
         );
@@ -87,8 +85,6 @@ export default {
         {
           headers: {
             "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-            flavour: "this.flavour",
           },
         }
       );
