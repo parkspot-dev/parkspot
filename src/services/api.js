@@ -59,6 +59,16 @@ class BaseApiService {
       this.handleErrors(err);
     }
   }
+
+  async patch(resource, payload = {}) {
+    try {
+      const response = await this.client.patch(resource, payload);
+      return response.data;
+    } catch (err) {
+      this.handleErrors(err);
+    }
+  }
+
   async get(resource) {
     try {
       const response = await this.client.get(resource);
@@ -110,6 +120,17 @@ class MayaApiService extends BaseApiService {
   }
 }
 
+class MapBoxApiService extends BaseApiService {
+  constructor() {
+    let mapBoxDomain = "https://api.mapbox.com"; //TODO: we can pick from .env files.
+    let baseHeaderMap = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    super(mapBoxDomain, baseHeaderMap, 5000, false);
+  }
+}
+
 function getFlavour() {
   const details = navigator.userAgent;
   const regexp = /android|iphone|kindle|ipad/i;
@@ -123,5 +144,6 @@ function getFlavour() {
 }
 
 const mayaClient = new MayaApiService(getFlavour());
+const mapBoxClient = new MapBoxApiService();
 
-export { mayaClient };
+export { mayaClient, mapBoxClient };

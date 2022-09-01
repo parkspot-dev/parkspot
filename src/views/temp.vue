@@ -1,19 +1,26 @@
 <template>
-  <div class="section">
-    <div class="container">
-      <atom-button> </atom-button>
-    </div>
-  </div>
+  <PagePaymentGateway></PagePaymentGateway>
 </template>
 <script>
-import AtomButton from "../components/atoms/atom-button/atom-button.vue";
+import PagePaymentGateway from "./PagePaymentGateway.vue";
+
 export default {
+  /**
+   * This page is used for development testing purposes.
+   */
   name: "Temp",
-  components: { AtomButton },
-  computed: {
-    count() {
-      return this.$store.getters["device/getFlavour"];
-    },
+  components: {
+    PagePaymentGateway,
+  },
+  data() {
+    return {};
   },
 };
 </script>
+
+<style scoped>
+.custom-wrapper {
+  max-width: 960px;
+  margin: auto;
+}
+</style>

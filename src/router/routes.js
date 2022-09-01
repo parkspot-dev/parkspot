@@ -1,5 +1,5 @@
 import Home from "../views/Home.vue";
-import about from "@/components/templates/t-about.vue";
+import PageAbout from "@/views/PageAbout.vue";
 import { firebase, getDatabase, ref, get, child } from "../firebase";
 
 const guardThisRoute = async (to, from, next) => {
@@ -35,11 +35,13 @@ export const pages = {
   SOPORTAL: "/register-parking-spot",
   TERMS: "/terms-and-conditions",
   BLOG: "/blog",
-  MAINBLOG: "/blog/:id/:postTitle",
-  SEARCHPORTAL: "/search-portal",
+  MAINBLOG: "/blog/:id",
+  INVENTORY: "/search-portal",
   PAYMENTGATEWAY: "/payment/*",
-  DISCOVER: "/bangalore/parking-near-*",
+  NEARBY: "/bangalore/parking-near-*",
   TEMP: "/temp",
+  THANK_YOU: "/thank-you",
+  ERROR: "/error",
 };
 
 export const routes = [
@@ -55,7 +57,7 @@ export const routes = [
   {
     path: pages.FAQ,
     name: "Faq",
-    component: () => import("@/views/Faq.vue"),
+    component: () => import("@/views/PageFaq.vue"),
     meta: {
       title: "FAQ's - Get Your All Parking Related Queries be Answered...",
     },
@@ -64,7 +66,7 @@ export const routes = [
   {
     path: pages.ABOUT,
     name: "t-about",
-    component: about,
+    component: PageAbout,
     meta: {
       title: "ParkSpot | About -  Get Parking Space , Rent Empty Space",
     },
@@ -79,8 +81,8 @@ export const routes = [
   },
   {
     path: pages.CONTACT,
-    name: "t-contact",
-    component: () => import("@/components/templates/t-contact.vue"),
+    name: "contactUs",
+    component: () => import("@/views/PageContactUs"),
     meta: {
       title: "ParkSpot | Contact Us",
     },
@@ -88,7 +90,7 @@ export const routes = [
   {
     path: pages.SRP,
     name: "srp",
-    component: () => import("@/views/Srp.vue"),
+    component: () => import("@/views/PageSrp.vue"),
     meta: {
       title: "ParkSpot | Search - ",
     },
@@ -96,7 +98,7 @@ export const routes = [
   {
     path: pages.VOPORTAL,
     name: "VOPortal",
-    component: () => import("@/views/VO-portal.vue"),
+    component: () => import("@/views/PageVOPortal.vue"),
     meta: {
       title: "ParkSpot | Get Parking Spot",
     },
@@ -104,7 +106,7 @@ export const routes = [
   {
     path: pages.SOPORTAL,
     name: "SOPortal",
-    component: () => import("@/views/SO-portal.vue"),
+    component: () => import("@/views/PageSOPortal.vue"),
     meta: {
       title: "ParkSpot | Register Parking Spot",
     },
@@ -112,7 +114,7 @@ export const routes = [
   {
     path: "/terms-and-conditions",
     name: "Terms",
-    component: () => import("@/views/Terms.vue"),
+    component: () => import("@/views/PageTerms.vue"),
     meta: {
       title: "ParkSpot | Terms & Conditions",
     },
@@ -120,7 +122,7 @@ export const routes = [
   {
     path: pages.BLOG,
     name: "blog",
-    component: () => import("@/views/landing-blog.vue"),
+    component: () => import("@/views/PageBlogHome.vue"),
     meta: {
       title: "ParkSpot | Blogs",
     },
@@ -128,15 +130,15 @@ export const routes = [
   {
     path: pages.MAINBLOG,
     name: "mainBlog",
-    component: () => import("@/views/main-blog.vue"),
+    component: () => import("@/views/PageBlogPost.vue"),
     meta: {
       title: "ParkSpot | Blogs - ",
     },
   },
   {
-    path: pages.SEARCHPORTAL,
-    name: "searchPortal",
-    component: () => import("@/views/search-portal.vue"),
+    path: pages.INVENTORY,
+    name: "Inventory",
+    component: () => import("@/views/PageInventory.vue"),
     meta: {
       title: "ParkSpot | Search Portal",
     },
@@ -145,16 +147,32 @@ export const routes = [
   {
     path: pages.PAYMENTGATEWAY,
     name: "paymentGateway",
-    component: () => import("@/views/payment-gateway.vue"),
+    component: () => import("@/views/PagePaymentGateway.vue"),
     meta: {
       title: "Payment | Parkspot.in ",
     },
   },
   // ! it will take " -mara/xyx"
   {
-    path: pages.DISCOVER,
+    path: pages.NEARBY,
     name: "discover",
-    component: () => import("@/views/discover-page.vue"),
+    component: () => import("@/views/PageNearBy.vue"),
+    meta: {
+      title: "Parking Near ",
+    },
+  },
+  {
+    path: pages.THANK_YOU,
+    name: "thankYou",
+    component: () => import("@/views/PageThankYou.vue"),
+    meta: {
+      title: "Parking Near ",
+    },
+  },
+  {
+    path: pages.ERROR,
+    name: "error",
+    component: () => import("@/views/PageError.vue"),
     meta: {
       title: "Parking Near ",
     },
@@ -163,7 +181,7 @@ export const routes = [
   {
     path: pages.TEMP,
     name: "temp",
-    component: () => import("@/views/features.vue"),
+    component: () => import("@/views/temp.vue"),
     meta: {
       title: "Parking Near ",
     },

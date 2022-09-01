@@ -52,12 +52,22 @@
           :text="request.Landmark"
         />
         <m-text-title class="column is-2" title="City" :text="request.City" />
-        <m-text-title class="column is-2" title="Priority" :text="priorityString" />
+        <m-text-title
+          class="column is-2"
+          title="Priority"
+          :text="priorityString"
+        />
       </div>
 
       <div id="row3" class="columns is-vcentered">
         <div class="column is-one-fifth">
-          <Datepicker :highlighted="highlighted" input-class="nextCallInput" format="yyyy-MM-dd" v-model="nextCallString" @input="setNextCall"></Datepicker>
+          <Datepicker
+            :highlighted="highlighted"
+            input-class="nextCallInput"
+            format="yyyy-MM-dd"
+            v-model="nextCallString"
+            @input="setNextCall"
+          ></Datepicker>
           <atom-select
             id="status"
             v-model="statusString"
@@ -89,7 +99,6 @@ import MTextTitle from "@/components/molecules/m-text-title.vue";
 import AtomSelect from "@/components/atoms/atom-select/atom-select.vue";
 import Datepicker from "vuejs-datepicker";
 
-
 export default {
   name: "ORequestCard",
   components: {
@@ -97,7 +106,7 @@ export default {
     AtomTextarea,
     MTextTitle,
     AtomSelect,
-    Datepicker
+    Datepicker,
   },
   props: {
     request: {
@@ -127,7 +136,7 @@ export default {
           Status: 2,
           Priority: 3,
           Comments: "Received Tentative Request.",
-          NextCall: "2022-01-18T09:56:27.3321676Z"
+          NextCall: "2022-01-18T09:56:27.3321676Z",
         };
       },
     },
@@ -144,11 +153,9 @@ export default {
         "Archive",
       ],
       priorityList: ["Not Set", "Low", "Medium", "High"],
-      highlighted : {
-        dates: [
-          new Date()
-        ]
-    }
+      highlighted: {
+        dates: [new Date()],
+      },
     };
   },
   computed: {
@@ -168,12 +175,11 @@ export default {
         this.request.Priority = this.priorityList.indexOf(priorityString);
       },
     },
-    nextCallString:{
+    nextCallString: {
       get() {
         return this.getDateString(this.request.NextCall);
-      }
-    }
-    
+      },
+    },
   },
 
   methods: {
@@ -186,16 +192,13 @@ export default {
       }
       return "card--low";
     },
-    setNextCall(nextCall)
-    {
-        this.request.NextCall = nextCall
+    setNextCall(nextCall) {
+      this.request.NextCall = nextCall;
     },
-    getDateString(date)
-    {
-        return date.substr(0, 10)
+    getDateString(date) {
+      return date.substr(0, 10);
     },
     async updateRequest() {
-
       const res = await fetch(
         "https://maya.parkspot.in/owner/request-comments",
         {
@@ -237,16 +240,16 @@ export default {
   border-bottom: 10px solid rgb(92, 92, 94);
 }
 </style>
- <style>
-        .nextCallInput{
-            width: 100%;
-            border-radius: 15px;
-            font-weight: 600;
-            letter-spacing: 0.01em;
-            font-size: 14px;
-            height: 3.5em;
-            margin-bottom: 5px;
-            text-align: left;
-            padding: 10px 
-           }
-    </style>
+<style>
+.nextCallInput {
+  width: 100%;
+  border-radius: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  font-size: 14px;
+  height: 3.5em;
+  margin-bottom: 5px;
+  text-align: left;
+  padding: 10px;
+}
+</style>

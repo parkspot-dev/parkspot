@@ -1,18 +1,21 @@
 <template>
   <div id="app">
-    <t-navbar class="is-fixed-top floatingNav" />
-    <br />
-    <router-view :key="$route.fullPath" class="body-template" />
-    <!-- :key="$route.fullPath" temporary fix ,as its only problem with this method is that every path in that router will update in the case of a path change. You may not want all that needless re-rendering, but that’s a decision for you to make.  -->
-    <t-footer />
+    <Navbar></Navbar>
+    <main class="body-container">
+      <router-view :key="$route.fullPath" />
+    </main>
+    <TemplateFooter></TemplateFooter>
   </div>
 </template>
 
 <script>
-import TNavbar from "@/components/templates/t-navbar.vue";
-import TFooter from "@/components/templates/t-footer.vue";
+import TemplateFooter from "./components/templates/TemplateFooter.vue";
+import Navbar from "./components/extras/Navbar.vue";
 export default {
-  components: { TNavbar, TFooter },
+  components: {
+    TemplateFooter,
+    Navbar,
+  },
 };
 </script>
 
@@ -24,16 +27,12 @@ export default {
   color: #555;
   font-weight: 400;
 }
-.body-template {
-  margin-top: 1.5rem;
+.body-container {
+  margin-top: 15px;
 }
-@media only screen and (min-width: 1024px) {
-  .body-template {
-    margin-top: 3rem;
+@media only screen and (max-width: 1024px) {
+  .body-container {
+    margin-top: 2px;
   }
-}
-.floatingNav {
-  border-radius: 2px;
-  box-shadow: 0px 2px 15px #999;
 }
 </style>
