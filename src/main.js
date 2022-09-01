@@ -12,7 +12,6 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 Vue.use(Buefy);
-
 Vue.config.productionTip = false;
 
 // main app instance created and mounted
