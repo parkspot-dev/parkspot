@@ -8,9 +8,6 @@
           {{ locationWithCaps }}
         </b-breadcrumb-item>
       </b-breadcrumb>
-      <!-- <div>
-        <SearchInput></SearchInput>
-      </div> -->
     </HeaderBanner>
 
     <Wrapper>
@@ -43,7 +40,6 @@
 
 <script>
 import HeaderBanner from "../extras/HeaderBanner.vue";
-// import SearchInput from "../extras/SearchInput.vue";
 import AtomHeading from "../atoms/AtomHeading.vue";
 import MoleculeSRPCard from "../molecules/MoleculeSRPCard.vue";
 import AtomParagraph from "../atoms/AtomParagraph.vue";
@@ -52,7 +48,6 @@ export default {
   name: "TemplateNearBy",
   components: {
     HeaderBanner,
-    // SearchInput,
     AtomHeading,
     MoleculeSRPCard,
     AtomParagraph,
@@ -99,11 +94,6 @@ export default {
   margin-bottom: 1rem;
 }
 
-/* @media only screen and (max-width: 1024px) {
-  .custom-title {
-    font-size: 2rem;
-  }
-} */
 .nearbyText-container {
   max-width: 960px;
   margin: auto;

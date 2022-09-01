@@ -1,7 +1,7 @@
 <template>
   <div class="srp-container">
     <div class="srp-lists">
-      <Pagination :totals="totals" @changed="onPageChange"></Pagination>
+      <Pagination :total="total" @changed="onPageChange"></Pagination>
       <MoleculeSRPCard
         v-for="spot in spots"
         :key="spot.ID"
@@ -37,7 +37,7 @@ export default {
     spots: {
       type: Array,
     },
-    totals: {
+    total: {
       type: Number,
     },
     reRender: {

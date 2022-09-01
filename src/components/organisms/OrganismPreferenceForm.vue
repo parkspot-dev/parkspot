@@ -90,10 +90,8 @@ export default {
           .then((el) => {
             if (el) {
               this.submit();
-              this.$emit("formValidate", el);
-            } else {
-              this.$emit("formValidate", el);
             }
+            this.$emit("formValidate", el);
           })
           .catch((er) => {
             console.log(er);
