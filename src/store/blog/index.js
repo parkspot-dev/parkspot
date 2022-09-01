@@ -9,7 +9,7 @@ const state = {
       img: "https://www.stevenvanbelleghem.com/wp-content/uploads/2020/04/Heavy-rains-lash-Delhi-NCR-traffic-snarls-at-many-places.jpg",
       desc: `In the recent years all over the globe production 
       and demand for motor vehicles has increased dramatically.
-      Earlier motor vehicles..`,
+      Earlier motor vehicles...`,
       time: "Nov 2, 2020",
       dateTime: "2020-02-11",
     },
