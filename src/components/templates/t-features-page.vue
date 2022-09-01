@@ -36,33 +36,6 @@
         >
           Show Less
         </p>
-        <!-- <atom-button
-          v-if="data.textLimit"
-          v-on:click.native="expand(data.id)"
-          class="feature-card__show"
-          :text="'Show more↓'"
-        ></atom-button>
-        <atom-button
-          v-if="!data.textLimit"
-          v-on:click.native="expand(data.id)"
-          class="feature-card__hide"
-          :text="'Hide↑'"
-        ></atom-button> -->
-        <!-- <p
-          v-if="data.textLimit"
-          v-on:click="expand(data.id)"
-          class="feature-card__show"
-        >
-          Show more↓
-        </p>
-        <p
-          v-if="!data.textLimit"
-          v-on:click="expand(data.id)"
-          class="feature-card__hide"
-        >
-          Hide↑
-        </p> -->
-        <!-- <div>{{ data.text.length }}</div> -->
       </div>
     </div>
   </div>
@@ -84,16 +57,16 @@ export default {
           id: 1,
           title: `Navigation`,
           text: `It is very difficult to go to an unknown place. 
-          People usually search on Google Maps to reach a particular\
-          location but sometimes it happens that people don’t get\
-          the exact address from the map.It is easy to find places\
-          like malls, hospitals, and much more popular sites, but \
-          when it comes to finding a specific location like a house, \
-          it’s really hard.<br> <br> ParkSpot helps in this situation. \
-          ParkSpot stores the exact location of the parking location \
-          and gives a navigation feature that will direct the ParkSpot \
-          user to navigate to the desired parking space.This easy-finding \
-          feature helps let users experience a hassle-free parking experience.`,
+                                    People usually search on Google Maps to reach a particular\
+                                    location but sometimes it happens that people don’t get\
+                                    the exact address from the map.It is easy to find places\
+                                    like malls, hospitals, and much more popular sites, but \
+                                    when it comes to finding a specific location like a house, \
+                                    it’s really hard.<br> <br> ParkSpot helps in this situation. \
+                                    ParkSpot stores the exact location of the parking location \
+                                    and gives a navigation feature that will direct the ParkSpot \
+                                    user to navigate to the desired parking space.This easy-finding \
+                                    feature helps let users experience a hassle-free parking experience.`,
           textLimit: true,
         },
         {

@@ -18,7 +18,9 @@
     <Wrapper>
       <article class="article-wrapper">
         <header class="mb-6">
-          <AtomHeading class="mb-2"> {{ blog.title }} </AtomHeading>
+          <AtomHeading class="mb-2">
+            {{ blog.title }}
+          </AtomHeading>
           <div class="custom-author">
             <figure class="author-img image is-48x48">
               <img

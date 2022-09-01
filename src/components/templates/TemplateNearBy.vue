@@ -25,7 +25,8 @@
       </div>
       <div class="nearbyText-container">
         <AtomHeading :level="'h3'">
-          Find and book parking spaces near {{ locationWithCaps }}
+          Find and book parking spaces near
+          {{ locationWithCaps }}
         </AtomHeading>
         <AtomParagraph class="custom-nearby">{{ nearByText }}</AtomParagraph>
         <br />

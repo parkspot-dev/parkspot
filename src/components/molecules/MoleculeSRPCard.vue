@@ -20,7 +20,8 @@
       <strong>Type : </strong> {{ spot.VehicleType }}
     </AtomParagraph>
     <AtomParagraph class="card-rate" :type="'span'">
-      <strong>Rate : </strong> ₹ {{ spot.Rate }} / {{ spot.RentUnit }}
+      <strong>Rate : </strong> ₹ {{ spot.Rate }} /
+      {{ spot.RentUnit }}
     </AtomParagraph>
     <AtomParagraph class="card-spot" :type="'span'">
       <strong>Available Spot : </strong> {{ spot.SlotsAvailable }}

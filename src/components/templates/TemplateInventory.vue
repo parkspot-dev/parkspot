@@ -58,7 +58,8 @@
           Email: <strong>{{ props.row.EmailID }}</strong>
         </p>
         <p>
-          Landmark : <strong>{{ props.row.Landmark }}</strong>
+          Landmark :
+          <strong>{{ props.row.Landmark }}</strong>
         </p>
         <p>City: {{ props.row.City }}</p>
         <p>Duration : {{ props.row.Duration }}</p>
@@ -90,7 +91,9 @@
         </AtomSelectInput>
         <span
           class="tag is-warning"
-          :class="{ 'is-danger': getStatus(props.row.NextCall) }"
+          :class="{
+            'is-danger': getStatus(props.row.NextCall),
+          }"
         >
           <span>
             {{ getStatus(props.row.NextCall) ? "delayed " : "upcoming " }}

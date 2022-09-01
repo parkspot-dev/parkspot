@@ -14,7 +14,9 @@
       <div class="custom-content-wrapper">
         <div class="custom-content">
           <div class="content-text">
-            <p class="content-text-title">{{ items.title }}</p>
+            <p class="content-text-title">
+              {{ items.title }}
+            </p>
             <p class="content-text-desc">
               {{ items.desc }}
             </p>

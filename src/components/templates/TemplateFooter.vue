@@ -35,7 +35,9 @@
               <p>
                 <router-link
                   class="topSearch-link"
-                  :to="{ path: '/bangalore/parking-near-jp-nagar' }"
+                  :to="{
+                    path: '/bangalore/parking-near-jp-nagar',
+                  }"
                 >
                   Parking Spot in JP-Nagar
                 </router-link>
@@ -43,7 +45,9 @@
               <p>
                 <router-link
                   class="topSearch-link"
-                  :to="{ path: '/bangalore/parking-near-btm' }"
+                  :to="{
+                    path: '/bangalore/parking-near-btm',
+                  }"
                 >
                   Parking Spot in BTM
                 </router-link>
@@ -51,7 +55,9 @@
               <p>
                 <router-link
                   class="topSearch-link"
-                  :to="{ path: '/bangalore/parking-near-bommanahalli' }"
+                  :to="{
+                    path: '/bangalore/parking-near-bommanahalli',
+                  }"
                 >
                   Parking Spot in Bommanahalli
                 </router-link>
@@ -59,14 +65,18 @@
               <p>
                 <router-link
                   class="topSearch-link"
-                  :to="{ path: '/bangalore/parking-near-rajajinagar' }"
+                  :to="{
+                    path: '/bangalore/parking-near-rajajinagar',
+                  }"
                   >Parking Spot in Rajajinagar</router-link
                 >
               </p>
               <p>
                 <router-link
                   class="topSearch-link"
-                  :to="{ path: '/bangalore/parking-near-banashankari' }"
+                  :to="{
+                    path: '/bangalore/parking-near-banashankari',
+                  }"
                 >
                   Parking Spot in Banashankari
                 </router-link>
@@ -74,7 +84,9 @@
               <p>
                 <router-link
                   class="topSearch-link"
-                  :to="{ path: '/bangalore/parking-near-marathahalli' }"
+                  :to="{
+                    path: '/bangalore/parking-near-marathahalli',
+                  }"
                 >
                   Parking Spot in marathahalli
                 </router-link>
@@ -125,7 +137,9 @@
                   <p>
                     <router-link
                       class="topSearch-link"
-                      :to="{ name: 'features' }"
+                      :to="{
+                        name: 'features',
+                      }"
                     >
                       Features
                     </router-link>
@@ -133,7 +147,12 @@
                 </li>
                 <li>
                   <p>
-                    <router-link class="topSearch-link" :to="{ name: 'blog' }">
+                    <router-link
+                      class="topSearch-link"
+                      :to="{
+                        name: 'blog',
+                      }"
+                    >
                       Blogs
                     </router-link>
                   </p>
@@ -142,7 +161,9 @@
                   <p>
                     <router-link
                       class="topSearch-link"
-                      :to="{ name: 'VOPortal' }"
+                      :to="{
+                        name: 'VOPortal',
+                      }"
                     >
                       Request Spot
                     </router-link>
@@ -152,7 +173,9 @@
                   <p>
                     <router-link
                       class="topSearch-link"
-                      :to="{ name: 'SOPortal' }"
+                      :to="{
+                        name: 'SOPortal',
+                      }"
                     >
                       Register Spot
                     </router-link>
@@ -160,7 +183,12 @@
                 </li>
                 <li>
                   <p>
-                    <router-link class="topSearch-link" :to="{ name: 'Faq' }">
+                    <router-link
+                      class="topSearch-link"
+                      :to="{
+                        name: 'Faq',
+                      }"
+                    >
                       Faq
                     </router-link>
                   </p>
