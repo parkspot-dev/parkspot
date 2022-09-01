@@ -1,7 +1,7 @@
 <template>
   <section>
     <b-pagination
-      :total="totals"
+      :total="total"
       v-model="data"
       :size="'is-small'"
       :per-page="3"
@@ -26,7 +26,7 @@
 export default {
   name: "Pagination",
   props: {
-    totals: {
+    total: {
       type: Number,
       default: 1,
     },

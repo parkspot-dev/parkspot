@@ -51,12 +51,6 @@ export default {
       innerValue: "",
     };
   },
-  // methods: {
-  //   onInput(value) {
-  //     // value - 1 because of one extra list generated for placeholder
-  //     this.$emit("input", this.list[value - 1]);
-  //   },
-  // },
   watch: {
     // Handles internal model changes.
     innerValue(newVal) {

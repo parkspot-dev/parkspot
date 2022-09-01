@@ -2,7 +2,7 @@
   <section>
     <TemplateSrp
       :spots="paginatedSrpResults"
-      :totals="totalPages"
+      :total="totalPages"
       @changed="onPageChange"
       :reRender="reRender"
     ></TemplateSrp>

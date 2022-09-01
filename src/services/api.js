@@ -126,7 +126,6 @@ class MapBoxApiService extends BaseApiService {
     let baseHeaderMap = {
       "Content-Type": "application/json",
       Accept: "application/json",
-      // Flavour: flavour,
     };
     super(mapBoxDomain, baseHeaderMap, 5000, false);
   }

@@ -13,7 +13,7 @@
 <script>
 import { ValidationProvider } from "vee-validate";
 import AtomUpload from "../atoms/AtomUpload.vue";
-import { getConvertedImage } from "../../inlcudes/ConvertImageToByte";
+import { getConvertedImage } from "../../includes/ConvertImageToByte";
 export default {
   name: "MoleculeUpload",
   components: { ValidationProvider, AtomUpload },

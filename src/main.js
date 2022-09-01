@@ -4,18 +4,14 @@ import router from "./router";
 import store from "./store";
 import fbApp from "./FB-App.vue";
 
-// import VueResource from "vue-resource";
-
 import "bulma/css/bulma.css";
 import Buefy from "buefy";
 import "buefy/dist/buefy.css";
-import "./inlcudes/VeeValidate";
+import "./includes/VeeValidate";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
 Vue.use(Buefy);
-// Vue.use(VueResource);
-
 Vue.config.productionTip = false;
 
 // main app instance created and mounted

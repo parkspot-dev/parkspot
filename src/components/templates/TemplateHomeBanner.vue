@@ -1,6 +1,5 @@
 <template>
   <Wrapper class="homeBanner">
-    <!-- <h1>hello</h1> -->
     <div class="banner-wrapper">
       <div class="banner-header">
         <h1 class="banner-title" data-aos="zoom-in">
