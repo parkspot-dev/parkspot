@@ -17,7 +17,7 @@ const state = {
       id: "Parking-Challenges-in-Office-Area",
       title: "Parking Challenges in Office Area!",
       author: "Sujeet Kumar",
-      author_img: require("@/assets/team/sujeet.jpg"),
+      author_img: require("@/assets/team/Sujeet.jpg"),
       img: require("@/assets/blog/blog2.jpg"),
       desc: `Parking has been a major concern in major cities. Due
       to fewer parking spaces, people have to spend a lot of time
