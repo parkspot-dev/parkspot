@@ -26,11 +26,6 @@ export default {
             type: Object,
         },
         status: Boolean,
-        error: Boolean,
-        success: Boolean,
-        pending: Boolean,
-        displayMsg: Boolean,
-        displayMsgContent: String,
     },
 };
 </script>

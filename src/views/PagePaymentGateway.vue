@@ -6,11 +6,6 @@
             :bookingDetails="bookingDetails"
             :paymentMode="paymentMode"
             :status="status"
-            :error="error"
-            :success="success"
-            :pending="pending"
-            :displayMsg="displayMsg"
-            :displayMsgContent="displayMsgContent"
         >
         </TemplatePaymentGateway>
     </div>
@@ -27,11 +22,6 @@ export default {
             bookingDetails: {},
             paymentMode: {},
             status: false,
-            error: false,
-            success: false,
-            pending: false,
-            displayMsg: false,
-            displayMsgContent: '',
         };
     },
     mounted() {
@@ -67,8 +57,16 @@ export default {
                         Object.prototype.hasOwnProperty.call(data, 'ErrorCode')
                     ) {
                         this.status = !this.status;
-                        this.displayMsg = !this.displayMsg;
-                        this.displayMsgContent = data.DisplayMsg;
+                        if (data.ErrorCode === 5) {
+                            this.$router.push({
+                                name: 'thankYou',
+                                params: { msg: data.DisplayMsg },
+                            });
+                        } else {
+                            this.$router.push({
+                                name: 'error',
+                            });
+                        }
                     } else {
                         this.bookingDetails = {
                             name: data.BookingInfo.Name,
