@@ -1,31 +1,31 @@
 <template>
-    <BodyWrapper>
-        <MoleculePaymentCard
-            v-if="!this.status"
-            :bookingDetails="bookingDetails"
-            :paymentMode="paymentMode"
-        >
-        </MoleculePaymentCard>
-    </BodyWrapper>
+  <BodyWrapper>
+    <MoleculePaymentCard
+      v-if="!this.status"
+      :bookingDetails="bookingDetails"
+      :paymentMode="paymentMode"
+    >
+    </MoleculePaymentCard>
+  </BodyWrapper>
 </template>
 
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import MoleculePaymentCard from '../molecules/MoleculePaymentCard.vue';
 export default {
-    name: 'TemplatePaymentGateway',
-    components: {
-        BodyWrapper,
-        MoleculePaymentCard,
+  name: 'TemplatePaymentGateway',
+  components: {
+    BodyWrapper,
+    MoleculePaymentCard,
+  },
+  props: {
+    bookingDetails: {
+      type: Object,
     },
-    props: {
-        bookingDetails: {
-            type: Object,
-        },
-        paymentMode: {
-            type: Object,
-        },
-        status: Boolean,
+    paymentMode: {
+      type: Object,
     },
+    status: Boolean,
+  },
 };
 </script>

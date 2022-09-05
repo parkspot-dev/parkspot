@@ -8,12 +8,12 @@ import map from './map';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-    modules: {
-        device,
-        blog,
-        user,
-        map,
-    },
+  modules: {
+    device,
+    blog,
+    user,
+    map,
+  },
 });
 
 export default store;
