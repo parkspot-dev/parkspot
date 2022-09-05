@@ -100,7 +100,6 @@ export default {
     font-size: 2.25rem;
     text-align: center;
   }
-
   .banner-subtitle {
     text-align: center;
   }

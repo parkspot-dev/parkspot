@@ -39,7 +39,6 @@ h2 {
   h1 {
     font-size: 2.5rem;
   }
-
   h2 {
     font-size: 2rem;
   }

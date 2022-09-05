@@ -7,9 +7,6 @@
           :src="items.image"
           :ratio="'5by4'"
         ></AtomImage>
-        <!-- <b-tag type="is-danger" rounded style="position: absolute; top: 0">
-          <b>50% OFF</b>
-        </b-tag> -->
       </div>
       <div class="custom-content-wrapper">
         <div class="custom-content">

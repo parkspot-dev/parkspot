@@ -32,7 +32,6 @@ export default {
       this.spotDetails = data;
       this.isLoading = false;
     },
-
     async updateRequest(request) {
       try {
         this.isLoading = true;

@@ -1,10 +1,10 @@
 <template>
   <b-rate
     :value="rate"
-    :icon-pack="packs"
-    :icon="icons"
-    :max="maxs"
-    :size="sizes"
+    :icon-pack="pack"
+    :icon="icon"
+    :max="max"
+    :size="size"
     :locale="locale"
     :spaced="isSpaced"
     :disabled="isDisabled"
@@ -20,18 +20,18 @@ export default {
       default: 5,
     },
     /**
-     * sizes @value is-small, is-medium, is-large
+     * size @value is-small, is-medium, is-large
      */
-    sizes: {
+    size: {
       type: String,
       default: 'is-small',
     },
   },
   data() {
     return {
-      maxs: 5,
-      packs: 'mdi',
-      icons: 'star',
+      max: 5,
+      pack: 'mdi',
+      icon: 'star',
       isSpaced: false,
       isDisabled: true,
       locale: undefined, // Browser locale

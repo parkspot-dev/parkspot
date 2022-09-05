@@ -120,7 +120,6 @@ export default {
   .mg-large {
     margin-bottom: 3rem;
   }
-
   .mg-medium {
     margin-bottom: 1rem;
   }

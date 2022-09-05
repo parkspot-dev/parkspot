@@ -82,7 +82,6 @@ export default {
         this.getStatus();
       }
     },
-
     async getStatus() {
       const o = this.$route.query.order_id;
       const response = await fetch(
