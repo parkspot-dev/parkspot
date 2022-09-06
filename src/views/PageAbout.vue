@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import TemplateAbout from "../components/templates/TemplateAbout.vue";
+import TemplateAbout from '../components/templates/TemplateAbout.vue';
 export default {
-  name: "PageAbout",
+  name: 'PageAbout',
   components: {
     TemplateAbout,
   },

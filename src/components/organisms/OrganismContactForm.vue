@@ -34,14 +34,14 @@
 </template>
 
 <script>
-import { ValidationObserver } from "vee-validate";
-import { FORM } from "../../constant/constant";
-import { mapMutations } from "vuex";
-import MoleculeNameInput from "../molecules/MoleculeNameInput.vue";
-import AtomTextarea from "../atoms/AtomTextarea.vue";
+import { ValidationObserver } from 'vee-validate';
+import { FORM } from '../../constant/constant';
+import { mapMutations } from 'vuex';
+import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
+import AtomTextarea from '../atoms/AtomTextarea.vue';
 
 export default {
-  name: "OrganismContactForm",
+  name: 'OrganismContactForm',
   components: {
     ValidationObserver,
     MoleculeNameInput,
@@ -57,19 +57,19 @@ export default {
       default: false,
     },
   },
-  emits: ["formValidate"],
+  emits: ['formValidate'],
   data() {
     return {
       model: {
-        fullname: "",
-        email: "",
-        cno: "",
-        msg: "",
+        fullname: '',
+        email: '',
+        cno: '',
+        msg: '',
       },
       validation: {
-        fullname: "required",
-        email: "required|email",
-        cno: "required|integer|phone",
+        fullname: 'required',
+        email: 'required|email',
+        cno: 'required|integer|phone',
       },
       CONTACT_FORM: FORM,
     };
@@ -82,9 +82,9 @@ export default {
           .then((el) => {
             if (el) {
               this.submit();
-              this.$emit("formValidate", el);
+              this.$emit('formValidate', el);
             } else {
-              this.$emit("formValidate", el);
+              this.$emit('formValidate', el);
             }
           })
           .catch((er) => {
@@ -95,15 +95,15 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateContact: "user/update-contact",
+      updateContact: 'user/update-contact',
     }),
     submit() {
       this.updateContact(this.model);
     },
     resetForm() {
-      this.model.fullname = "";
-      this.model.email = "";
-      this.model.cno = "";
+      this.model.fullname = '';
+      this.model.email = '';
+      this.model.cno = '';
       requestAnimationFrame(() => {
         this.$refs.observer.reset();
       });

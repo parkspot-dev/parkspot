@@ -1,7 +1,7 @@
 <template>
   <div class="bg-wrap">
-    <Wrapper>
-      <div class="featureContainer">
+    <BodyWrapper>
+      <div class="feature-container" data-aos="fade-left">
         <MoleculeFeatureCard :featureHeading="'Save Money'">
           Save up to 20% on our site compared to the cost of other parking
           platform.
@@ -22,17 +22,17 @@
           Securtiy guard etc.
         </MoleculeFeatureCard>
       </div>
-    </Wrapper>
+    </BodyWrapper>
   </div>
 </template>
 
 <script>
-import Wrapper from "../extras/Wrapper.vue";
-import MoleculeFeatureCard from "../molecules/MoleculeFeatureCard.vue";
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import MoleculeFeatureCard from '../molecules/MoleculeFeatureCard.vue';
 export default {
-  name: "TemplateFeatureHome",
+  name: 'TemplateFeatureHome',
   components: {
-    Wrapper,
+    BodyWrapper,
     MoleculeFeatureCard,
   },
 };
@@ -42,19 +42,21 @@ export default {
 .bg-wrap {
   background-color: var(--bg-color-secondary);
 }
-.featureContainer {
+
+.feature-container {
   display: flex;
   gap: 1.5rem;
   padding: 5rem;
 }
 
 @media only screen and (max-width: 1200px) {
-  .featureContainer {
+  .feature-container {
     padding: 5rem 0;
   }
 }
+
 @media only screen and (max-width: 800px) {
-  .featureContainer {
+  .feature-container {
     flex-direction: column;
     padding: 5rem 2.5rem;
   }

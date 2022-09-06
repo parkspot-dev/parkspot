@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "AtomIcon",
+  name: 'AtomIcon',
   props: {
     /**
      * Material Design icons are used
@@ -21,7 +21,7 @@ export default {
      */
     size: {
       type: String,
-      default: "is-small",
+      default: 'is-small',
     },
     /**
      * color of icon

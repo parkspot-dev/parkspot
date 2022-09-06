@@ -11,13 +11,13 @@
 
 <script>
 export default {
-  name: "AtomDatePicker",
+  name: 'AtomDatePicker',
   props: {
     assignedDate: {
       type: Date,
     },
   },
-  emits: ["changed"],
+  emits: ['changed'],
   data() {
     return {
       date: new Date(),
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     onChange(val) {
-      this.$emit("changed", val);
+      this.$emit('changed', val);
     },
   },
 };

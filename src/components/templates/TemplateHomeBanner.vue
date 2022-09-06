@@ -1,5 +1,6 @@
 <template>
-  <Wrapper class="homeBanner">
+  <BodyWrapper class="home-banner">
+    <!-- <h1>hello</h1> -->
     <div class="banner-wrapper">
       <div class="banner-header">
         <h1 class="banner-title" data-aos="zoom-in">
@@ -16,57 +17,59 @@
         </div>
       </div>
     </div>
-  </Wrapper>
+  </BodyWrapper>
 </template>
 
 <script>
-import Wrapper from "../extras/Wrapper.vue";
-import SearchInput from "../extras/SearchInput.vue";
-import AtomButton from "../atoms/AtomButton.vue";
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import SearchInput from '../extras/SearchInput.vue';
+import AtomButton from '../atoms/AtomButton.vue';
 export default {
-  name: "TemplateHomeBanner",
+  name: 'TemplateHomeBanner',
   components: {
-    Wrapper,
+    BodyWrapper,
     SearchInput,
     AtomButton,
   },
-  emits: ["flyToSrp"],
+  emits: ['flyToSrp'],
   methods: {
     flyToSrp() {
-      this.$emit("flyToSrp");
+      this.$emit('flyToSrp');
     },
   },
 };
 </script>
 
 <style scoped>
-.homeBanner {
+.home-banner {
   /* The image used */
-  background-image: url("../../assets/Home-Banner.jpg");
+  background-image: url('../../assets/Home-Banner.jpg');
   background-image: linear-gradient(
       to right bottom,
-      rgba(28, 26, 18, 0.35),
-      rgba(21, 19, 13, 0.35)
+      rgba(35, 30, 20, 45%),
+      rgba(35, 30, 20, 45%)
     ),
-    url("../../assets/Home-Banner.jpg");
-  /* Full height */
-  height: 100vh;
-  max-height: 1000px;
+    url('../../assets/Home-Banner.jpg');
+
   /* Center and scale the image nicely */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+
+  /* Full height */
+  height: 100vh;
+  max-height: 1000px;
 }
 
 .banner-wrapper {
-  max-width: 960px;
   margin: 10rem auto;
+  max-width: 960px;
 }
 
 .banner-header {
+  color: #fff;
   margin: 0 auto;
   padding: 2rem 6rem;
-  color: white;
 }
 
 .banner-title {
@@ -79,9 +82,11 @@ export default {
 .banner-subtitle {
   margin-bottom: 3rem;
 }
+
 .banner-input {
   margin-bottom: 1.25rem;
 }
+
 .btn-wrapper {
   text-align: center;
 }

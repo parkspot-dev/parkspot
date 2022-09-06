@@ -1,11 +1,11 @@
 <template>
   <footer class="custom-footer">
     <section class="primary-footer">
-      <Wrapper>
-        <section class="primary-footerContainer">
+      <BodyWrapper>
+        <section class="primary-container">
           <div class="custom-parkspot">
             <div class="mb-2">
-              <router-link class="topSearch-link" :to="{ name: 'Home' }">
+              <router-link class="top-search-link" :to="{ name: 'Home' }">
                 <figure class="image parkspot-logo">
                   <img :src="psfooterImg" :alt="'parkspot footer logo'" />
                 </figure>
@@ -27,14 +27,14 @@
             </span>
           </div>
 
-          <div class="topSearch">
+          <div class="top-search">
             <AtomParagraph :variation="'large'" class="footer-heading">
               Top Searched Places
             </AtomParagraph>
             <div>
               <p>
                 <router-link
-                  class="topSearch-link"
+                  class="top-search-link"
                   :to="{
                     path: '/bangalore/parking-near-jp-nagar',
                   }"
@@ -44,7 +44,7 @@
               </p>
               <p>
                 <router-link
-                  class="topSearch-link"
+                  class="top-search-link"
                   :to="{
                     path: '/bangalore/parking-near-btm',
                   }"
@@ -54,7 +54,7 @@
               </p>
               <p>
                 <router-link
-                  class="topSearch-link"
+                  class="top-search-link"
                   :to="{
                     path: '/bangalore/parking-near-bommanahalli',
                   }"
@@ -64,7 +64,7 @@
               </p>
               <p>
                 <router-link
-                  class="topSearch-link"
+                  class="top-search-link"
                   :to="{
                     path: '/bangalore/parking-near-rajajinagar',
                   }"
@@ -73,7 +73,7 @@
               </p>
               <p>
                 <router-link
-                  class="topSearch-link"
+                  class="top-search-link"
                   :to="{
                     path: '/bangalore/parking-near-banashankari',
                   }"
@@ -83,7 +83,7 @@
               </p>
               <p>
                 <router-link
-                  class="topSearch-link"
+                  class="top-search-link"
                   :to="{
                     path: '/bangalore/parking-near-marathahalli',
                   }"
@@ -118,12 +118,12 @@
             <div>
               <AtomParagraph class="mb-2"> Customer Service: </AtomParagraph>
               <span>
-                <a href="tel:+917488239471" class="phone-contact">
+                <a href="tel:+918092996057" class="phone-contact">
                   <AtomIcon :icon="'phone-classic'" :size="'is-medium'">
                   </AtomIcon>
                 </a>
               </span>
-              <AtomParagraph :type="'span'"> +91 748823 9471 </AtomParagraph>
+              <AtomParagraph :type="'span'"> +91 80929 96057 </AtomParagraph>
             </div>
           </div>
 
@@ -131,12 +131,12 @@
             <AtomParagraph :variation="'large'" class="footer-heading">
               Discover
             </AtomParagraph>
-            <div class="footer-discoveryList">
+            <div class="footer-discovery-list">
               <ul>
                 <li>
                   <p>
                     <router-link
-                      class="topSearch-link"
+                      class="top-search-link"
                       :to="{
                         name: 'features',
                       }"
@@ -148,7 +148,7 @@
                 <li>
                   <p>
                     <router-link
-                      class="topSearch-link"
+                      class="top-search-link"
                       :to="{
                         name: 'blog',
                       }"
@@ -160,7 +160,7 @@
                 <li>
                   <p>
                     <router-link
-                      class="topSearch-link"
+                      class="top-search-link"
                       :to="{
                         name: 'VOPortal',
                       }"
@@ -172,7 +172,7 @@
                 <li>
                   <p>
                     <router-link
-                      class="topSearch-link"
+                      class="top-search-link"
                       :to="{
                         name: 'SOPortal',
                       }"
@@ -184,7 +184,7 @@
                 <li>
                   <p>
                     <router-link
-                      class="topSearch-link"
+                      class="top-search-link"
                       :to="{
                         name: 'Faq',
                       }"
@@ -197,12 +197,12 @@
             </div>
           </div>
         </section>
-      </Wrapper>
+      </BodyWrapper>
     </section>
 
     <section class="secondary-footer">
-      <Wrapper>
-        <section class="secondary-footerContainer">
+      <BodyWrapper>
+        <section class="secondary-container">
           <div>
             <AtomParagraph>
               © 2021 NeoSpot Pvt Ltd.- ALL RIGHTS RESERVED
@@ -240,26 +240,28 @@
             </a>
           </div>
         </section>
-      </Wrapper>
+      </BodyWrapper>
     </section>
   </footer>
 </template>
 
 <script>
-import Wrapper from "../extras/Wrapper.vue";
-import AtomParagraph from "../atoms/AtomParagraph.vue";
-import AtomIcon from "../atoms/AtomIcon.vue";
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
+import AtomIcon from '../atoms/AtomIcon.vue';
+// import AtomImage from "../atoms/AtomImage.vue";
 export default {
-  name: "TemplateFooter",
+  name: 'TemplateFooter',
   components: {
-    Wrapper,
+    BodyWrapper,
     AtomParagraph,
     AtomIcon,
+    // AtomImage,
   },
   data() {
     return {
-      psfooterImg: require("@/assets/psfooterlogo.png"),
-      appLinkImg: require("@/assets/google-play-badge.png"),
+      psfooterImg: require('@/assets/psfooterlogo.png'),
+      appLinkImg: require('@/assets/google-play-badge.png'),
     };
   },
 };
@@ -269,83 +271,99 @@ export default {
 .parkspot-logo {
   width: 250px;
 }
+
 .custom-footer,
-.topSearch-link {
+.top-search-link {
   color: #888d93;
 }
-.topSearch-link:hover {
+
+.top-search-link:hover {
   color: var(--primary-color);
 }
 
 .primary-footer {
   background-color: #1f2e3b;
 }
+
 .secondary-footer {
   background-color: #162029;
 }
+
 .footer-heading {
-  color: white;
+  color: #fff;
   margin-bottom: 1rem;
 }
-.primary-footerContainer {
+
+.primary-container {
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
 }
+
 @media only screen and (max-width: 600px) {
-  .primary-footerContainer {
+  .primary-container {
     flex-direction: column;
   }
 }
+
 .custom-parkspot {
   display: flex;
-  flex-direction: column;
   flex: 22%;
+  flex-direction: column;
 }
+
 .contact-info {
   flex: 25%;
 }
-.topSearch {
+
+.top-search {
   flex: 25%;
 }
 
 .footer-discovery {
   flex: 20%;
 }
-.secondary-footerContainer {
+
+.secondary-container {
   display: flex;
   justify-content: space-between;
 }
-.social-groups {
-}
+
 .social-icon {
   color: var(--primary-text);
   padding: 0.5rem;
 }
+
 .social-icon:hover {
   color: var(--primary-color);
 }
-.footer-discoveryList ul {
+
+.footer-discovery-list ul {
   padding-left: 1rem;
 }
-.footer-discoveryList li {
+
+.footer-discovery-list li {
   position: relative;
 }
-.footer-discoveryList ul li::before {
-  content: "\2022";
+
+.footer-discovery-list ul li::before {
   color: var(--primary-color);
-  position: absolute;
+  content: '\2022';
   font-size: 25px;
   left: -19px;
+  position: absolute;
   top: -7px;
 }
+
 .location-icon {
   color: var(--primary-color);
 }
+
 .phone-contact {
   color: var(--secondary-color);
   cursor: pointer;
 }
+
 .phone-contact:hover {
   color: var(--primary-color);
 }

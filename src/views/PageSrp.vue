@@ -2,62 +2,90 @@
   <section>
     <TemplateSrp
       :spots="paginatedSrpResults"
-      :total="totalPages"
+      :totals="totalPages"
       @changed="onPageChange"
       :reRender="reRender"
+      @flyToSrp="flyToSrp"
     ></TemplateSrp>
+    <LoaderModal :isLoading="isLoading"></LoaderModal>
   </section>
 </template>
 <script>
-import TemplateSrp from "../components/templates/TemplateSrp.vue";
-import { mapActions, mapGetters, mapMutations } from "vuex";
+import TemplateSrp from '../components/templates/TemplateSrp.vue';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
+import LoaderModal from '../components/extras/LoaderModal.vue';
 export default {
-  name: "PageSrp",
+  name: 'PageSrp',
   components: {
     TemplateSrp,
+    LoaderModal,
   },
   data() {
     return {
-      pageStart: 1,
       reRender: 0,
+      isLoading: false,
     };
   },
   computed: {
     ...mapGetters({
-      paginatedSrpResults: "map/getPaginateSrpResults",
-      totalPages: "map/getTotalPages",
+      paginatedSrpResults: 'map/getPaginateSrpResults',
+      totalPages: 'map/getTotalPages',
+      LocDetails: 'map/getLocDetails',
     }),
   },
   async mounted() {
-    await this.updateMapCenter([this.getLng(), this.getLat()]);
-    await this.srpCall();
-    this.updatePaginatedSrpData(this.pageStart);
-    this.reRender++;
-    this.updateCenterSrp();
+    try {
+      this.isLoading = true;
+      await this.updateMapConfig(this.getLatLng()); // map center takes [lng, lat]
+      await this.srpCall();
+      this.reRender++;
+      this.isLoading = false;
+    } catch (error) {
+      console.log(error);
+      this.$router.push({ name: 'error', params: { msg: error } });
+    }
   },
   methods: {
     ...mapMutations({
-      updateMapCenter: "map/update-map-center",
-      updatePaginatedSrpData: "map/update-paginated-srp-data",
-      updateCenterSrp: "map/update-center-srp",
+      updateMapCenter: 'map/update-map-center',
+      updateMapConfig: 'map/update-map-config',
+      updatePaginatedSrpData: 'map/update-paginated-srp-data',
     }),
     ...mapActions({
-      srpCall: "map/srpCall",
+      srpCall: 'map/srpCall',
+      updateCenterSrp: 'map/update-center-srp',
     }),
 
     onPageChange(pageNum) {
+      this.isLoading = true;
       this.updatePaginatedSrpData(pageNum);
       this.updateCenterSrp();
       this.reRender++;
+      this.isLoading = false;
     },
     // methods to get Lat and Long
-    getLat: function () {
-      var queryParam = new URLSearchParams(window.location.search);
-      return queryParam.get("lat");
+
+    getLatLng() {
+      const queryParam = new URLSearchParams(window.location.search);
+      const latlng = queryParam.get('latlng').split(',');
+      latlng.reverse(); // map center takes [lng, lat] so reverse() used
+      return latlng;
     },
-    getLng: function () {
-      var queryParam = new URLSearchParams(window.location.search);
-      return queryParam.get("lng");
+
+    flyToSrp() {
+      this.$nextTick(() => {
+        let latlng = [...this.LocDetails.lnglat];
+        latlng = latlng.reverse().toString();
+        this.$router.push({
+          name: 'srp',
+          query: {
+            latlng,
+          },
+          params: {
+            location: this.LocDetails.locDetails.locName,
+          },
+        });
+      });
     },
   },
 };

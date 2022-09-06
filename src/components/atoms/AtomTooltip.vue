@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: "AtomTooltip",
+  name: 'AtomTooltip',
   props: {
     /**
      * msg inside tooltip

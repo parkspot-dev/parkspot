@@ -38,8 +38,8 @@
 
 <script>
 export default {
-  name: "AtomUpload",
-  emits: ["uploadFiles"],
+  name: 'AtomUpload',
+  emits: ['uploadFiles'],
   data() {
     return {
       dropFiles: [],
@@ -51,7 +51,7 @@ export default {
     },
     upload() {
       const files = [...this.dropFiles];
-      this.$emit("uploadFiles", files);
+      this.$emit('uploadFiles', files);
     },
   },
 };

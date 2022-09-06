@@ -1,4 +1,4 @@
-import { mayaClient } from "@/services/api";
+import { mayaClient } from '@/services/api';
 
 const state = {
   contactForm: {},
@@ -12,22 +12,27 @@ const state = {
 const getters = {};
 
 const mutations = {
-  "update-contact"(state, data = {}) {
+  'update-contact'(state, data = {}) {
     state.contactForm = data;
   },
-  "update-kyc"(state, data = {}) {
+
+  'update-kyc'(state, data = {}) {
     state.kycForm = data;
   },
-  "update-additional-info"(state, data = {}) {
+
+  'update-additional-info'(state, data = {}) {
     state.additionalInfo = data;
   },
-  "update-login"(state, data = {}) {
+
+  'update-login'(state, data = {}) {
     state.login = data;
   },
-  "update-location-details"(state, data = {}) {
+
+  'update-location-details'(state, data = {}) {
     state.locationDetails = data;
   },
-  "update-preference"(state, data = {}) {
+
+  'update-preference'(state, data = {}) {
     state.preference = data;
   },
 };
@@ -35,8 +40,8 @@ const mutations = {
 const actions = {
   register({ commit, state }) {
     const req = {
-      UserName: "dummy_" + state.contactForm.fullname + Date.now(),
-      Password: "dummy@123",
+      UserName: 'dummy_' + state.contactForm.fullname + Date.now(),
+      Password: 'dummy@123',
       FullName: state.contactForm.fullname,
       City: state.locationDetails.locName,
       EmailID: state.contactForm.email,
@@ -45,59 +50,63 @@ const actions = {
       Username: req.UserName,
       Password: req.Password,
     };
-    commit("update-login", loginReq);
-    mayaClient.post("/auth/register", req);
+    commit('update-login', loginReq);
+    mayaClient.post('/auth/register', req);
   },
+
   login({ state }) {
-    mayaClient.post("/auth/login", state.login);
+    mayaClient.post('/auth/login', state.login);
   },
+
   kyc({ state }) {
     const req = {
       ContactNo: state.contactForm.cno,
       UserName: state.login.UserName,
       Owner: state.kycForm.radioData,
-      OwnerName: "none",
-      OwnerContactNo: "none",
-      Relationship: "none",
+      OwnerName: 'none',
+      OwnerContactNo: 'none',
+      Relationship: 'none',
       OwnershipDocument: state.kycForm.documentData,
       IdentityDocument: state.kycForm.documentData,
       OwnershipDocumentImage: state.kycForm.imgData,
       IdentityDocumentImage: state.kycForm.imgData,
     };
-    mayaClient.patch("/kyc", req);
+    mayaClient.patch('/kyc', req);
   },
+
   contact({ state }) {
     let convertedAmenities;
     state.additionalInfo.amenities.forEach((data) => {
-      convertedAmenities += data + ",";
+      convertedAmenities += data + ',';
     });
     convertedAmenities = convertedAmenities.substring(
       0,
-      convertedAmenities.length - 1
+      convertedAmenities.length - 1,
     );
     const req = {
       User: {
-        UserName: state.login.UserName, //only for logged in user
+        UserName: state.login.UserName, //  only for logged in user
         FullName: state.contactForm.fullname,
         City: state.locationDetails.locName,
         EmailID: state.contactForm.email,
         Mobile: state.contactForm.cno,
       },
-      Comments: "Spot Registered",
+      Comments: 'Spot Registered',
       RentDetails: {
-        VehicleType: "",
+        VehicleType: '',
         Rate: state.additionalInfo.rent,
         MinBookingDuration: state.additionalInfo.minDur,
-        Availability: "",
-        SpecialService: convertedAmenities, //None/Camera/Security
-        TnC: "I Agree",
+        Availability: '',
+        SpecialService: convertedAmenities, //  None/Camera/Security
+        TnC: 'I Agree',
         Address: state.locationDetails.locName,
       },
     };
-    mayaClient.post("/contact", req);
+    mayaClient.post('/contact', req);
   },
+
   onlyContact({ state }) {
-    let comments = "From the Home Page ----->" + state.contactForm.msg;
+    const comments = 'From the Home Page ----->' + state.contactForm.msg;
     const req = {
       User: {
         FullName: state.contactForm.fullname,
@@ -106,7 +115,7 @@ const actions = {
       },
       Comments: comments,
     };
-    mayaClient.post("/contact", req);
+    mayaClient.post('/contact', req);
   },
 
   async requestSpot({ state }) {
@@ -123,7 +132,7 @@ const actions = {
       Duration: state.preference.minDur,
       Landmark: state.locationDetails.locDetails.city.country,
     };
-    mayaClient.post("/owner/parking-request", req);
+    mayaClient.post('/owner/parking-request', req);
   },
 };
 

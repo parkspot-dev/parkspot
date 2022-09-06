@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import { ValidationProvider } from "vee-validate";
-import AtomInput from "../atoms/AtomInput.vue";
+import { ValidationProvider } from 'vee-validate';
+import AtomInput from '../atoms/AtomInput.vue';
 export default {
-  name: "MoleculeNameInput",
+  name: 'MoleculeNameInput',
   components: {
     ValidationProvider,
     AtomInput,
@@ -37,7 +37,7 @@ export default {
     },
     rules: {
       type: [Object, String],
-      default: "",
+      default: '',
     },
     inputType: {
       type: String,
@@ -54,16 +54,15 @@ export default {
       type: String,
     },
   },
-  emits: ["input"],
   data() {
     return {
-      innerValue: "",
+      innerValue: '',
     };
   },
   watch: {
     // Handles internal model changes.
     innerValue(newVal) {
-      this.$emit("input", newVal);
+      this.$emit('input', newVal);
     },
     // Handles external model changes.
     value(newVal) {

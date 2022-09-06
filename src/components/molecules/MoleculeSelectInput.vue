@@ -22,13 +22,13 @@
 </template>
 
 <script>
-import { ValidationProvider } from "vee-validate";
-import AtomSelectInput from "../atoms/AtomSelectInput.vue";
-import AtomIcon from "../atoms/AtomIcon.vue";
-import AtomTooltip from "../atoms/AtomTooltip.vue";
-import { ICON } from "../../constant/constant";
+import { ValidationProvider } from 'vee-validate';
+import AtomSelectInput from '../atoms/AtomSelectInput.vue';
+import AtomIcon from '../atoms/AtomIcon.vue';
+import AtomTooltip from '../atoms/AtomTooltip.vue';
+import { ICON } from '../../constant/constant';
 export default {
-  name: "MoleculeSelectInput",
+  name: 'MoleculeSelectInput',
   components: {
     ValidationProvider,
     AtomSelectInput,
@@ -38,7 +38,7 @@ export default {
   props: {
     rules: {
       type: [Object, String],
-      default: "",
+      default: '',
     },
     list: {
       type: Array,
@@ -50,19 +50,19 @@ export default {
     },
     fieldName: {
       type: String,
-      default: "field",
+      default: 'field',
     },
     label: {
       type: String,
     },
-    //for tooltip
+    //  for tooltip
     tooltip: {
       type: Boolean,
       default: false,
     },
     tooltipMsg: {
       type: String,
-      default: "Please write something meaningful if you are using this.",
+      default: 'Please write something meaningful if you are using this.',
     },
     // must be included in props
     value: {
@@ -71,14 +71,14 @@ export default {
   },
   data() {
     return {
-      innerValue: "",
+      innerValue: '',
       ICON,
     };
   },
   watch: {
     // Handles internal model changes.
     innerValue(newVal) {
-      this.$emit("input", newVal);
+      this.$emit('input', newVal);
     },
     // Handles external model changes.
     value(newVal) {
@@ -97,9 +97,10 @@ export default {
 .custom-wrapper {
   position: relative;
 }
+
 .custom-tooltip {
-  position: absolute;
   left: 95px;
+  position: absolute;
   top: 2px;
 }
 </style>

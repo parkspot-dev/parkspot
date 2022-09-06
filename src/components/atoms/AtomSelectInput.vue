@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: "AtomSelectInput",
+  name: 'AtomSelectInput',
   props: {
     /**
      * The placeholder is for user
@@ -19,7 +19,7 @@ export default {
      */
     placeholder: {
       type: String,
-      default: "Select anything from list",
+      default: 'Select anything from list',
     },
     /**
      * The list is list of data
@@ -45,17 +45,24 @@ export default {
       type: null,
     },
   },
-  emits: ["input"],
+  emits: ['input'],
   data() {
     return {
-      innerValue: "",
+      innerValue: '',
     };
   },
+  // methods: {
+  //   onInput(value) {
+  //     // value - 1 because of one extra list generated for placeholder
+  //     this.$emit("input", this.list[value - 1]);
+  //   },
+  // },
   watch: {
     // Handles internal model changes.
     innerValue(newVal) {
-      this.$emit("input", newVal);
-      this.$emit("changed", newVal);
+      console.log('select', newVal);
+      this.$emit('input', newVal);
+      this.$emit('changed', newVal);
     },
     // Handles external model changes.
     value(newVal) {

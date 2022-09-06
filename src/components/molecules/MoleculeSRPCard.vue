@@ -8,8 +8,10 @@
       {{ spot.Name }}
     </AtomParagraph>
     <div class="card-location">
-      <span><AtomIcon :icon="'map-marker-radius'"></AtomIcon></span>
-      <AtomParagraph :type="'span'">
+      <span class="location-icon">
+        <AtomIcon :icon="'map-marker-radius'"></AtomIcon>
+      </span>
+      <AtomParagraph class="location-text" :type="'span'">
         {{ spot.Address }}
       </AtomParagraph>
     </div>
@@ -24,19 +26,20 @@
       {{ spot.RentUnit }}
     </AtomParagraph>
     <AtomParagraph class="card-spot" :type="'span'">
-      <strong>Available Spot : </strong> {{ spot.SlotsAvailable }}
+      <strong>Available Spot : </strong>
+      {{ spot.SlotsAvailable | available }}
     </AtomParagraph>
     <AtomButton class="card-btn" @click.native="onBook"> Book Spot </AtomButton>
   </div>
 </template>
 
 <script>
-import AtomRating from "../atoms/AtomRating.vue";
-import AtomParagraph from "../atoms/AtomParagraph.vue";
-import AtomButton from "../atoms/AtomButton.vue";
-import AtomIcon from "../atoms/AtomIcon.vue";
+import AtomRating from '../atoms/AtomRating.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
+import AtomButton from '../atoms/AtomButton.vue';
+import AtomIcon from '../atoms/AtomIcon.vue';
 export default {
-  name: "MoleculeSRPCard",
+  name: 'MoleculeSRPCard',
   components: {
     AtomRating,
     AtomParagraph,
@@ -48,10 +51,19 @@ export default {
       type: Object,
     },
   },
-  emits: ["booked"],
+  emits: ['booked'],
+  filters: {
+    available(slotAvailable) {
+      if (slotAvailable === 0) {
+        return 'N/A';
+      } else {
+        return slotAvailable;
+      }
+    },
+  },
   methods: {
     onBook() {
-      this.$emit("booked");
+      this.$emit('booked');
     },
   },
 };
@@ -59,61 +71,66 @@ export default {
 
 <style scoped>
 .custom-card {
+  border-radius: var(--border-default);
+  box-shadow: 0 0.5em 1em -0.125em rgb(10, 10, 10, 10%),
+    0 0 0 1px rgb(10, 10, 10, 20%);
+  column-gap: 0.75rem;
   display: grid;
-  box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%),
-    0 0 0 1px rgb(10 10 10 / 2%);
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(6, auto);
-  row-gap: 0.25rem;
-  column-gap: 0.75rem;
-  padding: 2rem;
-  border-radius: var(--border-default);
-  max-width: 100%;
   margin: 0.5rem;
+  max-width: 100%;
   overflow: hidden;
+  padding: 2rem;
+  row-gap: 0.25rem;
 }
+
 .card-img {
   grid-column: 1 / 1;
   grid-row: 1 / 5;
 }
+
 .card-title {
+  font-weight: var(--bold-font);
   grid-column: 2 / 6;
   grid-row: 1 / 1;
-  font-weight: var(--bold-font);
 }
+
 .card-btn {
   grid-column: 2 / 6;
 }
+
 .card-location {
+  align-items: center;
+  display: flex;
+  font-size: var(--sp-size-sm);
+  gap: 10px;
   grid-column: 2 / 6;
   grid-row: 2 / 2;
-  max-height: calc(1.2rem * 2);
-  overflow: hidden;
   position: relative;
-  font-size: var(--sp-size-sm);
 }
-.card-location::before {
-  content: "...";
-  position: absolute;
-  bottom: -5px;
-  right: 0;
+
+.location-icon {
+  font-size: 20px;
 }
-.card-location::after {
-  content: "";
-  position: absolute;
-  right: 0; /* note: not using bottom */
-  width: 1rem;
-  height: 1rem;
-  background: white;
+
+.location-text {
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
+
 .card-rating {
   grid-row: 5 / 5;
   margin: auto;
 }
+
 .card-distance,
 .card-rate {
   grid-column: 2 / 4;
 }
+
 .card-type,
 .card-spot {
   grid-column: 4 / 6;

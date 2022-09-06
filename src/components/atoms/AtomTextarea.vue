@@ -13,14 +13,14 @@
 
 <script>
 export default {
-  name: "AtomTextarea",
+  name: 'AtomTextarea',
   props: {
     /**
      * Textarea used for long input
      */
     label: {
       type: String,
-      default: "",
+      default: '',
     },
     maxlength: {
       type: Number,
@@ -28,7 +28,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: "Message",
+      default: 'Message',
     },
     /**
      *  User input value in the input field
@@ -38,13 +38,13 @@ export default {
       default: null,
     },
   },
-  emits: ["input", "changed"],
+  emits: ['input', 'changed'],
   methods: {
     onInput(value) {
-      this.$emit("input", value);
+      this.$emit('input', value);
     },
     onChange(value) {
-      this.$emit("changed", value);
+      this.$emit('changed', value);
     },
   },
 };

@@ -9,6 +9,7 @@
         :placeholder="placeholder"
         @input.native="onInput($event.target.value)"
         @focus.native="onFocus($event.target.value)"
+        @blur="onChange($event.target.value)"
       ></b-input>
     </b-field>
   </component>
@@ -16,7 +17,7 @@
 
 <script>
 export default {
-  name: "AtomInput",
+  name: 'AtomInput',
   props: {
     /**
      * The html element name used for the wrapper.
@@ -24,7 +25,7 @@ export default {
      */
     wrapper: {
       type: String,
-      default: "div",
+      default: 'div',
       validator: (value) => {
         return value.match(/(div|section)/);
       },
@@ -59,7 +60,7 @@ export default {
      */
     type: {
       type: String,
-      default: "text",
+      default: 'text',
       validator: (value) => {
         return value.match(/(text|number|email)/);
       },
@@ -97,13 +98,18 @@ export default {
       default: null,
     },
   },
-  emits: ["input", "focus"],
+  emits: ['input', 'focus', 'changed'],
   methods: {
     onInput(value) {
-      this.$emit("input", value);
+      this.$emit('input', value);
     },
+
     onFocus(value) {
-      this.$emit("focus", value);
+      this.$emit('focus', value);
+    },
+
+    onChange(value) {
+      this.$emit('changed', value);
     },
   },
 };

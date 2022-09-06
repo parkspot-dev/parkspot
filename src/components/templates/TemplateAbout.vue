@@ -1,6 +1,6 @@
 <template>
-  <Wrapper>
-    <div class="aboutContainer">
+  <BodyWrapper>
+    <div class="about-container">
       <AtomImage
         :src="aboutImg"
         :alt="'About Image'"
@@ -36,26 +36,26 @@
         </div>
       </div>
     </div>
-  </Wrapper>
+  </BodyWrapper>
 </template>
 
 <script>
-import Wrapper from "../extras/Wrapper.vue";
-import AtomHeading from "../atoms/AtomHeading.vue";
-import AtomParagraph from "../atoms/AtomParagraph.vue";
-import AtomImage from "../atoms/AtomImage.vue";
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import AtomHeading from '../atoms/AtomHeading.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
+import AtomImage from '../atoms/AtomImage.vue';
 export default {
-  name: "TemplateAbout",
+  name: 'TemplateAbout',
   components: {
-    Wrapper,
+    BodyWrapper,
     AtomHeading,
     AtomParagraph,
     AtomImage,
   },
   data() {
     return {
-      appLinkImg: require("@/assets/google-play-badge.png"),
-      aboutImg: require("@/assets/about.svg"),
+      appLinkImg: require('@/assets/google-play-badge.png'),
+      aboutImg: require('@/assets/about.svg'),
     };
   },
 };
@@ -63,22 +63,26 @@ export default {
 
 <style scoped>
 .about-links {
-  display: flex;
   align-items: center;
+  display: flex;
 }
-.aboutContainer {
-  display: flex;
+
+.about-container {
   align-items: center;
+  display: flex;
   gap: 2rem;
 }
+
 @media only screen and (max-width: 750px) {
-  .aboutContainer {
+  .about-container {
     flex-direction: column;
   }
 }
+
 .about-img {
   flex: 30%;
 }
+
 .about-desc {
   flex: 50%;
 }

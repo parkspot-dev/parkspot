@@ -1,34 +1,35 @@
 <template>
   <div class="srp-container">
     <div class="srp-lists">
-      <Pagination :total="total" @changed="onPageChange"></Pagination>
+      <PaginationBody :totals="totals" @changed="onPageChange"></PaginationBody>
       <MoleculeSRPCard
         v-for="spot in spots"
         :key="spot.ID"
         :spot="spot"
         @booked="onBook"
+        @click.native="selected(spot)"
       ></MoleculeSRPCard>
     </div>
     <div class="srp-map">
       <MapContainer
-        class="mapContainer"
+        class="map-container"
         :spotsList="spots"
         :key="reRender"
       ></MapContainer>
-      <SearchInput class="mapSearch"></SearchInput>
+      <SearchInput class="map-search" @changed="onChange"></SearchInput>
     </div>
   </div>
 </template>
 
 <script>
-import Pagination from "../extras/Pagination.vue";
-import MoleculeSRPCard from "../molecules/MoleculeSRPCard.vue";
-import MapContainer from "../extras/MapContainer.vue";
-import SearchInput from "../extras/SearchInput.vue";
+import PaginationBody from '../extras/PaginationBody.vue';
+import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
+import MapContainer from '../extras/MapContainer.vue';
+import SearchInput from '../extras/SearchInput.vue';
 export default {
-  name: "TemplateSrp",
+  name: 'TemplateSrp',
   components: {
-    Pagination,
+    PaginationBody,
     MoleculeSRPCard,
     MapContainer,
     SearchInput,
@@ -37,20 +38,27 @@ export default {
     spots: {
       type: Array,
     },
-    total: {
+    totals: {
       type: Number,
     },
     reRender: {
       type: Number,
     },
   },
-  emits: ["changed"],
+  emits: ['changed', 'flyToSrp'],
+
   methods: {
     onPageChange(page) {
-      this.$emit("changed", page);
+      this.$emit('changed', page);
     },
     onBook() {
-      this.$router.push({ name: "contactUs" });
+      this.$router.push({ name: 'contactUs' });
+    },
+    onChange() {
+      this.$emit('flyToSrp');
+    },
+    selected(spot) {
+      console.log(spot);
     },
   },
 };
@@ -59,49 +67,58 @@ export default {
 <style scoped>
 .srp-container {
   display: flex;
-  padding-left: 3rem;
   gap: 2rem;
+  padding-left: 3rem;
 }
 
 .srp-lists {
   flex: 20%;
   padding-top: 2rem;
 }
+
 .srp-map {
   flex: 60%;
 }
-.mapContainer {
-  height: 130vh;
+
+.map-container {
+  height: 100%;
   position: relative;
 }
-.mapSearch {
+
+.map-search {
+  left: 50%;
   position: absolute;
   top: 20%;
-  left: 50%;
   width: 500px;
 }
+
 @media only screen and (max-width: 1024px) {
   .srp-container {
     flex-direction: column-reverse;
     padding-left: 0;
   }
+
   .srp-lists {
     padding: 2rem 8rem;
   }
-  .mapContainer {
+
+  .map-container {
     height: 50vh;
   }
-  .mapSearch {
+
+  .map-search {
     left: 5%;
     top: 10%;
     width: 50vw;
   }
 }
+
 @media only screen and (max-width: 700px) {
   .srp-lists {
     padding: 2rem 4rem;
   }
 }
+
 @media only screen and (max-width: 500px) {
   .srp-lists {
     padding: 2rem 1rem;

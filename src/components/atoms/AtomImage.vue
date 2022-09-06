@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "AtomImage",
+  name: 'AtomImage',
   props: {
     /**
      * path of the image

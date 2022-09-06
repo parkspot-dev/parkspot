@@ -6,24 +6,24 @@
 </template>
 
 <script>
-import TemplateBlogHome from "../components/templates/TemplateBlogHome.vue";
-import { mapGetters } from "vuex";
+import TemplateBlogHome from '../components/templates/TemplateBlogHome.vue';
+import { mapGetters } from 'vuex';
 export default {
-  name: "PageBlogHome",
+  name: 'PageBlogHome',
   components: {
     TemplateBlogHome,
   },
   computed: {
     ...mapGetters({
-      blogs: "blog/getAllBlogs",
-      getBlogById: "blog/getBlogById",
+      blogs: 'blog/getAllBlogs',
+      getBlogById: 'blog/getBlogById',
     }),
   },
   methods: {
     onBlogClick(id) {
-      let blog = this.getBlogById(id);
+      const blog = this.getBlogById(id);
       this.$router.push({
-        name: "mainBlog",
+        name: 'mainBlog',
         params: {
           id: blog.id,
         },

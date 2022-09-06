@@ -10,7 +10,7 @@
       </b-breadcrumb>
     </HeaderBanner>
 
-    <Wrapper>
+    <BodyWrapper>
       <AtomHeading class="mb-4" :level="'h4'">
         Parking near {{ locationWithCaps }}
       </AtomHeading>
@@ -23,7 +23,7 @@
           @booked="onBook"
         ></MoleculeSRPCard>
       </div>
-      <div class="nearbyText-container">
+      <div class="nearbytext-container">
         <AtomHeading :level="'h3'">
           Find and book parking spaces near
           {{ locationWithCaps }}
@@ -35,24 +35,24 @@
           start earning extra.
         </AtomParagraph>
       </div>
-    </Wrapper>
+    </BodyWrapper>
   </div>
 </template>
 
 <script>
-import HeaderBanner from "../extras/HeaderBanner.vue";
-import AtomHeading from "../atoms/AtomHeading.vue";
-import MoleculeSRPCard from "../molecules/MoleculeSRPCard.vue";
-import AtomParagraph from "../atoms/AtomParagraph.vue";
-import Wrapper from "../extras/Wrapper.vue";
+import HeaderBanner from '../extras/HeaderBanner.vue';
+import AtomHeading from '../atoms/AtomHeading.vue';
+import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
 export default {
-  name: "TemplateNearBy",
+  name: 'TemplateNearBy',
   components: {
     HeaderBanner,
     AtomHeading,
     MoleculeSRPCard,
     AtomParagraph,
-    Wrapper,
+    BodyWrapper,
   },
   props: {
     nearByLocation: {
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     onBook() {
-      this.$router.push({ name: "contactUs" });
+      this.$router.push({ name: 'contactUs' });
     },
   },
 };
@@ -91,14 +91,15 @@ export default {
 
 <style scoped>
 .custom-title {
-  text-align: center;
   margin-bottom: 1rem;
+  text-align: center;
 }
 
-.nearbyText-container {
-  max-width: 960px;
+.nearbytext-container {
   margin: auto;
+  max-width: 960px;
 }
+
 .custom-nearby {
   color: var(--grey-shade);
   margin-bottom: 1rem;

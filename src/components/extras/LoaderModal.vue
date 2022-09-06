@@ -1,14 +1,14 @@
 <template>
   <b-loading
     :is-full-page="isFullPage"
-    v-model="isLoading"
-    :can-cancel="true"
+    :active="isLoading"
+    :can-cancel="false"
   ></b-loading>
 </template>
 
 <script>
 export default {
-  name: "LoaderModal",
+  name: 'LoaderModal',
   /**
    * show loading animation
    */

@@ -1,5 +1,5 @@
 <template>
-  <Wrapper>
+  <BodyWrapper>
     <AtomHeading class="mb-5 has-text-centered">
       Fill the form to Register your Parking Spot
     </AtomHeading>
@@ -100,27 +100,27 @@
         </template>
       </b-steps>
     </div>
-  </Wrapper>
+  </BodyWrapper>
 </template>
 
 <script>
-import OrganismContactForm from "../organisms/OrganismContactForm.vue";
-import OrganismKycForm from "../organisms/OrganismKycForm.vue";
-import OrganismAdditionalInfo from "../organisms/OrganismAdditionalInfo.vue";
-import OrganismAddressForm from "../organisms/OrganismAddressForm.vue";
-import Wrapper from "../extras/Wrapper.vue";
-import AtomHeading from "../atoms/AtomHeading.vue";
+import OrganismContactForm from '../organisms/OrganismContactForm.vue';
+import OrganismKycForm from '../organisms/OrganismKycForm.vue';
+import OrganismAdditionalInfo from '../organisms/OrganismAdditionalInfo.vue';
+import OrganismAddressForm from '../organisms/OrganismAddressForm.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import AtomHeading from '../atoms/AtomHeading.vue';
 export default {
-  name: "TemplateSOPortal",
+  name: 'TemplateSOPortal',
   components: {
     OrganismContactForm,
     OrganismKycForm,
     OrganismAdditionalInfo,
     OrganismAddressForm,
     AtomHeading,
-    Wrapper,
+    BodyWrapper,
   },
-  emits: ["finalSubmit"],
+  emits: ['finalSubmit'],
   data() {
     return {
       activeStep: 0,
@@ -132,17 +132,17 @@ export default {
       KYCFormStep: false,
       AddInfoFormStep: false,
 
-      prevIcon: "chevron-left",
-      nextIcon: "chevron-right",
-      labelPosition: "bottom",
-      mobileMode: "minimalist",
+      prevIcon: 'chevron-left',
+      nextIcon: 'chevron-right',
+      labelPosition: 'bottom',
+      mobileMode: 'minimalist',
 
       isStepsClickable: false,
 
-      headingLevel: "h3",
+      headingLevel: 'h3',
 
       nextEnable: null,
-      nextText: "Next",
+      nextText: 'Next',
       btnStack: [false, false, false, false],
       top: 0,
 
@@ -161,7 +161,7 @@ export default {
     btnPrev(previous) {
       this.top--;
       this.btnStack.splice(this.top, 1, false);
-      this.nextText = "Next";
+      this.nextText = 'Next';
       previous.action();
     },
     contactFormValidate(val) {
@@ -182,7 +182,7 @@ export default {
       this.btnStack.splice(this.top, 1, val);
       if (this.btnStack[this.top]) {
         this.nextEnable.action();
-        this.nextText = "Finish";
+        this.nextText = 'Finish';
         this.top++;
       }
     },
@@ -190,7 +190,7 @@ export default {
       this.btnStack.splice(this.top, 1, val);
       if (this.btnStack[this.top]) {
         this.nextEnable.action();
-        this.$emit("finalSubmit");
+        this.$emit('finalSubmit');
       }
     },
   },
@@ -201,15 +201,18 @@ export default {
 .cmargin {
   margin: 0 15rem;
 }
+
 .footer-buttons {
   display: flex;
   justify-content: space-between;
 }
+
 @media only screen and (max-width: 800px) {
   .cmargin {
     margin: 0 5rem;
   }
 }
+
 @media only screen and (max-width: 600px) {
   .cmargin {
     margin: 0;

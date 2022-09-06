@@ -1,32 +1,22 @@
 <template>
-  <Wrapper>
+  <BodyWrapper>
     <MoleculePaymentCard
       v-if="!this.status"
       :bookingDetails="bookingDetails"
       :paymentMode="paymentMode"
     >
     </MoleculePaymentCard>
-    <MoleculePaymentStatusCard
-      v-if="this.status"
-      :error="error"
-      :success="success"
-      :pending="pending"
-      :displayMsg="displayMsg"
-      :displayMsgContent="displayMsgContent"
-    ></MoleculePaymentStatusCard>
-  </Wrapper>
+  </BodyWrapper>
 </template>
 
 <script>
-import Wrapper from "../extras/Wrapper.vue";
-import MoleculePaymentCard from "../molecules/MoleculePaymentCard.vue";
-import MoleculePaymentStatusCard from "../molecules/MoleculePaymentStatusCard.vue";
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import MoleculePaymentCard from '../molecules/MoleculePaymentCard.vue';
 export default {
-  name: "TemplatePaymentGateway",
+  name: 'TemplatePaymentGateway',
   components: {
-    Wrapper,
+    BodyWrapper,
     MoleculePaymentCard,
-    MoleculePaymentStatusCard,
   },
   props: {
     bookingDetails: {
@@ -36,13 +26,6 @@ export default {
       type: Object,
     },
     status: Boolean,
-    error: Boolean,
-    success: Boolean,
-    pending: Boolean,
-    displayMsg: Boolean,
-    displayMsgContent: String,
   },
 };
 </script>
-
-<style></style>

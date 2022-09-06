@@ -1,20 +1,29 @@
 <template>
-  <TemplateThankYou @homeBtn="homeBtn"></TemplateThankYou>
+  <TemplateThankYou @homeBtn="homeBtn" :msg="msg"></TemplateThankYou>
 </template>
 
 <script>
-import TemplateThankYou from "../components/templates/TemplateThankYou.vue";
+import TemplateThankYou from '../components/templates/TemplateThankYou.vue';
 export default {
-  name: "PageThankYou",
+  name: 'PageThankYou',
   components: {
     TemplateThankYou,
   },
   data() {
-    return {};
+    return {
+      msg: '',
+    };
+  },
+  mounted() {
+    this.getMsg();
   },
   methods: {
     homeBtn() {
-      this.$router.push({ name: "Home" });
+      this.$router.push({ name: 'Home' });
+    },
+
+    getMsg() {
+      this.msg = this.$route.params.msg;
     },
   },
 };

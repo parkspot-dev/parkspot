@@ -2,9 +2,9 @@
   <TemplateTerms></TemplateTerms>
 </template>
 <script>
-import TemplateTerms from "../components/templates/TemplateTerms.vue";
+import TemplateTerms from '../components/templates/TemplateTerms.vue';
 export default {
-  name: "PageTerms",
+  name: 'PageTerms',
   components: {
     TemplateTerms,
   },

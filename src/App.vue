@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import TemplateFooter from "./components/templates/TemplateFooter.vue";
-import Navbar from "./components/extras/Navbar.vue";
+import TemplateFooter from './components/templates/TemplateFooter.vue';
+import Navbar from './components/extras/NavbarBody.vue';
 export default {
   components: {
     TemplateFooter,
@@ -20,16 +20,19 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Rubik:wght@400;500;600;700&display=swap");
-@import "./assets/styles/variables.css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Rubik:wght@400;500;600;700&display=swap');
+@import url('./assets/styles/variables.css');
+
 #app {
-  font-family: "Poppins", sans-serif;
   color: #555;
+  font-family: 'Poppins', sans-serif;
   font-weight: 400;
 }
+
 .body-container {
-  margin-top: 15px;
+  margin-top: 10px;
 }
+
 @media only screen and (max-width: 1024px) {
   .body-container {
     margin-top: 2px;

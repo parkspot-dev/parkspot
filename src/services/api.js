@@ -1,14 +1,22 @@
-import axios from "axios";
+import axios from 'axios';
 
 // BaseApiService create http client with basic configurations and error handling.
+/** Class representing a BaseApiService. */
 class BaseApiService {
+  /**
+   * Create a BaseApiService.
+   *  @param { string } domain - .
+   *  @param { object } commonHeaders - .
+   *  @param { number } timeout - .
+   *  @param { boolean } withCredentials - .
+   */
   constructor(
     domain,
     commonHeaders = {},
     timeout = 1000,
-    withCredentials = false
+    withCredentials = false,
   ) {
-    if (!domain) throw new Error("Domain is not provided");
+    if (!domain) throw new Error('Domain is not provided');
     this.domain = domain;
     this.client = axios.create({
       headers: {
@@ -20,16 +28,19 @@ class BaseApiService {
     });
     this.client.interceptors.response.use(
       this.responseInterceptor,
-      this.errorInterceptor
+      this.errorInterceptor,
     );
   }
-  // interceptor to catch network/server errors.
+  /**
+   * interceptor to catch network/server errors.
+   * @param { any } error - .
+   */
   errorInterceptor(error) {
     // check if it's a server error
     if (!error.response) {
-      if (error.code == "ECONNABORTED") {
+      if (error.code == 'ECONNABORTED') {
         // timeout
-        alert("Something went wrong. Please try again.");
+        alert('Something went wrong. Please try again.');
       }
     }
     throw error;
@@ -38,19 +49,27 @@ class BaseApiService {
   // Interceptor for responses
   responseInterceptor = (response) => response;
 
-  // handleError is used to log http errors.
+  /**
+   * handleError is used to log http errors.
+   * @param { any } error - .
+   */
   handleErrors(error) {
     if (!error.request) {
-      console.log({ "Http server/network error": error });
+      console.log({ 'Http server/network error': error });
       return;
     }
     console.log({
-      message: "Errors in http call",
+      message: 'Errors in http call',
       url: error.request.responseURL,
       err: error,
     });
   }
 
+  /**
+   * handle post request api call.
+   * @param { any } resource - url .
+   * @param { object } payload -  .
+   */
   async post(resource, payload = {}) {
     try {
       const response = await this.client.post(resource, payload);
@@ -60,6 +79,11 @@ class BaseApiService {
     }
   }
 
+  /**
+   * handle patch request api call.
+   * @param { any } resource - url .
+   * @param { object } payload -  .
+   */
   async patch(resource, payload = {}) {
     try {
       const response = await this.client.patch(resource, payload);
@@ -69,6 +93,10 @@ class BaseApiService {
     }
   }
 
+  /**
+   * handle get request api call.
+   * @param { any } resource - url .
+   */
   async get(resource) {
     try {
       const response = await this.client.get(resource);
@@ -83,18 +111,26 @@ class BaseApiService {
 }
 
 // MayaApiService inherits BaseApiService to create http clients for Maya services.
+/** Class representing a MayaApiService extends BaseApiService. */
 class MayaApiService extends BaseApiService {
+  /**
+   * Create a MayaApiService.
+   *  @param { function } flavour - getFlavour function.
+   */
   constructor(flavour) {
-    let mayaDomain = "https://maya.parkspot.in"; //TODO: we can pick from .env files.
-    let baseHeaderMap = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Flavour: flavour,
+    const mayaDomain = 'https://maya.parkspot.in'; //   TODO: we can pick from .env files.
+    const baseHeaderMap = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Flavour': flavour,
     };
     super(mayaDomain, baseHeaderMap, 5000, true);
   }
 
-  // errorInterceptor is used to handle status codes in accordance with Maya's contract.
+  /**
+   * errorInterceptor is used to handle status codes in accordance with Maya's contract.
+   * @param { any } error -  .
+   */
   errorInterceptor(error) {
     super.errorInterceptor(error);
     if (!error.response) {
@@ -103,43 +139,52 @@ class MayaApiService extends BaseApiService {
     }
     switch (error.response.status) {
       case 401: // authentication error, logout the user
-        alert("Please login and try again.");
+        alert('Please login and try again.');
         break;
 
       default:
         alert(
-          "Something went wrong.\nNo worries, our team is always there to help. \nPlease reach out to us at +91 80929 96057."
+          'Something went wrong.\nNo worries, our team is always there to help. \nPlease reach out to us at +91 80929 96057.',
         );
         console.error(
-          "maya interceptor default",
+          'maya interceptor default',
           error.response.status,
-          error.message
+          error.message,
         );
     }
     throw error;
   }
 }
 
+/** Class representing a MapBoxApiService extends BaseApiService */
 class MapBoxApiService extends BaseApiService {
+  /**
+   * Create a MapBoxApiService.
+   */
   constructor() {
-    let mapBoxDomain = "https://api.mapbox.com"; //TODO: we can pick from .env files.
-    let baseHeaderMap = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+    const mapBoxDomain = 'https://api.mapbox.com'; //   TODO: we can pick from .env files.
+    const baseHeaderMap = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // 'Flavour': flavour,
     };
     super(mapBoxDomain, baseHeaderMap, 5000, false);
   }
 }
 
+/**
+ * get the device mobile or desktop
+ * @return {string} mweb or dweb.
+ */
 function getFlavour() {
   const details = navigator.userAgent;
   const regexp = /android|iphone|kindle|ipad/i;
-  let isMobileDevice = regexp.test(details);
+  const isMobileDevice = regexp.test(details);
 
   if (isMobileDevice) {
-    return "mweb";
+    return 'mweb';
   } else {
-    return "dweb";
+    return 'dweb';
   }
 }
 

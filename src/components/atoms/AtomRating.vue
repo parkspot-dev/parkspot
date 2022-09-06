@@ -1,6 +1,6 @@
 <template>
   <b-rate
-    v-model="rate"
+    :value="rate"
     :icon-pack="pack"
     :icon="icon"
     :max="max"
@@ -13,7 +13,7 @@
 </template>
 <script>
 export default {
-  name: "AtomRating",
+  name: 'AtomRating',
   props: {
     rate: {
       type: Number,
@@ -24,14 +24,14 @@ export default {
      */
     size: {
       type: String,
-      default: "is-small",
+      default: 'is-small',
     },
   },
   data() {
     return {
       max: 5,
-      pack: "mdi",
-      icon: "star",
+      pack: 'mdi',
+      icon: 'star',
       isSpaced: false,
       isDisabled: true,
       locale: undefined, // Browser locale

@@ -6,23 +6,23 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import TemplateBlogPost from "../components/templates/TemplateBlogPost.vue";
-import PageContactUs from "./PageContactUs.vue";
+import { mapActions, mapGetters } from 'vuex';
+import TemplateBlogPost from '../components/templates/TemplateBlogPost.vue';
+import PageContactUs from './PageContactUs.vue';
 export default {
-  name: "PageBlogPost",
+  name: 'PageBlogPost',
   components: {
     TemplateBlogPost,
     PageContactUs,
   },
   data() {
     return {
-      content: "",
+      content: '',
     };
   },
   computed: {
     ...mapGetters({
-      getBlogById: "blog/getBlogById",
+      getBlogById: 'blog/getBlogById',
     }),
     blog() {
       return this.getBlogById(this.$route.params.id);
@@ -30,13 +30,13 @@ export default {
   },
   mounted() {
     this.getContentById(this.$route.params.id).then(
-      (res) => (this.content = res)
+      (res) => (this.content = res),
     );
   },
   methods: {
     ...mapActions({
-      getContentById: "blog/getContentById",
-      onlyContact: "user/onlyContact",
+      getContentById: 'blog/getContentById',
+      onlyContact: 'user/onlyContact',
     }),
     async fireContact() {
       try {
@@ -45,22 +45,22 @@ export default {
         await this.onlyContact();
 
         this.$buefy.toast.open({
-          message: "ParkSpot registered successfully!",
-          type: "is-success",
+          message: 'ParkSpot registered successfully!',
+          type: 'is-success',
           duration: 2000,
         });
 
-        this.$router.push({ name: "thankYou" });
+        this.$router.push({ name: 'thankYou' });
       } catch (error) {
         console.error({ error });
 
         this.$buefy.toast.open({
           message: `Something went wrong!`,
-          type: "is-danger",
+          type: 'is-danger',
           duration: 2000,
         });
 
-        this.$router.push({ name: "Home" });
+        this.$router.push({ name: 'Home' });
       }
       this.isLoading = false;
     },

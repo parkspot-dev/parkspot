@@ -1,63 +1,63 @@
-import Home from "../views/Home.vue";
-import PageAbout from "@/views/PageAbout.vue";
-import { firebase, getDatabase, ref, get, child } from "../firebase";
+import Home from '../views/PageHome.vue';
+import PageAbout from '@/views/PageAbout.vue';
+import { firebase, getDatabase, ref, get, child } from '../firebase';
 
 const guardThisRoute = async (to, from, next) => {
   const db = getDatabase(firebase);
   const dbref = ref(db);
   const res = await get(child(dbref, `portal-user`));
   const credentials = await res.val();
-  let userNameLocal = localStorage.getItem("searchPortalUser");
-  let userNamePwdLocal = localStorage.getItem("searchPortalUserPwd");
+  let userNameLocal = localStorage.getItem('searchPortalUser');
+  let userNamePwdLocal = localStorage.getItem('searchPortalUserPwd');
   if (
     userNameLocal === credentials.userName &&
     userNamePwdLocal === credentials.password
   ) {
     next();
   } else {
-    alert("Invalid username/password");
-    userNameLocal = prompt("Enter User Name:");
-    userNamePwdLocal = prompt("Enter Password:");
-    localStorage.setItem("searchPortalUser", userNameLocal);
-    localStorage.setItem("searchPortalUserPwd", userNamePwdLocal);
-    next("/search-portal");
+    alert('Invalid username/password');
+    userNameLocal = prompt('Enter User Name:');
+    userNamePwdLocal = prompt('Enter Password:');
+    localStorage.setItem('searchPortalUser', userNameLocal);
+    localStorage.setItem('searchPortalUserPwd', userNamePwdLocal);
+    next('/search-portal');
   }
 };
 
 export const pages = {
-  HOME: "/",
-  FAQ: "/faq",
-  ABOUT: "/about",
-  FEATURES: "/features",
-  CONTACT: "/contact",
-  SRP: "/srp",
-  VOPORTAL: "/get-parking-spot",
-  SOPORTAL: "/register-parking-spot",
-  TERMS: "/terms-and-conditions",
-  BLOG: "/blog",
-  MAINBLOG: "/blog/:id",
-  INVENTORY: "/search-portal",
-  PAYMENTGATEWAY: "/payment/*",
-  NEARBY: "/bangalore/parking-near-*",
-  TEMP: "/temp",
-  THANK_YOU: "/thank-you",
-  ERROR: "/error",
+  HOME: '/',
+  FAQ: '/faq',
+  ABOUT: '/about',
+  FEATURES: '/features',
+  CONTACT: '/contact',
+  SRP: '/srp',
+  VOPORTAL: '/get-parking-spot',
+  SOPORTAL: '/register-parking-spot',
+  TERMS: '/terms-and-conditions',
+  BLOG: '/blog',
+  MAINBLOG: '/blog/:id',
+  INVENTORY: '/search-portal',
+  PAYMENTGATEWAY: '/payment/*',
+  NEARBY: '/bangalore/parking-near-*',
+  TEMP: '/temp',
+  THANK_YOU: '/thank-you',
+  ERROR: '/error',
 };
 
 export const routes = [
   {
     path: pages.HOME,
-    name: "Home",
+    name: 'Home',
     component: Home,
     meta: {
       title:
-        "Find and Book Parking Spaces Nearby | Bangalore Delhi Mumbai Pune Bengaluru | Parkspot.in",
+        'Find and Book Parking Spaces Nearby | Bangalore Delhi Mumbai Pune Bengaluru | Parkspot.in',
     },
   },
   {
     path: pages.FAQ,
-    name: "Faq",
-    component: () => import("@/views/PageFaq.vue"),
+    name: 'Faq',
+    component: () => import('@/views/PageFaq.vue'),
     meta: {
       title: "FAQ's - Get Your All Parking Related Queries be Answered...",
     },
@@ -65,129 +65,129 @@ export const routes = [
 
   {
     path: pages.ABOUT,
-    name: "t-about",
+    name: 't-about',
     component: PageAbout,
     meta: {
-      title: "ParkSpot | About -  Get Parking Space , Rent Empty Space",
+      title: 'ParkSpot | About -  Get Parking Space , Rent Empty Space',
     },
   },
   {
     path: pages.FEATURES,
-    name: "features",
-    component: () => import("@/views/features.vue"),
+    name: 'features',
+    component: () => import('@/views/PageFeature.vue'),
     meta: {
-      title: "ParkSpot | Features",
+      title: 'ParkSpot | Features',
     },
   },
   {
     path: pages.CONTACT,
-    name: "contactUs",
-    component: () => import("@/views/PageContactUs"),
+    name: 'contactUs',
+    component: () => import('@/views/PageContactUs'),
     meta: {
-      title: "ParkSpot | Contact Us",
+      title: 'ParkSpot | Contact Us',
     },
   },
   {
     path: pages.SRP,
-    name: "srp",
-    component: () => import("@/views/PageSrp.vue"),
+    name: 'srp',
+    component: () => import('@/views/PageSrp.vue'),
     meta: {
-      title: "ParkSpot | Search - ",
+      title: 'ParkSpot | Search  ',
     },
   },
   {
     path: pages.VOPORTAL,
-    name: "VOPortal",
-    component: () => import("@/views/PageVOPortal.vue"),
+    name: 'VOPortal',
+    component: () => import('@/views/PageVOPortal.vue'),
     meta: {
-      title: "ParkSpot | Get Parking Spot",
+      title: 'ParkSpot | Get Parking Spot',
     },
   },
   {
     path: pages.SOPORTAL,
-    name: "SOPortal",
-    component: () => import("@/views/PageSOPortal.vue"),
+    name: 'SOPortal',
+    component: () => import('@/views/PageSOPortal.vue'),
     meta: {
-      title: "ParkSpot | Register Parking Spot",
+      title: 'ParkSpot | Register Parking Spot',
     },
   },
   {
-    path: "/terms-and-conditions",
-    name: "Terms",
-    component: () => import("@/views/PageTerms.vue"),
+    path: '/terms-and-conditions',
+    name: 'Terms',
+    component: () => import('@/views/PageTerms.vue'),
     meta: {
-      title: "ParkSpot | Terms & Conditions",
+      title: 'ParkSpot | Terms & Conditions',
     },
   },
   {
     path: pages.BLOG,
-    name: "blog",
-    component: () => import("@/views/PageBlogHome.vue"),
+    name: 'blog',
+    component: () => import('@/views/PageBlogHome.vue'),
     meta: {
-      title: "ParkSpot | Blogs",
+      title: 'ParkSpot | Blogs',
     },
   },
   {
     path: pages.MAINBLOG,
-    name: "mainBlog",
-    component: () => import("@/views/PageBlogPost.vue"),
+    name: 'mainBlog',
+    component: () => import('@/views/PageBlogPost.vue'),
     meta: {
-      title: "ParkSpot | Blogs - ",
+      title: 'ParkSpot | Blogs - ',
     },
   },
   {
     path: pages.INVENTORY,
-    name: "Inventory",
-    component: () => import("@/views/PageInventory.vue"),
+    name: 'Inventory',
+    component: () => import('@/views/PageInventory.vue'),
     meta: {
-      title: "ParkSpot | Search Portal",
+      title: 'ParkSpot | Search Portal',
     },
     beforeEnter: guardThisRoute,
   },
   {
     path: pages.PAYMENTGATEWAY,
-    name: "paymentGateway",
-    component: () => import("@/views/PagePaymentGateway.vue"),
+    name: 'paymentGateway',
+    component: () => import('@/views/PagePaymentGateway.vue'),
     meta: {
-      title: "Payment | Parkspot.in ",
+      title: 'Payment | Parkspot.in ',
     },
   },
   // ! it will take " -mara/xyx"
   {
     path: pages.NEARBY,
-    name: "discover",
-    component: () => import("@/views/PageNearBy.vue"),
+    name: 'discover',
+    component: () => import('@/views/PageNearBy.vue'),
     meta: {
-      title: "Parking Near ",
+      title: 'Parking Near ',
     },
   },
   {
     path: pages.THANK_YOU,
-    name: "thankYou",
-    component: () => import("@/views/PageThankYou.vue"),
+    name: 'thankYou',
+    component: () => import('@/views/PageThankYou.vue'),
     meta: {
-      title: "Parking Near ",
+      title: 'Parking Near ',
     },
   },
   {
     path: pages.ERROR,
-    name: "error",
-    component: () => import("@/views/PageError.vue"),
+    name: 'error',
+    component: () => import('@/views/PageError.vue'),
     meta: {
-      title: "Parking Near ",
+      title: 'Parking Near ',
     },
   },
   // Todo Delete below code before deployment
   {
     path: pages.TEMP,
-    name: "temp",
-    component: () => import("@/views/temp.vue"),
+    name: 'temp',
+    component: () => import('@/views/PageTemp.vue'),
     meta: {
-      title: "Parking Near ",
+      title: 'Parking Near ',
     },
   },
   {
-    path: "*",
+    path: '*',
     component: Home,
   },
 ];

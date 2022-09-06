@@ -41,14 +41,14 @@
 </template>
 
 <script>
-import { ValidationObserver } from "vee-validate";
-import MoleculeCheckbox from "../molecules/MoleculeCheckbox.vue";
-import MoleculeSelectInput from "../molecules/MoleculeSelectInput.vue";
-import MoleculeNameInput from "../molecules/MoleculeNameInput.vue";
-import { ADD_INFO, PREFERENCE } from "../../constant/constant";
-import { mapMutations } from "vuex";
+import { ValidationObserver } from 'vee-validate';
+import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
+import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
+import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
+import { ADD_INFO, PREFERENCE } from '../../constant/constant';
+import { mapMutations } from 'vuex';
 export default {
-  name: "OrganismPreferenceForm",
+  name: 'OrganismPreferenceForm',
   components: {
     ValidationObserver,
     MoleculeCheckbox,
@@ -61,7 +61,7 @@ export default {
       default: false,
     },
   },
-  emits: ["formValidate"],
+  emits: ['formValidate'],
   data() {
     return {
       ADD_INFO,
@@ -70,15 +70,15 @@ export default {
       minDurData: ADD_INFO.MINIMUM_DURATION_DATA,
       termData: ADD_INFO.TERMS_DATA,
       model: {
-        carModel: "",
-        minDur: "",
-        terms: "",
+        carModel: '',
+        minDur: '',
+        terms: '',
       },
       validation: {
-        carModel: "required",
-        minDur: "required",
-        terms: "required",
-        parkingType: "required",
+        carModel: 'required',
+        minDur: 'required',
+        terms: 'required',
+        parkingType: 'required',
       },
     };
   },
@@ -90,8 +90,10 @@ export default {
           .then((el) => {
             if (el) {
               this.submit();
+              this.$emit('formValidate', el);
+            } else {
+              this.$emit('formValidate', el);
             }
-            this.$emit("formValidate", el);
           })
           .catch((er) => {
             console.log(er);
@@ -101,7 +103,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updatePreference: "user/update-preference",
+      updatePreference: 'user/update-preference',
     }),
     submit() {
       this.updatePreference(this.model);
@@ -120,8 +122,8 @@ export default {
 </script>
 <style scoped>
 .custom-terms {
+  left: 111px;
   position: absolute;
   top: -2px;
-  left: 111px;
 }
 </style>

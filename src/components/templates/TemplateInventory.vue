@@ -49,64 +49,87 @@
 
       <b-table-column field="contact" label="Contact Details" v-slot="props">
         <p>
-          Name: <strong>{{ props.row.Name }}</strong>
+          Name:
+          <strong>{{ props.row.Name }}</strong>
         </p>
         <p>
-          Mobile: <strong>{{ props.row.Mobile }}</strong>
+          Mobile:
+          <strong>{{ props.row.Mobile }}</strong>
         </p>
         <p>
-          Email: <strong>{{ props.row.EmailID }}</strong>
+          Email:
+          <strong>{{ props.row.EmailID }}</strong>
         </p>
         <p>
           Landmark :
           <strong>{{ props.row.Landmark }}</strong>
         </p>
-        <p>City: {{ props.row.City }}</p>
-        <p>Duration : {{ props.row.Duration }}</p>
-        <p>Car Model: {{ props.row.CarModel }}</p>
+        <p>
+          City:
+          {{ props.row.City }}
+        </p>
+        <p>
+          Duration :
+          {{ props.row.Duration }}
+        </p>
+        <p>
+          Car Model:
+          {{ props.row.CarModel }}
+        </p>
       </b-table-column>
 
       <b-table-column field="comments" label="Comments" v-slot="props">
         <AtomTextarea
           :value="props.row.Comments"
-          class="custom-colComment"
+          class="comment-width"
           @changed="onCommentUpdate(props.row, ...arguments)"
         ></AtomTextarea>
       </b-table-column>
 
       <b-table-column
-        field="status_nextCall"
+        field="NextCall"
         label="Status/Next Call"
         width="100px"
-        v-slot="props"
+        sortable
+        searchable
       >
-        <span class="tag is-warning">
-          {{ statusList[props.row.Status].name }}
-        </span>
-        <AtomSelectInput
-          :list="statusList"
-          class="custom-columnWidth"
-          @changed="onStatusUpdate(props.row, ...arguments)"
-        >
-        </AtomSelectInput>
-        <span
-          class="tag is-warning"
-          :class="{
-            'is-danger': getStatus(props.row.NextCall),
-          }"
-        >
-          <span>
-            {{ getStatus(props.row.NextCall) ? "delayed " : "upcoming " }}
+        <template #searchable="props">
+          <AtomSelectInput
+            :list="statusList"
+            class="column-width"
+            v-model="props.filters['Status']"
+          >
+          </AtomSelectInput>
+        </template>
+        <template v-slot="props">
+          <span class="tag is-warning">
+            {{ statusList[props.row.Status].name }}
           </span>
-          <strong>
-            {{ new Date(props.row.NextCall).toLocaleDateString() }}
-          </strong>
-        </span>
-        <AtomDatePicker
-          class="custom-columnWidth"
-          @changed="onDateUpdate(props.row, ...arguments)"
-        >
-        </AtomDatePicker>
+          <AtomSelectInput
+            :list="statusList"
+            class="column-width"
+            @changed="onStatusUpdate(props.row, ...arguments)"
+          >
+          </AtomSelectInput>
+          <span
+            class="tag is-warning"
+            :class="{
+              'is-danger': getStatus(props.row.NextCall),
+            }"
+          >
+            <span>
+              {{ getStatus(props.row.NextCall) ? 'delayed ' : 'upcoming ' }}
+            </span>
+            <strong>
+              {{ new Date(props.row.NextCall).toLocaleDateString() }}
+            </strong>
+          </span>
+          <AtomDatePicker
+            class="column-width"
+            @changed="onDateUpdate(props.row, ...arguments)"
+          >
+          </AtomDatePicker>
+        </template>
       </b-table-column>
 
       <b-table-column
@@ -122,9 +145,26 @@
       </b-table-column>
 
       <b-table-column field="lat_lng" label="Lat/Lng" v-slot="props">
-        {{
-          props.row.Latitude.toFixed(6) + "/" + props.row.Longitude.toFixed(6)
-        }}
+        <a
+          target="_blank"
+          @click="toSrp(props.row.Latitude, props.row.Longitude)"
+        >
+          {{
+            props.row.Latitude.toFixed(6) + '/' + props.row.Longitude.toFixed(6)
+          }}
+        </a>
+
+        <p>Lat :</p>
+        <AtomInput
+          :value="props.row.Latitude.toFixed(6)"
+          @changed="updateLat(props.row, ...arguments)"
+        ></AtomInput>
+
+        <p>Lng :</p>
+        <AtomInput
+          :value="props.row.Longitude.toFixed(6)"
+          @changed="updateLng(props.row, ...arguments)"
+        ></AtomInput>
       </b-table-column>
 
       <template #empty>
@@ -135,15 +175,17 @@
 </template>
 
 <script>
-import AtomTextarea from "../atoms/AtomTextarea.vue";
-import AtomSelectInput from "../atoms/AtomSelectInput.vue";
-import AtomDatePicker from "../atoms/AtomDatePicker.vue";
+import AtomTextarea from '../atoms/AtomTextarea.vue';
+import AtomSelectInput from '../atoms/AtomSelectInput.vue';
+import AtomDatePicker from '../atoms/AtomDatePicker.vue';
+import AtomInput from '../atoms/AtomInput.vue';
 export default {
-  name: "TemplateInventory",
+  name: 'TemplateInventory',
   components: {
     AtomTextarea,
     AtomSelectInput,
     AtomDatePicker,
+    AtomInput,
   },
   props: {
     lists: {
@@ -153,7 +195,7 @@ export default {
       type: Boolean,
     },
   },
-  emits: ["updateRequest"],
+  emits: ['updateRequest', 'toSrp'],
   data() {
     return {
       isEmpty: false,
@@ -165,25 +207,22 @@ export default {
       hasMobileCards: true,
 
       statusList: [
-        { id: 1, name: "StatusNotSet" },
-        { id: 2, name: "Registered" },
-        { id: 3, name: "Processing" },
-        { id: 4, name: "SpotSuggested" },
-        { id: 5, name: "SpotAccepted" },
-        { id: 6, name: "SpotDenied" },
-        { id: 7, name: "Archive" },
-      ],
-      priorityList: [
-        { id: 1, name: "Not Set" },
-        { id: 2, name: "Low" },
-        { id: 3, name: "Medium" },
-        { id: 4, name: "High" },
+        { id: 0, name: 'StatusNotSet' },
+        { id: 1, name: 'Registered' },
+        { id: 2, name: 'Processing' },
+        {
+          id: 3,
+          name: 'SpotSuggested',
+        },
+        { id: 4, name: 'SpotAccepted' },
+        { id: 5, name: 'SpotDenied' },
+        { id: 6, name: 'Archive' },
       ],
 
       model: {
-        comments: "",
-        status: "",
-        nextCall: "",
+        comments: '',
+        status: '',
+        nextCall: '',
       },
     };
   },
@@ -191,13 +230,14 @@ export default {
     getPriority(val) {
       switch (val) {
         case 1:
-          return "Low";
+          return 'Low';
         case 2:
-          return "Medium";
+          return 'Medium';
         case 3:
-          return "High";
+          return 'High';
       }
     },
+
     getStatus(val) {
       if (new Date().getTime() > new Date(val).getTime()) {
         return true;
@@ -205,17 +245,40 @@ export default {
         return false;
       }
     },
+
     onDateUpdate(spotData, date) {
-      spotData["NextCall"] = date.toJSON();
-      this.$emit("updateRequest", spotData);
+      spotData['NextCall'] = date.toJSON();
+      this.$emit('updateRequest', spotData);
     },
+
     onCommentUpdate(spotData, comments) {
-      spotData["Comments"] = comments;
-      this.$emit("updateRequest", spotData);
+      if (spotData['Comments'] !== comments) {
+        spotData['Comments'] = comments;
+        this.$emit('updateRequest', spotData);
+      }
     },
+
     onStatusUpdate(spotData, status) {
-      spotData["Status"] = status - 1;
-      this.$emit("updateRequest", spotData);
+      spotData['Status'] = status;
+      this.$emit('updateRequest', spotData);
+    },
+
+    updateLat(spotData, lat) {
+      if (spotData['Latitude'].toString() !== parseFloat(lat).toString()) {
+        spotData['Latitude'] = parseFloat(lat);
+        this.$emit('updateRequest', spotData);
+      }
+    },
+
+    updateLng(spotData, lng) {
+      if (spotData['Longitude'].toString() !== parseFloat(lng).toString()) {
+        spotData['Longitude'] = parseFloat(lng);
+        this.$emit('updateRequest', spotData);
+      }
+    },
+
+    toSrp(lat, lng) {
+      this.$emit('toSrp', lat, lng);
     },
   },
 };
@@ -225,23 +288,27 @@ export default {
 .custom-wrap {
   padding: 1rem;
 }
-.custom-columnWidth {
+
+.column-width {
   width: 200px;
 }
-.custom-colComment {
+
+.comment-width {
   width: 400px;
 }
 
 .is-high {
-  background-color: red;
-  color: white;
+  background-color: #f00;
+  color: #fff;
 }
+
 .is-medium {
-  background-color: rgb(233, 221, 161);
-  color: white;
+  background-color: #fdda0d;
+  color: #fff;
 }
+
 .is-low {
   background-color: var(--primary-color);
-  color: white;
+  color: #fff;
 }
 </style>

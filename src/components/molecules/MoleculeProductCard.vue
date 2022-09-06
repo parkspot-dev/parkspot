@@ -7,9 +7,6 @@
           :src="items.image"
           :ratio="'5by4'"
         ></AtomImage>
-        <!-- <b-tag type="is-danger" rounded style="position: absolute; top: 0">
-          <b>50% OFF</b>
-        </b-tag> -->
       </div>
       <div class="custom-content-wrapper">
         <div class="custom-content">
@@ -36,10 +33,10 @@
 </template>
 
 <script>
-import AtomImage from "../atoms/AtomImage.vue";
-import AtomIcon from "../atoms/AtomIcon.vue";
+import AtomImage from '../atoms/AtomImage.vue';
+import AtomIcon from '../atoms/AtomIcon.vue';
 export default {
-  name: "MoleculeProductCard",
+  name: 'MoleculeProductCard',
   components: {
     AtomImage,
     AtomIcon,
@@ -50,13 +47,13 @@ export default {
       required: true,
     },
   },
-  emits: ["arrowBtn"],
+  emits: ['arrowBtn'],
   data() {
     return {};
   },
   methods: {
     onArrowBtn() {
-      this.$emit("arrowBtn");
+      this.$emit('arrowBtn');
     },
   },
 };
@@ -66,22 +63,25 @@ export default {
 .card-wrapper {
   height: 450px;
 }
+
 .custom-content-wrapper {
+  background: #fff;
+  border-radius: var(--border-default);
+  box-shadow: 0 0 15px #000;
   display: block;
+  left: 50%;
+  padding: 1.5rem 2rem;
   position: absolute;
   top: 100%;
-  left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
-  padding: 1.5rem 2rem;
   width: 80%;
-  border-radius: var(--border-default);
-  box-shadow: 0px 0px 15px black;
 }
+
 .custom-content {
   display: flex;
   gap: 2rem;
 }
+
 .content-text {
   margin-bottom: 0.25rem;
 }
@@ -89,17 +89,21 @@ export default {
 .content-text-title {
   font-weight: var(--bold-font);
 }
+
 .content-text-desc {
   font-size: 0.75rem;
 }
+
 .content-btn {
   align-self: end;
 }
+
 .btn-arrow {
   cursor: pointer;
 }
+
 .btn-arrow:hover {
-  cursor: pointer;
   color: var(--primary-color);
+  cursor: pointer;
 }
 </style>

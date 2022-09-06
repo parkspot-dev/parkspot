@@ -27,13 +27,13 @@
 </template>
 
 <script>
-import SearchInput from "../extras/SearchInput.vue";
-import MapContainer from "../extras/MapContainer.vue";
-import AtomParagraph from "../atoms/AtomParagraph.vue";
-import { ValidationProvider, ValidationObserver } from "vee-validate";
-import { mapGetters, mapMutations } from "vuex";
+import SearchInput from '../extras/SearchInput.vue';
+import MapContainer from '../extras/MapContainer.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
+import { mapGetters, mapMutations } from 'vuex';
 export default {
-  name: "OrganismAddressForm",
+  name: 'OrganismAddressForm',
   components: {
     SearchInput,
     MapContainer,
@@ -51,13 +51,13 @@ export default {
       default: 0,
     },
   },
-  emits: ["formValidate"],
+  emits: ['formValidate'],
   data() {
     return {};
   },
   computed: {
     ...mapGetters({
-      locDetails: "map/getLocDetails",
+      locDetails: 'map/getLocDetails',
     }),
   },
   watch: {
@@ -68,9 +68,9 @@ export default {
           .then((el) => {
             if (el) {
               this.submit();
-              this.$emit("formValidate", el);
+              this.$emit('formValidate', el);
             } else {
-              this.$emit("formValidate", el);
+              this.$emit('formValidate', el);
             }
           })
           .catch((er) => {
@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateLocationDetails: "user/update-location-details",
+      updateLocationDetails: 'user/update-location-details',
     }),
     submit() {
       this.updateLocationDetails(this.locDetails);

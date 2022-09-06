@@ -49,14 +49,14 @@
 </template>
 
 <script>
-import { ValidationObserver } from "vee-validate";
-import MoleculeCheckbox from "../molecules/MoleculeCheckbox.vue";
-import MoleculeSelectInput from "../molecules/MoleculeSelectInput.vue";
-import MoleculeNameInput from "../molecules/MoleculeNameInput.vue";
-import { ADD_INFO } from "../../constant/constant";
-import { mapMutations } from "vuex";
+import { ValidationObserver } from 'vee-validate';
+import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
+import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
+import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
+import { ADD_INFO } from '../../constant/constant';
+import { mapMutations } from 'vuex';
 export default {
-  name: "OrganismAdditionalInfo",
+  name: 'OrganismAdditionalInfo',
   components: {
     ValidationObserver,
     MoleculeCheckbox,
@@ -69,7 +69,7 @@ export default {
       default: false,
     },
   },
-  emits: ["formValidate"],
+  emits: ['formValidate'],
   data() {
     return {
       ADD_INFO,
@@ -78,18 +78,18 @@ export default {
       minDurData: ADD_INFO.MINIMUM_DURATION_DATA,
       termData: ADD_INFO.TERMS_DATA,
       model: {
-        amenities: "",
-        spot: "",
-        minDur: "",
-        rent: "",
-        terms: "",
+        amenities: '',
+        spot: '',
+        minDur: '',
+        rent: '',
+        terms: '',
       },
       validation: {
-        amenities: "required",
-        spot: "required",
-        minDur: "required",
-        rent: "required|integer",
-        terms: "required",
+        amenities: 'required',
+        spot: 'required',
+        minDur: 'required',
+        rent: 'required|integer',
+        terms: 'required',
       },
     };
   },
@@ -101,8 +101,10 @@ export default {
           .then((el) => {
             if (el) {
               this.submit();
+              this.$emit('formValidate', el);
+            } else {
+              this.$emit('formValidate', el);
             }
-            this.$emit("formValidate", el);
           })
           .catch((er) => {
             console.log(er);
@@ -112,7 +114,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateAddInfo: "user/update-additional-info",
+      updateAddInfo: 'user/update-additional-info',
     }),
     submit() {
       this.updateAddInfo(this.model);
@@ -134,8 +136,8 @@ export default {
 </script>
 <style scoped>
 .custom-terms {
+  left: 111px;
   position: absolute;
   top: -2px;
-  left: 111px;
 }
 </style>

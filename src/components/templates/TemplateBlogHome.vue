@@ -10,28 +10,29 @@
       </b-breadcrumb>
     </HeaderBanner>
 
-    <wrapper>
+    <BodyWrapper>
       <div class="grid-container">
         <MoleculeBlogCard
           :key="blog.id"
           v-for="blog in blogs"
           :blog="blog"
           @click.native="onBlogClick(blog.id)"
+          data-aos="zoom-in-up"
         ></MoleculeBlogCard>
       </div>
-    </wrapper>
+    </BodyWrapper>
   </div>
 </template>
 
 <script>
-import Wrapper from "../extras/Wrapper.vue";
-import AtomHeading from "../atoms/AtomHeading.vue";
-import HeaderBanner from "../extras/HeaderBanner.vue";
-import MoleculeBlogCard from "../molecules/MoleculeBlogCard.vue";
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import AtomHeading from '../atoms/AtomHeading.vue';
+import HeaderBanner from '../extras/HeaderBanner.vue';
+import MoleculeBlogCard from '../molecules/MoleculeBlogCard.vue';
 export default {
-  name: "TemplateBlogHome",
+  name: 'TemplateBlogHome',
   components: {
-    Wrapper,
+    BodyWrapper,
     AtomHeading,
     HeaderBanner,
     MoleculeBlogCard,
@@ -46,7 +47,7 @@ export default {
   },
   methods: {
     onBlogClick(data) {
-      this.$emit("onBlogClick", data);
+      this.$emit('onBlogClick', data);
     },
   },
 };
@@ -54,12 +55,13 @@ export default {
 
 <style scoped>
 .custom-title {
-  text-align: center;
   margin-bottom: 1rem;
+  text-align: center;
 }
+
 .grid-container {
   display: grid;
-  grid-template-columns: auto auto;
   gap: 2rem;
+  grid-template-columns: auto auto;
 }
 </style>

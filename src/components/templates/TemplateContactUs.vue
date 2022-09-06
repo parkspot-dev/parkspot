@@ -1,5 +1,5 @@
 <template>
-  <Wrapper>
+  <BodyWrapper>
     <div class="columns">
       <OrganismContactUs class="column is-half"></OrganismContactUs>
       <div class="column is-half" data-aos="slide-up">
@@ -13,23 +13,23 @@
         </div>
       </div>
     </div>
-  </Wrapper>
+  </BodyWrapper>
 </template>
 
 <script>
-import Wrapper from "../extras/Wrapper.vue";
-import OrganismContactUs from "../organisms/OrganismContactUs.vue";
-import OrganismContactForm from "../organisms/OrganismContactForm.vue";
-import AtomButton from "../atoms/AtomButton.vue";
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import OrganismContactUs from '../organisms/OrganismContactUs.vue';
+import OrganismContactForm from '../organisms/OrganismContactForm.vue';
+import AtomButton from '../atoms/AtomButton.vue';
 export default {
-  name: "TemplateContactUs",
+  name: 'TemplateContactUs',
   components: {
-    Wrapper,
+    BodyWrapper,
     OrganismContactUs,
     OrganismContactForm,
     AtomButton,
   },
-  emits: ["contactUs"],
+  emits: ['contactUs'],
   data() {
     return {
       formSubmitted: false,
@@ -41,8 +41,8 @@ export default {
     },
     contactFormValidate(flag) {
       if (flag) {
-        console.log("template contact us");
-        this.$emit("contactUs");
+        console.log('template contact us');
+        this.$emit('contactUs');
       }
       this.formSubmitted = false;
     },

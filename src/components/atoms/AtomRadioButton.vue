@@ -16,10 +16,10 @@
 
 <script>
 export default {
-  name: "AtomRadioButton",
+  name: 'AtomRadioButton',
   data() {
     return {
-      radio: "",
+      radio: '',
     };
   },
   props: {

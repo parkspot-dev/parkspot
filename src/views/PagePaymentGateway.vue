@@ -1,20 +1,19 @@
 <template>
-  <TemplatePaymentGateway
-    :bookingDetails="bookingDetails"
-    :paymentMode="paymentMode"
-    :status="status"
-    :error="error"
-    :success="success"
-    :pending="pending"
-    :displayMsg="displayMsg"
-    :displayMsgContent="displayMsgContent"
-  >
-  </TemplatePaymentGateway>
+  <div class="custom-bg">
+    <div class="bg-decor"></div>
+
+    <TemplatePaymentGateway
+      :bookingDetails="bookingDetails"
+      :paymentMode="paymentMode"
+      :status="status"
+    >
+    </TemplatePaymentGateway>
+  </div>
 </template>
 <script>
-import TemplatePaymentGateway from "../components/templates/TemplatePaymentGateway.vue";
+import TemplatePaymentGateway from '../components/templates/TemplatePaymentGateway.vue';
 export default {
-  name: "PagePaymentGateway",
+  name: 'PagePaymentGateway',
   components: {
     TemplatePaymentGateway,
   },
@@ -23,11 +22,6 @@ export default {
       bookingDetails: {},
       paymentMode: {},
       status: false,
-      error: false,
-      success: false,
-      pending: false,
-      displayMsg: false,
-      displayMsgContent: "",
     };
   },
   mounted() {
@@ -49,18 +43,28 @@ export default {
           `https://maya.parkspot.in/payment/validate?p=${p}&h=${h}`,
           {
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+              'flavour': 'this.flavour',
             },
-          }
+          },
         );
         if (!response.ok) {
           throw new Error(response);
         } else {
           const data = await response.json();
-          if (Object.prototype.hasOwnProperty.call(data, "ErrorCode")) {
+          if (Object.prototype.hasOwnProperty.call(data, 'ErrorCode')) {
             this.status = !this.status;
-            this.displayMsg = !this.displayMsg;
-            this.displayMsgContent = data.DisplayMsg;
+            if (data.ErrorCode === 5) {
+              this.$router.push({
+                name: 'thankYou',
+                params: { msg: data.DisplayMsg },
+              });
+            } else {
+              this.$router.push({
+                name: 'error',
+              });
+            }
           } else {
             this.bookingDetails = {
               name: data.BookingInfo.Name,
@@ -84,19 +88,31 @@ export default {
         `https://maya.parkspot.in/payment/status?order_id=${o}`,
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            'flavour': 'this.flavour',
           },
-        }
+        },
       );
       const data = await response.json();
-      if (data === "PAID") {
-        this.success = !this.success;
-      } else if (data === "ACTIVE") {
-        this.pending = !this.pending;
+      if (data === 'PAID') {
+        this.$router.push({
+          name: 'thankYou',
+          params: { msg: 'You have paid the amount.' },
+        });
+      } else if (data === 'ACTIVE') {
+        this.$router.push({
+          name: 'error',
+          params: { msg: 'Your order is still pending!' },
+        });
       } else {
-        this.error = !this.error;
+        this.$router.push({
+          name: 'error',
+        });
       }
     },
   },
 };
 </script>
+<style scoped>
+</style>

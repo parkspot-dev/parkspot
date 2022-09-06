@@ -1,14 +1,14 @@
 <template>
-  <Wrapper>
+  <BodyWrapper>
     <div class="custom-img-wrapper">
       <div class="custom-img">
         <AtomImage :src="img" :alt="imgName" :ratio="imgRatio"></AtomImage>
       </div>
     </div>
     <h1 class="custom-header">Thank You, enjoy!</h1>
-    <AtomParagraph :type="'p'" class="custom-para"
-      >We've registered the parkspot for you.</AtomParagraph
-    >
+    <AtomParagraph :type="'p'" class="custom-para">
+      {{ msg }}
+    </AtomParagraph>
     <div class="custom-button">
       <AtomButton @btnClick="homeBtn" :left="'arrow-left'">
         Back Home
@@ -17,33 +17,39 @@
     <AtomParagraph :type="'p'" class="custom-para"
       >If you have any issues. Call +91 80929 96057
     </AtomParagraph>
-  </Wrapper>
+  </BodyWrapper>
 </template>
 
 <script>
-import Wrapper from "../extras/Wrapper.vue";
-import AtomImage from "../atoms/AtomImage.vue";
-import AtomParagraph from "../atoms/AtomParagraph.vue";
-import AtomButton from "../atoms/AtomButton.vue";
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import AtomImage from '../atoms/AtomImage.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
+import AtomButton from '../atoms/AtomButton.vue';
 export default {
-  name: "TemplateThankYou",
+  name: 'TemplateThankYou',
   components: {
-    Wrapper,
+    BodyWrapper,
     AtomImage,
     AtomParagraph,
     AtomButton,
   },
-  emits: ["homeBtn"],
+  props: {
+    msg: {
+      type: String,
+      default: "We've registered the parkspot for you.",
+    },
+  },
+  emits: ['homeBtn'],
   data() {
     return {
-      img: require("@/assets/thankyou.svg"),
-      imgName: "Thank You",
-      imgRatio: "1by1",
+      img: require('@/assets/thankyou.svg'),
+      imgName: 'Thank You',
+      imgRatio: '1by1',
     };
   },
   methods: {
     homeBtn() {
-      this.$emit("homeBtn");
+      this.$emit('homeBtn');
     },
   },
 };
@@ -54,20 +60,24 @@ export default {
   font-weight: var(--semi-bold-font);
   text-align: center;
 }
+
 .custom-para {
   color: var(--grey-shade);
-  text-align: center;
   margin-bottom: 2rem;
-}
-.custom-button {
   text-align: center;
-  margin-bottom: 3rem;
 }
+
+.custom-button {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
 .custom-img-wrapper {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
 }
+
 .custom-img {
   width: 250px;
 }

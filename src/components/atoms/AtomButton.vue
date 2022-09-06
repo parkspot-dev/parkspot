@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: "AtomButton",
+  name: 'AtomButton',
   props: {
     /**
      * Type of Button
@@ -21,7 +21,7 @@ export default {
      */
     type: {
       type: String,
-      default: "is-warning",
+      default: 'is-warning',
     },
     /**
      * icons for the button
@@ -43,10 +43,10 @@ export default {
       default: false,
     },
   },
-  emits: ["btnClick"],
+  emits: ['btnClick'],
   methods: {
     onClick() {
-      this.$emit("btnClick");
+      this.$emit('btnClick');
     },
   },
 };

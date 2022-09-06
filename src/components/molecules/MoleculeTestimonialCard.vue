@@ -21,7 +21,9 @@
       </div>
 
       <div class="content">
-        {{ items.quote }}
+        <span class="content-text">
+          {{ items.quote }}
+        </span>
         <br />
         <div class="quote-bottom">
           <AtomRating class="rating" :rate="items.rate"></AtomRating>
@@ -33,11 +35,11 @@
 </template>
 
 <script>
-import AtomImage from "../atoms/AtomImage.vue";
-import AtomParagraph from "../atoms/AtomParagraph.vue";
-import AtomRating from "../atoms/AtomRating.vue";
+import AtomImage from '../atoms/AtomImage.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
+import AtomRating from '../atoms/AtomRating.vue';
 export default {
-  name: "MoleculeTestimonialCard",
+  name: 'MoleculeTestimonialCard',
   components: {
     AtomImage,
     AtomParagraph,
@@ -51,7 +53,7 @@ export default {
   },
   data() {
     return {
-      img: require("@/assets/quote.png"),
+      img: require('@/assets/quote.png'),
     };
   },
 };
@@ -61,22 +63,34 @@ export default {
 .quote {
   width: 64px;
 }
+
 .testimony {
   display: flex;
   gap: 1rem;
 }
+
 .testimony-right {
   align-self: center;
 }
+
 .testimony-name {
   font-weight: var(--semi-bold-font);
 }
+
 .quote-bottom {
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
 }
+
 .rating {
   margin: 0 !important;
 }
+
+/* .content-text {
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+} */
 </style>

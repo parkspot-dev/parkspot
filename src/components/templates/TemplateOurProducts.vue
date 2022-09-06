@@ -1,5 +1,5 @@
 <template>
-  <Wrapper data-aos="fade-out">
+  <BodyWrapper data-aos="fade-up">
     <AtomParagraph class="custom-subtitle">Types of Products</AtomParagraph>
     <AtomHeading class="custom-title" :level="'h2'">
       Our Parking Products
@@ -12,46 +12,46 @@
         ></MoleculeProductCard>
       </template>
     </b-carousel-list>
-  </Wrapper>
+  </BodyWrapper>
 </template>
 
 <script>
-import Wrapper from "../extras/Wrapper.vue";
-import MoleculeProductCard from "../molecules/MoleculeProductCard.vue";
-import AtomHeading from "../atoms/AtomHeading.vue";
-import AtomParagraph from "../atoms/AtomParagraph.vue";
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import MoleculeProductCard from '../molecules/MoleculeProductCard.vue';
+import AtomHeading from '../atoms/AtomHeading.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
 
 export default {
-  name: "TemplateOurProducts",
+  name: 'TemplateOurProducts',
   components: {
-    Wrapper,
+    BodyWrapper,
     MoleculeProductCard,
     AtomHeading,
     AtomParagraph,
   },
-  emits: ["arrowBtn"],
+  emits: ['arrowBtn'],
   data() {
     return {
       test: 0,
       items: [
         {
-          title: "ParkSpot for Owners",
-          image: require("@/assets/Parkspot-owners.jpg"),
+          title: 'ParkSpot for Owners',
+          image: require('@/assets/Parkspot-owners.jpg'),
           desc: `Want to monetize your idle parking spots?`,
         },
         {
-          title: "ParkSpot for Societies",
-          image: require("@/assets/Parkspot-societies.jpg"),
+          title: 'ParkSpot for Societies',
+          image: require('@/assets/Parkspot-societies.jpg'),
           desc: `Secure your society and enable seamless entry/exit for residents.`,
         },
         {
-          title: "ParkSpot for Corporates",
-          image: require("@/assets/Parkspot-corporates.jpg"),
+          title: 'ParkSpot for Corporates',
+          image: require('@/assets/Parkspot-corporates.jpg'),
           desc: `Give your employees the gift of easy parking.`,
         },
         {
-          title: "ParkSpot for Malls",
-          image: require("@/assets/Parkspot-malls.jpg"),
+          title: 'ParkSpot for Malls',
+          image: require('@/assets/Parkspot-malls.jpg'),
           desc: `Digitized parkspot for better monetization and seamless
                 customer experience.`,
         },
@@ -74,7 +74,7 @@ export default {
       this.test = value;
     },
     onArrowBtn() {
-      this.$emit("arrowBtn");
+      this.$emit('arrowBtn');
     },
   },
 };
@@ -82,12 +82,13 @@ export default {
 
 <style scoped>
 .custom-title {
-  text-align: center;
   margin-bottom: 4rem;
-}
-.custom-subtitle {
   text-align: center;
-  font-weight: var(--semi-bold-font);
+}
+
+.custom-subtitle {
   color: var(--secondary-color);
+  font-weight: var(--semi-bold-font);
+  text-align: center;
 }
 </style>

@@ -15,8 +15,8 @@
       </b-breadcrumb>
     </HeaderBanner>
 
-    <Wrapper>
-      <article class="article-wrapper">
+    <BodyWrapper>
+      <article class="article-wrapper" data-aos="fade-up">
         <header class="mb-6">
           <AtomHeading class="mb-2">
             {{ blog.title }}
@@ -46,24 +46,24 @@
         ></AtomImage>
         <section v-html="content"></section>
       </article>
-    </Wrapper>
+    </BodyWrapper>
   </div>
 </template>
 
 <script>
-import HeaderBanner from "../extras/HeaderBanner.vue";
-import AtomHeading from "../atoms/AtomHeading.vue";
-import Wrapper from "../extras/Wrapper.vue";
-import AtomParagraph from "../atoms/AtomParagraph.vue";
-import AtomImage from "../atoms/AtomImage.vue";
+import HeaderBanner from '../extras/HeaderBanner.vue';
+import AtomHeading from '../atoms/AtomHeading.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
+import AtomImage from '../atoms/AtomImage.vue';
 export default {
-  name: "TemplateBlogPost",
+  name: 'TemplateBlogPost',
   components: {
     HeaderBanner,
     AtomHeading,
     AtomParagraph,
     AtomImage,
-    Wrapper,
+    BodyWrapper,
   },
   props: {
     blog: {
@@ -80,30 +80,34 @@ export default {
 </script>
 <style scoped>
 .custom-title {
-  text-align: center;
   margin-bottom: 2rem;
+  text-align: center;
 }
 
 .article-wrapper {
-  max-width: 960px;
   margin: auto;
+  max-width: 960px;
 }
+
 .custom-author {
+  column-gap: 2rem;
   display: inline-grid;
   grid-template-columns: auto auto auto;
   grid-template-rows: 1fr 1fr;
-  column-gap: 2rem;
 }
+
 .author-img {
   grid-row: 1 / 4;
   margin: auto;
 }
+
 .author-timestamp {
+  color: var(--grey-shade);
   grid-row: 2 / 2;
-  color: var(--grey-shade);
 }
+
 .author-name {
-  grid-column: 2 / 4;
   color: var(--grey-shade);
+  grid-column: 2 / 4;
 }
 </style>

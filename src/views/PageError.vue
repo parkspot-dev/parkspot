@@ -1,20 +1,29 @@
 <template>
-  <TemplateError @homeBtn="homeBtn"></TemplateError>
+  <TemplateError @homeBtn="homeBtn" :msg="msg"></TemplateError>
 </template>
 
 <script>
-import TemplateError from "../components/templates/TemplateError.vue";
+import TemplateError from '../components/templates/TemplateError.vue';
 export default {
-  name: "PageError",
+  name: 'PageError',
   components: {
     TemplateError,
   },
   data() {
-    return {};
+    return {
+      msg: '',
+    };
+  },
+  mounted() {
+    this.getMsg();
   },
   methods: {
     homeBtn() {
-      this.$router.push({ name: "Home" });
+      this.$router.push({ name: 'Home' });
+    },
+
+    getMsg() {
+      this.msg = this.$route.params.msg;
     },
   },
 };

@@ -6,11 +6,11 @@
 </template>
 
 <script>
-import TemplateContactUs from "../components/templates/TemplateContactUs.vue";
-import LoaderModal from "../components/extras/LoaderModal.vue";
-import { mapActions } from "vuex";
+import TemplateContactUs from '../components/templates/TemplateContactUs.vue';
+import LoaderModal from '../components/extras/LoaderModal.vue';
+import { mapActions } from 'vuex';
 export default {
-  name: "PageContactUs",
+  name: 'PageContactUs',
   components: {
     TemplateContactUs,
     LoaderModal,
@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      onlyContact: "user/onlyContact",
+      onlyContact: 'user/onlyContact',
     }),
     async fireContact() {
       try {
@@ -31,22 +31,22 @@ export default {
         await this.onlyContact();
 
         this.$buefy.toast.open({
-          message: "ParkSpot registered successfully!",
-          type: "is-success",
+          message: 'ParkSpot registered successfully!',
+          type: 'is-success',
           duration: 2000,
         });
 
-        this.$router.push({ name: "thankYou" });
+        this.$router.push({ name: 'thankYou' });
       } catch (error) {
         console.error({ error });
 
         this.$buefy.toast.open({
           message: `Something went wrong!`,
-          type: "is-danger",
+          type: 'is-danger',
           duration: 2000,
         });
 
-        this.$router.push({ name: "Home" });
+        this.$router.push({ name: 'Home' });
       }
       this.isLoading = false;
     },
@@ -60,24 +60,23 @@ export default {
   padding: 2.5rem 0;
   position: relative;
 }
-.bg-wrap:before {
-  content: "";
-  display: block;
-  width: calc(50vw + 150px);
-  height: 100%;
+
+.bg-wrap::before {
   background-color: var(--bg-color-tertiary);
-  -webkit-clip-path: polygon(300px 0, 100% 0, 100% 100%, 0 100%);
   clip-path: polygon(300px 0, 100% 0, 100% 100%, 0 100%);
+  content: '';
+  display: block;
+  height: 100%;
   position: absolute;
-  top: 0;
   right: 0;
+  top: 0;
+  width: calc(50vw + 150px);
 }
 
 @media only screen and (max-width: 760px) {
-  .bg-wrap:before {
-    width: calc(50vw + 360px);
-    -webkit-clip-path: polygon(300px 70%, 100% 33%, 100% 100%, 0% 100%);
+  .bg-wrap::before {
     clip-path: polygon(300px 70%, 100% 33%, 100% 100%, 0% 100%);
+    width: calc(50vw + 360px);
   }
 }
 </style>

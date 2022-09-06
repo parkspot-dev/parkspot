@@ -1,5 +1,5 @@
 <template>
-  <Wrapper>
+  <BodyWrapper>
     <div class="terms-container">
       <AtomHeading class="mb-6"> Terms and Conditions </AtomHeading>
 
@@ -170,17 +170,17 @@
         <a href="mailto:connect@parkspot.in"> connect@parkspot.in </a>
       </AtomParagraph>
     </div>
-  </Wrapper>
+  </BodyWrapper>
 </template>
 
 <script>
-import Wrapper from "../extras/Wrapper.vue";
-import AtomHeading from "../atoms/AtomHeading.vue";
-import AtomParagraph from "../atoms/AtomParagraph.vue";
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import AtomHeading from '../atoms/AtomHeading.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
 export default {
-  name: "TemplateTerms",
+  name: 'TemplateTerms',
   components: {
-    Wrapper,
+    BodyWrapper,
     AtomHeading,
     AtomParagraph,
   },
@@ -189,7 +189,7 @@ export default {
 
 <style scoped>
 .terms-container {
-  max-width: 960px;
   margin: auto;
+  max-width: 960px;
 }
 </style>

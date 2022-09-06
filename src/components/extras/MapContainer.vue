@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import mapboxgl from "mapbox-gl";
-import { mapGetters, mapMutations } from "vuex";
+import mapboxgl from 'mapbox-gl';
+import { mapGetters, mapMutations } from 'vuex';
 export default {
-  name: "MapContainer",
+  name: 'MapContainer',
   props: {
     /**
      * map drag option for form only
@@ -19,19 +19,19 @@ export default {
       type: Array,
     },
   },
-  emits: ["location"],
+  emits: ['location'],
   data() {
     return {
       accessToken: process.env.VUE_APP_MAP_ACCESS_TOKEN,
-      img: require("@/assets/pstopmini.png"),
+      img: require('@/assets/pstopmini.png'),
       map: null, // map for mapbox
       marker: null, // marker for location
     };
   },
   computed: {
     ...mapGetters({
-      mapConfig: "map/getMapConfig",
-      mapCenter: "map/getNewMapCenter",
+      mapConfig: 'map/getMapConfig',
+      mapCenter: 'map/getNewMapCenter',
     }),
   },
   watch: {
@@ -47,7 +47,7 @@ export default {
 
     // create the popup
     const popup = new mapboxgl.Popup({ offset: 25 }).setText(
-      "Your current location."
+      'Your current location.',
     );
 
     // create the marker
@@ -59,30 +59,30 @@ export default {
       .addTo(this.map);
 
     if (this.drag) {
-      this.map.on("click", (e) => {
+      this.map.on('click', (e) => {
         this.marker.setPopup(popup).setLngLat(e.lngLat).addTo(this.map);
         this.updateMapConfig(this.marker.getLngLat());
-        this.$emit("location", this.marker.getLngLat());
+        this.$emit('location', this.marker.getLngLat());
       });
 
-      this.marker.on("dragend", () => {
+      this.marker.on('dragend', () => {
         this.updateMapConfig(this.marker.getLngLat());
-        this.$emit("location", this.marker.getLngLat());
+        this.$emit('location', this.marker.getLngLat());
       });
     }
 
     // create DOM element for the parking site marker
-    for (let spots of this.spotsList) {
-      var psMarker = document.createElement("div");
+    for (const spots of this.spotsList) {
+      const psMarker = document.createElement('div');
 
-      psMarker.className = "marker";
-      psMarker.style.backgroundImage = "url(" + this.img + ")";
-      psMarker.style.width = "50px";
-      psMarker.style.height = "50px";
-      psMarker.style.backgroundSize = "110%";
+      psMarker.className = 'marker';
+      psMarker.style.backgroundImage = 'url(' + this.img + ')';
+      psMarker.style.width = '50px';
+      psMarker.style.height = '50px';
+      psMarker.style.backgroundSize = '110%';
 
       const psPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-        `<p><strong>${spots.Name}</strong></p><p><strong>Distance :</strong> ${spots.Distance} Km</p>`
+        `<p><strong>${spots.Name}</strong></p><p><strong>Distance :</strong> ${spots.Distance} Km</p>`,
       );
 
       new mapboxgl.Marker(psMarker)
@@ -93,7 +93,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateMapConfig: "map/update-map-config",
+      updateMapConfig: 'map/update-map-config',
     }),
     recenterMap(center) {
       this.map.flyTo({

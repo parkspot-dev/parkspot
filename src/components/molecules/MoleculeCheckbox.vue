@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import { ValidationProvider } from "vee-validate";
-import AtomCheckbox from "../atoms/AtomCheckbox.vue";
+import { ValidationProvider } from 'vee-validate';
+import AtomCheckbox from '../atoms/AtomCheckbox.vue';
 export default {
-  name: "MoleculeCheckBox",
+  name: 'MoleculeCheckBox',
   components: {
     ValidationProvider,
     AtomCheckbox,
@@ -29,7 +29,7 @@ export default {
   props: {
     rules: {
       type: [Object, String],
-      default: "",
+      default: '',
     },
     fieldName: {
       type: String,
@@ -39,7 +39,7 @@ export default {
       type: Array,
     },
   },
-  emits: ["data"],
+  emits: ['data'],
   data() {
     return {
       checkboxData: [],
@@ -50,7 +50,7 @@ export default {
       const { valid } = await this.$refs.provider.validate(data);
       if (valid) {
         this.checkboxData.push(data.target.value);
-        this.$emit("data", this.checkboxData);
+        this.$emit('data', this.checkboxData);
       }
     },
   },

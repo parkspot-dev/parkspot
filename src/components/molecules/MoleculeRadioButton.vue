@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import { ValidationProvider } from "vee-validate";
-import AtomRadioButton from "../atoms/AtomRadioButton.vue";
+import { ValidationProvider } from 'vee-validate';
+import AtomRadioButton from '../atoms/AtomRadioButton.vue';
 export default {
-  name: "MoleculeRadioButton",
+  name: 'MoleculeRadioButton',
   components: { ValidationProvider, AtomRadioButton },
   props: {
     values: {
@@ -33,14 +33,14 @@ export default {
     },
     rules: {
       type: [Object, String],
-      default: "",
+      default: '',
     },
     fieldName: {
       type: String,
       required: true,
     },
   },
-  emits: ["data"],
+  emits: ['data'],
   //   data() {
   //     return {
   //       list: ["Yes", "No"],
@@ -50,7 +50,7 @@ export default {
     async handleChange(data) {
       const { valid } = await this.$refs.provider.validate(data);
       if (valid) {
-        this.$emit("data", data.target.value);
+        this.$emit('data', data.target.value);
       }
     },
   },

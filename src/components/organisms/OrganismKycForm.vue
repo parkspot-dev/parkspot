@@ -27,14 +27,14 @@
 </template>
 
 <script>
-import { ValidationObserver } from "vee-validate";
-import MoleculeRadioButton from "../molecules/MoleculeRadioButton.vue";
-import MoleculeSelectInput from "../molecules/MoleculeSelectInput.vue";
-import MoleculeUpload from "../molecules/MoleculeUpload.vue";
-import { mapMutations } from "vuex";
-import { KYC } from "../../constant/constant";
+import { ValidationObserver } from 'vee-validate';
+import MoleculeRadioButton from '../molecules/MoleculeRadioButton.vue';
+import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
+import MoleculeUpload from '../molecules/MoleculeUpload.vue';
+import { mapMutations } from 'vuex';
+import { KYC } from '../../constant/constant';
 export default {
-  name: "OrganismKycForm",
+  name: 'OrganismKycForm',
   components: {
     ValidationObserver,
     MoleculeRadioButton,
@@ -47,19 +47,19 @@ export default {
       default: false,
     },
   },
-  emits: ["formValidate"],
+  emits: ['formValidate'],
   data() {
     return {
       KYC,
       radioValues: KYC.RADIO_DATA,
       documentValues: KYC.DOCUMENT_DATA,
       validation: {
-        radio: "required",
-        documentSelect: "required",
-        img: "required|image",
+        radio: 'required',
+        documentSelect: 'required',
+        img: 'required|image',
       },
       model: {
-        radioData: "",
+        radioData: '',
         documentData: null,
         imgData: null,
       },
@@ -72,10 +72,10 @@ export default {
           .validate()
           .then((el) => {
             if (el) {
-              this.$emit("formValidate", el);
+              this.$emit('formValidate', el);
               this.submit();
             } else {
-              this.$emit("formValidate", el);
+              this.$emit('formValidate', el);
             }
           })
           .catch((er) => {
@@ -86,13 +86,13 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateKyc: "user/update-kyc",
+      updateKyc: 'user/update-kyc',
     }),
     submit() {
       this.updateKyc(this.model);
     },
     updateRadioData(data) {
-      data === "Yes"
+      data === 'Yes'
         ? (this.model.radioData = true)
         : (this.model.radioData = false);
     },

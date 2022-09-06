@@ -6,17 +6,17 @@
 </template>
 
 <script>
-import { firebase, getDatabase, ref, get, child } from "../firebase";
-import TemplateNearBy from "../components/templates/TemplateNearBy.vue";
+import { firebase, getDatabase, ref, get, child } from '../firebase';
+import TemplateNearBy from '../components/templates/TemplateNearBy.vue';
 export default {
-  name: "PageNearBy",
+  name: 'PageNearBy',
   components: {
     TemplateNearBy,
   },
   data() {
     return {
       spots: [],
-      nearByLocation: "",
+      nearByLocation: '',
       show: false,
     };
   },
@@ -31,13 +31,13 @@ export default {
       // console.log(check)
       // seo-pages database
       const pageData = await get(
-        child(dbref, `seo-pages/${this.$route.params.pathMatch}`)
+        child(dbref, `seo-pages/${this.$route.params.pathMatch}`),
       )
         .then((snapshot) => {
           if (snapshot.exists()) {
             return snapshot.val();
           } else {
-            console.log("No data available");
+            console.log('No data available');
             this.show = !this.show;
           }
         })
