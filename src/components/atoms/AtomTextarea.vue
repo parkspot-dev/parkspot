@@ -31,7 +31,7 @@ export default {
       default: 'Message',
     },
     /**
-     *  User input value in the input field
+     *        User input value in the input field
      */
     value: {
       type: String,
