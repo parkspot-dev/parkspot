@@ -128,7 +128,7 @@ const actions = {
             City: state.locationDetails.locDetails.city,
             Latitude: state.locationDetails.lnglat.lat,
             Longitude: state.locationDetails.lnglat.lng,
-            CarModel: state.preference.CarModel,
+            CarModel: state.preference.carModel,
             Duration: state.preference.minDur,
             Landmark: state.locationDetails.locDetails.city.country,
         };
