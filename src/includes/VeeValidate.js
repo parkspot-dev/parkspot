@@ -34,7 +34,7 @@ extend('image', {
 
 extend('phone', {
     validate: (value) => {
-        var phoneRegex = new RegExp('^([6-9]{1})([0-9]{9})$');
+        const phoneRegex = new RegExp('^([6-9]{1})([0-9]{9})$');
         if (value == '') return true;
         return phoneRegex.test(value);
     },
