@@ -1,21 +1,21 @@
 <template>
-  <div id="app">
-    <Navbar></Navbar>
-    <main class="body-container">
-      <router-view :key="$route.fullPath" />
-    </main>
-    <TemplateFooter></TemplateFooter>
-  </div>
+    <div id="app">
+        <Navbar></Navbar>
+        <main class="body-container">
+            <router-view :key="$route.fullPath" />
+        </main>
+        <TemplateFooter></TemplateFooter>
+    </div>
 </template>
 
 <script>
 import TemplateFooter from './components/templates/TemplateFooter.vue';
 import Navbar from './components/extras/NavbarBody.vue';
 export default {
-  components: {
-    TemplateFooter,
-    Navbar,
-  },
+    components: {
+        TemplateFooter,
+        Navbar,
+    },
 };
 </script>
 
@@ -24,18 +24,18 @@ export default {
 @import url('./assets/styles/variables.css');
 
 #app {
-  color: #555;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 400;
+    color: #555;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
 }
 
 .body-container {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 @media only screen and (max-width: 1024px) {
-  .body-container {
-    margin-top: 2px;
-  }
+    .body-container {
+        margin-top: 2px;
+    }
 }
 </style>

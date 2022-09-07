@@ -1,35 +1,35 @@
 <template>
-  <div class="block">
-    <b-checkbox
-      :key="value"
-      v-for="value in values"
-      v-model="checkboxGroup"
-      :native-value="value"
-      type="is-warning"
-    >
-      {{ value }}
-    </b-checkbox>
-  </div>
+    <div class="block">
+        <b-checkbox
+            :key="value"
+            v-for="value in values"
+            v-model="checkboxGroup"
+            :native-value="value"
+            type="is-warning"
+        >
+            {{ value }}
+        </b-checkbox>
+    </div>
 </template>
 
 <script>
 export default {
-  name: 'AtomCheckbox',
-  props: {
-    /**
-     * list of checkbox items
-     * @values Array expecting
-     */
-    values: {
-      type: Array,
-      default: null,
+    name: 'AtomCheckbox',
+    props: {
+        /**
+         * list of checkbox items
+         * @values Array expecting
+         */
+        values: {
+            type: Array,
+            default: null,
+        },
     },
-  },
-  data() {
-    return {
-      checkboxGroup: [],
-    };
-  },
+    data() {
+        return {
+            checkboxGroup: [],
+        };
+    },
 };
 </script>
 
