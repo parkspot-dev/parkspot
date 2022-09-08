@@ -35,7 +35,7 @@
                         </div>
                     </div>
                 </template>
-                <template #empty>No results for {{ search }}</template>
+                <template #empty> {{ search || 'No results' }}</template>
             </b-autocomplete>
         </b-field>
     </section>
@@ -86,9 +86,9 @@ export default {
         selected(newValue) {
             this.updateMapConfig([newValue.center[0], newValue.center[1]]); // needed for recentering of map.
             this.updateSelectedLocation(newValue); // get the actual value of selected option.
-            this.updateSelectedCity(newValue.context[0].text); // update selected city
-            this.updateSelectedState(newValue.context[1].text); // update selected state
-            this.updateSelectedCountry(newValue.context[2].text); // update selected country
+            this.updateSelectedCity(newValue.context[0]); // update selected city
+            this.updateSelectedState(newValue.context[1]); // update selected state
+            this.updateSelectedCountry(newValue.context[2]); // update selected country
         },
     },
     methods: {
@@ -121,9 +121,9 @@ export default {
         }, 500),
 
         async addRecentSearches() {
-            const recentLocations = await this.getFromRecent();
+            const recentSearch = await this.getFromRecent();
             if (this.LocationName.length === 0) {
-                for (const value of recentLocations) {
+                for (const value of recentSearch) {
                     this.LocationName.push(value);
                 }
             }

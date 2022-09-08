@@ -2,7 +2,7 @@ import { mapBoxClient, mayaClient } from '@/services/api';
 import _ from 'lodash';
 
 const state = {
-    locations: [],
+    location: [],
     selectedLocation: {
         city: '',
         state: '',
@@ -29,7 +29,7 @@ const getters = {
     },
 
     getLocationName(state) {
-        return state.locations;
+        return state.location;
     },
 
     getNewMapCenter(state) {
@@ -57,50 +57,54 @@ const getters = {
 };
 
 const mutations = {
-    'update-location'(state, data) {
-        const newData = [...state.recentSearch, ...data];
-        state.locations = [...newData];
+    'update-location'(state, location) {
+        const localLocation = [...state.recentSearch, ...location];
+        state.location = [...localLocation];
     },
 
-    'update-selected-location'(state, data) {
-        state.selectedLocation.locName = data.place_name;
+    'update-selected-location'(state, location) {
+        state.selectedLocation.locName = location.place_name;
 
-        const lsRecentID = JSON.parse(localStorage.getItem('recentID'));
-        if (lsRecentID !== undefined) {
-            state.recentID = lsRecentID;
-        }
-
-        const objData = {
-            id: state.recentID,
+        const newLocalRecentSearch = {
             fromLS: true,
-            ...data,
+            ...location,
         };
 
-        state.recentID = state.recentID + 1;
-        localStorage.setItem('recentID', state.recentID);
+        const localRecentSearch = [...state.recentSearch];
+
+        const uniqueLocalRecentSearch = localRecentSearch.filter(
+            (recentSearch) => {
+                if (recentSearch.id === newLocalRecentSearch.id) {
+                    return false;
+                }
+                return true;
+            },
+        );
 
         // performing LIFO in size of 3.
-        if (state.recentSearch.length >= 3) {
-            state.recentSearch.pop();
-            state.recentSearch.unshift(objData);
+        if (uniqueLocalRecentSearch.length >= 3) {
+            uniqueLocalRecentSearch.pop();
+            uniqueLocalRecentSearch.unshift(newLocalRecentSearch);
         } else {
-            state.recentSearch.unshift(objData);
+            uniqueLocalRecentSearch.unshift(newLocalRecentSearch);
         }
 
+        state.recentSearch = [...uniqueLocalRecentSearch];
         // JSON used to store array as string in LS
         localStorage.setItem('recent', JSON.stringify(state.recentSearch));
     },
 
-    'update-selected-city'(state, data) {
-        state.selectedLocation.city = data;
+    'update-selected-city'(state, city) {
+        state.selectedLocation.city = city.text || '';
     },
 
-    'update-selected-state'(state, data) {
-        state.selectedLocation.state = data;
+    // region is same as state like jharkhand, karnataka etc.
+    'update-selected-state'(state, region) {
+        state.selectedLocation.state = region.text || '';
     },
 
-    'update-selected-country'(state, data) {
-        state.selectedLocation.country = data;
+    'update-selected-country'(state, country) {
+        state.selectedLocation.country = country.text || '';
     },
 
     'update-map-config'(state, center) {
@@ -133,9 +137,9 @@ const actions = {
         const token =
             'pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ';
         const url = `/geocoding/v5/mapbox.places/${query}.json?access_token=${token}&proximity=77.4977,12.9716`;
-        const data = await mapBoxClient.get(url);
-        const result = _.get(data, 'features', []);
-        commit('update-location', result);
+        const responseData = await mapBoxClient.get(url);
+        const searchResult = _.get(responseData, 'features', []);
+        commit('update-location', searchResult);
     },
 
     async srpCall({ state, commit }) {
