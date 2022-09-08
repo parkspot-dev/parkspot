@@ -11,8 +11,8 @@
                 </h2>
                 <SearchInput class="banner-input"></SearchInput>
                 <div class="btn-wrapper">
-                    <AtomButton class="banner-btn" @click.native="flyToSrp">
-                        Search ParkSpot
+                    <AtomButton @click.native="flyToSrp">
+                        <span class="btn-text"> Search ParkSpot </span>
                     </AtomButton>
                 </div>
             </div>
@@ -89,6 +89,10 @@ export default {
 
 .btn-wrapper {
     text-align: center;
+}
+
+.btn-text {
+    font-weight: var(--semi-bold-font);
 }
 
 @media only screen and (max-width: 800px) {
