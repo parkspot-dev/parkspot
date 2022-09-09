@@ -58,8 +58,7 @@ const getters = {
 
 const mutations = {
     'update-location'(state, locations) {
-        const localLocations = [...state.recentSearch, ...locations];
-        state.locations = [...localLocations];
+        state.locations = [...state.recentSearch, ...locations];
     },
 
     'update-selected-location'(state, location) {
