@@ -2,7 +2,7 @@ import { mapBoxClient, mayaClient } from '@/services/api';
 import _ from 'lodash';
 
 const state = {
-    location: [],
+    locations: [],
     selectedLocation: {
         city: '',
         state: '',
@@ -29,7 +29,7 @@ const getters = {
     },
 
     getLocationName(state) {
-        return state.location;
+        return state.locations;
     },
 
     getNewMapCenter(state) {
@@ -57,9 +57,9 @@ const getters = {
 };
 
 const mutations = {
-    'update-location'(state, location) {
-        const localLocation = [...state.recentSearch, ...location];
-        state.location = [...localLocation];
+    'update-location'(state, locations) {
+        const localLocations = [...state.recentSearch, ...locations];
+        state.locations = [...localLocations];
     },
 
     'update-selected-location'(state, location) {
