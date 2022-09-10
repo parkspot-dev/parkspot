@@ -64,31 +64,29 @@ const mutations = {
     'update-selected-location'(state, location) {
         state.selectedLocation.locName = location.place_name;
 
-        const LocalRecentSearch = {
+        const recentSearchObj = {
             fromLS: true,
             ...location,
         };
 
-        const localRecentSearches = [...state.recentSearch];
+        const recentSearches = [...state.recentSearch];
 
-        const uniqueLocalRecentSearches = localRecentSearches.filter(
-            (recentSearch) => {
-                if (recentSearch.id === LocalRecentSearch.id) {
-                    return false;
-                }
-                return true;
-            },
-        );
+        const uniqueRecentSearches = recentSearches.filter((recentSearch) => {
+            if (recentSearch.id === recentSearchObj.id) {
+                return false;
+            }
+            return true;
+        });
 
         // performing LIFO in size of 3.
-        if (uniqueLocalRecentSearches.length >= 3) {
-            uniqueLocalRecentSearches.pop();
-            uniqueLocalRecentSearches.unshift(LocalRecentSearch);
+        if (uniqueRecentSearches.length >= 3) {
+            uniqueRecentSearches.pop();
+            uniqueRecentSearches.unshift(recentSearchObj);
         } else {
-            uniqueLocalRecentSearches.unshift(LocalRecentSearch);
+            uniqueRecentSearches.unshift(recentSearchObj);
         }
 
-        state.recentSearch = [...uniqueLocalRecentSearches];
+        state.recentSearch = [...uniqueRecentSearches];
         // JSON used to store array as string in LS
         localStorage.setItem('recent', JSON.stringify(state.recentSearch));
     },
