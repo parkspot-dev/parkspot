@@ -1,32 +1,26 @@
 <template>
-      <!-- <example :messages="messages"></example> -->
-      <div>
-            <h1>Sign Up</h1>
-      </div>
+  <PagePaymentGateway></PagePaymentGateway>
 </template>
 <script>
-// import example from "./example.vue";
+import PagePaymentGateway from "./PagePaymentGateway.vue";
+
 export default {
-      /**
-       * This page is used for development testing purposes.
-       */
-      name: "Temp",
-
-      data: () => ({
-            count: 0,
-      }),
-
-      methods: {
-            increment() {
-                  this.count++;
-            },
-      },
+  /**
+   * This page is used for development testing purposes.
+   */
+  name: "Temp",
+  components: {
+    PagePaymentGateway,
+  },
+  data() {
+    return {};
+  },
 };
 </script>
 
 <style scoped>
 .custom-wrapper {
-      max-width: 960px;
-      margin: auto;
+  max-width: 960px;
+  margin: auto;
 }
 </style>

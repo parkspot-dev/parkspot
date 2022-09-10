@@ -1,41 +1,41 @@
 <template>
-      <b-rate
-            v-model="rate"
-            :icon-pack="packs"
-            :icon="icons"
-            :max="maxs"
-            :size="sizes"
-            :locale="locale"
-            :spaced="isSpaced"
-            :disabled="isDisabled"
-      >
-      </b-rate>
+    <b-rate
+        :value="rate"
+        :icon-pack="pack"
+        :icon="icon"
+        :max="max"
+        :size="size"
+        :locale="locale"
+        :spaced="isSpaced"
+        :disabled="isDisabled"
+    >
+    </b-rate>
 </template>
 <script>
 export default {
-      name: "AtomRating",
-      props: {
-            rate: {
-                  type: Number,
-                  default: 5,
-            },
-            /**
-             * sizes @value is-small, is-medium, is-large
-             */
-            sizes: {
-                  type: String,
-                  default: "is-small",
-            },
-      },
-      data() {
-            return {
-                  maxs: 5,
-                  packs: "mdi",
-                  icons: "star",
-                  isSpaced: false,
-                  isDisabled: true,
-                  locale: undefined, // Browser locale
-            };
-      },
+    name: 'AtomRating',
+    props: {
+        rate: {
+            type: Number,
+            default: 5,
+        },
+        /**
+         * size @value is-small, is-medium, is-large
+         */
+        size: {
+            type: String,
+            default: 'is-small',
+        },
+    },
+    data() {
+        return {
+            max: 5,
+            pack: 'mdi',
+            icon: 'star',
+            isSpaced: false,
+            isDisabled: true,
+            locale: undefined, // Browser locale
+        };
+    },
 };
 </script>
