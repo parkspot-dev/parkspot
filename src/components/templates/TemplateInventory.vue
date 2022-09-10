@@ -91,6 +91,7 @@
                 <AtomTextarea
                     :value="props.row.Comments"
                     class="comment-width"
+                    :maxlength="1000"
                     @changed="onCommentUpdate(props.row, ...arguments)"
                 ></AtomTextarea>
             </b-table-column>
