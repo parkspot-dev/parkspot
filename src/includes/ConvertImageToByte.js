@@ -4,7 +4,7 @@ const fileByteArray = [];
 /**
  * Converts the image file to byte array.
  * @param {file} image file.
- * @return {Array} byte array consist of zeroes and ones.
+ * @return {Array} byte array.
  */
 function getConvertedImage(image) {
     return new Promise((resolve, reject) => {
