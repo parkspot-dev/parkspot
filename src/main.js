@@ -7,7 +7,7 @@ import fbApp from './FB-App.vue';
 import 'bulma/css/bulma.css';
 import Buefy from 'buefy';
 import 'buefy/dist/buefy.css';
-import './inlcudes/VeeValidate';
+import './includes/VeeValidate';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
