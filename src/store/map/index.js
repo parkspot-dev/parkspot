@@ -124,7 +124,7 @@ const mutations = {
     'update-paginated-srp-data'(state, currPageNum) {
         state.paginateSrpResults = [];
 
-        // loop to get list of srp result in one page
+        // loop to get list of srp result in current page
         for (
             let i = (currPageNum - 1) * 3;
             i < currPageNum * 3 && i < state.srpResults.length;
