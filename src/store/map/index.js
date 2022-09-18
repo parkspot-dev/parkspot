@@ -124,7 +124,9 @@ const mutations = {
     'update-paginated-srp-data'(state, pageNum) {
         state.paginateSrpResults = [];
         for (let i = (pageNum - 1) * 3; i < pageNum * 3; i++) {
-            state.paginateSrpResults.push(state.srpResults[i]);
+            if (i < state.srpResults.length) {
+                state.paginateSrpResults.push(state.srpResults[i]);
+            }
         }
     },
 };
