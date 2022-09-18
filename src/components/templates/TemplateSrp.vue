@@ -4,14 +4,22 @@
             <PaginationBody
                 :totals="totals"
                 @changed="onPageChange"
+                :current="currentPage"
             ></PaginationBody>
-            <MoleculeSRPCard
-                v-for="spot in spots"
-                :key="spot.ID"
-                :spot="spot"
-                @booked="onBook"
-                @click.native="selected(spot)"
-            ></MoleculeSRPCard>
+            <div class="srp-list-items">
+                <MoleculeSRPCard
+                    v-for="spot in spots"
+                    :key="spot.ID"
+                    :spot="spot"
+                    @booked="onBook"
+                    @click.native="selected(spot)"
+                ></MoleculeSRPCard>
+            </div>
+            <PaginationBody
+                :totals="totals"
+                @changed="onPageChange"
+                :current="currentPage"
+            ></PaginationBody>
         </div>
         <div class="srp-map">
             <MapContainer
@@ -47,6 +55,9 @@ export default {
         reRender: {
             type: Number,
         },
+        currentPage: {
+            type: Number,
+        },
     },
     emits: ['changed', 'flyToSrp'],
 
@@ -77,6 +88,12 @@ export default {
 .srp-lists {
     flex: 20%;
     padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.srp-list-items {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 .srp-map {

@@ -2,11 +2,12 @@
     <section>
         <b-pagination
             :total="totals"
-            v-model="data"
+            v-model="currentPage"
             :size="'is-small'"
             :per-page="3"
-            :range-before="2"
-            :range-after="2"
+            :range-before="1"
+            :range-after="1"
+            :simple="true"
             :order="'is-centered'"
             @change="onChange"
         >
@@ -47,14 +48,20 @@ export default {
         },
     },
     data() {
-        return {
-            data: 1,
-        };
+        return {};
     },
     emits: ['changed'],
     computed: {
-        currentPage() {
-            return this.current;
+        currentPage: {
+            // getter
+            get() {
+                return this.current;
+            },
+            // setter
+            set(updatedCurrent) {
+                // this function needed to prevent error
+                // but no functionality needed
+            },
         },
     },
     methods: {
