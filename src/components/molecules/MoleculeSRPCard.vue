@@ -1,5 +1,5 @@
 <template>
-    <div class="custom-card">
+    <!-- <div class="custom-card">
         <figure class="card-img image is-96x96">
             <img :alt="'Parking spot image'" :src="spot.IconURL" />
         </figure>
@@ -32,6 +32,46 @@
         <AtomButton class="card-btn" @click.native="onBook">
             Book Spot
         </AtomButton>
+    </div> -->
+    <div class="custom-card">
+        <AtomParagraph class="card-title" :type="'span'">
+            {{ spot.Name }}
+        </AtomParagraph>
+        <div class="card-location">
+            <span class="location-icon">
+                <AtomIcon :icon="'map-marker-radius'"></AtomIcon>
+            </span>
+            <AtomParagraph class="location-text" :type="'span'">
+                {{ spot.Address }}
+            </AtomParagraph>
+        </div>
+        <AtomRating class="card-rating" :rate="spot.Rating"></AtomRating>
+        <div class="card-distance">
+            <AtomParagraph class="distance-text" :type="'p'">
+                <strong class="text-color"> {{ spot.Distance }} KM </strong>
+            </AtomParagraph>
+        </div>
+
+        <AtomParagraph class="card-rate" :type="'span'">
+            <span class="rate-icon">
+                <AtomIcon :icon="'tag'"></AtomIcon>
+            </span>
+            <AtomParagraph :type="'span'">
+                <strong> ₹ {{ spot.Rate }} / {{ spot.RentUnit }} </strong>
+            </AtomParagraph>
+        </AtomParagraph>
+        <AtomParagraph class="card-spot" :type="'span'">
+            <strong
+                v-if="getAvailability(spot.SlotsAvailable)"
+                class="card-spot-green"
+            >
+                Available
+            </strong>
+            <strong v-else class="card-spot-red"> Rented Out </strong>
+        </AtomParagraph>
+        <AtomButton class="card-btn" @click.native="onBook">
+            Book Spot
+        </AtomButton>
     </div>
 </template>
 
@@ -57,15 +97,22 @@ export default {
     filters: {
         available(slotAvailable) {
             if (slotAvailable === 0) {
-                return 'N/A';
+                return 'Rented Out';
             } else {
-                return slotAvailable;
+                return 'Available';
             }
         },
     },
     methods: {
         onBook() {
             this.$emit('booked');
+        },
+        getAvailability(spot) {
+            if (spot === 0) {
+                return false;
+            } else {
+                return true;
+            }
         },
     },
 };
@@ -78,8 +125,6 @@ export default {
         0 0 0 1px rgb(10, 10, 10, 20%);
     column-gap: 0.75rem;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(6, auto);
     margin: 0.5rem;
     max-width: 100%;
     overflow: hidden;
@@ -87,19 +132,9 @@ export default {
     row-gap: 0.25rem;
 }
 
-.card-img {
-    grid-column: 1 / 1;
-    grid-row: 1 / 5;
-}
-
 .card-title {
+    font-size: 18px;
     font-weight: var(--bold-font);
-    grid-column: 2 / 6;
-    grid-row: 1 / 1;
-}
-
-.card-btn {
-    grid-column: 2 / 6;
 }
 
 .card-location {
@@ -123,25 +158,31 @@ export default {
     overflow: hidden;
 }
 
-.card-rating {
-    grid-row: 5 / 5;
-    margin: auto;
+.card-distance {
+    background-color: rgb(214, 253, 255);
+    width: 75px;
+    text-align: center;
+    padding: 1.25rem 1.25rem;
+    border-radius: var(--border-default);
 }
 
-.card-distance,
-.card-rate {
-    grid-column: 2 / 4;
+.distance-text {
+    line-height: var(--lh-small);
 }
 
-.card-type,
-.card-spot {
-    grid-column: 4 / 6;
+.text-color {
+    color: var(--secondary-color);
 }
 
-.card-distance,
-.card-type,
-.card-rate,
-.card-spot {
-    font-size: var(--sp-size-sm);
+.rate-icon {
+    color: green;
+}
+
+.card-spot-red {
+    color: red;
+}
+
+.card-spot-green {
+    color: green;
 }
 </style>
