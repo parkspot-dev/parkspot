@@ -121,9 +121,15 @@ const mutations = {
         state.center = data;
     },
 
-    'update-paginated-srp-data'(state, pageNum) {
+    'update-paginated-srp-data'(state, currPageNum) {
         state.paginateSrpResults = [];
-        for (let i = (pageNum - 1) * 3; i < pageNum * 3; i++) {
+
+        // loop to get list of srp result in current page
+        for (
+            let i = (currPageNum - 1) * 3;
+            i < currPageNum * 3 && i < state.srpResults.length;
+            i++
+        ) {
             state.paginateSrpResults.push(state.srpResults[i]);
         }
     },
