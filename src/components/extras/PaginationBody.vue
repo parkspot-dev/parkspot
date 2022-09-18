@@ -47,9 +47,6 @@ export default {
             default: 1,
         },
     },
-    data() {
-        return {};
-    },
     emits: ['changed'],
     computed: {
         currentPage: {
