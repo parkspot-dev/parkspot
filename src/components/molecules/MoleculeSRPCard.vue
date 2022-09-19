@@ -98,8 +98,14 @@ export default {
     overflow: hidden;
     padding: 2rem;
     row-gap: 0.25rem;
+    border: 2px solid transparent;
+    transition: transform 0.3s ease;
 }
 
+.custom-card:hover {
+    border: 2px solid var(--secondary-color);
+    transform: scale(1.03);
+}
 .card-title {
     font-size: 18px;
     font-weight: var(--bold-font);
