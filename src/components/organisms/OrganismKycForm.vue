@@ -96,8 +96,8 @@ export default {
                 ? (this.model.radioData = true)
                 : (this.model.radioData = false);
         },
-        updateDocumentData(data) {
-            this.model.documentData = data.name;
+        updateDocumentData(index) {
+            this.model.documentData = this.documentValues[index].name;
         },
         updateImg(data) {
             this.model.imgData = data;

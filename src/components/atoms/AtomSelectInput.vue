@@ -1,7 +1,9 @@
 <template>
     <b-field :label="label" :type="errorType" :message="errorMessage">
         <b-select :placeholder="placeholder" v-model="innerValue" expanded>
-            <option value>{{ placeholder }}</option>
+            <option value="" disabled>
+                {{ placeholder }}
+            </option>
             <option v-for="option in list" :value="option.id" :key="option.id">
                 {{ option.name }}
             </option>
@@ -24,7 +26,8 @@ export default {
         /**
          * The list is list of data
          * @values Array of Object expecting
-         * e.g. [{id:1, name:'list1'},{id:2, name:'list2'}]
+         * e.g. [{id:0, name:'list1'},{id:1, name:'list2'}]
+         * id should start with 0
          */
         list: {
             type: Array,
@@ -45,7 +48,7 @@ export default {
             type: null,
         },
     },
-    emits: ['input'],
+    emits: ['input', 'changed'],
     data() {
         return {
             innerValue: '',
@@ -60,7 +63,6 @@ export default {
     watch: {
         // Handles internal model changes.
         innerValue(newVal) {
-            console.log('select', newVal);
             this.$emit('input', newVal);
             this.$emit('changed', newVal);
         },

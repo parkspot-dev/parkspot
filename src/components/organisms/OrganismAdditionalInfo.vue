@@ -121,11 +121,11 @@ export default {
         submit() {
             this.updateAddInfo(this.model);
         },
-        updateMinDur(data) {
-            this.model.minDur = data.name;
+        updateMinDur(index) {
+            this.model.minDur = this.minDurData[index].name;
         },
-        updateSpot(data) {
-            this.model.spot = data.name;
+        updateSpot(index) {
+            this.model.spot = this.spotData[index].name;
         },
         updateAmenitiesData(data) {
             this.model.amenities = data;
