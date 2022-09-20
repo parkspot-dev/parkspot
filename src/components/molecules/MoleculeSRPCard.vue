@@ -1,20 +1,24 @@
 <template>
     <div class="custom-card">
         <AtomParagraph class="card-title" :type="'span'">
-            {{ spot.Name }}
+            <strong> {{ spot.Name }} </strong>
         </AtomParagraph>
         <div class="card-location">
             <span class="location-icon">
                 <AtomIcon :icon="'map-marker-radius'"></AtomIcon>
             </span>
-            <AtomParagraph class="location-text" :type="'span'">
+            <AtomParagraph
+                class="location-text"
+                :variation="'small'"
+                :type="'span'"
+            >
                 {{ spot.Address }}
             </AtomParagraph>
         </div>
         <AtomRating class="card-rating" :rate="spot.Rating"></AtomRating>
         <div class="card-distance">
             <AtomParagraph class="distance-text" :type="'p'">
-                <strong class="text-color"> {{ spot.Distance }} KM </strong>
+                <span class="text-color"> {{ spot.Distance }} KM </span>
             </AtomParagraph>
         </div>
 
@@ -22,18 +26,16 @@
             <span class="rate-icon">
                 <AtomIcon :icon="'tag'"></AtomIcon>
             </span>
-            <AtomParagraph :type="'span'">
-                <strong> ₹ {{ spot.Rate }} / {{ spot.RentUnit }} </strong>
-            </AtomParagraph>
+            <span> ₹ {{ spot.Rate }}/{{ spot.RentUnit }} </span>
         </AtomParagraph>
-        <AtomParagraph class="card-spot" :type="'span'">
-            <strong
+        <AtomParagraph class="card-spot" :type="'p'">
+            <span
                 v-if="getAvailability(spot.SlotsAvailable)"
                 class="card-spot-green"
             >
                 Available
-            </strong>
-            <strong v-else class="card-spot-red"> Rented Out </strong>
+            </span>
+            <span v-else class="card-spot-red"> Rented Out </span>
         </AtomParagraph>
         <AtomButton class="card-btn" @click.native="onBook">
             Book Spot
@@ -89,15 +91,14 @@ export default {
     border-radius: var(--border-default);
     box-shadow: 0 0.5em 1em -0.125em rgb(10, 10, 10, 10%),
         0 0 0 1px rgb(10, 10, 10, 20%);
-    column-gap: 0.75rem;
+    column-gap: 0.25rem;
     display: grid;
     grid-template-columns: repeat(6, auto);
     grid-template-rows: repeat(5, auto);
     margin: 0.5rem;
     max-width: 500px;
     overflow: hidden;
-    padding: 2rem;
-    row-gap: 0.25rem;
+    padding: 1rem;
     border: 2px solid transparent;
     transition: transform 0.3s ease;
 }
@@ -107,8 +108,7 @@ export default {
     transform: scale(1.03);
 }
 .card-title {
-    font-size: 18px;
-    font-weight: var(--bold-font);
+    font-size: 1rem;
     grid-column: 1 / 5;
     grid-row: 1 / 1;
 }
@@ -121,6 +121,8 @@ export default {
     grid-column: 1 / 5;
     grid-row: 2 / 2;
     position: relative;
+    line-height: 1.1;
+    color: #6b6b6b;
 }
 
 .location-icon {
@@ -137,13 +139,14 @@ export default {
 .card-rating {
     grid-column: 1 / 3;
     grid-row: 3 / 3;
+    margin-top: 0.75rem;
 }
 
 .card-distance {
     background-color: rgb(214, 253, 255);
-    width: 75px;
+    width: 58px;
     text-align: center;
-    padding: 1.25rem 1.25rem;
+    padding: 0.75rem 0.75rem;
     border-radius: var(--border-default);
     grid-column: 5 / 7;
     grid-row: 1 / 3;
@@ -153,6 +156,8 @@ export default {
 
 .distance-text {
     line-height: var(--lh-small);
+    font-weight: var(--bold-font);
+    font-size: 16px;
 }
 
 .text-color {
@@ -160,8 +165,13 @@ export default {
 }
 
 .card-rate {
+    align-items: center;
+    display: flex;
+    font-weight: var(--bold-font);
+    gap: 10px;
     grid-column: 1 / 3;
     grid-row: 4 / 5;
+    margin-bottom: 0.75rem;
 }
 
 .rate-icon {
@@ -175,14 +185,17 @@ export default {
 
 .card-spot-red {
     color: red;
+    font-weight: var(--bold-font);
 }
 
 .card-spot-green {
     color: green;
+    font-weight: var(--bold-font);
 }
 
 .card-btn {
     grid-column: 1 / 7;
     grid-row: 5 / 6;
+    font-weight: var(--bold-font);
 }
 </style>
