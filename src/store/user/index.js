@@ -66,7 +66,7 @@ const actions = {
         const req = {
             ContactNo               : state.contactForm.cno,
             UserName                : state.login.Username,
-            Owner                   : state.kycForm.radioData,
+            Owner                   : state.kycForm.owner,
             OwnerName               : 'none',
             OwnerContactNo          : 'none',
             Relationship            : 'none',

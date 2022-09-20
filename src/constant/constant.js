@@ -9,7 +9,7 @@ export const FORM = {
 };
 
 export const KYC = {
-    RADIO_DATA: ['Yes', 'No'],
+    OWNER_RADIO_DATA: ['Yes', 'No'],
     DOCUMENT_DATA: [
         { id: 0, name: 'Adhaar Card' },
         { id: 1, name: 'Electricity Bills' },

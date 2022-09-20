@@ -2,9 +2,9 @@
     <ValidationObserver ref="observer" v-slot="{}">
         <MoleculeRadioButton
             :fieldName="'radio'"
-            :rules="validation.radio"
-            :values="radioValues"
-            @data="updateRadioData"
+            :rules="validation.owner"
+            :values="ownerRadioValues"
+            @data="updateOwner"
         >
             Are you the Owner?
         </MoleculeRadioButton>
@@ -51,15 +51,15 @@ export default {
     data() {
         return {
             KYC,
-            radioValues: KYC.RADIO_DATA,
+            ownerRadioValues: KYC.OWNER_RADIO_DATA,
             documentValues: KYC.DOCUMENT_DATA,
             validation: {
-                radio: 'required',
+                owner: 'required',
                 documentSelect: 'required',
                 img: 'required|image',
             },
             model: {
-                radioData: '',
+                owner: '',
                 documentData: null,
                 imgData: null,
             },
@@ -91,10 +91,10 @@ export default {
         submit() {
             this.updateKyc(this.model);
         },
-        updateRadioData(data) {
-            data === 'Yes'
-                ? (this.model.radioData = true)
-                : (this.model.radioData = false);
+        updateOwner(owner) {
+            owner === 'Yes'
+                ? (this.model.owner = true)
+                : (this.model.owner = false);
         },
         updateDocumentData(index) {
             this.model.documentData = this.documentValues[index].name;
