@@ -58,7 +58,7 @@ const actions = {
     },
 
     login({ state }) {
-        mayaClient.post('/auth/login', state.login);
+        mayaClient.patch('/auth/login', state.login);
     },
 
     kyc({ state }) {
