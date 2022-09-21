@@ -58,7 +58,7 @@ const actions = {
     },
 
     login({ state }) {
-        mayaClient.patch('/auth/login', state.login);
+        mayaClient.post('/auth/login', state.login);
     },
 
     kyc({ state }) {
@@ -76,7 +76,7 @@ const actions = {
             IdentityDocumentImage   : state.kycForm.imgData,
         };
 
-        mayaClient.patch('/kyc', req);
+        mayaClient.post('/kyc', req);
     },
 
     contact({ state }) {
