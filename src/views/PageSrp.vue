@@ -3,8 +3,9 @@
         <TemplateSrp
             :spots="paginatedSrpResults"
             :totals="totalPages"
-            @changed="onPageChange"
+            :currentPage="currentPage"
             :reRender="reRender"
+            @changed="onPageChange"
             @flyToSrp="flyToSrp"
         ></TemplateSrp>
         <LoaderModal :isLoading="isLoading"></LoaderModal>
@@ -24,6 +25,7 @@ export default {
         return {
             reRender: 0,
             isLoading: false,
+            currentPage: 1,
         };
     },
     computed: {
@@ -53,13 +55,14 @@ export default {
         }),
         ...mapActions({
             srpCall: 'map/srpCall',
-            updateCenterSrp: 'map/update-center-srp',
+            updateCenterSrp: 'map/updateCenterSrp',
         }),
 
         onPageChange(pageNum) {
             this.isLoading = true;
             this.updatePaginatedSrpData(pageNum);
             this.updateCenterSrp();
+            this.currentPage = pageNum;
             this.reRender++;
             this.isLoading = false;
         },
