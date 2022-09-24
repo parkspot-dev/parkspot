@@ -62,25 +62,15 @@ export default {
         },
     },
     emits: ['booked'],
-    filters: {
-        available(slotAvailable) {
-            if (slotAvailable === 0) {
-                return 'Rented Out';
-            } else {
-                return 'Available';
-            }
-        },
-    },
     methods: {
         onBook() {
             this.$emit('booked');
         },
         getAvailability(spot) {
-            if (spot === 0) {
-                return false;
-            } else {
+            if (spot > 0) {
                 return true;
             }
+            return false;
         },
     },
 };
