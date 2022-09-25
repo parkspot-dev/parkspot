@@ -1,7 +1,7 @@
 <template>
     <BodyWrapper>
         <AtomHeading class="mb-5 has-text-centered">
-            Fill the form to Request your Parking Spot
+            Fill the form to Request a Parking Spot
         </AtomHeading>
         <div class="card card-wrapper">
             <b-steps
