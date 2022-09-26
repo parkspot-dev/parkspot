@@ -1,9 +1,9 @@
 <template>
     <BodyWrapper>
         <AtomHeading class="mb-5 has-text-centered">
-            Fill the form to Request your Parking Spot
+            Fill the form to Request a Parking Spot
         </AtomHeading>
-        <div class="card p-6 cmargin">
+        <div class="card card-wrapper">
             <b-steps
                 v-model="activeStep"
                 :has-navigation="hasNavigation"
@@ -194,24 +194,14 @@ export default {
 </script>
 
 <style scoped>
-.cmargin {
-    margin: 0 15rem;
+.card-wrapper {
+    margin: 0 auto;
+    max-width: 600px;
+    padding: 2rem 1rem;
 }
 
 .footer-buttons {
     display: flex;
     justify-content: space-between;
-}
-
-@media only screen and (max-width: 800px) {
-    .cmargin {
-        margin: 0 5rem;
-    }
-}
-
-@media only screen and (max-width: 600px) {
-    .cmargin {
-        margin: 0;
-    }
 }
 </style>
