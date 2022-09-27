@@ -65,13 +65,12 @@ export default {
 
             this.isLoading = false;
         },
-
         toSrp(lat, lng) {
+            const latlng = [lat, lng].toString();
             const routeData = this.$router.resolve({
                 name: 'srp',
                 query: {
-                    lat: lat,
-                    lng: lng,
+                    latlng,
                 },
             });
             window.open(routeData.href, '_blank');
