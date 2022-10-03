@@ -83,7 +83,7 @@ export default {
         0 0 0 1px rgb(10, 10, 10, 20%);
     column-gap: 0.25rem;
     display: grid;
-    grid-template-columns: repeat(6, auto);
+    grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(5, auto);
     margin: 0.5rem;
     max-width: 500px;
@@ -159,7 +159,7 @@ export default {
     display: flex;
     font-weight: var(--bold-font);
     gap: 10px;
-    grid-column: 1 / 3;
+    grid-column: 1 / 4;
     grid-row: 4 / 5;
     margin-bottom: 0.75rem;
 }
@@ -169,7 +169,7 @@ export default {
 }
 
 .card-spot {
-    grid-column: 3 / 5;
+    grid-column: 4 / 6;
     grid-row: 4 / 5;
 }
 
