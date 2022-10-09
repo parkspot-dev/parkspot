@@ -11,7 +11,7 @@ export default {
     },
     data() {
         return {
-            msg: '',
+            msg: 'Something went wrong...!',
         };
     },
     mounted() {
@@ -23,7 +23,11 @@ export default {
         },
 
         getMsg() {
-            this.msg = this.$route.params.msg;
+            if (this.$route.params.msg) {
+                this.msg = this.$route.params.msg
+                    .toString()
+                    .replace('Error:', '');
+            }
         },
     },
 };

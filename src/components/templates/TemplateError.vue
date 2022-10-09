@@ -18,8 +18,8 @@
                 Back Home
             </AtomButton>
         </div>
-        <AtomParagraph :type="'p'" class="custom-para"
-            >If you have any issues. Call +91 80929 96057
+        <AtomParagraph :type="'p'" class="custom-para">
+            If you have any issues. Call +91 80929 96057
         </AtomParagraph>
     </BodyWrapper>
 </template>
