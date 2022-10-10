@@ -166,22 +166,23 @@
                 >
                     {{
                         props.row.Latitude.toFixed(6) +
-                        '/' +
+                        ',' +
                         props.row.Longitude.toFixed(6)
                     }}
                 </a>
-
-                <p>Lat :</p>
+                <br />
+                <br />
+                <p>LatLng:</p>
                 <AtomInput
-                    :value="props.row.Latitude.toFixed(6)"
-                    @changed="updateLat(props.row, ...arguments)"
-                ></AtomInput>
-
-                <p>Lng :</p>
-                <AtomInput
-                    :value="props.row.Longitude.toFixed(6)"
-                    @changed="updateLng(props.row, ...arguments)"
-                ></AtomInput>
+                    :value="
+                        getLatLng(
+                            props.row.Latitude.toFixed(6),
+                            props.row.Longitude.toFixed(6),
+                        )
+                    "
+                    @changed="updateLatLng(props.row, ...arguments)"
+                >
+                </AtomInput>
             </b-table-column>
 
             <template #empty>
@@ -255,6 +256,10 @@ export default {
             }
         },
 
+        getLatLng(lat, lng) {
+            return lat + ',' + lng;
+        },
+
         isCallDelayed(nextCall) {
             if (new Date().getTime() > new Date(nextCall).getTime()) {
                 return true;
@@ -280,19 +285,15 @@ export default {
             this.$emit('updateRequest', spotData);
         },
 
-        updateLat(spotData, lat) {
+        updateLatLng(spotData, latlng) {
+            const coordinate = latlng.split(',');
+            const lat = coordinate[0].trim();
+            const lng = coordinate[1].trim();
             if (
-                spotData['Latitude'].toString() !== parseFloat(lat).toString()
+                spotData['Latitude'].toString() !== lat ||
+                spotData['Longitude'].toString() !== lng
             ) {
                 spotData['Latitude'] = parseFloat(lat);
-                this.$emit('updateRequest', spotData);
-            }
-        },
-
-        updateLng(spotData, lng) {
-            if (
-                spotData['Longitude'].toString() !== parseFloat(lng).toString()
-            ) {
                 spotData['Longitude'] = parseFloat(lng);
                 this.$emit('updateRequest', spotData);
             }
