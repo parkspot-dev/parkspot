@@ -23,15 +23,24 @@
             </b-table-column>
 
             <b-table-column
-                field="CreatedAt"
+                field="UpdatedAt"
                 label="Date"
                 centered
                 v-slot="props"
                 sortable
             >
-                <span class="tag is-success">
-                    {{ new Date(props.row.CreatedAt).toLocaleDateString() }}
-                </span>
+                <div>
+                    <p class="tag">UpdatedAt:</p>
+                    <strong>
+                        {{ new Date(props.row.UpdatedAt).toLocaleDateString() }}
+                    </strong>
+                    <br />
+                    <br />
+                    <p class="tag">CreatedAt:</p>
+                    <strong>
+                        {{ new Date(props.row.CreatedAt).toLocaleDateString() }}
+                    </strong>
+                </div>
             </b-table-column>
 
             <b-table-column
@@ -43,12 +52,12 @@
                 <span
                     class="tag"
                     :class="{
-                        'is-low': props.row.Priority === 1,
-                        'is-medium': props.row.Priority === 2,
-                        'is-high': props.row.Priority === 3,
+                        'is-info': props.row.Priority === 1,
+                        'is-warning': props.row.Priority === 2,
+                        'is-danger': props.row.Priority === 3,
                     }"
                 >
-                    {{ getPriority(props.row.Priority) }}
+                    <b> {{ getPriority(props.row.Priority) }}</b>
                 </span>
             </b-table-column>
 
@@ -124,23 +133,23 @@
                     <span
                         class="tag is-warning"
                         :class="{
-                            'is-danger': getStatus(props.row.NextCall),
+                            'is-danger': isCallDelayed(props.row.NextCall),
                         }"
                     >
                         <span>
                             {{
-                                getStatus(props.row.NextCall)
-                                    ? 'delayed '
-                                    : 'upcoming '
+                                isCallDelayed(props.row.NextCall)
+                                    ? 'Delayed :'
+                                    : 'Upcoming :'
                             }}
                         </span>
-                        <strong>
+                        <b>
                             {{
                                 new Date(
                                     props.row.NextCall,
                                 ).toLocaleDateString()
                             }}
-                        </strong>
+                        </b>
                     </span>
                     <AtomDatePicker
                         class="column-width"
@@ -148,18 +157,6 @@
                     >
                     </AtomDatePicker>
                 </template>
-            </b-table-column>
-
-            <b-table-column
-                field="UpdatedAt"
-                label="Last Updated"
-                centered
-                v-slot="props"
-                sortable
-            >
-                <span class="tag is-success">
-                    {{ new Date(props.row.UpdatedAt).toLocaleDateString() }}
-                </span>
             </b-table-column>
 
             <b-table-column field="lat_lng" label="Lat/Lng" v-slot="props">
@@ -258,8 +255,8 @@ export default {
             }
         },
 
-        getStatus(val) {
-            if (new Date().getTime() > new Date(val).getTime()) {
+        isCallDelayed(nextCall) {
+            if (new Date().getTime() > new Date(nextCall).getTime()) {
                 return true;
             } else {
                 return false;
@@ -319,20 +316,5 @@ export default {
 
 .comment-width {
     width: 400px;
-}
-
-.is-high {
-    background-color: #f00;
-    color: #fff;
-}
-
-.is-medium {
-    background-color: #fdda0d;
-    color: #fff;
-}
-
-.is-low {
-    background-color: var(--primary-color);
-    color: #fff;
 }
 </style>
