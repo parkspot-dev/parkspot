@@ -42,9 +42,8 @@ export default {
             await this.srpCall();
             this.reRender++;
             this.isLoading = false;
-        } catch (error) {
-            console.log(error);
-            this.$router.push({ name: 'error', params: { msg: error } });
+        } catch (errorMsg) {
+            this.$router.push({ name: 'error', params: { msg: errorMsg } });
         }
     },
     methods: {

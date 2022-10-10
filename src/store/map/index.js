@@ -155,9 +155,7 @@ const actions = {
             commit('update-paginated-srp-data', 1); // paginated srp result stored
             state.srpResults = data.Sites;
         } else {
-            throw new Error(
-                'Prensently we are not active on your location.\nNo worries, we are expanding rapidly',
-            );
+            throw data.DisplayMsg;
         }
     },
 

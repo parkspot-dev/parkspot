@@ -23,11 +23,7 @@ export default {
         },
 
         getMsg() {
-            if (this.$route.params.msg) {
-                this.msg = this.$route.params.msg
-                    .toString()
-                    .replace('Error:', '');
-            }
+            this.msg = this.$route.params.msg;
         },
     },
 };
