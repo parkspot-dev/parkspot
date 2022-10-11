@@ -32,6 +32,7 @@
                         </p>
                         <a class="card-header-icon">
                             <b-icon
+                                class="arrow-white"
                                 :icon="props.open ? 'menu-down' : 'menu-up'"
                             >
                             </b-icon>
@@ -159,6 +160,10 @@ export default {
 }
 
 .custom-header-title {
+    color: #fff;
+}
+
+.arrow-white {
     color: #fff;
 }
 </style>
