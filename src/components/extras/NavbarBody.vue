@@ -19,7 +19,7 @@
                     Features
                 </b-navbar-item>
                 <b-navbar-item tag="router-link" :to="{ name: 'blog' }">
-                    Blog
+                    Blogs
                 </b-navbar-item>
                 <b-navbar-dropdown label="Services" hoverable>
                     <b-navbar-item tag="router-link" :to="{ name: 'VOPortal' }">
