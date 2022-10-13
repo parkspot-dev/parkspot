@@ -84,7 +84,8 @@ export default {
     column-gap: 0.25rem;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(5, auto);
+    grid-template-rows: repeat(5, 1fr);
+    height: 220px;
     margin: 0.5rem;
     max-width: 500px;
     overflow: hidden;
