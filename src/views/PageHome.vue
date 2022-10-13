@@ -15,6 +15,7 @@ import TemplateHomeBanner from '../components/templates/TemplateHomeBanner.vue';
 import TemplateOurProducts from '../components/templates/TemplateOurProducts.vue';
 import TemplateTestimonial from '../components/templates/TemplateTestimonial.vue';
 import PageAbout from './PageAbout.vue';
+import { latLngFilter } from '../includes/LatLng';
 import { mapGetters } from 'vuex';
 export default {
     name: 'PageHome',
@@ -36,12 +37,13 @@ export default {
     },
     methods: {
         flyToSrp() {
-            let latlng = [...this.LocDetails.lnglat];
-            latlng = latlng.reverse().toString();
+            const coordinate = latLngFilter(this.LocDetails.lnglat.toString())
+                .reverse()
+                .toString();
             this.$router.push({
                 name: 'srp',
                 query: {
-                    latlng,
+                    latlng: coordinate,
                 },
                 params: {
                     location: this.LocDetails.locDetails.locName,

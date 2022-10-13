@@ -197,6 +197,8 @@ import AtomTextarea from '../atoms/AtomTextarea.vue';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import AtomInput from '../atoms/AtomInput.vue';
+import { latLngFilter } from '../../includes/LatLng';
+
 export default {
     name: 'TemplateInventory',
     components: {
@@ -286,15 +288,13 @@ export default {
         },
 
         updateLatLng(spotData, latlng) {
-            const coordinate = latlng.split(',');
-            const lat = coordinate[0].trim();
-            const lng = coordinate[1].trim();
+            const coordinate = latLngFilter(latlng);
             if (
-                spotData['Latitude'].toString() !== lat ||
-                spotData['Longitude'].toString() !== lng
+                spotData['Latitude'].toString() !== coordinate[0] ||
+                spotData['Longitude'].toString() !== coordinate[1]
             ) {
-                spotData['Latitude'] = parseFloat(lat);
-                spotData['Longitude'] = parseFloat(lng);
+                spotData['Latitude'] = parseFloat(coordinate[0]);
+                spotData['Longitude'] = parseFloat(coordinate[1]);
                 this.$emit('updateRequest', spotData);
             }
         },
