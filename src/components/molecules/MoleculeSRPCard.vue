@@ -102,6 +102,10 @@ export default {
     font-size: 1rem;
     grid-column: 1 / 5;
     grid-row: 1 / 1;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
 }
 
 .card-location {
