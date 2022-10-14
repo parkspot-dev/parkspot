@@ -11,7 +11,7 @@ export default {
     },
     data() {
         return {
-            msg: 'Something went wrong..!',
+            msg: 'Something went wrong...!',
         };
     },
     mounted() {
