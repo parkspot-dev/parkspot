@@ -84,7 +84,8 @@ export default {
     column-gap: 0.25rem;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(5, auto);
+    grid-template-rows: repeat(5, 1fr);
+    height: 220px;
     margin: 0.5rem;
     max-width: 500px;
     overflow: hidden;
@@ -101,6 +102,10 @@ export default {
     font-size: 1rem;
     grid-column: 1 / 5;
     grid-row: 1 / 1;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
 }
 
 .card-location {
