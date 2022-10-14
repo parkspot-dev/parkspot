@@ -15,7 +15,7 @@
 import TemplateSrp from '../components/templates/TemplateSrp.vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import LoaderModal from '../components/extras/LoaderModal.vue';
-import { latLngFilter } from '../includes/LatLng';
+import { getCoordinate } from '../includes/LatLng';
 
 export default {
     name: 'PageSrp',
@@ -74,14 +74,14 @@ export default {
 
         getLatLng() {
             const queryParam = new URLSearchParams(window.location.search);
-            const coordinate = latLngFilter(queryParam.get('latlng'));
+            const coordinate = getCoordinate(queryParam.get('latlng'));
             coordinate.reverse(); // map center takes [lng, lat] so reverse() used
             return coordinate;
         },
 
         flyToSrp() {
             this.$nextTick(() => {
-                const coordinate = latLngFilter(
+                const coordinate = getCoordinate(
                     this.LocDetails.lnglat.toString(),
                 )
                     .reverse()

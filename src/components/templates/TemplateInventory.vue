@@ -197,7 +197,7 @@ import AtomTextarea from '../atoms/AtomTextarea.vue';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import AtomInput from '../atoms/AtomInput.vue';
-import { latLngFilter } from '../../includes/LatLng';
+import { getCoordinate } from '../../includes/LatLng';
 
 export default {
     name: 'TemplateInventory',
@@ -288,7 +288,7 @@ export default {
         },
 
         updateLatLng(spotData, latlng) {
-            const coordinate = latLngFilter(latlng);
+            const coordinate = getCoordinate(latlng);
             if (
                 spotData['Latitude'].toString() !== coordinate[0] ||
                 spotData['Longitude'].toString() !== coordinate[1]

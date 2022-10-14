@@ -1,12 +1,15 @@
 /**
  * Take comma seperated latlng and convert into array.
  * @param {string} latlng string.
- * @return {Array} coordinate.
+ * @return {Array} coordinate i.e., coordinate[0]-> lat and coordinate[1]-> lng.
  */
-function latLngFilter(latlng) {
+function getCoordinate(latlng) {
     let coordinate = latlng.split(',');
-    coordinate = coordinate.map((coord) => coord.trim());
-    return coordinate;
+    if (coordinate.length == 2) {
+        coordinate = coordinate.map((coord) => coord.trim());
+        return coordinate;
+    }
+    return null;
 }
 
-export { latLngFilter };
+export { getCoordinate };
