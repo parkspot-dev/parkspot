@@ -15,6 +15,8 @@
 import TemplateSrp from '../components/templates/TemplateSrp.vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import LoaderModal from '../components/extras/LoaderModal.vue';
+import { getCoordinate } from '../includes/LatLng';
+
 export default {
     name: 'PageSrp',
     components: {
@@ -28,6 +30,7 @@ export default {
             currentPage: 1,
         };
     },
+
     computed: {
         ...mapGetters({
             paginatedSrpResults: 'map/getPaginateSrpResults',
@@ -35,6 +38,7 @@ export default {
             LocDetails: 'map/getLocDetails',
         }),
     },
+
     async mounted() {
         try {
             this.isLoading = true;
@@ -69,19 +73,23 @@ export default {
 
         getLatLng() {
             const queryParam = new URLSearchParams(window.location.search);
-            const latlng = queryParam.get('latlng').split(',');
-            latlng.reverse(); // map center takes [lng, lat] so reverse() used
-            return latlng;
+            const coordinate = getCoordinate(queryParam.get('latlng'));
+            coordinate.reverse(); // map center takes [lng, lat] so reverse() used
+            return coordinate;
         },
 
         flyToSrp() {
             this.$nextTick(() => {
-                let latlng = [...this.LocDetails.lnglat];
-                latlng = latlng.reverse().toString();
+                const coordinate = getCoordinate(
+                    this.LocDetails.lnglat.toString(),
+                )
+                    .reverse()
+                    .toString();
+
                 this.$router.push({
                     name: 'srp',
                     query: {
-                        latlng,
+                        latlng: coordinate,
                     },
                     params: {
                         location: this.LocDetails.locDetails.locName,

@@ -23,7 +23,9 @@ export default {
         },
 
         getMsg() {
-            this.msg = this.$route.params.msg;
+            if (this.$route.params.msg != null) {
+                this.msg = this.$route.params.msg;
+            }
         },
     },
 };
