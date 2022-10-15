@@ -36,7 +36,7 @@ export const pages = {
     TERMS: '/terms-and-conditions',
     BLOG: '/blog',
     MAINBLOG: '/blog/:id',
-    INVENTORY: '/search-portal',
+    SEARCH_PORTAL: '/search-portal',
     PAYMENTGATEWAY: '/payment/*',
     NEARBY: '/bangalore/parking-near-*',
     TEMP: '/temp',
@@ -135,9 +135,9 @@ export const routes = [
         },
     },
     {
-        path: pages.INVENTORY,
-        name: 'Inventory',
-        component: () => import('@/views/PageInventory.vue'),
+        path: pages.SEARCH_PORTAL,
+        name: 'SearchPortal',
+        component: () => import('@/views/PageSearchPortal.vue'),
         meta: {
             title: 'ParkSpot | Search Portal',
         },
