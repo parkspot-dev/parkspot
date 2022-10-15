@@ -200,7 +200,7 @@ import AtomInput from '../atoms/AtomInput.vue';
 import { getCoordinate } from '../../includes/LatLng';
 
 export default {
-    name: 'TemplateInventory',
+    name: 'TemplateSearchPortal',
     components: {
         AtomTextarea,
         AtomSelectInput,

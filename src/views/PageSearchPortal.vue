@@ -1,17 +1,17 @@
 <template>
-    <TemplateInventory
+    <TemplateSearchPortal
         :lists="spotDetails"
         :isLoading="isLoading"
         @updateRequest="updateRequest"
         @toSrp="toSrp"
-    ></TemplateInventory>
+    ></TemplateSearchPortal>
 </template>
 <script>
-import TemplateInventory from '../components/templates/TemplateInventory.vue';
+import TemplateSearchPortal from '../components/templates/TemplateSearchPortal.vue';
 export default {
-    name: 'PageInventory',
+    name: 'PageSearchPortal',
     components: {
-        TemplateInventory,
+        TemplateSearchPortal,
     },
     data() {
         return {
