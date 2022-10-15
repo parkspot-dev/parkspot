@@ -1,5 +1,45 @@
 <template>
     <div class="custom-wrap">
+        <div class="so-btn">
+            <AtomButton @click.native="showSummary">
+                {{ summary.btn }} Summary
+            </AtomButton>
+        </div>
+        <br />
+        <div class="so-summary" v-show="summary.show">
+            <p class="so-total">Total Request : {{ summary.totalRequest }}</p>
+            <hr />
+            <div class="so-priority">
+                <p>High : {{ summary.high }}</p>
+                <p>Low : {{ summary.low }}</p>
+                <p>Medium : {{ summary.medium }}</p>
+            </div>
+            <hr />
+            <div class="so-status">
+                <p>
+                    <span>Not Set :</span> <span>{{ summary.status[0] }}</span>
+                </p>
+                <p>
+                    <span>Registered :</span>
+                    <span>{{ summary.status[1] }}</span>
+                </p>
+                <p>
+                    <span>Processing :</span>
+                    <span>{{ summary.status[2] }}</span>
+                </p>
+                <p>
+                    <span>Suggested : </span>
+                    <span>{{ summary.status[3] }}</span>
+                </p>
+                <p>
+                    <span>Accepted : </span>
+                    <span>{{ summary.status[4] }}</span>
+                </p>
+                <p>
+                    <span>Denied : </span> <span>{{ summary.status[5] }}</span>
+                </p>
+            </div>
+        </div>
         <b-table
             :data="isEmpty ? [] : lists"
             :bordered="true"
@@ -197,6 +237,7 @@ import AtomTextarea from '../atoms/AtomTextarea.vue';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import AtomInput from '../atoms/AtomInput.vue';
+import AtomButton from '../atoms/AtomButton.vue';
 import { getCoordinate } from '../../includes/LatLng';
 
 export default {
@@ -206,6 +247,7 @@ export default {
         AtomSelectInput,
         AtomDatePicker,
         AtomInput,
+        AtomButton,
     },
     props: {
         lists: {
@@ -244,7 +286,39 @@ export default {
                 status: '',
                 nextCall: '',
             },
+
+            summary: {
+                btn: 'Show',
+                show: false,
+                totalRequest: 0,
+                high: 0,
+                medium: 0,
+                low: 0,
+                status: [0, 0, 0, 0, 0, 0],
+                registered: 0,
+                processing: 0,
+                spotSuggested: 0,
+                spotAccepted: 0,
+                spotDenied: 0,
+            },
         };
+    },
+    watch: {
+        lists(requests) {
+            this.summary.totalRequest = requests.length;
+            requests.forEach((request) => {
+                if (request.Priority === 3) {
+                    this.summary.high++;
+                }
+                if (request.Priority === 2) {
+                    this.summary.medium++;
+                }
+                if (request.Priority === 1) {
+                    this.summary.low++;
+                }
+                this.summary.status[request.Status]++;
+            });
+        },
     },
     methods: {
         getPriority(val) {
@@ -302,11 +376,57 @@ export default {
         toSrp(lat, lng) {
             this.$emit('toSrp', lat, lng);
         },
+
+        showSummary() {
+            console.log('summary');
+            this.summary.show = !this.summary.show;
+            if (this.summary.show) {
+                this.summary.btn = 'Hide';
+            } else {
+                this.summary.btn = 'Show';
+            }
+        },
     },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.so-btn {
+    text-align: right;
+}
+.so-summary {
+    border: 1px solid black;
+    padding: 2rem;
+    max-width: 500px;
+    background-color: #f5f5dc;
+    position: absolute;
+    top: 120px;
+    right: 20px;
+    z-index: 9999;
+    // display: none;
+
+    .so-total {
+        font-size: 20px;
+        font-weight: var(--semi-bold-font);
+        text-align: center;
+    }
+
+    .so-priority {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .so-status {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 2.5rem;
+
+        p {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+}
 .custom-wrap {
     padding: 1rem;
 }
