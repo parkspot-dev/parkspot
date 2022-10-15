@@ -17,9 +17,6 @@
             <hr />
             <div class="so-status">
                 <p>
-                    <span>Not Set :</span> <span>{{ summary.status[0] }}</span>
-                </p>
-                <p>
                     <span>Registered :</span>
                     <span>{{ summary.status[1] }}</span>
                 </p>
@@ -31,17 +28,10 @@
                     <span>Suggested : </span>
                     <span>{{ summary.status[3] }}</span>
                 </p>
-                <p>
-                    <span>Accepted : </span>
-                    <span>{{ summary.status[4] }}</span>
-                </p>
-                <p>
-                    <span>Denied : </span> <span>{{ summary.status[5] }}</span>
-                </p>
             </div>
         </div>
         <b-table
-            :data="isEmpty ? [] : lists"
+            :data="isEmpty ? [] : parkingRequests"
             :bordered="true"
             :hoverable="true"
             :loading="isLoading"
@@ -250,7 +240,7 @@ export default {
         AtomButton,
     },
     props: {
-        lists: {
+        parkingRequests: {
             type: Array,
         },
         isLoading: {
@@ -304,7 +294,7 @@ export default {
         };
     },
     watch: {
-        lists(requests) {
+        parkingRequests(requests) {
             this.summary.totalRequest = requests.length;
             requests.forEach((request) => {
                 if (request.Priority === 3) {
@@ -378,7 +368,6 @@ export default {
         },
 
         showSummary() {
-            console.log('summary');
             this.summary.show = !this.summary.show;
             if (this.summary.show) {
                 this.summary.btn = 'Hide';

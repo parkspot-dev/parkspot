@@ -1,6 +1,6 @@
 <template>
     <TemplateSearchPortal
-        :lists="spotDetails"
+        :parkingRequests="parkingRequests"
         :isLoading="isLoading"
         @updateRequest="updateRequest"
         @toSrp="toSrp"
@@ -15,21 +15,21 @@ export default {
     },
     data() {
         return {
-            spotDetails: [],
+            parkingRequests: [],
             isLoading: false,
         };
     },
     created() {
-        this.getSpotDetails();
+        this.getParkingRequests();
     },
     methods: {
-        async getSpotDetails() {
+        async getParkingRequests() {
             this.isLoading = true;
             const res = await fetch(
                 'https://maya.parkspot.in/internal/parking-requests',
             );
             const data = await res.json();
-            this.spotDetails = data;
+            this.parkingRequests = data;
             this.isLoading = false;
         },
         async updateRequest(request) {
