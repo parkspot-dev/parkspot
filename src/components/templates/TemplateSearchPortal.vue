@@ -9,11 +9,23 @@
         <div class="so-summary" v-show="summary.show">
             <p class="so-total">Total Request : {{ summary.totalRequest }}</p>
             <hr />
+            <div class="so-live-request">
+                <p>
+                    <span>Today : </span>
+                    <span>{{ summary.today }}</span>
+                </p>
+                <p>
+                    <span>yesterday : </span>
+                    <span>{{ summary.yesterday }}</span>
+                </p>
+            </div>
+            <hr />
             <div class="so-priority">
                 <p>High : {{ summary.high }}</p>
                 <p>Low : {{ summary.low }}</p>
                 <p>Medium : {{ summary.medium }}</p>
             </div>
+
             <hr />
             <div class="so-status">
                 <p>
@@ -285,28 +297,45 @@ export default {
                 medium: 0,
                 low: 0,
                 status: [0, 0, 0, 0, 0, 0],
-                registered: 0,
-                processing: 0,
-                spotSuggested: 0,
-                spotAccepted: 0,
-                spotDenied: 0,
+                today: 0,
+                yesterday: 0,
             },
         };
     },
     watch: {
         parkingRequests(requests) {
             this.summary.totalRequest = requests.length;
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
             requests.forEach((request) => {
                 if (request.Priority === 3) {
                     this.summary.high++;
                 }
+
                 if (request.Priority === 2) {
                     this.summary.medium++;
                 }
+
                 if (request.Priority === 1) {
                     this.summary.low++;
                 }
+
                 this.summary.status[request.Status]++;
+
+                if (
+                    new Date(request.CreatedAt).toLocaleDateString() ===
+                    today.toLocaleDateString()
+                ) {
+                    this.summary.today++;
+                }
+
+                if (
+                    new Date(request.CreatedAt).toLocaleDateString() ===
+                    yesterday.toLocaleDateString()
+                ) {
+                    this.summary.yesterday++;
+                }
             });
         },
     },
@@ -398,6 +427,11 @@ export default {
         font-size: 20px;
         font-weight: var(--semi-bold-font);
         text-align: center;
+    }
+
+    .so-live-request {
+        display: flex;
+        gap: 6rem;
     }
 
     .so-priority {
