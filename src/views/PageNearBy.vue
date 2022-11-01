@@ -21,8 +21,8 @@ export default {
         };
     },
     mounted() {
+        this.nearByLocation = this.$route.params.pathMatch.split('/')[0].trim();
         this.getPageData();
-        this.nearByLocation = this.$route.params.pathMatch;
     },
     methods: {
         async getPageData() {
@@ -31,7 +31,7 @@ export default {
             // console.log(check)
             // seo-pages database
             const pageData = await get(
-                child(dbref, `seo-pages/${this.$route.params.pathMatch}`),
+                child(dbref, `seo-pages/${this.nearByLocation}`),
             )
                 .then((snapshot) => {
                     if (snapshot.exists()) {

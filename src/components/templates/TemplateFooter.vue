@@ -308,6 +308,7 @@ export default {
 .custom-footer,
 .top-search-link {
     color: #888d93;
+    text-transform: capitalize;
 }
 
 .top-search-link:hover {
