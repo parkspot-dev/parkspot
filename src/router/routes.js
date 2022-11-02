@@ -165,7 +165,7 @@ export const routes = [
         name: 'thankYou',
         component: () => import('@/views/PageThankYou.vue'),
         meta: {
-            title: 'Parking Near ',
+            title: 'ParkSpot | Thank You ',
         },
     },
     {
@@ -173,7 +173,7 @@ export const routes = [
         name: 'error',
         component: () => import('@/views/PageError.vue'),
         meta: {
-            title: 'Parking Near ',
+            title: 'ParkSpot | Error ',
         },
     },
     // Todo Delete below code before deployment
@@ -182,11 +182,12 @@ export const routes = [
         name: 'temp',
         component: () => import('@/views/PageTemp.vue'),
         meta: {
-            title: 'Parking Near ',
+            title: 'ParkSpot | Temp ',
         },
     },
     {
         path: '*',
         component: Home,
+        redirect: pages.HOME,
     },
 ];
