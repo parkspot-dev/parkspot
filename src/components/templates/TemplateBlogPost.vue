@@ -1,20 +1,22 @@
 <template>
     <div>
         <HeaderBanner>
-            <AtomHeading :level="'h2'" class="custom-title">
-                Parking Blogs
-            </AtomHeading>
-            <b-breadcrumb align="is-centered" size="is-medium">
-                <b-breadcrumb-item tag="router-link" to="/">
-                    Home
-                </b-breadcrumb-item>
-                <b-breadcrumb-item tag="router-link" to="/blog">
-                    Blogs
-                </b-breadcrumb-item>
-                <b-breadcrumb-item tag="router-link" to="/blog" active>
-                    {{ blog.title }}
-                </b-breadcrumb-item>
-            </b-breadcrumb>
+            <div class="blog-header">
+                <h2>Parking Blogs</h2>
+                <div class="blog-nav">
+                    <b-breadcrumb align="is-centered" size="is-small">
+                        <b-breadcrumb-item tag="router-link" to="/">
+                            Home
+                        </b-breadcrumb-item>
+                        <b-breadcrumb-item tag="router-link" to="/blog">
+                            Blogs
+                        </b-breadcrumb-item>
+                        <b-breadcrumb-item tag="router-link" to="/blog" active>
+                            {{ blog.title }}
+                        </b-breadcrumb-item>
+                    </b-breadcrumb>
+                </div>
+            </div>
         </HeaderBanner>
 
         <BodyWrapper>
@@ -83,10 +85,19 @@ export default {
     },
 };
 </script>
-<style scoped>
-.custom-title {
-    margin-bottom: 2rem;
-    text-align: center;
+<style lang="scss" scoped>
+.blog-header {
+    display: flex;
+    height: 200px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    align-content: space-around;
+
+    h2 {
+        font-size: 2rem;
+        font-weight: 500;
+    }
 }
 
 .article-wrapper {
