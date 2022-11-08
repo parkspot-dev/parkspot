@@ -5,6 +5,7 @@
                 :alt="'image'"
                 :src="blog.img"
                 :ratio="'5by4'"
+                class="image-container"
             ></AtomImage>
         </div>
         <div class="blog-content">
@@ -63,6 +64,10 @@ export default {
 
         &:hover {
             opacity: 0.5;
+        }
+
+        .image-container {
+            padding-top: 50%;
         }
     }
 
