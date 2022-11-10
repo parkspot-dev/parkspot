@@ -1,19 +1,23 @@
 <template>
     <div>
         <HeaderBanner>
-            <AtomHeading class="custom-title">Parking Blogs</AtomHeading>
-            <b-breadcrumb align="is-centered" size="is-medium">
-                <b-breadcrumb-item tag="router-link" to="/">
-                    Home
-                </b-breadcrumb-item>
-                <b-breadcrumb-item tag="router-link" to="/blog" active>
-                    Blogs
-                </b-breadcrumb-item>
-            </b-breadcrumb>
+            <div class="blog-header">
+                <h1>Parking Blogs</h1>
+                <div class="blog-nav">
+                    <b-breadcrumb align="is-centered" size="is-small">
+                        <b-breadcrumb-item tag="router-link" to="/">
+                            Home
+                        </b-breadcrumb-item>
+                        <b-breadcrumb-item tag="router-link" to="/blog" active>
+                            Blogs
+                        </b-breadcrumb-item>
+                    </b-breadcrumb>
+                </div>
+            </div>
         </HeaderBanner>
 
         <BodyWrapper>
-            <div class="grid-container">
+            <div class="blog-container">
                 <MoleculeBlogCard
                     :key="blog.id"
                     v-for="blog in blogs"
@@ -28,14 +32,12 @@
 
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
-import AtomHeading from '../atoms/AtomHeading.vue';
 import HeaderBanner from '../extras/HeaderBanner.vue';
 import MoleculeBlogCard from '../molecules/MoleculeBlogCard.vue';
 export default {
     name: 'TemplateBlogHome',
     components: {
         BodyWrapper,
-        AtomHeading,
         HeaderBanner,
         MoleculeBlogCard,
     },
@@ -55,15 +57,28 @@ export default {
 };
 </script>
 
-<style scoped>
-.custom-title {
-    margin-bottom: 1rem;
-    text-align: center;
+<style lang="scss" scoped>
+.blog-header {
+    display: flex;
+    height: 200px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    align-content: space-around;
+
+    h1 {
+        font-size: 2rem;
+        font-weight: 500;
+    }
 }
 
-.grid-container {
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: auto auto;
+.blog-container {
+    display: flex;
+    gap: 56px;
+
+    @media only screen and (max-width: 1024px) {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 </style>
