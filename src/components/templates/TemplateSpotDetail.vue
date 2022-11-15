@@ -69,6 +69,10 @@ hr {
     height: 60vh;
     margin-bottom: 48px;
     margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #00000061;
 
     @media only screen and (max-width: 1024px) {
         margin-left: 0px;
