@@ -32,7 +32,7 @@ export const pages = {
     FEATURES        : '/features',
     CONTACT         : '/contact',
     SRP             : '/srp',
-    PDP             : '/srp/*',
+    SPOT_DETAIL     : '/srp/*',
     VOPORTAL        : '/get-parking-spot',
     SOPORTAL        : '/register-parking-spot',
     TERMS           : '/terms-and-conditions',
@@ -163,9 +163,9 @@ export const routes = [
         },
     },
     {
-        path: pages.PDP,
-        name: 'pdp',
-        component: () => import('@/views/PagePdp.vue'),
+        path: pages.SPOT_DETAIL,
+        name: 'spot-detail',
+        component: () => import('@/views/PageSpotDetail.vue'),
         meta: {
             title: 'ParkSpot | ',
         },
