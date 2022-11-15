@@ -71,6 +71,7 @@ export default {
         .discount-rate {
             font-weight: 600;
             font-size: 24px;
+            color: #000;
         }
     }
 
