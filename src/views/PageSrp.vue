@@ -7,6 +7,7 @@
             :reRender="reRender"
             @changed="onPageChange"
             @flyToSrp="flyToSrp"
+            @details="spotDetails"
         ></TemplateSrp>
         <LoaderModal :isLoading="isLoading"></LoaderModal>
     </section>
@@ -95,6 +96,15 @@ export default {
                         location: this.LocDetails.locDetails.locName,
                     },
                 });
+            });
+        },
+
+        spotDetails(spotID) {
+            this.$router.push({
+                name: 'spot-detail',
+                params: {
+                    spotId: spotID,
+                },
             });
         },
     },
