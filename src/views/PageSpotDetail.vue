@@ -1,5 +1,5 @@
 <template>
-    <TemplateSpotDetail></TemplateSpotDetail>
+    <TemplateSpotDetail :spotDetails="spotDetails"></TemplateSpotDetail>
 </template>
 
 <script>
@@ -13,18 +13,20 @@ export default {
     },
     data() {
         return {
+            spotId: null,
             spotDetails: null,
         };
     },
     mounted() {
+        this.spotId = this.$route.params.spotId;
         this.getSpotDetails();
     },
     methods: {
         async getSpotDetails() {
             const res = await mayaClient.get(
-                '/site?siteID=BLR%23RTNAGAR%23HANIELEGANC&getOwnerInfo=false',
+                `/site?siteID=${this.spotId}&getOwnerInfo=false`,
             );
-            this.spotDetails = res;
+            this.spotDetails = res.Site;
             console.log(this.spotDetails);
         },
     },

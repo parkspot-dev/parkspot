@@ -10,10 +10,15 @@
                 <SpotRateCard class="card-position"></SpotRateCard>
             </div>
             <div class="spot-detail-main-description">
-                <h1>Purva Sunflower</h1>
+                <h1>{{ spotDetails.Name }}</h1>
                 <p>
-                    8th Cross Rd, Lakshminarayanapuram, Rajajinagar, Binnipete,
-                    Bengaluru
+                    {{ spotDetails.Address }}
+                </p>
+                <p>
+                    {{ spotDetails.Area }}
+                </p>
+                <p>
+                    {{ spotDetails.City }}
                 </p>
             </div>
             <hr />
@@ -56,6 +61,12 @@ export default {
         BodyWrapper,
         SpotRateCard,
         MapContainer,
+    },
+    props: {
+        spotDetails: {
+            type: Object,
+            required: true,
+        },
     },
 };
 </script>
