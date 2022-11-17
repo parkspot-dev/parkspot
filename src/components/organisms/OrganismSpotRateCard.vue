@@ -1,30 +1,30 @@
 <template>
     <div class="rate-card">
         <div class="rate-container">
-            <p class="rate">₹9,000</p>
-            <p class="discount-rate">₹5,000</p>
+            <p class="rate">₹{{ spotDetails.Rate + DISCOUNT }}</p>
+            <p class="discount-rate">₹{{ spotDetails.Rate }}</p>
         </div>
         <div class="star-rating">
-            <AtomRating></AtomRating>
+            <AtomRating :rate="spotDetails.Rating"></AtomRating>
         </div>
         <hr />
         <div class="amount-breakage">
             <div>
-                <p>₹9,000 x 1 month</p>
-                <p>₹9,000</p>
+                <p>₹{{ spotDetails.Rate + DISCOUNT }} x 1 month</p>
+                <p>₹{{ spotDetails.Rate + DISCOUNT }}</p>
             </div>
             <div>
                 <p>Discount</p>
-                <p>₹4,000</p>
+                <p>- ₹{{ DISCOUNT }}</p>
             </div>
             <div>
                 <p>Convenience fee</p>
-                <p>₹500</p>
+                <p>+ ₹{{ spotDetails.Commission }}</p>
             </div>
             <hr />
             <div>
                 <p>Total before taxes</p>
-                <p>₹9000</p>
+                <p>₹{{ spotDetails.Rate + spotDetails.Commission }}</p>
             </div>
         </div>
 
@@ -35,11 +35,22 @@
 <script>
 import AtomRating from '../atoms/AtomRating.vue';
 import AtomButton from '../atoms/AtomButton.vue';
+import { mapState } from 'vuex';
 export default {
     name: 'OrganismSpotRateCard',
     components: {
         AtomRating,
         AtomButton,
+    },
+    data() {
+        return {
+            DISCOUNT: 1000,
+        };
+    },
+    computed: {
+        ...mapState('srp', {
+            spotDetails: (state) => state.spotDetails,
+        }),
     },
 };
 </script>
