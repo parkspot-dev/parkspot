@@ -1,6 +1,18 @@
 <template>
     <div class="gallery-container">
         <div id="lightgallery">
+            <!-- <template v-for="i in 5">
+                <a
+                    :key="i"
+                    class="gallery-item"
+                    href="http://localhost:8080/img/Home-Banner.b9fc5fdb.jpg"
+                >
+                    <img
+                        class="img-responsive"
+                        src="../../assets/Home-Banner.jpg"
+                    />
+                </a>
+            </template> -->
             <a
                 class="gallery-item"
                 href="http://localhost:8080/img/Home-Banner.b9fc5fdb.jpg"

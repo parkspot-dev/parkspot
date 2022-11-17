@@ -13,15 +13,18 @@
             </div>
             <div class="spot-detail-main-description">
                 <h1>{{ spotDetails.Name }}</h1>
-                <p>
-                    {{ spotDetails.Address }}
-                </p>
-                <p>
-                    {{ spotDetails.Area }}
-                </p>
-                <p>
-                    {{ spotDetails.City }}
-                </p>
+                <div>
+                    <p>Address:</p>
+                    <p>
+                        {{ spotDetails.Address }}
+                    </p>
+                    <p>
+                        {{ spotDetails.Area }}
+                    </p>
+                    <p>
+                        {{ spotDetails.City }}
+                    </p>
+                </div>
             </div>
             <hr />
 
@@ -30,7 +33,6 @@
                 <ul>
                     <li>Covered</li>
                     <li>Gated</li>
-                    <li>CCTV</li>
                     <li>Security Gaurd</li>
                 </ul>
             </div>
@@ -38,7 +40,7 @@
 
             <div class="spot-detail-map">
                 <h2>How to get here?</h2>
-                <MapContainer></MapContainer>
+                <MapContainer class="sdp-map"></MapContainer>
             </div>
 
             <div class="spot-detail-things">
@@ -58,6 +60,7 @@ import BodyWrapper from '../extras/BodyWrapper.vue';
 import SpotRateCard from '@/components/organisms/OrganismSpotRateCard.vue';
 import MapContainer from '@/components/extras/MapContainer.vue';
 import ImageGallery from '../organisms/OrganismImageGallery.vue';
+import { mapState } from 'vuex';
 
 export default {
     name: 'TemplateSpotDetail',
@@ -67,11 +70,10 @@ export default {
         MapContainer,
         ImageGallery,
     },
-    props: {
-        spotDetails: {
-            type: Object,
-            required: true,
-        },
+    computed: {
+        ...mapState('srp', {
+            spotDetails: (state) => state.spotDetails,
+        }),
     },
 };
 </script>
@@ -148,6 +150,7 @@ hr {
 
 .spot-detail-amenities {
     width: 600px;
+    min-height: 158px;
     margin-left: 20px;
 
     @media only screen and (max-width: 1024px) {
@@ -158,6 +161,17 @@ hr {
         font-size: 24px;
         font-weight: 500;
         margin-bottom: 26px;
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    ul li:before {
+        content: '✓ ';
+        color: green;
+        font-weight: bold;
+        font-size: 20px;
     }
 }
 
@@ -172,6 +186,10 @@ hr {
         font-size: 24px;
         font-weight: 500;
         margin-bottom: 26px;
+    }
+
+    .sdp-map {
+        border: 1px solid black;
     }
 }
 </style>
