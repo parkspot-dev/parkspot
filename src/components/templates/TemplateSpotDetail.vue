@@ -3,8 +3,10 @@
         <div>
             <!-- temporary later replace with collage for image gallery Organism-->
             <div class="spot-image-container">
-                <img src="../../assets/Home-Banner.jpg" alt="spot image" />
+                <!-- <img src="../../assets/Home-Banner.jpg" alt="spot image" /> -->
+                <ImageGallery></ImageGallery>
             </div>
+
             <!-- Rate Card Organism -->
             <div class="rate-card-container">
                 <SpotRateCard class="card-position"></SpotRateCard>
@@ -55,12 +57,15 @@
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import SpotRateCard from '@/components/organisms/OrganismSpotRateCard.vue';
 import MapContainer from '@/components/extras/MapContainer.vue';
+import ImageGallery from '../organisms/OrganismImageGallery.vue';
+
 export default {
     name: 'TemplateSpotDetail',
     components: {
         BodyWrapper,
         SpotRateCard,
         MapContainer,
+        ImageGallery,
     },
     props: {
         spotDetails: {
@@ -77,13 +82,15 @@ hr {
 }
 .spot-image-container {
     width: 100%;
-    height: 60vh;
+    height: 400px;
     margin-bottom: 48px;
     margin-left: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #00000061;
+    // background-color: #00000061;
+    border-radius: var(--border-default);
+    overflow: hidden;
 
     @media only screen and (max-width: 1024px) {
         margin-left: 0px;
