@@ -24,24 +24,26 @@ const guardThisRoute = async (to, from, next) => {
     }
 };
 
+// prettier-ignore
 export const pages = {
-    HOME: '/',
-    FAQ: '/faq',
-    ABOUT: '/about',
-    FEATURES: '/features',
-    CONTACT: '/contact',
-    SRP: '/srp',
-    VOPORTAL: '/get-parking-spot',
-    SOPORTAL: '/register-parking-spot',
-    TERMS: '/terms-and-conditions',
-    BLOG: '/blog',
-    MAINBLOG: '/blog/:id',
-    INVENTORY: '/search-portal',
-    PAYMENTGATEWAY: '/payment/*',
-    NEARBY: '/bangalore/parking-near-*',
-    TEMP: '/temp',
-    THANK_YOU: '/thank-you',
-    ERROR: '/error',
+    HOME            : '/',
+    FAQ             : '/faq',
+    ABOUT           : '/about',
+    FEATURES        : '/features',
+    CONTACT         : '/contact',
+    SRP             : '/srp',
+    SPOT_DETAIL     : '/srp/:spotId',
+    VOPORTAL        : '/get-parking-spot',
+    SOPORTAL        : '/register-parking-spot',
+    TERMS           : '/terms-and-conditions',
+    BLOG            : '/blog',
+    MAINBLOG        : '/blog/:id',
+    SEARCH_PORTAL   : '/search-portal',
+    PAYMENTGATEWAY  : '/payment/*',
+    NEARBY          : '/bangalore/parking-near-*',
+    TEMP            : '/temp',
+    THANK_YOU       : '/thank-you',
+    ERROR           : '/error',
 };
 
 export const routes = [
@@ -135,9 +137,9 @@ export const routes = [
         },
     },
     {
-        path: pages.INVENTORY,
-        name: 'Inventory',
-        component: () => import('@/views/PageInventory.vue'),
+        path: pages.SEARCH_PORTAL,
+        name: 'SearchPortal',
+        component: () => import('@/views/PageSearchPortal.vue'),
         meta: {
             title: 'ParkSpot | Search Portal',
         },
@@ -161,11 +163,19 @@ export const routes = [
         },
     },
     {
+        path: pages.SPOT_DETAIL,
+        name: 'spot-detail',
+        component: () => import('@/views/PageSpotDetail.vue'),
+        meta: {
+            title: 'ParkSpot | ',
+        },
+    },
+    {
         path: pages.THANK_YOU,
         name: 'thankYou',
         component: () => import('@/views/PageThankYou.vue'),
         meta: {
-            title: 'Parking Near ',
+            title: 'ParkSpot | Thank You ',
         },
     },
     {
@@ -173,7 +183,7 @@ export const routes = [
         name: 'error',
         component: () => import('@/views/PageError.vue'),
         meta: {
-            title: 'Parking Near ',
+            title: 'ParkSpot | Error ',
         },
     },
     // Todo Delete below code before deployment
@@ -182,11 +192,12 @@ export const routes = [
         name: 'temp',
         component: () => import('@/views/PageTemp.vue'),
         meta: {
-            title: 'Parking Near ',
+            title: 'ParkSpot | Temp ',
         },
     },
     {
         path: '*',
         component: Home,
+        redirect: pages.HOME,
     },
 ];

@@ -2,7 +2,7 @@
     <BodyWrapper>
         <div class="columns">
             <OrganismContactUs class="column is-half"></OrganismContactUs>
-            <div class="column is-half" data-aos="slide-up">
+            <div class="column is-half contact-form" data-aos="slide-up">
                 <div class="card card-padding">
                     <OrganismContactForm
                         :textArea="true"
@@ -60,6 +60,9 @@ export default {
 };
 </script>
 <style scoped>
+.contact-form {
+    max-width: 500px;
+}
 .card-padding {
     padding-bottom: 4rem !important;
     padding-left: 1.5rem !important;

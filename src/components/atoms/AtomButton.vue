@@ -6,6 +6,7 @@
         :icon-right="right"
         :outlined="outlined"
         :inverted="inverted"
+        :expanded="expanded"
     >
         <slot></slot>
     </b-button>
@@ -39,6 +40,10 @@ export default {
             default: false,
         },
         inverted: {
+            type: Boolean,
+            default: false,
+        },
+        expanded: {
             type: Boolean,
             default: false,
         },

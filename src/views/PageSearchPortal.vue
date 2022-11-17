@@ -1,35 +1,35 @@
 <template>
-    <TemplateInventory
-        :lists="spotDetails"
+    <TemplateSearchPortal
+        :parkingRequests="parkingRequests"
         :isLoading="isLoading"
         @updateRequest="updateRequest"
         @toSrp="toSrp"
-    ></TemplateInventory>
+    ></TemplateSearchPortal>
 </template>
 <script>
-import TemplateInventory from '../components/templates/TemplateInventory.vue';
+import TemplateSearchPortal from '../components/templates/TemplateSearchPortal.vue';
 export default {
-    name: 'PageInventory',
+    name: 'PageSearchPortal',
     components: {
-        TemplateInventory,
+        TemplateSearchPortal,
     },
     data() {
         return {
-            spotDetails: [],
+            parkingRequests: [],
             isLoading: false,
         };
     },
     created() {
-        this.getSpotDetails();
+        this.getParkingRequests();
     },
     methods: {
-        async getSpotDetails() {
+        async getParkingRequests() {
             this.isLoading = true;
             const res = await fetch(
                 'https://maya.parkspot.in/internal/parking-requests',
             );
             const data = await res.json();
-            this.spotDetails = data;
+            this.parkingRequests = data;
             this.isLoading = false;
         },
         async updateRequest(request) {
@@ -65,13 +65,12 @@ export default {
 
             this.isLoading = false;
         },
-
         toSrp(lat, lng) {
+            const latlng = [lat, lng].toString();
             const routeData = this.$router.resolve({
                 name: 'srp',
                 query: {
-                    lat: lat,
-                    lng: lng,
+                    latlng,
                 },
             });
             window.open(routeData.href, '_blank');

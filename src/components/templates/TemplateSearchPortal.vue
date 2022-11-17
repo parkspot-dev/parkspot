@@ -1,7 +1,49 @@
 <template>
     <div class="custom-wrap">
+        <div class="so-btn">
+            <AtomButton @click.native="showSummary">
+                {{ summary.btn }} Summary
+            </AtomButton>
+        </div>
+        <br />
+        <div class="so-summary" v-show="summary.show">
+            <p class="so-total">Total Request : {{ summary.totalRequest }}</p>
+            <hr />
+            <div class="so-live-request">
+                <p>
+                    <span>Today : </span>
+                    <span>{{ summary.today }}</span>
+                </p>
+                <p>
+                    <span>yesterday : </span>
+                    <span>{{ summary.yesterday }}</span>
+                </p>
+            </div>
+            <hr />
+            <div class="so-priority">
+                <p>High : {{ summary.high }}</p>
+                <p>Low : {{ summary.low }}</p>
+                <p>Medium : {{ summary.medium }}</p>
+            </div>
+
+            <hr />
+            <div class="so-status">
+                <p>
+                    <span>Registered :</span>
+                    <span>{{ summary.status[1] }}</span>
+                </p>
+                <p>
+                    <span>Processing :</span>
+                    <span>{{ summary.status[2] }}</span>
+                </p>
+                <p>
+                    <span>Suggested : </span>
+                    <span>{{ summary.status[3] }}</span>
+                </p>
+            </div>
+        </div>
         <b-table
-            :data="isEmpty ? [] : lists"
+            :data="isEmpty ? [] : parkingRequests"
             :bordered="true"
             :hoverable="true"
             :loading="isLoading"
@@ -23,15 +65,24 @@
             </b-table-column>
 
             <b-table-column
-                field="CreatedAt"
+                field="UpdatedAt"
                 label="Date"
                 centered
                 v-slot="props"
                 sortable
             >
-                <span class="tag is-success">
-                    {{ new Date(props.row.CreatedAt).toLocaleDateString() }}
-                </span>
+                <div>
+                    <p class="tag">UpdatedAt:</p>
+                    <strong>
+                        {{ new Date(props.row.UpdatedAt).toLocaleDateString() }}
+                    </strong>
+                    <br />
+                    <br />
+                    <p class="tag">CreatedAt:</p>
+                    <strong>
+                        {{ new Date(props.row.CreatedAt).toLocaleDateString() }}
+                    </strong>
+                </div>
             </b-table-column>
 
             <b-table-column
@@ -43,12 +94,12 @@
                 <span
                     class="tag"
                     :class="{
-                        'is-low': props.row.Priority === 1,
-                        'is-medium': props.row.Priority === 2,
-                        'is-high': props.row.Priority === 3,
+                        'is-info': props.row.Priority === 1,
+                        'is-warning': props.row.Priority === 2,
+                        'is-danger': props.row.Priority === 3,
                     }"
                 >
-                    {{ getPriority(props.row.Priority) }}
+                    <b> {{ getPriority(props.row.Priority) }}</b>
                 </span>
             </b-table-column>
 
@@ -124,23 +175,23 @@
                     <span
                         class="tag is-warning"
                         :class="{
-                            'is-danger': getStatus(props.row.NextCall),
+                            'is-danger': isCallDelayed(props.row.NextCall),
                         }"
                     >
                         <span>
                             {{
-                                getStatus(props.row.NextCall)
-                                    ? 'delayed '
-                                    : 'upcoming '
+                                isCallDelayed(props.row.NextCall)
+                                    ? 'Delayed :'
+                                    : 'Upcoming :'
                             }}
                         </span>
-                        <strong>
+                        <b>
                             {{
                                 new Date(
                                     props.row.NextCall,
                                 ).toLocaleDateString()
                             }}
-                        </strong>
+                        </b>
                     </span>
                     <AtomDatePicker
                         class="column-width"
@@ -150,18 +201,6 @@
                 </template>
             </b-table-column>
 
-            <b-table-column
-                field="UpdatedAt"
-                label="Last Updated"
-                centered
-                v-slot="props"
-                sortable
-            >
-                <span class="tag is-success">
-                    {{ new Date(props.row.UpdatedAt).toLocaleDateString() }}
-                </span>
-            </b-table-column>
-
             <b-table-column field="lat_lng" label="Lat/Lng" v-slot="props">
                 <a
                     target="_blank"
@@ -169,22 +208,23 @@
                 >
                     {{
                         props.row.Latitude.toFixed(6) +
-                        '/' +
+                        ',' +
                         props.row.Longitude.toFixed(6)
                     }}
                 </a>
-
-                <p>Lat :</p>
+                <br />
+                <br />
+                <p>LatLng:</p>
                 <AtomInput
-                    :value="props.row.Latitude.toFixed(6)"
-                    @changed="updateLat(props.row, ...arguments)"
-                ></AtomInput>
-
-                <p>Lng :</p>
-                <AtomInput
-                    :value="props.row.Longitude.toFixed(6)"
-                    @changed="updateLng(props.row, ...arguments)"
-                ></AtomInput>
+                    :value="
+                        getLatLng(
+                            props.row.Latitude.toFixed(6),
+                            props.row.Longitude.toFixed(6),
+                        )
+                    "
+                    @changed="updateLatLng(props.row, ...arguments)"
+                >
+                </AtomInput>
             </b-table-column>
 
             <template #empty>
@@ -199,16 +239,20 @@ import AtomTextarea from '../atoms/AtomTextarea.vue';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import AtomInput from '../atoms/AtomInput.vue';
+import AtomButton from '../atoms/AtomButton.vue';
+import { getCoordinate } from '../../includes/LatLng';
+
 export default {
-    name: 'TemplateInventory',
+    name: 'TemplateSearchPortal',
     components: {
         AtomTextarea,
         AtomSelectInput,
         AtomDatePicker,
         AtomInput,
+        AtomButton,
     },
     props: {
-        lists: {
+        parkingRequests: {
             type: Array,
         },
         isLoading: {
@@ -244,7 +288,56 @@ export default {
                 status: '',
                 nextCall: '',
             },
+
+            summary: {
+                btn: 'Show',
+                show: false,
+                totalRequest: 0,
+                high: 0,
+                medium: 0,
+                low: 0,
+                status: [0, 0, 0, 0, 0, 0],
+                today: 0,
+                yesterday: 0,
+            },
         };
+    },
+    watch: {
+        parkingRequests(requests) {
+            this.summary.totalRequest = requests.length;
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            requests.forEach((request) => {
+                if (request.Priority === 3) {
+                    this.summary.high++;
+                }
+
+                if (request.Priority === 2) {
+                    this.summary.medium++;
+                }
+
+                if (request.Priority === 1) {
+                    this.summary.low++;
+                }
+
+                this.summary.status[request.Status]++;
+
+                if (
+                    new Date(request.CreatedAt).toLocaleDateString() ===
+                    today.toLocaleDateString()
+                ) {
+                    this.summary.today++;
+                }
+
+                if (
+                    new Date(request.CreatedAt).toLocaleDateString() ===
+                    yesterday.toLocaleDateString()
+                ) {
+                    this.summary.yesterday++;
+                }
+            });
+        },
     },
     methods: {
         getPriority(val) {
@@ -258,8 +351,12 @@ export default {
             }
         },
 
-        getStatus(val) {
-            if (new Date().getTime() > new Date(val).getTime()) {
+        getLatLng(lat, lng) {
+            return lat + ',' + lng;
+        },
+
+        isCallDelayed(nextCall) {
+            if (new Date().getTime() > new Date(nextCall).getTime()) {
                 return true;
             } else {
                 return false;
@@ -283,20 +380,14 @@ export default {
             this.$emit('updateRequest', spotData);
         },
 
-        updateLat(spotData, lat) {
+        updateLatLng(spotData, latlng) {
+            const coordinate = getCoordinate(latlng);
             if (
-                spotData['Latitude'].toString() !== parseFloat(lat).toString()
+                spotData['Latitude'].toString() !== coordinate[0] ||
+                spotData['Longitude'].toString() !== coordinate[1]
             ) {
-                spotData['Latitude'] = parseFloat(lat);
-                this.$emit('updateRequest', spotData);
-            }
-        },
-
-        updateLng(spotData, lng) {
-            if (
-                spotData['Longitude'].toString() !== parseFloat(lng).toString()
-            ) {
-                spotData['Longitude'] = parseFloat(lng);
+                spotData['Latitude'] = parseFloat(coordinate[0]);
+                spotData['Longitude'] = parseFloat(coordinate[1]);
                 this.$emit('updateRequest', spotData);
             }
         },
@@ -304,11 +395,61 @@ export default {
         toSrp(lat, lng) {
             this.$emit('toSrp', lat, lng);
         },
+
+        showSummary() {
+            this.summary.show = !this.summary.show;
+            if (this.summary.show) {
+                this.summary.btn = 'Hide';
+            } else {
+                this.summary.btn = 'Show';
+            }
+        },
     },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.so-btn {
+    text-align: right;
+}
+.so-summary {
+    border: 1px solid black;
+    padding: 2rem;
+    max-width: 500px;
+    background-color: #f5f5dc;
+    position: absolute;
+    top: 120px;
+    right: 20px;
+    z-index: 9999;
+    // display: none;
+
+    .so-total {
+        font-size: 20px;
+        font-weight: var(--semi-bold-font);
+        text-align: center;
+    }
+
+    .so-live-request {
+        display: flex;
+        gap: 6rem;
+    }
+
+    .so-priority {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .so-status {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 2.5rem;
+
+        p {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+}
 .custom-wrap {
     padding: 1rem;
 }
@@ -319,20 +460,5 @@ export default {
 
 .comment-width {
     width: 400px;
-}
-
-.is-high {
-    background-color: #f00;
-    color: #fff;
-}
-
-.is-medium {
-    background-color: #fdda0d;
-    color: #fff;
-}
-
-.is-low {
-    background-color: var(--primary-color);
-    color: #fff;
 }
 </style>
