@@ -29,8 +29,8 @@ export default {
         ...mapActions('srp', {
             getSpotDetails: 'getSpotDetails',
         }),
-        ...mapMutations('srp', {
-            updateUserLocation: 'update-user-location',
+        ...mapMutations('map', {
+            updateManConfig: 'update-map-config',
         }),
         getUserLocation() {
             const geolocation = navigator.geolocation;
@@ -38,7 +38,7 @@ export default {
                 geolocation.getCurrentPosition(
                     this.onGeoSuccess,
                     this.onGeoError,
-                    this.setMap,
+                    // this.setMap,
                 );
             } else {
                 console.log('Geolocation is not supported by this browser.');
@@ -47,8 +47,8 @@ export default {
         onGeoSuccess(position) {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
-            const location = { lat: lat, lng: lng };
-            this.updateUserLocation(location);
+            const location = [lng, lat];
+            this.updateManConfig(location);
         },
         onGeoError(error) {
             let detailError;
@@ -64,10 +64,6 @@ export default {
             }
 
             console.log(detailError);
-        },
-
-        setMap() {
-            console.log('setting map');
         },
     },
 };

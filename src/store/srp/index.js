@@ -3,7 +3,7 @@ import { mayaClient } from '@/services/api';
 
 const state = {
     spotDetails: null,
-    userLocation: null,
+    selectedSpot: [],
 };
 
 const getters = {};
@@ -14,8 +14,9 @@ const mutations = {
         console.log(state.spotDetails);
     },
 
-    'update-user-location'(state, location) {
-        state.userLocation = location;
+    'update-selected-spot'(state, spot) {
+        state.selectedSpot = [];
+        state.selectedSpot = [...state.selectedSpot, spot];
     },
 };
 
@@ -25,6 +26,12 @@ const actions = {
             `/site?siteID=${spotId}&getOwnerInfo=false`,
         );
         commit('update-spot-details', res.Site);
+        const spot = {
+            Name: res.Site['Name'],
+            Lat: res.Site['Latitude'],
+            Long: res.Site['Longitude'],
+        };
+        commit('update-selected-spot', spot);
     },
 };
 
