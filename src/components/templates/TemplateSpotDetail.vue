@@ -48,7 +48,10 @@
 
             <div class="spot-detail-map">
                 <h2>How to get here?</h2>
-                <MapContainer class="sdp-map"></MapContainer>
+                <MapContainer
+                    class="sdp-map"
+                    :spotsList="selectedSpot"
+                ></MapContainer>
             </div>
 
             <div class="spot-detail-things">
@@ -81,6 +84,7 @@ export default {
     computed: {
         ...mapState('srp', {
             spotDetails: (state) => state.spotDetails,
+            selectedSpot: (state) => state.selectedSpot,
         }),
 
         isAvailable() {

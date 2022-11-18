@@ -37,6 +37,7 @@ import PaginationBody from '../extras/PaginationBody.vue';
 import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import SearchInput from '../extras/SearchInput.vue';
+import { mapMutations } from 'vuex';
 export default {
     name: 'TemplateSrp',
     components: {
