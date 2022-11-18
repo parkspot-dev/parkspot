@@ -1,8 +1,9 @@
 <template>
     <div class="rate-card">
         <div class="rate-container">
-            <p class="rate">₹{{ spotDetails.Rate + DISCOUNT }}</p>
+            <p class="rate">₹{{ spotDetails.Rate + discount }}</p>
             <p class="discount-rate">₹{{ spotDetails.Rate }}</p>
+            <p class="discount-label">{{ actualDiscount }}% OFF</p>
         </div>
         <div class="star-rating">
             <AtomRating :rate="spotDetails.Rating"></AtomRating>
@@ -10,12 +11,12 @@
         <hr />
         <div class="amount-breakage">
             <div>
-                <p>₹{{ spotDetails.Rate + DISCOUNT }} x 1 month</p>
-                <p>₹{{ spotDetails.Rate + DISCOUNT }}</p>
+                <p>₹{{ spotDetails.Rate + discount }} x 1 month</p>
+                <p>₹{{ spotDetails.Rate + discount }}</p>
             </div>
             <div>
                 <p>Discount</p>
-                <p>- ₹{{ DISCOUNT }}</p>
+                <p>- ₹{{ discount }}</p>
             </div>
             <div>
                 <p>Convenience fee</p>
@@ -23,7 +24,7 @@
             </div>
             <hr />
             <div>
-                <p>Total before taxes</p>
+                <p>Total</p>
                 <p>₹{{ spotDetails.Rate + spotDetails.Commission }}</p>
             </div>
         </div>
@@ -43,14 +44,25 @@ export default {
         AtomButton,
     },
     data() {
-        return {
-            DISCOUNT: 1000,
-        };
+        return {};
     },
     computed: {
         ...mapState('srp', {
             spotDetails: (state) => state.spotDetails,
         }),
+
+        discount() {
+            let discount = 0.15 * this.spotDetails.Rate;
+            while (discount % 100 != 0) {
+                discount = discount + (100 - (discount % 100));
+            }
+            return discount;
+        },
+
+        actualDiscount() {
+            const fakePrice = this.spotDetails.Rate + this.discount;
+            return Math.ceil((this.discount / fakePrice) * 100);
+        },
     },
 };
 </script>
@@ -63,6 +75,7 @@ export default {
     border-radius: var(--border-default);
     padding: 16px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    overflow: hidden;
 
     hr {
         background-color: #d7d7d7;
@@ -72,6 +85,8 @@ export default {
     .rate-container {
         display: flex;
         gap: 10px;
+        align-items: flex-start;
+
         .rate {
             font-weight: 600;
             font-size: 20px;
@@ -83,6 +98,17 @@ export default {
             font-weight: 600;
             font-size: 24px;
             color: #000;
+        }
+
+        .discount-label {
+            font-size: 15px;
+            font-weight: bold;
+            background: hsl(141deg, 53%, 53%);
+            padding: 2px 28px;
+            position: absolute;
+            top: 13px;
+            right: -24px;
+            transform: rotate(40deg);
         }
     }
 

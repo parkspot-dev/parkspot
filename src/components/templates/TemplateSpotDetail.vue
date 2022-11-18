@@ -12,7 +12,15 @@
                 <SpotRateCard class="card-position"></SpotRateCard>
             </div>
             <div class="spot-detail-main-description">
-                <h1>{{ spotDetails.Name }}</h1>
+                <div class="title-container">
+                    <h1>{{ spotDetails.Name }}</h1>
+                    <ul>
+                        <li v-if="isAvailable" class="status-green">
+                            Available
+                        </li>
+                        <li v-else class="status-red">Rented Out</li>
+                    </ul>
+                </div>
                 <div>
                     <p>Address:</p>
                     <p>
@@ -33,7 +41,7 @@
                 <ul>
                     <li>Covered</li>
                     <li>Gated</li>
-                    <li>Security Gaurd</li>
+                    <li>Security Guard</li>
                 </ul>
             </div>
             <hr />
@@ -74,6 +82,14 @@ export default {
         ...mapState('srp', {
             spotDetails: (state) => state.spotDetails,
         }),
+
+        isAvailable() {
+            if (this.spotDetails.SlotsAvailable > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        },
     },
 };
 </script>
@@ -136,14 +152,54 @@ hr {
         margin-left: 0px;
     }
 
-    h1 {
-        font-size: 32px;
-        font-weight: 500;
-        margin-bottom: 13px;
+    .title-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        h1 {
+            font-size: 32px;
+            font-weight: 500;
+            margin-bottom: 13px;
+            color: black;
+        }
+
+        ul {
+            position: relative;
+            font-size: 16px;
+
+            li:before {
+                content: '. ';
+                font-weight: bold;
+                font-size: 50px;
+                position: absolute;
+                top: -38.5px;
+                left: -18px;
+            }
+            .status-green {
+                color: hsl(141, 53%, 53%);
+                text-shadow: 0px 0px 10px #39ff14;
+
+                &:before {
+                    color: hsl(141, 53%, 53%);
+                    text-shadow: 0px 0px 10px #39ff14;
+                }
+            }
+
+            .status-red {
+                color: hsl(348, 100%, 61%);
+                text-shadow: 0px 0px 10px #ff3131;
+
+                &:before {
+                    color: hsl(348, 100%, 61%);
+                    text-shadow: 0px 0px 10px #ff3131;
+                }
+            }
+        }
     }
 
     p {
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 500;
     }
 }
@@ -161,6 +217,7 @@ hr {
         font-size: 24px;
         font-weight: 500;
         margin-bottom: 26px;
+        color: black;
     }
 
     ul {
@@ -169,7 +226,7 @@ hr {
 
     ul li:before {
         content: '✓ ';
-        color: green;
+        color: hsl(141, 53%, 53%);
         font-weight: bold;
         font-size: 20px;
     }
@@ -186,6 +243,7 @@ hr {
         font-size: 24px;
         font-weight: 500;
         margin-bottom: 26px;
+        color: black;
     }
 
     .sdp-map {

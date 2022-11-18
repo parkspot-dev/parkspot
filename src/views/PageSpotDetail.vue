@@ -36,9 +36,9 @@ export default {
             const geolocation = navigator.geolocation;
             if (geolocation) {
                 geolocation.getCurrentPosition(
-                    onGeoSuccess,
-                    onGeoError,
-                    options,
+                    this.onGeoSuccess,
+                    this.onGeoError,
+                    this.setMap,
                 );
             } else {
                 console.log('Geolocation is not supported by this browser.');
@@ -64,6 +64,10 @@ export default {
             }
 
             console.log(detailError);
+        },
+
+        setMap() {
+            console.log('setting map');
         },
     },
 };
