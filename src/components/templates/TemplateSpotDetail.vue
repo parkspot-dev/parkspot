@@ -140,6 +140,7 @@ hr {
         font-size: 32px;
         font-weight: 500;
         margin-bottom: 13px;
+        color: black;
     }
 
     p {
@@ -161,6 +162,7 @@ hr {
         font-size: 24px;
         font-weight: 500;
         margin-bottom: 26px;
+        color: black;
     }
 
     ul {
@@ -186,6 +188,7 @@ hr {
         font-size: 24px;
         font-weight: 500;
         margin-bottom: 26px;
+        color: black;
     }
 
     .sdp-map {
