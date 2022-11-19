@@ -272,5 +272,9 @@ hr {
         margin-bottom: 26px;
         color: black;
     }
+
+    p {
+        font-size: 20px;
+    }
 }
 </style>
