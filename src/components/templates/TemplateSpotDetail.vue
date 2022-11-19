@@ -54,8 +54,15 @@
                 ></MapContainer>
             </div>
 
+            <hr style="width: 100%" />
             <div class="spot-detail-things">
-                <!-- Organism to show the graphical layout -->
+                <h2>Things to Know</h2>
+                <p>
+                    ParkSpot does the KYC of the Parking Spot Owner. But, before
+                    you park your vehicle, please verify the facts claimed by
+                    the owner.
+                </p>
+                <InfographicSteps></InfographicSteps>
             </div>
 
             <!-- only to admin -->
@@ -71,6 +78,7 @@ import BodyWrapper from '../extras/BodyWrapper.vue';
 import SpotRateCard from '@/components/organisms/OrganismSpotRateCard.vue';
 import MapContainer from '@/components/extras/MapContainer.vue';
 import ImageGallery from '../organisms/OrganismImageGallery.vue';
+import InfographicSteps from '../molecules/MoleculeInfographicSteps.vue';
 import { mapState } from 'vuex';
 
 export default {
@@ -80,6 +88,7 @@ export default {
         SpotRateCard,
         MapContainer,
         ImageGallery,
+        InfographicSteps,
     },
     computed: {
         ...mapState('srp', {
@@ -252,6 +261,16 @@ hr {
 
     .sdp-map {
         border: 1px solid black;
+    }
+}
+
+.spot-detail-things {
+    margin-left: 20px;
+    h2 {
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 26px;
+        color: black;
     }
 }
 </style>
