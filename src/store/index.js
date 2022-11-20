@@ -4,7 +4,7 @@ import device from './device';
 import blog from './blog';
 import user from './user';
 import map from './map';
-import srp from './srp';
+import sdp from './sdp';
 
 Vue.use(Vuex);
 
@@ -14,7 +14,7 @@ const store = new Vuex.Store({
         blog,
         user,
         map,
-        srp,
+        sdp,
     },
 });
 

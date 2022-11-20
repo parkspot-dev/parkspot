@@ -74,7 +74,7 @@ export default {
         };
     },
     computed: {
-        ...mapState('srp', {
+        ...mapState('sdp', {
             spotDetails: (state) => state.spotDetails,
             isAvailable: (state) => state.isAvailable,
         }),

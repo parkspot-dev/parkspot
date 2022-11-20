@@ -23,7 +23,7 @@ export default {
         };
     },
     computed: {
-        ...mapState('srp', {
+        ...mapState('sdp', {
             isLoading: (state) => state.loading,
         }),
     },
@@ -36,7 +36,7 @@ export default {
         this.getUserLocation();
     },
     methods: {
-        ...mapActions('srp', {
+        ...mapActions('sdp', {
             getSpotDetails: 'getSpotDetails',
         }),
         ...mapMutations('map', {

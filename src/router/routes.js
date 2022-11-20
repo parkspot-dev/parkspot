@@ -32,7 +32,7 @@ export const pages = {
     FEATURES        : '/features',
     CONTACT         : '/contact',
     SRP             : '/srp',
-    SPOT_DETAIL     : '/srp/:spotId',
+    SPOT_DETAIL     : '/spot-details/:spotId',
     VOPORTAL        : '/get-parking-spot',
     SOPORTAL        : '/register-parking-spot',
     TERMS           : '/terms-and-conditions',

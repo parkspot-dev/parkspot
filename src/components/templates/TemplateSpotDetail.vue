@@ -91,7 +91,7 @@ export default {
         InfographicSteps,
     },
     computed: {
-        ...mapState('srp', {
+        ...mapState('sdp', {
             spotDetails: (state) => state.spotDetails,
             selectedSpot: (state) => state.selectedSpot,
         }),
