@@ -41,9 +41,7 @@ const mutations = {
 const actions = {
     async getSpotDetails({ commit }, spotId) {
         commit('update-loading', true);
-        const res = await mayaClient.get(
-            `/site?siteID=${spotId}&getOwnerInfo=false`,
-        );
+        const res = await mayaClient.get(`/site?siteID=${spotId}`);
         commit('update-spot-details', res.Site);
         const spot = {
             Name: res.Site['Name'],

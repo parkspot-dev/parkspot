@@ -48,7 +48,6 @@ export default {
                 geolocation.getCurrentPosition(
                     this.onGeoSuccess,
                     this.onGeoError,
-                    // this.setMap,
                 );
             } else {
                 console.log('Geolocation is not supported by this browser.');

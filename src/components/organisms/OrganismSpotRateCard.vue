@@ -1,9 +1,9 @@
 <template>
     <div class="rate-card">
         <div class="rate-container">
-            <p class="rate">₹{{ spotDetails.Rate + discount }}</p>
+            <p class="rate">₹{{ spotDetails.Rate + discountAmount }}</p>
             <p class="discount-rate">₹{{ spotDetails.Rate }}</p>
-            <p class="discount-label">{{ actualDiscount }}% OFF</p>
+            <p class="discount-label">{{ discountPercent }}% OFF</p>
         </div>
         <div class="star-rating">
             <AtomRating :rate="spotDetails.Rating"></AtomRating>
@@ -11,12 +11,12 @@
         <hr />
         <div class="amount-breakage">
             <div>
-                <p>₹{{ spotDetails.Rate + discount }} x 1 month</p>
-                <p>₹{{ spotDetails.Rate + discount }}</p>
+                <p>₹{{ spotDetails.Rate + discountAmount }} x 1 month</p>
+                <p>₹{{ spotDetails.Rate + discountAmount }}</p>
             </div>
             <div>
                 <p>Discount</p>
-                <p>- ₹{{ discount }}</p>
+                <p>- ₹{{ discountAmount }}</p>
             </div>
             <div>
                 <div class="negative-margin">
@@ -28,13 +28,11 @@
                         ></AtomIcon>
                     </AtomTooltip>
                 </div>
-                <!-- <p>+ ₹{{ spotDetails.Commission }}</p> -->
                 <p>+ ₹500</p>
             </div>
             <hr />
             <div>
                 <p>Total</p>
-                <!-- <p>₹{{ spotDetails.Rate + spotDetails.Commission }}</p> -->
                 <p>₹{{ spotDetails.Rate + 500 }}</p>
             </div>
         </div>
@@ -79,17 +77,15 @@ export default {
             isAvailable: (state) => state.isAvailable,
         }),
 
-        discount() {
-            let discount = 0.15 * this.spotDetails.Rate;
-            while (discount % 100 != 0) {
-                discount = discount + (100 - (discount % 100));
-            }
-            return discount;
+        discountAmount() {
+            let amount = 0.15 * this.spotDetails.Rate;
+            amount = Math.ceil(amount / 100) * 100;
+            return amount;
         },
 
-        actualDiscount() {
-            const fakePrice = this.spotDetails.Rate + this.discount;
-            return Math.ceil((this.discount / fakePrice) * 100);
+        discountPercent() {
+            const fakePrice = this.spotDetails.Rate + this.discountAmount;
+            return Math.ceil((this.discountAmount / fakePrice) * 100);
         },
     },
 };

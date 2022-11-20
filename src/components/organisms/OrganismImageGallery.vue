@@ -90,7 +90,6 @@ export default {
     height: 100%;
     position: relative;
     overflow: hidden;
-    // background-color: red;
 
     .gallery-item {
         position: absolute;
