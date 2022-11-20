@@ -1,5 +1,5 @@
 <template>
-    <ExampleComponent :messages="messages"></ExampleComponent>
+    <ExampleComponent></ExampleComponent>
     <!-- <div>
         <h1>Sign Up</h1>
     </div> -->
