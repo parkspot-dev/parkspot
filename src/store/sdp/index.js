@@ -6,6 +6,7 @@ const state = {
     selectedSpot: [],
     isAvailable: false,
     loading: false,
+    image: '',
 };
 
 const getters = {};
@@ -13,6 +14,7 @@ const getters = {};
 const mutations = {
     'update-spot-details'(state, spotDetails) {
         state.spotDetails = spotDetails;
+        console.log(spotDetails);
     },
 
     'update-selected-spot'(state, spot) {
@@ -31,6 +33,10 @@ const mutations = {
     'update-loading'(state, loading) {
         state.loading = loading;
     },
+
+    'update-image'(state, image) {
+        state.image = image;
+    },
 };
 
 const actions = {
@@ -48,6 +54,7 @@ const actions = {
         commit('update-selected-spot', spot);
         commit('update-is-available', res.Site['SlotsAvailable']);
         commit('update-loading', false);
+        commit('update-image', res.Site['SiteImageURI']);
     },
 };
 
