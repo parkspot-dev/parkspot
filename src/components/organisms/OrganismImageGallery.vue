@@ -17,7 +17,7 @@
             <a
                 class="gallery-item"
                 :href="spotImage"
-                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${temp}</p>`"
+                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${locationName}</p>`"
             >
                 <img class="img-responsive" :src="spotImage" />
             </a>
@@ -25,28 +25,28 @@
             <a
                 class="gallery-item"
                 data-src="https://images.unsplash.com/photo-1544550285-f813152fb2fd?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80"
-                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${temp}</p>`"
+                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${locationName}</p>`"
             >
                 <img class="img-responsive" src="../../assets/no-image.png" />
             </a>
             <a
                 class="gallery-item"
                 data-src="https://images.unsplash.com/photo-1544550285-f813152fb2fd?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80"
-                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${temp}</p>`"
+                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${locationName}</p>`"
             >
                 <img class="img-responsive" src="../../assets/no-image.png" />
             </a>
             <a
                 class="gallery-item"
                 data-src="https://images.unsplash.com/photo-1544550285-f813152fb2fd?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80"
-                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${temp}</p>`"
+                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${locationName}</p>`"
             >
                 <img class="img-responsive" src="../../assets/no-image.png" />
             </a>
             <a
                 class="gallery-item"
                 data-src="https://images.unsplash.com/photo-1544550285-f813152fb2fd?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80"
-                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${temp}</p>`"
+                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${locationName}</p>`"
             >
                 <img class="img-responsive" src="../../assets/no-image.png" />
             </a>
@@ -64,13 +64,16 @@ export default {
     data() {
         return {
             imageList: [],
-            temp: 'N/A',
         };
     },
     computed: {
         ...mapState('sdp', {
             spotImage: (state) => state.image,
+            selectedSpot: (state) => state.selectedSpot,
         }),
+        locationName() {
+            return this.selectedSpot[0]['Name'];
+        },
     },
     mounted() {
         const el = document.getElementById('lightgallery');

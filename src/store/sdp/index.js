@@ -14,7 +14,6 @@ const getters = {};
 const mutations = {
     'update-spot-details'(state, spotDetails) {
         state.spotDetails = spotDetails;
-        console.log(spotDetails);
     },
 
     'update-selected-spot'(state, spot) {
