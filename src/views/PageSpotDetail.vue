@@ -1,21 +1,31 @@
 <template>
-    <TemplateSpotDetail></TemplateSpotDetail>
+    <div>
+        <TemplateSpotDetail></TemplateSpotDetail>
+        <LoaderModal :isLoading="isLoading"></LoaderModal>
+    </div>
 </template>
 
 <script>
 import TemplateSpotDetail from '../components/templates/TemplateSpotDetail.vue';
-import { mapActions, mapMutations } from 'vuex';
+import LoaderModal from '../components/extras/LoaderModal.vue';
+import { mapState, mapActions, mapMutations } from 'vuex';
 
 export default {
     name: 'PageSpotDetail',
     components: {
         TemplateSpotDetail,
+        LoaderModal,
     },
     data() {
         return {
             spotId: null,
             spotDetails: null,
         };
+    },
+    computed: {
+        ...mapState('srp', {
+            isLoading: (state) => state.loading,
+        }),
     },
     mounted() {
         this.spotId = this.$route.params.spotId;

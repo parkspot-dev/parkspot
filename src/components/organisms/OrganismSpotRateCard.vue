@@ -19,36 +19,64 @@
                 <p>- ₹{{ discount }}</p>
             </div>
             <div>
-                <p>Convenience fee</p>
-                <p>+ ₹{{ spotDetails.Commission }}</p>
+                <div class="negative-margin">
+                    <p>Convenience fee</p>
+                    <AtomTooltip :label="tooltipMsg">
+                        <AtomIcon
+                            :icon="ICON.INFO"
+                            :size="'is-small'"
+                        ></AtomIcon>
+                    </AtomTooltip>
+                </div>
+                <!-- <p>+ ₹{{ spotDetails.Commission }}</p> -->
+                <p>+ ₹500</p>
             </div>
             <hr />
             <div>
                 <p>Total</p>
-                <p>₹{{ spotDetails.Rate + spotDetails.Commission }}</p>
+                <!-- <p>₹{{ spotDetails.Rate + spotDetails.Commission }}</p> -->
+                <p>₹{{ spotDetails.Rate + 500 }}</p>
             </div>
         </div>
 
-        <AtomButton class="top-margin" :expanded="true"> Book </AtomButton>
+        <ul>
+            <li v-if="isAvailable" class="status-green">Available</li>
+            <li v-else class="status-red">Rented Out</li>
+        </ul>
+        <AtomButton v-if="isAvailable" class="top-margin" :expanded="true">
+            Book
+        </AtomButton>
+        <AtomButton v-else class="top-margin" :expanded="true">
+            Notify me
+        </AtomButton>
     </div>
 </template>
 
 <script>
 import AtomRating from '../atoms/AtomRating.vue';
 import AtomButton from '../atoms/AtomButton.vue';
+import AtomTooltip from '../atoms/AtomTooltip.vue';
+import AtomIcon from '../atoms/AtomIcon.vue';
+import { ICON } from '@/constant/constant';
 import { mapState } from 'vuex';
 export default {
     name: 'OrganismSpotRateCard',
     components: {
         AtomRating,
         AtomButton,
+        AtomTooltip,
+        AtomIcon,
     },
     data() {
-        return {};
+        return {
+            ICON,
+            tooltipMsg: 'This helps us run our platform and offer services.',
+        };
     },
     computed: {
         ...mapState('srp', {
             spotDetails: (state) => state.spotDetails,
+            isAvailable: (state) => state.isAvailable,
         }),
 
         discount() {
@@ -123,10 +151,48 @@ export default {
             justify-content: space-between;
             margin-bottom: 12px;
         }
+
+        .negative-margin {
+            margin-bottom: -5px;
+        }
+    }
+
+    ul {
+        position: relative;
+        font-size: 16px;
+        margin-left: 20px;
+
+        li:before {
+            content: '. ';
+            font-weight: bold;
+            font-size: 50px;
+            position: absolute;
+            top: -38.5px;
+            left: -18px;
+        }
+        .status-green {
+            color: hsl(141, 53%, 53%);
+            text-shadow: 0px 0px 10px #39ff14;
+
+            &:before {
+                color: hsl(141, 53%, 53%);
+                text-shadow: 0px 0px 10px #39ff14;
+            }
+        }
+
+        .status-red {
+            color: hsl(348, 100%, 61%);
+            text-shadow: 0px 0px 10px #ff3131;
+
+            &:before {
+                color: hsl(348, 100%, 61%);
+                text-shadow: 0px 0px 10px #ff3131;
+            }
+        }
     }
 
     .top-margin {
-        margin-top: 45px;
+        margin-top: 5px;
     }
 }
 </style>
