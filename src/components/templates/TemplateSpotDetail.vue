@@ -68,7 +68,9 @@
             <!-- only to admin -->
             <div class="spot-detail-owner"></div>
 
-            <div class="rate-card-container-mobile"></div>
+            <div class="rate-card-container-mobile">
+                <hr style="width: 100%; margin-top: 80px" />
+            </div>
         </div>
     </BodyWrapper>
 </template>
@@ -144,8 +146,10 @@ hr {
 }
 
 .rate-card-container-mobile {
+    display: none;
     @media only screen and (max-width: 1024px) {
-        min-height: 50vh;
+        display: block;
+        min-height: 35vh;
     }
 }
 

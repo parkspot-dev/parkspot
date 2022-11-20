@@ -1,5 +1,6 @@
 <template>
     <div class="infographic-container">
+        <div class="infographic-bg-img"></div>
         <div class="infographic-first steps-container">
             <div class="step-img"></div>
             <img src="../../assets/first.png" alt="find" />
@@ -40,19 +41,28 @@ export default {
 $leftPos: 200px;
 $rightPos: 735px;
 .infographic-container {
-    width: 100%;
-    height: 1200px;
     position: relative;
-    background-image: url('../../assets/infographic-line.png');
-    background-position: center;
-    background-repeat: no-repeat;
 
-    // .step-img {
-    //     background-image: url('../../assets/1.png');
-    //     background-position: center;
-    //     background-repeat: no-repeat;
-    //     background-size: 150px 200px;
-    // }
+    @media only screen and (max-width: 1024px) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 80px;
+    }
+    .infographic-bg-img {
+        width: 100%;
+        height: 1200px;
+        position: relative;
+        background-image: url('../../assets/infographic-line.png');
+        background-position: center;
+        background-repeat: no-repeat;
+
+        @media only screen and (max-width: 1024px) {
+            background-image: none;
+            height: 20px;
+        }
+    }
+
     p {
         font-size: 24px;
         line-height: 29px;
@@ -60,35 +70,35 @@ $rightPos: 735px;
     .steps-container {
         width: 390px;
         text-align: center;
+        position: absolute;
+        @media only screen and (max-width: 1024px) {
+            position: relative;
+            top: unset !important;
+            left: unset !important;
+        }
     }
 
     .infographic-first {
-        position: absolute;
         top: 210px;
         left: $leftPos;
     }
     .infographic-second {
-        position: absolute;
         top: 330px;
         left: $rightPos;
     }
     .infographic-third {
-        position: absolute;
         top: 535px;
         left: $leftPos;
     }
     .infographic-fourth {
-        position: absolute;
         top: 625px;
         left: $rightPos;
     }
     .infographic-fifth {
-        position: absolute;
         top: 845px;
         left: $leftPos;
     }
     .infographic-sixth {
-        position: absolute;
         top: 935px;
         left: $rightPos;
     }
