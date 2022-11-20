@@ -37,8 +37,8 @@
             </span>
             <span v-else class="card-spot-red"> Rented Out </span>
         </AtomParagraph>
-        <AtomButton class="card-btn" @click.native="onBook">
-            Book Spot
+        <AtomButton class="card-btn" @click.native="onDetails">
+            Spot Details
         </AtomButton>
     </div>
 </template>
@@ -61,10 +61,10 @@ export default {
             type: Object,
         },
     },
-    emits: ['booked'],
+    emits: ['on-details'],
     methods: {
-        onBook() {
-            this.$emit('booked');
+        onDetails() {
+            this.$emit('on-details', this.spot.ID);
         },
         getAvailability(spot) {
             if (spot > 0) {

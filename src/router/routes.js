@@ -24,24 +24,26 @@ const guardThisRoute = async (to, from, next) => {
     }
 };
 
+// prettier-ignore
 export const pages = {
-    HOME: '/',
-    FAQ: '/faq',
-    ABOUT: '/about',
-    FEATURES: '/features',
-    CONTACT: '/contact',
-    SRP: '/srp',
-    VOPORTAL: '/get-parking-spot',
-    SOPORTAL: '/register-parking-spot',
-    TERMS: '/terms-and-conditions',
-    BLOG: '/blog',
-    MAINBLOG: '/blog/:id',
-    SEARCH_PORTAL: '/search-portal',
-    PAYMENTGATEWAY: '/payment/*',
-    NEARBY: '/bangalore/parking-near-*',
-    TEMP: '/temp',
-    THANK_YOU: '/thank-you',
-    ERROR: '/error',
+    HOME            : '/',
+    FAQ             : '/faq',
+    ABOUT           : '/about',
+    FEATURES        : '/features',
+    CONTACT         : '/contact',
+    SRP             : '/srp',
+    SPOT_DETAIL     : '/spot-details/:spotId',
+    VOPORTAL        : '/get-parking-spot',
+    SOPORTAL        : '/register-parking-spot',
+    TERMS           : '/terms-and-conditions',
+    BLOG            : '/blog',
+    MAINBLOG        : '/blog/:id',
+    SEARCH_PORTAL   : '/search-portal',
+    PAYMENTGATEWAY  : '/payment/*',
+    NEARBY          : '/bangalore/parking-near-*',
+    TEMP            : '/temp',
+    THANK_YOU       : '/thank-you',
+    ERROR           : '/error',
 };
 
 export const routes = [
@@ -158,6 +160,14 @@ export const routes = [
         component: () => import('@/views/PageNearBy.vue'),
         meta: {
             title: 'Parking Near ',
+        },
+    },
+    {
+        path: pages.SPOT_DETAIL,
+        name: 'spot-detail',
+        component: () => import('@/views/PageSpotDetail.vue'),
+        meta: {
+            title: 'ParkSpot | ',
         },
     },
     {
