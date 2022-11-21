@@ -6,7 +6,7 @@ const state = {
     selectedSpot: [],
     isAvailable: false,
     loading: false,
-    image: '',
+    image: [],
 };
 
 const getters = {};
@@ -34,7 +34,8 @@ const mutations = {
     },
 
     'update-image'(state, image) {
-        state.image = image;
+        state.image = [];
+        state.image = [image];
     },
 };
 

@@ -1,55 +1,17 @@
 <template>
     <div class="gallery-container">
         <div id="lightgallery">
-            <!-- <template v-for="i in 5">
+            <template v-for="i in spotImage.length">
                 <a
                     :key="i"
                     class="gallery-item"
-                    href="http://localhost:8080/img/Home-Banner.b9fc5fdb.jpg"
-                    :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${temp}</p>`"
+                    :class="imageSize"
+                    :href="spotImage"
+                    :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${locationName}</p>`"
                 >
-                    <img
-                        class="img-responsive"
-                        src="../../assets/Home-Banner.jpg"
-                    />
+                    <img class="img-responsive" :src="spotImage" />
                 </a>
-            </template> -->
-            <a
-                class="gallery-item"
-                :href="spotImage"
-                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${locationName}</p>`"
-            >
-                <img class="img-responsive" :src="spotImage" />
-            </a>
-
-            <a
-                class="gallery-item"
-                data-src="https://images.unsplash.com/photo-1544550285-f813152fb2fd?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80"
-                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${locationName}</p>`"
-            >
-                <img class="img-responsive" src="../../assets/no-image.png" />
-            </a>
-            <a
-                class="gallery-item"
-                data-src="https://images.unsplash.com/photo-1544550285-f813152fb2fd?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80"
-                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${locationName}</p>`"
-            >
-                <img class="img-responsive" src="../../assets/no-image.png" />
-            </a>
-            <a
-                class="gallery-item"
-                data-src="https://images.unsplash.com/photo-1544550285-f813152fb2fd?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80"
-                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${locationName}</p>`"
-            >
-                <img class="img-responsive" src="../../assets/no-image.png" />
-            </a>
-            <a
-                class="gallery-item"
-                data-src="https://images.unsplash.com/photo-1544550285-f813152fb2fd?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80"
-                :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${locationName}</p>`"
-            >
-                <img class="img-responsive" src="../../assets/no-image.png" />
-            </a>
+            </template>
         </div>
     </div>
 </template>
@@ -63,7 +25,7 @@ export default {
     name: 'ImageGallery',
     data() {
         return {
-            imageList: [],
+            imageSize: '',
         };
     },
     computed: {
@@ -80,6 +42,28 @@ export default {
         window.lightGallery(el, {
             thumbnail: true,
         });
+
+        this.setImageSize();
+    },
+    methods: {
+        setImageSize() {
+            switch (this.spotImage.length) {
+                case 1:
+                    this.imageSize = 'image-full';
+                    break;
+                case 2:
+                    this.imageSize = 'image-half';
+                    break;
+                case 3:
+                    this.imageSize = 'image-three';
+                    break;
+                case 4:
+                    this.imageSize = 'image-four';
+                    break;
+                default:
+                    this.imageSize = 'image-five';
+            }
+        },
     },
 };
 </script>
@@ -96,6 +80,88 @@ export default {
         opacity: 1;
         border: 1px solid black;
 
+        .img-responsive {
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+    .image-full {
+        width: 100%;
+        height: 400px;
+        top: 0;
+        left: 0;
+    }
+
+    .image-half {
+        &:nth-child(1) {
+            width: 660px;
+            height: 400px;
+            top: 0;
+            left: 0;
+        }
+
+        &:nth-child(2) {
+            width: 667px;
+            height: 400px;
+            top: 0;
+            left: 675px;
+        }
+    }
+
+    .image-three {
+        &:nth-child(1) {
+            width: 660px;
+            height: 400px;
+            top: 0;
+            left: 0;
+        }
+
+        &:nth-child(2) {
+            width: 667px;
+            height: 195px;
+            top: 0;
+            left: 675px;
+        }
+
+        &:nth-child(3) {
+            width: 667px;
+            height: 195px;
+            top: 205px;
+            left: 675px;
+        }
+    }
+
+    .image-four {
+        &:nth-child(1) {
+            width: 660px;
+            height: 400px;
+            top: 0;
+            left: 0;
+        }
+
+        &:nth-child(2) {
+            width: 330px;
+            height: 400px;
+            top: 0;
+            left: 675px;
+        }
+
+        &:nth-child(3) {
+            width: 330px;
+            height: 195px;
+            top: 0;
+            left: 1013px;
+        }
+
+        &:nth-child(4) {
+            width: 330px;
+            height: 195px;
+            top: 205px;
+            left: 1013px;
+        }
+    }
+    .image-five {
         &:nth-child(1) {
             width: 660px;
             height: 400px;
@@ -131,9 +197,9 @@ export default {
             left: 1013px;
         }
 
-        .img-responsive {
-            height: 100%;
-            width: 100%;
+        // it will apply to all the child from 6 includes itself
+        &:nth-child(n + 6) {
+            display: none;
         }
     }
 }
