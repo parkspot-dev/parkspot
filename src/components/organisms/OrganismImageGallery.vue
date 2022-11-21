@@ -49,10 +49,10 @@ export default {
         setImageSize() {
             switch (this.spotImage.length) {
                 case 1:
-                    this.imageSize = 'image-full';
+                    this.imageSize = 'image-one';
                     break;
                 case 2:
-                    this.imageSize = 'image-half';
+                    this.imageSize = 'image-two';
                     break;
                 case 3:
                     this.imageSize = 'image-three';
@@ -86,14 +86,14 @@ export default {
         }
     }
 
-    .image-full {
+    .image-one {
         width: 100%;
         height: 400px;
         top: 0;
         left: 0;
     }
 
-    .image-half {
+    .image-two {
         &:nth-child(1) {
             width: 660px;
             height: 400px;
