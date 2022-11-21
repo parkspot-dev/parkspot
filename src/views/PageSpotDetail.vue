@@ -16,6 +16,9 @@ export default {
         TemplateSpotDetail,
         LoaderModal,
     },
+    metaInfo: {
+        title: 'Default Title',
+    },
     data() {
         return {
             spotId: null,
