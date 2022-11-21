@@ -41,10 +41,20 @@
             <li v-if="isAvailable" class="status-green">Available</li>
             <li v-else class="status-red">Rented Out</li>
         </ul>
-        <AtomButton v-if="isAvailable" class="top-margin" :expanded="true">
+        <AtomButton
+            v-if="isAvailable"
+            @click.native="onContact"
+            class="top-margin"
+            :expanded="true"
+        >
             Book
         </AtomButton>
-        <AtomButton v-else class="top-margin" :expanded="true">
+        <AtomButton
+            v-else
+            class="top-margin"
+            @click.native="onContact"
+            :expanded="true"
+        >
             Notify me
         </AtomButton>
     </div>
@@ -86,6 +96,11 @@ export default {
         discountPercent() {
             const fakePrice = this.spotDetails.Rate + this.discountAmount;
             return Math.ceil((this.discountAmount / fakePrice) * 100);
+        },
+    },
+    methods: {
+        onContact() {
+            this.$router.push({ name: 'contactUs' });
         },
     },
 };
