@@ -142,7 +142,7 @@ hr {
     display: none;
     @media only screen and (max-width: 1024px) {
         display: block;
-        min-height: 35vh;
+        min-height: 450px;
     }
 }
 
