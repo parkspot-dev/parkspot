@@ -69,4 +69,6 @@ export const PAGE_TITLE = {
     ABOUT: 'About -  Get Parking Space , Rent Empty Space',
     CONTACT: 'Contact Us',
     FEATURES: 'Features',
+    VOPORTAL: 'Get Parking Spot',
+    SOPORTAL: 'Register Parking Spot',
 };

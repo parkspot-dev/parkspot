@@ -10,11 +10,18 @@
 import TemplateVOPortal from '../components/templates/TemplateVOPortal.vue';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import { mapActions } from 'vuex';
+import { PAGE_TITLE } from '@/constant/constant';
 export default {
     name: 'PageVOPortal',
     components: {
         TemplateVOPortal,
         LoaderModal,
+    },
+    metaInfo() {
+        return {
+            title: PAGE_TITLE.SOPORTAL,
+            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+        };
     },
     data() {
         return {

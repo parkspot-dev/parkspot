@@ -72,9 +72,6 @@ export const routes = [
         path: pages.CONTACT,
         name: 'contactUs',
         component: () => import('@/views/PageContactUs'),
-        meta: {
-            title: 'ParkSpot | Contact Us',
-        },
     },
     {
         path: pages.SRP,
@@ -88,17 +85,11 @@ export const routes = [
         path: pages.VOPORTAL,
         name: 'VOPortal',
         component: () => import('@/views/PageVOPortal.vue'),
-        meta: {
-            title: 'ParkSpot | Get Parking Spot',
-        },
     },
     {
         path: pages.SOPORTAL,
         name: 'SOPortal',
         component: () => import('@/views/PageSOPortal.vue'),
-        meta: {
-            title: 'ParkSpot | Register Parking Spot',
-        },
     },
     {
         path: '/terms-and-conditions',
