@@ -73,7 +73,7 @@ export const PAGE_TITLE = {
     SOPORTAL: 'Register Parking Spot',
     TERMS: 'Terms & Conditions',
     THANK: 'Thank You!',
-    ERROR: 'Oops... Something went wrong!',
+    ERROR: 'Oops... Something went wrong!!',
     BLOG: 'Blogs',
     SEARCH_PORTAL: 'Search Portal - Admin Only',
     PAYMENT: 'Payment',
