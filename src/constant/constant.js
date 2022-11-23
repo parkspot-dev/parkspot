@@ -74,4 +74,6 @@ export const PAGE_TITLE = {
     TERMS: 'Terms & Conditions',
     THANK: 'Thank You!',
     ERROR: 'Oops... Something went wrong!',
+    BLOG: 'Blogs',
+    SEARCH_PORTAL: 'Search Portal - Admin Only',
 };

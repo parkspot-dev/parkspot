@@ -23,10 +23,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.name === 'mainBlog') {
-        document.title = `${to.meta.title}  
-    ${to.params.id}`;
-    } else if (to.name === 'srp') {
+    if (to.name === 'srp') {
         document.title = `${to.meta.title} ${to.params.location || ''}`;
     } else if (to.name === 'discover') {
         document.title = `${to.meta.title} 

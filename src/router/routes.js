@@ -100,17 +100,11 @@ export const routes = [
         path: pages.BLOG,
         name: 'blog',
         component: () => import('@/views/PageBlogHome.vue'),
-        meta: {
-            title: 'ParkSpot | Blogs',
-        },
     },
     {
         path: pages.MAINBLOG,
         name: 'mainBlog',
         component: () => import('@/views/PageBlogPost.vue'),
-        meta: {
-            title: 'ParkSpot | Blogs - ',
-        },
     },
     {
         path: pages.SEARCH_PORTAL,
@@ -158,9 +152,6 @@ export const routes = [
         path: pages.TEMP,
         name: 'temp',
         component: () => import('@/views/PageTemp.vue'),
-        meta: {
-            title: 'ParkSpot | Temp ',
-        },
     },
     {
         path: '*',
