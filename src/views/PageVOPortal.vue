@@ -19,7 +19,7 @@ export default {
     },
     metaInfo() {
         return {
-            title: PAGE_TITLE.SOPORTAL,
+            title: PAGE_TITLE.VOPORTAL,
             titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
         };
     },

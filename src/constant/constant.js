@@ -71,4 +71,7 @@ export const PAGE_TITLE = {
     FEATURES: 'Features',
     VOPORTAL: 'Get Parking Spot',
     SOPORTAL: 'Register Parking Spot',
+    TERMS: 'Terms & Conditions',
+    THANK: 'Thank You!',
+    ERROR: 'Oops... Something went wrong!',
 };

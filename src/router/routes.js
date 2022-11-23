@@ -95,9 +95,6 @@ export const routes = [
         path: '/terms-and-conditions',
         name: 'Terms',
         component: () => import('@/views/PageTerms.vue'),
-        meta: {
-            title: 'ParkSpot | Terms & Conditions',
-        },
     },
     {
         path: pages.BLOG,
@@ -150,17 +147,11 @@ export const routes = [
         path: pages.THANK_YOU,
         name: 'thankYou',
         component: () => import('@/views/PageThankYou.vue'),
-        meta: {
-            title: 'ParkSpot | Thank You ',
-        },
     },
     {
         path: pages.ERROR,
         name: 'error',
         component: () => import('@/views/PageError.vue'),
-        meta: {
-            title: 'ParkSpot | Error ',
-        },
     },
     // Todo Delete below code before deployment
     {
