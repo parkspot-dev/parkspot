@@ -51,34 +51,22 @@ export const routes = [
         path: pages.HOME,
         name: 'Home',
         component: Home,
-        meta: {
-            title: 'Find and Book Parking Spaces Nearby | Bangalore Delhi Mumbai Pune Bengaluru | Parkspot.in',
-        },
     },
     {
         path: pages.FAQ,
         name: 'Faq',
         component: () => import('@/views/PageFaq.vue'),
-        meta: {
-            title: "FAQ's - Get Your All Parking Related Queries be Answered...",
-        },
     },
 
     {
         path: pages.ABOUT,
         name: 't-about',
         component: PageAbout,
-        meta: {
-            title: 'ParkSpot | About -  Get Parking Space , Rent Empty Space',
-        },
     },
     {
         path: pages.FEATURES,
         name: 'features',
         component: () => import('@/views/PageFeature.vue'),
-        meta: {
-            title: 'ParkSpot | Features',
-        },
     },
     {
         path: pages.CONTACT,

@@ -68,4 +68,5 @@ export const PAGE_TITLE = {
     FAQ: `FAQ's - Get Your All Parking Related Queries be Answered...`,
     ABOUT: 'About -  Get Parking Space , Rent Empty Space',
     CONTACT: 'Contact Us',
+    FEATURES: 'Features',
 };
