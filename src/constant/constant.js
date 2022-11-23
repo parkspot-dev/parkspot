@@ -76,4 +76,7 @@ export const PAGE_TITLE = {
     ERROR: 'Oops... Something went wrong!',
     BLOG: 'Blogs',
     SEARCH_PORTAL: 'Search Portal - Admin Only',
+    PAYMENT: 'Payment',
+    DISCOVER: 'Parking Near ',
+    SEARCH: 'ParkSpot | ',
 };

@@ -77,9 +77,6 @@ export const routes = [
         path: pages.SRP,
         name: 'srp',
         component: () => import('@/views/PageSrp.vue'),
-        meta: {
-            title: 'ParkSpot | Search  ',
-        },
     },
     {
         path: pages.VOPORTAL,
@@ -110,27 +107,18 @@ export const routes = [
         path: pages.SEARCH_PORTAL,
         name: 'SearchPortal',
         component: () => import('@/views/PageSearchPortal.vue'),
-        meta: {
-            title: 'ParkSpot | Search Portal',
-        },
         beforeEnter: guardThisRoute,
     },
     {
         path: pages.PAYMENTGATEWAY,
         name: 'paymentGateway',
         component: () => import('@/views/PagePaymentGateway.vue'),
-        meta: {
-            title: 'Payment | Parkspot.in ',
-        },
     },
     // ! it will take " -mara/xyx"
     {
         path: pages.NEARBY,
         name: 'discover',
         component: () => import('@/views/PageNearBy.vue'),
-        meta: {
-            title: 'Parking Near ',
-        },
     },
     {
         path: pages.SPOT_DETAIL,

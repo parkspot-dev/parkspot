@@ -22,17 +22,4 @@ const router = new VueRouter({
     scrollBehavior,
 });
 
-router.beforeEach((to, from, next) => {
-    if (to.name === 'srp') {
-        document.title = `${to.meta.title} ${to.params.location || ''}`;
-    } else if (to.name === 'discover') {
-        document.title = `${to.meta.title} 
-    ${to.params.pathMatch.replace(/b*\//, '')} 
-    - Find and Book Best Parking Spot with ParkSpot`;
-    } else {
-        document.title = `${to.meta.title} `;
-    }
-    next();
-});
-
 export default router;
