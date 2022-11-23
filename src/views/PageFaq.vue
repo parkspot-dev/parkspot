@@ -7,10 +7,16 @@
 
 <script>
 import TemplateFaq from '../components/templates/TemplateFaq.vue';
+import { PAGE_TITLE } from '@/constant/constant';
 export default {
     name: 'PageFaq',
     components: {
         TemplateFaq,
+    },
+    metaInfo() {
+        return {
+            title: PAGE_TITLE.FAQ,
+        };
     },
 };
 </script>

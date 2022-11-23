@@ -60,3 +60,12 @@ export const PREFERENCE = {
 export const ICON = {
     INFO: 'information-outline',
 };
+
+export const PAGE_TITLE = {
+    TITLE_TEMPLATE: 'ParkSpot | ',
+    HOMEPAGE:
+        'Find and Book Parking Spaces Nearby | Bangalore Delhi Mumbai Pune Bengaluru | Parkspot.in',
+    FAQ: `FAQ's - Get Your All Parking Related Queries be Answered...`,
+    ABOUT: 'About -  Get Parking Space , Rent Empty Space',
+    CONTACT: 'Contact Us',
+};
