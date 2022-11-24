@@ -9,12 +9,19 @@
 import TemplateSpotDetail from '../components/templates/TemplateSpotDetail.vue';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import { mapState, mapActions, mapMutations } from 'vuex';
+import { PAGE_TITLE } from '@/constant/constant';
 
 export default {
     name: 'PageSpotDetail',
     components: {
         TemplateSpotDetail,
         LoaderModal,
+    },
+    metaInfo() {
+        return {
+            title: this.title,
+            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+        };
     },
     data() {
         return {
@@ -25,6 +32,7 @@ export default {
     computed: {
         ...mapState('sdp', {
             isLoading: (state) => state.loading,
+            title: (state) => state.title,
         }),
     },
     mounted() {

@@ -11,10 +11,16 @@
 <script>
 import TemplateFooter from './components/templates/TemplateFooter.vue';
 import Navbar from './components/extras/NavbarBody.vue';
+import { PAGE_TITLE } from '@/constant/constant';
 export default {
     components: {
         TemplateFooter,
         Navbar,
+    },
+    metaInfo() {
+        return {
+            title: PAGE_TITLE.HOMEPAGE,
+        };
     },
 };
 </script>

@@ -4,6 +4,7 @@
 
 <script>
 import TemplateThankYou from '../components/templates/TemplateThankYou.vue';
+import { PAGE_TITLE } from '@/constant/constant';
 export default {
     name: 'PageThankYou',
     components: {
@@ -12,6 +13,12 @@ export default {
     data() {
         return {
             msg: '',
+        };
+    },
+    metaInfo() {
+        return {
+            title: PAGE_TITLE.THANK,
+            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
         };
     },
     mounted() {

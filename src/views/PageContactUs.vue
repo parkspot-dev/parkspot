@@ -9,16 +9,36 @@
 import TemplateContactUs from '../components/templates/TemplateContactUs.vue';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import { mapActions } from 'vuex';
+import { PAGE_TITLE } from '@/constant/constant';
 export default {
     name: 'PageContactUs',
     components: {
         TemplateContactUs,
         LoaderModal,
     },
+    metaInfo() {
+        return {
+            title: this.title,
+            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+        };
+    },
     data() {
         return {
             isLoading: false,
+            title: undefined,
+            PAGE_TITLE,
         };
+    },
+    watch: {
+        $route: {
+            handler: function (to) {
+                if (to.name == 'contactUs') {
+                    this.title = PAGE_TITLE.CONTACT;
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
     },
     methods: {
         ...mapActions({

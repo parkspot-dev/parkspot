@@ -6,6 +6,7 @@ const state = {
     selectedSpot: [],
     isAvailable: false,
     loading: false,
+    title: '',
     image: [],
 };
 
@@ -37,6 +38,10 @@ const mutations = {
         state.image = [];
         state.image = [image];
     },
+
+    'update-title'(state, title) {
+        state.title = title;
+    },
 };
 
 const actions = {
@@ -53,6 +58,7 @@ const actions = {
         commit('update-is-available', res.Site['SlotsAvailable']);
         commit('update-loading', false);
         commit('update-image', res.Site['SiteImageURI']);
+        commit('update-title', res.Site['Name']);
     },
 };
 
