@@ -27,7 +27,7 @@
             </div>
 
             <div class="content">
-                <span class="content-text">
+                <span class="content-text content-text-full">
                     {{ items.quote }}
                 </span>
                 <br />
@@ -65,7 +65,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .quote {
     width: 64px;
 }
@@ -93,10 +93,19 @@ export default {
     margin: 0 !important;
 }
 
-/* .content-text {
+.content-text {
     -webkit-box-orient: vertical;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     overflow: hidden;
-} */
+}
+
+.sf {
+    .content-text-full {
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+        -webkit-line-clamp: unset;
+        overflow: hidden;
+    }
+}
 </style>
