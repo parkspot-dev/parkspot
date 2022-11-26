@@ -20,7 +20,7 @@
             </div>
             <div>
                 <div class="negative-margin">
-                    <p>Convenience fee</p>
+                    <p style="margin-right: 5px">Convenience fee</p>
                     <AtomTooltip :label="tooltipMsg">
                         <AtomIcon
                             :icon="ICON.INFO"
