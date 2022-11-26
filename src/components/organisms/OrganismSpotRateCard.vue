@@ -78,7 +78,8 @@ export default {
     data() {
         return {
             ICON,
-            tooltipMsg: 'This helps us run our platform and offer services.',
+            tooltipMsg:
+                'This helps us run our platform and offer services. One time charge only. ',
         };
     },
     computed: {
