@@ -1,6 +1,6 @@
 <template>
     <div class="home-card">
-        <b-tabs expanded>
+        <b-tabs expanded @input="onChange">
             <b-tab-item>
                 <template #header>
                     <div class="header-tab-btn">
@@ -55,6 +55,15 @@ export default {
         AtomIcon,
         SearchInput,
         AtomButton,
+    },
+    methods: {
+        onChange(tabNumber) {
+            if (tabNumber == 30) {
+                this.$emit('changed', 'car');
+            } else {
+                this.$emit('changed', 'spot');
+            }
+        },
     },
 };
 </script>

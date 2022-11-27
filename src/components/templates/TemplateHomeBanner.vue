@@ -1,23 +1,14 @@
 <template>
-    <BodyWrapper class="home-banner">
-        <OrganismHomeCard></OrganismHomeCard>
-        <!-- <h1>hello</h1> -->
-        <!-- <div class="banner-wrapper">
-            <div class="banner-header">
-                <h1 class="banner-title" data-aos="zoom-in">
-                    Find Amazing Parking Spot Near You
-                </h1>
-                <h2 class="banner-subtitle" data-aos="zoom-in">
-                    Instantly book your spot today.Trusted by many.
-                </h2>
-                <SearchInput class="banner-input"></SearchInput>
-                <div class="btn-wrapper">
-                    <AtomButton @click.native="flyToSrp">
-                        <span class="btn-text"> Search ParkSpot </span>
-                    </AtomButton>
-                </div>
-            </div>
-        </div> -->
+    <BodyWrapper
+        class="home-banner"
+        :class="activeTab === 'car' ? 'image-car-owner' : 'image-spot-owner'"
+    >
+        <!-- <div class="home-bg-image image-spot-owner"></div> -->
+        <!-- <div class="home-bg-image image-car-owner"></div> -->
+        <OrganismHomeCard
+            class="home-cta"
+            @changed="getActiveTab"
+        ></OrganismHomeCard>
     </BodyWrapper>
 </template>
 
@@ -35,17 +26,25 @@ export default {
         // AtomButton,
     },
     emits: ['flyToSrp'],
+    data() {
+        return {
+            activeTab: 'car',
+        };
+    },
     methods: {
         flyToSrp() {
             this.$emit('flyToSrp');
+        },
+        getActiveTab(activeTab) {
+            this.activeTab = activeTab;
         },
     },
 };
 </script>
 
-<style scoped>
-.home-banner {
-    /* The image used */
+<style lang="scss" scoped>
+.image-car-owner {
+    // background-color: yellow;
     background-image: url('../../assets/Home-Banner.jpg');
     background-image: linear-gradient(
             to right bottom,
@@ -53,61 +52,39 @@ export default {
             rgba(35, 30, 20, 45%)
         ),
         url('../../assets/Home-Banner.jpg');
+}
+.image-spot-owner {
+    background-color: green;
+}
+.home-banner {
+    height: 629px;
+    max-height: 1000px;
+
+    position: relative;
 
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 
-    height: 629px;
-    max-height: 1000px;
-}
-
-.banner-wrapper {
-    margin: 10rem auto;
-    max-width: 960px;
-}
-
-.banner-header {
-    color: #fff;
-    margin: 0 auto;
-    padding: 2rem 6rem;
-}
-
-.banner-title {
-    font-size: 3rem;
-    font-weight: var(--semi-bold-font);
-    line-height: var(--lh-small);
-    margin-bottom: 1.25rem;
-}
-
-.banner-subtitle {
-    margin-bottom: 3rem;
-}
-
-.banner-input {
-    margin-bottom: 1.25rem;
-}
-
-.btn-wrapper {
-    text-align: center;
-}
-
-.btn-text {
-    font-weight: var(--semi-bold-font);
-}
-
-@media only screen and (max-width: 800px) {
-    .banner-header {
-        padding: 0 3rem;
-    }
-
-    .banner-title {
-        font-size: 2.25rem;
-        text-align: center;
-    }
-    .banner-subtitle {
-        text-align: center;
+    .home-cta {
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 }
+
+// @media only screen and (max-width: 800px) {
+//     .banner-header {
+//         padding: 0 3rem;
+//     }
+
+//     .banner-title {
+//         font-size: 2.25rem;
+//         text-align: center;
+//     }
+//     .banner-subtitle {
+//         text-align: center;
+//     }
+// }
 </style>
