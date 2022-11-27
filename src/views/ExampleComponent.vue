@@ -1,17 +1,13 @@
 <template>
-    <ul>
-        <li v-for="message in messages" :key="message">
-            {{ message }}
-        </li>
-    </ul>
+    <OrganismHomeCard></OrganismHomeCard>
 </template>
 
 <script>
+import OrganismHomeCard from '../components/organisms/OrganismHomeCard.vue';
 export default {
     name: 'ExampleComponent',
-    props: ['messages'],
-    created() {
-        alert(this.messages);
+    components: {
+        OrganismHomeCard,
     },
 };
 </script>

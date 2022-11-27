@@ -1,7 +1,8 @@
 <template>
     <BodyWrapper class="home-banner">
+        <OrganismHomeCard></OrganismHomeCard>
         <!-- <h1>hello</h1> -->
-        <div class="banner-wrapper">
+        <!-- <div class="banner-wrapper">
             <div class="banner-header">
                 <h1 class="banner-title" data-aos="zoom-in">
                     Find Amazing Parking Spot Near You
@@ -16,20 +17,22 @@
                     </AtomButton>
                 </div>
             </div>
-        </div>
+        </div> -->
     </BodyWrapper>
 </template>
 
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
-import SearchInput from '../extras/SearchInput.vue';
-import AtomButton from '../atoms/AtomButton.vue';
+import OrganismHomeCard from '../organisms/OrganismHomeCard.vue';
+// import SearchInput from '../extras/SearchInput.vue';
+// import AtomButton from '../atoms/AtomButton.vue';
 export default {
     name: 'TemplateHomeBanner',
     components: {
         BodyWrapper,
-        SearchInput,
-        AtomButton,
+        OrganismHomeCard,
+        // SearchInput,
+        // AtomButton,
     },
     emits: ['flyToSrp'],
     methods: {
@@ -56,8 +59,7 @@ export default {
     background-repeat: no-repeat;
     background-size: cover;
 
-    /* Full height */
-    height: 100vh;
+    height: 629px;
     max-height: 1000px;
 }
 
