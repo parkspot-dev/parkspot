@@ -38,18 +38,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.image-car-owner {
-    // background-color: yellow;
-    background-image: url('../../assets/Home-Banner.jpg');
-    background-image: linear-gradient(
-            to right bottom,
-            rgba(35, 30, 20, 45%),
-            rgba(35, 30, 20, 45%)
-        ),
-        url('../../assets/Home-Banner.jpg');
-}
 .image-spot-owner {
-    background-color: green;
+    // background-color: yellow;
+    background-image: url('../../assets/home-spot-owner.png');
+    // background-image: linear-gradient(
+    //         to right bottom,
+    //         rgba(35, 30, 20, 45%),
+    //         rgba(35, 30, 20, 45%)
+    //     ),
+    //     url('../../assets/home-spot-owner.png');
+}
+.image-car-owner {
+    background-image: url('../../assets/home-car-owner.png');
 }
 .home-banner {
     height: 629px;

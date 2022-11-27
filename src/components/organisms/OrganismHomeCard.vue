@@ -36,8 +36,10 @@
                             Start earning money by listing unused parking spot
                             in our platform.
                         </p>
-                        <AtomButton class="mb-6">Search now</AtomButton>
-                        <p>Learn more about being a spot owner.</p>
+                        <AtomButton class="mb-5">Register now</AtomButton>
+                        <div>
+                            <span>Learn more about being a spot owner.</span>
+                        </div>
                     </div>
                 </template>
             </b-tab-item>
@@ -74,6 +76,8 @@ export default {
     height: 509px;
     border-radius: var(--border-default);
     background: white;
+    padding-top: 15px;
+    padding-bottom: 10px;
 
     .header-tab-btn {
         display: flex;
@@ -94,6 +98,13 @@ export default {
 
         p {
             font-size: 16px;
+            color: #8c8c8c;
+            line-height: 19px;
+        }
+
+        span {
+            font-size: 14px;
+            border-bottom: 1px solid #8c8c8c;
             color: #8c8c8c;
             line-height: 19px;
         }
