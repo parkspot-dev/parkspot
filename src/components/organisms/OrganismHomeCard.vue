@@ -72,7 +72,7 @@ export default {
 
 <style lang="scss" scoped>
 .home-card {
-    width: 562px;
+    max-width: 562px;
     height: 509px;
     border-radius: var(--border-default);
     background: white;
@@ -88,12 +88,22 @@ export default {
 
     .card-main-body {
         padding: 33px 49px;
+
+        @media only screen and (max-width: 620px) {
+            padding: 18px 13px;
+        }
+
         h2 {
             font-size: 48px;
             font-weight: 700;
             line-height: 58px;
             color: black;
             margin-bottom: 62px;
+
+            @media only screen and (max-width: 620px) {
+                font-size: 32px;
+                line-height: 39px;
+            }
         }
 
         p {
