@@ -3,8 +3,6 @@
         class="home-banner"
         :class="activeTab === 'car' ? 'image-car-owner' : 'image-spot-owner'"
     >
-        <!-- <div class="home-bg-image image-spot-owner"></div> -->
-        <!-- <div class="home-bg-image image-car-owner"></div> -->
         <OrganismHomeCard
             class="home-cta"
             @changed="getActiveTab"
@@ -15,15 +13,12 @@
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import OrganismHomeCard from '../organisms/OrganismHomeCard.vue';
-// import SearchInput from '../extras/SearchInput.vue';
-// import AtomButton from '../atoms/AtomButton.vue';
+
 export default {
     name: 'TemplateHomeBanner',
     components: {
         BodyWrapper,
         OrganismHomeCard,
-        // SearchInput,
-        // AtomButton,
     },
     emits: ['flyToSrp'],
     data() {
