@@ -23,6 +23,7 @@
     "vee-validate": "^3.4.14",
     "vue": "^2.6.12",
     "vue-cli-plugin-compression": "^1.1.5",
+    "vue-meta": "^2.4.0",
     "vue-router": "^3.4.8",
     "vuex": "^3.6.2"
   },

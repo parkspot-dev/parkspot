@@ -1,21 +1,39 @@
 <template>
-    <TemplateSpotDetail></TemplateSpotDetail>
+    <div>
+        <TemplateSpotDetail></TemplateSpotDetail>
+        <LoaderModal :isLoading="isLoading"></LoaderModal>
+    </div>
 </template>
 
 <script>
 import TemplateSpotDetail from '../components/templates/TemplateSpotDetail.vue';
-import { mapActions, mapMutations } from 'vuex';
+import LoaderModal from '../components/extras/LoaderModal.vue';
+import { mapState, mapActions, mapMutations } from 'vuex';
+import { PAGE_TITLE } from '@/constant/constant';
 
 export default {
     name: 'PageSpotDetail',
     components: {
         TemplateSpotDetail,
+        LoaderModal,
+    },
+    metaInfo() {
+        return {
+            title: this.title,
+            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+        };
     },
     data() {
         return {
             spotId: null,
             spotDetails: null,
         };
+    },
+    computed: {
+        ...mapState('sdp', {
+            isLoading: (state) => state.loading,
+            title: (state) => state.title,
+        }),
     },
     mounted() {
         this.spotId = this.$route.params.spotId;
@@ -26,7 +44,7 @@ export default {
         this.getUserLocation();
     },
     methods: {
-        ...mapActions('srp', {
+        ...mapActions('sdp', {
             getSpotDetails: 'getSpotDetails',
         }),
         ...mapMutations('map', {
@@ -38,7 +56,6 @@ export default {
                 geolocation.getCurrentPosition(
                     this.onGeoSuccess,
                     this.onGeoError,
-                    // this.setMap,
                 );
             } else {
                 console.log('Geolocation is not supported by this browser.');

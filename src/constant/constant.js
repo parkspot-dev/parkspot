@@ -60,3 +60,23 @@ export const PREFERENCE = {
 export const ICON = {
     INFO: 'information-outline',
 };
+
+export const PAGE_TITLE = {
+    TITLE_TEMPLATE: 'ParkSpot | ',
+    HOMEPAGE:
+        'Find and Book Parking Spaces Nearby | Bangalore Delhi Mumbai Pune Bengaluru | Parkspot.in',
+    FAQ: `FAQ's - Get Your All Parking Related Queries be Answered...`,
+    ABOUT: 'About -  Get Parking Space , Rent Empty Space',
+    CONTACT: 'Contact Us',
+    FEATURES: 'Features',
+    VO_PORTAL: 'Get Parking Spot',
+    SO_PORTAL: 'Register Parking Spot',
+    TERMS: 'Terms & Conditions',
+    THANK: 'Thank You!',
+    ERROR: 'Oops... Something went wrong!!',
+    BLOG: 'Blogs',
+    SEARCH_PORTAL: 'Search Portal - Admin Only',
+    PAYMENT: 'Payment',
+    DISCOVER: 'Parking Near ',
+    SEARCH: 'ParkSpot | ',
+};

@@ -8,10 +8,17 @@
 <script>
 import TemplateBlogHome from '../components/templates/TemplateBlogHome.vue';
 import { mapGetters } from 'vuex';
+import { PAGE_TITLE } from '@/constant/constant';
 export default {
     name: 'PageBlogHome',
     components: {
         TemplateBlogHome,
+    },
+    metaInfo() {
+        return {
+            title: PAGE_TITLE.BLOG,
+            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+        };
     },
     computed: {
         ...mapGetters({

@@ -1,9 +1,9 @@
 <template>
     <div class="rate-card">
         <div class="rate-container">
-            <p class="rate">₹{{ spotDetails.Rate + discount }}</p>
+            <p class="rate">₹{{ spotDetails.Rate + discountAmount }}</p>
             <p class="discount-rate">₹{{ spotDetails.Rate }}</p>
-            <p class="discount-label">{{ actualDiscount }}% OFF</p>
+            <p class="discount-label">{{ discountPercent }}% OFF</p>
         </div>
         <div class="star-rating">
             <AtomRating :rate="spotDetails.Rating"></AtomRating>
@@ -11,57 +11,96 @@
         <hr />
         <div class="amount-breakage">
             <div>
-                <p>₹{{ spotDetails.Rate + discount }} x 1 month</p>
-                <p>₹{{ spotDetails.Rate + discount }}</p>
+                <p>₹{{ spotDetails.Rate + discountAmount }} x 1 month</p>
+                <p>₹{{ spotDetails.Rate + discountAmount }}</p>
             </div>
             <div>
                 <p>Discount</p>
-                <p>- ₹{{ discount }}</p>
+                <p>- ₹{{ discountAmount }}</p>
             </div>
             <div>
-                <p>Convenience fee</p>
-                <p>+ ₹{{ spotDetails.Commission }}</p>
+                <div class="negative-margin">
+                    <p>Convenience fee</p>
+                    <AtomTooltip :label="tooltipMsg">
+                        <AtomIcon
+                            :icon="ICON.INFO"
+                            :size="'is-small'"
+                        ></AtomIcon>
+                    </AtomTooltip>
+                </div>
+                <p>+ ₹500</p>
             </div>
             <hr />
             <div>
                 <p>Total</p>
-                <p>₹{{ spotDetails.Rate + spotDetails.Commission }}</p>
+                <p>₹{{ spotDetails.Rate + 500 }}</p>
             </div>
         </div>
 
-        <AtomButton class="top-margin" :expanded="true"> Book </AtomButton>
+        <ul>
+            <li v-if="isAvailable" class="status-green">Available</li>
+            <li v-else class="status-red">Rented Out</li>
+        </ul>
+        <AtomButton
+            v-if="isAvailable"
+            @click.native="onContact"
+            class="top-margin"
+            :expanded="true"
+        >
+            Book
+        </AtomButton>
+        <AtomButton
+            v-else
+            class="top-margin"
+            @click.native="onContact"
+            :expanded="true"
+        >
+            Notify me
+        </AtomButton>
     </div>
 </template>
 
 <script>
 import AtomRating from '../atoms/AtomRating.vue';
 import AtomButton from '../atoms/AtomButton.vue';
+import AtomTooltip from '../atoms/AtomTooltip.vue';
+import AtomIcon from '../atoms/AtomIcon.vue';
+import { ICON } from '@/constant/constant';
 import { mapState } from 'vuex';
 export default {
     name: 'OrganismSpotRateCard',
     components: {
         AtomRating,
         AtomButton,
+        AtomTooltip,
+        AtomIcon,
     },
     data() {
-        return {};
+        return {
+            ICON,
+            tooltipMsg: 'This helps us run our platform and offer services.',
+        };
     },
     computed: {
-        ...mapState('srp', {
+        ...mapState('sdp', {
             spotDetails: (state) => state.spotDetails,
+            isAvailable: (state) => state.isAvailable,
         }),
 
-        discount() {
-            let discount = 0.15 * this.spotDetails.Rate;
-            while (discount % 100 != 0) {
-                discount = discount + (100 - (discount % 100));
-            }
-            return discount;
+        discountAmount() {
+            let amount = 0.15 * this.spotDetails.Rate;
+            amount = Math.ceil(amount / 100) * 100;
+            return amount;
         },
 
-        actualDiscount() {
-            const fakePrice = this.spotDetails.Rate + this.discount;
-            return Math.ceil((this.discount / fakePrice) * 100);
+        discountPercent() {
+            const fakePrice = this.spotDetails.Rate + this.discountAmount;
+            return Math.ceil((this.discountAmount / fakePrice) * 100);
+        },
+    },
+    methods: {
+        onContact() {
+            this.$router.push({ name: 'contactUs' });
         },
     },
 };
@@ -123,10 +162,48 @@ export default {
             justify-content: space-between;
             margin-bottom: 12px;
         }
+
+        .negative-margin {
+            margin-bottom: -5px;
+        }
+    }
+
+    ul {
+        position: relative;
+        font-size: 16px;
+        margin-left: 20px;
+
+        li:before {
+            content: '. ';
+            font-weight: bold;
+            font-size: 50px;
+            position: absolute;
+            top: -38.5px;
+            left: -18px;
+        }
+        .status-green {
+            color: hsl(141, 53%, 53%);
+            text-shadow: 0px 0px 10px #39ff14;
+
+            &:before {
+                color: hsl(141, 53%, 53%);
+                text-shadow: 0px 0px 10px #39ff14;
+            }
+        }
+
+        .status-red {
+            color: hsl(348, 100%, 61%);
+            text-shadow: 0px 0px 10px #ff3131;
+
+            &:before {
+                color: hsl(348, 100%, 61%);
+                text-shadow: 0px 0px 10px #ff3131;
+            }
+        }
     }
 
     .top-margin {
-        margin-top: 45px;
+        margin-top: 5px;
     }
 }
 </style>

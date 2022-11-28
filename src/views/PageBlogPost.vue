@@ -9,6 +9,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import TemplateBlogPost from '../components/templates/TemplateBlogPost.vue';
 import PageContactUs from './PageContactUs.vue';
+import { PAGE_TITLE } from '@/constant/constant';
 export default {
     name: 'PageBlogPost',
     components: {
@@ -18,6 +19,17 @@ export default {
     data() {
         return {
             content: '',
+        };
+    },
+    metaInfo() {
+        return {
+            title: this.title,
+            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+        };
+    },
+    data() {
+        return {
+            title: undefined,
         };
     },
     computed: {
@@ -32,6 +44,8 @@ export default {
         this.getContentById(this.$route.params.id).then(
             (res) => (this.content = res),
         );
+
+        this.title = this.$route.params.id;
     },
     methods: {
         ...mapActions({
