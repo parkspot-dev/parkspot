@@ -87,7 +87,7 @@ export default {
     .home-cta {
         position: absolute;
         top: 0;
-        left: 0;
+        left: 100px;
 
         @media only screen and (max-width: 620px) {
             position: relative;
