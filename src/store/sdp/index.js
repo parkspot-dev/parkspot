@@ -36,7 +36,11 @@ const mutations = {
 
     'update-image'(state, image) {
         state.image = [];
-        state.image = [image];
+        if (Array.isArray(image)) {
+            state.image = image;
+        } else {
+            state.image = [image];
+        }
     },
 
     'update-title'(state, title) {
@@ -57,7 +61,11 @@ const actions = {
         commit('update-selected-spot', spot);
         commit('update-is-available', res.Site['SlotsAvailable']);
         commit('update-loading', false);
-        commit('update-image', res.Site['SiteImageURI']);
+        if (res.Site['SiteImages'].length > 0) {
+            commit('update-image', res.Site['SiteImages']);
+        } else {
+            commit('update-image', res.Site['SiteImageURI']);
+        }
         commit('update-title', res.Site['Name']);
     },
 };

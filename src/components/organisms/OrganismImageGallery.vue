@@ -1,15 +1,15 @@
 <template>
     <div class="gallery-container">
         <div id="lightgallery">
-            <template v-for="i in spotImage.length">
+            <template v-for="(image, i) in spotImage">
                 <a
                     :key="i"
                     class="gallery-item"
                     :class="imageSize"
-                    :href="spotImage"
+                    :href="image"
                     :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${locationName}</p>`"
                 >
-                    <img class="img-responsive" :src="spotImage" />
+                    <img class="img-responsive" :src="image" />
                 </a>
             </template>
         </div>
@@ -79,10 +79,15 @@ export default {
         position: absolute;
         opacity: 1;
         border: 1px solid black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgb(87, 86, 86);
 
         .img-responsive {
             height: 100%;
-            width: 100%;
+            width: auto;
+            background: white;
         }
     }
 
