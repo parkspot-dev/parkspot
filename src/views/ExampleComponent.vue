@@ -1,13 +1,17 @@
 <template>
-    <OrganismHomeCard></OrganismHomeCard>
+    <div></div>
 </template>
 
 <script>
-import OrganismHomeCard from '../components/organisms/OrganismHomeCard.vue';
 export default {
-    name: 'ExampleComponent',
-    components: {
-        OrganismHomeCard,
+    components: {},
+    data() {
+        return {};
     },
+
+    mounted() {},
 };
 </script>
+
+<style lang="scss" scoped>
+</style>
