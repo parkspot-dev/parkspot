@@ -11,7 +11,7 @@
                     v-for="spot in spots"
                     :key="spot.ID"
                     :spot="spot"
-                    @booked="onBook"
+                    @on-details="details"
                     @click.native="selected(spot)"
                 ></MoleculeSRPCard>
             </div>
@@ -59,14 +59,14 @@ export default {
             type: Number,
         },
     },
-    emits: ['changed', 'flyToSrp'],
+    emits: ['changed', 'flyToSrp', 'details'],
 
     methods: {
         onPageChange(page) {
             this.$emit('changed', page);
         },
-        onBook() {
-            this.$router.push({ name: 'contactUs' });
+        details(spotID) {
+            this.$emit('details', spotID);
         },
         onChange() {
             this.$emit('flyToSrp');

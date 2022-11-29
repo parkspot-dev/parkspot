@@ -8,10 +8,17 @@
 </template>
 <script>
 import TemplateSearchPortal from '../components/templates/TemplateSearchPortal.vue';
+import { PAGE_TITLE } from '@/constant/constant';
 export default {
     name: 'PageSearchPortal',
     components: {
         TemplateSearchPortal,
+    },
+    metaInfo() {
+        return {
+            title: PAGE_TITLE.SEARCH_PORTAL,
+            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+        };
     },
     data() {
         return {

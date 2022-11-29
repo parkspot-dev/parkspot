@@ -17,6 +17,7 @@ import TemplateTestimonial from '../components/templates/TemplateTestimonial.vue
 import PageAbout from './PageAbout.vue';
 import { getCoordinate } from '../includes/LatLng';
 import { mapGetters } from 'vuex';
+import { PAGE_TITLE } from '@/constant/constant';
 export default {
     name: 'PageHome',
     components: {
@@ -26,6 +27,11 @@ export default {
         TemplateHomeBanner,
         TemplateTestimonial,
         TemplateOurProducts,
+    },
+    metaInfo() {
+        return {
+            title: PAGE_TITLE.HOMEPAGE,
+        };
     },
     data() {
         return {};

@@ -10,7 +10,9 @@ import 'buefy/dist/buefy.css';
 import './includes/VeeValidate';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import VueMeta from 'vue-meta';
 
+Vue.use(VueMeta);
 Vue.use(Buefy);
 Vue.config.productionTip = false;
 

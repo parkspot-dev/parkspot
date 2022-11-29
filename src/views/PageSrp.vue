@@ -7,6 +7,7 @@
             :reRender="reRender"
             @changed="onPageChange"
             @flyToSrp="flyToSrp"
+            @details="spotDetails"
         ></TemplateSrp>
         <LoaderModal :isLoading="isLoading"></LoaderModal>
     </section>
@@ -16,12 +17,19 @@ import TemplateSrp from '../components/templates/TemplateSrp.vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import { getCoordinate } from '../includes/LatLng';
+import { PAGE_TITLE } from '@/constant/constant';
 
 export default {
     name: 'PageSrp',
     components: {
         TemplateSrp,
         LoaderModal,
+    },
+    metaInfo() {
+        return {
+            title: this.title,
+            titleTemplate: PAGE_TITLE.SEARCH + '%s',
+        };
     },
     data() {
         return {
@@ -30,7 +38,17 @@ export default {
             currentPage: 1,
         };
     },
-
+    watch: {
+        $route: {
+            handler: function (to) {
+                if (to.name == 'srp') {
+                    this.title = to.params.location;
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
+    },
     computed: {
         ...mapGetters({
             paginatedSrpResults: 'map/getPaginateSrpResults',
@@ -95,6 +113,15 @@ export default {
                         location: this.LocDetails.locDetails.locName,
                     },
                 });
+            });
+        },
+
+        spotDetails(spotID) {
+            this.$router.push({
+                name: 'spot-detail',
+                params: {
+                    spotId: spotID,
+                },
             });
         },
     },

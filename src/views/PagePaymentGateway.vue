@@ -12,10 +12,17 @@
 </template>
 <script>
 import TemplatePaymentGateway from '../components/templates/TemplatePaymentGateway.vue';
+import { PAGE_TITLE } from '@/constant/constant';
 export default {
     name: 'PagePaymentGateway',
     components: {
         TemplatePaymentGateway,
+    },
+    metaInfo() {
+        return {
+            title: PAGE_TITLE.PAYMENT,
+            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+        };
     },
     data() {
         return {
