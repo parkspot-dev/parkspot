@@ -1,54 +1,30 @@
 <template>
-    <div class="card">
-        <div class="card-content">
-            <div class="testimony">
-                <div class="testimony-left">
-                    <figure class="image is-48x48">
-                        <img
-                            class="is-rounded"
-                            :src="items.image"
-                            alt="Placeholder image"
-                        />
-                    </figure>
-                </div>
-                <div class="testimony-right">
-                    <AtomParagraph class="testimony-name">{{
-                        items.name
-                    }}</AtomParagraph>
-                </div>
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="swiper-avatar">
+                <img :src="items.image" />
+                <p>{{ items.name }}</p>
             </div>
-
             <div class="quote">
-                <AtomImage
-                    :alt="'quote'"
-                    :src="img"
-                    :ratio="'1by1'"
-                ></AtomImage>
+                <img alt="quote" :src="img" />
             </div>
-
-            <div class="content">
-                <span class="content-text content-text-full">
-                    {{ items.quote }}
-                </span>
-                <br />
-                <div class="quote-bottom">
-                    <AtomRating class="rating" :rate="items.rate"></AtomRating>
-                    <time :datetime="items.datetime">{{ items.date }}</time>
-                </div>
+            <p>"{{ items.quote }}"</p>
+            <div class="content-bottom">
+                <AtomRating
+                    class="rating"
+                    :rate="items.rate"
+                    :size="'is-small'"
+                ></AtomRating>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import AtomImage from '../atoms/AtomImage.vue';
-import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomRating from '../atoms/AtomRating.vue';
 export default {
     name: 'MoleculeTestimonialCard',
     components: {
-        AtomImage,
-        AtomParagraph,
         AtomRating,
     },
     props: {
@@ -66,46 +42,60 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.quote {
-    width: 64px;
-}
+$g-line-height: 1.5 !default;
+$g-spacing: $g-line-height * 1em;
+$black: #000;
+$white: #fff;
+$g-background-color-dark: #18181b;
 
-.testimony {
-    display: flex;
-    gap: 1rem;
-}
+.content-wrapper {
+    position: relative;
+    height: 500px;
+    width: 100%;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    .content {
+        padding: $g-spacing * 2 $g-spacing;
+        color: $black;
 
-.testimony-right {
-    align-self: center;
-}
+        .quote {
+            width: 64px;
+            opacity: 15%;
+            position: absolute;
+            top: 120px;
+            left: 0;
+        }
+        .swiper-avatar {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 20px;
 
-.testimony-name {
-    font-weight: var(--semi-bold-font);
-}
+            img {
+                border-radius: 500px;
+                height: 72px;
+                width: 72px;
+            }
 
-.quote-bottom {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1rem;
-}
+            p {
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 24px;
+                margin: 0;
+            }
+        }
 
-.rating {
-    margin: 0 !important;
-}
+        p {
+            font-weight: 400;
+            font-size: 18px;
+            line-height: 24px;
+            margin-bottom: 25px;
+        }
 
-.content-text {
-    -webkit-box-orient: vertical;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
-}
-
-.sf {
-    .content-text-full {
-        -webkit-box-orient: vertical;
-        display: -webkit-box;
-        -webkit-line-clamp: unset;
-        overflow: hidden;
+        .content-bottom {
+            .rating {
+                font-size: 25px;
+            }
+        }
     }
 }
 </style>

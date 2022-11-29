@@ -25,13 +25,11 @@
 <script>
 import Swiper, { Navigation, Pagination } from 'swiper';
 import MoleculeTestimonialCard from '@/components/molecules/MoleculeTestimonialCard.vue';
-// import 'swiper/css';
-// import 'swiper/css/navigation';
-// import 'swiper/css/pagination';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
 export default {
+    name: 'TestimonialSwiper',
     components: {
         MoleculeTestimonialCard,
     },
@@ -120,7 +118,7 @@ $white: #fff;
 $g-background-color-dark: #18181b;
 
 .swiper {
-    padding: $g-spacing;
+    padding: 2.5em 1.5em;
     height: 700px;
     .swiper-slide {
         margin: 0;
