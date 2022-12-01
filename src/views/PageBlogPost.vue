@@ -40,8 +40,6 @@ export default {
         this.getContentById(this.$route.params.id).then(
             (res) => (this.content = res),
         );
-
-        console.log(this.content);
         this.title = this.$route.params.id;
     },
     methods: {
