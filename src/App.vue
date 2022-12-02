@@ -13,7 +13,7 @@
 import TemplateFooter from './components/templates/TemplateFooter.vue';
 import Navbar from './components/extras/NavbarBody.vue';
 import { PAGE_TITLE } from '@/constant/constant';
-import MoleculeSocialLinks from './components/molecules/MoleculeSocialLinks.vue';
+import MoleculeSocialLinks from '@/components/molecules/MoleculeSocialLinks.vue';
 export default {
     components: {
         TemplateFooter,
