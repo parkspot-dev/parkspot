@@ -1,17 +1,17 @@
 <template>
-    <ul>
-        <li v-for="message in messages" :key="message">
-            {{ message }}
-        </li>
-    </ul>
+    <div></div>
 </template>
 
 <script>
 export default {
-    name: 'ExampleComponent',
-    props: ['messages'],
-    created() {
-        alert(this.messages);
+    components: {},
+    data() {
+        return {};
     },
+
+    mounted() {},
 };
 </script>
+
+<style lang="scss" scoped>
+</style>
