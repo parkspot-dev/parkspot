@@ -127,7 +127,7 @@ export const routes = [
         children: [
             {
                 // when /spot-details/:id/internal is matched
-                path: 'internal',
+                path: 'admin',
                 name: 'adminOnly-spot-detail',
                 component: () => import('@/views/PageSpotDetail.vue'),
                 beforeEnter: guardThisRoute,
