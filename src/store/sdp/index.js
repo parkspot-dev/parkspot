@@ -3,6 +3,7 @@ import { mayaClient } from '@/services/api';
 
 const state = {
     spotDetails: null,
+    ownerInfoDetails: null,
     selectedSpot: [],
     isAvailable: false,
     loading: false,
@@ -16,6 +17,10 @@ const getters = {};
 const mutations = {
     'update-spot-details'(state, spotDetails) {
         state.spotDetails = spotDetails;
+    },
+
+    'update-owner-info-details'(state, ownerInfoDetails) {
+        state.ownerInfoDetails = ownerInfoDetails;
     },
 
     'update-selected-spot'(state, spot) {
@@ -51,10 +56,17 @@ const mutations = {
 };
 
 const actions = {
-    async getSpotDetails({ commit }, spotId) {
+    async getSpotDetails({ commit }, { spotId, isAdmin }) {
         commit('update-loading', true);
-        const res = await mayaClient.get(`/site?siteID=${spotId}`);
+        console.log(isAdmin);
+        const url = isAdmin
+            ? `/site?siteID=${spotId}&getOwnerInfo=true`
+            : `/site?siteID=${spotId}`;
+
+        console.log(url);
+        const res = await mayaClient.get(url);
         commit('update-spot-details', res.Site);
+        commit('update-owner-info-details', res.User);
         const spot = {
             Name: res.Site['Name'],
             Lat: res.Site['Latitude'],
