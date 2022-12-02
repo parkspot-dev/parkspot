@@ -4,7 +4,16 @@
         <main class="body-container">
             <router-view :key="$route.fullPath" />
         </main>
-        <MoleculeSocialLinks></MoleculeSocialLinks>
+        <OrganismIntersectionObserver
+            sentinal-name="socialLinks"
+            @on-intersection-element="onIntersectionElement"
+        ></OrganismIntersectionObserver>
+        <MoleculeSocialLinks
+            :class="{
+                'opacity-100': isSocialLinksVisible,
+                'opacity-0': !isSocialLinksVisible,
+            }"
+        ></MoleculeSocialLinks>
         <TemplateFooter></TemplateFooter>
     </div>
 </template>
@@ -14,16 +23,30 @@ import TemplateFooter from './components/templates/TemplateFooter.vue';
 import Navbar from './components/extras/NavbarBody.vue';
 import { PAGE_TITLE } from '@/constant/constant';
 import MoleculeSocialLinks from '@/components/molecules/MoleculeSocialLinks.vue';
+import OrganismIntersectionObserver from '@/components/organisms/OrganismIntersectionObserver.vue';
+
 export default {
     components: {
         TemplateFooter,
         Navbar,
         MoleculeSocialLinks,
+        OrganismIntersectionObserver,
     },
     metaInfo() {
         return {
             title: PAGE_TITLE.HOMEPAGE,
         };
+    },
+    data() {
+        return {
+            isSocialLinksVisible: false,
+        };
+    },
+    methods: {
+        onIntersectionElement(isVisble) {
+            this.isSocialLinksVisible = isVisble;
+            console.log('helo');
+        },
     },
 };
 </script>
@@ -40,6 +63,13 @@ export default {
 
 .body-container {
     margin-top: 10px;
+}
+
+.opacity-100 {
+    opacity: 1;
+}
+.opacity-0 {
+    opacity: 0;
 }
 
 @media only screen and (max-width: 1024px) {
