@@ -33,7 +33,7 @@ export default {
     },
     computed: {
         ...mapState('sdp', {
-            image: (state) => state.image,
+            images: (state) => state.images,
             thumbnail: (state) => state.thumbnail,
             selectedSpot: (state) => state.selectedSpot,
         }),
@@ -47,8 +47,8 @@ export default {
             thumbnail: true,
         });
 
-        if (this.image.length > 0) {
-            this.spotImage = this.image;
+        if (this.images.length > 0) {
+            this.spotImage = this.images;
         } else {
             this.spotImage = this.thumbnail;
         }

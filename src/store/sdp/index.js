@@ -8,7 +8,7 @@ const state = {
     loading: false,
     title: '',
     thumbnail: [],
-    image: [],
+    images: [],
 };
 
 const getters = {};
@@ -36,8 +36,8 @@ const mutations = {
     },
 
     'update-image'(state, images) {
-        state.image = [];
-        state.image = images.map((img) => img.ImageURL);
+        state.images = [];
+        state.images = images.map((img) => img.ImageURL);
     },
 
     'update-thumbnail-image'(state, image) {
