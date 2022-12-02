@@ -7,7 +7,8 @@ const state = {
     isAvailable: false,
     loading: false,
     title: '',
-    image: [],
+    thumbnail: [],
+    images: [],
 };
 
 const getters = {};
@@ -34,13 +35,14 @@ const mutations = {
         state.loading = loading;
     },
 
-    'update-image'(state, image) {
-        state.image = [];
-        if (Array.isArray(image)) {
-            state.image = image;
-        } else {
-            state.image = [image];
-        }
+    'update-image'(state, images) {
+        state.images = [];
+        state.images = images.map((img) => img.ImageURL);
+    },
+
+    'update-thumbnail-image'(state, image) {
+        state.thumbnail = [];
+        state.thumbnail = [image];
     },
 
     'update-title'(state, title) {
@@ -61,11 +63,8 @@ const actions = {
         commit('update-selected-spot', spot);
         commit('update-is-available', res.Site['SlotsAvailable']);
         commit('update-loading', false);
-        if (res.Site['SiteImages'].length > 0) {
-            commit('update-image', res.Site['SiteImages']);
-        } else {
-            commit('update-image', res.Site['SiteImageURI']);
-        }
+        commit('update-image', res.Site['SiteImages']);
+        commit('update-thumbnail-image', res.Site['SiteImageURI']);
         commit('update-title', res.Site['Name']);
     },
 };
