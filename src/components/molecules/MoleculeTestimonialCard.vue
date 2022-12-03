@@ -44,7 +44,7 @@ export default {
 <style lang="scss" scoped>
 $g-line-height: 1.5 !default;
 $g-spacing: $g-line-height * 1em;
-$black: #000;
+$black: var(--primary-text);
 $white: #fff;
 $g-background-color-dark: #18181b;
 
@@ -72,8 +72,8 @@ $g-background-color-dark: #18181b;
 
             img {
                 border-radius: 500px;
-                height: 72px;
-                width: 72px;
+                height: 64px;
+                width: 64px;
             }
 
             p {
@@ -86,14 +86,14 @@ $g-background-color-dark: #18181b;
 
         p {
             font-weight: 400;
-            font-size: 18px;
+            font-size: 14px;
             line-height: 24px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .content-bottom {
             .rating {
-                font-size: 25px;
+                font-size: 20px;
             }
         }
     }
