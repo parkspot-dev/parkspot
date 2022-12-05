@@ -172,6 +172,22 @@ class MapBoxApiService extends BaseApiService {
     }
 }
 
+/** Class representing a GoogleMapApiService extends BaseApiService */
+class GoogleMapApiService extends BaseApiService {
+    /**
+     * Create a GoogleMapApiService.
+     */
+    constructor() {
+        const googleMapDomain = 'https://maps.googleapis.com'; //   TODO: we can pick from .env files.
+        const baseHeaderMap = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            // 'Flavour': flavour,
+        };
+        super(googleMapDomain, baseHeaderMap, 5000, false);
+    }
+}
+
 /**
  * get the device mobile or desktop
  * @return {string} mweb or dweb.
@@ -190,5 +206,6 @@ function getFlavour() {
 
 const mayaClient = new MayaApiService(getFlavour());
 const mapBoxClient = new MapBoxApiService();
+const GoogleMapClient = new GoogleMapApiService();
 
-export { mayaClient, mapBoxClient };
+export { mayaClient, mapBoxClient, GoogleMapClient };
