@@ -44,7 +44,6 @@ export default {
 <style lang="scss" scoped>
 $g-line-height: 1.5 !default;
 $g-spacing: $g-line-height * 1em;
-$black: var(--primary-text);
 $white: #fff;
 $g-background-color-dark: #18181b;
 
@@ -55,7 +54,7 @@ $g-background-color-dark: #18181b;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     .content {
         padding: $g-spacing * 2 $g-spacing;
-        color: $black;
+        color: var(--primary-text);
 
         .quote {
             width: 64px;
