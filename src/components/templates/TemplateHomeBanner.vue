@@ -1,7 +1,7 @@
 <template>
     <BodyWrapper
         class="home-banner"
-        :class="activeTab === 'car' ? 'image-car-owner' : 'image-spot-owner'"
+        :class="activeTab === 'VO' ? 'image-car-owner' : 'image-spot-owner'"
     >
         <OrganismHomeCard
             class="home-cta"
@@ -9,7 +9,7 @@
         ></OrganismHomeCard>
         <div
             :class="
-                activeTab === 'car' ? 'm-image-car-owner' : 'm-image-spot-owner'
+                activeTab === 'VO' ? 'm-image-car-owner' : 'm-image-spot-owner'
             "
         ></div>
     </BodyWrapper>
@@ -28,7 +28,7 @@ export default {
     emits: ['flyToSrp'],
     data() {
         return {
-            activeTab: 'car',
+            activeTab: 'VO',
         };
     },
     methods: {
@@ -44,14 +44,7 @@ export default {
 
 <style lang="scss" scoped>
 .image-spot-owner {
-    // background-color: yellow;
     background-image: url('../../assets/home-spot-owner.jpg');
-    // background-image: linear-gradient(
-    //         to right bottom,
-    //         rgba(35, 30, 20, 45%),
-    //         rgba(35, 30, 20, 45%)
-    //     ),
-    //     url('../../assets/home-spot-owner.png');
     -webkit-transition: background-image 1s;
 
     @media only screen and (max-width: 620px) {

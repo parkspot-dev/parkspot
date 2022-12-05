@@ -1,7 +1,7 @@
 <template>
     <div class="home-card">
         <b-tabs expanded @input="onChange">
-            <b-tab-item>
+            <b-tab-item value="VO">
                 <template #header>
                     <div class="header-tab-btn">
                         <AtomIcon
@@ -13,7 +13,7 @@
                 </template>
                 <template>
                     <div class="card-main-body">
-                        <h2>Search a spot for the car</h2>
+                        <h2>Search a spot for your car</h2>
                         <SearchInput class="mb-6"></SearchInput>
                         <AtomButton @click.native="flyToSrp">
                             Search now
@@ -21,7 +21,7 @@
                     </div>
                 </template>
             </b-tab-item>
-            <b-tab-item>
+            <b-tab-item value="SO">
                 <template #header>
                     <div class="header-tab-btn">
                         <AtomIcon
@@ -86,12 +86,8 @@ export default {
                 },
             });
         },
-        onChange(tabNumber) {
-            if (tabNumber == 30) {
-                this.$emit('changed', 'car');
-            } else {
-                this.$emit('changed', 'spot');
-            }
+        onChange(tabName) {
+            this.$emit('changed', tabName);
         },
 
         contactUs() {
