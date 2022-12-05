@@ -1,4 +1,5 @@
 import { mayaClient } from '@/services/api';
+import { firebase, getDatabase, ref, get, child } from '../../firebase';
 // import _ from 'lodash';
 
 const state = {
@@ -58,12 +59,16 @@ const mutations = {
 const actions = {
     async getSpotDetails({ commit }, { spotId, isAdmin }) {
         commit('update-loading', true);
-        console.log(isAdmin);
-        const url = isAdmin
-            ? `/site?siteID=${spotId}&getOwnerInfo=true`
-            : `/site?siteID=${spotId}`;
-
-        console.log(url);
+        let url;
+        if (isAdmin) {
+            const db = getDatabase(firebase);
+            const dbref = ref(db);
+            const res = await get(child(dbref, `admin`));
+            const credentials = await res.val();
+            url = `/site?site-id=${spotId}&get-owner-info=true&auth-key=${credentials.auth_password}`;
+        } else {
+            url = `/site?site-id=${spotId}`;
+        }
         const res = await mayaClient.get(url);
         commit('update-spot-details', res.Site);
         commit('update-owner-info-details', res.User);
