@@ -26,11 +26,15 @@ export default {
     data() {
         return {
             imageSize: '',
+            spotImage: [
+                'https://parkspot.blob.core.windows.net/assets/default.png',
+            ],
         };
     },
     computed: {
         ...mapState('sdp', {
-            spotImage: (state) => state.image,
+            images: (state) => state.images,
+            thumbnail: (state) => state.thumbnail,
             selectedSpot: (state) => state.selectedSpot,
         }),
         locationName() {
@@ -42,6 +46,12 @@ export default {
         window.lightGallery(el, {
             thumbnail: true,
         });
+
+        if (this.images.length > 0) {
+            this.spotImage = this.images;
+        } else {
+            this.spotImage = this.thumbnail;
+        }
 
         this.setImageSize();
     },

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <TemplateSpotDetail></TemplateSpotDetail>
+        <TemplateSpotDetail :isAdmin="isAdmin"></TemplateSpotDetail>
         <LoaderModal :isLoading="isLoading"></LoaderModal>
     </div>
 </template>
@@ -27,6 +27,7 @@ export default {
         return {
             spotId: null,
             spotDetails: null,
+            isAdmin: false,
         };
     },
     computed: {
@@ -40,7 +41,10 @@ export default {
         if (this.spotId.includes('#')) {
             this.spotId = encodeURIComponent(this.spotId);
         }
-        this.getSpotDetails(this.spotId);
+        if (this.$route.name === 'adminOnly-spot-detail') {
+            this.isAdmin = true;
+        }
+        this.getSpotDetails({ spotId: this.spotId, isAdmin: this.isAdmin });
         this.getUserLocation();
     },
     methods: {

@@ -1,13 +1,16 @@
 import { mayaClient } from '@/services/api';
+import { firebase, getDatabase, ref, get, child } from '../../firebase';
 // import _ from 'lodash';
 
 const state = {
     spotDetails: null,
+    ownerInfoDetails: null,
     selectedSpot: [],
     isAvailable: false,
     loading: false,
     title: '',
-    image: [],
+    thumbnail: [],
+    images: [],
 };
 
 const getters = {};
@@ -15,6 +18,10 @@ const getters = {};
 const mutations = {
     'update-spot-details'(state, spotDetails) {
         state.spotDetails = spotDetails;
+    },
+
+    'update-owner-info-details'(state, ownerInfoDetails) {
+        state.ownerInfoDetails = ownerInfoDetails;
     },
 
     'update-selected-spot'(state, spot) {
@@ -34,13 +41,14 @@ const mutations = {
         state.loading = loading;
     },
 
-    'update-image'(state, image) {
-        state.image = [];
-        if (Array.isArray(image)) {
-            state.image = image;
-        } else {
-            state.image = [image];
-        }
+    'update-image'(state, images) {
+        state.images = [];
+        state.images = images.map((img) => img.ImageURL);
+    },
+
+    'update-thumbnail-image'(state, image) {
+        state.thumbnail = [];
+        state.thumbnail = [image];
     },
 
     'update-title'(state, title) {
@@ -49,10 +57,21 @@ const mutations = {
 };
 
 const actions = {
-    async getSpotDetails({ commit }, spotId) {
+    async getSpotDetails({ commit }, { spotId, isAdmin }) {
         commit('update-loading', true);
-        const res = await mayaClient.get(`/site?siteID=${spotId}`);
+        let url;
+        if (isAdmin) {
+            const db = getDatabase(firebase);
+            const dbref = ref(db);
+            const res = await get(child(dbref, `admin`));
+            const credentials = await res.val();
+            url = `/site?site-id=${spotId}&get-owner-info=true&auth-key=${credentials.auth_password}`;
+        } else {
+            url = `/site?site-id=${spotId}`;
+        }
+        const res = await mayaClient.get(url);
         commit('update-spot-details', res.Site);
+        commit('update-owner-info-details', res.User);
         const spot = {
             Name: res.Site['Name'],
             Lat: res.Site['Latitude'],
@@ -61,11 +80,8 @@ const actions = {
         commit('update-selected-spot', spot);
         commit('update-is-available', res.Site['SlotsAvailable']);
         commit('update-loading', false);
-        if (res.Site['SiteImages'].length > 0) {
-            commit('update-image', res.Site['SiteImages']);
-        } else {
-            commit('update-image', res.Site['SiteImageURI']);
-        }
+        commit('update-image', res.Site['SiteImages']);
+        commit('update-thumbnail-image', res.Site['SiteImageURI']);
         commit('update-title', res.Site['Name']);
     },
 };
