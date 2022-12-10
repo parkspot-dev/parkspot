@@ -59,7 +59,16 @@
             </div>
 
             <!-- only to admin -->
-            <div class="spot-detail-owner"></div>
+            <div class="spot-detail-owner" v-if="isAdmin">
+                <hr style="width: 100%; margin-top: 80px" />
+                <h2>Owner Info Details</h2>
+                <p>FullName : {{ ownerInfoDetails.FullName }}</p>
+                <p>Mobile : {{ ownerInfoDetails.Mobile }}</p>
+                <p>Alternate Mobile : {{ ownerInfoDetails.AlternateMobile }}</p>
+                <p>City : {{ ownerInfoDetails.City }}</p>
+                <p>EmailID : {{ ownerInfoDetails.EmailID }}</p>
+                <p>KYCStatus : {{ ownerInfoDetails.KYCStatus }}</p>
+            </div>
 
             <div class="rate-card-container-mobile">
                 <hr style="width: 100%; margin-top: 80px" />
@@ -85,9 +94,16 @@ export default {
         ImageGallery,
         InfographicSteps,
     },
+    props: {
+        isAdmin: {
+            type: Boolean,
+            default: false,
+        },
+    },
     computed: {
         ...mapState('sdp', {
             spotDetails: (state) => state.spotDetails,
+            ownerInfoDetails: (state) => state.ownerInfoDetails,
             selectedSpot: (state) => state.selectedSpot,
         }),
     },
@@ -222,6 +238,21 @@ hr {
 
 .spot-detail-things {
     margin-left: 20px;
+    h2 {
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 26px;
+        color: black;
+    }
+
+    p {
+        font-size: 20px;
+    }
+}
+
+.spot-detail-owner {
+    margin-left: 20px;
+    margin-top: 50px;
     h2 {
         font-size: 24px;
         font-weight: 500;

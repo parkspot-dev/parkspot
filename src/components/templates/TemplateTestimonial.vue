@@ -4,28 +4,23 @@
         <AtomHeading class="custom-title" :level="'h2'">
             What Our Customers Say
         </AtomHeading>
-        <b-carousel-list v-model="test" :data="items" v-bind="al">
-            <template #item="list">
-                <MoleculeTestimonialCard :items="list">
-                </MoleculeTestimonialCard>
-            </template>
-        </b-carousel-list>
+        <OrganismTestimonialSwiper></OrganismTestimonialSwiper>
     </BodyWrapper>
 </template>
 
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
-import MoleculeTestimonialCard from '../molecules/MoleculeTestimonialCard.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
+import OrganismTestimonialSwiper from '../organisms/OrganismTestimonialSwiper.vue';
 
 export default {
     name: 'TemplateOurProducts',
     components: {
         BodyWrapper,
-        MoleculeTestimonialCard,
         AtomHeading,
         AtomParagraph,
+        OrganismTestimonialSwiper,
     },
     data() {
         return {
@@ -65,23 +60,7 @@ export default {
                     datetime: '2022-1-7',
                 },
             ],
-            al: {
-                itemsToShow: 1,
-                breakpoints: {
-                    768: {
-                        itemsToShow: 2,
-                    },
-                    960: {
-                        itemsToShow: 3,
-                    },
-                },
-            },
         };
-    },
-    methods: {
-        info(value) {
-            this.test = value;
-        },
     },
 };
 </script>

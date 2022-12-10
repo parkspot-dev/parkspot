@@ -20,6 +20,7 @@
     "lightgallery.js": "^1.4.0",
     "lodash": "^4.17.21",
     "mapbox-gl": "^1.13.2",
+    "swiper": "^8.4.4",
     "vee-validate": "^3.4.14",
     "vue": "^2.6.12",
     "vue-cli-plugin-compression": "^1.1.5",

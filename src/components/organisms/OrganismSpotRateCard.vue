@@ -20,7 +20,7 @@
             </div>
             <div>
                 <div class="negative-margin">
-                    <p>Convenience fee</p>
+                    <p style="margin-right: 5px">Convenience fee</p>
                     <AtomTooltip :label="tooltipMsg">
                         <AtomIcon
                             :icon="ICON.INFO"
@@ -78,7 +78,8 @@ export default {
     data() {
         return {
             ICON,
-            tooltipMsg: 'This helps us run our platform and offer services.',
+            tooltipMsg:
+                'This helps us run our platform and offer services. One time charge only. ',
         };
     },
     computed: {
