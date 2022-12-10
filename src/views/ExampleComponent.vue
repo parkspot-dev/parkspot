@@ -4,9 +4,10 @@
 
 <script>
 export default {
-    components: {},
-    data() {
-        return {};
+    name: 'ExampleComponent',
+    props: ['messages'],
+    created() {
+        alert(this.messages);
     },
 
     mounted() {},
