@@ -16,11 +16,6 @@ export default {
         TemplateBlogPost,
         PageContactUs,
     },
-    data() {
-        return {
-            content: '',
-        };
-    },
     metaInfo() {
         return {
             title: this.title,
@@ -29,6 +24,7 @@ export default {
     },
     data() {
         return {
+            content: '',
             title: undefined,
         };
     },
@@ -44,7 +40,6 @@ export default {
         this.getContentById(this.$route.params.id).then(
             (res) => (this.content = res),
         );
-
         this.title = this.$route.params.id;
     },
     methods: {

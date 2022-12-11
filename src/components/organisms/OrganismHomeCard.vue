@@ -1,7 +1,7 @@
 <template>
     <div class="home-card">
         <b-tabs expanded @input="onChange">
-            <b-tab-item>
+            <b-tab-item value="VO">
                 <template #header>
                     <div class="header-tab-btn">
                         <AtomIcon
@@ -13,13 +13,15 @@
                 </template>
                 <template>
                     <div class="card-main-body">
-                        <h2>Search a spot for the car</h2>
+                        <h2>Search a spot for your car</h2>
                         <SearchInput class="mb-6"></SearchInput>
-                        <AtomButton>Search now</AtomButton>
+                        <AtomButton @click.native="flyToSrp">
+                            Search now
+                        </AtomButton>
                     </div>
                 </template>
             </b-tab-item>
-            <b-tab-item>
+            <b-tab-item value="SO">
                 <template #header>
                     <div class="header-tab-btn">
                         <AtomIcon
@@ -36,9 +38,13 @@
                             Start earning money by listing unused parking spot
                             in our platform.
                         </p>
-                        <AtomButton class="mb-5">Register now</AtomButton>
+                        <AtomButton class="mb-5" @click.native="contactUs">
+                            Register now
+                        </AtomButton>
                         <div>
-                            <span>Learn more about being a spot owner.</span>
+                            <span @click="contactUs">
+                                Learn more about being a spot owner.
+                            </span>
                         </div>
                     </div>
                 </template>
@@ -51,6 +57,8 @@
 import AtomIcon from '../atoms/AtomIcon.vue';
 import SearchInput from '../extras/SearchInput.vue';
 import AtomButton from '../atoms/AtomButton.vue';
+import { mapGetters } from 'vuex';
+import { getCoordinate } from '../../includes/LatLng';
 export default {
     name: 'HomeCard',
     components: {
@@ -58,13 +66,32 @@ export default {
         SearchInput,
         AtomButton,
     },
+    computed: {
+        ...mapGetters({
+            LocDetails: 'map/getLocDetails',
+        }),
+    },
     methods: {
-        onChange(tabNumber) {
-            if (tabNumber == 30) {
-                this.$emit('changed', 'car');
-            } else {
-                this.$emit('changed', 'spot');
-            }
+        flyToSrp() {
+            const coordinate = getCoordinate(this.LocDetails.lnglat.toString())
+                .reverse()
+                .toString();
+            this.$router.push({
+                name: 'srp',
+                query: {
+                    latlng: coordinate,
+                },
+                params: {
+                    location: this.LocDetails.locDetails.locName,
+                },
+            });
+        },
+        onChange(tabName) {
+            this.$emit('changed', tabName);
+        },
+
+        contactUs() {
+            this.$router.push({ name: 'contactUs' });
         },
     },
 };
@@ -117,6 +144,7 @@ export default {
             border-bottom: 1px solid #8c8c8c;
             color: #8c8c8c;
             line-height: 19px;
+            cursor: pointer;
         }
     }
 }
