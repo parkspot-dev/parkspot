@@ -29,10 +29,13 @@
                     </span>
                 </AtomParagraph>
             </div>
-            <div class="card-btn">
+            <!-- <div class="card-btn">
                 <a :href="paymentMode.PaymentLink">
                     <AtomButton> Pay Now </AtomButton>
                 </a>
+            </div> -->
+            <div class="card-btn">
+                <AtomButton @click.native="payNow"> Pay Now </AtomButton>
             </div>
         </div>
 
@@ -60,6 +63,13 @@ export default {
         },
         paymentMode: {
             type: Object,
+        },
+    },
+    methods: {
+        payNow() {
+            // prettier-ignore
+            const cashfree = new Cashfree(this.paymentMode.PaymentSessionID);
+            cashfree.redirect();
         },
     },
 };
