@@ -88,6 +88,10 @@ $g-background-color-dark: #18181b;
             font-size: 14px;
             line-height: 24px;
             margin-bottom: 20px;
+            -webkit-box-orient: vertical;
+            display: -webkit-box;
+            overflow: hidden;
+            -webkit-line-clamp: 12;
         }
 
         .content-bottom {
