@@ -92,7 +92,7 @@ export default {
 
     .m-image-car-owner {
         display: none;
-        background-image: url('../../assets/home-car-owner.jpg');
+        background-image: url('../../assets/m-home-car-owner.jpg');
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -106,7 +106,7 @@ export default {
     }
     .m-image-spot-owner {
         display: none;
-        background-image: url('../../assets/home-spot-owner.jpg');
+        background-image: url('../../assets/m-home-spot-owner.jpg');
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
