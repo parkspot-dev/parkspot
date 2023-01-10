@@ -18,9 +18,14 @@
                 <p>Discount</p>
                 <p>- ₹{{ discountAmount }}</p>
             </div>
+            <hr />
+            <div>
+                <p>Total</p>
+                <p>₹{{ spotDetails.Rate }}</p>
+            </div>
             <div>
                 <div class="negative-margin">
-                    <p style="margin-right: 5px">Convenience fee</p>
+                    <p style="margin-right: 5px">Conv. fee (One time)</p>
                     <AtomTooltip :label="tooltipMsg">
                         <AtomIcon
                             :icon="ICON.INFO"
@@ -29,11 +34,6 @@
                     </AtomTooltip>
                 </div>
                 <p>+ ₹500</p>
-            </div>
-            <hr />
-            <div>
-                <p>Total</p>
-                <p>₹{{ spotDetails.Rate + 500 }}</p>
             </div>
         </div>
 
