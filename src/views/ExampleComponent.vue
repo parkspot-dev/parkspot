@@ -18,7 +18,19 @@ export default {
         console.log(phoneProvider);
         const uiConfig = {
             signInSuccessUrl: '/profile',
-            signInOptions: [gProvider.providerId, phoneProvider.providerId],
+            signInOptions: [
+                gProvider.providerId,
+                {
+                    provider: phoneProvider.providerId,
+                    recaptchaParameters: {
+                        type: 'image', // 'audio'
+                        size: 'normal', // 'invisible' or 'compact'
+                        badge: 'bottomleft', //' bottomright' or 'inline' applies to invisible.
+                    },
+                    defaultCountry: 'IN', // Set default country to the INDIA.
+                    loginHint: '+911234567890',
+                },
+            ],
         };
         ui.start('#firebaseui-auth-container', uiConfig);
     },
