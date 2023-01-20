@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { authInstance, gProvider } from '../firebase.js';
+import { authInstance, gProvider, phoneProvider } from '../firebase.js';
 import * as firebaseui from 'firebaseui';
 
 /* the line below added in the styling for me */
@@ -15,10 +15,10 @@ export default {
 
     mounted() {
         const ui = new firebaseui.auth.AuthUI(authInstance);
-        console.log(gProvider);
+        console.log(phoneProvider);
         const uiConfig = {
             signInSuccessUrl: '/profile',
-            signInOptions: [gProvider.providerId],
+            signInOptions: [gProvider.providerId, phoneProvider.providerId],
         };
         ui.start('#firebaseui-auth-container', uiConfig);
     },
