@@ -23,14 +23,16 @@ export default {
                 {
                     provider: phoneProvider.providerId,
                     recaptchaParameters: {
-                        size: 'invisible', // 'invisible' or 'compact'
+                        type: 'image', // 'audio'
+                        size: 'normal', // 'invisible' or 'compact'
+                        badge: 'bottomleft', //' bottomright' or 'inline' applies to invisible.
                     },
                     defaultCountry: 'IN', // Set default country to the INDIA.
                     loginHint: '+911234567890',
-                    callback: (response) => {
-                        // reCAPTCHA solved, allow signInWithPhoneNumber.
-                        onSignInSubmit();
-                    },
+                    // callback: (response) => {
+                    //     // reCAPTCHA solved, allow signInWithPhoneNumber.
+                    //     onSignInSubmit();
+                    // },
                 },
             ],
         };
