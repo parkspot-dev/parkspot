@@ -23,9 +23,7 @@ export default {
                 {
                     provider: phoneProvider.providerId,
                     recaptchaParameters: {
-                        type: 'image', // 'audio'
-                        size: 'normal', // 'invisible' or 'compact'
-                        badge: 'bottomleft', //' bottomright' or 'inline' applies to invisible.
+                        size: 'invisible', // 'invisible' or 'compact'
                     },
                     defaultCountry: 'IN', // Set default country to the INDIA.
                     loginHint: '+911234567890',
