@@ -9,18 +9,20 @@
             </template>
 
             <template #end>
-                <b-navbar-item tag="router-link" :to="{ name: 'Home' }">
-                    Home
-                </b-navbar-item>
-                <b-navbar-item tag="router-link" :to="{ name: 't-about' }">
-                    About
-                </b-navbar-item>
-                <b-navbar-item tag="router-link" :to="{ name: 'features' }">
-                    Features
-                </b-navbar-item>
-                <b-navbar-item tag="router-link" :to="{ name: 'blog' }">
-                    Blogs
-                </b-navbar-item>
+                <b-navbar-dropdown label="Company" hoverable>
+                    <b-navbar-item tag="router-link" :to="{ name: 'Home' }">
+                        Home
+                    </b-navbar-item>
+                    <b-navbar-item tag="router-link" :to="{ name: 't-about' }">
+                        About
+                    </b-navbar-item>
+                    <b-navbar-item tag="router-link" :to="{ name: 'features' }">
+                        Features
+                    </b-navbar-item>
+                    <b-navbar-item tag="router-link" :to="{ name: 'blog' }">
+                        Blogs
+                    </b-navbar-item>
+                </b-navbar-dropdown>
                 <b-navbar-dropdown label="Services" hoverable>
                     <b-navbar-item tag="router-link" :to="{ name: 'VOPortal' }">
                         Request Spot
@@ -32,14 +34,28 @@
                 <b-navbar-item tag="router-link" :to="{ name: 'Faq' }">
                     Faq
                 </b-navbar-item>
+                <b-navbar-item tag="div">
+                    <div class="buttons">
+                        <!-- <a class="button is-primary">
+                            <strong>Sign up</strong>
+                        </a>
+                        <a class="button is-light"> Log in </a> -->
+                        <AtomButton>Log in</AtomButton>
+                        <AtomButton>Sign up</AtomButton>
+                    </div>
+                </b-navbar-item>
             </template>
         </b-navbar>
     </header>
 </template>
 
 <script>
+import AtomButton from '../atoms/AtomButton.vue';
 export default {
     name: 'NavbarBody',
+    components: {
+        AtomButton,
+    },
     data() {
         return {
             parkspotIcon: require('@/assets/pstopmini.png'),
@@ -51,7 +67,7 @@ export default {
 
 <style >
 .custom-navpad {
-    padding: 0.25rem 2rem;
+    padding: 0.25rem 6rem;
 }
 
 @media only screen and (max-width: 1024px) {
