@@ -70,13 +70,19 @@ export default {
         };
     },
     mounted() {
-        authInstance.onAuthStateChanged(function (user) {
+        const user = authInstance.onAuthStateChanged(function (user) {
             //   document.getElementById('loading').style.display = 'none';
             //   document.getElementById('loaded').style.display = 'block';
             // console.log('hello')
-            user ? handleSignedInUser(user) : handleSignedOutUser();
+            return user;
             // console.log(user);
         });
+
+        if (user) {
+            this.handleSignedInUser(user);
+        } else {
+            this.handleSignedOutUser();
+        }
     },
     methods: {
         logIn() {
