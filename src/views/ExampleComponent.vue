@@ -30,10 +30,6 @@ export default {
                     },
                     defaultCountry: 'IN', // Set default country to the INDIA.
                     loginHint: '+911234567890',
-                    // callback: (response) => {
-                    //     // reCAPTCHA solved, allow signInWithPhoneNumber.
-                    //     onSignInSubmit();
-                    // },
                 },
             ],
         };
