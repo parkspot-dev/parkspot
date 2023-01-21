@@ -34,7 +34,7 @@
                 <b-navbar-item tag="router-link" :to="{ name: 'Faq' }">
                     Faq
                 </b-navbar-item>
-                <b-navbar-item tag="div">
+                <b-navbar-item tag="div" v-if="loggedIn">
                     <div class="buttons">
                         <!-- <a class="button is-primary">
                             <strong>Sign up</strong>
@@ -44,6 +44,11 @@
                         <AtomButton>Sign up</AtomButton>
                     </div>
                 </b-navbar-item>
+                <b-navbar-item tag="div" v-if="!loggedIn">
+                    <div id="photo-container">
+                        <img id="photo" />
+                    </div>
+                </b-navbar-item>
             </template>
         </b-navbar>
     </header>
@@ -51,6 +56,7 @@
 
 <script>
 import AtomButton from '../atoms/AtomButton.vue';
+import { authInstance } from '../../firebase.js';
 export default {
     name: 'NavbarBody',
     components: {
@@ -60,13 +66,55 @@ export default {
         return {
             parkspotIcon: require('@/assets/pstopmini.png'),
             parkspotText: require('@/assets/pstoptext.png'),
+            loggedIn: true,
         };
+    },
+    mounted() {
+        authInstance.onAuthStateChanged(function (user) {
+            //   document.getElementById('loading').style.display = 'none';
+            //   document.getElementById('loaded').style.display = 'block';
+            // console.log('hello')
+            user ? handleSignedInUser(user) : handleSignedOutUser();
+            // console.log(user);
+        });
     },
     methods: {
         logIn() {
             this.$router.push({
                 name: 'Login',
             });
+        },
+
+        handleSignedOutUser() {
+            this.loggedIn = true;
+        },
+
+        handleSignedInUser(user) {
+            // document.getElementById('user-signed-in').style.display = 'block';
+            // document.getElementById('user-signed-out').style.display = 'none';
+            // document.getElementById('name').textContent = user.displayName;
+            // document.getElementById('email').textContent = user.email;
+            // document.getElementById('phone').textContent = user.phoneNumber;
+            // if (user.photoURL) {
+            //     let photoURL = user.photoURL;
+            //     // Append size to the photo URL for Google hosted images to avoid requesting
+            //     // the image with its original resolution (using more bandwidth than needed)
+            //     // when it is going to be presented in smaller size.
+            //     if (
+            //         photoURL.indexOf('googleusercontent.com') != -1 ||
+            //         photoURL.indexOf('ggpht.com') != -1
+            //     ) {
+            //         photoURL =
+            //             photoURL +
+            //             '?sz=' +
+            //             document.getElementById('photo').clientHeight;
+            //     }
+            //     document.getElementById('photo').src = photoURL;
+            //     document.getElementById('photo').style.display = 'block';
+            // } else {
+            //     document.getElementById('photo').style.display = 'none';
+            // }
+            console.log('logged in ', user);
         },
     },
 };
