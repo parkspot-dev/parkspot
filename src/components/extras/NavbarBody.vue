@@ -40,7 +40,7 @@
                             <strong>Sign up</strong>
                         </a>
                         <a class="button is-light"> Log in </a> -->
-                        <AtomButton @click.native="logIn">Log in</AtomButton>
+                        <AtomButton @click.native="logIn">Log ins</AtomButton>
                         <AtomButton>Sign up</AtomButton>
                     </div>
                 </b-navbar-item>
