@@ -2,6 +2,9 @@ const zlib = require('zlib');
 const PrerenderSPAPlugin = require('prerender-spa-plugin');
 const path = require('path');
 module.exports = {
+    // devServer: {
+    //     host: 'projectname.local',
+    // },
     productionSourceMap: false, //  Setting this to false can speed up production builds if you don't need source maps for production.
     configureWebpack: (config) => {
         if (process.env.NODE_ENV === 'production') {
