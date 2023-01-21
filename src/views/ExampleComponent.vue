@@ -1,27 +1,18 @@
 <template>
-    <section id="firebaseui-auth-container"></section>
+    <div>
+        <div>
+            <PageLogin></PageLogin>
+        </div>
+    </div>
 </template>
 
 <script>
-import { authInstance, gProvider, phoneProvider } from '../firebase.js';
-import * as firebaseui from 'firebaseui';
-
-/* the line below added in the styling for me */
-import 'firebaseui/dist/firebaseui.css';
+import PageLogin from './PageLogin.vue';
 
 export default {
     name: 'ExampleComponent',
+    components: { PageLogin },
     props: ['messages'],
-
-    mounted() {
-        const ui = new firebaseui.auth.AuthUI(authInstance);
-        console.log(phoneProvider);
-        const uiConfig = {
-            signInSuccessUrl: '/profile',
-            signInOptions: [gProvider.providerId],
-        };
-        ui.start('#firebaseui-auth-container', uiConfig);
-    },
 };
 </script>
 
