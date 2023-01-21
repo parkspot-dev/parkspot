@@ -40,7 +40,7 @@
                             <strong>Sign up</strong>
                         </a>
                         <a class="button is-light"> Log in </a> -->
-                        <AtomButton>Log in</AtomButton>
+                        <AtomButton @click.native="logIn">Log in</AtomButton>
                         <AtomButton>Sign up</AtomButton>
                     </div>
                 </b-navbar-item>
@@ -61,6 +61,13 @@ export default {
             parkspotIcon: require('@/assets/pstopmini.png'),
             parkspotText: require('@/assets/pstoptext.png'),
         };
+    },
+    methods: {
+        logIn() {
+            this.$router.push({
+                name: 'Login',
+            });
+        },
     },
 };
 </script>
