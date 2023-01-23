@@ -1,6 +1,11 @@
 import { mayaClient } from '@/services/api';
+import { auth } from '../../firebase';
+import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 
 const state = {
+    user: null,
+    isLogIn: false,
+    loginModal: false,
     contactForm: {},
     kycForm: {},
     additionalInfo: {},
@@ -12,6 +17,18 @@ const state = {
 const getters = {};
 
 const mutations = {
+    'update-user'(state, user) {
+        state.user = user;
+    },
+
+    'update-is-login'(state, isLogIn) {
+        state.isLogIn = isLogIn;
+    },
+
+    'update-login-Modal'(state, loginModal) {
+        state.loginModal = loginModal;
+    },
+
     'update-contact'(state, data = {}) {
         state.contactForm = data;
     },
@@ -38,6 +55,41 @@ const mutations = {
 };
 
 const actions = {
+    async loginWithGoogle({ commit, state }) {
+        const gProvider = new GoogleAuthProvider();
+
+        try {
+            const res = await signInWithPopup(auth, gProvider);
+            const credential = GoogleAuthProvider.credentialFromResult(res);
+            const token = credential.accessToken;
+            const user = res.user;
+            console.log('token', token);
+            console.log('user', user);
+            commit('update-user', user);
+            commit('update-login-Modal', false);
+            commit('update-is-login', true);
+        } catch (err) {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            const email = error.customData.email;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            console.log(errorCode, errorMessage, email, credential);
+        }
+    },
+
+    async goodBye({ commit, state }) {
+        try {
+            await signOut(auth);
+            commit('update-user', null);
+            commit('update-is-login', false);
+        } catch (err) {
+            throw new Error(err);
+        }
+    },
+
     register({ commit, state }) {
         // prettier-ignore
         const req = {
