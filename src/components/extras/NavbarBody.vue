@@ -34,19 +34,31 @@
                 <b-navbar-item tag="router-link" :to="{ name: 'Faq' }">
                     Faq
                 </b-navbar-item>
-                <b-navbar-item tag="div" v-if="loggedIn">
+
+                <!-- user logged out -->
+                <b-navbar-item tag="div" v-if="!isLogIn">
                     <div class="buttons">
-                        <!-- <a class="button is-primary">
-                            <strong>Sign up</strong>
-                        </a>
-                        <a class="button is-light"> Log in </a> -->
-                        <AtomButton @click.native="logIn">Log ins</AtomButton>
+                        <AtomButton @click.native="logInBtn">Log in</AtomButton>
                         <AtomButton>Sign up</AtomButton>
                     </div>
                 </b-navbar-item>
-                <b-navbar-item tag="div" v-if="!loggedIn">
-                    <div id="photo-container">
-                        <img id="photo" />
+
+                <!-- user logged in -->
+                <b-navbar-item tag="div" v-if="isLogIn">
+                    <div class="user-profile">
+                        <img
+                            class="user-pic"
+                            :src="user.photoURL"
+                            alt="profile image"
+                        />
+                        <!-- user profile dropdown -->
+                        <ul class="user-dropdown">
+                            <li class="dropdown-list"><a> Profile </a></li>
+                            <li class="dropdown-list"><a> Edit Profile </a></li>
+                            <li class="dropdown-list">
+                                <a @click="signout"> Sign Out </a>
+                            </li>
+                        </ul>
                     </div>
                 </b-navbar-item>
             </template>
@@ -56,7 +68,8 @@
 
 <script>
 import AtomButton from '../atoms/AtomButton.vue';
-import { authInstance } from '../../firebase.js';
+import { mapState, mapMutations, mapActions } from 'vuex';
+
 export default {
     name: 'NavbarBody',
     components: {
@@ -66,67 +79,37 @@ export default {
         return {
             parkspotIcon: require('@/assets/pstopmini.png'),
             parkspotText: require('@/assets/pstoptext.png'),
-            loggedIn: true,
         };
     },
+    computed: {
+        ...mapState('user', {
+            isLogIn: (state) => state.isLogIn,
+            user: (state) => state.user,
+        }),
+    },
     mounted() {
-        const user = authInstance.onAuthStateChanged(function (user) {
-            //   document.getElementById('loading').style.display = 'none';
-            //   document.getElementById('loaded').style.display = 'block';
-            // console.log('hello')
-            return user;
-            // console.log(user);
-        });
-
-        if (user) {
-            this.handleSignedInUser(user);
-        } else {
-            this.handleSignedOutUser();
-        }
+        console.log(this.isLogIn);
     },
     methods: {
-        logIn() {
-            this.$router.push({
-                name: 'Login',
-            });
+        ...mapMutations('user', {
+            updateLoginModal: 'update-login-Modal',
+        }),
+        ...mapActions('user', {
+            goodBye: 'goodBye',
+        }),
+
+        logInBtn() {
+            this.updateLoginModal(true);
         },
 
-        handleSignedOutUser() {
-            this.loggedIn = true;
-        },
-
-        handleSignedInUser(user) {
-            // document.getElementById('user-signed-in').style.display = 'block';
-            // document.getElementById('user-signed-out').style.display = 'none';
-            // document.getElementById('name').textContent = user.displayName;
-            // document.getElementById('email').textContent = user.email;
-            // document.getElementById('phone').textContent = user.phoneNumber;
-            // if (user.photoURL) {
-            //     let photoURL = user.photoURL;
-            //     // Append size to the photo URL for Google hosted images to avoid requesting
-            //     // the image with its original resolution (using more bandwidth than needed)
-            //     // when it is going to be presented in smaller size.
-            //     if (
-            //         photoURL.indexOf('googleusercontent.com') != -1 ||
-            //         photoURL.indexOf('ggpht.com') != -1
-            //     ) {
-            //         photoURL =
-            //             photoURL +
-            //             '?sz=' +
-            //             document.getElementById('photo').clientHeight;
-            //     }
-            //     document.getElementById('photo').src = photoURL;
-            //     document.getElementById('photo').style.display = 'block';
-            // } else {
-            //     document.getElementById('photo').style.display = 'none';
-            // }
-            console.log('logged in ', user);
+        signout() {
+            this.goodBye();
         },
     },
 };
 </script>
 
-<style >
+<style lang="scss">
 .custom-navpad {
     padding: 0.25rem 6rem;
 }
@@ -171,5 +154,47 @@ export default {
 
 .navbar-item.has-dropdown.is-hoverable.is-active .navbar-link {
     color: var(--secondary-color);
+}
+
+/* user profile css */
+.user-profile {
+    position: relative;
+    display: inline-block;
+
+    &:hover {
+        .user-dropdown {
+            visibility: visible;
+        }
+    }
+
+    .user-pic {
+        border-radius: 100%;
+    }
+
+    .user-dropdown {
+        visibility: hidden;
+        position: absolute;
+        background-color: #fff;
+        min-width: 160px;
+        box-shadow: 0px 10px 50px rgb(0 0 0 / 10%);
+        z-index: 1;
+        padding: 32px 0;
+        top: 90%;
+        left: -200%;
+        border-radius: 8px;
+
+        .dropdown-list {
+            display: flex;
+            align-items: center;
+
+            a {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                padding: 8px 32px;
+                color: var(--primary-text);
+            }
+        }
+    }
 }
 </style>

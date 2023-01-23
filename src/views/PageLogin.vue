@@ -46,30 +46,7 @@ export default {
         // return FirebaseUI config
         getUiConfig() {
             return {
-                callbacks: {
-                    // Called when the user has been successfully signed in.
-                    signInSuccessWithAuthResult: function (
-                        authResult,
-                        redirectUrl,
-                    ) {
-                        if (authResult.user) {
-                            handleSignedInUser(authResult.user);
-                        }
-                        if (authResult.additionalUserInfo) {
-                            // document.getElementById('is-new-user').textContent =
-                            //     authResult.additionalUserInfo.isNewUser
-                            //         ? 'New User'
-                            //         : 'Existing User';
-                            const textContent = authResult.additionalUserInfo
-                                .isNewUser
-                                ? 'New User'
-                                : 'Existing User';
-                            console.log(textContent);
-                        }
-                        // Do not redirect.
-                        return false;
-                    },
-                },
+                signInSuccessUrl: '/dashboard',
                 // Opens IDP Providers sign-in flow in a popup.
                 signInFlow: 'popup',
                 signInOptions: [gProvider.providerId],
