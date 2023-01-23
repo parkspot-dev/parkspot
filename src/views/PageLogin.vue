@@ -46,6 +46,7 @@ export default {
         // return FirebaseUI config
         getUiConfig() {
             return {
+                signInSuccessUrl: '/dashboard',
                 // Opens IDP Providers sign-in flow in a popup.
                 signInFlow: 'popup',
                 signInOptions: [gProvider.providerId],
