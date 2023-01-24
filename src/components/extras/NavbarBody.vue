@@ -49,11 +49,13 @@
                     <!-- user logged in -->
                     <b-navbar-item tag="div" v-if="user">
                         <div class="user-profile">
-                            <img
-                                class="user-pic"
-                                :src="user.photoURL"
-                                alt="profile image"
-                            />
+                            <div class="user-pic-wrapper">
+                                <img
+                                    class="user-pic"
+                                    :src="user.photoURL"
+                                    alt="profile image"
+                                />
+                            </div>
                             <!-- user profile dropdown -->
                             <ul class="user-dropdown">
                                 <li class="dropdown-list"><a> Profile </a></li>
@@ -173,8 +175,26 @@ export default {
         }
     }
 
-    .user-pic {
+    .user-pic-wrapper {
+        margin: 0;
+        padding: 0;
+        height: 28px;
+        width: 30px;
+        background-color: #e8e8e8;
         border-radius: 100%;
+        .user-pic {
+            margin: 0;
+            padding: 0;
+            border-radius: 100%;
+            cursor: pointer;
+            height: 28px;
+            width: 30px;
+
+            &:hover {
+                height: 24px;
+                width: 26px;
+            }
+        }
     }
 
     .user-dropdown {
