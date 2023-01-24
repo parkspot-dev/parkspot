@@ -53,6 +53,11 @@ export const routes = [
         component: Home,
     },
     {
+        path: '/user/profile',
+        name: 'userProfile',
+        component: () => import('@/views/PageUserProfile.vue'),
+    },
+    {
         path: pages.FAQ,
         name: 'Faq',
         component: () => import('@/views/PageFaq.vue'),
