@@ -178,22 +178,18 @@ export default {
     .user-pic-wrapper {
         margin: 0;
         padding: 0;
-        height: 28px;
-        width: 30px;
-        background-color: #e8e8e8;
+        height: 32px;
+        width: 34px;
+        background-color: transparent;
         border-radius: 100%;
+        cursor: pointer;
+
         .user-pic {
             margin: 0;
             padding: 0;
             border-radius: 100%;
-            cursor: pointer;
             height: 28px;
             width: 30px;
-
-            &:hover {
-                height: 24px;
-                width: 26px;
-            }
         }
     }
 
