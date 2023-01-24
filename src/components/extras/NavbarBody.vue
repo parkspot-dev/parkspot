@@ -95,9 +95,6 @@ export default {
             isAuthReady: (state) => state.isAuthReady,
         }),
     },
-    mounted() {
-        console.log(this.isLogIn);
-    },
     methods: {
         ...mapMutations('user', {
             updateLoginModal: 'update-login-Modal',
