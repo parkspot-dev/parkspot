@@ -1,10 +1,16 @@
 import { mayaClient } from '@/services/api';
 import { auth } from '../../firebase';
-import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
+import store from '../../store';
+import {
+    signInWithPopup,
+    GoogleAuthProvider,
+    signOut,
+    onAuthStateChanged,
+} from 'firebase/auth';
 
 const state = {
     user: null,
-    isLogIn: false,
+    isAuthReady: false,
     loginModal: false,
     contactForm: {},
     kycForm: {},
@@ -21,12 +27,12 @@ const mutations = {
         state.user = user;
     },
 
-    'update-is-login'(state, isLogIn) {
-        state.isLogIn = isLogIn;
-    },
-
     'update-login-Modal'(state, loginModal) {
         state.loginModal = loginModal;
+    },
+
+    'update-auth-ready'(state, isAuthReady) {
+        state.isAuthReady = isAuthReady;
     },
 
     'update-contact'(state, data = {}) {
@@ -67,7 +73,6 @@ const actions = {
             console.log('user', user);
             commit('update-user', user);
             commit('update-login-Modal', false);
-            commit('update-is-login', true);
         } catch (err) {
             // Handle Errors here.
             const errorCode = error.code;
@@ -84,7 +89,6 @@ const actions = {
         try {
             await signOut(auth);
             commit('update-user', null);
-            commit('update-is-login', false);
         } catch (err) {
             throw new Error(err);
         }
@@ -195,6 +199,12 @@ const actions = {
         mayaClient.post('/owner/parking-request', req);
     },
 };
+
+const unsub = onAuthStateChanged(auth, (user) => {
+    store.commit('user/update-user', user);
+    store.commit('user/update-auth-ready', true);
+    unsub();
+});
 
 export default {
     namespaced: true,

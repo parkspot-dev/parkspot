@@ -35,32 +35,38 @@
                     Faq
                 </b-navbar-item>
 
-                <!-- user logged out -->
-                <b-navbar-item tag="div" v-if="!isLogIn">
-                    <div class="buttons">
-                        <AtomButton @click.native="logInBtn">Log in</AtomButton>
-                        <AtomButton>Sign up</AtomButton>
-                    </div>
-                </b-navbar-item>
+                <template v-if="isAuthReady">
+                    <!-- user logged out -->
+                    <b-navbar-item tag="div" v-if="!user">
+                        <div class="buttons">
+                            <AtomButton @click.native="logInBtn"
+                                >Log in</AtomButton
+                            >
+                            <AtomButton>Sign up</AtomButton>
+                        </div>
+                    </b-navbar-item>
 
-                <!-- user logged in -->
-                <b-navbar-item tag="div" v-if="isLogIn">
-                    <div class="user-profile">
-                        <img
-                            class="user-pic"
-                            :src="user.photoURL"
-                            alt="profile image"
-                        />
-                        <!-- user profile dropdown -->
-                        <ul class="user-dropdown">
-                            <li class="dropdown-list"><a> Profile </a></li>
-                            <li class="dropdown-list"><a> Edit Profile </a></li>
-                            <li class="dropdown-list">
-                                <a @click="signout"> Sign Out </a>
-                            </li>
-                        </ul>
-                    </div>
-                </b-navbar-item>
+                    <!-- user logged in -->
+                    <b-navbar-item tag="div" v-if="user">
+                        <div class="user-profile">
+                            <img
+                                class="user-pic"
+                                :src="user.photoURL"
+                                alt="profile image"
+                            />
+                            <!-- user profile dropdown -->
+                            <ul class="user-dropdown">
+                                <li class="dropdown-list"><a> Profile </a></li>
+                                <li class="dropdown-list">
+                                    <a> Edit Profile </a>
+                                </li>
+                                <li class="dropdown-list">
+                                    <a @click="signout"> Sign Out </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </b-navbar-item>
+                </template>
             </template>
         </b-navbar>
     </header>
@@ -83,8 +89,8 @@ export default {
     },
     computed: {
         ...mapState('user', {
-            isLogIn: (state) => state.isLogIn,
             user: (state) => state.user,
+            isAuthReady: (state) => state.isAuthReady,
         }),
     },
     mounted() {
