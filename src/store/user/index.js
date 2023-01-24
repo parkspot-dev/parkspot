@@ -66,11 +66,9 @@ const actions = {
 
         try {
             const res = await signInWithPopup(auth, gProvider);
-            const credential = GoogleAuthProvider.credentialFromResult(res);
-            const token = credential.accessToken;
+            // const credential = GoogleAuthProvider.credentialFromResult(res);
+            // const token = credential.accessToken;
             const user = res.user;
-            console.log('token', token);
-            console.log('user', user);
             commit('update-user', user);
             commit('update-login-Modal', false);
         } catch (err) {

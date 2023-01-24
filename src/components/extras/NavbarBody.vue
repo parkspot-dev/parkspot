@@ -49,14 +49,18 @@
                     <!-- user logged in -->
                     <b-navbar-item tag="div" v-if="user">
                         <div class="user-profile">
-                            <img
-                                class="user-pic"
-                                :src="user.photoURL"
-                                alt="profile image"
-                            />
+                            <div class="user-pic-wrapper">
+                                <img
+                                    class="user-pic"
+                                    :src="user.photoURL"
+                                    alt="profile image"
+                                />
+                            </div>
                             <!-- user profile dropdown -->
                             <ul class="user-dropdown">
-                                <li class="dropdown-list"><a> Profile </a></li>
+                                <li class="dropdown-list">
+                                    <a @click="gotoUserProfile"> Profile </a>
+                                </li>
                                 <li class="dropdown-list">
                                     <a> Edit Profile </a>
                                 </li>
@@ -93,9 +97,6 @@ export default {
             isAuthReady: (state) => state.isAuthReady,
         }),
     },
-    mounted() {
-        console.log(this.isLogIn);
-    },
     methods: {
         ...mapMutations('user', {
             updateLoginModal: 'update-login-Modal',
@@ -110,6 +111,10 @@ export default {
 
         signout() {
             this.goodBye();
+        },
+
+        gotoUserProfile() {
+            this.$router.push({ name: 'userProfile' });
         },
     },
 };
@@ -173,8 +178,22 @@ export default {
         }
     }
 
-    .user-pic {
+    .user-pic-wrapper {
+        margin: 0;
+        padding: 0;
+        height: 32px;
+        width: 34px;
+        background-color: transparent;
         border-radius: 100%;
+        cursor: pointer;
+
+        .user-pic {
+            margin: 0;
+            padding: 0;
+            border-radius: 100%;
+            height: 28px;
+            width: 30px;
+        }
     }
 
     .user-dropdown {

@@ -1,17 +1,12 @@
 <template>
     <div>
-        <div>
-            <PageLogin></PageLogin>
-        </div>
+        <div></div>
     </div>
 </template>
 
 <script>
-import PageLogin from './PageLogin.vue';
-
 export default {
     name: 'ExampleComponent',
-    components: { PageLogin },
     props: ['messages'],
 
     mounted() {
