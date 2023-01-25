@@ -19,6 +19,7 @@ export const KYC = {
     DOCUMENT_INFO_MSG:
         'Note: Document must contain the address proof of the spot registered.',
 };
+
 export const ADD_INFO = {
     AMENITIES: 'Amenities',
     SPOTS: 'Spots',
