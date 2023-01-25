@@ -62,7 +62,9 @@
                                     <a @click="gotoUserProfile"> Profile </a>
                                 </li>
                                 <li class="dropdown-list">
-                                    <a> Edit Profile </a>
+                                    <a @click="gotoEditProfile">
+                                        Edit Profile
+                                    </a>
                                 </li>
                                 <li class="dropdown-list">
                                     <a @click="signout"> Sign Out </a>
@@ -115,6 +117,10 @@ export default {
 
         gotoUserProfile() {
             this.$router.push({ name: 'userProfile' });
+        },
+
+        gotoEditProfile() {
+            this.$router.push({ name: 'editProfile' });
         },
     },
 };

@@ -39,7 +39,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .profile-masthead {
     .profile-simple-masthead {
         padding: 60px 0 28px;
