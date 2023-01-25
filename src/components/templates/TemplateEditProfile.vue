@@ -15,7 +15,6 @@
                 </div>
             </div>
             <div class="edit-main">
-                <div class="primary"></div>
                 <div class="secondary">
                     <ul>
                         <li>
@@ -26,21 +25,23 @@
                         </li>
                     </ul>
                 </div>
+                <div class="primary">
+                    <OrganismUserGeneralInfo></OrganismUserGeneralInfo>
+                </div>
             </div>
         </div>
-        <AtomButton></AtomButton>
     </BodyWrapper>
 </template>
 
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
-import AtomButton from '../atoms/AtomButton.vue';
+import OrganismUserGeneralInfo from '../organisms/OrganismUserGeneralInfo.vue';
 import { mapState } from 'vuex';
 export default {
     name: 'TemplateUserProfile',
     components: {
         BodyWrapper,
-        AtomButton,
+        OrganismUserGeneralInfo,
     },
     computed: {
         ...mapState('user', {
@@ -51,10 +52,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.edit-profile-main {
+    max-width: 878px;
+    margin: 0 auto;
+}
 .profile-group-head {
     position: relative;
     display: flex;
     gap: 15px;
+    margin-bottom: 30px;
 
     .user-avatar {
         width: 48px;
@@ -99,8 +105,12 @@ export default {
 .edit-main {
     display: flex;
     .primary {
+        flex: 1 1 70%;
     }
     .secondary {
+        flex: 1 1 30%;
+        font-size: 15px;
+
         ul {
             li {
                 padding: 7px 0;
