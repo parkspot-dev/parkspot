@@ -1,6 +1,6 @@
 <template>
     <div class="columns mb-5">
-        <div class="column">
+        <div class="column is-5">
             <label class="label"><slot></slot></label>
         </div>
         <div class="column">
@@ -57,4 +57,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+</style>
