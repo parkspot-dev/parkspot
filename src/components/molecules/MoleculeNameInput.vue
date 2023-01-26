@@ -11,7 +11,7 @@
             :errorMessage="errors"
             :errorType="{ 'is-danger': errors[0], 'is-success': valid }"
             :label="label"
-            class="mb-4"
+            class="mb-1"
         >
         </AtomInput>
     </ValidationProvider>
