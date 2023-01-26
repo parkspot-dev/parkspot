@@ -18,15 +18,33 @@
                 <div class="secondary">
                     <ul>
                         <li>
-                            <a href="">General</a>
+                            <a
+                                @click="updateActiveForm(1)"
+                                :class="isActive === 1 ? 'link-active' : ''"
+                            >
+                                General
+                            </a>
                         </li>
                         <li>
-                            <a href="">KYC Verification</a>
+                            <a
+                                @click="updateActiveForm(2)"
+                                :class="isActive === 2 ? 'link-active' : ''"
+                            >
+                                Parking Facility
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                @click="updateActiveForm(3)"
+                                :class="isActive === 3 ? 'link-active' : ''"
+                            >
+                                KYC Verification
+                            </a>
                         </li>
                     </ul>
                 </div>
                 <div class="primary">
-                    <OrganismUserGeneralInfo></OrganismUserGeneralInfo>
+                    <component :is="activeForm"></component>
                 </div>
             </div>
         </div>
@@ -36,17 +54,45 @@
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import OrganismUserGeneralInfo from '../organisms/OrganismUserGeneralInfo.vue';
+import OrganismParkingFacility from '../organisms/OrganismParkingFacility.vue';
+import OrganismKycForm from '../organisms/OrganismKycForm.vue';
 import { mapState } from 'vuex';
 export default {
     name: 'TemplateUserProfile',
     components: {
         BodyWrapper,
         OrganismUserGeneralInfo,
+        OrganismParkingFacility,
+        OrganismKycForm,
+    },
+    data() {
+        return {
+            activeForm: 'OrganismUserGeneralInfo',
+            isActive: 1,
+        };
     },
     computed: {
         ...mapState('user', {
             user: (state) => state.user,
         }),
+    },
+    methods: {
+        updateActiveForm(formNo) {
+            this.isActive = formNo;
+            switch (formNo) {
+                case 1:
+                    this.activeForm;
+                    'OrganismUserGeneralInfo';
+                    break;
+
+                case 2:
+                    this.activeForm = 'OrganismParkingFacility';
+                    break;
+                case 3:
+                    this.activeForm = 'OrganismKycForm';
+                    break;
+            }
+        },
     },
 };
 </script>
@@ -116,6 +162,10 @@ export default {
                 padding: 7px 0;
                 a {
                     color: #6e6d7a;
+                }
+                .link-active {
+                    color: black;
+                    font-weight: 600;
                 }
             }
         }

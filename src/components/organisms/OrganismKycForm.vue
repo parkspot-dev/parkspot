@@ -1,29 +1,44 @@
 <template>
-    <ValidationObserver ref="observer" v-slot="{}">
-        <MoleculeRadioButton
-            :fieldName="'radio'"
-            :rules="validation.owner"
-            :values="ownerRadioValues"
-            @data="updateOwner"
-        >
-            Are you the Owner?
-        </MoleculeRadioButton>
-        <MoleculeSelectInput
-            :fieldName="'input'"
-            :list="documentValues"
-            @input="updateDocumentData"
-            :rules="validation.documentSelect"
-            :placeholder="'Select documents'"
-            :label="'Documents'"
-            :tooltip="true"
-            :tooltipMsg="KYC.DOCUMENT_INFO_MSG"
-        ></MoleculeSelectInput>
-        <MoleculeUpload
-            @data="updateImg"
-            :fieldName="'document'"
-            :rules="validation.img"
-        ></MoleculeUpload>
-    </ValidationObserver>
+    <div class="kyc-form">
+        <div class="kyc-form-header">
+            <h1>KYC Verification</h1>
+            <h2>Please fill all the field correctly</h2>
+        </div>
+        <div class="kyc-form-main">
+            <ValidationObserver ref="observer" v-slot="{}">
+                <div class="py-4">
+                    <MoleculeRadioButton
+                        :fieldName="'radio'"
+                        :rules="validation.owner"
+                        :values="ownerRadioValues"
+                        @data="updateOwner"
+                    >
+                        Are you the Owner?
+                    </MoleculeRadioButton>
+                </div>
+                <div class="py-4">
+                    <MoleculeSelectInput
+                        :fieldName="'input'"
+                        :list="documentValues"
+                        @input="updateDocumentData"
+                        :rules="validation.documentSelect"
+                        :placeholder="'Select documents'"
+                        :label="'Documents'"
+                        :tooltip="true"
+                        :tooltipMsg="KYC.DOCUMENT_INFO_MSG"
+                    ></MoleculeSelectInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeUpload
+                        @data="updateImg"
+                        :fieldName="'document'"
+                        :rules="validation.img"
+                    ></MoleculeUpload>
+                </div>
+                <AtomButton class="is-pulled-right">Save Profile</AtomButton>
+            </ValidationObserver>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -31,6 +46,7 @@ import { ValidationObserver } from 'vee-validate';
 import MoleculeRadioButton from '../molecules/MoleculeRadioButton.vue';
 import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
 import MoleculeUpload from '../molecules/MoleculeUpload.vue';
+import AtomButton from '../atoms/AtomButton.vue';
 import { mapMutations } from 'vuex';
 import { KYC } from '../../constant/constant';
 export default {
@@ -40,6 +56,7 @@ export default {
         MoleculeRadioButton,
         MoleculeSelectInput,
         MoleculeUpload,
+        AtomButton,
     },
     props: {
         formSubmitted: {
@@ -106,4 +123,25 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.kyc-form-header {
+    background-color: var(--secondary-color);
+    padding: 20px 30px;
+    margin-bottom: 30px;
+
+    h1 {
+        color: black;
+        font-weight: 600;
+        font-size: 24px;
+    }
+
+    h2 {
+        color: #e8faff;
+        font-size: 14px;
+    }
+}
+
+.kyc-form-main {
+    padding: 0 30px;
+}
+</style>
