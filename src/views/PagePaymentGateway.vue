@@ -104,12 +104,12 @@ export default {
                 },
             );
             const data = await response.json();
-            if (data === 'PAID') {
+            if (data.Status === 'PAID') {
                 this.$router.push({
                     name: 'thankYou',
                     params: { msg: 'You have paid the amount.' },
                 });
-            } else if (data === 'ACTIVE') {
+            } else if (data.Status === 'ACTIVE') {
                 this.$router.push({
                     name: 'error',
                     params: { msg: 'Your order is still pending!' },
