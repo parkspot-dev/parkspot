@@ -99,11 +99,15 @@ export default {
             isAuthReady: (state) => state.isAuthReady,
         }),
     },
+    mounted() {
+        this.authenticateWithMaya();
+    },
     methods: {
         ...mapMutations('user', {
             updateLoginModal: 'update-login-Modal',
         }),
         ...mapActions('user', {
+            authenticateWithMaya: 'authenticateWithMaya',
             goodBye: 'goodBye',
         }),
 

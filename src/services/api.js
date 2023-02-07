@@ -116,13 +116,15 @@ class MayaApiService extends BaseApiService {
     /**
      * Create a MayaApiService.
      *  @param { function } flavour - getFlavour function.
+     *  @param { function } authToken - getFlavour function.
      */
-    constructor(flavour) {
+    constructor(flavour, authToken) {
         const mayaDomain = 'https://maya.parkspot.in'; //   TODO: we can pick from .env files.
         const baseHeaderMap = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Flavour': flavour,
+            'PSAuthKey': authToken,
         };
         super(mayaDomain, baseHeaderMap, 5000, true);
     }
@@ -188,7 +190,21 @@ function getFlavour() {
     }
 }
 
-const mayaClient = new MayaApiService(getFlavour());
+/**
+ * get the device mobile or desktop
+ * @return {string} mweb or dweb.
+ */
+function getAuthToken() {
+    const token = localStorage.getItem('PSAuthKey');
+    console.log('tojke', token);
+    if (token) {
+        return token;
+    } else {
+        return '';
+    }
+}
+
+const mayaClient = new MayaApiService(getFlavour(), getAuthToken());
 const mapBoxClient = new MapBoxApiService();
 
 export { mayaClient, mapBoxClient };

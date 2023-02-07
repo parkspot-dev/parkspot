@@ -25,6 +25,7 @@ const getters = {};
 const mutations = {
     'update-user'(state, user) {
         state.user = user;
+        localStorage.setItem('PSAuthKey', user.accessToken);
     },
 
     'update-login-Modal'(state, loginModal) {
@@ -193,6 +194,11 @@ const actions = {
         };
 
         mayaClient.post('/owner/parking-request', req);
+    },
+
+    async authenticateWithMaya({ state }) {
+        const res = await mayaClient.get('/auth/authenticate');
+        console.log('auth', res);
     },
 };
 
