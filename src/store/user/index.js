@@ -25,7 +25,11 @@ const getters = {};
 const mutations = {
     'update-user'(state, user) {
         state.user = user;
-        localStorage.setItem('PSAuthKey', user.accessToken);
+        if (user) {
+            localStorage.setItem('PSAuthKey', user.accessToken);
+        } else {
+            localStorage.setItem('PSAuthKey', null);
+        }
     },
 
     'update-login-Modal'(state, loginModal) {
