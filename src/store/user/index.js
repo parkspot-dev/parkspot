@@ -131,7 +131,7 @@ const actions = {
             IdentityDocumentImage   : state.kycForm.imgData,
         };
 
-        mayaClient.patch('/kyc', req);
+        mayaClient.post('/kyc', req);
     },
 
     contact({ state }) {

@@ -145,6 +145,14 @@ export const routes = [
         ],
     },
     {
+        path: pages.SPOT_DETAIL,
+        name: 'spot-detail',
+        component: () => import('@/views/PageSpotDetail.vue'),
+        meta: {
+            title: 'ParkSpot | ',
+        },
+    },
+    {
         path: pages.THANK_YOU,
         name: 'thankYou',
         component: () => import('@/views/PageThankYou.vue'),
