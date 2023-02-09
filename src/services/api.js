@@ -116,7 +116,7 @@ class MayaApiService extends BaseApiService {
     /**
      * Create a MayaApiService.
      *  @param { function } flavour - getFlavour function.
-     *  @param { function } authToken - getFlavour function.
+     *  @param { function } authToken - getAuthToken function.
      */
     constructor(flavour, authToken) {
         const mayaDomain = 'https://maya.parkspot.in'; //   TODO: we can pick from .env files.
@@ -196,7 +196,6 @@ function getFlavour() {
  */
 function getAuthToken() {
     const token = localStorage.getItem('PSAuthKey');
-    console.log('tojke', token);
     if (token) {
         return token;
     } else {

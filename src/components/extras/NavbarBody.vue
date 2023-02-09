@@ -100,7 +100,7 @@ export default {
         }),
     },
     mounted() {
-        this.authenticateWithMaya();
+        // this.authenticateWithMaya();
     },
     methods: {
         ...mapMutations('user', {
@@ -113,6 +113,7 @@ export default {
 
         logInBtn() {
             this.updateLoginModal(true);
+            this.authenticateWithMaya();
         },
 
         signout() {
