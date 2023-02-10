@@ -92,6 +92,10 @@ export default {
         updateParkingSpotImg(data) {
             this.model.parkingSpotImg = data;
         },
+
+        updateAmenitiesData(amenitiesData) {
+            console.log(amenitiesData);
+        },
     },
 };
 </script>
