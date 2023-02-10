@@ -5,44 +5,46 @@
             <h2>Please fill all the field correctly</h2>
         </div>
         <div class="general-info-form">
-            <div class="py-4">
-                <MoleculeNameInput
-                    :fieldName="FORM.FULLNAME"
-                    :placeholder="FORM.FULLNAME"
-                    :rules="validation.fullname"
-                    v-model="model.fullname"
-                    :label="FORM.FULLNAME"
-                ></MoleculeNameInput>
-            </div>
-            <div class="py-4">
-                <MoleculeNameInput
-                    :fieldName="FORM.EMAIL"
-                    :placeholder="FORM.EMAIL"
-                    :rules="validation.email"
-                    v-model="model.email"
-                    :label="FORM.EMAIL"
-                ></MoleculeNameInput>
-            </div>
-            <div class="py-4">
-                <MoleculeNameInput
-                    :fieldName="FORM.CONTACT_NO"
-                    :placeholder="FORM.CONTACT_NO"
-                    :rules="validation.contactNo"
-                    v-model="model.contactNo"
-                    :label="FORM.CONTACT_NO"
-                ></MoleculeNameInput>
-            </div>
-            <div class="py-4">
-                <MoleculeRadioButton
-                    :fieldName="'radio'"
-                    :rules="validation.userType"
-                    :values="userType"
-                    @data="updateUserType"
-                >
-                    What is you are looking for?
-                </MoleculeRadioButton>
-            </div>
-            <AtomButton class="is-pulled-right">Save Profile</AtomButton>
+            <ValidationObserver ref="observer" v-slot="{}">
+                <div class="py-4">
+                    <MoleculeNameInput
+                        :fieldName="FORM.FULLNAME"
+                        :placeholder="FORM.FULLNAME"
+                        :rules="validation.fullname"
+                        v-model="model.fullname"
+                        :label="FORM.FULLNAME"
+                    ></MoleculeNameInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeNameInput
+                        :fieldName="FORM.EMAIL"
+                        :placeholder="FORM.EMAIL"
+                        :rules="validation.email"
+                        v-model="model.email"
+                        :label="FORM.EMAIL"
+                    ></MoleculeNameInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeNameInput
+                        :fieldName="FORM.CONTACT_NO"
+                        :placeholder="FORM.CONTACT_NO"
+                        :rules="validation.contactNo"
+                        v-model="model.contactNo"
+                        :label="FORM.CONTACT_NO"
+                    ></MoleculeNameInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeRadioButton
+                        :fieldName="'radio'"
+                        :rules="validation.userType"
+                        :values="userType"
+                        @data="updateUserType"
+                    >
+                        What is you are looking for?
+                    </MoleculeRadioButton>
+                </div>
+                <AtomButton class="is-pulled-right">Save Profile</AtomButton>
+            </ValidationObserver>
         </div>
     </div>
 </template>
@@ -52,12 +54,15 @@ import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
 import MoleculeRadioButton from '../molecules/MoleculeRadioButton.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import { FORM } from '../../constant/constant';
+import { ValidationObserver } from 'vee-validate';
+
 export default {
     name: 'OrganismUserGeneralInfo',
     components: {
         MoleculeNameInput,
         AtomButton,
         MoleculeRadioButton,
+        ValidationObserver,
     },
     data() {
         return {
@@ -78,6 +83,11 @@ export default {
                 userType: '',
             },
         };
+    },
+    methods: {
+        updateUserType(userType) {
+            console.log(userType);
+        },
     },
 };
 </script>

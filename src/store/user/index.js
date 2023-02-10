@@ -10,6 +10,7 @@ import {
 
 const state = {
     user: null,
+    userProfile: null,
     isAuthReady: false,
     loginModal: false,
     contactForm: {},
@@ -30,6 +31,10 @@ const mutations = {
         } else {
             localStorage.setItem('PSAuthKey', null);
         }
+    },
+
+    'update-user-profile'(state, userProfile) {
+        state.userProfile = userProfile;
     },
 
     'update-login-Modal'(state, loginModal) {
@@ -201,8 +206,20 @@ const actions = {
     },
 
     async authenticateWithMaya({ state }) {
-        const res = await mayaClient.get('/auth/authenticate');
-        console.log('auth', res);
+        try {
+            await mayaClient.get('/auth/authenticate');
+        } catch (err) {
+            throw new Error(err);
+        }
+    },
+
+    async getUserProfile({ commit, state }) {
+        try {
+            const userProfile = await mayaClient.get('/auth/user');
+            commit('update-user-profile', userProfile);
+        } catch (err) {
+            throw new Error(err);
+        }
     },
 };
 
