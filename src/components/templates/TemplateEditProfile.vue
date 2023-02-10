@@ -1,6 +1,7 @@
 <template>
     <BodyWrapper>
-        <div class="edit-profile-main">
+        <LoaderModal :isLoading="!user"></LoaderModal>
+        <div class="edit-profile-main" v-if="user">
             <div class="profile-group-head">
                 <div class="user-avatar">
                     <img :src="user.photoURL" alt="profile pic" />
@@ -56,6 +57,7 @@ import BodyWrapper from '../extras/BodyWrapper.vue';
 import OrganismUserGeneralInfo from '../organisms/OrganismUserGeneralInfo.vue';
 import OrganismParkingFacility from '../organisms/OrganismParkingFacility.vue';
 import OrganismKycForm from '../organisms/OrganismKycForm.vue';
+import LoaderModal from '../extras/LoaderModal.vue';
 import { mapState } from 'vuex';
 export default {
     name: 'TemplateUserProfile',
@@ -64,6 +66,7 @@ export default {
         OrganismUserGeneralInfo,
         OrganismParkingFacility,
         OrganismKycForm,
+        LoaderModal,
     },
     data() {
         return {
@@ -81,8 +84,7 @@ export default {
             this.isActive = formNo;
             switch (formNo) {
                 case 1:
-                    this.activeForm;
-                    'OrganismUserGeneralInfo';
+                    this.activeForm = 'OrganismUserGeneralInfo';
                     break;
 
                 case 2:

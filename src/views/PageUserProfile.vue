@@ -6,10 +6,14 @@
 
 <script>
 import TemplateUserProfile from '../components/templates/TemplateUserProfile.vue';
+
 export default {
     name: 'PageUserProfile',
     components: {
         TemplateUserProfile,
+    },
+    data() {
+        return {};
     },
 };
 </script>
