@@ -1,7 +1,7 @@
 <template>
     <BodyWrapper>
-        <div class="custom-img-wrapper">
-            <div class="custom-img">
+        <div class="error-img-wrapper">
+            <div class="error-img">
                 <AtomImage
                     :src="img"
                     :alt="imgName"
@@ -9,32 +9,31 @@
                 ></AtomImage>
             </div>
         </div>
-        <h1 class="custom-header">Oops!</h1>
-        <AtomParagraph :type="'p'" class="custom-para">
+        <h1 class="error-header">Oops!</h1>
+        <p class="error-para">
             {{ msg }}
-        </AtomParagraph>
-        <div class="custom-button">
+        </p>
+        <div class="error-button">
             <AtomButton @btnClick="homeBtn" :left="'arrow-left'">
                 Back Home
             </AtomButton>
         </div>
-        <AtomParagraph :type="'p'" class="custom-para">
-            If you have any issues. Call +91 80929 96057
-        </AtomParagraph>
+        <div class="error-para">
+            <p>If you have any issues.</p>
+            <p>Call +91 80929 96057.</p>
+        </div>
     </BodyWrapper>
 </template>
 
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomImage from '../atoms/AtomImage.vue';
-import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 export default {
     name: 'TemplateError',
     components: {
         BodyWrapper,
         AtomImage,
-        AtomParagraph,
         AtomButton,
     },
     props: {
@@ -58,31 +57,31 @@ export default {
     },
 };
 </script>
-<style scoped>
-.custom-header {
+<style lang="scss" scoped>
+.error-header {
     font-size: 4rem;
     font-weight: var(--semi-bold-font);
     text-align: center;
 }
 
-.custom-para {
+.error-para {
     color: var(--grey-shade);
     margin-bottom: 2rem;
     text-align: center;
 }
 
-.custom-button {
+.error-button {
     margin-bottom: 3rem;
     text-align: center;
 }
 
-.custom-img-wrapper {
+.error-img-wrapper {
     align-items: center;
     display: flex;
     justify-content: center;
 }
 
-.custom-img {
+.error-img {
     width: 250px;
 }
 </style>
