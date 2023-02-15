@@ -3,7 +3,7 @@
         <div class="block">
             <b-radio
                 :key="value"
-                v-model="radio"
+                :value="currentSelectedRadio"
                 name="name"
                 v-for="value in values"
                 :native-value="value"
@@ -17,12 +17,16 @@
 <script>
 export default {
     name: 'AtomRadioButton',
-    data() {
-        return {
-            radio: '',
-        };
-    },
     props: {
+        /**
+         * selected radio option
+         * @selectedRadio in string
+         */
+        currentSelectedRadio: {
+            type: String,
+            required: true,
+            default: null,
+        },
         /**
          * List of radio buttons
          * @values in Array
@@ -31,6 +35,11 @@ export default {
             type: Array,
             default: null,
         },
+    },
+    data() {
+        return {
+            radio: '',
+        };
     },
 };
 </script>
