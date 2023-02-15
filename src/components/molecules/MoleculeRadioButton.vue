@@ -1,9 +1,9 @@
 <template>
-    <div class="columns mb-5">
-        <div class="column is-5">
+    <div class="mb-5">
+        <div class="radio-label">
             <label class="label"><slot></slot></label>
         </div>
-        <div class="column">
+        <div class="radio-option">
             <ValidationProvider
                 ref="provider"
                 :name="fieldName"
@@ -13,6 +13,7 @@
                 <AtomRadioButton
                     @change.native="handleChange"
                     :values="values"
+                    :currentSelectedRadio="currentSelectedRadio"
                 ></AtomRadioButton>
                 <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
             </ValidationProvider>
@@ -27,6 +28,10 @@ export default {
     name: 'MoleculeRadioButton',
     components: { ValidationProvider, AtomRadioButton },
     props: {
+        currentSelectedRadio: {
+            type: String,
+            required: true,
+        },
         values: {
             type: Array,
             required: true,
@@ -58,4 +63,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.radio-label {
+    margin-bottom: 0.5em;
+}
 </style>
