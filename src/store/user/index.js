@@ -88,7 +88,7 @@ const actions = {
         }
     },
 
-    async goodBye({ commit, state }) {
+    async logOut({ commit, state }) {
         try {
             await signOut(auth);
             commit('update-user', null);
@@ -200,9 +200,8 @@ const actions = {
         mayaClient.post('/owner/parking-request', req);
     },
 
-    async authenticateWithMaya({ state }) {
-        const res = await mayaClient.get('/auth/authenticate');
-        console.log('auth', res);
+    async authenticateWithMaya() {
+        await mayaClient.get('/auth/authenticate');
     },
 };
 

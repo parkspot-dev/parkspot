@@ -51,10 +51,10 @@ export default {
     }
 
     .login-title {
-        font-size: 25px;
+        font-size: 24px;
         font-weight: 600;
         text-align: center;
-        margin-bottom: 15px;
+        margin-bottom: 16px;
     }
 
     .login-subtitle {

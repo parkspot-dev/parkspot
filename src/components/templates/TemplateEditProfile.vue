@@ -11,7 +11,7 @@
                         <span>/</span>
                         Edit Profile
                     </h1>
-                    <h2>Set up your parkspot account.</h2>
+                    <h2>Set up your Parkspot account.</h2>
                 </div>
             </div>
             <div class="edit-main">
@@ -105,7 +105,7 @@ export default {
 .profile-group-head {
     position: relative;
     display: flex;
-    gap: 15px;
+    gap: 16px;
     margin-bottom: 30px;
 
     .user-avatar {

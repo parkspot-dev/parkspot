@@ -26,7 +26,7 @@ const guardThisRoute = async (to, from, next) => {
 
 // prettier-ignore
 export const pages = {
-    HOME                    : '/',    
+    HOME                    : '/',
     FAQ                     : '/faq',
     ABOUT                   : '/about',
     FEATURES                : '/features',
@@ -58,7 +58,7 @@ export const routes = [
         component: () => import('@/views/PageUserProfile.vue'),
     },
     {
-        path: '/user/Editprofile',
+        path: '/user/edit-profile',
         name: 'editProfile',
         component: () => import('@/views/PageEditProfile.vue'),
     },

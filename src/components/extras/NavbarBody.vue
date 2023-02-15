@@ -36,9 +36,10 @@
                     <!-- user logged out -->
                     <b-navbar-item tag="div" v-if="!user">
                         <div class="buttons">
-                            <AtomButton @click.native="logInBtn"
-                                >Log in</AtomButton
-                            >
+                            <AtomButton @click.native="logInBtn">
+                                Log in
+                            </AtomButton>
+                            <!-- todo: add functionality for sign up -->
                             <AtomButton>Sign up</AtomButton>
                         </div>
                     </b-navbar-item>
@@ -97,7 +98,7 @@ export default {
         }),
     },
     mounted() {
-        // this.authenticateWithMaya();
+        this.authenticateWithMaya();
     },
     methods: {
         ...mapMutations('user', {
@@ -105,7 +106,7 @@ export default {
         }),
         ...mapActions('user', {
             authenticateWithMaya: 'authenticateWithMaya',
-            goodBye: 'goodBye',
+            logOut: 'logOut',
         }),
 
         logInBtn() {
@@ -114,7 +115,7 @@ export default {
         },
 
         signout() {
-            this.goodBye();
+            this.logOut();
         },
 
         gotoUserProfile() {
