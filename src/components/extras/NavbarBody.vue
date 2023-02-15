@@ -10,9 +10,6 @@
 
             <template #end>
                 <b-navbar-dropdown label="Company" hoverable>
-                    <b-navbar-item tag="router-link" :to="{ name: 'Home' }">
-                        Home
-                    </b-navbar-item>
                     <b-navbar-item tag="router-link" :to="{ name: 't-about' }">
                         About
                     </b-navbar-item>
