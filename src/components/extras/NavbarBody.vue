@@ -32,7 +32,7 @@
                     Faq
                 </b-navbar-item>
 
-                <template v-if="false">
+                <template v-if="isAuthReady">
                     <!-- user logged out -->
                     <b-navbar-item tag="div" v-if="!user">
                         <div class="buttons">
