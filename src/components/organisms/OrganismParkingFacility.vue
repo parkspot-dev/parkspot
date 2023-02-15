@@ -51,7 +51,7 @@
                     :rules="validation.parkingSpotImg"
                 ></MoleculeUpload>
             </div>
-            <!-- map integration (not decided yet google map or mapbox) -->
+            <!-- todo: map integration (not decided yet google map or mapbox) -->
             <AtomButton class="is-pulled-right">Save Profile</AtomButton>
         </div>
     </div>

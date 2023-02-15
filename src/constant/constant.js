@@ -9,7 +9,7 @@ export const FORM = {
 };
 
 export const PARKING_FACILITY = {
-    BUILDING_ADDR: 'Building Address ',
+    BUILDING_ADDR: 'Building Address',
     TOTAL_PARKING: 'Total Parking',
     FACILITIES: 'Facilities',
     FACILITIES_DATA: [

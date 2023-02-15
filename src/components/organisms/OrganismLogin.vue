@@ -6,7 +6,7 @@
                     <img
                         class="login-logo"
                         src="../../assets/pstopmini.png"
-                        alt=""
+                        alt="parkspot logo"
                     />
                 </div>
                 <p class="login-title">Log In</p>
@@ -71,11 +71,11 @@ export default {
 
 <style lang="scss" scoped>
 .login-card {
+    background-color: white;
+    border-radius: var(--border-default);
     max-width: 480px;
     margin: 0 auto;
-    background-color: white;
     padding: 50px 25px 10px 25px;
-    border-radius: var(--border-default);
 
     .logo-wrapper {
         width: 64px;

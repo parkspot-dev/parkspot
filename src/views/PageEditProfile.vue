@@ -6,6 +6,7 @@
 
 <script>
 import TemplateEditProfile from '../components/templates/TemplateEditProfile.vue';
+
 export default {
     name: 'PageEditProfile',
     components: {
