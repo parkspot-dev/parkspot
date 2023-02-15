@@ -10,8 +10,8 @@
                     <MoleculeNameInput
                         :fieldName="FORM.FULLNAME"
                         :placeholder="FORM.FULLNAME"
-                        :rules="validation.fullname"
-                        v-model="model.fullname"
+                        :rules="validation.FullName"
+                        v-model="userProfile.FullName"
                         :label="FORM.FULLNAME"
                     ></MoleculeNameInput>
                 </div>
@@ -19,8 +19,8 @@
                     <MoleculeNameInput
                         :fieldName="FORM.EMAIL"
                         :placeholder="FORM.EMAIL"
-                        :rules="validation.email"
-                        v-model="model.email"
+                        :rules="validation.EmailID"
+                        v-model="userProfile.EmailID"
                         :label="FORM.EMAIL"
                     ></MoleculeNameInput>
                 </div>
@@ -28,8 +28,8 @@
                     <MoleculeNameInput
                         :fieldName="FORM.CONTACT_NO"
                         :placeholder="FORM.CONTACT_NO"
-                        :rules="validation.contactNo"
-                        v-model="model.contactNo"
+                        :rules="validation.Mobile"
+                        v-model="userProfile.Mobile"
                         :label="FORM.CONTACT_NO"
                     ></MoleculeNameInput>
                 </div>
@@ -38,12 +38,15 @@
                         :fieldName="'radio'"
                         :rules="validation.userType"
                         :values="userType"
+                        :currentSelectedRadio="userType[1]"
                         @data="updateUserType"
                     >
                         What is you are looking for?
                     </MoleculeRadioButton>
                 </div>
-                <AtomButton class="is-pulled-right">Save Profile</AtomButton>
+                <AtomButton class="is-pulled-right" @click.native="saveProfile">
+                    Save Profile
+                </AtomButton>
             </ValidationObserver>
         </div>
     </div>
@@ -55,6 +58,7 @@ import MoleculeRadioButton from '../molecules/MoleculeRadioButton.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import { FORM } from '../../constant/constant';
 import { ValidationObserver } from 'vee-validate';
+import { mapState } from 'vuex';
 
 export default {
     name: 'OrganismUserGeneralInfo',
@@ -68,25 +72,43 @@ export default {
         return {
             FORM,
             userType: [
-                'I own a parking lot, want to rent it',
-                'I am a car owner, looking for parking',
+                'I own a parking spot, want to rent it',
+                'I am a vehicle owner, looking for parking',
             ],
             model: {
-                fullname: '',
-                email: '',
-                contactNo: '',
+                FullName: '',
+                EmailID: '',
+                Mobile: '',
             },
             validation: {
-                fullname: '',
-                email: '',
-                contactNo: '',
-                userType: '',
+                FullName: 'required',
+                EmailID: 'required|email',
+                Mobile: 'required|integer|phone',
+                userType: 'required',
             },
         };
+    },
+    computed: {
+        ...mapState('user', {
+            userProfile: (state) => state.userProfile,
+        }),
     },
     methods: {
         updateUserType(userType) {
             console.log(userType);
+        },
+
+        saveProfile() {
+            this.$refs.observer
+                .validate()
+                .then((sucess) => {
+                    if (sucess) {
+                        this.submit();
+                    }
+                })
+                .catch((er) => {
+                    console.log(er);
+                });
         },
     },
 };
