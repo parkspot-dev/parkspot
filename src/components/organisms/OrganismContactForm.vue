@@ -25,6 +25,15 @@
             :label="CONTACT_FORM.CONTACT_NO"
         >
         </MoleculeNameInput>
+        <MoleculeNameInput
+            v-if="isEnable"
+            :rules="validation.addr"
+            :fieldName="'Address'"
+            v-model="model.addr"
+            :placeholder="'Address'"
+            :label="'Address'"
+        >
+        </MoleculeNameInput>
         <AtomTextarea
             v-if="textArea"
             v-model="model.msg"
@@ -65,13 +74,16 @@ export default {
                 email: '',
                 cno: '',
                 msg: '',
+                addr: '',
             },
             validation: {
                 fullname: 'required',
                 email: 'required|email',
                 cno: 'required|integer|phone',
+                addr: 'required',
             },
             CONTACT_FORM: FORM,
+            isEnable: false,
         };
     },
     watch: {
@@ -92,6 +104,9 @@ export default {
                     });
             }
         },
+    },
+    mounted() {
+        this.isEnable = this.$route.name === 'SOPortal';
     },
     methods: {
         ...mapMutations({
