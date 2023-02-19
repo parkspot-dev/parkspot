@@ -2,7 +2,7 @@
     <div class="general-info">
         <div class="general-info-header">
             <h1>General Info</h1>
-            <h2>Please fill all the field correctly</h2>
+            <h2>Please fill all the fields</h2>
         </div>
         <div class="general-info-form">
             <div class="py-4">

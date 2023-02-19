@@ -2,7 +2,7 @@
     <div class="kyc-form">
         <div class="kyc-form-header">
             <h1>KYC Verification</h1>
-            <h2>Please fill all the field correctly</h2>
+            <h2>Please fill all the fields</h2>
         </div>
         <div class="kyc-form-main">
             <ValidationObserver ref="observer" v-slot="{}">
