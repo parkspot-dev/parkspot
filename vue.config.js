@@ -3,8 +3,7 @@ const PrerenderSPAPlugin = require('prerender-spa-plugin');
 const path = require('path');
 module.exports = {
     devServer: {
-        host: 'dev.parkspot.in.localhost',
-        proxy: 'https://www.parkspot.in',
+        host: 'parkspot.localhost',
     },
     productionSourceMap: false, //  Setting this to false can speed up production builds if you don't need source maps for production.
     configureWebpack: (config) => {
