@@ -9,17 +9,38 @@ export const FORM = {
 };
 
 export const PARKING_FACILITY = {
-    BUILDING_ADDR: 'Building Address',
-    TOTAL_PARKING: 'Total Parking',
-    FACILITIES: 'Facilities',
-    FACILITIES_DATA: [
-        'Covered',
-        'Gated',
-        'CCTV Camera',
-        'Security Guard',
-        '24 Hour Access',
-    ],
-    LANDMARK: 'Landmark',
+    SO: {
+        BUILDING_ADDR: 'Building Address',
+        TOTAL_PARKING: 'Total Parking',
+        FACILITIES: 'Facilities',
+        FACILITIES_DATA: [
+            'Covered',
+            'Gated',
+            'CCTV Camera',
+            'Security Guard',
+            '24 Hour Access',
+        ],
+        LANDMARK: 'Landmark',
+    },
+    VO: {
+        PARKING_TYPE: 'Types of parking',
+        PARKING_TYPE_LIST: [
+            { id: 0, name: 'Covered Parking' },
+            { id: 1, name: 'Open Parking' },
+        ],
+        DURATION: 'Duration',
+        MINIMUM_DURATION_DATA: [
+            { id: 0, name: ' < 1 month' },
+            { id: 1, name: '2 - 3 months' },
+            { id: 2, name: '3 - 5 months' },
+            { id: 3, name: 'More than 6 months' },
+        ],
+        CAR_TYPE: [
+            { id: 0, name: 'Suv' },
+            { id: 1, name: 'Sedan' },
+            { id: 2, name: 'Hatchback' },
+        ],
+    },
 };
 
 export const KYC = {
