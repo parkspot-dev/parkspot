@@ -5,51 +5,82 @@
             <h2>Please fill all the fields</h2>
         </div>
         <div class="parking-facility-form">
-            <div class="py-4">
-                <MoleculeNameInput
-                    :fieldName="PARKING_FACILITY.BUILDING_ADDR"
-                    :placeholder="PARKING_FACILITY.BUILDING_ADDR"
-                    :rules="validation.buildingAddr"
-                    v-model="model.buildingAddr"
-                    :label="PARKING_FACILITY.BUILDING_ADDR"
-                ></MoleculeNameInput>
+            <div class="parking-facility-form-VO" v-if="isVO">
+                <div class="py-4">
+                    <MoleculeSelectInput
+                        :fieldName="PARKING_FACILITY.VO.PARKING_TYPE"
+                        :list="PARKING_FACILITY.VO.PARKING_TYPE_LIST"
+                        @input="updateType"
+                        :placeholder="'Type of Parking'"
+                        :label="PARKING_FACILITY.VO.PARKING_TYPE"
+                    ></MoleculeSelectInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeSelectInput
+                        :fieldName="PARKING_FACILITY.VO.DURATION"
+                        :list="PARKING_FACILITY.VO.MINIMUM_DURATION_DATA"
+                        @input="updateMinDur"
+                        :placeholder="'Minimum duration if any'"
+                        :label="PARKING_FACILITY.VO.DURATION"
+                    ></MoleculeSelectInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeSelectInput
+                        :fieldName="'Car Type'"
+                        :list="PARKING_FACILITY.VO.CAR_TYPE"
+                        @input="updateCarType"
+                        :placeholder="'Type of Car'"
+                        :label="'Car Type'"
+                    ></MoleculeSelectInput>
+                </div>
             </div>
-            <div class="py-4">
-                <MoleculeNameInput
-                    :fieldName="PARKING_FACILITY.LANDMARK"
-                    :placeholder="PARKING_FACILITY.LANDMARK"
-                    :rules="validation.landmark"
-                    v-model="model.landmark"
-                    :label="PARKING_FACILITY.LANDMARK"
-                ></MoleculeNameInput>
-                <p>Is there a landmark near the parking spot?</p>
-            </div>
-            <div class="py-4">
-                <MoleculeNameInput
-                    :fieldName="PARKING_FACILITY.TOTAL_PARKING"
-                    :placeholder="PARKING_FACILITY.TOTAL_PARKING"
-                    :rules="validation.totalParking"
-                    v-model="model.totalParking"
-                    :label="PARKING_FACILITY.TOTAL_PARKING"
-                ></MoleculeNameInput>
-            </div>
-            <div class="py-4">
-                <MoleculeCheckbox
-                    :fieldName="PARKING_FACILITY.FACILITIES"
-                    :rules="validation.amenities"
-                    :values="PARKING_FACILITY.FACILITIES_DATA"
-                    @data="updateAmenitiesData"
-                >
-                    {{ PARKING_FACILITY.FACILITIES }}
-                </MoleculeCheckbox>
-            </div>
-            <div class="py-4">
-                <p>Photos(Parking spot pictures)</p>
-                <MoleculeUpload
-                    @data="updateParkingSpotImg"
-                    :fieldName="'document'"
-                    :rules="validation.parkingSpotImg"
-                ></MoleculeUpload>
+            <div class="parking-facility-form-SO" v-else>
+                <div class="py-4">
+                    <MoleculeNameInput
+                        :fieldName="PARKING_FACILITY.SO.BUILDING_ADDR"
+                        :placeholder="PARKING_FACILITY.SO.BUILDING_ADDR"
+                        :rules="validation.buildingAddr"
+                        v-model="model.buildingAddr"
+                        :label="PARKING_FACILITY.SO.BUILDING_ADDR"
+                    ></MoleculeNameInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeNameInput
+                        :fieldName="PARKING_FACILITY.SO.LANDMARK"
+                        :placeholder="PARKING_FACILITY.SO.LANDMARK"
+                        :rules="validation.landmark"
+                        v-model="model.landmark"
+                        :label="PARKING_FACILITY.SO.LANDMARK"
+                    ></MoleculeNameInput>
+                    <p>Is there a landmark near the parking spot?</p>
+                </div>
+                <div class="py-4">
+                    <MoleculeNameInput
+                        :fieldName="PARKING_FACILITY.SO.TOTAL_PARKING"
+                        :placeholder="PARKING_FACILITY.SO.TOTAL_PARKING"
+                        :rules="validation.totalParking"
+                        v-model="model.totalParking"
+                        :label="PARKING_FACILITY.SO.TOTAL_PARKING"
+                    ></MoleculeNameInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeCheckbox
+                        :fieldName="PARKING_FACILITY.SO.FACILITIES"
+                        :rules="validation.amenities"
+                        :values="PARKING_FACILITY.SO.FACILITIES_DATA"
+                        @data="updateAmenitiesData"
+                    >
+                        {{ PARKING_FACILITY.SO.FACILITIES }}
+                    </MoleculeCheckbox>
+                </div>
+                <div class="py-4">
+                    <p>Photos(Parking spot pictures)</p>
+                    <MoleculeUpload
+                        @data="updateParkingSpotImg"
+                        :fieldName="'document'"
+                        :rules="validation.parkingSpotImg"
+                    ></MoleculeUpload>
+                </div>
             </div>
             <!-- todo: map integration (not decided yet google map or mapbox) -->
             <AtomButton class="is-pulled-right">Save Profile</AtomButton>
@@ -62,6 +93,7 @@ import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
 import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
 import MoleculeUpload from '../molecules/MoleculeUpload.vue';
 import AtomButton from '../atoms/AtomButton.vue';
+import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
 import { PARKING_FACILITY } from '../../constant/constant';
 export default {
     name: 'OrganismParkingFacility',
@@ -70,6 +102,13 @@ export default {
         MoleculeCheckbox,
         MoleculeUpload,
         AtomButton,
+        MoleculeSelectInput,
+    },
+    props: {
+        isVO: {
+            type: Boolean,
+            required: true,
+        },
     },
     data() {
         return {
@@ -81,10 +120,11 @@ export default {
                 parkingSpotImg: null,
             },
             validation: {
-                buildingAddr: '',
+                buildingAddr: 'required',
                 totalParking: '',
                 parkingSpotImg: '',
                 landmark: '',
+                parkingType: '',
             },
         };
     },
@@ -95,6 +135,18 @@ export default {
 
         updateAmenitiesData(amenitiesData) {
             console.log(amenitiesData);
+        },
+
+        updateType(typeData) {
+            console.log(typeData);
+        },
+
+        updateMinDur(minDur) {
+            console.log(minDur);
+        },
+
+        updateCarType(carType) {
+            console.log(carType);
         },
     },
 };

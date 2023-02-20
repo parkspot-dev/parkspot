@@ -96,6 +96,8 @@ export default {
     methods: {
         updateUserType(userType) {
             console.log(userType);
+            const isVO = userType.search('vehicle') === -1 ? false : true;
+            this.$emit('userType', isVO);
         },
 
         saveProfile() {
