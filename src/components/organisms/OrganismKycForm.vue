@@ -10,8 +10,9 @@
                     <MoleculeRadioButton
                         :fieldName="'radio'"
                         :rules="validation.owner"
-                        :values="ownerRadioValues"
+                        :values="KYC.OWNER_RADIO_DATA"
                         @data="updateOwner"
+                        :currentSelectedRadio="KYC.OWNER_RADIO_DATA[0]"
                     >
                         Are you the Owner?
                     </MoleculeRadioButton>
@@ -19,7 +20,7 @@
                 <div class="py-4">
                     <MoleculeSelectInput
                         :fieldName="'input'"
-                        :list="documentValues"
+                        :list="documentList"
                         @input="updateDocumentData"
                         :rules="validation.documentSelect"
                         :placeholder="'Select documents'"
@@ -35,7 +36,9 @@
                         :rules="validation.img"
                     ></MoleculeUpload>
                 </div>
-                <AtomButton class="is-pulled-right">Save Profile</AtomButton>
+                <AtomButton class="is-pulled-right" @click.native="saveProfile">
+                    Save Profile
+                </AtomButton>
             </ValidationObserver>
         </div>
     </div>
@@ -59,19 +62,16 @@ export default {
         AtomButton,
     },
     props: {
-        formSubmitted: {
+        isVO: {
             type: Boolean,
-            default: false,
+            required: true,
         },
     },
-    emits: ['formValidate'],
     data() {
         return {
             KYC,
-            ownerRadioValues: KYC.OWNER_RADIO_DATA,
-            documentValues: KYC.DOCUMENT_DATA,
             validation: {
-                owner: 'required',
+                owner: '',
                 documentSelect: 'required',
                 img: 'required|image',
             },
@@ -82,22 +82,12 @@ export default {
             },
         };
     },
-    watch: {
-        formSubmitted(newVal) {
-            if (newVal) {
-                this.$refs.observer
-                    .validate()
-                    .then((el) => {
-                        if (el) {
-                            this.$emit('formValidate', el);
-                            this.submit();
-                        } else {
-                            this.$emit('formValidate', el);
-                        }
-                    })
-                    .catch((er) => {
-                        console.log(er);
-                    });
+    computed: {
+        documentList() {
+            if (this.isVO) {
+                return this.KYC.DOCUMENT_DATA_VO;
+            } else {
+                return this.KYC.DOCUMENT_DATA_SO;
             }
         },
     },
@@ -105,9 +95,19 @@ export default {
         ...mapMutations({
             updateKyc: 'user/update-kyc',
         }),
-        submit() {
-            this.updateKyc(this.model);
+        saveProfile() {
+            this.$refs.observer
+                .validate()
+                .then((sucess) => {
+                    if (sucess) {
+                        this.submit();
+                    }
+                })
+                .catch((er) => {
+                    console.log(er);
+                });
         },
+
         updateOwner(owner) {
             owner === 'Yes'
                 ? (this.model.owner = true)
