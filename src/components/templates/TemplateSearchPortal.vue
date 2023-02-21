@@ -61,7 +61,9 @@
                 v-slot="props"
                 sortable
             >
-                {{ props.row.ID }}
+                <div class="id-column">
+                    {{ props.row.ID }}
+                </div>
             </b-table-column>
 
             <b-table-column
@@ -71,7 +73,7 @@
                 v-slot="props"
                 sortable
             >
-                <div>
+                <div class="date-column">
                     <p class="tag">UpdatedAt:</p>
                     <strong>
                         {{ new Date(props.row.UpdatedAt).toLocaleDateString() }}
@@ -481,7 +483,19 @@ export default {
     width: 400px;
 }
 
+.id-column {
+    font-size: 14px;
+}
+
+.date-column {
+    font-size: 14px;
+}
+.contact-column {
+    font-size: 14px;
+}
+
 .status-column {
+    font-size: 14px;
     .status-part {
         display: flex;
         flex-direction: column;
@@ -497,6 +511,7 @@ export default {
 }
 
 .lat-lng-column {
+    font-size: 14px;
     .lat-lng-link {
         margin-bottom: 20px;
     }
