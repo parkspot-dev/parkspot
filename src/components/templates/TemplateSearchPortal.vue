@@ -163,41 +163,45 @@
                     </AtomSelectInput>
                 </template>
                 <template v-slot="props">
-                    <span class="tag is-warning">
-                        {{ statusList[props.row.Status].name }}
-                    </span>
-                    <AtomSelectInput
-                        :list="statusList"
-                        class="column-width"
-                        @changed="onStatusUpdate(props.row, ...arguments)"
-                    >
-                    </AtomSelectInput>
-                    <span
-                        class="tag is-warning"
-                        :class="{
-                            'is-danger': isCallDelayed(props.row.NextCall),
-                        }"
-                    >
-                        <span>
-                            {{
-                                isCallDelayed(props.row.NextCall)
-                                    ? 'Delayed :'
-                                    : 'Upcoming :'
-                            }}
+                    <div class="status-part">
+                        <span class="tag is-warning">
+                            {{ statusList[props.row.Status].name }}
                         </span>
-                        <b>
-                            {{
-                                new Date(
-                                    props.row.NextCall,
-                                ).toLocaleDateString()
-                            }}
-                        </b>
-                    </span>
-                    <AtomDatePicker
-                        class="column-width"
-                        @changed="onDateUpdate(props.row, ...arguments)"
-                    >
-                    </AtomDatePicker>
+                        <AtomSelectInput
+                            :list="statusList"
+                            class="column-width"
+                            @changed="onStatusUpdate(props.row, ...arguments)"
+                        >
+                        </AtomSelectInput>
+                    </div>
+                    <div class="next-call-part">
+                        <span
+                            class="tag is-warning"
+                            :class="{
+                                'is-danger': isCallDelayed(props.row.NextCall),
+                            }"
+                        >
+                            <span>
+                                {{
+                                    isCallDelayed(props.row.NextCall)
+                                        ? 'Delayed :'
+                                        : 'Upcoming :'
+                                }}
+                            </span>
+                            <b>
+                                {{
+                                    new Date(
+                                        props.row.NextCall,
+                                    ).toLocaleDateString()
+                                }}
+                            </b>
+                        </span>
+                        <AtomDatePicker
+                            class="column-width"
+                            @changed="onDateUpdate(props.row, ...arguments)"
+                        >
+                        </AtomDatePicker>
+                    </div>
                 </template>
             </b-table-column>
 
@@ -460,5 +464,18 @@ export default {
 
 .comment-width {
     width: 400px;
+}
+
+.status-part {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.next-call-part {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 </style>
