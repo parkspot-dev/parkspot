@@ -7,6 +7,7 @@
             :value="value"
             @blur="onChange($event.target.value)"
             @input.native="onInput($event.target.value)"
+            :size="size"
         ></b-input>
     </b-field>
 </template>
@@ -34,6 +35,14 @@ export default {
          *  User input value in the input field
          */
         value: {
+            type: String,
+            default: null,
+        },
+        /**
+         * Size is to decide
+         * size of the input is-small etc.
+         */
+        size: {
             type: String,
             default: null,
         },

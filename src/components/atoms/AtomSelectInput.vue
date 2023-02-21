@@ -1,6 +1,11 @@
 <template>
     <b-field :label="label" :type="errorType" :message="errorMessage">
-        <b-select :placeholder="placeholder" v-model="innerValue" expanded>
+        <b-select
+            :placeholder="placeholder"
+            v-model="innerValue"
+            :size="size"
+            expanded
+        >
             <option value="" disabled>
                 {{ placeholder }}
             </option>
@@ -46,6 +51,10 @@ export default {
         },
         value: {
             type: null,
+        },
+        size: {
+            type: String,
+            default: '',
         },
     },
     emits: ['input', 'changed'],

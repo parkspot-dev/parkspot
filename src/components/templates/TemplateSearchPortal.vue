@@ -1,48 +1,54 @@
 <template>
-    <div class="custom-wrap">
-        <div class="so-btn">
-            <AtomButton @click.native="showSummary">
-                {{ summary.btn }} Summary
-            </AtomButton>
-        </div>
-        <br />
-        <div class="so-summary" v-show="summary.show">
-            <p class="so-total">Total Request : {{ summary.totalRequest }}</p>
-            <hr />
-            <div class="so-live-request">
-                <p>
-                    <span>Today : </span>
-                    <span>{{ summary.today }}</span>
-                </p>
-                <p>
-                    <span>yesterday : </span>
-                    <span>{{ summary.yesterday }}</span>
-                </p>
+    <div class="search-portal-wrapper">
+        <div class="summary">
+            <div class="so-btn">
+                <AtomButton @click.native="showSummary">
+                    {{ summary.btn }} Summary
+                </AtomButton>
             </div>
-            <hr />
-            <div class="so-priority">
-                <p>High : {{ summary.high }}</p>
-                <p>Low : {{ summary.low }}</p>
-                <p>Medium : {{ summary.medium }}</p>
-            </div>
+            <br />
+            <div class="so-summary" v-show="summary.show">
+                <p class="so-total">
+                    Total Request : {{ summary.totalRequest }}
+                </p>
+                <hr />
+                <div class="so-live-request">
+                    <p>
+                        <span>Today : </span>
+                        <span>{{ summary.today }}</span>
+                    </p>
+                    <p>
+                        <span>yesterday : </span>
+                        <span>{{ summary.yesterday }}</span>
+                    </p>
+                </div>
+                <hr />
+                <div class="so-priority">
+                    <p>High : {{ summary.high }}</p>
+                    <p>Low : {{ summary.low }}</p>
+                    <p>Medium : {{ summary.medium }}</p>
+                </div>
 
-            <hr />
-            <div class="so-status">
-                <p>
-                    <span>Registered :</span>
-                    <span>{{ summary.status[1] }}</span>
-                </p>
-                <p>
-                    <span>Processing :</span>
-                    <span>{{ summary.status[2] }}</span>
-                </p>
-                <p>
-                    <span>Suggested : </span>
-                    <span>{{ summary.status[3] }}</span>
-                </p>
+                <hr />
+                <div class="so-status">
+                    <p>
+                        <span>Registered :</span>
+                        <span>{{ summary.status[1] }}</span>
+                    </p>
+                    <p>
+                        <span>Processing :</span>
+                        <span>{{ summary.status[2] }}</span>
+                    </p>
+                    <p>
+                        <span>Suggested : </span>
+                        <span>{{ summary.status[3] }}</span>
+                    </p>
+                </div>
             </div>
         </div>
         <b-table
+            :paginated="true"
+            :per-page="5"
             :data="isEmpty ? [] : parkingRequests"
             :bordered="true"
             :hoverable="true"
@@ -51,7 +57,7 @@
             :mobile-cards="hasMobileCards"
             :scrollable="true"
             :sticky-header="true"
-            height="800"
+            height="950"
         >
             <b-table-column
                 field="ID"
@@ -74,16 +80,27 @@
                 sortable
             >
                 <div class="date-column">
-                    <p class="tag">UpdatedAt:</p>
-                    <strong>
-                        {{ new Date(props.row.UpdatedAt).toLocaleDateString() }}
-                    </strong>
-                    <br />
-                    <br />
-                    <p class="tag">CreatedAt:</p>
-                    <strong>
-                        {{ new Date(props.row.CreatedAt).toLocaleDateString() }}
-                    </strong>
+                    <div>
+                        <p class="tag">UpdatedAt:</p>
+                        <strong>
+                            {{
+                                new Date(
+                                    props.row.UpdatedAt,
+                                ).toLocaleDateString()
+                            }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <p class="tag">CreatedAt:</p>
+                        <strong>
+                            {{
+                                new Date(
+                                    props.row.CreatedAt,
+                                ).toLocaleDateString()
+                            }}
+                        </strong>
+                    </div>
                 </div>
             </b-table-column>
 
@@ -144,6 +161,7 @@
 
             <b-table-column field="comments" label="Comments" v-slot="props">
                 <AtomTextarea
+                    :size="'is-small'"
                     :value="props.row.Comments"
                     class="comment-width"
                     :maxlength="1000"
@@ -160,6 +178,7 @@
             >
                 <template #searchable="props">
                     <AtomSelectInput
+                        :size="'is-small'"
                         :list="statusList"
                         class="column-width"
                         v-model="props.filters['Status']"
@@ -173,6 +192,7 @@
                                 {{ statusList[props.row.Status].name }}
                             </span>
                             <AtomSelectInput
+                                :size="'is-small'"
                                 :list="statusList"
                                 class="column-width"
                                 @changed="
@@ -206,6 +226,7 @@
                                 </b>
                             </span>
                             <AtomDatePicker
+                                :size="'is-small'"
                                 class="column-width"
                                 @changed="onDateUpdate(props.row, ...arguments)"
                             >
@@ -235,6 +256,7 @@
                     <div class="lat-lng-input">
                         <p>LatLng:</p>
                         <AtomInput
+                            :size="'is-small'"
                             :value="
                                 getLatLng(
                                     props.row.Latitude.toFixed(6),
@@ -430,96 +452,111 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.so-btn {
-    text-align: right;
-}
-.so-summary {
-    border: 1px solid black;
-    padding: 2rem;
-    max-width: 500px;
-    background-color: #f5f5dc;
-    position: absolute;
-    top: 120px;
-    right: 20px;
-    z-index: 9999;
-    // display: none;
+.search-portal-wrapper {
+    padding: 1rem;
 
-    .so-total {
-        font-size: 20px;
-        font-weight: var(--semi-bold-font);
-        text-align: center;
-    }
-
-    .so-live-request {
-        display: flex;
-        gap: 6rem;
-    }
-
-    .so-priority {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .so-status {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        column-gap: 2.5rem;
-
-        p {
-            display: flex;
-            justify-content: space-between;
+    .column-width {
+        width: 200px;
+        @media only screen and (max-width: 1024px) {
+            width: 150px;
         }
     }
-}
-.custom-wrap {
-    padding: 1rem;
-}
 
-.column-width {
-    width: 200px;
-}
+    .comment-width {
+        width: 350px;
+        @media only screen and (max-width: 1024px) {
+            width: 200px;
+        }
+    }
 
-.comment-width {
-    width: 400px;
-}
+    .summary {
+        .so-btn {
+            text-align: right;
+        }
+        .so-summary {
+            border: 1px solid black;
+            padding: 2rem;
+            max-width: 500px;
+            background-color: #f5f5dc;
+            position: absolute;
+            top: 120px;
+            right: 20px;
+            z-index: 9999;
+            // display: none;
 
-.id-column {
-    font-size: 14px;
-}
+            .so-total {
+                font-size: 20px;
+                font-weight: var(--semi-bold-font);
+                text-align: center;
+            }
 
-.date-column {
-    font-size: 14px;
-}
-.contact-column {
-    font-size: 14px;
-}
+            .so-live-request {
+                display: flex;
+                gap: 6rem;
+            }
 
-.status-column {
-    font-size: 14px;
-    .status-part {
+            .so-priority {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .so-status {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                column-gap: 2.5rem;
+
+                p {
+                    display: flex;
+                    justify-content: space-between;
+                }
+            }
+        }
+    }
+    .id-column {
+        font-size: 14px;
+    }
+
+    .date-column {
+        font-size: 14px;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        margin-bottom: 20px;
+
+        div {
+            display: flex;
+        }
+    }
+    .contact-column {
+        font-size: 14px;
     }
 
-    .next-call-part {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-}
+    .status-column {
+        font-size: 14px;
+        .status-part {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-.lat-lng-column {
-    font-size: 14px;
-    .lat-lng-link {
-        margin-bottom: 20px;
+        .next-call-part {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
     }
 
-    .lat-lng-input {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+    .lat-lng-column {
+        font-size: 14px;
+        .lat-lng-link {
+            margin-bottom: 20px;
+        }
+
+        .lat-lng-input {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
     }
 }
 </style>
