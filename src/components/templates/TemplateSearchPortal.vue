@@ -108,34 +108,36 @@
                 label="Contact Details"
                 v-slot="props"
             >
-                <p>
-                    Name:
-                    <strong>{{ props.row.Name }}</strong>
-                </p>
-                <p>
-                    Mobile:
-                    <strong>{{ props.row.Mobile }}</strong>
-                </p>
-                <p>
-                    Email:
-                    <strong>{{ props.row.EmailID }}</strong>
-                </p>
-                <p>
-                    Landmark :
-                    <strong>{{ props.row.Landmark }}</strong>
-                </p>
-                <p>
-                    City:
-                    {{ props.row.City }}
-                </p>
-                <p>
-                    Duration :
-                    {{ props.row.Duration }}
-                </p>
-                <p>
-                    Car Model:
-                    {{ props.row.CarModel }}
-                </p>
+                <div class="contact-column">
+                    <p>
+                        Name:
+                        <strong>{{ props.row.Name }}</strong>
+                    </p>
+                    <p>
+                        Mobile:
+                        <strong>{{ props.row.Mobile }}</strong>
+                    </p>
+                    <p>
+                        Email:
+                        <strong>{{ props.row.EmailID }}</strong>
+                    </p>
+                    <p>
+                        Landmark :
+                        <strong>{{ props.row.Landmark }}</strong>
+                    </p>
+                    <p>
+                        City:
+                        {{ props.row.City }}
+                    </p>
+                    <p>
+                        Duration :
+                        {{ props.row.Duration }}
+                    </p>
+                    <p>
+                        Car Model:
+                        {{ props.row.CarModel }}
+                    </p>
+                </div>
             </b-table-column>
 
             <b-table-column field="comments" label="Comments" v-slot="props">
@@ -163,72 +165,85 @@
                     </AtomSelectInput>
                 </template>
                 <template v-slot="props">
-                    <div class="status-part">
-                        <span class="tag is-warning">
-                            {{ statusList[props.row.Status].name }}
-                        </span>
-                        <AtomSelectInput
-                            :list="statusList"
-                            class="column-width"
-                            @changed="onStatusUpdate(props.row, ...arguments)"
-                        >
-                        </AtomSelectInput>
-                    </div>
-                    <div class="next-call-part">
-                        <span
-                            class="tag is-warning"
-                            :class="{
-                                'is-danger': isCallDelayed(props.row.NextCall),
-                            }"
-                        >
-                            <span>
-                                {{
-                                    isCallDelayed(props.row.NextCall)
-                                        ? 'Delayed :'
-                                        : 'Upcoming :'
-                                }}
+                    <div class="status-column">
+                        <div class="status-part">
+                            <span class="tag is-warning">
+                                {{ statusList[props.row.Status].name }}
                             </span>
-                            <b>
-                                {{
-                                    new Date(
+                            <AtomSelectInput
+                                :list="statusList"
+                                class="column-width"
+                                @changed="
+                                    onStatusUpdate(props.row, ...arguments)
+                                "
+                            >
+                            </AtomSelectInput>
+                        </div>
+                        <div class="next-call-part">
+                            <span
+                                class="tag is-warning"
+                                :class="{
+                                    'is-danger': isCallDelayed(
                                         props.row.NextCall,
-                                    ).toLocaleDateString()
-                                }}
-                            </b>
-                        </span>
-                        <AtomDatePicker
-                            class="column-width"
-                            @changed="onDateUpdate(props.row, ...arguments)"
-                        >
-                        </AtomDatePicker>
+                                    ),
+                                }"
+                            >
+                                <span>
+                                    {{
+                                        isCallDelayed(props.row.NextCall)
+                                            ? 'Delayed :'
+                                            : 'Upcoming :'
+                                    }}
+                                </span>
+                                <b>
+                                    {{
+                                        new Date(
+                                            props.row.NextCall,
+                                        ).toLocaleDateString()
+                                    }}
+                                </b>
+                            </span>
+                            <AtomDatePicker
+                                class="column-width"
+                                @changed="onDateUpdate(props.row, ...arguments)"
+                            >
+                            </AtomDatePicker>
+                        </div>
                     </div>
                 </template>
             </b-table-column>
 
             <b-table-column field="lat_lng" label="Lat/Lng" v-slot="props">
-                <a
-                    target="_blank"
-                    @click="toSrp(props.row.Latitude, props.row.Longitude)"
-                >
-                    {{
-                        props.row.Latitude.toFixed(6) +
-                        ',' +
-                        props.row.Longitude.toFixed(6)
-                    }}
-                </a>
-                <br />
-                <br />
-                <p>LatLng:</p>
-                <AtomInput
-                    :value="
-                        getLatLng(
-                            props.row.Latitude.toFixed(6),
-                            props.row.Longitude.toFixed(6),
-                        )
-                    "
-                    @changed="updateLatLng(props.row, ...arguments)"
-                >
-                </AtomInput>
+                <div class="lat-lng-column">
+                    <div class="lat-lng-link">
+                        <a
+                            target="_blank"
+                            @click="
+                                toSrp(props.row.Latitude, props.row.Longitude)
+                            "
+                        >
+                            {{
+                                props.row.Latitude.toFixed(6) +
+                                ',' +
+                                props.row.Longitude.toFixed(6)
+                            }}
+                        </a>
+                    </div>
+
+                    <div class="lat-lng-input">
+                        <p>LatLng:</p>
+                        <AtomInput
+                            :value="
+                                getLatLng(
+                                    props.row.Latitude.toFixed(6),
+                                    props.row.Longitude.toFixed(6),
+                                )
+                            "
+                            @changed="updateLatLng(props.row, ...arguments)"
+                        >
+                        </AtomInput>
+                    </div>
+                </div>
             </b-table-column>
 
             <template #empty>
@@ -466,16 +481,30 @@ export default {
     width: 400px;
 }
 
-.status-part {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
+.status-column {
+    .status-part {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .next-call-part {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 
-.next-call-part {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.lat-lng-column {
+    .lat-lng-link {
+        margin-bottom: 20px;
+    }
+
+    .lat-lng-input {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 </style>
