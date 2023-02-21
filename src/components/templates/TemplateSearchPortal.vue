@@ -1,48 +1,54 @@
 <template>
-    <div class="custom-wrap">
-        <div class="so-btn">
-            <AtomButton @click.native="showSummary">
-                {{ summary.btn }} Summary
-            </AtomButton>
-        </div>
-        <br />
-        <div class="so-summary" v-show="summary.show">
-            <p class="so-total">Total Request : {{ summary.totalRequest }}</p>
-            <hr />
-            <div class="so-live-request">
-                <p>
-                    <span>Today : </span>
-                    <span>{{ summary.today }}</span>
-                </p>
-                <p>
-                    <span>yesterday : </span>
-                    <span>{{ summary.yesterday }}</span>
-                </p>
+    <div class="search-portal-wrapper">
+        <div class="summary">
+            <div class="so-btn">
+                <AtomButton @click.native="showSummary">
+                    {{ summary.btn }} Summary
+                </AtomButton>
             </div>
-            <hr />
-            <div class="so-priority">
-                <p>High : {{ summary.high }}</p>
-                <p>Low : {{ summary.low }}</p>
-                <p>Medium : {{ summary.medium }}</p>
-            </div>
+            <br />
+            <div class="so-summary" v-show="summary.show">
+                <p class="so-total">
+                    Total Request : {{ summary.totalRequest }}
+                </p>
+                <hr />
+                <div class="so-live-request">
+                    <p>
+                        <span>Today : </span>
+                        <span>{{ summary.today }}</span>
+                    </p>
+                    <p>
+                        <span>yesterday : </span>
+                        <span>{{ summary.yesterday }}</span>
+                    </p>
+                </div>
+                <hr />
+                <div class="so-priority">
+                    <p>High : {{ summary.high }}</p>
+                    <p>Low : {{ summary.low }}</p>
+                    <p>Medium : {{ summary.medium }}</p>
+                </div>
 
-            <hr />
-            <div class="so-status">
-                <p>
-                    <span>Registered :</span>
-                    <span>{{ summary.status[1] }}</span>
-                </p>
-                <p>
-                    <span>Processing :</span>
-                    <span>{{ summary.status[2] }}</span>
-                </p>
-                <p>
-                    <span>Suggested : </span>
-                    <span>{{ summary.status[3] }}</span>
-                </p>
+                <hr />
+                <div class="so-status">
+                    <p>
+                        <span>Registered :</span>
+                        <span>{{ summary.status[1] }}</span>
+                    </p>
+                    <p>
+                        <span>Processing :</span>
+                        <span>{{ summary.status[2] }}</span>
+                    </p>
+                    <p>
+                        <span>Suggested : </span>
+                        <span>{{ summary.status[3] }}</span>
+                    </p>
+                </div>
             </div>
         </div>
         <b-table
+            :paginated="true"
+            :per-page="5"
             :data="isEmpty ? [] : parkingRequests"
             :bordered="true"
             :hoverable="true"
@@ -51,7 +57,7 @@
             :mobile-cards="hasMobileCards"
             :scrollable="true"
             :sticky-header="true"
-            height="800"
+            height="950"
         >
             <b-table-column
                 field="ID"
@@ -61,7 +67,9 @@
                 v-slot="props"
                 sortable
             >
-                {{ props.row.ID }}
+                <div class="id-column">
+                    {{ props.row.ID }}
+                </div>
             </b-table-column>
 
             <b-table-column
@@ -71,17 +79,28 @@
                 v-slot="props"
                 sortable
             >
-                <div>
-                    <p class="tag">UpdatedAt:</p>
-                    <strong>
-                        {{ new Date(props.row.UpdatedAt).toLocaleDateString() }}
-                    </strong>
-                    <br />
-                    <br />
-                    <p class="tag">CreatedAt:</p>
-                    <strong>
-                        {{ new Date(props.row.CreatedAt).toLocaleDateString() }}
-                    </strong>
+                <div class="date-column">
+                    <div>
+                        <p class="tag">UpdatedAt:</p>
+                        <strong>
+                            {{
+                                new Date(
+                                    props.row.UpdatedAt,
+                                ).toLocaleDateString()
+                            }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <p class="tag">CreatedAt:</p>
+                        <strong>
+                            {{
+                                new Date(
+                                    props.row.CreatedAt,
+                                ).toLocaleDateString()
+                            }}
+                        </strong>
+                    </div>
                 </div>
             </b-table-column>
 
@@ -108,38 +127,41 @@
                 label="Contact Details"
                 v-slot="props"
             >
-                <p>
-                    Name:
-                    <strong>{{ props.row.Name }}</strong>
-                </p>
-                <p>
-                    Mobile:
-                    <strong>{{ props.row.Mobile }}</strong>
-                </p>
-                <p>
-                    Email:
-                    <strong>{{ props.row.EmailID }}</strong>
-                </p>
-                <p>
-                    Landmark :
-                    <strong>{{ props.row.Landmark }}</strong>
-                </p>
-                <p>
-                    City:
-                    {{ props.row.City }}
-                </p>
-                <p>
-                    Duration :
-                    {{ props.row.Duration }}
-                </p>
-                <p>
-                    Car Model:
-                    {{ props.row.CarModel }}
-                </p>
+                <div class="contact-column">
+                    <p>
+                        Name:
+                        <strong>{{ props.row.Name }}</strong>
+                    </p>
+                    <p>
+                        Mobile:
+                        <strong>{{ props.row.Mobile }}</strong>
+                    </p>
+                    <p>
+                        Email:
+                        <strong>{{ props.row.EmailID }}</strong>
+                    </p>
+                    <p>
+                        Landmark :
+                        <strong>{{ props.row.Landmark }}</strong>
+                    </p>
+                    <p>
+                        City:
+                        {{ props.row.City }}
+                    </p>
+                    <p>
+                        Duration :
+                        {{ props.row.Duration }}
+                    </p>
+                    <p>
+                        Car Model:
+                        {{ props.row.CarModel }}
+                    </p>
+                </div>
             </b-table-column>
 
             <b-table-column field="comments" label="Comments" v-slot="props">
                 <AtomTextarea
+                    :size="'is-small'"
                     :value="props.row.Comments"
                     class="comment-width"
                     :maxlength="1000"
@@ -156,6 +178,7 @@
             >
                 <template #searchable="props">
                     <AtomSelectInput
+                        :size="'is-small'"
                         :list="statusList"
                         class="column-width"
                         v-model="props.filters['Status']"
@@ -163,68 +186,88 @@
                     </AtomSelectInput>
                 </template>
                 <template v-slot="props">
-                    <span class="tag is-warning">
-                        {{ statusList[props.row.Status].name }}
-                    </span>
-                    <AtomSelectInput
-                        :list="statusList"
-                        class="column-width"
-                        @changed="onStatusUpdate(props.row, ...arguments)"
-                    >
-                    </AtomSelectInput>
-                    <span
-                        class="tag is-warning"
-                        :class="{
-                            'is-danger': isCallDelayed(props.row.NextCall),
-                        }"
-                    >
-                        <span>
-                            {{
-                                isCallDelayed(props.row.NextCall)
-                                    ? 'Delayed :'
-                                    : 'Upcoming :'
-                            }}
-                        </span>
-                        <b>
-                            {{
-                                new Date(
-                                    props.row.NextCall,
-                                ).toLocaleDateString()
-                            }}
-                        </b>
-                    </span>
-                    <AtomDatePicker
-                        class="column-width"
-                        @changed="onDateUpdate(props.row, ...arguments)"
-                    >
-                    </AtomDatePicker>
+                    <div class="status-column">
+                        <div class="status-part">
+                            <span class="tag is-warning">
+                                {{ statusList[props.row.Status].name }}
+                            </span>
+                            <AtomSelectInput
+                                :size="'is-small'"
+                                :list="statusList"
+                                class="column-width"
+                                @changed="
+                                    onStatusUpdate(props.row, ...arguments)
+                                "
+                            >
+                            </AtomSelectInput>
+                        </div>
+                        <div class="next-call-part">
+                            <span
+                                class="tag is-warning"
+                                :class="{
+                                    'is-danger': isCallDelayed(
+                                        props.row.NextCall,
+                                    ),
+                                }"
+                            >
+                                <span>
+                                    {{
+                                        isCallDelayed(props.row.NextCall)
+                                            ? 'Delayed :'
+                                            : 'Upcoming :'
+                                    }}
+                                </span>
+                                <b>
+                                    {{
+                                        new Date(
+                                            props.row.NextCall,
+                                        ).toLocaleDateString()
+                                    }}
+                                </b>
+                            </span>
+                            <AtomDatePicker
+                                :size="'is-small'"
+                                class="column-width"
+                                @changed="onDateUpdate(props.row, ...arguments)"
+                            >
+                            </AtomDatePicker>
+                        </div>
+                    </div>
                 </template>
             </b-table-column>
 
             <b-table-column field="lat_lng" label="Lat/Lng" v-slot="props">
-                <a
-                    target="_blank"
-                    @click="toSrp(props.row.Latitude, props.row.Longitude)"
-                >
-                    {{
-                        props.row.Latitude.toFixed(6) +
-                        ',' +
-                        props.row.Longitude.toFixed(6)
-                    }}
-                </a>
-                <br />
-                <br />
-                <p>LatLng:</p>
-                <AtomInput
-                    :value="
-                        getLatLng(
-                            props.row.Latitude.toFixed(6),
-                            props.row.Longitude.toFixed(6),
-                        )
-                    "
-                    @changed="updateLatLng(props.row, ...arguments)"
-                >
-                </AtomInput>
+                <div class="lat-lng-column">
+                    <div class="lat-lng-link">
+                        <a
+                            target="_blank"
+                            @click="
+                                toSrp(props.row.Latitude, props.row.Longitude)
+                            "
+                        >
+                            {{
+                                props.row.Latitude.toFixed(6) +
+                                ',' +
+                                props.row.Longitude.toFixed(6)
+                            }}
+                        </a>
+                    </div>
+
+                    <div class="lat-lng-input">
+                        <p>LatLng:</p>
+                        <AtomInput
+                            :size="'is-small'"
+                            :value="
+                                getLatLng(
+                                    props.row.Latitude.toFixed(6),
+                                    props.row.Longitude.toFixed(6),
+                                )
+                            "
+                            @changed="updateLatLng(props.row, ...arguments)"
+                        >
+                        </AtomInput>
+                    </div>
+                </div>
             </b-table-column>
 
             <template #empty>
@@ -409,56 +452,111 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.so-btn {
-    text-align: right;
-}
-.so-summary {
-    border: 1px solid black;
-    padding: 2rem;
-    max-width: 500px;
-    background-color: #f5f5dc;
-    position: absolute;
-    top: 120px;
-    right: 20px;
-    z-index: 9999;
-    // display: none;
+.search-portal-wrapper {
+    padding: 1rem;
 
-    .so-total {
-        font-size: 20px;
-        font-weight: var(--semi-bold-font);
-        text-align: center;
-    }
-
-    .so-live-request {
-        display: flex;
-        gap: 6rem;
-    }
-
-    .so-priority {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .so-status {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        column-gap: 2.5rem;
-
-        p {
-            display: flex;
-            justify-content: space-between;
+    .column-width {
+        width: 200px;
+        @media only screen and (max-width: 1024px) {
+            width: 150px;
         }
     }
-}
-.custom-wrap {
-    padding: 1rem;
-}
 
-.column-width {
-    width: 200px;
-}
+    .comment-width {
+        width: 350px;
+        @media only screen and (max-width: 1024px) {
+            width: 200px;
+        }
+    }
 
-.comment-width {
-    width: 400px;
+    .summary {
+        .so-btn {
+            text-align: right;
+        }
+        .so-summary {
+            border: 1px solid black;
+            padding: 2rem;
+            max-width: 500px;
+            background-color: #f5f5dc;
+            position: absolute;
+            top: 120px;
+            right: 20px;
+            z-index: 9999;
+            // display: none;
+
+            .so-total {
+                font-size: 20px;
+                font-weight: var(--semi-bold-font);
+                text-align: center;
+            }
+
+            .so-live-request {
+                display: flex;
+                gap: 6rem;
+            }
+
+            .so-priority {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .so-status {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                column-gap: 2.5rem;
+
+                p {
+                    display: flex;
+                    justify-content: space-between;
+                }
+            }
+        }
+    }
+    .id-column {
+        font-size: 14px;
+    }
+
+    .date-column {
+        font-size: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        div {
+            display: flex;
+        }
+    }
+    .contact-column {
+        font-size: 14px;
+    }
+
+    .status-column {
+        font-size: 14px;
+        .status-part {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .next-call-part {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+
+    .lat-lng-column {
+        font-size: 14px;
+        .lat-lng-link {
+            margin-bottom: 20px;
+        }
+
+        .lat-lng-input {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
 }
 </style>
