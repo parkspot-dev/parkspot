@@ -66,6 +66,7 @@
                 numeric
                 v-slot="props"
                 sortable
+                sticky="true" 
             >
                 <div class="id-column">
                     {{ props.row.ID }}
@@ -451,7 +452,16 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
+
+@media only screen and (max-width: 1024px) {
+           
+    .is-sticky {
+        background: #cfcfcd !important;
+        color: rgb(0, 0, 0) !important;
+    }
+}
+
 .search-portal-wrapper {
     padding: 1rem;
 
