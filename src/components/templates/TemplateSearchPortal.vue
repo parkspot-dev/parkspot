@@ -48,7 +48,7 @@
         </div>
         <b-table
             :paginated="true"
-            :per-page="6"
+            :per-page="30"
             :data="isEmpty ? [] : parkingRequests"
             :bordered="true"
             :hoverable="true"
@@ -57,7 +57,7 @@
             :mobile-cards="hasMobileCards"
             :narrowed="true"
             :sticky-header="true"
-            height="1050"
+            height="5000"
         >
             <b-table-column
                 field="ID"
@@ -148,19 +148,8 @@
                             <strong>{{ props.row.Landmark }}</strong>
                         </p>
                     </div>
-                    <div class="more-icon">
-                        <AtomIcon
-                            :icon="'dots-horizontal-circle-outline'"
-                            @click.native="toggleSecondary(props.row.ID)"
-                        ></AtomIcon>
-                    </div>
-                    <div
-                        class="secondary"
-                        v-show="
-                            showSecondaryDetails.ID === props.row.ID &&
-                            showSecondaryDetails.isShow
-                        "
-                    >
+
+                    <div class="secondary">
                         <p>
                             City:
                             {{ props.row.City }}
@@ -183,6 +172,7 @@
                     :value="props.row.Comments"
                     class="comment-width"
                     :maxlength="1000"
+                    :rowNo="8"
                     @changed="onCommentUpdate(props.row, ...arguments)"
                 ></AtomTextarea>
             </b-table-column>
@@ -301,7 +291,6 @@ import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import AtomInput from '../atoms/AtomInput.vue';
 import AtomButton from '../atoms/AtomButton.vue';
-import AtomIcon from '../atoms/AtomIcon.vue';
 import { getCoordinate } from '../../includes/LatLng';
 
 export default {
@@ -312,7 +301,6 @@ export default {
         AtomDatePicker,
         AtomInput,
         AtomButton,
-        AtomIcon,
     },
     props: {
         parkingRequests: {
@@ -470,11 +458,6 @@ export default {
             } else {
                 this.summary.btn = 'Show';
             }
-        },
-        toggleSecondary(toggleID) {
-            this.showSecondaryDetails['ID'] = toggleID;
-            this.showSecondaryDetails['isShow'] =
-                !this.showSecondaryDetails['isShow'];
         },
     },
 };
