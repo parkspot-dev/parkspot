@@ -42,6 +42,14 @@
                                 KYC Verification
                             </a>
                         </li>
+                        <li>
+                            <a
+                                @click="updateActiveForm(4)"
+                                :class="isActive === 4 ? 'link-active' : ''"
+                            >
+                                Map Location
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <div class="primary">
@@ -61,6 +69,7 @@ import BodyWrapper from '../extras/BodyWrapper.vue';
 import OrganismUserGeneralInfo from '../organisms/OrganismUserGeneralInfo.vue';
 import OrganismParkingFacility from '../organisms/OrganismParkingFacility.vue';
 import OrganismKycForm from '../organisms/OrganismKycForm.vue';
+import OrganismMapLocation from '../organisms/OrganismMapLocation.vue';
 import LoaderModal from '../extras/LoaderModal.vue';
 import { mapState } from 'vuex';
 export default {
@@ -71,6 +80,7 @@ export default {
         OrganismParkingFacility,
         OrganismKycForm,
         LoaderModal,
+        OrganismMapLocation,
     },
     data() {
         return {
@@ -97,6 +107,9 @@ export default {
                     break;
                 case 3:
                     this.activeForm = 'OrganismKycForm';
+                    break;
+                case 4:
+                    this.activeForm = 'OrganismMapLocation';
                     break;
             }
         },
