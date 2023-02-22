@@ -48,16 +48,16 @@
         </div>
         <b-table
             :paginated="true"
-            :per-page="5"
+            :per-page="6"
             :data="isEmpty ? [] : parkingRequests"
             :bordered="true"
             :hoverable="true"
             :loading="isLoading"
             :focusable="true"
             :mobile-cards="hasMobileCards"
-            :scrollable="true"
+            :narrowed="true"
             :sticky-header="true"
-            height="950"
+            height="1050"
         >
             <b-table-column
                 field="ID"
@@ -66,7 +66,8 @@
                 numeric
                 v-slot="props"
                 sortable
-                sticky="true" 
+                headerClass="id-column-parent"
+                cellClass="id-column-parent"
             >
                 <div class="id-column">
                     {{ props.row.ID }}
@@ -129,34 +130,50 @@
                 v-slot="props"
             >
                 <div class="contact-column">
-                    <p>
-                        Name:
-                        <strong>{{ props.row.Name }}</strong>
-                    </p>
-                    <p>
-                        Mobile:
-                        <strong>{{ props.row.Mobile }}</strong>
-                    </p>
-                    <p>
-                        Email:
-                        <strong>{{ props.row.EmailID }}</strong>
-                    </p>
-                    <p>
-                        Landmark :
-                        <strong>{{ props.row.Landmark }}</strong>
-                    </p>
-                    <p>
-                        City:
-                        {{ props.row.City }}
-                    </p>
-                    <p>
-                        Duration :
-                        {{ props.row.Duration }}
-                    </p>
-                    <p>
-                        Car Model:
-                        {{ props.row.CarModel }}
-                    </p>
+                    <div class="primary">
+                        <p>
+                            Name:
+                            <strong>{{ props.row.Name }}</strong>
+                        </p>
+                        <p>
+                            Mobile:
+                            <strong>{{ props.row.Mobile }}</strong>
+                        </p>
+                        <p>
+                            Email:
+                            <strong>{{ props.row.EmailID }}</strong>
+                        </p>
+                        <p>
+                            Landmark :
+                            <strong>{{ props.row.Landmark }}</strong>
+                        </p>
+                    </div>
+                    <div class="more-icon">
+                        <AtomIcon
+                            :icon="'dots-horizontal-circle-outline'"
+                            @click.native="toggleSecondary(props.row.ID)"
+                        ></AtomIcon>
+                    </div>
+                    <div
+                        class="secondary"
+                        v-show="
+                            showSecondaryDetails.ID === props.row.ID &&
+                            showSecondaryDetails.isShow
+                        "
+                    >
+                        <p>
+                            City:
+                            {{ props.row.City }}
+                        </p>
+                        <p>
+                            Duration :
+                            {{ props.row.Duration }}
+                        </p>
+                        <p>
+                            Car Model:
+                            {{ props.row.CarModel }}
+                        </p>
+                    </div>
                 </div>
             </b-table-column>
 
@@ -284,6 +301,7 @@ import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import AtomInput from '../atoms/AtomInput.vue';
 import AtomButton from '../atoms/AtomButton.vue';
+import AtomIcon from '../atoms/AtomIcon.vue';
 import { getCoordinate } from '../../includes/LatLng';
 
 export default {
@@ -294,6 +312,7 @@ export default {
         AtomDatePicker,
         AtomInput,
         AtomButton,
+        AtomIcon,
     },
     props: {
         parkingRequests: {
@@ -343,6 +362,10 @@ export default {
                 status: [0, 0, 0, 0, 0, 0],
                 today: 0,
                 yesterday: 0,
+            },
+            showSecondaryDetails: {
+                ID: 0,
+                isShow: false,
             },
         };
     },
@@ -448,22 +471,29 @@ export default {
                 this.summary.btn = 'Show';
             }
         },
+        toggleSecondary(toggleID) {
+            this.showSecondaryDetails['ID'] = toggleID;
+            this.showSecondaryDetails['isShow'] =
+                !this.showSecondaryDetails['isShow'];
+        },
     },
 };
 </script>
 
-<style lang="scss" >
-
+<style lang="scss">
 @media only screen and (max-width: 1024px) {
-           
-    .is-sticky {
+    .id-column-parent {
         background: #cfcfcd !important;
         color: rgb(0, 0, 0) !important;
     }
 }
 
 .search-portal-wrapper {
-    padding: 1rem;
+    padding: 1rem 4rem;
+
+    @media only screen and (max-width: 1024px) {
+        padding: 1rem;
+    }
 
     .column-width {
         width: 200px;
@@ -486,7 +516,7 @@ export default {
         .so-summary {
             border: 1px solid black;
             padding: 2rem;
-            max-width: 500px;
+            max-width: 450px;
             background-color: #f5f5dc;
             position: absolute;
             top: 120px;
@@ -495,17 +525,19 @@ export default {
             // display: none;
 
             .so-total {
-                font-size: 20px;
+                font-size: 16px;
                 font-weight: var(--semi-bold-font);
                 text-align: center;
             }
 
             .so-live-request {
+                font-size: 12px;
                 display: flex;
                 gap: 6rem;
             }
 
             .so-priority {
+                font-size: 12px;
                 display: flex;
                 justify-content: space-between;
             }
@@ -516,6 +548,7 @@ export default {
                 column-gap: 2.5rem;
 
                 p {
+                    font-size: 12px;
                     display: flex;
                     justify-content: space-between;
                 }
@@ -538,6 +571,16 @@ export default {
     }
     .contact-column {
         font-size: 14px;
+        position: relative;
+        .more-icon {
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            right: 0;
+            @media only screen and (max-width: 1024px) {
+                position: unset;
+            }
+        }
     }
 
     .status-column {
