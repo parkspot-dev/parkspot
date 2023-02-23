@@ -464,6 +464,8 @@ export default {
 </script>
 
 <style lang="scss">
+$portal-font-size: 14px;
+
 @media only screen and (max-width: 1024px) {
     .id-column-parent {
         background: #cfcfcd !important;
@@ -498,12 +500,12 @@ export default {
         }
         .so-summary {
             border: 1px solid black;
-            padding: 2rem;
-            max-width: 450px;
+            padding: 1.25rem;
+            max-width: 430px;
             background-color: #f5f5dc;
             position: absolute;
             top: 120px;
-            right: 20px;
+            right: 12px;
             z-index: 9999;
             // display: none;
 
@@ -514,13 +516,13 @@ export default {
             }
 
             .so-live-request {
-                font-size: 12px;
+                font-size: $portal-font-size;
                 display: flex;
                 gap: 6rem;
             }
 
             .so-priority {
-                font-size: 12px;
+                font-size: $portal-font-size;
                 display: flex;
                 justify-content: space-between;
             }
@@ -531,7 +533,7 @@ export default {
                 column-gap: 2.5rem;
 
                 p {
-                    font-size: 12px;
+                    font-size: $portal-font-size;
                     display: flex;
                     justify-content: space-between;
                 }
@@ -539,11 +541,11 @@ export default {
         }
     }
     .id-column {
-        font-size: 14px;
+        font-size: $portal-font-size;
     }
 
     .date-column {
-        font-size: 14px;
+        font-size: $portal-font-size;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -553,7 +555,7 @@ export default {
         }
     }
     .contact-column {
-        font-size: 14px;
+        font-size: $portal-font-size;
         position: relative;
         .more-icon {
             cursor: pointer;
@@ -567,7 +569,7 @@ export default {
     }
 
     .status-column {
-        font-size: 14px;
+        font-size: $portal-font-size;
         .status-part {
             display: flex;
             flex-direction: column;
@@ -583,7 +585,7 @@ export default {
     }
 
     .lat-lng-column {
-        font-size: 14px;
+        font-size: $portal-font-size;
         .lat-lng-link {
             margin-bottom: 20px;
         }
