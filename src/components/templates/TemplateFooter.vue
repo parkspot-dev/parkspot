@@ -236,7 +236,7 @@
                             © 2021 NeoSpot Pvt Ltd.- ALL RIGHTS RESERVED
                         </AtomParagraph>
                         <AtomParagraph>
-                            <a
+                            <a class="tnc"
                                 href="https://www.parkspot.in/terms-and-conditions"
                                 target="_blank"
                             >
@@ -321,6 +321,9 @@ export default {
 
 .secondary-footer {
     background-color: #162029;
+}
+.tnc {
+    color:#888d93;
 }
 
 .footer-heading {
