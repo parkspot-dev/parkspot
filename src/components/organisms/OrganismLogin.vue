@@ -112,7 +112,7 @@ export default {
         line-height: normal;
         min-height: 40px;
         padding: 8px 16px;
-        margin-bottom: 50px;
+        margin-bottom: 48px;
         width: 100%;
         border: none;
         cursor: pointer;
