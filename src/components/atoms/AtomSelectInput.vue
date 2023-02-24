@@ -54,7 +54,7 @@ export default {
         },
         size: {
             type: String,
-            default: '',
+            default: null,
         },
     },
     emits: ['input', 'changed'],
