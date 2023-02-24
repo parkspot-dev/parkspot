@@ -102,8 +102,8 @@ export default {
 <style lang="scss" scoped>
 .parking-facility-header {
     background-color: var(--secondary-color);
-    padding: 20px 30px;
-    margin-bottom: 30px;
+    padding: 20px 32px;
+    margin-bottom: 32px;
 
     h1 {
         color: black;
@@ -118,6 +118,6 @@ export default {
 }
 
 .parking-facility-form {
-    padding: 0 30px;
+    padding: 0 32px;
 }
 </style>
