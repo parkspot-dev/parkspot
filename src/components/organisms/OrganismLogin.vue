@@ -1,6 +1,6 @@
 <template>
     <div>
-        <MoleculeModal :modal="modal" @cancel="onClose">
+        <MoleculeModal :is-show="isShow" @cancel="onClose">
             <div class="login-card">
                 <div class="logo-wrapper">
                     <img
@@ -43,7 +43,7 @@ export default {
         MoleculeModal,
     },
     props: {
-        modal: Boolean,
+        isShow: Boolean,
     },
     data() {
         return {};
