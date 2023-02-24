@@ -8,6 +8,20 @@ export const FORM = {
     CONTACT_NO: 'Contact No.',
 };
 
+export const PARKING_FACILITY = {
+    BUILDING_ADDR: 'Building Address',
+    TOTAL_PARKING: 'Total Parking',
+    FACILITIES: 'Facilities',
+    FACILITIES_DATA: [
+        'Covered',
+        'Gated',
+        'CCTV Camera',
+        'Security Guard',
+        '24 Hour Access',
+    ],
+    LANDMARK: 'Landmark',
+};
+
 export const KYC = {
     OWNER_RADIO_DATA: ['Yes', 'No'],
     DOCUMENT_DATA: [
@@ -19,6 +33,7 @@ export const KYC = {
     DOCUMENT_INFO_MSG:
         'Note: Document must contain the address proof of the spot registered.',
 };
+
 export const ADD_INFO = {
     AMENITIES: 'Amenities',
     SPOTS: 'Spots',
