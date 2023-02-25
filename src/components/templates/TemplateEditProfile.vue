@@ -53,11 +53,7 @@
                     </ul>
                 </div>
                 <div class="primary">
-                    <component
-                        :is="activeForm"
-                        @userType="userType"
-                        :isVO="isVO"
-                    ></component>
+                    <component :is="activeForm"></component>
                 </div>
             </div>
         </div>
@@ -86,7 +82,6 @@ export default {
         return {
             activeForm: 'OrganismUserGeneralInfo',
             isActive: 1,
-            isVO: true,
         };
     },
     computed: {
@@ -112,9 +107,6 @@ export default {
                     this.activeForm = 'OrganismMapLocation';
                     break;
             }
-        },
-        userType(isVO) {
-            this.isVO = isVO;
         },
     },
 };

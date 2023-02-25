@@ -11,30 +11,14 @@ import {
 const state = {
     user: null,
     userProfile: {
-        UserName: 'sujits32',
-        CreatedAt: '2023-02-07T18:38:56.6952883Z',
         FullName: 'Sujeet kumar',
-        City: 'Bokaro',
-        VehicleNumber: '',
         EmailID: 'sujits32@gmail.com',
         Mobile: '6201967433',
-        AlternateMobile: 'N/A',
-        RegLatitude: 0,
-        RegLongitude: 0,
-        Type: 0,
-        KYCStatus: 0,
-        IDProofURL: '',
-        OwnershipProofURL: '',
-        IdentityDocument: '',
-        OwnershipDocument: '',
-        OriginalOwnerName: '',
-        OriginalOwnerMobile: '',
-        Relationship: '',
-        Sites: '',
-        Bookings: '',
+        Type: 'VO',
     },
     isAuthReady: false,
     loginModal: false,
+    userType: 'VO',
     contactForm: {},
     kycForm: {},
     additionalInfo: {},
@@ -235,6 +219,8 @@ const actions = {
             throw new Error(err);
         }
     },
+
+    async updateUserInfo({ commit, state }) {},
 
     async getUserProfile({ commit, state }) {
         try {
