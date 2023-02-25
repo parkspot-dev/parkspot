@@ -5,7 +5,7 @@
             <h2>Please fill all the fields</h2>
         </div>
         <div class="parking-facility-form">
-            <div class="parking-facility-form-VO" v-if="isVO">
+            <div class="parking-facility-form-VO" v-if="userType === 'VO'">
                 <div class="py-4">
                     <MoleculeSelectInput
                         :fieldName="PARKING_FACILITY.VO.PARKING_TYPE"
@@ -95,6 +95,7 @@ import MoleculeUpload from '../molecules/MoleculeUpload.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
 import { PARKING_FACILITY } from '../../constant/constant';
+import { mapState } from 'vuex';
 export default {
     name: 'OrganismParkingFacility',
     components: {
@@ -127,6 +128,11 @@ export default {
                 parkingType: '',
             },
         };
+    },
+    computed: {
+        ...mapState('user', {
+            userType: (state) => state.userType,
+        }),
     },
     methods: {
         updateParkingSpotImg(data) {

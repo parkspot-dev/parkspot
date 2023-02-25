@@ -50,7 +50,7 @@ import MoleculeRadioButton from '../molecules/MoleculeRadioButton.vue';
 import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
 import MoleculeUpload from '../molecules/MoleculeUpload.vue';
 import AtomButton from '../atoms/AtomButton.vue';
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 import { KYC } from '../../constant/constant';
 export default {
     name: 'OrganismKycForm',
@@ -60,12 +60,6 @@ export default {
         MoleculeSelectInput,
         MoleculeUpload,
         AtomButton,
-    },
-    props: {
-        isVO: {
-            type: Boolean,
-            required: true,
-        },
     },
     data() {
         return {
@@ -83,8 +77,11 @@ export default {
         };
     },
     computed: {
+        ...mapState('user', {
+            userType: (state) => state.userType,
+        }),
         documentList() {
-            if (this.isVO) {
+            if (this.userType === 'VO') {
                 return this.KYC.DOCUMENT_DATA_VO;
             } else {
                 return this.KYC.DOCUMENT_DATA_SO;

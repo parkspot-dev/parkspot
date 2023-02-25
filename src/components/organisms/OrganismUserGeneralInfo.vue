@@ -39,7 +39,7 @@
                         :rules="validation.userType"
                         :values="userType"
                         :currentSelectedRadio="userType[1]"
-                        @data="updateUserType"
+                        @data="setUserType"
                     >
                         What is you are looking for?
                     </MoleculeRadioButton>
@@ -58,7 +58,7 @@ import MoleculeRadioButton from '../molecules/MoleculeRadioButton.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import { FORM } from '../../constant/constant';
 import { ValidationObserver } from 'vee-validate';
-import { mapState } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
     name: 'OrganismUserGeneralInfo',
@@ -94,18 +94,20 @@ export default {
         }),
     },
     methods: {
-        updateUserType(userType) {
-            console.log(userType);
-            const isVO = userType.search('vehicle') === -1 ? false : true;
-            this.$emit('userType', isVO);
+        ...mapMutations('user', {
+            updateUserType: 'update-user-type',
+        }),
+        setUserType(userType) {
+            userType.search('vehicle') === -1
+                ? this.updateUserType('SO')
+                : this.updateUserType('VO');
         },
-
         saveProfile() {
             this.$refs.observer
                 .validate()
                 .then((sucess) => {
                     if (sucess) {
-                        this.submit();
+                        // todo: write api call to save the details
                     }
                 })
                 .catch((er) => {
