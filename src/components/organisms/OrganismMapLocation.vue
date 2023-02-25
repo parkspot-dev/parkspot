@@ -6,17 +6,14 @@
         </div>
         <GmapMap
             ref="mapRef"
-            :center="{ lat: 51.093048, lng: 6.84212 }"
+            :center="{ lat: 12.92442, lng: 77.580643 }"
             :zoom="10"
             style="width: 600px; height: 30rem"
+            @click="onMapClick"
         >
             <GmapMarker
-                :key="index"
-                v-for="(m, index) in markers"
-                :position="m.position"
-                :clickable="true"
-                :draggable="true"
-                @click="center = m.position"
+                ref="myMarker"
+                :position="google && new google.maps.LatLng(markerPostion)"
             />
         </GmapMap>
         <AtomButton class="is-pulled-right" @click.native="saveProfile">
@@ -27,6 +24,7 @@
 
 <script>
 import AtomButton from '../atoms/AtomButton.vue';
+import { gmapApi } from 'vue2-google-maps';
 
 export default {
     name: 'OrganismMapLocation',
@@ -35,33 +33,11 @@ export default {
     },
     data() {
         return {
-            markers: [
-                {
-                    position: {
-                        lat: 51.093048,
-                        lng: 6.84212,
-                    },
-                },
-                {
-                    position: {
-                        lat: 51.198429,
-                        lng: 6.69529,
-                    },
-                },
-                {
-                    position: {
-                        lat: 51.165218,
-                        lng: 7.067116,
-                    },
-                },
-                {
-                    position: {
-                        lat: 51.09256,
-                        lng: 6.84074,
-                    },
-                },
-            ],
+            markerPostion: { lat: 12.92442, lng: 77.580643 },
         };
+    },
+    computed: {
+        google: gmapApi,
     },
     mounted() {
         // At this point, the child GmapMap has been mounted, but
@@ -69,8 +45,13 @@ export default {
         // Therefore we need to write mapRef.$mapPromise.then(() => ...)
 
         this.$refs.mapRef.$mapPromise.then((map) => {
-            map.panTo({ lat: 1.38, lng: 103.8 });
+            map.panTo({ lat: 12.92442, lng: 77.580643 });
         });
+    },
+    methods: {
+        onMapClick(mapsMouseEvent) {
+            this.markerPostion = mapsMouseEvent.latLng.toJSON();
+        },
     },
 };
 </script>
