@@ -57,7 +57,7 @@ import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
 import MoleculeRadioButton from '../molecules/MoleculeRadioButton.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import { ValidationObserver } from 'vee-validate';
-import { mapMutations, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState } from 'vuex';
 
 export default {
     name: 'OrganismUserGeneralInfo',
@@ -78,7 +78,7 @@ export default {
                 FullName: 'required',
                 EmailID: 'required|email',
                 Mobile: 'required|integer|phone',
-                userType: 'required',
+                userType: '',
             },
         };
     },
@@ -103,6 +103,9 @@ export default {
         ...mapMutations('user', {
             updateUserProfile: 'update-user-profile',
         }),
+        ...mapActions('user', {
+            userInfo: 'userInfo',
+        }),
         setUserType(userType) {
             if (userType.search('vehicle') === -1) {
                 this.updateUserProfile({ ...this.userProfile, Type: 'SO' });
@@ -117,7 +120,7 @@ export default {
                 .validate()
                 .then((sucess) => {
                     if (sucess) {
-                        // todo: write api call to save the details
+                        this.userInfo();
                     }
                 })
                 .catch((er) => {

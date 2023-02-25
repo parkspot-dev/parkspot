@@ -11,9 +11,9 @@ import {
 const state = {
     user: null,
     userProfile: {
-        FullName: 'Sujeet kumar',
-        EmailID: 'sujits32@gmail.com',
-        Mobile: '6201967433',
+        FullName: '',
+        EmailID: '',
+        Mobile: '',
         Type: 'VO',
     },
     isAuthReady: false,
@@ -219,7 +219,13 @@ const actions = {
         }
     },
 
-    async updateUserInfo({ commit, state }) {},
+    async userInfo({ commit, state }) {
+        try {
+            await mayaClient.post('/auth/update-fields', state.userProfile);
+        } catch (err) {
+            throw new Error(err);
+        }
+    },
 
     async getUserProfile({ commit, state }) {
         try {
