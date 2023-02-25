@@ -6,9 +6,9 @@
         </div>
         <GmapMap
             ref="mapRef"
-            :center="{ lat: 12.92442, lng: 77.580643 }"
+            :center="center"
             :zoom="10"
-            style="width: 600px; height: 30rem"
+            style="width: 620px; height: 30rem"
             @click="onMapClick"
         >
             <GmapMarker
@@ -16,7 +16,10 @@
                 :position="google && new google.maps.LatLng(markerPostion)"
             />
         </GmapMap>
-        <AtomButton class="is-pulled-right" @click.native="saveProfile">
+        <AtomButton
+            :class="['is-pulled-right', 'save-btn']"
+            @click.native="saveProfile"
+        >
             Save Profile
         </AtomButton>
     </div>
@@ -25,6 +28,7 @@
 <script>
 import AtomButton from '../atoms/AtomButton.vue';
 import { gmapApi } from 'vue2-google-maps';
+import { getUserLocation } from '../../includes/UserLocation';
 
 export default {
     name: 'OrganismMapLocation',
@@ -34,18 +38,23 @@ export default {
     data() {
         return {
             markerPostion: { lat: 12.92442, lng: 77.580643 },
+            center: { lat: 12.92442, lng: 77.580643 },
         };
     },
     computed: {
         google: gmapApi,
     },
     mounted() {
+        getUserLocation((userLocation) => {
+            this.center = userLocation;
+            this.markerPostion = userLocation;
+        });
         // At this point, the child GmapMap has been mounted, but
         // its map has not been initialized.
         // Therefore we need to write mapRef.$mapPromise.then(() => ...)
 
         this.$refs.mapRef.$mapPromise.then((map) => {
-            map.panTo({ lat: 12.92442, lng: 77.580643 });
+            map.panTo(this.center);
         });
     },
     methods: {
@@ -72,5 +81,9 @@ export default {
         color: #e8faff;
         font-size: 14px;
     }
+}
+
+.save-btn {
+    margin-top: 32px;
 }
 </style>
