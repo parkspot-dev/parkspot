@@ -18,7 +18,6 @@ const state = {
     },
     isAuthReady: false,
     loginModal: false,
-    userType: 'VO',
     contactForm: {},
     kycForm: {},
     additionalInfo: {},

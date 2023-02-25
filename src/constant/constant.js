@@ -1,3 +1,4 @@
+// Todo: Remove Form constants not needed
 export const FORM = {
     USERNAME: 'Username',
     NAME: 'full-name',

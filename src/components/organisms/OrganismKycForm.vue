@@ -78,7 +78,7 @@ export default {
     },
     computed: {
         ...mapState('user', {
-            userType: (state) => state.userType,
+            userType: (state) => state.userProfile.Type,
         }),
         documentList() {
             if (this.userType === 'VO') {

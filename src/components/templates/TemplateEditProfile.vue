@@ -53,7 +53,9 @@
                     </ul>
                 </div>
                 <div class="primary">
-                    <component :is="activeForm"></component>
+                    <keep-alive>
+                        <component :is="activeForm"></component>
+                    </keep-alive>
                 </div>
             </div>
         </div>

@@ -105,12 +105,6 @@ export default {
         AtomButton,
         MoleculeSelectInput,
     },
-    props: {
-        isVO: {
-            type: Boolean,
-            required: true,
-        },
-    },
     data() {
         return {
             PARKING_FACILITY,
@@ -131,7 +125,7 @@ export default {
     },
     computed: {
         ...mapState('user', {
-            userType: (state) => state.userType,
+            userType: (state) => state.userProfile.Type,
         }),
     },
     methods: {
