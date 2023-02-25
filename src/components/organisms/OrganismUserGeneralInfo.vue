@@ -8,37 +8,37 @@
             <ValidationObserver ref="observer" v-slot="{}">
                 <div class="py-4">
                     <MoleculeNameInput
-                        :fieldName="FORM.FULLNAME"
-                        :placeholder="FORM.FULLNAME"
+                        :fieldName="'Full Name'"
+                        :placeholder="'Full Name'"
                         :rules="validation.FullName"
                         v-model="userProfile.FullName"
-                        :label="FORM.FULLNAME"
+                        :label="'Full Name'"
                     ></MoleculeNameInput>
                 </div>
                 <div class="py-4">
                     <MoleculeNameInput
-                        :fieldName="FORM.EMAIL"
-                        :placeholder="FORM.EMAIL"
+                        :fieldName="'Email'"
+                        :placeholder="'Email'"
                         :rules="validation.EmailID"
                         v-model="userProfile.EmailID"
-                        :label="FORM.EMAIL"
+                        :label="'Email'"
                     ></MoleculeNameInput>
                 </div>
                 <div class="py-4">
                     <MoleculeNameInput
-                        :fieldName="FORM.CONTACT_NO"
-                        :placeholder="FORM.CONTACT_NO"
+                        :fieldName="'Contact No.'"
+                        :placeholder="'Contact No.'"
                         :rules="validation.Mobile"
                         v-model="userProfile.Mobile"
-                        :label="FORM.CONTACT_NO"
+                        :label="'Contact No.'"
                     ></MoleculeNameInput>
                 </div>
                 <div class="py-4">
                     <MoleculeRadioButton
                         :fieldName="'radio'"
                         :rules="validation.userType"
-                        :values="userType"
-                        :currentSelectedRadio="userType[1]"
+                        :values="userTypeData"
+                        :currentSelectedRadio="userType"
                         @data="setUserType"
                     >
                         What is you are looking for?
@@ -56,7 +56,6 @@
 import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
 import MoleculeRadioButton from '../molecules/MoleculeRadioButton.vue';
 import AtomButton from '../atoms/AtomButton.vue';
-import { FORM } from '../../constant/constant';
 import { ValidationObserver } from 'vee-validate';
 import { mapMutations, mapState } from 'vuex';
 
@@ -70,16 +69,11 @@ export default {
     },
     data() {
         return {
-            FORM,
-            userType: [
+            userTypeData: [
                 'I own a parking spot, want to rent it',
                 'I am a vehicle owner, looking for parking',
             ],
-            model: {
-                FullName: '',
-                EmailID: '',
-                Mobile: '',
-            },
+            userType: 'VO',
             validation: {
                 FullName: 'required',
                 EmailID: 'required|email',
@@ -93,14 +87,30 @@ export default {
             userProfile: (state) => state.userProfile,
         }),
     },
+    watch: {
+        userType(type) {
+            this.setUserType(type);
+        },
+    },
+    mounted() {
+        if (this.userProfile === 'SO') {
+            this.userType = this.userTypeData[0];
+        } else {
+            this.userType = this.userTypeData[1];
+        }
+    },
     methods: {
         ...mapMutations('user', {
-            updateUserType: 'update-user-type',
+            updateUserProfile: 'update-user-profile',
         }),
         setUserType(userType) {
-            userType.search('vehicle') === -1
-                ? this.updateUserType('SO')
-                : this.updateUserType('VO');
+            if (userType.search('vehicle') === -1) {
+                this.updateUserProfile({ ...this.userProfile, Type: 'SO' });
+                this.userType = this.userTypeData[0];
+            } else {
+                this.updateUserProfile({ ...this.userProfile, Type: 'VO' });
+                this.userType = this.userTypeData[1];
+            }
         },
         saveProfile() {
             this.$refs.observer
