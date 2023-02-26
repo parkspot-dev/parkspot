@@ -175,7 +175,7 @@
                     class="comment-width"
                     :maxlength="1000"
                     :rowNo="8"
-                    @changed="onCommentUpdate(props.row, arguments)"
+                    @changed="onCommentUpdate(props.row, ...arguments)"
                 ></AtomTextarea>
             </b-table-column>
 
@@ -426,27 +426,12 @@ export default {
         },
 
         onCommentUpdate(spotData, comments) {
-            const oldCommentArr = spotData['Comments'].split('\n');
-            const newCommentArr = comments[0].split('\n');
-            const temp = new Date().toLocaleDateString('en-GB');
-
-            if (spotData['Comments'] !== comments[0]) {
-                const currentComment = [];
-                let i = 0;
-                while (i < oldCommentArr.length && i < newCommentArr.length) {
-                    if (oldCommentArr[i] !== newCommentArr[i]) {
-                        currentComment.push(newCommentArr[i] + '\n');
-                    } else {
-                        currentComment.push(oldCommentArr[i] + '\n');
-                    }
-                    i++;
-                }
-                currentComment.push(`[${temp}] `);
-                while (i < newCommentArr.length) {
-                    currentComment.push(newCommentArr[i] + '\n');
-                    i++;
-                }
-                spotData['Comments'] = currentComment.join('');
+            const date = new Date();
+            const dd = date.getDate();
+            let mm = date.getMonth() + 1;
+            if (mm < 10) mm = '0' + mm;
+            if (spotData['Comments'] !== comments) {
+                spotData['Comments'] = `${comments} [${dd}/${mm}]`;
                 this.$emit('updateRequest', spotData);
             }
         },
