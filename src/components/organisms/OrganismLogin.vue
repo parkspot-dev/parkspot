@@ -1,6 +1,6 @@
 <template>
     <div>
-        <MoleculeModal :modal="modal" @cancel="onClose">
+        <MoleculeModal :is-show="isShow" @cancel="onClose">
             <div class="login-card">
                 <div class="logo-wrapper">
                     <img
@@ -25,7 +25,10 @@
                 <div class="login-footer">
                     <p>
                         By continuing, you are indicating that you accept our
-                        <a href="">Terms of Service</a>.
+                        <a href="https://www.parkspot.in/terms-and-conditions">
+                            Terms of Service
+                        </a>
+                        .
                     </p>
                 </div>
             </div>
@@ -43,7 +46,7 @@ export default {
         MoleculeModal,
     },
     props: {
-        modal: Boolean,
+        isShow: Boolean,
     },
     data() {
         return {};
@@ -112,7 +115,7 @@ export default {
         line-height: normal;
         min-height: 40px;
         padding: 8px 16px;
-        margin-bottom: 50px;
+        margin-bottom: 48px;
         width: 100%;
         border: none;
         cursor: pointer;

@@ -1,5 +1,5 @@
 <template>
-    <b-modal v-model="isCardModalActive" :on-cancel="onCancel">
+    <b-modal :active="isShow" :on-cancel="onCancel">
         <slot></slot>
     </b-modal>
 </template>
@@ -9,20 +9,7 @@ export default {
     name: 'MoleculeModal',
     props: {
         // indicates visible or not
-        modal: Boolean,
-    },
-    data() {
-        return {
-            isCardModalActive: null,
-        };
-    },
-    watch: {
-        modal() {
-            this.isCardModalActive = this.modal;
-        },
-    },
-    mounted() {
-        this.isCardModalActive = this.modal;
+        isShow: Boolean,
     },
     methods: {
         onCancel() {

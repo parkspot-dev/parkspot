@@ -10,6 +10,21 @@ import {
 
 const state = {
     user: null,
+    userProfile: {
+        UserName: 'sujits32',
+        CreatedAt: '2023-02-07T18:38:56.6952883Z',
+        FullName: 'Sujeet kumar',
+        City: 'Bokaro',
+        VehicleNumber: '',
+        EmailID: 'sujits32@gmail.com',
+        Mobile: '6201967433',
+        AlternateMobile: 'N/A',
+        RegLatitude: 0,
+        RegLongitude: 0,
+        Type: 0,
+        KYCStatus: 0,
+        IDProofURL: '',
+    },
     isAuthReady: false,
     loginModal: false,
     contactForm: {},
@@ -30,6 +45,10 @@ const mutations = {
         } else {
             localStorage.setItem('PSAuthKey', null);
         }
+    },
+
+    'update-user-profile'(state, userProfile) {
+        state.userProfile = userProfile;
     },
 
     'update-login-Modal'(state, loginModal) {
@@ -201,8 +220,22 @@ const actions = {
         mayaClient.post('/owner/parking-request', req);
     },
 
-    async authenticateWithMaya() {
-        await mayaClient.get('/auth/authenticate');
+    async authenticateWithMaya({ state }) {
+        try {
+            await mayaClient.get('/auth/authenticate');
+        } catch (err) {
+            throw new Error(err);
+        }
+    },
+
+    async getUserProfile({ commit, state }) {
+        try {
+            const userProfile = await mayaClient.get('/auth/user');
+            console.log('userprofile', userProfile);
+            commit('update-user-profile', userProfile);
+        } catch (err) {
+            throw new Error(err);
+        }
     },
 };
 

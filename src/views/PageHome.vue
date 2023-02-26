@@ -1,6 +1,6 @@
 <template>
     <div id="Home">
-        <OrganismLogin :modal="loginModal"></OrganismLogin>
+        <OrganismLogin :is-show="loginModal"></OrganismLogin>
         <TemplateHomeBanner @flyToSrp="flyToSrp"></TemplateHomeBanner>
         <TemplateFeatureHome></TemplateFeatureHome>
         <TemplateOurProducts @arrowBtn="onArrowBtn"></TemplateOurProducts>

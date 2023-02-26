@@ -5,44 +5,49 @@
             <h2>Please fill all the fields</h2>
         </div>
         <div class="general-info-form">
-            <div class="py-4">
-                <MoleculeNameInput
-                    :fieldName="FORM.FULLNAME"
-                    :placeholder="FORM.FULLNAME"
-                    :rules="validation.fullname"
-                    v-model="model.fullname"
-                    :label="FORM.FULLNAME"
-                ></MoleculeNameInput>
-            </div>
-            <div class="py-4">
-                <MoleculeNameInput
-                    :fieldName="FORM.EMAIL"
-                    :placeholder="FORM.EMAIL"
-                    :rules="validation.email"
-                    v-model="model.email"
-                    :label="FORM.EMAIL"
-                ></MoleculeNameInput>
-            </div>
-            <div class="py-4">
-                <MoleculeNameInput
-                    :fieldName="FORM.CONTACT_NO"
-                    :placeholder="FORM.CONTACT_NO"
-                    :rules="validation.contactNo"
-                    v-model="model.contactNo"
-                    :label="FORM.CONTACT_NO"
-                ></MoleculeNameInput>
-            </div>
-            <div class="py-4">
-                <MoleculeRadioButton
-                    :fieldName="'radio'"
-                    :rules="validation.userType"
-                    :values="userType"
-                    @data="updateUserType"
-                >
-                    What is you are looking for?
-                </MoleculeRadioButton>
-            </div>
-            <AtomButton class="is-pulled-right">Save Profile</AtomButton>
+            <ValidationObserver ref="observer" v-slot="{}">
+                <div class="py-4">
+                    <MoleculeNameInput
+                        :fieldName="FORM.FULLNAME"
+                        :placeholder="FORM.FULLNAME"
+                        :rules="validation.FullName"
+                        v-model="userProfile.FullName"
+                        :label="FORM.FULLNAME"
+                    ></MoleculeNameInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeNameInput
+                        :fieldName="FORM.EMAIL"
+                        :placeholder="FORM.EMAIL"
+                        :rules="validation.EmailID"
+                        v-model="userProfile.EmailID"
+                        :label="FORM.EMAIL"
+                    ></MoleculeNameInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeNameInput
+                        :fieldName="FORM.CONTACT_NO"
+                        :placeholder="FORM.CONTACT_NO"
+                        :rules="validation.Mobile"
+                        v-model="userProfile.Mobile"
+                        :label="FORM.CONTACT_NO"
+                    ></MoleculeNameInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeRadioButton
+                        :fieldName="'radio'"
+                        :rules="validation.userType"
+                        :values="userType"
+                        :currentSelectedRadio="userType[1]"
+                        @data="updateUserType"
+                    >
+                        What is you are looking for?
+                    </MoleculeRadioButton>
+                </div>
+                <AtomButton class="is-pulled-right" @click.native="saveProfile">
+                    Save Profile
+                </AtomButton>
+            </ValidationObserver>
         </div>
     </div>
 </template>
@@ -52,32 +57,59 @@ import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
 import MoleculeRadioButton from '../molecules/MoleculeRadioButton.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import { FORM } from '../../constant/constant';
+import { ValidationObserver } from 'vee-validate';
+import { mapState } from 'vuex';
+
 export default {
     name: 'OrganismUserGeneralInfo',
     components: {
         MoleculeNameInput,
         AtomButton,
         MoleculeRadioButton,
+        ValidationObserver,
     },
     data() {
         return {
             FORM,
             userType: [
-                'I own a parking lot, want to rent it',
-                'I am a car owner, looking for parking',
+                'I own a parking spot, want to rent it',
+                'I am a vehicle owner, looking for parking',
             ],
             model: {
-                fullname: '',
-                email: '',
-                contactNo: '',
+                FullName: '',
+                EmailID: '',
+                Mobile: '',
             },
             validation: {
-                fullname: '',
-                email: '',
-                contactNo: '',
-                userType: '',
+                FullName: 'required',
+                EmailID: 'required|email',
+                Mobile: 'required|integer|phone',
+                userType: 'required',
             },
         };
+    },
+    computed: {
+        ...mapState('user', {
+            userProfile: (state) => state.userProfile,
+        }),
+    },
+    methods: {
+        updateUserType(userType) {
+            console.log(userType);
+        },
+
+        saveProfile() {
+            this.$refs.observer
+                .validate()
+                .then((sucess) => {
+                    if (sucess) {
+                        this.submit();
+                    }
+                })
+                .catch((er) => {
+                    console.log(er);
+                });
+        },
     },
 };
 </script>
@@ -85,8 +117,8 @@ export default {
 <style lang="scss" scoped>
 .general-info-header {
     background-color: var(--secondary-color);
-    padding: 20px 30px;
-    margin-bottom: 30px;
+    padding: 20px 32px;
+    margin-bottom: 32px;
 
     h1 {
         color: black;
@@ -101,6 +133,6 @@ export default {
 }
 
 .general-info-form {
-    padding: 0px 30px;
+    padding: 0px 32px;
 }
 </style>
