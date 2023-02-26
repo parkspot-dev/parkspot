@@ -88,7 +88,7 @@
                             {{
                                 new Date(
                                     props.row.UpdatedAt,
-                                ).toLocaleDateString()
+                                ).toLocaleDateString('en-GB')
                             }}
                         </strong>
                     </div>
@@ -99,7 +99,7 @@
                             {{
                                 new Date(
                                     props.row.CreatedAt,
-                                ).toLocaleDateString()
+                                ).toLocaleDateString('en-GB')
                             }}
                         </strong>
                     </div>
@@ -175,7 +175,7 @@
                     class="comment-width"
                     :maxlength="1000"
                     :rowNo="8"
-                    @changed="onCommentUpdate(props.row, ...arguments)"
+                    @changed="onCommentUpdate(props.row, arguments)"
                 ></AtomTextarea>
             </b-table-column>
 
@@ -231,7 +231,7 @@
                                     {{
                                         new Date(
                                             props.row.NextCall,
-                                        ).toLocaleDateString()
+                                        ).toLocaleDateString('en-GB')
                                     }}
                                 </b>
                             </span>
@@ -426,8 +426,27 @@ export default {
         },
 
         onCommentUpdate(spotData, comments) {
-            if (spotData['Comments'] !== comments) {
-                spotData['Comments'] = comments;
+            const oldCommentArr = spotData['Comments'].split('\n');
+            const newCommentArr = comments[0].split('\n');
+            const temp = new Date().toLocaleDateString('en-GB');
+
+            if (spotData['Comments'] !== comments[0]) {
+                const currentComment = [];
+                let i = 0;
+                while (i < oldCommentArr.length && i < newCommentArr.length) {
+                    if (oldCommentArr[i] !== newCommentArr[i]) {
+                        currentComment.push(newCommentArr[i] + '\n');
+                    } else {
+                        currentComment.push(oldCommentArr[i] + '\n');
+                    }
+                    i++;
+                }
+                currentComment.push(`[${temp}] `);
+                while (i < newCommentArr.length) {
+                    currentComment.push(newCommentArr[i] + '\n');
+                    i++;
+                }
+                spotData['Comments'] = currentComment.join('');
                 this.$emit('updateRequest', spotData);
             }
         },
