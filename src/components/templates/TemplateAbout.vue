@@ -24,7 +24,7 @@
                     registered via cameras.
                 </AtomParagraph>
                 <div class="about-links">
-                    <AtomParagraph :variation="'large'" id="app-link">
+                    <AtomParagraph :variation="'large'" class="app-link">
                         Get ParkSpot App
                     </AtomParagraph>
                     <span class="pl-2">
@@ -74,7 +74,8 @@ export default {
     display: flex;
     
 }
-#app-link {
+
+.app-link {
     font-size:1rem;
     
 }
