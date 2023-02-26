@@ -322,6 +322,7 @@ export default {
 .secondary-footer {
     background-color: #162029;
 }
+
 .tnc {
     color:#888d93;
 }
