@@ -137,7 +137,9 @@
                         </p>
                         <p>
                             Mobile:
-                            <strong>{{ props.row.Mobile }}</strong>
+                            <a :href="`tel:+91${props.row.Mobile}`">
+                                <strong>{{ props.row.Mobile }}</strong>
+                            </a>
                         </p>
                         <p>
                             Email:
