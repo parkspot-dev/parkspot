@@ -93,7 +93,9 @@
             <div class="nav-wrapper">
                 <div class="nav-container">
                     <div class="primary-nav-mobile-innner">
-                        <div class="close-icon"></div>
+                        <div class="close-icon">
+                            <b-icon icon="close"> </b-icon>
+                        </div>
                         <div class="menu-slide">
                             <div class="slide-header"></div>
                             <div class="scroll-section">
@@ -123,9 +125,75 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="menu-slide"></div>
-                        <div class="menu-slide"></div>
-                        <div class="menu-slide"></div>
+                        <div class="menu-slide">
+                            <div class="slide-header">
+                                <i class="back-button"></i>
+                                <p class="slide-header-title">Company</p>
+                            </div>
+                            <div class="scroll-section">
+                                <ul class="scroll-items">
+                                    <li class="scroll-item">
+                                        <router-link :to="{ name: 't-about' }">
+                                            Go to About
+                                        </router-link>
+                                    </li>
+                                    <li class="scroll-item">
+                                        <router-link :to="{ name: 'features' }">
+                                            Features
+                                        </router-link>
+                                    </li>
+                                    <li class="scroll-item">
+                                        <router-link :to="{ name: 'blog' }">
+                                            Blogs
+                                        </router-link>
+                                    </li>
+                                </ul>
+                                <div class="menu-mobile-btn">
+                                    <AtomButton
+                                        class="login-btn"
+                                        @click.native="logInBtn"
+                                    >
+                                        Log in
+                                    </AtomButton>
+                                </div>
+                                <div class="menu-mobile-btn">
+                                    <!-- todo: add functionality for sign up -->
+                                    <AtomButton>Sign up</AtomButton>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu-slide active-slide">
+                            <div class="slide-header">
+                                <i class="back-button"></i>
+                                <p class="slide-header-title">Services</p>
+                            </div>
+                            <div class="scroll-section">
+                                <ul class="scroll-items">
+                                    <li class="scroll-item">
+                                        <router-link :to="{ name: 'VOPortal' }">
+                                            Request Spot
+                                        </router-link>
+                                    </li>
+                                    <li class="scroll-item">
+                                        <router-link :to="{ name: 'SOPortal' }">
+                                            Register Spot
+                                        </router-link>
+                                    </li>
+                                </ul>
+                                <div class="menu-mobile-btn">
+                                    <AtomButton
+                                        class="login-btn"
+                                        @click.native="logInBtn"
+                                    >
+                                        Log in
+                                    </AtomButton>
+                                </div>
+                                <div class="menu-mobile-btn">
+                                    <!-- todo: add functionality for sign up -->
+                                    <AtomButton>Sign up</AtomButton>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -323,6 +391,19 @@ export default {
     transition: height 0.3s ease-in-out;
 }
 
+.close-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3.375rem;
+    height: 4.0625rem;
+    z-index: 1;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .menu-slide {
     width: 100%;
     display: flex;
@@ -330,8 +411,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    // transform: translateX(100%);
-    transform: translateX(0);
+    transform: translateX(100%);
     transition: transform 0.3s ease-in-out;
 
     .slide-header {
@@ -342,6 +422,26 @@ export default {
         flex-direction: row;
         align-items: center;
         flex-shrink: 0;
+
+        .slide-header-title {
+            font-size: 1.225rem;
+            line-height: 1.4375rem;
+            font-weight: 500;
+        }
+
+        .back-button {
+            font-size: 0.9375rem;
+            line-height: 3.125rem;
+            height: 3.125rem;
+            padding: 0 0.9375rem 0 1.25rem;
+            cursor: pointer;
+            margin-left: -1.25rem;
+
+            &:before {
+                content: '↩';
+                font-size: 2rem;
+            }
+        }
     }
 
     .scroll-section {
@@ -363,6 +463,17 @@ export default {
             padding: 0;
             margin: 0;
             border-bottom: 1px solid #bfbfbf;
+            position: relative;
+
+            &:after {
+                content: '\2794';
+                position: absolute;
+                top: calc(50% - 5px);
+                right: 0;
+                font-size: 1.25rem;
+                line-height: 0.625rem;
+                pointer-events: none;
+            }
 
             a {
                 display: block;
@@ -376,5 +487,9 @@ export default {
 }
 .menu-mobile-btn {
     text-align: center;
+}
+
+.active-slide {
+    transform: translateX(0);
 }
 </style>
