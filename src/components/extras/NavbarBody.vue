@@ -1,78 +1,135 @@
 <template>
     <header>
-        <b-navbar class="has-shadow custom-navpad" fixed-top>
-            <template #brand>
-                <b-navbar-item tag="router-link" :to="{ path: '/' }">
-                    <img :src="parkspotIcon" alt="parkspot icon" />
-                    <img :src="parkspotText" alt="parkspot text" />
-                </b-navbar-item>
-            </template>
-
-            <template #end>
-                <b-navbar-dropdown label="Company" hoverable>
-                    <b-navbar-item tag="router-link" :to="{ name: 't-about' }">
-                        About
-                    </b-navbar-item>
-                    <b-navbar-item tag="router-link" :to="{ name: 'features' }">
-                        Features
-                    </b-navbar-item>
-                    <b-navbar-item tag="router-link" :to="{ name: 'blog' }">
-                        Blogs
-                    </b-navbar-item>
-                </b-navbar-dropdown>
-                <b-navbar-dropdown label="Services" hoverable>
-                    <b-navbar-item tag="router-link" :to="{ name: 'VOPortal' }">
-                        Request Spot
-                    </b-navbar-item>
-                    <b-navbar-item tag="router-link" :to="{ name: 'SOPortal' }">
-                        Register Spot
-                    </b-navbar-item>
-                </b-navbar-dropdown>
-                <b-navbar-item tag="router-link" :to="{ name: 'Faq' }">
-                    Faq
-                </b-navbar-item>
-
-                <template v-if="isAuthReady">
-                    <!-- user logged out -->
-                    <b-navbar-item tag="div" v-if="!user">
-                        <div class="buttons">
-                            <AtomButton @click.native="logInBtn">
-                                Log in
-                            </AtomButton>
-                            <!-- todo: add functionality for sign up -->
-                            <AtomButton>Sign up</AtomButton>
-                        </div>
-                    </b-navbar-item>
-
-                    <!-- user logged in -->
-                    <b-navbar-item tag="div" v-if="user">
-                        <div class="user-profile">
-                            <div class="user-pic-wrapper">
-                                <img
-                                    class="user-pic"
-                                    :src="user.photoURL"
-                                    alt="profile image"
-                                />
+        <nav class="primary-nav">
+            <div class="primary-nav-inner">
+                <div class="company-logo">
+                    <router-link :to="{ name: 'Home' }">
+                        <img
+                            class="ps-icon"
+                            src="@/assets/pstopmini.png"
+                            alt="parkspot icon"
+                        />
+                        <img
+                            class="ps-text"
+                            src="@/assets/pstoptext.png"
+                            alt="parkspot text"
+                        />
+                    </router-link>
+                </div>
+                <div class="menu-wrapper-left">
+                    <ul class="menu-wrapper">
+                        <li class="menu-item">
+                            <span class="menu-title">Company</span>
+                            <div class="menu-item-dropdown">
+                                <ul>
+                                    <li>
+                                        <router-link :to="{ name: 't-about' }">
+                                            Go to About
+                                        </router-link>
+                                    </li>
+                                    <li>
+                                        <router-link :to="{ name: 'features' }">
+                                            Features
+                                        </router-link>
+                                    </li>
+                                    <li>
+                                        <router-link :to="{ name: 'blog' }">
+                                            Blogs
+                                        </router-link>
+                                    </li>
+                                </ul>
                             </div>
-                            <!-- user profile dropdown -->
-                            <ul class="user-dropdown">
-                                <li class="dropdown-list">
-                                    <a @click="gotoUserProfile"> Profile </a>
-                                </li>
-                                <li class="dropdown-list">
-                                    <a @click="gotoEditProfile">
-                                        Edit Profile
-                                    </a>
-                                </li>
-                                <li class="dropdown-list">
-                                    <a @click="signout"> Sign Out </a>
-                                </li>
-                            </ul>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-title">Services</span>
+                            <div class="menu-item-dropdown">
+                                <ul>
+                                    <li>
+                                        <router-link :to="{ name: 'VOPortal' }">
+                                            Request Spot
+                                        </router-link>
+                                    </li>
+                                    <li>
+                                        <router-link :to="{ name: 'SOPortal' }">
+                                            Register Spot
+                                        </router-link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="menu-wrapper-right">
+                    <ul>
+                        <li></li>
+                    </ul>
+                    <AtomButton class="login-btn" @click.native="logInBtn">
+                        Log in
+                    </AtomButton>
+                    <!-- todo: add functionality for sign up -->
+                    <AtomButton>Sign up</AtomButton>
+                </div>
+                <div class="primary-nav-hamburger">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="26"
+                        height="20"
+                        viewBox="0 0 26 20"
+                        fill="none"
+                    >
+                        <rect width="26" height="4" fill="#0C0B0B"></rect>
+                        <rect y="8" width="26" height="4" fill="#0C0B0B"></rect>
+                        <rect
+                            y="16"
+                            width="26"
+                            height="4"
+                            fill="#0C0B0B"
+                        ></rect>
+                    </svg>
+                </div>
+            </div>
+        </nav>
+        <nav class="primary-nav-mobile">
+            <div class="nav-wrapper">
+                <div class="nav-container">
+                    <div class="primary-nav-mobile-innner">
+                        <div class="close-icon"></div>
+                        <div class="menu-slide">
+                            <div class="slide-header"></div>
+                            <div class="scroll-section">
+                                <ul class="scroll-items">
+                                    <li class="scroll-item">
+                                        <a href="">
+                                            <span>Company</span>
+                                        </a>
+                                    </li>
+                                    <li class="scroll-item">
+                                        <a href="">
+                                            <span> Services </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="menu-mobile-btn">
+                                    <AtomButton
+                                        class="login-btn"
+                                        @click.native="logInBtn"
+                                    >
+                                        Log in
+                                    </AtomButton>
+                                </div>
+                                <div class="menu-mobile-btn">
+                                    <!-- todo: add functionality for sign up -->
+                                    <AtomButton>Sign up</AtomButton>
+                                </div>
+                            </div>
                         </div>
-                    </b-navbar-item>
-                </template>
-            </template>
-        </b-navbar>
+                        <div class="menu-slide"></div>
+                        <div class="menu-slide"></div>
+                        <div class="menu-slide"></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
     </header>
 </template>
 
@@ -86,10 +143,7 @@ export default {
         AtomButton,
     },
     data() {
-        return {
-            parkspotIcon: require('@/assets/pstopmini.png'),
-            parkspotText: require('@/assets/pstoptext.png'),
-        };
+        return {};
     },
     computed: {
         ...mapState('user', {
@@ -130,105 +184,197 @@ export default {
 </script>
 
 <style lang="scss">
-.custom-navpad {
-    padding: 0.25rem 6rem;
-}
+// .primary-nav {
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     padding-right: inherit;
+//     z-index: 39;
+// }
 
-@media only screen and (max-width: 1024px) {
-    .custom-navpad {
-        padding: 0.25rem 0;
-    }
-}
-
-.navbar-item img {
-    max-height: 2rem;
-}
-
-.navbar-end .navbar-item:hover {
-    color: var(--secondary-color);
-}
-
-.navbar-end .navbar-item:active {
-    color: var(--secondary-color);
-}
-
-.router-link-exact-active:visited {
-    color: var(--secondary-color);
-}
-
-.navbar-item.router-link-exact-active.router-link-active {
-    color: var(--secondary-color);
-}
-
-.navbar-item .navbar-link:hover {
-    color: var(--secondary-color);
-}
-
-.navbar-item .navbar-link.is-active {
-    color: var(--secondary-color);
-}
-
-.navbar-item .navbar-link:not(.is-arrowless)::after {
-    border-color: var(--secondary-color);
-}
-
-.navbar-item.has-dropdown.is-hoverable.is-active .navbar-link {
-    color: var(--secondary-color);
-}
-
-/* user profile css */
-.user-profile {
+.primary-nav-inner {
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    height: 4.375rem;
+    max-width: 90rem;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+}
 
-    &:hover {
-        .user-dropdown {
-            visibility: visible;
+.company-logo {
+    margin-right: 2.5rem;
+    a {
+        display: inline-flex;
+
+        .ps-icon {
+            width: 36px;
+            height: 36px;
+        }
+        .ps-text {
+            width: auto;
+            height: 36px;
         }
     }
+}
 
-    .user-pic-wrapper {
-        margin: 0;
-        padding: 0;
-        height: 32px;
-        width: 34px;
-        background-color: transparent;
-        border-radius: 100%;
+.menu-wrapper {
+    display: flex;
+}
+
+.menu-wrapper-left {
+    display: flex;
+    flex-grow: 1;
+
+    .menu-item {
+        margin-right: 1.875rem;
+        position: relative;
+
+        &:after {
+            content: '';
+            width: 100%;
+            height: 1.25rem;
+            position: absolute;
+            top: 100%;
+            left: 0;
+        }
+
+        .menu-title {
+            &:after {
+                content: '\276F';
+                display: inline-block;
+                font-size: 0.925rem;
+                margin-left: 0.5rem;
+                vertical-align: middle;
+                transform: rotate(90deg);
+                transition: -webkit-transform 0.2s ease-in-out;
+                transition: transform 0.2s ease-in-out;
+            }
+        }
+
+        span {
+            font-size: 1.125rem;
+            line-height: 1.25rem;
+        }
+
+        .menu-item-dropdown {
+            position: absolute;
+            top: 2.5rem;
+            background: #fff;
+            border: 1px solid #36a635;
+            border-radius: 1.25rem;
+            max-width: 25rem;
+            transform: translateY(30px);
+        }
+    }
+}
+
+.menu-wrapper-right {
+    display: flex;
+    align-items: center;
+    margin: 0 1.25rem 0 0;
+
+    .login-btn {
+        margin: 0 0.625rem 0 0;
+        font-weight: bold;
+    }
+}
+
+.primary-nav-hamburger {
+    display: none;
+    margin-top: 6px;
+
+    @media only screen and (max-width: 1024px) {
+        display: block;
         cursor: pointer;
+    }
+}
 
-        .user-pic {
-            margin: 0;
-            padding: 0;
-            border-radius: 100%;
-            height: 28px;
-            width: 30px;
-        }
+.primary-nav-mobile {
+    position: fixed;
+    top: 0.625rem;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    transform: scale(1);
+    transform-origin: calc(100vw - 25px) 0;
+    transition: transform 0.5s cubic-bezier(1, 0.07, 0.11, 1);
+}
+
+.nav-wrapper {
+    display: flex;
+
+    .nav-container {
+        padding-right: 0.9375rem;
+        padding-left: 0.9375rem;
+        flex: 0 0 auto;
+        min-height: 0;
+        min-width: 0;
+        width: 100%;
+    }
+}
+
+.primary-nav-mobile-innner {
+    background-color: #fff;
+    position: relative;
+    max-height: calc(100vh - 20px);
+    height: 200px;
+    transition: height 0.3s ease-in-out;
+}
+
+.menu-slide {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+    // transform: translateX(100%);
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out;
+
+    .slide-header {
+        padding: 0 1.25rem;
+        height: 4.0625rem;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex-shrink: 0;
     }
 
-    .user-dropdown {
-        visibility: hidden;
-        position: absolute;
-        background-color: #fff;
-        min-width: 160px;
-        box-shadow: 0px 10px 50px rgb(0 0 0 / 10%);
-        z-index: 1;
-        padding: 32px 0;
-        top: 90%;
-        left: -200%;
-        border-radius: 8px;
+    .scroll-section {
+        padding: 0 1.25rem 1.25rem;
+        height: 100%;
+        width: 100%;
+        overflow-y: auto;
 
-        .dropdown-list {
-            display: flex;
-            align-items: center;
+        .scroll-items {
+            margin-bottom: 2.5rem;
+        }
+
+        .scroll-item {
+            display: block;
+            width: 100%;
+            text-align: left;
+            font-weight: 400;
+            position: relative;
+            padding: 0;
+            margin: 0;
+            border-bottom: 1px solid #bfbfbf;
 
             a {
-                display: flex;
-                align-items: center;
+                display: block;
                 width: 100%;
-                padding: 8px 32px;
-                color: var(--primary-text);
+                text-align: left;
+                font-weight: 400;
+                padding: 0.875rem 0;
             }
         }
     }
+}
+.menu-mobile-btn {
+    text-align: center;
 }
 </style>
