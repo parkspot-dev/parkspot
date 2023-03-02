@@ -78,6 +78,12 @@ export default {
     font-size: 1rem;
 }
 
+@media only screen and (min-width: 600px) {
+    .about-links .park-link {
+        font-size: 1.5rem;
+    }
+}
+
 .about-container {
     align-items: center;
     display: flex;
