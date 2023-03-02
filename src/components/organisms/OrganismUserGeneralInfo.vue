@@ -104,7 +104,7 @@ export default {
             updateUserProfile: 'update-user-profile',
         }),
         ...mapActions('user', {
-            userInfo: 'userInfo',
+            updateUserInfo: 'updateUserInfo',
         }),
         setUserType(userType) {
             if (userType.search('vehicle') === -1) {
@@ -120,7 +120,7 @@ export default {
                 .validate()
                 .then((sucess) => {
                     if (sucess) {
-                        this.userInfo();
+                        this.updateUserInfo();
                     }
                 })
                 .catch((er) => {

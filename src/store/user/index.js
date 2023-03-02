@@ -39,6 +39,7 @@ const mutations = {
     },
 
     'update-user-profile'(state, userProfile) {
+        userProfile['UserName'] = '';
         state.userProfile = userProfile;
     },
 
@@ -219,7 +220,7 @@ const actions = {
         }
     },
 
-    async userInfo({ commit, state }) {
+    async updateUserInfo({ commit, state }) {
         try {
             await mayaClient.post('/auth/update-fields', state.userProfile);
         } catch (err) {
