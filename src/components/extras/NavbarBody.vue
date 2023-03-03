@@ -69,7 +69,7 @@
                     <!-- todo: add functionality for sign up -->
                     <AtomButton>Sign up</AtomButton>
                 </div>
-                <div class="primary-nav-hamburger">
+                <div class="primary-nav-hamburger" @click="toggleMobileNav">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="26"
@@ -89,26 +89,57 @@
                 </div>
             </div>
         </nav>
-        <nav class="primary-nav-mobile">
+        <nav
+            :class="[
+                'primary-nav-mobile',
+                showMobileNav ? 'primary-nav-mobile--open' : '',
+            ]"
+        >
             <div class="nav-wrapper">
                 <div class="nav-container">
                     <div class="primary-nav-mobile-innner">
-                        <div class="close-icon">
+                        <div class="close-icon" @click="toggleMobileNav">
                             <b-icon icon="close"> </b-icon>
                         </div>
-                        <div class="menu-slide">
-                            <div class="slide-header"></div>
+                        <div
+                            :class="[
+                                'menu-slide',
+                                activeSlide === 0 ? 'active-slide' : '',
+                            ]"
+                        >
+                            <div class="slide-header">
+                                <div class="company-logo">
+                                    <router-link :to="{ name: 'Home' }">
+                                        <img
+                                            class="ps-icon"
+                                            src="@/assets/pstopmini.png"
+                                            alt="parkspot icon"
+                                        />
+                                        <img
+                                            class="ps-text"
+                                            src="@/assets/pstoptext.png"
+                                            alt="parkspot text"
+                                        />
+                                    </router-link>
+                                </div>
+                            </div>
                             <div class="scroll-section">
                                 <ul class="scroll-items">
-                                    <li class="scroll-item">
-                                        <a href="">
+                                    <li
+                                        class="scroll-item"
+                                        @click="toggleSlide(1)"
+                                    >
+                                        <p>
                                             <span>Company</span>
-                                        </a>
+                                        </p>
                                     </li>
-                                    <li class="scroll-item">
-                                        <a href="">
+                                    <li
+                                        class="scroll-item"
+                                        @click="toggleSlide(2)"
+                                    >
+                                        <p>
                                             <span> Services </span>
-                                        </a>
+                                        </p>
                                     </li>
                                 </ul>
                                 <div class="menu-mobile-btn">
@@ -125,27 +156,50 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="menu-slide">
+                        <div
+                            :class="[
+                                'menu-slide',
+                                activeSlide === 1 ? 'active-slide' : '',
+                            ]"
+                        >
                             <div class="slide-header">
-                                <i class="back-button"></i>
+                                <i
+                                    class="back-button"
+                                    @click="backToMainScroll"
+                                ></i>
                                 <p class="slide-header-title">Company</p>
                             </div>
                             <div class="scroll-section">
                                 <ul class="scroll-items">
                                     <li class="scroll-item">
-                                        <router-link :to="{ name: 't-about' }">
-                                            Go to About
-                                        </router-link>
+                                        <p @click="toggleMobileNav">
+                                            <router-link
+                                                class="nav-link"
+                                                :to="{ name: 't-about' }"
+                                            >
+                                                Go to About
+                                            </router-link>
+                                        </p>
                                     </li>
                                     <li class="scroll-item">
-                                        <router-link :to="{ name: 'features' }">
-                                            Features
-                                        </router-link>
+                                        <p @click="toggleMobileNav">
+                                            <router-link
+                                                class="nav-link"
+                                                :to="{ name: 'features' }"
+                                            >
+                                                Features
+                                            </router-link>
+                                        </p>
                                     </li>
                                     <li class="scroll-item">
-                                        <router-link :to="{ name: 'blog' }">
-                                            Blogs
-                                        </router-link>
+                                        <p @click="toggleMobileNav">
+                                            <router-link
+                                                class="nav-link"
+                                                :to="{ name: 'blog' }"
+                                            >
+                                                Blogs
+                                            </router-link>
+                                        </p>
                                     </li>
                                 </ul>
                                 <div class="menu-mobile-btn">
@@ -162,22 +216,40 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="menu-slide active-slide">
+                        <div
+                            :class="[
+                                'menu-slide',
+                                activeSlide === 2 ? 'active-slide' : '',
+                            ]"
+                        >
                             <div class="slide-header">
-                                <i class="back-button"></i>
+                                <i
+                                    class="back-button"
+                                    @click="backToMainScroll"
+                                ></i>
                                 <p class="slide-header-title">Services</p>
                             </div>
                             <div class="scroll-section">
                                 <ul class="scroll-items">
                                     <li class="scroll-item">
-                                        <router-link :to="{ name: 'VOPortal' }">
-                                            Request Spot
-                                        </router-link>
+                                        <p @click="toggleMobileNav">
+                                            <router-link
+                                                class="nav-link"
+                                                :to="{ name: 'VOPortal' }"
+                                            >
+                                                Request Spot
+                                            </router-link>
+                                        </p>
                                     </li>
                                     <li class="scroll-item">
-                                        <router-link :to="{ name: 'SOPortal' }">
-                                            Register Spot
-                                        </router-link>
+                                        <p @click="toggleMobileNav">
+                                            <router-link
+                                                class="nav-link"
+                                                :to="{ name: 'SOPortal' }"
+                                            >
+                                                Register Spot
+                                            </router-link>
+                                        </p>
                                     </li>
                                 </ul>
                                 <div class="menu-mobile-btn">
@@ -211,7 +283,10 @@ export default {
         AtomButton,
     },
     data() {
-        return {};
+        return {
+            showMobileNav: false,
+            activeSlide: 0,
+        };
     },
     computed: {
         ...mapState('user', {
@@ -247,6 +322,15 @@ export default {
         gotoEditProfile() {
             this.$router.push({ name: 'editProfile' });
         },
+        toggleMobileNav() {
+            this.showMobileNav = !this.showMobileNav;
+        },
+        toggleSlide(slideNo) {
+            this.activeSlide = slideNo;
+        },
+        backToMainScroll() {
+            this.activeSlide = 0; // making main slide active
+        },
     },
 };
 </script>
@@ -279,10 +363,20 @@ export default {
         .ps-icon {
             width: 36px;
             height: 36px;
+
+            @media only screen and (max-width: 1024px) {
+                width: 30px;
+                height: 30px;
+            }
         }
         .ps-text {
             width: auto;
             height: 36px;
+
+            @media only screen and (max-width: 1024px) {
+                width: auto;
+                height: 30px;
+            }
         }
     }
 }
@@ -365,9 +459,13 @@ export default {
     left: 0;
     right: 0;
     z-index: 30;
-    transform: scale(1);
+    transform: scale(0);
     transform-origin: calc(100vw - 25px) 0;
     transition: transform 0.5s cubic-bezier(1, 0.07, 0.11, 1);
+}
+
+.primary-nav-mobile--open {
+    transform: scale(1);
 }
 
 .nav-wrapper {
@@ -386,8 +484,8 @@ export default {
 .primary-nav-mobile-innner {
     background-color: #fff;
     position: relative;
+    height: 350px;
     max-height: calc(100vh - 20px);
-    height: 200px;
     transition: height 0.3s ease-in-out;
 }
 
@@ -402,6 +500,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
 .menu-slide {
@@ -475,18 +574,24 @@ export default {
                 pointer-events: none;
             }
 
-            a {
+            p {
                 display: block;
                 width: 100%;
                 text-align: left;
                 font-weight: 400;
                 padding: 0.875rem 0;
+
+                .nav-link {
+                    display: block;
+                }
             }
         }
     }
 }
+
 .menu-mobile-btn {
     text-align: center;
+    margin-bottom: 1rem;
 }
 
 .active-slide {
