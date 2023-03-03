@@ -290,6 +290,7 @@
                 </div>
             </div>
         </nav>
+        <div class="primary-nav-mobile__backdrop"></div>
     </header>
 </template>
 
@@ -565,8 +566,27 @@ export default {
     transition: transform 0.5s cubic-bezier(1, 0.07, 0.11, 1);
 }
 
+.primary-nav-mobile__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 29;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s cubic-bezier(1, 0.07, 0.11, 1),
+        visibility 0.5s cubic-bezier(1, 0.07, 0.11, 1);
+}
+
 .primary-nav-mobile--open {
     transform: scale(1);
+
+    & + .primary-nav-mobile__backdrop {
+        opacity: 1;
+        visibility: visible;
+    }
 }
 
 .nav-wrapper {
@@ -588,6 +608,7 @@ export default {
     height: 350px;
     max-height: calc(100vh - 20px);
     transition: height 0.3s ease-in-out;
+    border-radius: var(--border-default);
 }
 
 .close-icon {
