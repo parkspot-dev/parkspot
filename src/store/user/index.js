@@ -220,8 +220,9 @@ const actions = {
         }
     },
 
-    async updateUserInfo({ commit, state }) {
+    async updateUserInfo({ commit, dispatch, state }) {
         try {
+            dispatch('authenticateWithMaya');
             await mayaClient.post('/auth/update-fields', state.userProfile);
         } catch (err) {
             throw new Error(err);
