@@ -118,9 +118,22 @@ export default {
         saveProfile() {
             this.$refs.observer
                 .validate()
-                .then((sucess) => {
+                .then(async (sucess) => {
                     if (sucess) {
-                        this.updateUserInfo();
+                        try {
+                            await this.updateUserInfo();
+                            this.$buefy.toast.open({
+                                message: 'Profile updated successfully!',
+                                type: 'is-success',
+                                duration: 2000,
+                            });
+                        } catch (error) {
+                            this.$buefy.toast.open({
+                                message: `Something went wrong!`,
+                                type: 'is-danger',
+                                duration: 2000,
+                            });
+                        }
                     }
                 })
                 .catch((er) => {
