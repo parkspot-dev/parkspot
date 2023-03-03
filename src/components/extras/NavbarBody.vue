@@ -1,7 +1,9 @@
 <template>
-    <header>
+    <header class="main-nav">
+        <!-- desktop version navbar -->
         <nav class="primary-nav">
             <div class="primary-nav-inner">
+                <!-- company logo -->
                 <div class="company-logo">
                     <router-link :to="{ name: 'Home' }">
                         <img
@@ -16,10 +18,12 @@
                         />
                     </router-link>
                 </div>
+                <!-- nav-links -->
                 <div class="menu-wrapper-left">
                     <ul class="menu-wrapper">
                         <li class="menu-item">
                             <span class="menu-title">Company</span>
+                            <!-- menu dropdown -->
                             <div class="menu-item-dropdown">
                                 <ul>
                                     <li>
@@ -42,6 +46,7 @@
                         </li>
                         <li class="menu-item">
                             <span class="menu-title">Services</span>
+                            <!-- menu dropdown -->
                             <div class="menu-item-dropdown">
                                 <ul>
                                     <li>
@@ -59,9 +64,22 @@
                         </li>
                     </ul>
                 </div>
+                <!-- phone link -->
+                <div class="mobile-phone-link">
+                    <p>
+                        <a href="tel:+91 80929 96057"> +91 80929 96057 </a>
+                    </p>
+                </div>
+                <!-- login buttons -->
                 <div class="menu-wrapper-right">
                     <ul>
-                        <li></li>
+                        <li>
+                            <p>
+                                <a href="tel:+91 80929 96057">
+                                    +91 809-299-6057
+                                </a>
+                            </p>
+                        </li>
                     </ul>
                     <AtomButton class="login-btn" @click.native="logInBtn">
                         Log in
@@ -69,6 +87,7 @@
                     <!-- todo: add functionality for sign up -->
                     <AtomButton>Sign up</AtomButton>
                 </div>
+                <!-- hamburger for mobile view -->
                 <div class="primary-nav-hamburger" @click="toggleMobileNav">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -89,6 +108,7 @@
                 </div>
             </div>
         </nav>
+        <!-- mobile version navbar -->
         <nav
             :class="[
                 'primary-nav-mobile',
@@ -344,6 +364,15 @@ export default {
 //     padding-right: inherit;
 //     z-index: 39;
 // }
+.main-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding-right: inherit;
+    z-index: 39;
+    background-color: #fff;
+}
 
 .primary-nav-inner {
     position: relative;
@@ -377,6 +406,10 @@ export default {
                 width: auto;
                 height: 30px;
             }
+
+            @media only screen and (max-width: 680px) {
+                display: none;
+            }
         }
     }
 }
@@ -389,9 +422,23 @@ export default {
     display: flex;
     flex-grow: 1;
 
+    @media only screen and (max-width: 750px) {
+        display: none;
+    }
+
     .menu-item {
         margin-right: 1.875rem;
         position: relative;
+
+        &:hover {
+            .menu-item-dropdown {
+                opacity: 1;
+                visibility: visible;
+                transition: opacity 0.2s ease-in-out,
+                    visibility 0.2s ease-in-out, transform 0.2s ease-in-out,
+                    -webkit-transform 0.2s ease-in-out;
+            }
+        }
 
         &:after {
             content: '';
@@ -403,6 +450,8 @@ export default {
         }
 
         .menu-title {
+            font-weight: 500;
+
             &:after {
                 content: '\276F';
                 display: inline-block;
@@ -424,10 +473,45 @@ export default {
             position: absolute;
             top: 2.5rem;
             background: #fff;
-            border: 1px solid #36a635;
-            border-radius: 1.25rem;
-            max-width: 25rem;
-            transform: translateY(30px);
+            border: 1px solid var(--primary-color);
+            border-radius: var(--border-default);
+            width: 11rem;
+            transform: translateY(5px);
+            opacity: 0;
+            visibility: hidden;
+
+            &:before {
+                content: '';
+                position: absolute;
+                top: -0.5625rem;
+                left: 1rem;
+                background: #fff;
+                border-left: 1px solid var(--primary-color);
+                border-top: 1px solid var(--primary-color);
+                width: 1rem;
+                height: 1rem;
+                -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+            }
+
+            ul {
+                padding: 1.5625rem 1.875rem;
+
+                li {
+                    font-size: 1.0625rem;
+                    line-height: 1.4375rem;
+                    margin-bottom: 1.0625rem;
+
+                    a {
+                        color: #555;
+                        font-weight: 500;
+                    }
+
+                    a:hover {
+                        color: #0085ad;
+                    }
+                }
+            }
         }
     }
 }
@@ -437,9 +521,26 @@ export default {
     align-items: center;
     margin: 0 1.25rem 0 0;
 
+    p {
+        margin: 0 1.25rem 0 0;
+        a {
+            color: #555;
+        }
+
+        @media only screen and (max-width: 1024px) {
+            display: none;
+        }
+    }
+
     .login-btn {
         margin: 0 0.625rem 0 0;
         font-weight: bold;
+    }
+
+    .button {
+        @media only screen and (max-width: 750px) {
+            display: none;
+        }
     }
 }
 
@@ -596,5 +697,20 @@ export default {
 
 .active-slide {
     transform: translateX(0);
+}
+
+.mobile-phone-link {
+    display: none;
+    margin: 0 auto;
+    a {
+        font-size: 1.25rem;
+        font-weight: 500;
+        color: #555;
+        border-bottom: 2px solid var(--primary-color);
+    }
+
+    @media only screen and (max-width: 750px) {
+        display: block;
+    }
 }
 </style>
