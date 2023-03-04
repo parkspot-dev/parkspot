@@ -11959,9 +11959,9 @@
     "write-file-atomic" "^4.0.1"
 
 "supercluster@^7.1.0":
-  "integrity" "sha512-LDasImUAFMhTqhK+cUXfy9C2KTUqJ3gucLjmNLNFmKWOnDUBxLFLH9oKuXOTCLveecmxh8fbk8kgh6Q0gsfe2w=="
-  "resolved" "https://registry.npmjs.org/supercluster/-/supercluster-7.1.0.tgz"
-  "version" "7.1.0"
+  "integrity" "sha512-EulshI3pGUM66o6ZdH3ReiFcvHpM3vAigyK+vcxdjpJyEbIIrtbmBdY23mGgnI24uXiGFvrGq9Gkum/8U7vJWg=="
+  "resolved" "https://registry.npmjs.org/supercluster/-/supercluster-7.1.5.tgz"
+  "version" "7.1.5"
   dependencies:
     "kdbush" "^3.0.0"
 
@@ -12816,6 +12816,14 @@
   "integrity" "sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-2.6.12.tgz"
   "version" "2.6.12"
+
+"vue2-google-maps@^0.10.7":
+  "integrity" "sha512-y5aBJTAsfGvpsbfgPaeWU7o7QbOeINZKsP6SB9qrBe8U8EYBFO/bTWo3rcMq/NOtgT/XssV3Nwg/2u3no6jWbw=="
+  "resolved" "https://registry.npmjs.org/vue2-google-maps/-/vue2-google-maps-0.10.7.tgz"
+  "version" "0.10.7"
+  dependencies:
+    "babel-runtime" "^6.26.0"
+    "marker-clusterer-plus" "^2.1.4"
 
 "vuex@^3.6.2":
   "integrity" "sha512-ETW44IqCgBpVomy520DT5jf8n0zoCac+sxWnn+hMe/CzaSejb/eVw2YToiXYX+Ex/AuHHia28vWTq4goAexFbw=="
