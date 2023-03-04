@@ -220,19 +220,18 @@ const actions = {
         }
     },
 
-    async updateUserInfo({ commit, dispatch, state }) {
+    async updateUserInfo({ commit, state }) {
         try {
-            dispatch('authenticateWithMaya');
             await mayaClient.post('/auth/update-fields', state.userProfile);
         } catch (err) {
             throw new Error(err);
         }
     },
 
-    async getUserProfile({ commit, state }) {
+    async getUserProfile({ commit, dispatch, state }) {
         try {
+            dispatch('authenticateWithMaya');
             const userProfile = await mayaClient.get('/auth/user');
-            console.log('userprofile', userProfile);
             commit('update-user-profile', userProfile);
         } catch (err) {
             throw new Error(err);
