@@ -57,12 +57,7 @@
                             <!-- user profile dropdown -->
                             <ul class="user-dropdown">
                                 <li class="dropdown-list">
-                                    <a @click="gotoUserProfile"> Profile </a>
-                                </li>
-                                <li class="dropdown-list">
-                                    <a @click="gotoEditProfile">
-                                        Edit Profile
-                                    </a>
+                                    <a @click="gotoEditProfile"> Profile </a>
                                 </li>
                                 <li class="dropdown-list">
                                     <a @click="signout"> Sign Out </a>
@@ -111,10 +106,6 @@ export default {
 
         signout() {
             this.logOut();
-        },
-
-        gotoUserProfile() {
-            this.$router.push({ name: 'userProfile' });
         },
 
         gotoEditProfile() {
