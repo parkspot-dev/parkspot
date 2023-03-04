@@ -25,7 +25,6 @@ export default {
         currentSelectedRadio: {
             type: String,
             required: true,
-            default: null,
         },
         /**
          * List of radio buttons
@@ -43,5 +42,4 @@ export default {
     },
 };
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
