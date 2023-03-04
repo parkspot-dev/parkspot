@@ -25,7 +25,10 @@
                 <div class="login-footer">
                     <p>
                         By continuing, you are indicating that you accept our
-                        <a href="">Terms of Service</a>.
+                        <a href="https://www.parkspot.in/terms-and-conditions">
+                            Terms of Service
+                        </a>
+                        .
                     </p>
                 </div>
             </div>

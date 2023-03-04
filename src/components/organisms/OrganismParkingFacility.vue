@@ -134,18 +134,22 @@ export default {
         },
 
         updateAmenitiesData(amenitiesData) {
+            // todo
             console.log(amenitiesData);
         },
 
         updateType(typeData) {
+            // todo
             console.log(typeData);
         },
 
         updateMinDur(minDur) {
+            // todo
             console.log(minDur);
         },
 
         updateCarType(carType) {
+            // todo
             console.log(carType);
         },
     },
