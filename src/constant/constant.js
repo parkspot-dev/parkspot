@@ -18,7 +18,7 @@ export const PARKING_FACILITY = {
             'Gated',
             'CCTV Camera',
             'Security Guard',
-            '24 Hour Access',
+            '24 Hours Access',
         ],
         LANDMARK: 'Landmark',
     },
@@ -36,7 +36,7 @@ export const PARKING_FACILITY = {
             { id: 3, name: 'More than 6 months' },
         ],
         CAR_TYPE: [
-            { id: 0, name: 'Suv' },
+            { id: 0, name: 'SUV' },
             { id: 1, name: 'Sedan' },
             { id: 2, name: 'Hatchback' },
         ],
