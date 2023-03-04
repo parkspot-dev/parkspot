@@ -101,7 +101,6 @@ export default {
             }
         },
         userType(isVO) {
-            console.log('ghello', isVO);
             this.isVO = isVO;
         },
     },
