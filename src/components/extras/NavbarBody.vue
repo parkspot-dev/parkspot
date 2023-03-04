@@ -81,11 +81,47 @@
                             </p>
                         </li>
                     </ul>
-                    <AtomButton class="login-btn" @click.native="logInBtn">
-                        Log in
-                    </AtomButton>
-                    <!-- todo: add functionality for sign up -->
-                    <AtomButton>Sign up</AtomButton>
+                    <template v-if="isAuthReady">
+                        <div v-if="!user">
+                            <AtomButton
+                                class="login-btn"
+                                @click.native="logInBtn"
+                            >
+                                Log in
+                            </AtomButton>
+                            <!-- todo: add functionality for sign up -->
+                            <AtomButton>Sign up</AtomButton>
+                        </div>
+                        <div v-if="user">
+                            <div class="user-profile">
+                                <div class="user-pic-wrapper">
+                                    <img
+                                        class="user-pic"
+                                        :src="user.photoURL"
+                                        alt="profile image"
+                                    />
+                                </div>
+                                <!-- user profile dropdown -->
+                                <div class="user-dropdown">
+                                    <ul>
+                                        <li class="dropdown-list">
+                                            <a @click="gotoUserProfile">
+                                                Profile
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-list">
+                                            <a @click="gotoEditProfile">
+                                                Edit Profile
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-list">
+                                            <a @click="signout"> Sign Out </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
                 </div>
                 <!-- hamburger for mobile view -->
                 <div class="primary-nav-hamburger" @click="toggleMobileNav">
@@ -718,6 +754,92 @@ export default {
 
 .active-slide {
     transform: translateX(0);
+}
+
+.user-profile {
+    margin-right: 1.875rem;
+    position: relative;
+
+    &:after {
+        content: '';
+        width: 100%;
+        height: 1.25rem;
+        position: absolute;
+        top: 100%;
+        left: 0;
+    }
+
+    &:hover {
+        .user-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out,
+                transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
+        }
+    }
+
+    .user-dropdown {
+        position: absolute;
+        top: 2.75rem;
+        left: -6.5rem;
+        background: #fff;
+        border: 1px solid var(--primary-color);
+        border-radius: var(--border-default);
+        width: 10rem;
+        transform: translateY(5px);
+        opacity: 0;
+        visibility: hidden;
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: -0.5625rem;
+            left: 7.25rem;
+            background: #fff;
+            border-left: 1px solid var(--primary-color);
+            border-top: 1px solid var(--primary-color);
+            width: 1rem;
+            height: 1rem;
+            transform: rotate(45deg);
+        }
+
+        ul {
+            padding: 1.5625rem 1.875rem;
+
+            li {
+                font-size: 1.0625rem;
+                line-height: 1.4375rem;
+                margin-bottom: 1.0625rem;
+
+                a {
+                    color: #555;
+                    font-weight: 500;
+                }
+
+                a:hover {
+                    color: #0085ad;
+                }
+            }
+        }
+    }
+
+    .user-pic-wrapper {
+        margin: 0;
+        padding: 0;
+        height: 36px;
+        width: 36px;
+        background-color: transparent;
+        border-radius: 100%;
+        cursor: pointer;
+
+        .user-pic {
+            margin: 0;
+            padding: 0;
+            border-radius: 100%;
+            height: 36px;
+            width: 36px;
+        }
+    }
 }
 
 .mobile-phone-link {
