@@ -26,7 +26,8 @@
                                 General
                             </a>
                         </li>
-                        <li>
+                        <!-- disabling below features not fully ready yet -->
+                        <!-- <li>
                             <a
                                 @click="updateActiveForm(2)"
                                 :class="isActive === 2 ? 'link-active' : ''"
@@ -49,7 +50,7 @@
                             >
                                 Map Location
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
                 <div class="primary">
