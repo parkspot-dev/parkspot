@@ -4,6 +4,7 @@
             v-model="date"
             placeholder="Click to select..."
             @input="onChange"
+            :size="size"
         >
         </b-datepicker>
     </b-field>
@@ -15,6 +16,10 @@ export default {
     props: {
         assignedDate: {
             type: Date,
+        },
+        size: {
+            type: String,
+            default: '',
         },
     },
     emits: ['changed'],

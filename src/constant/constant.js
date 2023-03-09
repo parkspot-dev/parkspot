@@ -18,7 +18,7 @@ export const PARKING_FACILITY = {
             'Gated',
             'CCTV Camera',
             'Security Guard',
-            '24 Hour Access',
+            '24 Hours Access',
         ],
         LANDMARK: 'Landmark',
     },
@@ -36,7 +36,7 @@ export const PARKING_FACILITY = {
             { id: 3, name: 'More than 6 months' },
         ],
         CAR_TYPE: [
-            { id: 0, name: 'Suv' },
+            { id: 0, name: 'SUV' },
             { id: 1, name: 'Sedan' },
             { id: 2, name: 'Hatchback' },
         ],
@@ -45,11 +45,15 @@ export const PARKING_FACILITY = {
 
 export const KYC = {
     OWNER_RADIO_DATA: ['Yes', 'No'],
-    DOCUMENT_DATA: [
+    DOCUMENT_DATA_SO: [
         { id: 0, name: 'Adhaar Card' },
         { id: 1, name: 'Electricity Bills' },
         { id: 2, name: 'Driving License' },
         { id: 3, name: 'Rent Agreement' },
+    ],
+    DOCUMENT_DATA_VO: [
+        { id: 0, name: 'Adhaar Card' },
+        { id: 1, name: 'Driving License' },
     ],
     DOCUMENT_INFO_MSG:
         'Note: Document must contain the address proof of the spot registered.',

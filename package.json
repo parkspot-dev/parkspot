@@ -27,6 +27,7 @@
     "vue-cli-plugin-compression": "^1.1.5",
     "vue-meta": "^2.4.0",
     "vue-router": "^3.4.8",
+    "vue2-google-maps": "^0.10.7",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
