@@ -383,32 +383,23 @@ export default {
             isAuthReady: (state) => state.isAuthReady,
         }),
     },
-    mounted() {
-        this.authenticateWithMaya();
-    },
     methods: {
         ...mapMutations('user', {
             updateLoginModal: 'update-login-Modal',
         }),
         ...mapActions('user', {
-            authenticateWithMaya: 'authenticateWithMaya',
             logOut: 'logOut',
         }),
 
         logInBtn() {
             this.updateLoginModal(true);
-            this.authenticateWithMaya();
         },
 
         signout() {
             this.logOut();
         },
 
-        gotoUserProfile() {
-            this.$router.push({ name: 'userProfile' });
-        },
-
-        gotoEditProfile() {
+        gotoProfile() {
             this.$router.push({ name: 'editProfile' });
         },
         toggleMobileNav() {

@@ -26,7 +26,8 @@
                                 General
                             </a>
                         </li>
-                        <li>
+                        <!-- disabling below features not fully ready yet -->
+                        <!-- <li>
                             <a
                                 @click="updateActiveForm(2)"
                                 :class="isActive === 2 ? 'link-active' : ''"
@@ -49,15 +50,13 @@
                             >
                                 Map Location
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
                 <div class="primary">
-                    <component
-                        :is="activeForm"
-                        @userType="userType"
-                        :isVO="isVO"
-                    ></component>
+                    <keep-alive>
+                        <component :is="activeForm"></component>
+                    </keep-alive>
                 </div>
             </div>
         </div>
@@ -86,7 +85,6 @@ export default {
         return {
             activeForm: 'OrganismUserGeneralInfo',
             isActive: 1,
-            isVO: true,
         };
     },
     computed: {
@@ -112,9 +110,6 @@ export default {
                     this.activeForm = 'OrganismMapLocation';
                     break;
             }
-        },
-        userType(isVO) {
-            this.isVO = isVO;
         },
     },
 };

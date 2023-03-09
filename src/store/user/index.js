@@ -11,27 +11,10 @@ import {
 const state = {
     user: null,
     userProfile: {
-        UserName: 'sujits32',
-        CreatedAt: '2023-02-07T18:38:56.6952883Z',
-        FullName: 'Sujeet kumar',
-        City: 'Bokaro',
-        VehicleNumber: '',
-        EmailID: 'sujits32@gmail.com',
-        Mobile: '6201967433',
-        AlternateMobile: 'N/A',
-        RegLatitude: 0,
-        RegLongitude: 0,
-        Type: 0,
-        KYCStatus: 0,
-        IDProofURL: '',
-        OwnershipProofURL: '',
-        IdentityDocument: '',
-        OwnershipDocument: '',
-        OriginalOwnerName: '',
-        OriginalOwnerMobile: '',
-        Relationship: '',
-        Sites: '',
-        Bookings: '',
+        FullName: '',
+        EmailID: '',
+        Mobile: '',
+        Type: 'VO',
     },
     isAuthReady: false,
     loginModal: false,
@@ -56,6 +39,7 @@ const mutations = {
     },
 
     'update-user-profile'(state, userProfile) {
+        userProfile['UserName'] = '';
         state.userProfile = userProfile;
     },
 
@@ -121,6 +105,7 @@ const actions = {
             await signOut(auth);
             commit('update-user', null);
         } catch (err) {
+            // todo write proper exception case
             throw new Error(err);
         }
     },
@@ -234,16 +219,27 @@ const actions = {
         try {
             await mayaClient.get('/auth/authenticate');
         } catch (err) {
+            // todo write proper exception case
             throw new Error(err);
         }
     },
 
-    async getUserProfile({ commit, state }) {
+    async updateUserInfo({ commit, state }) {
         try {
+            await mayaClient.post('/auth/update-fields', state.userProfile);
+        } catch (err) {
+            // todo write proper exception case
+            throw new Error(err);
+        }
+    },
+
+    async getUserProfile({ commit, dispatch, state }) {
+        try {
+            dispatch('authenticateWithMaya');
             const userProfile = await mayaClient.get('/auth/user');
-            console.log('userprofile', userProfile);
             commit('update-user-profile', userProfile);
         } catch (err) {
+            // todo write proper exception case
             throw new Error(err);
         }
     },
