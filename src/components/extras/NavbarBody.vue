@@ -105,13 +105,8 @@
                                 <div class="user-dropdown">
                                     <ul>
                                         <li class="dropdown-list">
-                                            <a @click="gotoUserProfile">
+                                            <a @click="gotoProfile">
                                                 Profile
-                                            </a>
-                                        </li>
-                                        <li class="dropdown-list">
-                                            <a @click="gotoEditProfile">
-                                                Edit Profile
                                             </a>
                                         </li>
                                         <li class="dropdown-list">
