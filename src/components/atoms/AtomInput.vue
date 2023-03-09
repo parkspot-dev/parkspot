@@ -10,6 +10,7 @@
                 @input.native="onInput($event.target.value)"
                 @focus.native="onFocus($event.target.value)"
                 @blur="onChange($event.target.value)"
+                :size="size"
             ></b-input>
         </b-field>
     </component>
@@ -95,6 +96,15 @@ export default {
          */
         errorMessage: {
             type: Array,
+            default: null,
+        },
+
+        /**
+         * Size is to decide
+         * size of the input is-small etc.
+         */
+        size: {
+            type: String,
             default: null,
         },
     },

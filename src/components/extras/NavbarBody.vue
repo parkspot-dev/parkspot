@@ -82,7 +82,7 @@
                         </li>
                     </ul>
                     <template v-if="isAuthReady">
-                        <div v-if="!user">
+                        <div class="login-options" v-if="!user">
                             <AtomButton
                                 class="login-btn"
                                 @click.native="logInBtn"
@@ -92,7 +92,7 @@
                             <!-- todo: add functionality for sign up -->
                             <AtomButton>Sign up</AtomButton>
                         </div>
-                        <div v-if="user">
+                        <div class="login-options" v-if="user">
                             <div class="user-profile">
                                 <div class="user-pic-wrapper">
                                     <img
@@ -105,13 +105,8 @@
                                 <div class="user-dropdown">
                                     <ul>
                                         <li class="dropdown-list">
-                                            <a @click="gotoUserProfile">
+                                            <a @click="gotoProfile">
                                                 Profile
-                                            </a>
-                                        </li>
-                                        <li class="dropdown-list">
-                                            <a @click="gotoEditProfile">
-                                                Edit Profile
                                             </a>
                                         </li>
                                         <li class="dropdown-list">
@@ -182,8 +177,15 @@
                             <div class="scroll-section">
                                 <ul class="scroll-items">
                                     <li
+                                        v-if="user"
                                         class="scroll-item"
                                         @click="toggleSlide(1)"
+                                    >
+                                        <p><span>My Account</span></p>
+                                    </li>
+                                    <li
+                                        class="scroll-item"
+                                        @click="toggleSlide(2)"
                                     >
                                         <p>
                                             <span>Company</span>
@@ -191,31 +193,80 @@
                                     </li>
                                     <li
                                         class="scroll-item"
-                                        @click="toggleSlide(2)"
+                                        @click="toggleSlide(3)"
                                     >
                                         <p>
                                             <span> Services </span>
                                         </p>
                                     </li>
                                 </ul>
-                                <div class="menu-mobile-btn">
-                                    <AtomButton
-                                        class="login-btn"
-                                        @click.native="logInBtn"
-                                    >
-                                        Log in
-                                    </AtomButton>
-                                </div>
-                                <div class="menu-mobile-btn">
-                                    <!-- todo: add functionality for sign up -->
-                                    <AtomButton>Sign up</AtomButton>
-                                </div>
+                                <template v-if="isAuthReady">
+                                    <div v-if="!user">
+                                        <AtomButton
+                                            class="menu-mobile-btn"
+                                            @click.native="logInBtn"
+                                        >
+                                            Log in
+                                        </AtomButton>
+                                        <!-- todo: add functionality for sign up -->
+                                        <AtomButton class="menu-mobile-btn"
+                                            >Sign up</AtomButton
+                                        >
+                                    </div>
+                                </template>
                             </div>
                         </div>
                         <div
                             :class="[
                                 'menu-slide',
                                 activeSlide === 1 ? 'active-slide' : '',
+                            ]"
+                        >
+                            <div class="slide-header">
+                                <i
+                                    class="back-button"
+                                    @click="backToMainScroll"
+                                ></i>
+                                <p class="slide-header-title">My Account</p>
+                            </div>
+                            <div class="scroll-section">
+                                <ul class="scroll-items">
+                                    <li class="scroll-item">
+                                        <p @click="toggleMobileNav">
+                                            <router-link
+                                                class="nav-link"
+                                                :to="{ name: 'editProfile' }"
+                                            >
+                                                Profile
+                                            </router-link>
+                                        </p>
+                                    </li>
+                                    <li class="scroll-item">
+                                        <p @click="toggleMobileNav">
+                                            <a @click="signout"> Sign Out </a>
+                                        </p>
+                                    </li>
+                                </ul>
+                                <template v-if="isAuthReady">
+                                    <div v-if="!user">
+                                        <AtomButton
+                                            class="menu-mobile-btn"
+                                            @click.native="logInBtn"
+                                        >
+                                            Log in
+                                        </AtomButton>
+                                        <!-- todo: add functionality for sign up -->
+                                        <AtomButton class="menu-mobile-btn"
+                                            >Sign up</AtomButton
+                                        >
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                        <div
+                            :class="[
+                                'menu-slide',
+                                activeSlide === 2 ? 'active-slide' : '',
                             ]"
                         >
                             <div class="slide-header">
@@ -258,24 +309,12 @@
                                         </p>
                                     </li>
                                 </ul>
-                                <div class="menu-mobile-btn">
-                                    <AtomButton
-                                        class="login-btn"
-                                        @click.native="logInBtn"
-                                    >
-                                        Log in
-                                    </AtomButton>
-                                </div>
-                                <div class="menu-mobile-btn">
-                                    <!-- todo: add functionality for sign up -->
-                                    <AtomButton>Sign up</AtomButton>
-                                </div>
                             </div>
                         </div>
                         <div
                             :class="[
                                 'menu-slide',
-                                activeSlide === 2 ? 'active-slide' : '',
+                                activeSlide === 3 ? 'active-slide' : '',
                             ]"
                         >
                             <div class="slide-header">
@@ -308,18 +347,6 @@
                                         </p>
                                     </li>
                                 </ul>
-                                <div class="menu-mobile-btn">
-                                    <AtomButton
-                                        class="login-btn"
-                                        @click.native="logInBtn"
-                                    >
-                                        Log in
-                                    </AtomButton>
-                                </div>
-                                <div class="menu-mobile-btn">
-                                    <!-- todo: add functionality for sign up -->
-                                    <AtomButton>Sign up</AtomButton>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -367,11 +394,7 @@ export default {
             this.logOut();
         },
 
-        gotoUserProfile() {
-            this.$router.push({ name: 'userProfile' });
-        },
-
-        gotoEditProfile() {
+        gotoProfile() {
             this.$router.push({ name: 'editProfile' });
         },
         toggleMobileNav() {
@@ -743,7 +766,7 @@ export default {
 }
 
 .menu-mobile-btn {
-    text-align: center;
+    width: 100%;
     margin-bottom: 1rem;
 }
 
@@ -849,6 +872,12 @@ export default {
 
     @media only screen and (max-width: 750px) {
         display: block;
+    }
+}
+
+.login-options {
+    @media only screen and (max-width: 1024px) {
+        display: none;
     }
 }
 </style>

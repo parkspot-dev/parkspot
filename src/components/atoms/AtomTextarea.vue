@@ -7,6 +7,8 @@
             :value="value"
             @blur="onChange($event.target.value)"
             @input.native="onInput($event.target.value)"
+            :size="size"
+            :rows="rowNo"
         ></b-input>
     </b-field>
 </template>
@@ -36,6 +38,22 @@ export default {
         value: {
             type: String,
             default: null,
+        },
+        /**
+         * Size is to decide
+         * size of the input is-small etc.
+         */
+        size: {
+            type: String,
+            default: null,
+        },
+        /**
+         * row is to decide height of the input field
+         * by giving no. of rows.
+         */
+        rowNo: {
+            type: Number,
+            default: 9,
         },
     },
     emits: ['input', 'changed'],

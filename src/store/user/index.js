@@ -105,6 +105,7 @@ const actions = {
             await signOut(auth);
             commit('update-user', null);
         } catch (err) {
+            // todo write proper exception case
             throw new Error(err);
         }
     },
@@ -151,26 +152,28 @@ const actions = {
     },
 
     contact({ state }) {
-        const convertedAmenities = state.additionalInfo.amenities.toString();
+        const convertedAmenities = state.additionalInfo.amenities
+            ? state.additionalInfo.amenities.toString()
+            : '';
 
         // prettier-ignore
         const req = {
             User: {
-                UserName    : state.login.Username, //  only for logged in user
+                UserName    : state.login.Username ? state.login.Username : state.contactForm.fullname, //  only for logged in user
                 FullName    : state.contactForm.fullname,
-                City        : state.locationDetails.locDetails.locName,
+                City        : state.locationDetails.locDetails ? state.locationDetails.locDetails.locName : '',
                 EmailID     : state.contactForm.email,
                 Mobile      : state.contactForm.cno,
             },
             Comments        : 'Spot Registered',
             RentDetails: {
                 VehicleType         : '',
-                Rate                : state.additionalInfo.rent,
-                MinBookingDuration  : state.additionalInfo.minDur,
+                Rate                : state.additionalInfo.rent ? state.additionalInfo.rent : '',
+                MinBookingDuration  : state.additionalInfo.minDur ? state.additionalInfo.minDur : '',
                 Availability        : '',
                 SpecialService      : convertedAmenities, //  None/Camera/Security
                 TnC                 : 'I Agree',
-                Address             : state.locationDetails.locDetails.locName,
+                Address             : state.locationDetails.locDetails ? state.locationDetails.locDetails.locName : state.contactForm.addr,
 
             },
         };
@@ -216,6 +219,7 @@ const actions = {
         try {
             await mayaClient.get('/auth/authenticate');
         } catch (err) {
+            // todo write proper exception case
             throw new Error(err);
         }
     },
@@ -225,16 +229,18 @@ const actions = {
             dispatch('authenticateWithMaya');
             await mayaClient.post('/auth/update-fields', state.userProfile);
         } catch (err) {
+            // todo write proper exception case
             throw new Error(err);
         }
     },
 
-    async getUserProfile({ commit, state }) {
+    async getUserProfile({ commit, dispatch, state }) {
         try {
+            dispatch('authenticateWithMaya');
             const userProfile = await mayaClient.get('/auth/user');
-            console.log('userprofile', userProfile);
             commit('update-user-profile', userProfile);
         } catch (err) {
+            // todo write proper exception case
             throw new Error(err);
         }
     },

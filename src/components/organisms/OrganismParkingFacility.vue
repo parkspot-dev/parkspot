@@ -5,36 +5,7 @@
             <h2>Please fill all the fields</h2>
         </div>
         <div class="parking-facility-form">
-            <div class="parking-facility-form-VO" v-if="userType === 'VO'">
-                <div class="py-4">
-                    <MoleculeSelectInput
-                        :fieldName="PARKING_FACILITY.VO.PARKING_TYPE"
-                        :list="PARKING_FACILITY.VO.PARKING_TYPE_LIST"
-                        @input="updateType"
-                        :placeholder="'Type of Parking'"
-                        :label="PARKING_FACILITY.VO.PARKING_TYPE"
-                    ></MoleculeSelectInput>
-                </div>
-                <div class="py-4">
-                    <MoleculeSelectInput
-                        :fieldName="PARKING_FACILITY.VO.DURATION"
-                        :list="PARKING_FACILITY.VO.MINIMUM_DURATION_DATA"
-                        @input="updateMinDur"
-                        :placeholder="'Minimum duration if any'"
-                        :label="PARKING_FACILITY.VO.DURATION"
-                    ></MoleculeSelectInput>
-                </div>
-                <div class="py-4">
-                    <MoleculeSelectInput
-                        :fieldName="'Car Type'"
-                        :list="PARKING_FACILITY.VO.CAR_TYPE"
-                        @input="updateCarType"
-                        :placeholder="'Type of Car'"
-                        :label="'Car Type'"
-                    ></MoleculeSelectInput>
-                </div>
-            </div>
-            <div class="parking-facility-form-SO" v-else>
+            <div class="parking-facility-form-SO" v-if="userType === 'SO'">
                 <div class="py-4">
                     <MoleculeNameInput
                         :fieldName="PARKING_FACILITY.SO.BUILDING_ADDR"
@@ -80,6 +51,35 @@
                         :fieldName="'document'"
                         :rules="validation.parkingSpotImg"
                     ></MoleculeUpload>
+                </div>
+            </div>
+            <div class="parking-facility-form-VO" v-else>
+                <div class="py-4">
+                    <MoleculeSelectInput
+                        :fieldName="PARKING_FACILITY.VO.PARKING_TYPE"
+                        :list="PARKING_FACILITY.VO.PARKING_TYPE_LIST"
+                        @input="updateType"
+                        :placeholder="'Type of Parking'"
+                        :label="PARKING_FACILITY.VO.PARKING_TYPE"
+                    ></MoleculeSelectInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeSelectInput
+                        :fieldName="PARKING_FACILITY.VO.DURATION"
+                        :list="PARKING_FACILITY.VO.MINIMUM_DURATION_DATA"
+                        @input="updateMinDur"
+                        :placeholder="'Minimum duration if any'"
+                        :label="PARKING_FACILITY.VO.DURATION"
+                    ></MoleculeSelectInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeSelectInput
+                        :fieldName="'Car Type'"
+                        :list="PARKING_FACILITY.VO.CAR_TYPE"
+                        @input="updateCarType"
+                        :placeholder="'Type of Car'"
+                        :label="'Car Type'"
+                    ></MoleculeSelectInput>
                 </div>
             </div>
             <!-- todo: map integration (not decided yet google map or mapbox) -->
@@ -134,18 +134,22 @@ export default {
         },
 
         updateAmenitiesData(amenitiesData) {
+            // todo
             console.log(amenitiesData);
         },
 
         updateType(typeData) {
+            // todo
             console.log(typeData);
         },
 
         updateMinDur(minDur) {
+            // todo
             console.log(minDur);
         },
 
         updateCarType(carType) {
+            // todo
             console.log(carType);
         },
     },

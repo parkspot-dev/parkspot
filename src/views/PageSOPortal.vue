@@ -38,15 +38,15 @@ export default {
         async onFinalSubmit() {
             try {
                 this.isLoading = true;
-
-                await this.register();
-                setTimeout(async () => {
-                    await Promise.all([
-                        this.login(),
-                        this.kyc(),
-                        this.contact(), // todo contact can be fired in parallel
-                    ]);
-                }, 1000);
+                this.contact();
+                // await this.register();
+                // setTimeout(async () => {
+                //     await Promise.all([
+                //         this.login(),
+                //         this.kyc(),
+                //         this.contact(), // todo contact can be fired in parallel
+                //     ]);
+                // }, 1000);
 
                 this.isLoading = false;
                 this.$buefy.toast.open({

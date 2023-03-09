@@ -30,7 +30,7 @@
                     ></OrganismContactForm>
                 </b-step-item>
 
-                <b-step-item
+                <!-- <b-step-item
                     step="2"
                     label="Step 2"
                     :clickable="isStepsClickable"
@@ -83,7 +83,7 @@
                         :formSubmitted="btnStack[3]"
                         @formValidate="AddInfoFormValidate"
                     ></OrganismAdditionalInfo>
-                </b-step-item>
+                </b-step-item> -->
 
                 <template
                     v-if="customNavigation"
@@ -109,7 +109,7 @@
                             :disabled="false"
                             @click.prevent="btnNext(next)"
                         >
-                            {{ nextText }}
+                            Submit
                         </b-button>
                     </div>
                 </template>
@@ -120,18 +120,18 @@
 
 <script>
 import OrganismContactForm from '../organisms/OrganismContactForm.vue';
-import OrganismKycForm from '../organisms/OrganismKycForm.vue';
-import OrganismAdditionalInfo from '../organisms/OrganismAdditionalInfo.vue';
-import OrganismAddressForm from '../organisms/OrganismAddressForm.vue';
+// import OrganismKycForm from '../organisms/OrganismKycForm.vue';
+// import OrganismAdditionalInfo from '../organisms/OrganismAdditionalInfo.vue';
+// import OrganismAddressForm from '../organisms/OrganismAddressForm.vue';
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 export default {
     name: 'TemplateSOPortal',
     components: {
         OrganismContactForm,
-        OrganismKycForm,
-        OrganismAdditionalInfo,
-        OrganismAddressForm,
+        // OrganismKycForm,
+        // OrganismAdditionalInfo,
+        // OrganismAddressForm,
         AtomHeading,
         BodyWrapper,
     },
@@ -183,7 +183,7 @@ export default {
             this.btnStack.splice(this.top, 1, val);
             if (this.btnStack[this.top]) {
                 this.nextEnable.action();
-                this.top++;
+                this.$emit('finalSubmit');
             }
         },
         kycFormValidate(val) {
