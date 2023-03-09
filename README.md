@@ -23,6 +23,8 @@ npm run lint
 
 ### Requirements
 ```
+node - 16.13.2
+npm - 8.1.2
 vue - 2.6.12
 vuex - 3.6.2
 ```
