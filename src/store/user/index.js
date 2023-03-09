@@ -105,6 +105,7 @@ const actions = {
             await signOut(auth);
             commit('update-user', null);
         } catch (err) {
+            // todo write proper exception case
             throw new Error(err);
         }
     },
@@ -216,6 +217,7 @@ const actions = {
         try {
             await mayaClient.get('/auth/authenticate');
         } catch (err) {
+            // todo write proper exception case
             throw new Error(err);
         }
     },
@@ -224,6 +226,7 @@ const actions = {
         try {
             await mayaClient.post('/auth/update-fields', state.userProfile);
         } catch (err) {
+            // todo write proper exception case
             throw new Error(err);
         }
     },
@@ -234,6 +237,7 @@ const actions = {
             const userProfile = await mayaClient.get('/auth/user');
             commit('update-user-profile', userProfile);
         } catch (err) {
+            // todo write proper exception case
             throw new Error(err);
         }
     },
