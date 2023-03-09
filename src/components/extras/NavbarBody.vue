@@ -57,12 +57,7 @@
                             <!-- user profile dropdown -->
                             <ul class="user-dropdown">
                                 <li class="dropdown-list">
-                                    <a @click="gotoUserProfile"> Profile </a>
-                                </li>
-                                <li class="dropdown-list">
-                                    <a @click="gotoEditProfile">
-                                        Edit Profile
-                                    </a>
+                                    <a @click="gotoProfile"> Profile </a>
                                 </li>
                                 <li class="dropdown-list">
                                     <a @click="signout"> Sign Out </a>
@@ -97,32 +92,23 @@ export default {
             isAuthReady: (state) => state.isAuthReady,
         }),
     },
-    mounted() {
-        this.authenticateWithMaya();
-    },
     methods: {
         ...mapMutations('user', {
             updateLoginModal: 'update-login-Modal',
         }),
         ...mapActions('user', {
-            authenticateWithMaya: 'authenticateWithMaya',
             logOut: 'logOut',
         }),
 
         logInBtn() {
             this.updateLoginModal(true);
-            this.authenticateWithMaya();
         },
 
         signout() {
             this.logOut();
         },
 
-        gotoUserProfile() {
-            this.$router.push({ name: 'userProfile' });
-        },
-
-        gotoEditProfile() {
+        gotoProfile() {
             this.$router.push({ name: 'editProfile' });
         },
     },

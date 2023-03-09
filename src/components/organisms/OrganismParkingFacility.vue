@@ -5,36 +5,7 @@
             <h2>Please fill all the fields</h2>
         </div>
         <div class="parking-facility-form">
-            <div class="parking-facility-form-VO" v-if="isVO">
-                <div class="py-4">
-                    <MoleculeSelectInput
-                        :fieldName="PARKING_FACILITY.VO.PARKING_TYPE"
-                        :list="PARKING_FACILITY.VO.PARKING_TYPE_LIST"
-                        @input="updateType"
-                        :placeholder="'Type of Parking'"
-                        :label="PARKING_FACILITY.VO.PARKING_TYPE"
-                    ></MoleculeSelectInput>
-                </div>
-                <div class="py-4">
-                    <MoleculeSelectInput
-                        :fieldName="PARKING_FACILITY.VO.DURATION"
-                        :list="PARKING_FACILITY.VO.MINIMUM_DURATION_DATA"
-                        @input="updateMinDur"
-                        :placeholder="'Minimum duration if any'"
-                        :label="PARKING_FACILITY.VO.DURATION"
-                    ></MoleculeSelectInput>
-                </div>
-                <div class="py-4">
-                    <MoleculeSelectInput
-                        :fieldName="'Car Type'"
-                        :list="PARKING_FACILITY.VO.CAR_TYPE"
-                        @input="updateCarType"
-                        :placeholder="'Type of Car'"
-                        :label="'Car Type'"
-                    ></MoleculeSelectInput>
-                </div>
-            </div>
-            <div class="parking-facility-form-SO" v-else>
+            <div class="parking-facility-form-SO" v-if="userType === 'SO'">
                 <div class="py-4">
                     <MoleculeNameInput
                         :fieldName="PARKING_FACILITY.SO.BUILDING_ADDR"
@@ -82,6 +53,35 @@
                     ></MoleculeUpload>
                 </div>
             </div>
+            <div class="parking-facility-form-VO" v-else>
+                <div class="py-4">
+                    <MoleculeSelectInput
+                        :fieldName="PARKING_FACILITY.VO.PARKING_TYPE"
+                        :list="PARKING_FACILITY.VO.PARKING_TYPE_LIST"
+                        @input="updateType"
+                        :placeholder="'Type of Parking'"
+                        :label="PARKING_FACILITY.VO.PARKING_TYPE"
+                    ></MoleculeSelectInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeSelectInput
+                        :fieldName="PARKING_FACILITY.VO.DURATION"
+                        :list="PARKING_FACILITY.VO.MINIMUM_DURATION_DATA"
+                        @input="updateMinDur"
+                        :placeholder="'Minimum duration if any'"
+                        :label="PARKING_FACILITY.VO.DURATION"
+                    ></MoleculeSelectInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeSelectInput
+                        :fieldName="'Car Type'"
+                        :list="PARKING_FACILITY.VO.CAR_TYPE"
+                        @input="updateCarType"
+                        :placeholder="'Type of Car'"
+                        :label="'Car Type'"
+                    ></MoleculeSelectInput>
+                </div>
+            </div>
             <!-- todo: map integration (not decided yet google map or mapbox) -->
             <AtomButton class="is-pulled-right">Save Profile</AtomButton>
         </div>
@@ -95,6 +95,7 @@ import MoleculeUpload from '../molecules/MoleculeUpload.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
 import { PARKING_FACILITY } from '../../constant/constant';
+import { mapState } from 'vuex';
 export default {
     name: 'OrganismParkingFacility',
     components: {
@@ -103,12 +104,6 @@ export default {
         MoleculeUpload,
         AtomButton,
         MoleculeSelectInput,
-    },
-    props: {
-        isVO: {
-            type: Boolean,
-            required: true,
-        },
     },
     data() {
         return {
@@ -127,6 +122,11 @@ export default {
                 parkingType: '',
             },
         };
+    },
+    computed: {
+        ...mapState('user', {
+            userType: (state) => state.userProfile.Type,
+        }),
     },
     methods: {
         updateParkingSpotImg(data) {
