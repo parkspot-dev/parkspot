@@ -1,3 +1,4 @@
+// Todo: Remove Form constants not needed
 export const FORM = {
     USERNAME: 'Username',
     NAME: 'full-name',
@@ -8,17 +9,57 @@ export const FORM = {
     CONTACT_NO: 'Contact No.',
 };
 
+export const PARKING_FACILITY = {
+    SO: {
+        BUILDING_ADDR: 'Building Address',
+        TOTAL_PARKING: 'Total Parking',
+        FACILITIES: 'Facilities',
+        FACILITIES_DATA: [
+            'Covered',
+            'Gated',
+            'CCTV Camera',
+            'Security Guard',
+            '24 Hours Access',
+        ],
+        LANDMARK: 'Landmark',
+    },
+    VO: {
+        PARKING_TYPE: 'Types of parking',
+        PARKING_TYPE_LIST: [
+            { id: 0, name: 'Covered Parking' },
+            { id: 1, name: 'Open Parking' },
+        ],
+        DURATION: 'Duration',
+        MINIMUM_DURATION_DATA: [
+            { id: 0, name: ' < 1 month' },
+            { id: 1, name: '2 - 3 months' },
+            { id: 2, name: '3 - 5 months' },
+            { id: 3, name: 'More than 6 months' },
+        ],
+        CAR_TYPE: [
+            { id: 0, name: 'SUV' },
+            { id: 1, name: 'Sedan' },
+            { id: 2, name: 'Hatchback' },
+        ],
+    },
+};
+
 export const KYC = {
     OWNER_RADIO_DATA: ['Yes', 'No'],
-    DOCUMENT_DATA: [
+    DOCUMENT_DATA_SO: [
         { id: 0, name: 'Adhaar Card' },
         { id: 1, name: 'Electricity Bills' },
         { id: 2, name: 'Driving License' },
         { id: 3, name: 'Rent Agreement' },
     ],
+    DOCUMENT_DATA_VO: [
+        { id: 0, name: 'Adhaar Card' },
+        { id: 1, name: 'Driving License' },
+    ],
     DOCUMENT_INFO_MSG:
         'Note: Document must contain the address proof of the spot registered.',
 };
+
 export const ADD_INFO = {
     AMENITIES: 'Amenities',
     SPOTS: 'Spots',
