@@ -357,7 +357,7 @@
                 </div>
             </div>
         </nav>
-        <div class="primary-nav-mobile__backdrop"></div>
+        <div class="primary-nav-mobile-backdrop"></div>
     </header>
 </template>
 

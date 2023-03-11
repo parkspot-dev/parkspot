@@ -9976,6 +9976,11 @@
   "resolved" "https://registry.npmjs.org/postcss-sorting/-/postcss-sorting-7.0.1.tgz"
   "version" "7.0.1"
 
+"postcss-sorting@^8.0.2":
+  "integrity" "sha512-M9dkSrmU00t/jK7rF6BZSZauA5MAaBW4i5EnJXspMwt4iqTh/L9j6fgMnbElEOfyRyfLfVbIHj/R52zHzAPe1Q=="
+  "resolved" "https://registry.npmjs.org/postcss-sorting/-/postcss-sorting-8.0.2.tgz"
+  "version" "8.0.2"
+
 "postcss-svgo@^4.0.2":
   "integrity" "sha512-C6wyjo3VwFm0QgBy+Fu7gCYOkCmgmClghO+pjcxvrcBKtiKt0uCF+hvbMO1fyv5BMImRK90SMb+dwUnfbGd+jw=="
   "resolved" "https://registry.npmjs.org/postcss-svgo/-/postcss-svgo-4.0.2.tgz"
@@ -10061,10 +10066,10 @@
     "picocolors" "^0.2.1"
     "source-map" "^0.6.1"
 
-"postcss@^8.2", "postcss@^8.3.11", "postcss@^8.3.3", "postcss@^8.3.9", "postcss@^8.4.16":
-  "integrity" "sha512-ipHE1XBvKzm5xI7hiHCZJCSugxvsdq2mPnsq5+UF+VHCjiBvtDrlxJfMBToWaP9D5XlgNmcFGqoHmUn0EYEaRQ=="
-  "resolved" "https://registry.npmjs.org/postcss/-/postcss-8.4.16.tgz"
-  "version" "8.4.16"
+"postcss@^8.2", "postcss@^8.3.11", "postcss@^8.3.3", "postcss@^8.3.9", "postcss@^8.4.16", "postcss@^8.4.20", "postcss@^8.4.21":
+  "integrity" "sha512-tP7u/Sn/dVxK2NnruI4H9BG+x+Wxz6oeZ1cJ8P6G/PZY0IKk4k/63TDsQf2kQq3+qoJeLm2kIBUNlZe3zgb4Zg=="
+  "resolved" "https://registry.npmjs.org/postcss/-/postcss-8.4.21.tgz"
+  "version" "8.4.21"
   dependencies:
     "nanoid" "^3.3.4"
     "picocolors" "^1.0.0"
@@ -11883,6 +11888,14 @@
     "postcss" "^8.3.11"
     "postcss-sorting" "^7.0.1"
 
+"stylelint-order@^6.0.3":
+  "integrity" "sha512-1j1lOb4EU/6w49qZeT2SQVJXm0Ht+Qnq9GMfUa3pMwoyojIWfuA+JUDmoR97Bht1RLn4ei0xtLGy87M7d29B1w=="
+  "resolved" "https://registry.npmjs.org/stylelint-order/-/stylelint-order-6.0.3.tgz"
+  "version" "6.0.3"
+  dependencies:
+    "postcss" "^8.4.21"
+    "postcss-sorting" "^8.0.2"
+
 "stylelint-prettier@^2.0.0":
   "integrity" "sha512-jvT3G+9lopkeB0ARmDPszyfaOnvnIF+30QCjZxyt7E6fynI1T9mOKgYDNb9bXX17M7PXMZaX3j/26wqakjp1tw=="
   "resolved" "https://registry.npmjs.org/stylelint-prettier/-/stylelint-prettier-2.0.0.tgz"
@@ -11919,7 +11932,7 @@
     "normalize-path" "^3.0.0"
     "schema-utils" "^4.0.0"
 
-"stylelint@^13.0.0 || ^14.0.0", "stylelint@^14.0.0", "stylelint@^14.0.1", "stylelint@^14.10.0", "stylelint@^14.5.1", "stylelint@>=11.0.0", "stylelint@>=14.0.0":
+"stylelint@^13.0.0 || ^14.0.0", "stylelint@^14.0.0", "stylelint@^14.0.0 || ^15.0.0", "stylelint@^14.0.1", "stylelint@^14.10.0", "stylelint@^14.5.1", "stylelint@>=11.0.0", "stylelint@>=14.0.0":
   "integrity" "sha512-VAmyKrEK+wNFh9R8mNqoxEFzaa4gsHGhcT4xgkQDuOA5cjF6CaNS8loYV7gpi4tIZBPUyXesotPXzJAMN8VLOQ=="
   "resolved" "https://registry.npmjs.org/stylelint/-/stylelint-14.10.0.tgz"
   "version" "14.10.0"
