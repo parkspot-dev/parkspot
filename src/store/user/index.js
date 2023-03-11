@@ -32,7 +32,6 @@ const mutations = {
     'update-user'(state, user) {
         state.user = user;
         if (user) {
-            console.log('update-user tokennnn', user.accessToken);
             localStorage.setItem('PSAuthKey', user.accessToken);
         } else {
             localStorage.setItem('PSAuthKey', null);

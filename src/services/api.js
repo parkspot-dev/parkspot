@@ -183,7 +183,6 @@ const getFlavour = (function () {
     const details = navigator.userAgent;
     const regexp = /android|iphone|kindle|ipad/i;
     const isMobileDevice = regexp.test(details);
-    console.log('getFlavour');
     if (isMobileDevice) {
         return 'mweb';
     } else {
@@ -198,7 +197,6 @@ const getFlavour = (function () {
  */
 const getAuthToken = (function () {
     const token = localStorage.getItem('PSAuthKey');
-    console.log('getAuthToken');
     if (token) {
         return token;
     } else {
