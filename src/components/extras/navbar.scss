@@ -8,6 +8,7 @@
     background-color: #ffffff;
 }
 
+// desktop version navbar
 .primary-nav-inner {
     position: relative;
     display: flex;
@@ -151,6 +152,22 @@
     }
 }
 
+.mobile-phone-link {
+    display: none;
+    margin: 0 auto;
+
+    a {
+        font-size: 1.25rem;
+        font-weight: 500;
+        border-bottom: 2px solid var(--primary-color);
+        color: #555555;
+    }
+
+    @media only screen and (max-width: 750px) {
+        display: block;
+    }
+}
+
 .menu-wrapper-right {
     display: flex;
     align-items: center;
@@ -180,6 +197,7 @@
     }
 }
 
+// hamburger for mobile view
 .primary-nav-hamburger {
     display: none;
     margin-top: 6px;
@@ -190,6 +208,7 @@
     }
 }
 
+// mobile version navbar
 .primary-nav-mobile {
     position: fixed;
     top: 0.625rem;
@@ -287,16 +306,11 @@
 
         .back-button {
             margin-left: -1.25rem;
-            padding: 0 0.9375rem 0 1.25rem;
+            padding: 0.25rem 0.9375rem 0 1.25rem;
             height: 3.125rem;
             font-size: 0.9375rem;
             line-height: 3.125rem;
             cursor: pointer;
-
-            &::before {
-                content: '↩';
-                font-size: 2rem;
-            }
         }
     }
 
@@ -312,23 +326,14 @@
 
         .scroll-item {
             position: relative;
-            display: block;
+            display: flex;
+            align-items: center;
             margin: 0;
             padding: 0;
             width: 100%;
             font-weight: 400;
             border-bottom: 1px solid #bfbfbf;
             text-align: left;
-
-            &::after {
-                content: '\2794';
-                position: absolute;
-                top: calc(50% - 5px);
-                right: 0;
-                font-size: 1.25rem;
-                line-height: 0.625rem;
-                pointer-events: none;
-            }
 
             p {
                 display: block;
@@ -440,22 +445,7 @@
     }
 }
 
-.mobile-phone-link {
-    display: none;
-    margin: 0 auto;
-
-    a {
-        font-size: 1.25rem;
-        font-weight: 500;
-        border-bottom: 2px solid var(--primary-color);
-        color: #555555;
-    }
-
-    @media only screen and (max-width: 750px) {
-        display: block;
-    }
-}
-
+// login and signup btn in mobile view hide
 .login-options {
     @media only screen and (max-width: 1024px) {
         display: none;

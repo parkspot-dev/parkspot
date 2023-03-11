@@ -183,6 +183,7 @@
                                         @click="toggleSlide(1)"
                                     >
                                         <p><span>My Account</span></p>
+                                        <b-icon icon="chevron-right"> </b-icon>
                                     </li>
                                     <li
                                         class="scroll-item"
@@ -191,6 +192,7 @@
                                         <p>
                                             <span>Company</span>
                                         </p>
+                                        <b-icon icon="chevron-right"> </b-icon>
                                     </li>
                                     <li
                                         class="scroll-item"
@@ -199,6 +201,7 @@
                                         <p>
                                             <span> Services </span>
                                         </p>
+                                        <b-icon icon="chevron-right"> </b-icon>
                                     </li>
                                 </ul>
                                 <template v-if="isAuthReady">
@@ -210,9 +213,9 @@
                                             Log in
                                         </AtomButton>
                                         <!-- todo: add functionality for sign up -->
-                                        <AtomButton class="menu-mobile-btn"
-                                            >Sign up</AtomButton
-                                        >
+                                        <AtomButton class="menu-mobile-btn">
+                                            Sign up
+                                        </AtomButton>
                                     </div>
                                 </template>
                             </div>
@@ -228,7 +231,9 @@
                                 <i
                                     class="back-button"
                                     @click="backToMainScroll"
-                                ></i>
+                                >
+                                    <b-icon icon="arrow-left"> </b-icon>
+                                </i>
                                 <p class="slide-header-title">My Account</p>
                             </div>
                             <div class="scroll-section">
@@ -276,7 +281,9 @@
                                 <i
                                     class="back-button"
                                     @click="backToMainScroll"
-                                ></i>
+                                >
+                                    <b-icon icon="arrow-left"> </b-icon>
+                                </i>
                                 <p class="slide-header-title">Company</p>
                             </div>
                             <div class="scroll-section">
@@ -325,7 +332,9 @@
                                 <i
                                     class="back-button"
                                     @click="backToMainScroll"
-                                ></i>
+                                >
+                                    <b-icon icon="arrow-left"> </b-icon>
+                                </i>
                                 <p class="slide-header-title">Services</p>
                             </div>
                             <div class="scroll-section">
