@@ -5,7 +5,7 @@
                 Book Your Parking Spot
             </AtomHeading>
             <b-breadcrumb align="is-centered" size="is-small">
-                <b-breadcrumb-item tag="router-link" to="/">
+                <b-breadcrumb-item tag="router-link" to="/" class="bread">
                     Home
                 </b-breadcrumb-item>
                 <b-breadcrumb-item tag="router-link" to="/blog" active>
@@ -99,6 +99,10 @@ export default {
 .custom-title {
     margin-bottom: 1rem;
     text-align: center;
+}
+
+.bread :hover{
+    color: red;
 }
 
 .nearbytext-container {

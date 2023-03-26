@@ -8,7 +8,7 @@
                             :icon="'car-back'"
                             :size="'is-medium'"
                         ></AtomIcon>
-                        <span> Car Owner </span>
+                        <span> Find Parking </span>
                     </div>
                 </template>
                 <template>
