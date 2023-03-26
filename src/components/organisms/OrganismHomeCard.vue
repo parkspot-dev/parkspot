@@ -16,7 +16,7 @@
                         <h2>Search a spot for your car</h2>
                         <SearchInput class="mb-6"></SearchInput>
                         <AtomButton @click.native="flyToSrp">
-                            Search now
+                            Find Parking
                         </AtomButton>
                     </div>
                 </template>
