@@ -28,7 +28,7 @@
                             :icon="'home-account'"
                             :size="'is-medium'"
                         ></AtomIcon>
-                        <span> Spot Owner </span>
+                        <span> Register Spot </span>
                     </div>
                 </template>
                 <template>
