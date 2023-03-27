@@ -33,7 +33,7 @@
                 </template>
                 <template>
                     <div class="card-main-body">
-                        <h2>Register unused parking spot</h2>
+                        <h2>Make money by renting your free space.</h2>
                         <p class="mb-5">
                             Start earning money by listing unused parking spot
                             in our platform.
@@ -125,11 +125,12 @@ export default {
             font-weight: 700;
             line-height: 58px;
             color: black;
-            margin-bottom: 62px;
+            margin-bottom: 25px;
 
             @media only screen and (max-width: 620px) {
                 font-size: 32px;
                 line-height: 39px;
+                margin-bottom: 62px;
             }
         }
 
