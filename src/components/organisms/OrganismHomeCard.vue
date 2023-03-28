@@ -39,7 +39,7 @@
                             in our platform.
                         </p>
                         <AtomButton class="mb-5" @click.native="contactUs">
-                            Register now
+                            Rent now
                         </AtomButton>
                         <div>
                             <span @click="contactUs">
