@@ -175,35 +175,36 @@ class MapBoxApiService extends BaseApiService {
 }
 
 /**
+ * IIFE function to
  * get the device mobile or desktop
  * @return {string} mweb or dweb.
  */
-function getFlavour() {
+const getFlavour = (function () {
     const details = navigator.userAgent;
     const regexp = /android|iphone|kindle|ipad/i;
     const isMobileDevice = regexp.test(details);
-
     if (isMobileDevice) {
         return 'mweb';
     } else {
         return 'dweb';
     }
-}
+})();
 
 /**
- * get the device mobile or desktop
+ * IIFE function to
+ * get the PSAuth key
  * @return {string} mweb or dweb.
  */
-function getAuthToken() {
+const getAuthToken = (function () {
     const token = localStorage.getItem('PSAuthKey');
     if (token) {
         return token;
     } else {
         return '';
     }
-}
+})();
 
-const mayaClient = new MayaApiService(getFlavour(), getAuthToken());
+const mayaClient = new MayaApiService(getFlavour, getAuthToken);
 const mapBoxClient = new MapBoxApiService();
 
 export { mayaClient, mapBoxClient };
