@@ -53,6 +53,11 @@ export const routes = [
         component: Home,
     },
     {
+        path: '/user/edit-profile',
+        name: 'editProfile',
+        component: () => import('@/views/PageEditProfile.vue'),
+    },
+    {
         path: pages.FAQ,
         name: 'Faq',
         component: () => import('@/views/PageFaq.vue'),

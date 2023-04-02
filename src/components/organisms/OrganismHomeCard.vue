@@ -16,7 +16,7 @@
                         <h2>Search a spot for your car</h2>
                         <SearchInput class="mb-6"></SearchInput>
                         <AtomButton @click.native="flyToSrp">
-                            Search now
+                            Find Parking
                         </AtomButton>
                     </div>
                 </template>
@@ -28,12 +28,12 @@
                             :icon="'home-account'"
                             :size="'is-medium'"
                         ></AtomIcon>
-                        <span> Spot Owner </span>
+                        <span> Register Spot </span>
                     </div>
                 </template>
                 <template>
                     <div class="card-main-body">
-                        <h2>Make money by renting your free space.</h2>
+                        <h2>Make money by renting out your parking spot</h2>
                         <p class="mb-5">
                             Start earning money by listing unused parking spot
                             in our platform.
@@ -125,7 +125,7 @@ export default {
             font-weight: 700;
             line-height: 58px;
             color: black;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
 
             @media only screen and (max-width: 620px) {
                 font-size: 32px;

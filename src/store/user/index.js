@@ -1,6 +1,23 @@
 import { mayaClient } from '@/services/api';
+import { auth } from '../../firebase';
+import store from '../../store';
+import {
+    signInWithPopup,
+    GoogleAuthProvider,
+    signOut,
+    onAuthStateChanged,
+} from 'firebase/auth';
 
 const state = {
+    user: null,
+    userProfile: {
+        FullName: '',
+        EmailID: '',
+        Mobile: '',
+        Type: 'VO',
+    },
+    isAuthReady: false,
+    loginModal: false,
     contactForm: {},
     kycForm: {},
     additionalInfo: {},
@@ -12,6 +29,28 @@ const state = {
 const getters = {};
 
 const mutations = {
+    'update-user'(state, user) {
+        state.user = user;
+        if (user) {
+            localStorage.setItem('PSAuthKey', user.accessToken);
+        } else {
+            localStorage.setItem('PSAuthKey', null);
+        }
+    },
+
+    'update-user-profile'(state, userProfile) {
+        userProfile['UserName'] = '';
+        state.userProfile = userProfile;
+    },
+
+    'update-login-Modal'(state, loginModal) {
+        state.loginModal = loginModal;
+    },
+
+    'update-auth-ready'(state, isAuthReady) {
+        state.isAuthReady = isAuthReady;
+    },
+
     'update-contact'(state, data = {}) {
         state.contactForm = data;
     },
@@ -38,6 +77,39 @@ const mutations = {
 };
 
 const actions = {
+    async loginWithGoogle({ commit, state }) {
+        const gProvider = new GoogleAuthProvider();
+
+        try {
+            const res = await signInWithPopup(auth, gProvider);
+            // todo remove commented code and console log
+            // const credential = GoogleAuthProvider.credentialFromResult(res);
+            // const token = credential.accessToken;
+            const user = res.user;
+            commit('update-user', user);
+            commit('update-login-Modal', false);
+        } catch (err) {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            const email = error.customData.email;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            console.log(errorCode, errorMessage, email, credential);
+        }
+    },
+
+    async logOut({ commit, state }) {
+        try {
+            await signOut(auth);
+            commit('update-user', null);
+        } catch (err) {
+            // todo write proper exception case
+            throw new Error(err);
+        }
+    },
+
     register({ commit, state }) {
         // prettier-ignore
         const req = {
@@ -142,7 +214,42 @@ const actions = {
 
         mayaClient.post('/owner/parking-request', req);
     },
+
+    async authenticateWithMaya({ state }) {
+        try {
+            await mayaClient.get('/auth/authenticate');
+        } catch (err) {
+            // todo write proper exception case
+            throw new Error(err);
+        }
+    },
+
+    async updateUserInfo({ commit, state }) {
+        try {
+            await mayaClient.post('/auth/update-fields', state.userProfile);
+        } catch (err) {
+            // todo write proper exception case
+            throw new Error(err);
+        }
+    },
+
+    async getUserProfile({ commit, dispatch, state }) {
+        try {
+            dispatch('authenticateWithMaya');
+            const userProfile = await mayaClient.get('/auth/user');
+            commit('update-user-profile', userProfile);
+        } catch (err) {
+            // todo write proper exception case
+            throw new Error(err);
+        }
+    },
 };
+
+const unsub = onAuthStateChanged(auth, (user) => {
+    store.commit('user/update-user', user);
+    store.commit('user/update-auth-ready', true);
+    unsub();
+});
 
 export default {
     namespaced: true,
