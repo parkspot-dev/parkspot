@@ -130,6 +130,7 @@ export default {
             @media only screen and (max-width: 620px) {
                 font-size: 32px;
                 line-height: 39px;
+                margin-bottom: 62px;
             }
         }
 
