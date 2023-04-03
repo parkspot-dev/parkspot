@@ -25,7 +25,9 @@
             </div>
             <div>
                 <div class="negative-margin">
-                    <p style="margin-right: 5px">Conv. fee ( <span class="bold-text"> One time </span> ) </p>
+                    <p style="margin-right: 5px">Conv. fee (
+                         <span class="bold-text"> One time </span> ) 
+                    </p>
                     <AtomTooltip :label="tooltipMsg">
                         <AtomIcon
                             :icon="ICON.INFO"
