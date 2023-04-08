@@ -7,21 +7,28 @@
                 class="about-img"
             ></AtomImage>
             <div class="about-desc" data-aos="zoom-in">
-                <AtomHeading class="mb-3"> Why Choose Us? </AtomHeading>
-                <AtomParagraph class="mb-2">
-                    We at ParkSpot strive to solve the trivial problem of
+                <AtomHeading class="mb-3"> What is ParkSpot? </AtomHeading>
+                <AtomParagraph class="mb-3">
+                    We at ParkSpot strive to solve the crucial problem of
                     finding or booking available parking slots in vicinity which
-                    is faced by millions of people on a daily basis. we view for
-                    solutions which brings technology and life closer and
-                    accessible.
+                    is faced by millions of people on a daily basis. Building
+                    solution to use technology for comport, security, and also
+                    generate side income.
                 </AtomParagraph>
-                <AtomParagraph class="mb-6">
-                    ParkSpot is part of this new initiative and incorporates
-                    various features aimed at improving the parking experience
-                    for residents and visitors. These will include removing the
-                    need for entry barriers at car park entrances and exits for
-                    a seamless flow of traffic, as vehicle plates will be
-                    registered via cameras.
+                <AtomHeading class="mb-3"> Why Choose Us? </AtomHeading>
+                <AtomParagraph class="mb-3">
+                    Comfortable parking experience. Brokerage free. Genuine Owners. 
+                    Ensured security of your vehicle. Available for residents and 
+                    visitors. Surveillance parking. Simple steps to list property. 
+                    Earn money on the go. Available on app and website.
+                </AtomParagraph>
+                <AtomParagraph class="mb-4">
+                    Find your parking spot now!
+                        <span>
+                            <router-link :to="'/'" class="link">
+                                <button class="btn"> Search </button>
+                            </router-link>
+                        </span>
                 </AtomParagraph>
                 <div class="about-links">
                     <AtomParagraph :variation="'large'" class="park-link">
@@ -74,6 +81,22 @@ export default {
     display: flex;     
 }
 
+.link, .router-link-active {
+    color: var(--primary-text);
+}
+
+.btn {
+    color: var(--primary-text);
+    font-size: 1.1rem;
+    font-weight: 400;
+    border-radius: 50px;
+    border-style: none;
+}
+
+.btn:hover {
+    color: var( --secondary-color);
+    cursor: pointer;
+}
 .about-links .park-link {
     font-size: 1.5rem;
 }
