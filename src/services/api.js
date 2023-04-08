@@ -135,7 +135,6 @@ class MayaApiService extends BaseApiService {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Flavour': flavour,
-            // 'PSAuthKey': authToken,
         };
         super(mayaDomain, baseHeaderMap, 5000, true);
     }
