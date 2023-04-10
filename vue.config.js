@@ -2,10 +2,11 @@ const zlib = require('zlib');
 const PrerenderSPAPlugin = require('prerender-spa-plugin');
 const path = require('path');
 module.exports = {
-    devServer: {
-        host: 'parkspot.localhost',
-        proxy: 'https://www.parkspot.in',
-    },
+    // was working but now not working why?
+    // devServer: {
+    //     host: 'parkspot.localhost',
+    //     proxy: 'https://www.parkspot.in',
+    // },
     productionSourceMap: false, //  Setting this to false can speed up production builds if you don't need source maps for production.
     configureWebpack: (config) => {
         if (process.env.NODE_ENV === 'production') {

@@ -25,7 +25,9 @@
             </div>
             <div>
                 <div class="negative-margin">
-                    <p style="margin-right: 5px">Conv. fee (One time)</p>
+                    <p style="margin-right: 5px">Conv. fee (
+                         <span class="bold-text"> One time </span> ) 
+                    </p>
                     <AtomTooltip :label="tooltipMsg">
                         <AtomIcon
                             :icon="ICON.INFO"
@@ -166,6 +168,10 @@ export default {
 
         .negative-margin {
             margin-bottom: -5px;
+        }
+
+        .bold-text {
+            font-weight: 700;
         }
     }
 

@@ -62,12 +62,10 @@ export default {
             faqLists: [
                 {
                     question: 'What is ParkSpot ?',
-                    answer: `ParkSpot is a smart parking platform, where you can search and book \
-                        a parking spot at your desired location or in your vicinity.\
-                        ParkSpot also supports long term parking and rental parkings.\
-                        ParkSpot relies on new technology and software that allows you to\
-                        monitor your vehicle in realtime post parking your vehicle in the\
-                        parking spot.`,
+                    answer: `We at ParkSpot strive to solve the crucial problem of finding or \
+                    booking available parking slots in vicinity which is faced by millions of \
+                    people on a daily basis. Building solution to use technology for comport, \
+                    security, and also generate side income.`,
                 },
 
                 {
