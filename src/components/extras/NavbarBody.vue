@@ -67,7 +67,10 @@
                 <!-- phone link -->
                 <div class="mobile-phone-link">
                     <p>
-                        <a href="tel:+91 80929 96057"> +91 80929 96057 </a>
+                        <a href="tel:+91 80929 96057">
+                            <b-icon icon="phone" size="is-small"> </b-icon>
+                            +91 809-299-6057
+                        </a>
                     </p>
                 </div>
                 <!-- login buttons -->
@@ -76,6 +79,8 @@
                         <li>
                             <p>
                                 <a href="tel:+91 80929 96057">
+                                    <b-icon icon="phone" size="is-small">
+                                    </b-icon>
                                     +91 809-299-6057
                                 </a>
                             </p>
