@@ -8,7 +8,7 @@
             ></AtomImage>
             <div class="about-desc" data-aos="zoom-in">
                 <AtomHeading class="mb-3"> What is ParkSpot? </AtomHeading>
-                <AtomParagraph class="mb-3">
+                <AtomParagraph class="mb-5">
                     We at ParkSpot strive to solve the crucial problem of
                     finding or booking available parking slots in vicinity which
                     is faced by millions of people on a daily basis. Building
@@ -16,19 +16,16 @@
                     generate side income.
                 </AtomParagraph>
                 <AtomHeading class="mb-3"> Why Choose Us? </AtomHeading>
-                <AtomParagraph class="mb-3">
+                <AtomParagraph class="mb-5">
                     Comfortable parking experience. Brokerage free. Genuine Owners. 
                     Ensured security of your vehicle. Available for residents and 
                     visitors. Surveillance parking. Simple steps to list property. 
                     Earn money on the go. Available on app and website.
                 </AtomParagraph>
                 <AtomParagraph class="mb-4">
-                    Find your parking spot now!
-                        <span>
-                            <router-link :to="'/'" class="link">
-                                <button class="btn"> Search </button>
-                            </router-link>
-                        </span>
+                    <router-link :to="'/'" class="link">
+                         Find your parking spot now!
+                    </router-link>
                 </AtomParagraph>
                 <div class="about-links">
                     <AtomParagraph :variation="'large'" class="park-link">
