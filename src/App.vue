@@ -36,12 +36,6 @@ export default {
 }
 
 .body-container {
-    margin-top: 10px;
-}
-
-@media only screen and (max-width: 1024px) {
-    .body-container {
-        margin-top: 2px;
-    }
+    padding-top: 4.375rem;
 }
 </style>

@@ -52,6 +52,7 @@
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-sass-guidelines": "^9.0.1",
     "stylelint-config-standard": "^27.0.0",
+    "stylelint-order": "^6.0.3",
     "stylelint-prettier": "^2.0.0",
     "stylelint-processor-html": "^1.0.0",
     "stylelint-webpack-plugin": "^3.3.0",
