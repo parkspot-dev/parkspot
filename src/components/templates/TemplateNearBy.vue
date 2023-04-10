@@ -4,7 +4,7 @@
             <AtomHeading class="custom-title">
                 Book Your Parking Spot
             </AtomHeading>
-            <b-breadcrumb align="is-centered" size="is-medium">
+            <b-breadcrumb align="is-centered" size="is-small">
                 <b-breadcrumb-item tag="router-link" to="/">
                     Home
                 </b-breadcrumb-item>

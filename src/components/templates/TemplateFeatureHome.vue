@@ -46,19 +46,19 @@ export default {
 .feature-container {
     display: flex;
     gap: 1.5rem;
-    padding: 5rem;
+    padding: 3.5rem;
 }
 
 @media only screen and (max-width: 1200px) {
     .feature-container {
-        padding: 5rem 0;
+        padding: 3rem 0;
     }
 }
 
 @media only screen and (max-width: 800px) {
     .feature-container {
         flex-direction: column;
-        padding: 5rem 2.5rem;
+        padding: 3rem 2.5rem;
     }
 }
 </style>
