@@ -412,6 +412,7 @@ export default {
 
         signout() {
             this.logOut();
+            this.$router.push({ name: 'Home' });
         },
 
         gotoProfile() {
