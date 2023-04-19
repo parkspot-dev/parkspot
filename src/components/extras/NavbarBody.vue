@@ -95,9 +95,9 @@
                                 Log in
                             </AtomButton>
                             <!-- todo: add functionality for sign up -->
-                            <AtomButton class="signup-btn" :outlined="true">
+                            <!-- <AtomButton class="signup-btn" :outlined="true">
                                 Sign up
-                            </AtomButton>
+                            </AtomButton> -->
                         </div>
                         <div class="login-options" v-if="user">
                             <div class="user-profile">
@@ -220,9 +220,9 @@
                                             Log in
                                         </AtomButton>
                                         <!-- todo: add functionality for sign up -->
-                                        <AtomButton class="menu-mobile-btn">
+                                        <!-- <AtomButton class="menu-mobile-btn">
                                             Sign up
-                                        </AtomButton>
+                                        </AtomButton> -->
                                     </div>
                                 </template>
                             </div>
@@ -270,9 +270,9 @@
                                             Log in
                                         </AtomButton>
                                         <!-- todo: add functionality for sign up -->
-                                        <AtomButton class="menu-mobile-btn">
+                                        <!-- <AtomButton class="menu-mobile-btn">
                                             Sign up
-                                        </AtomButton>
+                                        </AtomButton> -->
                                     </div>
                                 </template>
                             </div>
