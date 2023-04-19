@@ -59,7 +59,7 @@
             </div>
 
             <!-- only to admin -->
-            <div class="spot-detail-owner" v-if="isAdmin">
+            <div class="spot-detail-owner" v-if="ownerInfoDetails.UserName">
                 <hr style="width: 100%; margin-top: 80px" />
                 <h2>Owner Info Details</h2>
                 <p>FullName : {{ ownerInfoDetails.FullName }}</p>
