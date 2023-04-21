@@ -1,6 +1,5 @@
 <template>
     <div id="Home">
-        <OrganismLogin :is-show="loginModal"></OrganismLogin>
         <TemplateHomeBanner @flyToSrp="flyToSrp"></TemplateHomeBanner>
         <TemplateFeatureHome></TemplateFeatureHome>
         <TemplateOurProducts @arrowBtn="onArrowBtn"></TemplateOurProducts>
@@ -16,9 +15,8 @@ import TemplateHomeBanner from '../components/templates/TemplateHomeBanner.vue';
 import TemplateOurProducts from '../components/templates/TemplateOurProducts.vue';
 import TemplateTestimonial from '../components/templates/TemplateTestimonial.vue';
 import PageAbout from './PageAbout.vue';
-import OrganismLogin from '../components/organisms/OrganismLogin.vue';
+
 import { PAGE_TITLE } from '@/constant/constant';
-import { mapState } from 'vuex';
 export default {
     name: 'PageHome',
     components: {
@@ -28,7 +26,6 @@ export default {
         TemplateHomeBanner,
         TemplateTestimonial,
         TemplateOurProducts,
-        OrganismLogin,
     },
     metaInfo() {
         return {
@@ -37,11 +34,6 @@ export default {
     },
     data() {
         return {};
-    },
-    computed: {
-        ...mapState('user', {
-            loginModal: (state) => state.loginModal,
-        }),
     },
     methods: {
         onArrowBtn() {
