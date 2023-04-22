@@ -1,9 +1,7 @@
 <template>
     <div>
-        <HeaderBanner class="custom-header">
-            <AtomHeading class="custom-title">
-                <h1>Book Your Parking Spot</h1>
-            </AtomHeading>
+        <HeaderBanner class="custom-header">            
+                <h1 class="custom-title">Book Your Parking Spot</h1>           
             <b-breadcrumb align="is-centered" size="is-small">
                 <b-breadcrumb-item tag="router-link" to="/">
                     Home
@@ -107,7 +105,7 @@ export default {
     text-align: center;
 }
 
-.custom-title h1 {
+.custom-title {
     font-size: 2rem;
     font-weight: 500;
     letter-spacing: 0.8px;
