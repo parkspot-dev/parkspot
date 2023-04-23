@@ -47,32 +47,31 @@ export default {
     background-image: url('../../assets/home-spot-owner.jpg');
     -webkit-transition: background-image 1s;
 
-    @media only screen and (max-width: 620px) {
+    @media only screen and (max-width: 1024px) {
         background-image: unset;
-        background: white;
+        background-color: #ffffff;
     }
 }
 .image-car-owner {
     background-image: url('../../assets/home-car-owner.jpg');
     -webkit-transition: background-image 1s;
 
-    @media only screen and (max-width: 620px) {
+    @media only screen and (max-width: 1024px) {
         background-image: unset;
-        background: white;
+        background-color: #ffffff;
     }
 }
 .home-banner {
+    position: relative;
     height: 629px;
     max-height: 1000px;
-
-    position: relative;
 
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 
-    @media only screen and (max-width: 620px) {
+    @media only screen and (max-width: 1024px) {
         height: 790px;
         max-height: 1000px;
     }
@@ -82,7 +81,7 @@ export default {
         top: 0;
         left: 100px;
 
-        @media only screen and (max-width: 620px) {
+        @media only screen and (max-width: 1024px) {
             position: relative;
             top: unset;
             left: unset;
@@ -92,29 +91,29 @@ export default {
 
     .m-image-car-owner {
         display: none;
+        height: 187px;
         background-image: url('../../assets/m-home-car-owner.jpg');
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-        height: 187px;
         transform: scale(1.25);
         -webkit-transition: background-image 1s;
 
-        @media only screen and (max-width: 620px) {
+        @media only screen and (max-width: 1024px) {
             display: block;
         }
     }
     .m-image-spot-owner {
         display: none;
+        height: 187px;
         background-image: url('../../assets/m-home-spot-owner.jpg');
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-        height: 187px;
         transform: scale(1.25);
         -webkit-transition: background-image 1s;
 
-        @media only screen and (max-width: 620px) {
+        @media only screen and (max-width: 1024px) {
             display: block;
         }
     }

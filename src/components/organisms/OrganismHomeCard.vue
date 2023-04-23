@@ -1,22 +1,19 @@
 <template>
     <div class="home-card">
-        <b-tabs expanded @input="onChange">
+        <b-tabs @input="onChange">
             <b-tab-item value="VO">
                 <template #header>
                     <div class="header-tab-btn">
-                        <AtomIcon
-                            :icon="'car-back'"
-                            :size="'is-medium'"
-                        ></AtomIcon>
-                        <span> Car Owner </span>
+                        <b-icon class="tab-icon" :icon="'car'"></b-icon>
+                        <span class="tab-btn-text"> Find spot </span>
                     </div>
                 </template>
                 <template>
                     <div class="card-main-body">
-                        <h2>Search a parking spot for your car</h2>
-                        <SearchInput class="mb-6"></SearchInput>
-                        <AtomButton @click.native="flyToSrp">
-                            Find Parking
+                        <h2 class="title">Search parking spot in seconds</h2>
+                        <SearchInput class="search-input"></SearchInput>
+                        <AtomButton class="btn" @click.native="flyToSrp">
+                            Search now
                         </AtomButton>
                     </div>
                 </template>
@@ -24,24 +21,28 @@
             <b-tab-item value="SO">
                 <template #header>
                     <div class="header-tab-btn">
-                        <AtomIcon
-                            :icon="'home-account'"
-                            :size="'is-medium'"
-                        ></AtomIcon>
-                        <span> Register Spot </span>
+                        <b-icon
+                            class="tab-icon"
+                            :icon="'home-map-marker'"
+                        ></b-icon>
+                        <span class="tab-btn-text"> Rent spot </span>
                     </div>
                 </template>
                 <template>
                     <div class="card-main-body">
-                        <h2>Make money by renting out your parking spot</h2>
-                        <p class="mb-5">
-                            Start earning money by listing unused parking spot
-                            in our platform.
-                        </p>
-                        <AtomButton class="mb-5" @click.native="contactUs">
-                            Rent Spot
+                        <h2 class="title">
+                            Make money by renting out your spot
+                        </h2>
+                        <div class="subtitle">
+                            <p>
+                                Start earning money by listing your spot in our
+                                platform.
+                            </p>
+                        </div>
+                        <AtomButton class="btn mb-5" @click.native="contactUs">
+                            Get started
                         </AtomButton>
-                        <div>
+                        <div class="learn-more">
                             <span @click="contactUs">
                                 Learn more about being a spot owner.
                             </span>
@@ -54,7 +55,6 @@
 </template>
 
 <script>
-import AtomIcon from '../atoms/AtomIcon.vue';
 import SearchInput from '../extras/SearchInput.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import { mapGetters } from 'vuex';
@@ -62,7 +62,6 @@ import { getCoordinate } from '../../includes/LatLng';
 export default {
     name: 'HomeCard',
     components: {
-        AtomIcon,
         SearchInput,
         AtomButton,
     },
@@ -99,53 +98,148 @@ export default {
 
 <style lang="scss" scoped>
 .home-card {
-    max-width: 562px;
-    height: 509px;
+    max-width: 640px;
+    height: 532px;
     border-radius: var(--border-default);
-    background: white;
-    padding-top: 15px;
-    padding-bottom: 10px;
+    background: #ffffff;
+
+    @media only screen and (max-width: 1024px) {
+        height: 480px;
+    }
 
     .header-tab-btn {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        padding: 28px 16px 12px;
+        width: 104px;
+        min-width: 104px;
+
+        @media only screen and (max-width: 1024px) {
+            padding: 28px 0px 12px;
+        }
+
+        .tab-icon {
+            margin: 0 auto;
+            width: 24px;
+            height: 24px;
+        }
+
+        .tab-btn-text {
+            display: flex;
+            justify-content: center;
+            margin-top: 16px;
+            font-size: 14px;
+            font-weight: 500;
+        }
     }
 
     .card-main-body {
-        padding: 33px 49px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
 
-        @media only screen and (max-width: 620px) {
-            padding: 18px 13px;
+        @media only screen and (max-width: 1024px) {
         }
 
-        h2 {
-            font-size: 48px;
-            font-weight: 700;
-            line-height: 58px;
-            color: black;
-            margin-bottom: 30px;
+        .search-input {
+            margin-bottom: 48px;
+            width: 100%;
+        }
 
-            @media only screen and (max-width: 620px) {
+        .title {
+            margin-bottom: 30px;
+            font-size: 48px;
+            font-weight: 600;
+            line-height: 58px;
+            color: #000000;
+
+            @media only screen and (max-width: 1024px) {
                 font-size: 32px;
                 line-height: 39px;
                 margin-bottom: 62px;
             }
         }
 
-        p {
+        .subtitle {
+            margin-top: 24px;
+            margin-bottom: 32px;
             font-size: 16px;
             color: #8c8c8c;
             line-height: 19px;
+
+            @media only screen and (max-width: 1024px) {
+                margin-top: 0;
+            }
         }
 
-        span {
+        .learn-more {
             font-size: 14px;
             border-bottom: 1px solid #8c8c8c;
             color: #8c8c8c;
             line-height: 19px;
             cursor: pointer;
+        }
+    }
+
+    .btn {
+        font-weight: 700;
+    }
+}
+</style>
+
+<style lang="scss">
+.home-card {
+    .b-tabs {
+        .tabs {
+            ul {
+                justify-content: space-around;
+
+                @media only screen and (max-width: 1024px) {
+                    justify-content: unset;
+                }
+
+                li {
+                    a {
+                        @media only screen and (max-width: 1024px) {
+                            padding-right: 0;
+                            padding-left: 0;
+                        }
+
+                        &:hover {
+                            border-bottom: 0;
+                        }
+                    }
+                }
+            }
+
+            li.is-active a {
+                position: relative;
+                border-bottom: 0;
+                color: var(--secondary-color);
+
+                &:focus {
+                    border-bottom: 0;
+                }
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    width: 75px;
+                    height: 1px;
+                    border-bottom: 4px solid var(--secondary-color);
+                    transform: translateX(-50%);
+                }
+            }
+        }
+
+        .tab-content {
+            padding: 3rem;
+
+            @media only screen and (max-width: 1024px) {
+                padding: 1.5rem 0.95rem;
+            }
         }
     }
 }
