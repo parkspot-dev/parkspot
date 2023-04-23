@@ -125,4 +125,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.label {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+</style>

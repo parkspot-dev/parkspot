@@ -1,6 +1,6 @@
 <template>
     <div>
-        <TemplateSpotDetail :isAdmin="isAdmin"></TemplateSpotDetail>
+        <TemplateSpotDetail></TemplateSpotDetail>
         <LoaderModal :isLoading="isLoading"></LoaderModal>
     </div>
 </template>

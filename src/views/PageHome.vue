@@ -9,12 +9,13 @@
     </div>
 </template>
 <script>
-import TemplateFeatureHome from '@/components/templates/TemplateFeatureHome.vue';
+import TemplateFeatureHome from '../components/templates/TemplateFeatureHome.vue';
 import PageContactUs from './PageContactUs.vue';
 import TemplateHomeBanner from '../components/templates/TemplateHomeBanner.vue';
 import TemplateOurProducts from '../components/templates/TemplateOurProducts.vue';
 import TemplateTestimonial from '../components/templates/TemplateTestimonial.vue';
 import PageAbout from './PageAbout.vue';
+
 import { PAGE_TITLE } from '@/constant/constant';
 export default {
     name: 'PageHome',
