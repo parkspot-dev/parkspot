@@ -149,6 +149,10 @@
                             Landmark :
                             <strong>{{ props.row.Landmark }}</strong>
                         </p>
+                        <p v-if="props.row.Distance">
+                            Distance :
+                            <strong>{{ props.row.Distance }} Km</strong>
+                        </p>
                     </div>
 
                     <div class="secondary">

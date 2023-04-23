@@ -1,18 +1,40 @@
 <template>
-    <TemplateSearchPortal
-        :parkingRequests="parkingRequests"
-        :isLoading="isLoading"
-        @updateRequest="updateRequest"
-        @toSrp="toSrp"
-    ></TemplateSearchPortal>
+    <b-tabs size="is-medium" v-model="activeTab">
+        <b-tab-item label="VO/SO Request">
+            <TemplateSearchPortal
+                :parkingRequests="parkingRequests"
+                :isLoading="isLoading"
+                @updateRequest="updateRequest"
+                @toSrp="toSrp"
+            ></TemplateSearchPortal>
+        </b-tab-item>
+
+        <b-tab-item label="Interested VO">
+            <div class="search-control">
+                <p></p>
+                <AtomInput v-model="SOLatLngInput"> </AtomInput>
+                <AtomButton @click.native="getInterestedVO">Search</AtomButton>
+            </div>
+            <TemplateSearchPortal
+                :parkingRequests="intrestedVOList"
+                :isLoading="isLoading"
+                @updateRequest="updateRequest"
+                @toSrp="toSrp"
+            ></TemplateSearchPortal>
+        </b-tab-item>
+    </b-tabs>
 </template>
 <script>
 import TemplateSearchPortal from '../components/templates/TemplateSearchPortal.vue';
 import { PAGE_TITLE } from '@/constant/constant';
+import AtomInput from '../components/atoms/AtomInput.vue';
+import AtomButton from '../components/atoms/AtomButton.vue';
 export default {
     name: 'PageSearchPortal',
     components: {
         TemplateSearchPortal,
+        AtomInput,
+        AtomButton,
     },
     metaInfo() {
         return {
@@ -24,10 +46,13 @@ export default {
         return {
             parkingRequests: [],
             isLoading: false,
+            intrestedVOList: [],
+            SOLatLngInput: '',
         };
     },
     created() {
         this.getParkingRequests();
+        // this.getInterestedVO();
     },
     methods: {
         async getParkingRequests() {
@@ -37,6 +62,18 @@ export default {
             );
             const data = await res.json();
             this.parkingRequests = data;
+            this.isLoading = false;
+        },
+        async getInterestedVO() {
+            this.isLoading = true;
+            const location = this.SOLatLngInput.trim().split(',');
+            const lat = location[0].trim();
+            const lng = location[1].trim();
+            const res = await fetch(
+                `https://maya.parkspot.in/search-requests?lat=${lat}&long=${lng}`,
+            );
+            const data = await res.json();
+            this.intrestedVOList = data;
             this.isLoading = false;
         },
         async updateRequest(request) {
@@ -85,3 +122,13 @@ export default {
     },
 };
 </script>
+
+<style lang="scss" scoped>
+.tab-item {
+    .search-control {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+}
+</style>
