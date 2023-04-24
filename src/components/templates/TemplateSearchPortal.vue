@@ -1,6 +1,6 @@
 <template>
     <div class="search-portal-wrapper">
-        <div class="summary">
+        <div class="summary" v-if="isSummary">
             <div class="so-btn">
                 <AtomButton @click.native="showSummary">
                     {{ summary.btn }} Summary
@@ -314,6 +314,10 @@ export default {
         },
         isLoading: {
             type: Boolean,
+        },
+        isSummary: {
+            type: Boolean,
+            default: false,
         },
     },
     emits: ['updateRequest', 'toSrp'],

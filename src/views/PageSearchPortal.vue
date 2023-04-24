@@ -1,15 +1,16 @@
 <template>
-    <b-tabs size="is-medium" v-model="activeTab">
-        <b-tab-item label="VO/SO Request">
+    <b-tabs v-model="activeTab">
+        <b-tab-item label="Parking Request (VO/SO)">
             <TemplateSearchPortal
                 :parkingRequests="parkingRequests"
                 :isLoading="isLoading"
+                :isSummary="true"
                 @updateRequest="updateRequest"
                 @toSrp="toSrp"
             ></TemplateSearchPortal>
         </b-tab-item>
 
-        <b-tab-item label="Interested VO">
+        <b-tab-item label="Interested Request(VO)">
             <div class="search-control">
                 <p></p>
                 <AtomInput v-model="SOLatLngInput"> </AtomInput>
@@ -46,6 +47,7 @@ export default {
         return {
             parkingRequests: [],
             isLoading: false,
+            activeTab: 0,
             intrestedVOList: [],
             SOLatLngInput: '',
         };
