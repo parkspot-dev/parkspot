@@ -1,6 +1,6 @@
 <template>
     <div class="search-portal-wrapper">
-        <div class="summary">
+        <div class="summary" v-if="isSummary">
             <div class="so-btn">
                 <AtomButton @click.native="showSummary">
                     {{ summary.btn }} Summary
@@ -148,6 +148,10 @@
                         <p>
                             Landmark :
                             <strong>{{ props.row.Landmark }}</strong>
+                        </p>
+                        <p v-if="props.row.Distance">
+                            Distance :
+                            <strong>{{ props.row.Distance }} Km</strong>
                         </p>
                     </div>
 
@@ -310,6 +314,10 @@ export default {
         },
         isLoading: {
             type: Boolean,
+        },
+        isSummary: {
+            type: Boolean,
+            default: false,
         },
     },
     emits: ['updateRequest', 'toSrp'],
