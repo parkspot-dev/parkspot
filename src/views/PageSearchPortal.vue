@@ -30,6 +30,8 @@ import TemplateSearchPortal from '../components/templates/TemplateSearchPortal.v
 import { PAGE_TITLE } from '@/constant/constant';
 import AtomInput from '../components/atoms/AtomInput.vue';
 import AtomButton from '../components/atoms/AtomButton.vue';
+import { mayaClient } from '@/services/api';
+
 export default {
     name: 'PageSearchPortal',
     components: {
@@ -54,16 +56,14 @@ export default {
     },
     created() {
         this.getParkingRequests();
-        // this.getInterestedVO();
     },
     methods: {
         async getParkingRequests() {
             this.isLoading = true;
-            const res = await fetch(
-                'https://maya.parkspot.in/internal/parking-requests',
+            const parkingRequestList = await mayaClient.get(
+                '/internal/parking-requests',
             );
-            const data = await res.json();
-            this.parkingRequests = data;
+            this.parkingRequests = parkingRequestList;
             this.isLoading = false;
         },
         async getInterestedVO() {
@@ -71,10 +71,9 @@ export default {
             const location = this.SOLatLngInput.trim().split(',');
             const lat = location[0].trim();
             const lng = location[1].trim();
-            const res = await fetch(
-                `https://maya.parkspot.in/search-requests?lat=${lat}&long=${lng}`,
+            const parkingRequestList = await mayaClient.get(
+                `/search-requests?lat=${lat}&long=${lng}`,
             );
-            const parkingRequestList = await res.json();
             this.intrestedVOList = parkingRequestList;
             this.isLoading = false;
         },
