@@ -11,7 +11,7 @@
         </b-tab-item>
 
         <b-tab-item label="Interested Request(VO)">
-            <div class="search-control">
+            <div class="request-search-control">
                 <p></p>
                 <AtomInput v-model="SOLatLngInput"> </AtomInput>
                 <AtomButton @click.native="getInterestedVO">Search</AtomButton>
@@ -74,8 +74,8 @@ export default {
             const res = await fetch(
                 `https://maya.parkspot.in/search-requests?lat=${lat}&long=${lng}`,
             );
-            const data = await res.json();
-            this.intrestedVOList = data;
+            const parkingRequestList = await res.json();
+            this.intrestedVOList = parkingRequestList;
             this.isLoading = false;
         },
         async updateRequest(request) {
@@ -127,7 +127,7 @@ export default {
 
 <style lang="scss" scoped>
 .tab-item {
-    .search-control {
+    .request-search-control {
         display: flex;
         justify-content: center;
         gap: 10px;
