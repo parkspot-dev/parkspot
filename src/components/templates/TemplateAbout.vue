@@ -1,12 +1,13 @@
 <template>
     <BodyWrapper>
+        <AtomParagraph class="custom-subtitle"> About Us </AtomParagraph>
         <div class="about-container">
             <AtomImage
                 :src="aboutImg"
                 :alt="'About Image'"
                 class="about-img"
             ></AtomImage>
-            <div class="about-desc" data-aos="zoom-in">
+            <div class="about-desc" data-aos="zoom-in">             
                 <h2 class="mb-3 first-heading"> What is ParkSpot? </h2>
                 <p class="mb-5">
                     We at ParkSpot strive to solve the crucial problem of
@@ -77,6 +78,13 @@ export default {
     font-weight: 500;
 }
 
+.custom-subtitle {
+    color: var(--secondary-color);
+    font-weight: var(--semi-bold-font);
+    text-align: center;
+    padding-bottom: 1.8rem;
+}
+
 @media only screen and (max-width: 1024px) {
     .about-desc .first-heading {
         font-size: 2.2rem;
@@ -84,7 +92,7 @@ export default {
 }
 
 .second-heading {
-    font-size: 1.8rem;
+    font-size: 2.7rem;
     font-weight: 500;
 }
 
@@ -95,6 +103,10 @@ export default {
 
 .link, .router-link-active {
     color: var(--primary-text);
+}
+
+.link:hover {
+    color: var(--secondary-color);
 }
 
 .btn {
