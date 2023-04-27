@@ -82,3 +82,18 @@ export default {
     }
 }
 </style>
+
+<style lang="scss">
+.blog-header {
+    .breadcrumb li:first-child a {
+    color: black;
+}
+}
+
+.blog-header {
+    .breadcrumb li:first-child a:hover {
+        color: var(--secondary-color);
+    }
+}
+
+</style>
