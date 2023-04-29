@@ -1,17 +1,19 @@
 <template>
     <div>
         <HeaderBanner>
-            <AtomHeading class="custom-title">
-                Book Your Parking Spot
-            </AtomHeading>
-            <b-breadcrumb align="is-centered" size="is-small">
-                <b-breadcrumb-item tag="router-link" to="/">
-                    Home
-                </b-breadcrumb-item>
-                <b-breadcrumb-item tag="router-link" to="/blog" active>
-                    {{ locationWithCaps }}
-                </b-breadcrumb-item>
-            </b-breadcrumb>
+            <div class="custom-header">
+                <AtomHeading class="custom-title">
+                    Book Your Parking Spot
+                </AtomHeading>
+                <b-breadcrumb align="is-centered" size="is-small">
+                    <b-breadcrumb-item tag="router-link" to="/">
+                        Home
+                    </b-breadcrumb-item>
+                    <b-breadcrumb-item tag="router-link" to="/blog" active>
+                        {{ locationWithCaps }}
+                    </b-breadcrumb-item>
+                </b-breadcrumb>
+            </div>
         </HeaderBanner>
 
         <BodyWrapper>
@@ -95,7 +97,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .custom-title {
     margin-bottom: 1rem;
     text-align: center;
@@ -109,5 +111,19 @@ export default {
 .custom-nearby {
     color: var(--grey-shade);
     margin-bottom: 1rem;
+}
+</style>
+
+<style lang="scss">
+.custom-header {
+    .breadcrumb li:first-child a {
+        color: #111;   
+    }
+}
+
+.custom-header {
+    .breadcrumb li:first-child a:hover {
+        color: var(--secondary-color);
+    }
 }
 </style>
