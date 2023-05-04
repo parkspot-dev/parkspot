@@ -1,5 +1,5 @@
 <template>
-    <b-tabs v-model="activeTab">
+    <b-tabs v-model="activeTabView">
         <b-tab-item label="Parking Request (VO/SO)">
             <TemplateSearchPortal
                 :parkingRequests="parkingRequests"
@@ -13,7 +13,7 @@
         <b-tab-item label="Interested Request(VO)">
             <div class="request-search-control">
                 <p></p>
-                <AtomInput v-model="SOLatLngInput"> </AtomInput>
+                <AtomInput v-model="SOLatLng"> </AtomInput>
                 <AtomButton @click.native="getInterestedVO">Search</AtomButton>
             </div>
             <TemplateSearchPortal
@@ -31,6 +31,7 @@ import { PAGE_TITLE } from '@/constant/constant';
 import AtomInput from '../components/atoms/AtomInput.vue';
 import AtomButton from '../components/atoms/AtomButton.vue';
 import { mayaClient } from '@/services/api';
+import { mapActions, mapState } from 'vuex';
 
 export default {
     name: 'PageSearchPortal',
@@ -49,15 +50,39 @@ export default {
         return {
             parkingRequests: [],
             isLoading: false,
-            activeTab: 0,
             intrestedVOList: [],
-            SOLatLngInput: '',
         };
+    },
+    computed: {
+        ...mapState('searchPortal', ['activeTab', 'SOLatLngInput']),
+        activeTabView: {
+            get() {
+                return this.activeTab;
+            },
+            set(tabNo) {
+                this.updateActiveTab(tabNo);
+            },
+        },
+        SOLatLng: {
+            get() {
+                return this.SOLatLngInput;
+            },
+            set(LatLng) {
+                this.updateSOLatLngInput(LatLng);
+            },
+        },
     },
     created() {
         this.getParkingRequests();
+        if (this.SOLatLngInput) {
+            this.getInterestedVO();
+        }
     },
     methods: {
+        ...mapActions('searchPortal', [
+            'updateActiveTab',
+            'updateSOLatLngInput',
+        ]),
         async getParkingRequests() {
             this.isLoading = true;
             const parkingRequestList = await mayaClient.get(

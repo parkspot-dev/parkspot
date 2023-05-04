@@ -1,6 +1,8 @@
 <template>
     <div>
-        <TemplateSpotDetail></TemplateSpotDetail>
+        <TemplateSpotDetail
+            @goToSearchPortal="goToSearchPortal"
+        ></TemplateSpotDetail>
         <LoaderModal :isLoading="isLoading"></LoaderModal>
     </div>
 </template>
@@ -51,6 +53,10 @@ export default {
         ...mapActions('sdp', {
             getSpotDetails: 'getSpotDetails',
         }),
+        ...mapActions('searchPortal', [
+            'updateActiveTab',
+            'updateSOLatLngInput',
+        ]),
         ...mapMutations('map', {
             updateManConfig: 'update-map-config',
         }),
@@ -85,6 +91,11 @@ export default {
             }
 
             console.log(detailError);
+        },
+        goToSearchPortal(latLng) {
+            this.updateActiveTab(1);
+            this.updateSOLatLngInput(latLng.join(','));
+            this.$router.push({ name: 'SearchPortal' });
         },
     },
 };
