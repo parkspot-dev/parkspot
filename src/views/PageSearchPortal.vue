@@ -1,18 +1,19 @@
 <template>
-    <b-tabs size="is-medium" v-model="activeTab">
-        <b-tab-item label="VO/SO Request">
+    <b-tabs v-model="activeTabView">
+        <b-tab-item label="Parking Request (VO/SO)">
             <TemplateSearchPortal
                 :parkingRequests="parkingRequests"
                 :isLoading="isLoading"
+                :isSummary="true"
                 @updateRequest="updateRequest"
                 @toSrp="toSrp"
             ></TemplateSearchPortal>
         </b-tab-item>
 
-        <b-tab-item label="Interested VO">
-            <div class="search-control">
+        <b-tab-item label="Interested Request(VO)">
+            <div class="request-search-control">
                 <p></p>
-                <AtomInput v-model="SOLatLngInput"> </AtomInput>
+                <AtomInput v-model="SOLatLng"> </AtomInput>
                 <AtomButton @click.native="getInterestedVO">Search</AtomButton>
             </div>
             <TemplateSearchPortal
@@ -29,6 +30,9 @@ import TemplateSearchPortal from '../components/templates/TemplateSearchPortal.v
 import { PAGE_TITLE } from '@/constant/constant';
 import AtomInput from '../components/atoms/AtomInput.vue';
 import AtomButton from '../components/atoms/AtomButton.vue';
+import { mayaClient } from '@/services/api';
+import { mapActions, mapState } from 'vuex';
+
 export default {
     name: 'PageSearchPortal',
     components: {
@@ -47,21 +51,44 @@ export default {
             parkingRequests: [],
             isLoading: false,
             intrestedVOList: [],
-            SOLatLngInput: '',
         };
+    },
+    computed: {
+        ...mapState('searchPortal', ['activeTab', 'SOLatLngInput']),
+        activeTabView: {
+            get() {
+                return this.activeTab;
+            },
+            set(tabNo) {
+                this.updateActiveTab(tabNo);
+            },
+        },
+        SOLatLng: {
+            get() {
+                return this.SOLatLngInput;
+            },
+            set(LatLng) {
+                this.updateSOLatLngInput(LatLng);
+            },
+        },
     },
     created() {
         this.getParkingRequests();
-        // this.getInterestedVO();
+        if (this.SOLatLngInput) {
+            this.getInterestedVO();
+        }
     },
     methods: {
+        ...mapActions('searchPortal', [
+            'updateActiveTab',
+            'updateSOLatLngInput',
+        ]),
         async getParkingRequests() {
             this.isLoading = true;
-            const res = await fetch(
-                'https://maya.parkspot.in/internal/parking-requests',
+            const parkingRequestList = await mayaClient.get(
+                '/internal/parking-requests',
             );
-            const data = await res.json();
-            this.parkingRequests = data;
+            this.parkingRequests = parkingRequestList;
             this.isLoading = false;
         },
         async getInterestedVO() {
@@ -69,11 +96,10 @@ export default {
             const location = this.SOLatLngInput.trim().split(',');
             const lat = location[0].trim();
             const lng = location[1].trim();
-            const res = await fetch(
-                `https://maya.parkspot.in/search-requests?lat=${lat}&long=${lng}`,
+            const parkingRequestList = await mayaClient.get(
+                `/search-requests?lat=${lat}&long=${lng}`,
             );
-            const data = await res.json();
-            this.intrestedVOList = data;
+            this.intrestedVOList = parkingRequestList;
             this.isLoading = false;
         },
         async updateRequest(request) {
@@ -127,7 +153,7 @@ export default {
 
 <style lang="scss" scoped>
 .tab-item {
-    .search-control {
+    .request-search-control {
         display: flex;
         justify-content: center;
         gap: 10px;

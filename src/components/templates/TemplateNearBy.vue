@@ -1,9 +1,7 @@
 <template>
     <div>
-        <HeaderBanner>
-            <AtomHeading class="custom-title">
-                Book Your Parking Spot
-            </AtomHeading>
+        <HeaderBanner class="custom-header">            
+                <h1 class="custom-title">Book Your Parking Spot</h1>           
             <b-breadcrumb align="is-centered" size="is-small">
                 <b-breadcrumb-item tag="router-link" to="/">
                     Home
@@ -96,9 +94,21 @@ export default {
 </script>
 
 <style scoped>
-.custom-title {
+.custom-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    flex-direction: column;
+    align-content: space-between;
     margin-bottom: 1rem;
     text-align: center;
+}
+
+.custom-title {
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: 0.8px;
 }
 
 .nearbytext-container {
