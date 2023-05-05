@@ -1,7 +1,7 @@
 <template>
     <section>
         <TemplateSrp
-            :spots="paginatedSrpResults"
+            :spots="srpResults"
             :totals="totalPages"
             :currentPage="currentPage"
             :reRender="reRender"
@@ -14,7 +14,7 @@
 </template>
 <script>
 import TemplateSrp from '../components/templates/TemplateSrp.vue';
-import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import { getCoordinate } from '../includes/LatLng';
 import { PAGE_TITLE } from '@/constant/constant';
@@ -55,6 +55,7 @@ export default {
             totalPages: 'map/getTotalPages',
             LocDetails: 'map/getLocDetails',
         }),
+        ...mapState('map', ['srpResults']),
     },
 
     async mounted() {

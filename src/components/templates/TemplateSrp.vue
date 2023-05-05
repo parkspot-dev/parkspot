@@ -1,11 +1,11 @@
 <template>
     <div class="srp-container">
         <div class="srp-lists">
-            <PaginationBody
+            <!-- <PaginationBody
                 :totals="totals"
                 @changed="onPageChange"
                 :current="currentPage"
-            ></PaginationBody>
+            ></PaginationBody> -->
             <div class="srp-list-items">
                 <MoleculeSRPCard
                     v-for="spot in spots"
@@ -15,11 +15,11 @@
                     @click.native="selected(spot)"
                 ></MoleculeSRPCard>
             </div>
-            <PaginationBody
+            <!-- <PaginationBody
                 :totals="totals"
                 @changed="onPageChange"
                 :current="currentPage"
-            ></PaginationBody>
+            ></PaginationBody> -->
         </div>
         <div class="srp-map">
             <MapContainer
@@ -33,14 +33,14 @@
 </template>
 
 <script>
-import PaginationBody from '../extras/PaginationBody.vue';
+// import PaginationBody from '../extras/PaginationBody.vue';
 import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import SearchInput from '../extras/SearchInput.vue';
 export default {
     name: 'TemplateSrp',
     components: {
-        PaginationBody,
+        // PaginationBody,
         MoleculeSRPCard,
         MapContainer,
         SearchInput,
@@ -83,6 +83,7 @@ export default {
     display: flex;
     gap: 2rem;
     padding-left: 3rem;
+    height: 100vh;
 }
 
 .srp-lists {
@@ -94,6 +95,27 @@ export default {
 .srp-list-items {
     padding-top: 1rem;
     padding-bottom: 1rem;
+    height: 80vh;
+    overflow-y: scroll;
+}
+
+/* custom scroll design */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px rgb(202, 201, 201);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(0, 88, 114);
 }
 
 .srp-map {
@@ -116,6 +138,7 @@ export default {
     .srp-container {
         flex-direction: column-reverse;
         padding-left: 0;
+        height: unset;
     }
 
     .srp-lists {
