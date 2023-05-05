@@ -478,7 +478,7 @@ export default {
 </script>
 
 <style lang="scss">
-$portal-font-size: 14px;
+$portal-font-size: 13px;
 
 @media only screen and (max-width: 1024px) {
     .id-column-parent {
@@ -488,7 +488,7 @@ $portal-font-size: 14px;
 }
 
 .search-portal-wrapper {
-    padding: 1rem 4rem;
+    padding: 1rem 1rem;
 
     @media only screen and (max-width: 1024px) {
         padding: 1rem;
@@ -564,9 +564,9 @@ $portal-font-size: 14px;
         flex-direction: column;
         gap: 10px;
 
-        div {
-            display: flex;
-        }
+        // div {
+        //     display: flex;
+        // }
     }
     .contact-column {
         font-size: $portal-font-size;
