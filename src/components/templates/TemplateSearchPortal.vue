@@ -563,10 +563,6 @@ $portal-font-size: 13px;
         display: flex;
         flex-direction: column;
         gap: 10px;
-
-        // div {
-        //     display: flex;
-        // }
     }
     .contact-column {
         font-size: $portal-font-size;
