@@ -19,6 +19,7 @@
                                 <AtomCheckbox
                                     :values="filterOptions"
                                     :size="'is-small'"
+                                    @input="handleFilter"
                                 ></AtomCheckbox>
                             </ul>
                         </div>
@@ -27,8 +28,12 @@
             </div>
             <div class="srp-results-heading">
                 <p>
-                    <strong>{{ spots.length }} Results </strong>
-                    <span> in {{ selectedLocation.locName }} </span>
+                    Spots found:
+                    <strong>
+                        <b-tag type="is-light">
+                            {{ spots.length }}
+                        </b-tag>
+                    </strong>
                 </p>
             </div>
             <hr />
@@ -115,6 +120,9 @@ export default {
         },
         onOutsideFilter() {
             this.isFilter = false;
+        },
+        handleFilter(filterOptions) {
+            this.$emit('filter', filterOptions);
         },
     },
 };
