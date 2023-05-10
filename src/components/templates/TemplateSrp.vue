@@ -138,8 +138,8 @@ export default {
     .srp-control {
         display: flex;
         gap: 10px;
-        margin-bottom: 24px;
         margin-top: 10px;
+        margin-bottom: 24px;
 
         .map-search {
             width: 100%;
@@ -147,14 +147,15 @@ export default {
 
         .filter-component {
             position: relative;
+
             .filter-dropdown {
-                width: 120px;
-                background-color: white;
-                border: 1px solid black;
-                padding: 12px 5px 5px 12px;
                 position: absolute;
+                padding: 12px 5px 5px 12px;
+                width: 120px;
                 z-index: 999;
                 border-radius: 4px;
+                border: 1px solid #000000;
+                background-color: #ffffff;
 
                 ul {
                     font-size: 16px;
@@ -179,53 +180,41 @@ export default {
     }
 
     .srp-list-items {
-        height: 70vh;
         /* scroll bar width, for use in mask calculations */
         --scrollbar-width: 8px;
-
         /* mask fade distance, for use in mask calculations */
         --mask-height: 32px;
-
-        /* If content exceeds height of container, overflow! */
-        overflow-y: auto;
-
-        /* Need to make sure container has bottom space,
-      otherwise content at the bottom is always faded out */
-        padding-bottom: var(--mask-height);
-
-        /* Keep some space between content and scrollbar */
-        padding-right: 20px;
-
         /* The CSS mask */
-
         /* The content mask is a linear gradient from top to bottom */
         --mask-image-content: linear-gradient(
             to bottom,
             transparent,
-            black var(--mask-height),
-            black calc(100% - var(--mask-height)),
+            #000000 var(--mask-height),
+            #000000 calc(100% - var(--mask-height)),
             transparent
         );
-
         /* Here we scale the content gradient to the width of the container
       minus the scrollbar width. The height is the full container height */
         --mask-size-content: calc(100% - var(--scrollbar-width)) 100%;
-
         /* The scrollbar mask is a black pixel */
-        --mask-image-scrollbar: linear-gradient(black, black);
-
+        --mask-image-scrollbar: linear-gradient(#000000, #000000);
         /* The width of our black pixel is the width of the scrollbar.
       The height is the full container height */
         --mask-size-scrollbar: var(--scrollbar-width) 100%;
-
+        /* If content exceeds height of container, overflow! */
+        overflow-y: auto;
+        /* Keep some space between content and scrollbar */
+        padding-right: 20px;
+        /* Need to make sure container has bottom space,
+      otherwise content at the bottom is always faded out */
+        padding-bottom: var(--mask-height);
+        height: 70vh;
         /* Apply the mask image and mask size variables */
         mask-image: var(--mask-image-content), var(--mask-image-scrollbar);
         mask-size: var(--mask-size-content), var(--mask-size-scrollbar);
-
         /* Position the content gradient in the top left, and the
       scroll gradient in the top right */
         mask-position: 0 0, 100% 0;
-
         /* We don't repeat our mask images */
         mask-repeat: no-repeat, no-repeat;
     }
@@ -236,13 +225,13 @@ export default {
     }
 
     ::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 5px rgb(202, 201, 201);
         border-radius: 10px;
+        box-shadow: inset 0 0 5px rgb(202, 201, 201);
     }
 
     ::-webkit-scrollbar-thumb {
-        background: var(--secondary-color);
         border-radius: 10px;
+        background: var(--secondary-color);
     }
 
     ::-webkit-scrollbar-thumb:hover {
@@ -254,8 +243,8 @@ export default {
     }
 
     .map-container {
-        height: 100%;
         position: relative;
+        height: 100%;
     }
 }
 
@@ -275,8 +264,8 @@ export default {
     }
 
     .map-search {
-        left: 5%;
         top: 10%;
+        left: 5%;
         width: 50vw;
     }
 }
