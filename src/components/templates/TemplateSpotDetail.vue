@@ -45,8 +45,17 @@
                     class="sdp-map"
                     :spotsList="selectedSpot"
                 ></MapContainer>
+                <p>
+                    Click
+                    <a
+                        :href="`https://www.google.com/maps/dir//'${spotDetails.Latitude},${spotDetails.Longitude}'/@${spotDetails.Latitude},${spotDetails.Longitude},14.08z/data=!3m1!4b1!4m6!4m5!1m0!1m3!2m2!1d${spotDetails.Longitude}!2d${spotDetails.Latitude}`"
+                        target="_blank"
+                    >
+                        here
+                    </a>
+                    google map direction.
+                </p>
             </div>
-
             <hr style="width: 100%" />
             <div class="spot-detail-things">
                 <h2>Things to Know</h2>
