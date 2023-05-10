@@ -13,11 +13,15 @@
                 ></SearchInput>
                 <div class="filter-component">
                     <b-button icon-left="tune-variant"> Filters </b-button>
-                    <div class="filter-dropdown">
-                        <ul>
-                            <li>Available</li>
-                            <li>Rented</li>
-                        </ul>
+                    <div v-click-outside="outsideClick">
+                        <div class="filter-dropdown">
+                            <ul>
+                                <AtomCheckbox
+                                    :values="filterOptions"
+                                    :size="'is-small'"
+                                ></AtomCheckbox>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -58,16 +62,23 @@
 <script>
 // import PaginationBody from '../extras/PaginationBody.vue';
 import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
+// import AtomRadioButton from '../atoms/AtomRadioButton.vue';
+import AtomCheckbox from '../atoms/AtomCheckbox.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import SearchInput from '../extras/SearchInput.vue';
 import { mapState } from 'vuex';
+import vClickOutside from 'v-click-outside';
 export default {
     name: 'TemplateSrp',
+    directives: {
+        clickOutside: vClickOutside.directive,
+    },
     components: {
         // PaginationBody,
         MoleculeSRPCard,
         MapContainer,
         SearchInput,
+        AtomCheckbox,
     },
     emits: ['changed', 'flyToSrp', 'details'],
     props: {
@@ -84,6 +95,11 @@ export default {
             type: Number,
         },
     },
+    data() {
+        return {
+            filterOptions: ['Available', 'Rented out'],
+        };
+    },
     computed: {
         ...mapState('map', ['selectedLocation']),
     },
@@ -99,6 +115,9 @@ export default {
         },
         selected(spot) {
             console.log(spot);
+        },
+        outsideClick() {
+            console.log('hello outside');
         },
     },
 };
@@ -127,9 +146,10 @@ export default {
                 width: 120px;
                 background-color: white;
                 border: 1px solid black;
-                padding: 5px;
+                padding: 12px 5px 5px 12px;
                 position: absolute;
                 z-index: 999;
+                border-radius: 4px;
 
                 ul {
                     font-size: 16px;

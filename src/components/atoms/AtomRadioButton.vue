@@ -7,6 +7,7 @@
                 name="name"
                 v-for="value in values"
                 :native-value="value"
+                :size="size"
             >
                 {{ value }}
             </b-radio>
@@ -34,6 +35,7 @@ export default {
             type: Array,
             default: null,
         },
+        size: String,
     },
     data() {
         return {

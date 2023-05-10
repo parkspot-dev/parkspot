@@ -5,6 +5,7 @@
             v-for="value in values"
             v-model="checkboxGroup"
             :native-value="value"
+            :size="size"
             type="is-warning"
         >
             {{ value }}
@@ -24,6 +25,7 @@ export default {
             type: Array,
             default: null,
         },
+        size: String,
     },
     data() {
         return {
