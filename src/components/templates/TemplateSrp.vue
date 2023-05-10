@@ -1,20 +1,20 @@
 <template>
     <div class="srp-container">
         <div class="srp-lists">
-            <!-- <PaginationBody
-                :totals="totals"
-                @changed="onPageChange"
-                :current="currentPage"
-            ></PaginationBody> -->
             <div class="srp-control">
                 <SearchInput
                     class="map-search"
                     @changed="onChange"
                 ></SearchInput>
                 <div class="filter-component">
-                    <b-button icon-left="tune-variant"> Filters </b-button>
-                    <div v-click-outside="outsideClick">
-                        <div class="filter-dropdown">
+                    <div v-click-outside="onOutsideFilter">
+                        <b-button
+                            icon-left="tune-variant"
+                            @click="activateFilter"
+                        >
+                            Filters
+                        </b-button>
+                        <div class="filter-dropdown" v-if="isFilter">
                             <ul>
                                 <AtomCheckbox
                                     :values="filterOptions"
@@ -32,22 +32,15 @@
                 </p>
             </div>
             <hr />
-            <keep-alive>
-                <div class="srp-list-items">
-                    <MoleculeSRPCard
-                        v-for="spot in spots"
-                        :key="spot.ID"
-                        :spot="spot"
-                        @on-details="details"
-                        @click.native="selected(spot)"
-                    ></MoleculeSRPCard>
-                </div>
-            </keep-alive>
-            <!-- <PaginationBody
-                :totals="totals"
-                @changed="onPageChange"
-                :current="currentPage"
-            ></PaginationBody> -->
+            <div class="srp-list-items">
+                <MoleculeSRPCard
+                    v-for="spot in spots"
+                    :key="spot.ID"
+                    :spot="spot"
+                    @on-details="details"
+                    @click.native="selected(spot)"
+                ></MoleculeSRPCard>
+            </div>
         </div>
         <div class="srp-map">
             <MapContainer
@@ -98,6 +91,7 @@ export default {
     data() {
         return {
             filterOptions: ['Available', 'Rented out'],
+            isFilter: false,
         };
     },
     computed: {
@@ -116,8 +110,11 @@ export default {
         selected(spot) {
             console.log(spot);
         },
-        outsideClick() {
-            console.log('hello outside');
+        activateFilter() {
+            this.isFilter = !this.isFilter;
+        },
+        onOutsideFilter() {
+            this.isFilter = false;
         },
     },
 };
