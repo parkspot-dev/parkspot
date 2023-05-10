@@ -21,6 +21,7 @@ const state = {
     paginateSrpResults: [],
     recentSearch: [],
     recentID: 0,
+    filteredSrpResults: [],
 };
 
 const getters = {
@@ -113,8 +114,8 @@ const mutations = {
         state.totalPages = data;
     },
 
-    'update-srp-results'(state, data) {
-        state.srpResults = data;
+    'update-srp-results'(state, srpResults) {
+        state.srpResults = srpResults;
     },
 
     'update-map-center'(state, data) {
@@ -133,13 +134,17 @@ const mutations = {
             state.paginateSrpResults.push(state.srpResults[i]);
         }
     },
+
+    'update-filtered-srp-results'(state, srpResults) {
+        state.filteredSrpResults = srpResults;
+    },
 };
 
 const actions = {
     async searchLocation({ commit }, query) {
         const token =
             'pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ';
-        const url = `/geocoding/v5/mapbox.places/${query}.json?access_token=${token}&proximity=77.4977,12.9716`;
+        const url = `/geocoding/v5/mapbox.places/${query}.json?access_token=${token}&worldview=in&country=in`;
         const responseData = await mapBoxClient.get(url);
         const searchResult = _.get(responseData, 'features', []);
         commit('update-location', searchResult);
@@ -154,6 +159,7 @@ const actions = {
             commit('update-total-pages', data.Sites.length);
             commit('update-paginated-srp-data', 1); // paginated srp result stored
             state.srpResults = data.Sites;
+            commit('update-filtered-srp-results', state.srpResults);
         } else {
             throw data.DisplayMsg;
         }
@@ -178,6 +184,25 @@ const actions = {
             return (state.recentSearch = []);
         }
         return state.recentSearch;
+    },
+
+    updateSrpResults({ commit }, filterOptions) {
+        let filteredSrpResults = [];
+        if (filterOptions.length < 2 && filterOptions.length !== 0) {
+            if (filterOptions[0] === 'Available') {
+                filteredSrpResults = state.srpResults.filter(
+                    (srpResult) => srpResult.SlotsAvailable > 0,
+                );
+            } else if (filterOptions[0] === 'Rented out') {
+                filteredSrpResults = state.srpResults.filter(
+                    (srpResult) => srpResult.SlotsAvailable === 0,
+                );
+            }
+        } else {
+            filteredSrpResults = state.srpResults;
+        }
+
+        commit('update-filtered-srp-results', filteredSrpResults);
     },
 };
 

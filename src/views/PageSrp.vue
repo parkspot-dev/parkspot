@@ -1,13 +1,14 @@
 <template>
     <section>
         <TemplateSrp
-            :spots="srpResults"
+            :spots="filteredSrpResults"
             :totals="totalPages"
             :currentPage="currentPage"
             :reRender="reRender"
             @changed="onPageChange"
             @flyToSrp="flyToSrp"
             @details="spotDetails"
+            @filter="onFilter"
         ></TemplateSrp>
         <LoaderModal :isLoading="isLoading"></LoaderModal>
     </section>
@@ -48,6 +49,9 @@ export default {
             deep: true,
             immediate: true,
         },
+        filteredSrpResults() {
+            this.reRender++;
+        },
     },
     computed: {
         ...mapGetters({
@@ -55,7 +59,7 @@ export default {
             totalPages: 'map/getTotalPages',
             LocDetails: 'map/getLocDetails',
         }),
-        ...mapState('map', ['srpResults']),
+        ...mapState('map', ['srpResults', 'filteredSrpResults']),
     },
 
     async mounted() {
@@ -81,6 +85,7 @@ export default {
         ...mapActions({
             srpCall: 'map/srpCall',
             updateCenterSrp: 'map/updateCenterSrp',
+            updateSrpResults: 'map/updateSrpResults',
         }),
 
         onPageChange(pageNum) {
@@ -121,12 +126,16 @@ export default {
         },
 
         spotDetails(spotID) {
-            this.$router.push({
+            const route = this.$router.resolve({
                 name: 'spot-detail',
                 params: {
                     spotId: spotID,
                 },
             });
+            window.open(route.href);
+        },
+        onFilter(filterOption) {
+            this.updateSrpResults(filterOption);
         },
     },
 };
