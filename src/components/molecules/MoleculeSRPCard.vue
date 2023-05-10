@@ -1,49 +1,59 @@
 <template>
     <div class="custom-card" @click="onDetails">
-        <div class="card-title">
-            <p>
-                {{ spot.Name }}
-            </p>
+        <div class="card-primary">
+            <div>
+                <div class="card-title">
+                    <p>
+                        {{ spot.Name }}
+                    </p>
+                </div>
+
+                <!-- <AtomRating
+                    class="card-rating"
+                    :rate="spot.Rating"
+                ></AtomRating> -->
+                <b-tag type="is-success">
+                    {{ spot.Rating }} <span>★</span>
+                </b-tag>
+
+                <div class="card-location">
+                    <span class="location-icon">
+                        <AtomIcon :icon="'map-marker-radius'"></AtomIcon>
+                    </span>
+                    <p class="location-text">
+                        {{ spot.Address }}
+                    </p>
+                </div>
+            </div>
+            <div class="card-distance">
+                <p class="distance-text">
+                    <span class="text-color"> {{ spot.Distance }} KM </span>
+                </p>
+            </div>
         </div>
 
-        <div class="card-location">
-            <span class="location-icon">
-                <AtomIcon :icon="'map-marker-radius'"></AtomIcon>
-            </span>
-            <p class="location-text">
-                {{ spot.Address }}
-            </p>
-        </div>
-        <AtomRating class="card-rating" :rate="spot.Rating"></AtomRating>
-        <div class="card-distance">
-            <p class="distance-text">
-                <span class="text-color"> {{ spot.Distance }} KM </span>
-            </p>
-        </div>
+        <div class="card-secondary">
+            <div class="card-rate">
+                <p>
+                    <span class="rate-icon">
+                        <AtomIcon :icon="'tag'"></AtomIcon>
+                    </span>
+                    <span> ₹ {{ spot.Rate }}/{{ spot.RentUnit }} </span>
+                </p>
+            </div>
 
-        <div class="card-rate">
-            <p>
-                <span class="rate-icon">
-                    <AtomIcon :icon="'tag'"></AtomIcon>
-                </span>
-                <span> ₹ {{ spot.Rate }}/{{ spot.RentUnit }} </span>
-            </p>
+            <div class="card-spot">
+                <p>
+                    <span
+                        v-if="getAvailability(spot.SlotsAvailable)"
+                        class="card-spot-green"
+                    >
+                        Available
+                    </span>
+                    <span v-else class="card-spot-red"> Rented Out </span>
+                </p>
+            </div>
         </div>
-
-        <div class="card-spot">
-            <p>
-                <span
-                    v-if="getAvailability(spot.SlotsAvailable)"
-                    class="card-spot-green"
-                >
-                    Available
-                </span>
-                <span v-else class="card-spot-red"> Rented Out </span>
-            </p>
-        </div>
-
-        <div class="card-active-border-left"></div>
-        <div class="card-active-border-right"></div>
         <!-- <AtomButton class="card-btn" @click.native="onDetails">
             Spot Details
         </AtomButton> -->
@@ -51,13 +61,13 @@
 </template>
 
 <script>
-import AtomRating from '../atoms/AtomRating.vue';
+// import AtomRating from '../atoms/AtomRating.vue';
 // import AtomButton from '../atoms/AtomButton.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
 export default {
     name: 'MoleculeSRPCard',
     components: {
-        AtomRating,
+        // AtomRating,
         // AtomButton,
         AtomIcon,
     },
@@ -86,10 +96,10 @@ export default {
     border-radius: var(--border-default);
     box-shadow: 0 0.5em 1em -0.125em rgb(10, 10, 10, 10%),
         0 0 0 1px rgb(10, 10, 10, 20%);
-    column-gap: 12px;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    // column-gap: 12px;
+    // display: grid;
+    // grid-template-columns: repeat(6, 1fr);
+    // grid-template-rows: repeat(4, 1fr);
     // height: 150px;
     margin: 0.5rem;
     max-width: 500px;
@@ -124,28 +134,39 @@ export default {
         }
     }
 
+    .card-primary {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .card-secondary {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 14px;
+    }
+
     .card-title {
         font-size: 15px;
         font-weight: 500;
-        grid-column: 1 / 5;
-        grid-row: 1 / 1;
+        // grid-column: 1 / 5;
+        // grid-row: 1 / 1;
         -webkit-box-orient: vertical;
         display: -webkit-box;
         -webkit-line-clamp: 1;
         overflow: hidden;
-        padding-top: 5px;
-        padding-bottom: 5px;
     }
     .card-location {
         align-items: center;
         display: flex;
         font-size: 12px;
-        gap: 10px;
-        grid-column: 1 / 5;
-        grid-row: 3 / 3;
+        gap: 5px;
+        // grid-column: 1 / 5;
+        // grid-row: 3 / 3;
         position: relative;
         line-height: 1.1;
         color: #6b6b6b;
+        margin-top: 10px;
 
         .location-icon {
             font-size: 20px;
@@ -161,8 +182,8 @@ export default {
     }
 
     .card-rating {
-        grid-column: 1 / 3;
-        grid-row: 2 /2;
+        // grid-column: 1 / 3;
+        // grid-row: 2 /2;
         // margin-top: 0.75rem;
         margin-bottom: unset;
     }
@@ -194,8 +215,8 @@ export default {
         display: flex;
         font-weight: var(--bold-font);
         gap: 10px;
-        grid-column: 1 / 4;
-        grid-row: 4 / 5;
+        // grid-column: 1 / 4;
+        // grid-row: 4 / 5;
     }
 
     .rate-icon {
@@ -203,8 +224,8 @@ export default {
     }
 
     .card-spot {
-        grid-column: 4 / 6;
-        grid-row: 4 / 5;
+        // grid-column: 4 / 6;
+        // grid-row: 4 / 5;
     }
 
     .card-spot-red {
@@ -218,8 +239,8 @@ export default {
     }
 
     .card-btn {
-        grid-column: 1 / 7;
-        grid-row: 5 / 6;
+        // grid-column: 1 / 7;
+        // grid-row: 5 / 6;
         font-weight: var(--bold-font);
     }
 }
