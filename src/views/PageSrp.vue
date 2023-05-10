@@ -49,6 +49,9 @@ export default {
             deep: true,
             immediate: true,
         },
+        filteredSrpResults() {
+            this.reRender++;
+        },
     },
     computed: {
         ...mapGetters({
@@ -123,12 +126,13 @@ export default {
         },
 
         spotDetails(spotID) {
-            this.$router.push({
+            const route = this.$router.resolve({
                 name: 'spot-detail',
                 params: {
                     spotId: spotID,
                 },
             });
+            window.open(route.href);
         },
         onFilter(filterOption) {
             this.updateSrpResults(filterOption);

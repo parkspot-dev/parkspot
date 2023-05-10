@@ -18,7 +18,7 @@
 
                 <div class="card-location">
                     <span class="location-icon">
-                        <AtomIcon :icon="'map-marker-radius'"></AtomIcon>
+                        <AtomIcon :icon="'map-marker'"></AtomIcon>
                     </span>
                     <p class="location-text">
                         {{ spot.Address }}
@@ -160,7 +160,7 @@ export default {
         margin-top: 10px;
 
         .location-icon {
-            font-size: 20px;
+            font-size: 16px;
         }
 
         .location-text {
