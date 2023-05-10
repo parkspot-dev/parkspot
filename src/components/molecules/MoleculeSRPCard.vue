@@ -93,44 +93,38 @@ export default {
 
 <style lang="scss" scoped>
 .custom-card {
+    margin: 0.5rem;
     border-radius: var(--border-default);
     box-shadow: 0 0.5em 1em -0.125em rgb(10, 10, 10, 10%),
         0 0 0 1px rgb(10, 10, 10, 20%);
-    // column-gap: 12px;
-    // display: grid;
-    // grid-template-columns: repeat(6, 1fr);
-    // grid-template-rows: repeat(4, 1fr);
-    // height: 150px;
-    margin: 0.5rem;
-    max-width: 500px;
     overflow: hidden;
+    max-width: 500px;
     padding: 1rem;
-    // border: 3px solid transparent;
+    position: relative;
     transition: transform 0.3s ease;
     cursor: pointer;
-    position: relative;
 
     &:hover {
-        // border-left: 3px solid var(--secondary-color);
-        // border-right: 3px solid var(--secondary-color);
         transform: scale(1.03);
+
         &::before {
             content: '';
-            background: var(--secondary-color);
             position: absolute;
+            background: var(--secondary-color);
             bottom: 25%;
             left: 0;
-            height: 50%;
             width: 2px;
+            height: 50%;
         }
+
         &::after {
             content: '';
-            background: var(--secondary-color);
             position: absolute;
-            bottom: 25%;
+            background: var(--secondary-color);
             right: 0;
-            height: 50%;
+            bottom: 25%;
             width: 2px;
+            height: 50%;
         }
     }
 
@@ -149,20 +143,17 @@ export default {
     .card-title {
         font-size: 15px;
         font-weight: 500;
-        // grid-column: 1 / 5;
-        // grid-row: 1 / 1;
         -webkit-box-orient: vertical;
         display: -webkit-box;
         -webkit-line-clamp: 1;
         overflow: hidden;
     }
+
     .card-location {
         align-items: center;
         display: flex;
         font-size: 12px;
         gap: 5px;
-        // grid-column: 1 / 5;
-        // grid-row: 3 / 3;
         position: relative;
         line-height: 1.1;
         color: #6b6b6b;
@@ -182,9 +173,6 @@ export default {
     }
 
     .card-rating {
-        // grid-column: 1 / 3;
-        // grid-row: 2 /2;
-        // margin-top: 0.75rem;
         margin-bottom: unset;
     }
 
@@ -215,17 +203,10 @@ export default {
         display: flex;
         font-weight: var(--bold-font);
         gap: 10px;
-        // grid-column: 1 / 4;
-        // grid-row: 4 / 5;
     }
 
     .rate-icon {
         color: green;
-    }
-
-    .card-spot {
-        // grid-column: 4 / 6;
-        // grid-row: 4 / 5;
     }
 
     .card-spot-red {
