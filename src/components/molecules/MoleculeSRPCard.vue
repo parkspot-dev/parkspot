@@ -132,6 +132,7 @@ export default {
         display: flex;
         justify-content: space-between;
         gap: 20px;
+        align-items: flex-start;
     }
 
     .card-secondary {
@@ -169,6 +170,7 @@ export default {
             -webkit-line-clamp: 2;
             overflow: hidden;
             font-size: 12px;
+            word-wrap: break-word;
         }
     }
 
@@ -184,8 +186,6 @@ export default {
         border-radius: var(--border-default);
         grid-column: 5 / 7;
         grid-row: 1 / 3;
-        align-self: end;
-        justify-self: end;
     }
 
     .distance-text {
