@@ -93,7 +93,7 @@ export default {
 
 <style lang="scss" scoped>
 .custom-card {
-    margin: 0.5rem;
+    margin: 0.8rem;
     border-radius: var(--border-default);
     box-shadow: 0 0.5em 1em -0.125em rgb(10, 10, 10, 10%),
         0 0 0 1px rgb(10, 10, 10, 20%);
@@ -168,7 +168,7 @@ export default {
             display: -webkit-box;
             -webkit-line-clamp: 2;
             overflow: hidden;
-            font-size: 10px;
+            font-size: 12px;
         }
     }
 

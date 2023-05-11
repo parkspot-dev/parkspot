@@ -211,7 +211,7 @@ export default {
         overflow-y: auto;
 
         /* Keep some space between content and scrollbar */
-        padding-right: 20px;
+        padding-right: 4px;
 
         /* Need to make sure container has bottom space,
       otherwise content at the bottom is always faded out */
