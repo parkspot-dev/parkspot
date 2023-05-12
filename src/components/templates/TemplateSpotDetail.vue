@@ -47,13 +47,14 @@
                 ></MapContainer>
                 <p>
                     Click
+                    <!-- direction btw user location and spot location -->
                     <a
-                        :href="`https://www.google.com/maps/dir//'${spotDetails.Latitude},${spotDetails.Longitude}'/@${spotDetails.Latitude},${spotDetails.Longitude},14.08z/data=!3m1!4b1!4m6!4m5!1m0!1m3!2m2!1d${spotDetails.Longitude}!2d${spotDetails.Latitude}`"
+                        :href="`https://www.google.com/maps/dir/'${userLocation[1]},${userLocation[0]}'/'${spotDetails.Latitude},${spotDetails.Longitude}'/@18.2566348,76.9574504,6z/data=!3m1!4b1!4m10!4m9!1m3!2m2!1d${userLocation[0]}!2d${userLocation[1]}!1m3!2m2!1d${spotDetails.Longitude}!2d${spotDetails.Latitude}!3e0`"
                         target="_blank"
                     >
                         here
                     </a>
-                    google map direction.
+                    for google map direction.
                 </p>
             </div>
             <hr style="width: 100%" />
@@ -152,6 +153,9 @@ export default {
             spotDetails: (state) => state.spotDetails,
             ownerInfoDetails: (state) => state.ownerInfoDetails,
             selectedSpot: (state) => state.selectedSpot,
+        }),
+        ...mapState('map', {
+            userLocation: (state) => state.center,
         }),
     },
     methods: {
