@@ -59,6 +59,7 @@ const mutations = {
 const actions = {
     async getSpotDetails({ commit }, { spotId, isAdmin }) {
         commit('update-loading', true);
+        console.log('spotid', spotId);
         let url;
         if (isAdmin) {
             const db = getDatabase(firebase);
@@ -69,20 +70,25 @@ const actions = {
         } else {
             url = `/site?site-id=${spotId}`;
         }
+
         const res = await mayaClient.get(url);
-        commit('update-spot-details', res.Site);
-        commit('update-owner-info-details', res.User);
-        const spot = {
-            Name: res.Site['Name'],
-            Lat: res.Site['Latitude'],
-            Long: res.Site['Longitude'],
-        };
-        commit('update-selected-spot', spot);
-        commit('update-is-available', res.Site['SlotsAvailable']);
-        commit('update-loading', false);
-        commit('update-image', res.Site['SiteImages']);
-        commit('update-thumbnail-image', res.Site['SiteImageURI']);
-        commit('update-title', res.Site['Name']);
+        if (res.Site) {
+            commit('update-spot-details', res.Site);
+            commit('update-owner-info-details', res.User);
+            const spot = {
+                Name: res.Site['Name'],
+                Lat: res.Site['Latitude'],
+                Long: res.Site['Longitude'],
+            };
+            commit('update-selected-spot', spot);
+            commit('update-is-available', res.Site['SlotsAvailable']);
+            commit('update-loading', false);
+            commit('update-image', res.Site['SiteImages']);
+            commit('update-thumbnail-image', res.Site['SiteImageURI']);
+            commit('update-title', res.Site['Name']);
+        } else {
+            throw res.DisplayMsg;
+        }
     },
 };
 

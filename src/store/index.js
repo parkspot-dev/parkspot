@@ -5,6 +5,7 @@ import blog from './blog';
 import user from './user';
 import map from './map';
 import sdp from './sdp';
+import searchPortal from './searchPortal';
 
 Vue.use(Vuex);
 
@@ -15,6 +16,7 @@ const store = new Vuex.Store({
         user,
         map,
         sdp,
+        searchPortal,
     },
 });
 

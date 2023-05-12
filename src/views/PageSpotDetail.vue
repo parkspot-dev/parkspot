@@ -1,6 +1,8 @@
 <template>
     <div>
-        <TemplateSpotDetail></TemplateSpotDetail>
+        <TemplateSpotDetail
+            @goToSearchPortal="goToSearchPortal"
+        ></TemplateSpotDetail>
         <LoaderModal :isLoading="isLoading"></LoaderModal>
     </div>
 </template>
@@ -36,7 +38,7 @@ export default {
             title: (state) => state.title,
         }),
     },
-    mounted() {
+    async mounted() {
         this.spotId = this.$route.params.spotId;
         if (this.spotId.includes('#')) {
             this.spotId = encodeURIComponent(this.spotId);
@@ -44,13 +46,29 @@ export default {
         if (this.$route.name === 'adminOnly-spot-detail') {
             this.isAdmin = true;
         }
-        this.getSpotDetails({ spotId: this.spotId, isAdmin: this.isAdmin });
+        try {
+            await this.getSpotDetails({
+                spotId: this.spotId,
+                isAdmin: this.isAdmin,
+            });
+        } catch (error) {
+            this.$buefy.toast.open({
+                message: `Something went wrong!`,
+                type: 'is-danger',
+                duration: 2000,
+            });
+            this.$router.push({ name: 'error' });
+        }
         this.getUserLocation();
     },
     methods: {
         ...mapActions('sdp', {
             getSpotDetails: 'getSpotDetails',
         }),
+        ...mapActions('searchPortal', [
+            'updateActiveTab',
+            'updateSOLatLngInput',
+        ]),
         ...mapMutations('map', {
             updateManConfig: 'update-map-config',
         }),
@@ -85,6 +103,11 @@ export default {
             }
 
             console.log(detailError);
+        },
+        goToSearchPortal(latLng) {
+            this.updateActiveTab(1);
+            this.updateSOLatLngInput(latLng.join(','));
+            this.$router.push({ name: 'SearchPortal' });
         },
     },
 };
