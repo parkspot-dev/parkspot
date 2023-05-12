@@ -72,7 +72,7 @@ const actions = {
         }
 
         const res = await mayaClient.get(url);
-        if (res.Site && res.User) {
+        if (res.Site) {
             commit('update-spot-details', res.Site);
             commit('update-owner-info-details', res.User);
             const spot = {
