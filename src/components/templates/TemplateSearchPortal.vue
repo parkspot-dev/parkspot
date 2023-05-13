@@ -125,6 +125,33 @@
             </b-table-column>
 
             <b-table-column
+                field="agent"
+                label="Agent"
+                width="100px"
+                sortable
+                searchable
+            >               
+                <template v-slot="props">
+                    <div class="status-column">
+                        <div class="status-part">
+                            <span class="tag is-warning">
+                                {{ agentList[props.row.Status].name }}
+                            </span>
+                            <AtomSelectInput
+                                :size="'is-small'"
+                                :list="agentList"
+                                class="column-width"
+                                @changed="
+                                    onAgentUpdate(props.row, ...arguments,agentList)
+                                "
+                            >
+                            </AtomSelectInput>
+                        </div>
+                    </div>
+                </template>
+            </b-table-column>
+
+            <b-table-column
                 field="contact"
                 label="Contact Details"
                 v-slot="props"
@@ -331,6 +358,13 @@ export default {
             isFocusable: false,
             hasMobileCards: true,
 
+            agentList: [
+                { id: 0, name: 'Sud' },
+                { id: 1, name: 'Ish' },
+                { id: 2, name: 'Nitya'},
+                { id: 3, name: 'Preeti'},
+            ],
+
             statusList: [
                 { id: 0, name: 'StatusNotSet' },
                 { id: 1, name: 'Registered' },
@@ -346,6 +380,7 @@ export default {
 
             model: {
                 comments: '',
+                agent: '',
                 status: '',
                 nextCall: '',
             },
@@ -357,6 +392,7 @@ export default {
                 high: 0,
                 medium: 0,
                 low: 0,
+                agent: [0, 0, 0, 0],
                 status: [0, 0, 0, 0, 0, 0],
                 today: 0,
                 yesterday: 0,
@@ -386,6 +422,8 @@ export default {
                     this.summary.low++;
                 }
 
+                this.summary.agent[request.Agent]++;
+
                 this.summary.status[request.Status]++;
 
                 if (
@@ -414,6 +452,19 @@ export default {
                 case 3:
                     return 'High';
             }
+        },
+
+        onAgentUpdate(spotData, agentid, agentList) {
+            spotData['Agent'] = agentid;
+            spotData['Agent'] = agentList;
+            console.log("debug",agentList);
+
+            agentList.forEach((Agent) => {
+                if (Agent.id === agentid) {
+                    spotData['Agent'] = Agent.name;
+                }   
+            });
+            this.$emit('updateRequest', spotData);
         },
 
         getLatLng(lat, lng) {
