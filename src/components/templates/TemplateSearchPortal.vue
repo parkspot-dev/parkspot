@@ -125,24 +125,33 @@
             </b-table-column>
 
             <b-table-column
-                field="agent"
+                field="Agent"
                 label="Agent"
                 width="100px"
                 sortable
                 searchable
             >               
+            <template #searchable="props">
+                    <AtomSelectInput
+                        :size="'is-small'"
+                        :list="agentList"
+                        class="column-width"
+                        v-model="props.filters['Agent']"
+                    >
+                    </AtomSelectInput>
+                </template>
                 <template v-slot="props">
                     <div class="status-column">
                         <div class="status-part">
                             <span class="tag is-warning">
-                                {{ agentList[props.row.Status].name }}
+                                {{ props.row.Agent }}
                             </span>
                             <AtomSelectInput
                                 :size="'is-small'"
                                 :list="agentList"
                                 class="column-width"
                                 @changed="
-                                    onAgentUpdate(props.row, ...arguments,agentList)
+                                    onAgentUpdate(props.row, ...arguments)
                                 "
                             >
                             </AtomSelectInput>
@@ -217,7 +226,7 @@
                 sortable
                 searchable
             >
-                <template #searchable="props">
+                <template #searchable="props">            
                     <AtomSelectInput
                         :size="'is-small'"
                         :list="statusList"
@@ -363,6 +372,7 @@ export default {
                 { id: 1, name: 'Ish' },
                 { id: 2, name: 'Nitya'},
                 { id: 3, name: 'Preeti'},
+                { id: 4, name: 'NA'},
             ],
 
             statusList: [
@@ -454,12 +464,8 @@ export default {
             }
         },
 
-        onAgentUpdate(spotData, agentid, agentList) {
-            spotData['Agent'] = agentid;
-            spotData['Agent'] = agentList;
-            console.log("debug",agentList);
-
-            agentList.forEach((Agent) => {
+        onAgentUpdate(spotData, agentid) {           
+            this.agentList.forEach((Agent) => {
                 if (Agent.id === agentid) {
                     spotData['Agent'] = Agent.name;
                 }   
