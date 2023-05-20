@@ -85,12 +85,15 @@ export default {
         },
     },
     watch: {
-        selected(location) {
-            this.updateMapConfig([location.center[0], location.center[1]]); // needed for recentering of map.
-            this.updateSelectedLocation(location); // get the actual value of selected option.
-            this.updateSelectedCity(location.context[0]); // update selected city
-            this.updateSelectedState(location.context[1]); // update selected state
-            this.updateSelectedCountry(location.context[2]); // update selected country
+        selected(newLocation) {
+            // this.updateMapConfig([
+            //     newLocation.center[0],
+            //     newLocation.center[1],
+            // ]); // needed for recentering of map.
+            // this.updateSelectedLocation(newLocation); // get the actual value of selected option.
+            // this.updateSelectedCity(newLocation.context[0]); // update selected city
+            // this.updateSelectedState(newLocation.context[1]); // update selected state
+            // this.updateSelectedCountry(newLocation.context[2]); // update selected country
         },
     },
     methods: {
@@ -133,6 +136,7 @@ export default {
         },
 
         onSelect(selectedLocation) {
+            this.getSelectedLocationLatLng(selectedLocation);
             this.selected = selectedLocation;
             this.$emit('changed');
         },

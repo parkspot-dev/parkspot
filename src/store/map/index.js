@@ -1,5 +1,5 @@
-import { mapBoxClient, mayaClient } from '@/services/api';
-import _ from 'lodash';
+import { mayaClient } from '@/services/api';
+// import _ from 'lodash';
 
 const state = {
     locations: [],
@@ -61,14 +61,15 @@ const mutations = {
         state.locations = [...state.recentSearch, ...locations];
     },
 
-    'update-selected-location'(state, location) {
-        state.selectedLocation.locName = location.description;
+    'update-selected-location'(state, selectedLocation) {
+        state.selectedLocation.locName = selectedLocation.description;
 
         const recentSearchObj = {
             fromLS: true,
-            ...location,
+            ...selectedLocation,
         };
 
+        console.log('update-Selected-Location0', recentSearchObj);
         const recentSearches = [...state.recentSearch];
 
         const uniqueRecentSearches = recentSearches.filter((recentSearch) => {
@@ -136,14 +137,6 @@ const mutations = {
 };
 
 const actions = {
-    async searchLocations({ commit }, query) {
-        const token =
-            'pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ';
-        const url = `/geocoding/v5/mapbox.places/${query}.json?access_token=${token}&proximity=77.4977,12.9716`;
-        const responseData = await mapBoxClient.get(url);
-        const searchResult = _.get(responseData, 'features', []);
-        commit('update-location', searchResult);
-    },
     async getPredictedLocations({ commit }, query) {
         const token = 'AIzaSyAtHsC3zbjqgFkphcIjgG5OhrISlJ0bOaI';
         // autocomplete prediction api give list of location prediction contains place_id
@@ -151,16 +144,19 @@ const actions = {
         const predictionLocRes = await fetch(autocompleteURL);
         const locDetails = await predictionLocRes.json();
         const locDetailsArr = locDetails.predictions;
-        console.log(locDetailsArr);
+        // console.log(locDetailsArr);
         commit('update-location', locDetailsArr);
     },
 
     async getSelectedLocationLatLng({ commit }, selectedLocation) {
+        console.log('getSelectedLocationLatLng', selectedLocation);
+        const token = 'AIzaSyAtHsC3zbjqgFkphcIjgG5OhrISlJ0bOaI';
         const placeId = selectedLocation.place_id;
         const latLngURL = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${token}`;
-        const placeDetail = await fetch(latLngURL);
-        const data = await placeDetail.json();
-        console.log('getSelectedLocationLatLng', data);
+        const placeDetailRes = await fetch(latLngURL);
+        const placeDetail = await placeDetailRes.json();
+        console.log(placeDetail.results[0]);
+        commit('update-selected-location', placeDetail.results[0]);
     },
 
     async srpCall({ state, commit }) {
