@@ -7,11 +7,6 @@
                         {{ spot.Name }}
                     </p>
                 </div>
-
-                <!-- <AtomRating
-                    class="card-rating"
-                    :rate="spot.Rating"
-                ></AtomRating> -->
                 <b-tag type="is-success">
                     {{ spot.Rating }} <span>★</span>
                 </b-tag>
@@ -54,21 +49,14 @@
                 </p>
             </div>
         </div>
-        <!-- <AtomButton class="card-btn" @click.native="onDetails">
-            Spot Details
-        </AtomButton> -->
     </div>
 </template>
 
 <script>
-// import AtomRating from '../atoms/AtomRating.vue';
-// import AtomButton from '../atoms/AtomButton.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
 export default {
     name: 'MoleculeSRPCard',
     components: {
-        // AtomRating,
-        // AtomButton,
         AtomIcon,
     },
     props: {
@@ -93,14 +81,14 @@ export default {
 
 <style lang="scss" scoped>
 .custom-card {
+    position: relative;
+    overflow: hidden;
     margin: 0.8rem;
+    padding: 1rem;
+    max-width: 500px;
     border-radius: var(--border-default);
     box-shadow: 0 0.5em 1em -0.125em rgb(10, 10, 10, 10%),
         0 0 0 1px rgb(10, 10, 10, 20%);
-    overflow: hidden;
-    max-width: 500px;
-    padding: 1rem;
-    position: relative;
     transition: transform 0.3s ease;
     cursor: pointer;
 
@@ -110,21 +98,21 @@ export default {
         &::before {
             content: '';
             position: absolute;
-            background: var(--secondary-color);
             bottom: 25%;
-            left: 0;
+            left: 0.25px;
             width: 2px;
             height: 50%;
+            background: var(--secondary-color);
         }
 
         &::after {
             content: '';
             position: absolute;
-            background: var(--secondary-color);
-            right: 0;
+            right: 0.25px;
             bottom: 25%;
             width: 2px;
             height: 50%;
+            background: var(--secondary-color);
         }
     }
 
@@ -142,23 +130,23 @@ export default {
     }
 
     .card-title {
+        display: -webkit-box;
+        overflow: hidden;
         font-size: 15px;
         font-weight: 500;
         -webkit-box-orient: vertical;
-        display: -webkit-box;
         -webkit-line-clamp: 1;
-        overflow: hidden;
     }
 
     .card-location {
-        align-items: center;
+        position: relative;
         display: flex;
+        align-items: center;
+        margin-top: 10px;
         font-size: 12px;
         gap: 5px;
-        position: relative;
         line-height: 1.1;
         color: #6b6b6b;
-        margin-top: 10px;
 
         .location-icon {
             font-size: 16px;
@@ -179,19 +167,19 @@ export default {
     }
 
     .card-distance {
-        background-color: rgb(214, 253, 255);
+        padding: 0.75rem;
         width: 58px;
-        text-align: center;
-        padding: 0.75rem 0.75rem;
         border-radius: var(--border-default);
+        text-align: center;
+        background-color: rgb(214, 253, 255);
         grid-column: 5 / 7;
         grid-row: 1 / 3;
     }
 
     .distance-text {
         line-height: var(--lh-small);
-        font-weight: var(--bold-font);
         font-size: 14px;
+        font-weight: var(--bold-font);
     }
 
     .text-color {
@@ -199,29 +187,27 @@ export default {
     }
 
     .card-rate {
-        align-items: center;
         display: flex;
+        align-items: center;
         font-weight: var(--bold-font);
         gap: 10px;
     }
 
     .rate-icon {
-        color: green;
+        color: #85bb65;
     }
 
     .card-spot-red {
-        color: red;
         font-weight: var(--bold-font);
+        color: #cc3636;
     }
 
     .card-spot-green {
-        color: green;
         font-weight: var(--bold-font);
+        color: #367e18;
     }
 
     .card-btn {
-        // grid-column: 1 / 7;
-        // grid-row: 5 / 6;
         font-weight: var(--bold-font);
     }
 }

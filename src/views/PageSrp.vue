@@ -49,6 +49,7 @@ export default {
             deep: true,
             immediate: true,
         },
+        // filter change will re-render the map
         filteredSrpResults() {
             this.reRender++;
         },

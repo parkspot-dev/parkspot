@@ -188,7 +188,7 @@ const actions = {
 
     updateSrpResults({ commit }, filterOptions) {
         let filteredSrpResults = [];
-        if (filterOptions.length < 2 && filterOptions.length !== 0) {
+        if (filterOptions.length === 1) {
             if (filterOptions[0] === 'Available') {
                 filteredSrpResults = state.srpResults.filter(
                     (srpResult) => srpResult.SlotsAvailable > 0,

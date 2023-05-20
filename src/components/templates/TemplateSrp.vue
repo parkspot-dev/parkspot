@@ -14,7 +14,7 @@
                         >
                             Filters
                         </b-button>
-                        <div class="filter-dropdown" v-if="isFilter">
+                        <div class="filter-dropdown" v-if="showFilterCheckbox">
                             <ul>
                                 <AtomCheckbox
                                     :values="filterOptions"
@@ -43,7 +43,6 @@
                     :key="spot.ID"
                     :spot="spot"
                     @on-details="details"
-                    @click.native="selected(spot)"
                 ></MoleculeSRPCard>
             </div>
         </div>
@@ -96,7 +95,7 @@ export default {
     data() {
         return {
             filterOptions: ['Available', 'Rented out'],
-            isFilter: false,
+            showFilterCheckbox: false,
         };
     },
     computed: {
@@ -112,14 +111,11 @@ export default {
         onChange() {
             this.$emit('flyToSrp');
         },
-        selected(spot) {
-            console.log(spot);
-        },
         activateFilter() {
-            this.isFilter = !this.isFilter;
+            this.showFilterCheckbox = !this.showFilterCheckbox;
         },
         onOutsideFilter() {
-            this.isFilter = false;
+            this.showFilterCheckbox = false;
         },
         handleFilter(filterOptions) {
             this.$emit('filter', filterOptions);
@@ -150,11 +146,11 @@ export default {
 
             .filter-dropdown {
                 position: absolute;
+                z-index: 999;
                 padding: 12px 5px 5px 12px;
                 width: 120px;
-                z-index: 999;
-                border-radius: 4px;
                 border: 1px solid #000000;
+                border-radius: 4px;
                 background-color: #ffffff;
 
                 ul {
