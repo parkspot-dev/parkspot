@@ -22,6 +22,7 @@ const state = {
     paginateSrpResults: [],
     recentSearch: [],
     recentID: 0,
+    GOOGLE_TOKEN: process.env.VUE_APP_GOOGLE_MAP_TOKEN,
 };
 
 const getters = {
@@ -141,21 +142,18 @@ const mutations = {
 };
 
 const actions = {
-    async getPredictedLocations({ commit }, query) {
-        const token = 'AIzaSyAtHsC3zbjqgFkphcIjgG5OhrISlJ0bOaI';
+    async getPredictedLocations({ commit, state }, query) {
         // autocomplete prediction api give list of location prediction contains place_id
-        const autocompleteURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&components=country:in&key=${token}`;
+        const autocompleteURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&components=country:in&key=${state.GOOGLE_TOKEN}`;
         const predictionLocRes = await fetch(autocompleteURL);
         const locDetails = await predictionLocRes.json();
         const locDetailsArr = locDetails.predictions;
         commit('update-location', locDetailsArr);
     },
 
-    async getSelectedLocationLatLng({ commit }, selectedLocation) {
-        commit('update-selected-location', selectedLocation);
-        const token = 'AIzaSyAtHsC3zbjqgFkphcIjgG5OhrISlJ0bOaI';
+    async getSelectedLocationLatLng({ commit, state }, selectedLocation) {
         const placeId = selectedLocation.place_id;
-        const latLngURL = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${token}`;
+        const latLngURL = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${state.GOOGLE_TOKEN}`;
         const placeDetailRes = await fetch(latLngURL);
         const placeDetail = await placeDetailRes.json();
         commit('update-selected-location-latlng', placeDetail.results[0]);
