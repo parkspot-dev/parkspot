@@ -130,13 +130,14 @@
                 width="100px"
                 sortable
                 searchable
-            >               
-            <template #searchable="props">
+            >
+                <template #searchable="props">
                     <AtomSelectInput
                         :size="'is-small'"
                         :list="agentList"
-                        class="column-width"
                         v-model="props.filters['Agent']"
+                        label=""
+                        placeholder="Agent"
                     >
                     </AtomSelectInput>
                 </template>
@@ -149,10 +150,11 @@
                             <AtomSelectInput
                                 :size="'is-small'"
                                 :list="agentList"
-                                class="column-width"
                                 @changed="
                                     onAgentUpdate(props.row, ...arguments)
                                 "
+                                label=""
+                                placeholder="Select Agent"
                             >
                             </AtomSelectInput>
                         </div>
@@ -226,7 +228,7 @@
                 sortable
                 searchable
             >
-                <template #searchable="props">            
+                <template #searchable="props">
                     <AtomSelectInput
                         :size="'is-small'"
                         :list="statusList"
@@ -370,9 +372,9 @@ export default {
             agentList: [
                 { id: 0, name: 'Sud' },
                 { id: 1, name: 'Ish' },
-                { id: 2, name: 'Nitya'},
-                { id: 3, name: 'Preeti'},
-                { id: 4, name: 'NA'},
+                { id: 2, name: 'Nitya' },
+                { id: 3, name: 'Preeti' },
+                { id: 4, name: 'NA' },
             ],
 
             statusList: [
@@ -464,11 +466,11 @@ export default {
             }
         },
 
-        onAgentUpdate(spotData, agentid) {           
+        onAgentUpdate(spotData, agentid) {
             this.agentList.forEach((Agent) => {
                 if (Agent.id === agentid) {
                     spotData['Agent'] = Agent.name;
-                }   
+                }
             });
             this.$emit('updateRequest', spotData);
         },
