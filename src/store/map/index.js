@@ -9,6 +9,7 @@ const state = {
         country: '',
         locName: '',
     },
+    selectedLocationLatLng: null,
     mapConfig: {
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
@@ -62,14 +63,13 @@ const mutations = {
     },
 
     'update-selected-location'(state, selectedLocation) {
-        state.selectedLocation.locName = selectedLocation.description;
+        state.selectedLocation = selectedLocation;
 
         const recentSearchObj = {
             fromLS: true,
             ...selectedLocation,
         };
 
-        console.log('update-Selected-Location0', recentSearchObj);
         const recentSearches = [...state.recentSearch];
 
         const uniqueRecentSearches = recentSearches.filter((recentSearch) => {
@@ -90,6 +90,10 @@ const mutations = {
         state.recentSearch = [...uniqueRecentSearches];
         // JSON used to store array as string in LS
         localStorage.setItem('recent', JSON.stringify(state.recentSearch));
+    },
+
+    'update-selected-location-latlng'(state, selectedLocationLatLng) {
+        state.selectedLocationLatLng = selectedLocationLatLng;
     },
 
     'update-selected-city'(state, city) {
@@ -140,23 +144,23 @@ const actions = {
     async getPredictedLocations({ commit }, query) {
         const token = 'AIzaSyAtHsC3zbjqgFkphcIjgG5OhrISlJ0bOaI';
         // autocomplete prediction api give list of location prediction contains place_id
-        const autocompleteURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&key=${token}`;
+        const autocompleteURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&components=country:in&key=${token}`;
         const predictionLocRes = await fetch(autocompleteURL);
         const locDetails = await predictionLocRes.json();
         const locDetailsArr = locDetails.predictions;
-        // console.log(locDetailsArr);
         commit('update-location', locDetailsArr);
     },
 
     async getSelectedLocationLatLng({ commit }, selectedLocation) {
-        console.log('getSelectedLocationLatLng', selectedLocation);
+        commit('update-selected-location', selectedLocation);
         const token = 'AIzaSyAtHsC3zbjqgFkphcIjgG5OhrISlJ0bOaI';
         const placeId = selectedLocation.place_id;
         const latLngURL = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${token}`;
         const placeDetailRes = await fetch(latLngURL);
         const placeDetail = await placeDetailRes.json();
-        console.log(placeDetail.results[0]);
-        commit('update-selected-location', placeDetail.results[0]);
+        commit('update-selected-location-latlng', placeDetail.results[0]);
+        const latLng = placeDetail.results[0].geometry.location;
+        commit('update-map-config', [latLng.lng, latLng.lat]);
     },
 
     async srpCall({ state, commit }) {

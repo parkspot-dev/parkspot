@@ -13,7 +13,7 @@
                 @select="onSelect"
                 keep-first
                 :open-on-focus="true"
-                @click.native="addRecentSearches()"
+                @click.native="addToRecentSearches()"
             >
                 <template slot-scope="props">
                     <div class="media">
@@ -45,7 +45,7 @@
 
 <script>
 import _ from 'lodash';
-import { mapGetters, mapActions, mapMutations } from 'vuex';
+import { mapActions, mapMutations, mapState } from 'vuex';
 import AtomIcon from '../atoms/AtomIcon.vue';
 
 export default {
@@ -70,8 +70,8 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            LocationName: 'map/getLocationName',
+        ...mapState('map', {
+            LocationName: (state) => state.locations,
         }),
         filteredLocationName() {
             return this.LocationName.filter((option) => {
@@ -126,7 +126,7 @@ export default {
             }
         }, 500),
 
-        async addRecentSearches() {
+        async addToRecentSearches() {
             const recentSearches = await this.getFromRecent();
             if (this.LocationName.length === 0) {
                 for (const recentSearch of recentSearches) {
