@@ -62,7 +62,7 @@ const mutations = {
     },
 
     'update-selected-location'(state, location) {
-        state.selectedLocation.locName = location.place_name;
+        state.selectedLocation.locName = location.description;
 
         const recentSearchObj = {
             fromLS: true,
@@ -136,13 +136,31 @@ const mutations = {
 };
 
 const actions = {
-    async searchLocation({ commit }, query) {
+    async searchLocations({ commit }, query) {
         const token =
             'pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ';
         const url = `/geocoding/v5/mapbox.places/${query}.json?access_token=${token}&proximity=77.4977,12.9716`;
         const responseData = await mapBoxClient.get(url);
         const searchResult = _.get(responseData, 'features', []);
         commit('update-location', searchResult);
+    },
+    async getPredictedLocations({ commit }, query) {
+        const token = 'AIzaSyAtHsC3zbjqgFkphcIjgG5OhrISlJ0bOaI';
+        // autocomplete prediction api give list of location prediction contains place_id
+        const autocompleteURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&key=${token}`;
+        const predictionLocRes = await fetch(autocompleteURL);
+        const locDetails = await predictionLocRes.json();
+        const locDetailsArr = locDetails.predictions;
+        console.log(locDetailsArr);
+        commit('update-location', locDetailsArr);
+    },
+
+    async getSelectedLocationLatLng({ commit }, selectedLocation) {
+        const placeId = selectedLocation.place_id;
+        const latLngURL = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${token}`;
+        const placeDetail = await fetch(latLngURL);
+        const data = await placeDetail.json();
+        console.log('getSelectedLocationLatLng', data);
     },
 
     async srpCall({ state, commit }) {

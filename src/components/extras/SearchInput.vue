@@ -6,7 +6,7 @@
                 :data="filteredLocationName"
                 ref="autocomplete"
                 placeholder="e.g. Bengaluru"
-                field="place_name"
+                field="description"
                 icon="magnify"
                 :loading="isFetching"
                 @typing="getAsyncData"
@@ -31,7 +31,7 @@
                                 'custom-color': props.option.fromLS,
                             }"
                         >
-                            {{ props.option.place_name }}
+                            {{ props.option.description }}
                         </div>
                     </div>
                 </template>
@@ -76,7 +76,7 @@ export default {
         filteredLocationName() {
             return this.LocationName.filter((option) => {
                 return (
-                    option.place_name
+                    option.description
                         .toString()
                         .toLowerCase()
                         .indexOf(this.search.toLowerCase()) >= 0
@@ -102,10 +102,11 @@ export default {
             updateMapConfig: 'map/update-map-config',
             updateRecentLocation: 'map/update-recent-location',
         }),
-        ...mapActions({
-            searchLocation: 'map/searchLocation',
-            getFromRecent: 'map/getFromRecent',
-        }),
+        ...mapActions('map', [
+            'getPredictedLocations',
+            'getFromRecent',
+            'getSelectedLocationLatLng',
+        ]),
 
         getAsyncData: _.debounce(async function (name) {
             /* eslint-disable */
@@ -114,7 +115,7 @@ export default {
                 fot this function   */
             this.isFetching = true;
             try {
-                await this.searchLocation(name);
+                await this.getPredictedLocations(name);
             } catch (error) {
                 console.log(error);
             } finally {
@@ -131,8 +132,8 @@ export default {
             }
         },
 
-        onSelect(option) {
-            this.selected = option;
+        onSelect(selectedLocation) {
+            this.selected = selectedLocation;
             this.$emit('changed');
         },
     },
