@@ -15,7 +15,7 @@
 </template>
 <script>
 import TemplateSrp from '../components/templates/TemplateSrp.vue';
-import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import { getCoordinate } from '../includes/LatLng';
 import { PAGE_TITLE } from '@/constant/constant';
