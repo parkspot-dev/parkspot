@@ -53,7 +53,6 @@
                 :key="reRender"
                 :mapOptions="mapOptions"
             ></MapContainer>
-            <SearchInput class="map-search"></SearchInput>
         </div>
     </div>
 </template>
@@ -84,9 +83,6 @@ export default {
         spots: {
             type: Array,
         },
-        totals: {
-            type: Number,
-        },
         reRender: {
             type: Number,
         },
@@ -94,7 +90,6 @@ export default {
             type: Number,
         },
     },
-    emits: ['changed', 'details'],
     data() {
         return {
             filterOptions: ['Available', 'Rented out'],
@@ -105,14 +100,8 @@ export default {
         ...mapState('map', ['selectedLocation', 'mapOptions']),
     },
     methods: {
-        onPageChange(page) {
-            this.$emit('changed', page);
-        },
         details(spotID) {
             this.$emit('details', spotID);
-        },
-        selected(spot) {
-            console.log(spot);
         },
         activateFilter() {
             this.showFilterCheckbox = !this.showFilterCheckbox;
@@ -122,6 +111,9 @@ export default {
         },
         handleFilter(filterOptions) {
             this.$emit('filter', filterOptions);
+        },
+        onChange() {
+            console.log('onChangeonChange');
         },
     },
 };
