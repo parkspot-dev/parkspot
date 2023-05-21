@@ -55,11 +55,7 @@ export default {
     data() {
         return {};
     },
-    computed: {
-        ...mapGetters({
-            locDetails: 'map/getLocDetails',
-        }),
-    },
+    computed: {},
     watch: {
         formSubmitted(newVal) {
             if (newVal) {

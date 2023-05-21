@@ -88,14 +88,6 @@ export default {
         selected(newLocation) {},
     },
     methods: {
-        ...mapMutations({
-            updateSelectedLocation: 'map/update-selected-location',
-            updateSelectedCity: 'map/update-selected-city',
-            updateSelectedState: 'map/update-selected-state',
-            updateSelectedCountry: 'map/update-selected-country',
-            updateMapConfig: 'map/update-map-config',
-            updateRecentLocation: 'map/update-recent-location',
-        }),
         ...mapActions('map', [
             'getPredictedLocations',
             'getFromRecent',

@@ -3,29 +3,14 @@ import { firebase, getDatabase, ref, get, child } from '../../firebase';
 
 const state = {
     locations: [],
-    selectedLocation: {
-        city: '',
-        state: '',
-        country: '',
-        locName: '',
-    },
+    selectedLocation: null,
     selectedLocationLatLng: null,
-    // remove below
-    mapConfig: {
-        container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: [77.5946, 12.9716], //  default bengaluru lat, lng.
-        zoom: 11,
-    },
     mapOptions: {
         center: { lat: 17.471356, lng: 78.3344256 }, //  default bengaluru lat, lng.
         zoom: 12,
         mapId: 'PARKSPOT_MAP',
     },
-    center: null,
-    totalPages: 1, // default page number
     srpResults: [],
-    paginateSrpResults: [],
     recentSearch: [],
     recentID: 0,
     GOOGLE_TOKEN: '',
@@ -33,10 +18,6 @@ const state = {
 };
 
 const getters = {
-    getMapConfig(state) {
-        return state.mapConfig;
-    },
-
     getLocationName(state) {
         return state.locations;
     },
@@ -45,23 +26,8 @@ const getters = {
         return state.center;
     },
 
-    getLocDetails(state) {
-        return {
-            locDetails: state.selectedLocation,
-            lnglat: state.center,
-        };
-    },
-
     getSrpResults(state) {
         return state.srpResults;
-    },
-
-    getPaginateSrpResults(state) {
-        return state.paginateSrpResults;
-    },
-
-    getTotalPages() {
-        return state.totalPages;
     },
 };
 
@@ -104,46 +70,12 @@ const mutations = {
         state.selectedLocationLatLng = selectedLocationLatLng;
     },
 
-    'update-selected-city'(state, city) {
-        state.selectedLocation.city = city.text || '';
-    },
-
-    // region is same as state like jharkhand, karnataka etc.
-    'update-selected-state'(state, region) {
-        state.selectedLocation.state = region.text || '';
-    },
-
-    'update-selected-country'(state, country) {
-        state.selectedLocation.country = country.text || '';
-    },
-
     'update-map-options'(state, center) {
         state.mapOptions.center = center;
     },
 
-    'update-total-pages'(state, data) {
-        state.totalPages = data;
-    },
-
     'update-srp-results'(state, srpResults) {
         state.srpResults = srpResults;
-    },
-
-    'update-map-center'(state, data) {
-        state.center = data;
-    },
-
-    'update-paginated-srp-data'(state, currPageNum) {
-        state.paginateSrpResults = [];
-
-        // loop to get list of srp result in current page
-        for (
-            let i = (currPageNum - 1) * 3;
-            i < currPageNum * 3 && i < state.srpResults.length;
-            i++
-        ) {
-            state.paginateSrpResults.push(state.srpResults[i]);
-        }
     },
 
     'update-filtered-srp-results'(state, srpResults) {
@@ -189,26 +121,12 @@ const actions = {
         );
         if (data && Object.prototype.hasOwnProperty.call(data, 'Sites')) {
             commit('update-srp-results', data.Sites);
-            commit('update-total-pages', data.Sites.length);
             commit('update-paginated-srp-data', 1); // paginated srp result stored
             state.srpResults = data.Sites;
             commit('update-filtered-srp-results', state.srpResults);
         } else {
             throw data.DisplayMsg;
         }
-    },
-
-    updateCenterSrp({ state, commit }) {
-        const ys = state.paginateSrpResults.reduce((long, site) => {
-            return long + site.Long;
-        }, 0);
-        const xs = state.paginateSrpResults.reduce((a, site) => {
-            return a + site.Lat;
-        }, 0);
-        commit('update-map-config', [
-            ys / state.paginateSrpResults.length,
-            xs / state.paginateSrpResults.length,
-        ]);
     },
 
     getFromRecent({ state }) {
