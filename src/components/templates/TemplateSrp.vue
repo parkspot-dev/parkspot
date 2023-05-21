@@ -51,7 +51,8 @@
                 class="map-container"
                 :spotsList="spots"
                 :key="reRender"
-                :mapOptions="mapOptions"
+                :center="mapCenter"
+                :userLatLng="mapCenter"
             ></MapContainer>
         </div>
     </div>
@@ -95,7 +96,7 @@ export default {
         };
     },
     computed: {
-        ...mapState('map', ['selectedLocation']),
+        ...mapState('map', ['selectedLocation', 'mapCenter']),
     },
     methods: {
         details(spotID) {

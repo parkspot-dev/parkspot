@@ -5,11 +5,7 @@ const state = {
     locations: [],
     selectedLocation: null,
     selectedLocationLatLng: null,
-    mapOptions: {
-        center: { lat: 17.471356, lng: 78.3344256 }, //  default bengaluru lat, lng.
-        zoom: 12,
-        mapId: 'PARKSPOT_MAP',
-    },
+    mapCenter: { lat: 17.471356, lng: 78.3344256 }, //  default bengaluru lat, lng.
     srpResults: [],
     recentSearch: [],
     recentID: 0,
@@ -71,8 +67,8 @@ const mutations = {
         state.selectedLocationLatLng = selectedLocationLatLng;
     },
 
-    'update-map-options'(state, center) {
-        state.mapOptions.center = center;
+    'update-map-center'(state, center) {
+        state.mapCenter = center;
     },
 
     'update-srp-results'(state, srpResults) {
@@ -114,12 +110,12 @@ const actions = {
         const placeDetail = await placeDetailRes.json();
         commit('update-selected-location-latlng', placeDetail.results[0]);
         const latLng = placeDetail.results[0].geometry.location;
-        commit('update-map-options', latLng);
+        commit('update-map-center', latLng);
     },
 
     async srpCall({ state, commit }) {
         const data = await mayaClient.get(
-            `/search?lat=${state.mapOptions.center.lat}&long=${state.mapOptions.center.lng}&start=20201115t1250&end=20201115t1400`,
+            `/search?lat=${state.mapCenter.lat}&long=${state.mapCenter.lng}&start=20201115t1250&end=20201115t1400`,
         );
         if (data && Object.prototype.hasOwnProperty.call(data, 'Sites')) {
             commit('update-srp-results', data.Sites);

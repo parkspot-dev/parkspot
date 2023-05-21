@@ -76,7 +76,6 @@ export default {
     methods: {
         ...mapMutations({
             updateMapCenter: 'map/update-map-center',
-            updateMapOptions: 'map/update-map-options',
         }),
         ...mapActions({
             srpCall: 'map/srpCall',
