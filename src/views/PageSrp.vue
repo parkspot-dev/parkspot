@@ -35,12 +35,15 @@ export default {
             reRender: 0,
             isLoading: false,
             currentPage: 1,
+            title: undefined,
+            PAGE_TITLE,
         };
     },
     watch: {
         $route: {
             handler: function (to) {
                 if (to.name == 'srp') {
+                    console.log('sdfads', to);
                     this.title = to.params.location;
                 }
             },
