@@ -53,9 +53,7 @@
                 :key="reRender"
                 :mapOptions="mapOptions"
             ></MapContainer>
-            <<<<<<< HEAD
             <SearchInput class="map-search"></SearchInput>
-            ======= >>>>>>> master
         </div>
     </div>
 </template>
@@ -172,8 +170,7 @@ export default {
                     font-size: 16px;
                 }
             }
-        }
-    }
+
 
     .srp-lists {
         flex: 20%;
