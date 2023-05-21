@@ -45,7 +45,7 @@
 
 <script>
 import _ from 'lodash';
-import { mapActions, mapMutations, mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import AtomIcon from '../atoms/AtomIcon.vue';
 
 export default {
