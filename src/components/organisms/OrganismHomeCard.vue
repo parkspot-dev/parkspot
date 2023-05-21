@@ -70,6 +70,7 @@ export default {
     },
     methods: {
         flyToSrp() {
+            console.log;
             const coordinate = getCoordinate(
                 [
                     this.selectedLocationLatLng.geometry.location.lat,
@@ -82,9 +83,7 @@ export default {
                     latlng: coordinate,
                 },
                 params: {
-                    location:
-                        this.selectedLocationLatLng.address_components
-                            .formatted_address,
+                    location: this.selectedLocationLatLng.formatted_address,
                 },
             });
         },
