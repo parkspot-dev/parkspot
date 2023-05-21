@@ -37,6 +37,7 @@ const mutations = {
     },
 
     'update-selected-location'(state, selectedLocation) {
+        console.log(selectedLocation);
         state.selectedLocation = selectedLocation;
 
         const recentSearchObj = {
@@ -47,7 +48,7 @@ const mutations = {
         const recentSearches = [...state.recentSearch];
 
         const uniqueRecentSearches = recentSearches.filter((recentSearch) => {
-            if (recentSearch.id === recentSearchObj.id) {
+            if (recentSearch.place_id === recentSearchObj.place_id) {
                 return false;
             }
             return true;
@@ -106,6 +107,7 @@ const actions = {
 
     async getSelectedLocationLatLng({ commit, state }, selectedLocation) {
         dispatch('getGoogleToken');
+        commit('update-selected-location', selectedLocation);
         const placeId = selectedLocation.place_id;
         const latLngURL = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${state.GOOGLE_TOKEN}`;
         const placeDetailRes = await fetch(latLngURL);
