@@ -4,7 +4,9 @@
             :key="value"
             v-for="value in values"
             v-model="checkboxGroup"
+            @input="handleCheckbox"
             :native-value="value"
+            :size="size"
             type="is-warning"
         >
             {{ value }}
@@ -24,11 +26,17 @@ export default {
             type: Array,
             default: null,
         },
+        size: String,
     },
     data() {
         return {
             checkboxGroup: [],
         };
+    },
+    methods: {
+        handleCheckbox() {
+            this.$emit('input', this.checkboxGroup);
+        },
     },
 };
 </script>
