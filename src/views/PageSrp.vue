@@ -66,7 +66,8 @@ export default {
     async mounted() {
         try {
             this.isLoading = true;
-            await this.updateMapConfig(this.getLatLng()); // map center takes [lng, lat]
+            // await this.updateMapConfig(this.getLatLng()); // map center takes [lng, lat]
+            // await this.updateMapOptions(this.getLatLng());
             await this.srpCall();
             this.reRender++;
             this.isLoading = false;
@@ -80,7 +81,7 @@ export default {
     methods: {
         ...mapMutations({
             updateMapCenter: 'map/update-map-center',
-            updateMapConfig: 'map/update-map-config',
+            updateMapOptions: 'map/update-map-options',
             updatePaginatedSrpData: 'map/update-paginated-srp-data',
         }),
         ...mapActions({
@@ -102,8 +103,8 @@ export default {
         getLatLng() {
             const queryParam = new URLSearchParams(window.location.search);
             const coordinate = getCoordinate(queryParam.get('latlng'));
-            coordinate.reverse(); // map center takes [lng, lat] so reverse() used
-            return coordinate;
+            // coordinate.reverse(); // map center takes [lng, lat] so reverse() used
+            return { lat: coordinate[0], lng: coordinate[1] };
         },
 
         flyToSrp() {

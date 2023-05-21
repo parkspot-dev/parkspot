@@ -51,6 +51,7 @@
                 class="map-container"
                 :spotsList="spots"
                 :key="reRender"
+                :mapOptions="mapOptions"
             ></MapContainer>
         </div>
     </div>
