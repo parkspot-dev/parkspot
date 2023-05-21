@@ -123,7 +123,6 @@ const actions = {
         );
         if (data && Object.prototype.hasOwnProperty.call(data, 'Sites')) {
             commit('update-srp-results', data.Sites);
-            commit('update-paginated-srp-data', 1); // paginated srp result stored
             state.srpResults = data.Sites;
             commit('update-filtered-srp-results', state.srpResults);
         } else {
