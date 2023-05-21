@@ -83,9 +83,6 @@ export default {
         spots: {
             type: Array,
         },
-        totals: {
-            type: Number,
-        },
         reRender: {
             type: Number,
         },
@@ -103,14 +100,8 @@ export default {
         ...mapState('map', ['selectedLocation']),
     },
     methods: {
-        onPageChange(page) {
-            this.$emit('changed', page);
-        },
         details(spotID) {
             this.$emit('details', spotID);
-        },
-        onChange() {
-            this.$emit('flyToSrp');
         },
         activateFilter() {
             this.showFilterCheckbox = !this.showFilterCheckbox;
@@ -120,6 +111,9 @@ export default {
         },
         handleFilter(filterOptions) {
             this.$emit('filter', filterOptions);
+        },
+        onChange() {
+            console.log('onChangeonChange');
         },
     },
 };

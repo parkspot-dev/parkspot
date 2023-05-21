@@ -2,7 +2,6 @@
     <section>
         <TemplateSrp
             :spots="filteredSrpResults"
-            :totals="totalPages"
             :currentPage="currentPage"
             :reRender="reRender"
             @changed="onPageChange"
