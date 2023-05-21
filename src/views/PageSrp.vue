@@ -55,18 +55,12 @@ export default {
         },
     },
     computed: {
-        ...mapGetters({
-            paginatedSrpResults: 'map/getPaginateSrpResults',
-            totalPages: 'map/getTotalPages',
-            LocDetails: 'map/getLocDetails',
-        }),
         ...mapState('map', ['srpResults', 'filteredSrpResults']),
     },
 
     async mounted() {
         try {
             this.isLoading = true;
-            // await this.updateMapConfig(this.getLatLng()); // map center takes [lng, lat]
             // await this.updateMapOptions(this.getLatLng());
             await this.srpCall();
             this.reRender++;
