@@ -158,7 +158,8 @@ export default {
                     font-size: 16px;
                 }
             }
-
+        }
+    }
 
     .srp-lists {
         flex: 20%;
