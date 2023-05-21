@@ -29,6 +29,7 @@ const state = {
     recentSearch: [],
     recentID: 0,
     GOOGLE_TOKEN: process.env.VUE_APP_GOOGLE_MAP_TOKEN,
+    filteredSrpResults: [],
 };
 
 const getters = {
@@ -124,8 +125,8 @@ const mutations = {
         state.totalPages = data;
     },
 
-    'update-srp-results'(state, data) {
-        state.srpResults = data;
+    'update-srp-results'(state, srpResults) {
+        state.srpResults = srpResults;
     },
 
     'update-map-center'(state, data) {
@@ -143,6 +144,10 @@ const mutations = {
         ) {
             state.paginateSrpResults.push(state.srpResults[i]);
         }
+    },
+
+    'update-filtered-srp-results'(state, srpResults) {
+        state.filteredSrpResults = srpResults;
     },
 };
 
@@ -175,6 +180,7 @@ const actions = {
             commit('update-total-pages', data.Sites.length);
             commit('update-paginated-srp-data', 1); // paginated srp result stored
             state.srpResults = data.Sites;
+            commit('update-filtered-srp-results', state.srpResults);
         } else {
             throw data.DisplayMsg;
         }
@@ -199,6 +205,25 @@ const actions = {
             return (state.recentSearch = []);
         }
         return state.recentSearch;
+    },
+
+    updateSrpResults({ commit }, filterOptions) {
+        let filteredSrpResults = [];
+        if (filterOptions.length === 1) {
+            if (filterOptions[0] === 'Available') {
+                filteredSrpResults = state.srpResults.filter(
+                    (srpResult) => srpResult.SlotsAvailable > 0,
+                );
+            } else if (filterOptions[0] === 'Rented out') {
+                filteredSrpResults = state.srpResults.filter(
+                    (srpResult) => srpResult.SlotsAvailable === 0,
+                );
+            }
+        } else {
+            filteredSrpResults = state.srpResults;
+        }
+
+        commit('update-filtered-srp-results', filteredSrpResults);
     },
 };
 
