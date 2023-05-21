@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import mapboxgl from 'mapbox-gl';
+// import mapboxgl from 'mapbox-gl';
+import { Loader } from '@googlemaps/js-api-loader';
 import { mapGetters, mapMutations } from 'vuex';
 export default {
     name: 'MapContainer',
@@ -18,12 +19,14 @@ export default {
         spotsList: {
             type: Array,
         },
+        // it will contains center, zoom and many other config
+        mapOptions: Object,
     },
     emits: ['location'],
     data() {
         return {
             accessToken: process.env.VUE_APP_MAP_ACCESS_TOKEN,
-            img: require('@/assets/pstopmini.png'),
+            parkspotMarkerIcon: require('@/assets/parkspotMarkerIcon.png'),
             map: null, // map for mapbox
             marker: null, // marker for location
         };
@@ -35,72 +38,75 @@ export default {
         }),
     },
     watch: {
-        mapCenter(newCenter) {
-            this.recenterMap(newCenter);
-        },
+        // mapCenter(newCenter) {
+        //     this.recenterMap(newCenter);
+        // },
     },
     mounted() {
-        mapboxgl.accessToken = this.accessToken;
+        const loader = new Loader({
+            apiKey: process.env.VUE_APP_GOOGLE_MAP_TOKEN,
+            version: 'weekly',
+        });
 
-        // create map
-        this.map = new mapboxgl.Map(this.mapConfig);
+        loader.load().then(async () => {
+            const { Map } = await google.maps.importLibrary('maps');
+            const { AdvancedMarkerElement, PinElement } =
+                await google.maps.importLibrary('marker');
 
-        // create the popup
-        const popup = new mapboxgl.Popup({ offset: 25 }).setText(
-            'Your current location.',
-        );
-
-        // create the marker
-        this.marker = new mapboxgl.Marker({
-            draggable: this.drag,
-        })
-            .setLngLat(this.mapConfig.center)
-            .setPopup(popup)
-            .addTo(this.map);
-
-        if (this.drag) {
-            this.map.on('click', (e) => {
-                this.marker.setPopup(popup).setLngLat(e.lngLat).addTo(this.map);
-                this.updateMapConfig(this.marker.getLngLat());
-                this.$emit('location', this.marker.getLngLat());
+            // creating map with config
+            this.map = new Map(document.getElementById('map'), {
+                center: { lat: 17.471356, lng: 78.3344256 },
+                zoom: 12,
+                mapId: 'DEMO_MAP_ID',
             });
 
-            this.marker.on('dragend', () => {
-                this.updateMapConfig(this.marker.getLngLat());
-                this.$emit('location', this.marker.getLngLat());
+            // user marker styles
+            const pinScaled = new PinElement({
+                scale: 1.5,
+                // background: '#ffdd57',
+                // borderColor: '#0085ad',
+                // glyphColor: '#0085ad',
             });
-        }
 
-        // create DOM element for the parking site marker
-        for (const spots of this.spotsList) {
-            const psMarker = document.createElement('div');
+            // adding user marker in the map
+            this.marker = new AdvancedMarkerElement({
+                map: this.map,
+                position: { lat: 17.471356, lng: 78.3344256 },
+                title: 'Uluru',
+                content: pinScaled.element,
+            });
 
-            psMarker.className = 'marker';
-            psMarker.style.backgroundImage = 'url(' + this.img + ')';
-            psMarker.style.width = '50px';
-            psMarker.style.height = '50px';
-            psMarker.style.backgroundSize = '110%';
+            this.spotsList.forEach((spot) => {
+                const lat = spot.Lat;
+                const lng = spot.Long;
 
-            const psPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-                `<p><strong>${spots.Name}</strong></p><p><strong>Distance :</strong> ${spots.Distance} Km</p>`,
-            );
+                // creating spot marker
+                const glyphImg = document.createElement('img');
+                glyphImg.src = this.parkspotMarkerIcon;
+                const glyphSvgPinElement = new PinElement({
+                    glyph: glyphImg,
+                });
 
-            new mapboxgl.Marker(psMarker)
-                .setLngLat([spots.Long, spots.Lat])
-                .setPopup(psPopup)
-                .addTo(this.map);
-        }
+                // adding spot marker in the map
+                new AdvancedMarkerElement({
+                    map: this.map,
+                    position: { lat: lat, lng: lng },
+                    title: spot.Name,
+                    content: glyphSvgPinElement.element,
+                });
+            });
+        });
     },
     methods: {
         ...mapMutations({
             updateMapConfig: 'map/update-map-config',
         }),
-        recenterMap(center) {
-            this.map.flyTo({
-                center: center,
-            });
-            this.marker.setLngLat(center);
-        },
+        // recenterMap(center) {
+        //     this.map.flyTo({
+        //         center: center,
+        //     });
+        //     this.marker.setLngLat(center);
+        // },
     },
 };
 </script>
