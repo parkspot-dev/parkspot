@@ -147,16 +147,6 @@ export default {
         .filter-component {
             position: relative;
 
-.map-container {
-    position: relative;
-    height: 100%;
-}
-
-.map-search {
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    width: 500px;
             .filter-dropdown {
                 position: absolute;
                 z-index: 999;
@@ -170,7 +160,8 @@ export default {
                     font-size: 16px;
                 }
             }
-
+        }
+    }
 
     .srp-lists {
         flex: 20%;
