@@ -110,6 +110,7 @@ export default {
         }, 500),
 
         async addToRecentSearches() {
+            console.log('addToRecentSearches');
             const recentSearches = await this.getFromRecent();
             if (this.LocationName.length === 0) {
                 for (const recentSearch of recentSearches) {
