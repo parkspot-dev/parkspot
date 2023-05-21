@@ -26,8 +26,9 @@
                 class="map-container"
                 :spotsList="spots"
                 :key="reRender"
+                :mapOptions="mapOptions"
             ></MapContainer>
-            <SearchInput class="map-search" @changed="onChange"></SearchInput>
+            <SearchInput class="map-search"></SearchInput>
         </div>
     </div>
 </template>
@@ -37,6 +38,7 @@ import PaginationBody from '../extras/PaginationBody.vue';
 import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import SearchInput from '../extras/SearchInput.vue';
+import { mapState } from 'vuex';
 export default {
     name: 'TemplateSrp',
     components: {
@@ -59,17 +61,16 @@ export default {
             type: Number,
         },
     },
-    emits: ['changed', 'flyToSrp', 'details'],
-
+    emits: ['changed', 'details'],
+    computed: {
+        ...mapState('map', ['mapOptions']),
+    },
     methods: {
         onPageChange(page) {
             this.$emit('changed', page);
         },
         details(spotID) {
             this.$emit('details', spotID);
-        },
-        onChange() {
-            this.$emit('flyToSrp');
         },
         selected(spot) {
             console.log(spot);
@@ -101,14 +102,14 @@ export default {
 }
 
 .map-container {
-    height: 100%;
     position: relative;
+    height: 100%;
 }
 
 .map-search {
-    left: 50%;
     position: absolute;
     top: 20%;
+    left: 50%;
     width: 500px;
 }
 
@@ -127,8 +128,8 @@ export default {
     }
 
     .map-search {
-        left: 5%;
         top: 10%;
+        left: 5%;
         width: 50vw;
     }
 }

@@ -5,7 +5,7 @@
 <script>
 // import mapboxgl from 'mapbox-gl';
 import { Loader } from '@googlemaps/js-api-loader';
-import { mapGetters, mapMutations } from 'vuex';
+// import { mapGetters, mapMutations } from 'vuex';
 export default {
     name: 'MapContainer',
     props: {
@@ -31,12 +31,6 @@ export default {
             userMarker: null, // user marker for location
         };
     },
-    computed: {
-        ...mapGetters({
-            mapConfig: 'map/getMapConfig',
-            mapCenter: 'map/getNewMapCenter',
-        }),
-    },
     watch: {
         // mapCenter(newCenter) {
         //     this.recenterMap(newCenter);
@@ -54,11 +48,7 @@ export default {
                 await google.maps.importLibrary('marker');
 
             // creating map with config
-            this.map = new Map(document.getElementById('map'), {
-                center: { lat: 17.471356, lng: 78.3344256 },
-                zoom: 12,
-                mapId: 'DEMO_MAP_ID',
-            });
+            this.map = new Map(document.getElementById('map'), this.mapOptions);
 
             // user marker styles
             const pinScaled = new PinElement({
@@ -76,7 +66,7 @@ export default {
                 content: pinScaled.element,
                 gmpDraggable: this.drag, // make draggable marker
             });
-
+            console.log(this.userMarker);
             // Create an info window to share between markers.
             const userInfoWindow = new InfoWindow();
 
@@ -84,7 +74,7 @@ export default {
                 const { target } = domEvent;
                 console.log(target);
                 userInfoWindow.close();
-                userInfoWindow.setContent(this.userMarker.title);
+                userInfoWindow.setContent(this.userMarker.position);
                 userInfoWindow.open(this.userMarker.map, this.userMarker);
             });
 
@@ -102,20 +92,6 @@ export default {
             }
 
             this.spotsList.forEach((spot) => {
-                console.log(spot);
-                // const contentString =
-                //     `<div class="spot-details-content">` +
-                //     `<h1 class="title full-width"> <strong>${spot.Name}</strong> </h1>` +
-                //     `<div class="bodyContent">` +
-                //     `<p>Address: ${spot.Address}  </p>` +
-                //     `<p>Distance: ${spot.Distance}&#160;km </p>` +
-                //     `<div style="display: flex;justify-content: space-between;align-items: center;">` +
-                //     `<p>&#8377; ${spot.Rate}</p>` +
-                //     `<button style="background-color: #ffe08a;border-color: transparent;border-radius: 3px;color: rgba(0, 0, 0, 0.7);"> <a href="https://www.parkspot.in/spot-details/${spot.ID}" target="_blank">` +
-                //     `View Spot &gt;</a> </button>` +
-                //     `</div>` +
-                //     `</div>` +
-                //     `</div>`;
                 const contentString = `<div dir="ltr" style="" jstcache="0">
                         <div jstcache="34" class="poi-info-window gm-style">
                             <div jstcache="2"> 
@@ -134,6 +110,7 @@ export default {
                             </div>
                         </div>
                     </div>`;
+
                 // Create an info window to share between markers.
                 const spotInfoWindow = new InfoWindow({
                     content: contentString,
@@ -170,9 +147,6 @@ export default {
         });
     },
     methods: {
-        ...mapMutations({
-            updateMapConfig: 'map/update-map-config',
-        }),
         // recenterMap(center) {
         //     this.map.flyTo({
         //         center: center,

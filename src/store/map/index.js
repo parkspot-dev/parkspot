@@ -10,11 +10,17 @@ const state = {
         locName: '',
     },
     selectedLocationLatLng: null,
+    // remove below
     mapConfig: {
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [77.5946, 12.9716], //  default bengaluru lat, lng.
         zoom: 11,
+    },
+    mapOptions: {
+        center: { lat: 17.471356, lng: 78.3344256 }, //  default bengaluru lat, lng.
+        zoom: 12,
+        mapId: 'PARKSPOT_MAP',
     },
     center: null,
     totalPages: 1, // default page number
@@ -110,9 +116,8 @@ const mutations = {
         state.selectedLocation.country = country.text || '';
     },
 
-    'update-map-config'(state, center) {
-        state.mapConfig.center = center;
-        state.center = center;
+    'update-map-options'(state, center) {
+        state.mapOptions.center = center;
     },
 
     'update-total-pages'(state, data) {
@@ -158,12 +163,12 @@ const actions = {
         const placeDetail = await placeDetailRes.json();
         commit('update-selected-location-latlng', placeDetail.results[0]);
         const latLng = placeDetail.results[0].geometry.location;
-        commit('update-map-config', [latLng.lng, latLng.lat]);
+        commit('update-map-options', latLng);
     },
 
     async srpCall({ state, commit }) {
         const data = await mayaClient.get(
-            `/search?lat=${state.center[1]}&long=${state.center[0]}&start=20201115t1250&end=20201115t1400`,
+            `/search?lat=${state.mapOptions.center.lat}&long=${state.mapOptions.center.lng}&start=20201115t1250&end=20201115t1400`,
         );
         if (data && Object.prototype.hasOwnProperty.call(data, 'Sites')) {
             commit('update-srp-results', data.Sites);
