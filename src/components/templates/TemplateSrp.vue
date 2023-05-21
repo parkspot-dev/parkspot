@@ -58,9 +58,7 @@
 </template>
 
 <script>
-// import PaginationBody from '../extras/PaginationBody.vue';
 import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
-// import AtomRadioButton from '../atoms/AtomRadioButton.vue';
 import AtomCheckbox from '../atoms/AtomCheckbox.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import SearchInput from '../extras/SearchInput.vue';
@@ -78,7 +76,7 @@ export default {
         SearchInput,
         AtomCheckbox,
     },
-    emits: ['changed', 'flyToSrp', 'details'],
+    emits: ['flyToSrp', 'details'],
     props: {
         spots: {
             type: Array,

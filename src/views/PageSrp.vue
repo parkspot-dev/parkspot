@@ -4,7 +4,6 @@
             :spots="filteredSrpResults"
             :currentPage="currentPage"
             :reRender="reRender"
-            @changed="onPageChange"
             @flyToSrp="flyToSrp"
             @details="spotDetails"
             @filter="onFilter"
@@ -75,7 +74,6 @@ export default {
         ...mapMutations({
             updateMapCenter: 'map/update-map-center',
             updateMapOptions: 'map/update-map-options',
-            updatePaginatedSrpData: 'map/update-paginated-srp-data',
         }),
         ...mapActions({
             srpCall: 'map/srpCall',
@@ -83,16 +81,7 @@ export default {
             updateSrpResults: 'map/updateSrpResults',
         }),
 
-        onPageChange(pageNum) {
-            this.isLoading = true;
-            this.updatePaginatedSrpData(pageNum);
-            this.updateCenterSrp();
-            this.currentPage = pageNum;
-            this.reRender++;
-            this.isLoading = false;
-        },
         // methods to get Lat and Long
-
         getLatLng() {
             const queryParam = new URLSearchParams(window.location.search);
             const coordinate = getCoordinate(queryParam.get('latlng'));
