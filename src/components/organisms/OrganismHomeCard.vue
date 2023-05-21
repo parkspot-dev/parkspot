@@ -66,7 +66,7 @@ export default {
         AtomButton,
     },
     computed: {
-        ...mapState('map', ['mapOptions', 'selectedLocationLatLng']),
+        ...mapState('map', ['selectedLocationLatLng']),
     },
     methods: {
         flyToSrp() {

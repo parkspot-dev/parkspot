@@ -19,8 +19,10 @@ export default {
         spotsList: {
             type: Array,
         },
-        // it will contains center, zoom and many other config
-        mapOptions: Object,
+        // it will contains map center
+        center: Object,
+        // it will contain latlng of user
+        userLatLng: Object,
     },
     emits: ['location'],
     data() {
@@ -48,7 +50,11 @@ export default {
                 await google.maps.importLibrary('marker');
 
             // creating map with config
-            this.map = new Map(document.getElementById('map'), this.mapOptions);
+            this.map = new Map(document.getElementById('map'), {
+                center: this.center,
+                zoom: 12,
+                mapId: 'PARKSPOT_MAP',
+            });
 
             // user marker styles
             const pinScaled = new PinElement({
@@ -61,7 +67,7 @@ export default {
             // adding user marker in the map
             this.userMarker = new AdvancedMarkerElement({
                 map: this.map,
-                position: { lat: 17.471356, lng: 78.3344256 },
+                position: this.userLatLng,
                 title: 'Your Location',
                 content: pinScaled.element,
                 gmpDraggable: this.drag, // make draggable marker
