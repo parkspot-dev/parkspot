@@ -233,7 +233,7 @@
                 <section class="secondary-container">
                     <div>
                         <AtomParagraph>
-                            © 2021 NeoSpot Pvt Ltd.- ALL RIGHTS RESERVED
+                            © 2023 NeoSpot Pvt Ltd.- ALL RIGHTS RESERVED
                         </AtomParagraph>
                         <AtomParagraph>
                             <a class="tnc"
