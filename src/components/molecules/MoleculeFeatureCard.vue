@@ -37,7 +37,7 @@ export default {
 
 .custom-card:hover,
 .custom-card:focus {
-    background-color: var(--primary-color);
+    background-color: #ffe08a;
     border: 2px solid transparent;
     color: var(--secondary-color);
     transform: scale(1.05);
