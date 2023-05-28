@@ -77,8 +77,8 @@ const actions = {
             commit('update-owner-info-details', res.User);
             const spot = {
                 Name: res.Site['Name'],
-                Lat: res.Site['Latitude'],
-                Long: res.Site['Longitude'],
+                Lat: res.Site['Lat'],
+                Long: res.Site['Long'],
             };
             commit('update-selected-spot', spot);
             commit('update-is-available', res.Site['SlotsAvailable']);
