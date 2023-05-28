@@ -215,3 +215,9 @@ $g-background-color-dark: #18181b;
     transform: scale(1.5);
 }
 </style>
+
+<style lang="scss">
+.swiper-pagination-bullet-active {
+    background: var(--secondary-color);
+}
+</style>
