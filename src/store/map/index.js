@@ -1,5 +1,4 @@
 import { mayaClient } from '@/services/api';
-// import _ from 'lodash';
 
 const state = {
     locations: [],

@@ -85,16 +85,7 @@ export default {
         },
     },
     watch: {
-        selected(newLocation) {
-            // this.updateMapConfig([
-            //     newLocation.center[0],
-            //     newLocation.center[1],
-            // ]); // needed for recentering of map.
-            // this.updateSelectedLocation(newLocation); // get the actual value of selected option.
-            // this.updateSelectedCity(newLocation.context[0]); // update selected city
-            // this.updateSelectedState(newLocation.context[1]); // update selected state
-            // this.updateSelectedCountry(newLocation.context[2]); // update selected country
-        },
+        selected(newLocation) {},
     },
     methods: {
         ...mapMutations({
