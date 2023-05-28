@@ -1,4 +1,5 @@
 import { mayaClient } from '@/services/api';
+import { firebase, getDatabase, ref, get, child } from '../../firebase';
 
 const state = {
     locations: [],
@@ -21,7 +22,7 @@ const state = {
     paginateSrpResults: [],
     recentSearch: [],
     recentID: 0,
-    GOOGLE_TOKEN: process.env.VUE_APP_GOOGLE_MAP_TOKEN,
+    GOOGLE_TOKEN: '',
     filteredSrpResults: [],
 };
 
@@ -143,11 +144,22 @@ const mutations = {
     'update-filtered-srp-results'(state, srpResults) {
         state.filteredSrpResults = srpResults;
     },
+    'update-google-token'(state, token) {
+        state.GOOGLE_TOKEN = token;
+    },
 };
 
 const actions = {
-    async getPredictedLocations({ commit, state }, query) {
+    async getGoogleToken({ commit }) {
+        const db = getDatabase(firebase);
+        const dbref = ref(db);
+        const res = await get(child(dbref, `admin`));
+        const credentials = await res.val();
+        commit('update-google-token', credentials.google_map.token);
+    },
+    async getPredictedLocations({ dispatch, commit, state }, query) {
         // autocomplete prediction api give list of location prediction contains place_id
+        dispatch('getGoogleToken');
         const autocompleteURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&components=country:in&key=${state.GOOGLE_TOKEN}`;
         const predictionLocRes = await fetch(autocompleteURL);
         const locDetails = await predictionLocRes.json();
@@ -156,6 +168,7 @@ const actions = {
     },
 
     async getSelectedLocationLatLng({ commit, state }, selectedLocation) {
+        dispatch('getGoogleToken');
         const placeId = selectedLocation.place_id;
         const latLngURL = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${state.GOOGLE_TOKEN}`;
         const placeDetailRes = await fetch(latLngURL);
