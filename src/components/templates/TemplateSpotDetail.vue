@@ -95,8 +95,8 @@
                         <AtomButton
                             @click.native="
                                 goToInterestedVO([
-                                    spotDetails.Latitude,
-                                    spotDetails.Longitude,
+                                    spotDetails.Lat,
+                                    spotDetails.Long,
                                 ])
                             "
                         >
