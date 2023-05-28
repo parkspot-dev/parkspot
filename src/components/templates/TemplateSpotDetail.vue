@@ -41,9 +41,16 @@
 
             <div class="spot-detail-map">
                 <h2>How to get here?</h2>
+                <!-- <MapContainer
+                    class="sdp-map"
+                    :spotsList="selectedSpot"
+                ></MapContainer> -->
                 <MapContainer
                     class="sdp-map"
                     :spotsList="selectedSpot"
+                    :key="reRender"
+                    :center="mapCenter"
+                    :userLatLng="mapCenter"
                 ></MapContainer>
             </div>
 
@@ -144,6 +151,7 @@ export default {
             ownerInfoDetails: (state) => state.ownerInfoDetails,
             selectedSpot: (state) => state.selectedSpot,
         }),
+        ...mapState('map', ['mapCenter']),
     },
     methods: {
         goToInterestedVO(latLng) {

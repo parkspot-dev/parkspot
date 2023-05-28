@@ -101,7 +101,10 @@ const actions = {
         commit('update-location', locDetailsArr);
     },
 
-    async getSelectedLocationLatLng({ commit, state }, selectedLocation) {
+    async getSelectedLocationLatLng(
+        { dispatch, commit, state },
+        selectedLocation,
+    ) {
         dispatch('getGoogleToken');
         commit('update-selected-location', selectedLocation);
         const placeId = selectedLocation.place_id;
