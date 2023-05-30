@@ -72,6 +72,9 @@ export default {
         ...mapMutations('map', {
             updateManConfig: 'update-map-config',
         }),
+        ...mapMutations('sdp', {
+            updateUserLatLng: 'update-user-lat-lng',
+        }),
         getUserLocation() {
             const geolocation = navigator.geolocation;
             if (geolocation) {
@@ -86,8 +89,10 @@ export default {
         onGeoSuccess(position) {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
-            const location = [lng, lat];
-            this.updateManConfig(location);
+            const location = { lat, lng };
+            // this.updateManConfig(location);
+            console.log('jhe', location);
+            this.updateUserLatLng(location);
         },
         onGeoError(error) {
             let detailError;

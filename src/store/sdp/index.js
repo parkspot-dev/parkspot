@@ -11,6 +11,7 @@ const state = {
     title: '',
     thumbnail: [],
     images: [],
+    userLatLng: null,
 };
 
 const getters = {};
@@ -53,6 +54,10 @@ const mutations = {
 
     'update-title'(state, title) {
         state.title = title;
+    },
+    'update-user-lat-lng'(state, userLocation) {
+        console.log('kjhdsfa');
+        state.userLatLng = userLocation;
     },
 };
 

@@ -64,6 +64,7 @@ export default {
                 // glyphColor: '#0085ad',
             });
 
+            console.log('here', this.userLatLng);
             // adding user marker in the map
             this.userMarker = new AdvancedMarkerElement({
                 map: this.map,
@@ -80,7 +81,7 @@ export default {
                 const { target } = domEvent;
                 console.log(target);
                 userInfoWindow.close();
-                userInfoWindow.setContent(this.userMarker.position);
+                userInfoWindow.setContent(this.userMarker.title);
                 userInfoWindow.open(this.userMarker.map, this.userMarker);
             });
 

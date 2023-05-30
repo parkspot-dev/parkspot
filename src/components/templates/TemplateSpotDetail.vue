@@ -49,8 +49,8 @@
                     class="sdp-map"
                     :spotsList="[...spotDetails]"
                     :key="reRender"
-                    :center="mapCenter"
-                    :userLatLng="mapCenter"
+                    :center="{ lat: spotDetails.Lat, lng: spotDetails.Long }"
+                    :userLatLng="userLatLng"
                 ></MapContainer>
             </div>
 
@@ -146,11 +146,12 @@ export default {
         },
     },
     computed: {
-        ...mapState('sdp', {
-            spotDetails: (state) => state.spotDetails,
-            ownerInfoDetails: (state) => state.ownerInfoDetails,
-            selectedSpot: (state) => state.selectedSpot,
-        }),
+        ...mapState('sdp', [
+            'spotDetails',
+            'ownerInfoDetails',
+            'userLatLng',
+            'selectedSpot',
+        ]),
         ...mapState('map', ['mapCenter']),
     },
     methods: {
