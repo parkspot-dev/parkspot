@@ -9,11 +9,10 @@
             <div class="about-desc" data-aos="zoom-in">
                 <AtomHeading class="mb-3"> Why Choose Us? </AtomHeading>
                 <AtomParagraph class="mb-2">
-                    We at ParkSpot strive to solve the trivial problem of
-                    finding or booking available parking slots in vicinity which
-                    is faced by millions of people on a daily basis. we view for
-                    solutions which brings technology and life closer and
-                    accessible.
+                    Comfortable parking experience. Brokerage free. Genuine Owners. 
+                    Ensured security of your vehicle. Available for residents and visitors.
+                     Surveillance parking. Simple steps to list property. Earn money on the go. 
+                     Available on app and website. 
                 </AtomParagraph>
                 <AtomParagraph class="mb-6">
                     ParkSpot is part of this new initiative and incorporates

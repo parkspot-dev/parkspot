@@ -59,15 +59,51 @@
             </div>
 
             <!-- only to admin -->
-            <div class="spot-detail-owner" v-if="isAdmin">
+            <div class="spot-detail-owner" v-if="ownerInfoDetails.UserName">
                 <hr style="width: 100%; margin-top: 80px" />
                 <h2>Owner Info Details</h2>
-                <p>FullName : {{ ownerInfoDetails.FullName }}</p>
-                <p>Mobile : {{ ownerInfoDetails.Mobile }}</p>
-                <p>Alternate Mobile : {{ ownerInfoDetails.AlternateMobile }}</p>
-                <p>City : {{ ownerInfoDetails.City }}</p>
-                <p>EmailID : {{ ownerInfoDetails.EmailID }}</p>
-                <p>KYCStatus : {{ ownerInfoDetails.KYCStatus }}</p>
+                <div class="spot-detail-owner-body">
+                    <div>
+                        <table>
+                            <tr v-if="ownerInfoDetails.FullName">
+                                <td>FullName</td>
+                                <td>{{ ownerInfoDetails.FullName }}</td>
+                            </tr>
+                            <tr v-if="ownerInfoDetails.Mobile">
+                                <td>Mobile</td>
+                                <td>{{ ownerInfoDetails.Mobile }}</td>
+                            </tr>
+                            <tr v-if="ownerInfoDetails.AlternateMobile">
+                                <td>Alternate Mobile</td>
+                                <td>{{ ownerInfoDetails.AlternateMobile }}</td>
+                            </tr>
+                            <tr v-if="ownerInfoDetails.City">
+                                <td>City</td>
+                                <td>{{ ownerInfoDetails.City }}</td>
+                            </tr>
+                            <tr v-if="ownerInfoDetails.EmailID">
+                                <td>EmailID</td>
+                                <td>{{ ownerInfoDetails.EmailID }}</td>
+                            </tr>
+                            <tr v-if="ownerInfoDetails.KYCStatus">
+                                <td>KYCStatus</td>
+                                <td>{{ ownerInfoDetails.KYCStatus }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="goto-btn">
+                        <AtomButton
+                            @click.native="
+                                goToInterestedVO([
+                                    spotDetails.Lat,
+                                    spotDetails.Long,
+                                ])
+                            "
+                        >
+                            Interested VO's
+                        </AtomButton>
+                    </div>
+                </div>
             </div>
 
             <div class="rate-card-container-mobile">
@@ -83,6 +119,7 @@ import SpotRateCard from '@/components/organisms/OrganismSpotRateCard.vue';
 import MapContainer from '@/components/extras/MapContainer.vue';
 import ImageGallery from '../organisms/OrganismImageGallery.vue';
 import InfographicSteps from '../molecules/MoleculeInfographicSteps.vue';
+import AtomButton from '@/components/atoms/AtomButton.vue';
 import { mapState } from 'vuex';
 
 export default {
@@ -93,6 +130,7 @@ export default {
         MapContainer,
         ImageGallery,
         InfographicSteps,
+        AtomButton,
     },
     props: {
         isAdmin: {
@@ -106,6 +144,11 @@ export default {
             ownerInfoDetails: (state) => state.ownerInfoDetails,
             selectedSpot: (state) => state.selectedSpot,
         }),
+    },
+    methods: {
+        goToInterestedVO(latLng) {
+            this.$emit('goToSearchPortal', latLng);
+        },
     },
 };
 </script>
@@ -262,6 +305,22 @@ hr {
 
     p {
         font-size: 20px;
+    }
+
+    .spot-detail-owner-body {
+        display: flex;
+        gap: 10px;
+    }
+
+    .goto-btn {
+        margin-top: 10px;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid;
+        padding: 5px;
     }
 }
 </style>

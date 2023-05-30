@@ -16,7 +16,7 @@
     </div>
 </template>
 
-  <script>
+<script>
 import 'lightgallery.js';
 import 'lightgallery.js/dist/css/lightgallery.css';
 import { mapState } from 'vuex';
@@ -55,6 +55,17 @@ export default {
 
         this.setImageSize();
     },
+    watch: {
+        images() {
+            if (this.images.length > 0) {
+                this.spotImage = this.images;
+            } else {
+                this.spotImage = this.thumbnail;
+            }
+            this.setImageSize();
+        },
+    },
+
     methods: {
         setImageSize() {
             switch (this.spotImage.length) {
@@ -78,7 +89,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped >
+<style lang="scss" scoped>
 .gallery-container {
     width: 100%;
     height: 100%;

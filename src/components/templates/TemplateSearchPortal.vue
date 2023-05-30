@@ -1,6 +1,6 @@
 <template>
     <div class="search-portal-wrapper">
-        <div class="summary">
+        <div class="summary" v-if="isSummary">
             <div class="so-btn">
                 <AtomButton @click.native="showSummary">
                     {{ summary.btn }} Summary
@@ -125,6 +125,44 @@
             </b-table-column>
 
             <b-table-column
+                field="Agent"
+                label="Agent"
+                width="100px"
+                sortable
+                searchable
+            >
+                <template #searchable="props">
+                    <AtomSelectInput
+                        :size="'is-small'"
+                        :list="agentList"
+                        v-model="props.filters['Agent']"
+                        label=""
+                        placeholder="Agent"
+                    >
+                    </AtomSelectInput>
+                </template>
+                <template v-slot="props">
+                    <div class="status-column">
+                        <div class="status-part">
+                            <span class="tag is-warning">
+                                {{ props.row.Agent }}
+                            </span>
+                            <AtomSelectInput
+                                :size="'is-small'"
+                                :list="agentList"
+                                @changed="
+                                    onAgentUpdate(props.row, ...arguments)
+                                "
+                                label=""
+                                placeholder="Select Agent"
+                            >
+                            </AtomSelectInput>
+                        </div>
+                    </div>
+                </template>
+            </b-table-column>
+
+            <b-table-column
                 field="contact"
                 label="Contact Details"
                 v-slot="props"
@@ -148,6 +186,10 @@
                         <p>
                             Landmark :
                             <strong>{{ props.row.Landmark }}</strong>
+                        </p>
+                        <p v-if="props.row.Distance">
+                            Distance :
+                            <strong>{{ props.row.Distance }} Km</strong>
                         </p>
                     </div>
 
@@ -311,6 +353,10 @@ export default {
         isLoading: {
             type: Boolean,
         },
+        isSummary: {
+            type: Boolean,
+            default: false,
+        },
     },
     emits: ['updateRequest', 'toSrp'],
     data() {
@@ -322,6 +368,14 @@ export default {
             isHoverable: false,
             isFocusable: false,
             hasMobileCards: true,
+
+            agentList: [
+                { id: 0, name: 'Sud' },
+                { id: 1, name: 'Ish' },
+                { id: 2, name: 'Nitya' },
+                { id: 3, name: 'Preeti' },
+                { id: 4, name: 'NA' },
+            ],
 
             statusList: [
                 { id: 0, name: 'StatusNotSet' },
@@ -338,6 +392,7 @@ export default {
 
             model: {
                 comments: '',
+                agent: '',
                 status: '',
                 nextCall: '',
             },
@@ -349,6 +404,7 @@ export default {
                 high: 0,
                 medium: 0,
                 low: 0,
+                agent: [0, 0, 0, 0],
                 status: [0, 0, 0, 0, 0, 0],
                 today: 0,
                 yesterday: 0,
@@ -378,6 +434,8 @@ export default {
                     this.summary.low++;
                 }
 
+                this.summary.agent[request.Agent]++;
+
                 this.summary.status[request.Status]++;
 
                 if (
@@ -406,6 +464,15 @@ export default {
                 case 3:
                     return 'High';
             }
+        },
+
+        onAgentUpdate(spotData, agentid) {
+            this.agentList.forEach((Agent) => {
+                if (Agent.id === agentid) {
+                    spotData['Agent'] = Agent.name;
+                }
+            });
+            this.$emit('updateRequest', spotData);
         },
 
         getLatLng(lat, lng) {
@@ -470,7 +537,7 @@ export default {
 </script>
 
 <style lang="scss">
-$portal-font-size: 14px;
+$portal-font-size: 13px;
 
 @media only screen and (max-width: 1024px) {
     .id-column-parent {
@@ -480,7 +547,7 @@ $portal-font-size: 14px;
 }
 
 .search-portal-wrapper {
-    padding: 1rem 4rem;
+    padding: 1rem 1rem;
 
     @media only screen and (max-width: 1024px) {
         padding: 1rem;
@@ -555,10 +622,6 @@ $portal-font-size: 14px;
         display: flex;
         flex-direction: column;
         gap: 10px;
-
-        div {
-            display: flex;
-        }
     }
     .contact-column {
         font-size: $portal-font-size;

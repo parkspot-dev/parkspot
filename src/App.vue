@@ -1,6 +1,7 @@
 <template>
     <div id="app">
         <Navbar></Navbar>
+        <OrganismLogin :is-show="loginModal"></OrganismLogin>
         <main class="body-container">
             <router-view :key="$route.fullPath" />
         </main>
@@ -11,16 +12,24 @@
 <script>
 import TemplateFooter from './components/templates/TemplateFooter.vue';
 import Navbar from './components/extras/NavbarBody.vue';
+import OrganismLogin from './components/organisms/OrganismLogin.vue';
 import { PAGE_TITLE } from '@/constant/constant';
+import { mapState } from 'vuex';
 export default {
     components: {
         TemplateFooter,
         Navbar,
+        OrganismLogin,
     },
     metaInfo() {
         return {
             title: PAGE_TITLE.HOMEPAGE,
         };
+    },
+    computed: {
+        ...mapState('user', {
+            loginModal: (state) => state.loginModal,
+        }),
     },
 };
 </script>
@@ -36,12 +45,6 @@ export default {
 }
 
 .body-container {
-    margin-top: 10px;
-}
-
-@media only screen and (max-width: 1024px) {
-    .body-container {
-        margin-top: 2px;
-    }
+    padding-top: 4.375rem;
 }
 </style>

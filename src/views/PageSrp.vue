@@ -1,20 +1,21 @@
 <template>
     <section>
         <TemplateSrp
-            :spots="paginatedSrpResults"
+            :spots="filteredSrpResults"
             :totals="totalPages"
             :currentPage="currentPage"
             :reRender="reRender"
             @changed="onPageChange"
             @flyToSrp="flyToSrp"
             @details="spotDetails"
+            @filter="onFilter"
         ></TemplateSrp>
         <LoaderModal :isLoading="isLoading"></LoaderModal>
     </section>
 </template>
 <script>
 import TemplateSrp from '../components/templates/TemplateSrp.vue';
-import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import { getCoordinate } from '../includes/LatLng';
 import { PAGE_TITLE } from '@/constant/constant';
@@ -48,6 +49,10 @@ export default {
             deep: true,
             immediate: true,
         },
+        // filter change will re-render the map
+        filteredSrpResults() {
+            this.reRender++;
+        },
     },
     computed: {
         ...mapGetters({
@@ -55,6 +60,7 @@ export default {
             totalPages: 'map/getTotalPages',
             LocDetails: 'map/getLocDetails',
         }),
+        ...mapState('map', ['srpResults', 'filteredSrpResults']),
     },
 
     async mounted() {
@@ -65,7 +71,10 @@ export default {
             this.reRender++;
             this.isLoading = false;
         } catch (errorMsg) {
-            this.$router.push({ name: 'error', params: { msg: errorMsg } });
+            console.log(errorMsg);
+            this.$router.push({
+                name: 'error',
+            });
         }
     },
     methods: {
@@ -77,6 +86,7 @@ export default {
         ...mapActions({
             srpCall: 'map/srpCall',
             updateCenterSrp: 'map/updateCenterSrp',
+            updateSrpResults: 'map/updateSrpResults',
         }),
 
         onPageChange(pageNum) {
@@ -117,12 +127,16 @@ export default {
         },
 
         spotDetails(spotID) {
-            this.$router.push({
+            const route = this.$router.resolve({
                 name: 'spot-detail',
                 params: {
                     spotId: spotID,
                 },
             });
+            window.open(route.href);
+        },
+        onFilter(filterOption) {
+            this.updateSrpResults(filterOption);
         },
     },
 };
