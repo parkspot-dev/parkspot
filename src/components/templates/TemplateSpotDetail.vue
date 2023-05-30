@@ -47,7 +47,7 @@
                 ></MapContainer> -->
                 <MapContainer
                     class="sdp-map"
-                    :spotsList="selectedSpot"
+                    :spotsList="[...spotDetails]"
                     :key="reRender"
                     :center="mapCenter"
                     :userLatLng="mapCenter"
