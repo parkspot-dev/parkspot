@@ -5,7 +5,6 @@ import { firebase, getDatabase, ref, get, child } from '../../firebase';
 const state = {
     spotDetails: null,
     ownerInfoDetails: null,
-    selectedSpot: [],
     isAvailable: false,
     loading: false,
     title: '',
@@ -23,11 +22,6 @@ const mutations = {
 
     'update-owner-info-details'(state, ownerInfoDetails) {
         state.ownerInfoDetails = ownerInfoDetails;
-    },
-
-    'update-selected-spot'(state, spot) {
-        state.selectedSpot = [];
-        state.selectedSpot = [...state.selectedSpot, spot];
     },
 
     'update-is-available'(state, available) {
@@ -80,12 +74,6 @@ const actions = {
         if (res.Site) {
             commit('update-spot-details', res.Site);
             commit('update-owner-info-details', res.User);
-            const spot = {
-                Name: res.Site['Name'],
-                Lat: res.Site['Lat'],
-                Long: res.Site['Long'],
-            };
-            commit('update-selected-spot', spot);
             commit('update-is-available', res.Site['SlotsAvailable']);
             commit('update-loading', false);
             commit('update-image', res.Site['SiteImages']);

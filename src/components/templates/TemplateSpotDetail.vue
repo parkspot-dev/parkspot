@@ -41,10 +41,6 @@
 
             <div class="spot-detail-map">
                 <h2>How to get here?</h2>
-                <!-- <MapContainer
-                    class="sdp-map"
-                    :spotsList="selectedSpot"
-                ></MapContainer> -->
                 <MapContainer
                     class="sdp-map"
                     :spotsList="[...spotDetails]"
@@ -146,12 +142,7 @@ export default {
         },
     },
     computed: {
-        ...mapState('sdp', [
-            'spotDetails',
-            'ownerInfoDetails',
-            'userLatLng',
-            'selectedSpot',
-        ]),
+        ...mapState('sdp', ['spotDetails', 'ownerInfoDetails', 'userLatLng']),
         ...mapState('map', ['mapCenter']),
     },
     methods: {
