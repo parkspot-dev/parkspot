@@ -91,9 +91,8 @@ const actions = {
         const credentials = await res.val();
         commit('update-google-token', credentials.google_map.token);
     },
-    async getPredictedLocations({ dispatch, commit, state }, query) {
+    async getPredictedLocations({ commit, state }, query) {
         // autocomplete prediction api give list of location prediction contains place_id
-        dispatch('getGoogleToken');
         const autocompleteURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&components=country:in&key=${state.GOOGLE_TOKEN}`;
         const predictionLocRes = await fetch(autocompleteURL);
         const locDetails = await predictionLocRes.json();
@@ -101,11 +100,7 @@ const actions = {
         commit('update-location', locDetailsArr);
     },
 
-    async getSelectedLocationLatLng(
-        { dispatch, commit, state },
-        selectedLocation,
-    ) {
-        dispatch('getGoogleToken');
+    async getSelectedLocationLatLng({ commit, state }, selectedLocation) {
         commit('update-selected-location', selectedLocation);
         const placeId = selectedLocation.place_id;
         const latLngURL = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${state.GOOGLE_TOKEN}`;

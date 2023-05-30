@@ -14,7 +14,7 @@ import TemplateFooter from './components/templates/TemplateFooter.vue';
 import Navbar from './components/extras/NavbarBody.vue';
 import OrganismLogin from './components/organisms/OrganismLogin.vue';
 import { PAGE_TITLE } from '@/constant/constant';
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 export default {
     components: {
         TemplateFooter,
@@ -30,6 +30,12 @@ export default {
         ...mapState('user', {
             loginModal: (state) => state.loginModal,
         }),
+    },
+    mounted() {
+        this.getGoogleToken();
+    },
+    methods: {
+        ...mapActions('map', ['getGoogleToken']),
     },
 };
 </script>
