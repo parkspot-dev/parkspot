@@ -1,7 +1,7 @@
 <template>
     <div>
-        <HeaderBanner class="custom-header">            
-                <h1 class="custom-title">Book Your Parking Spot</h1>           
+        <HeaderBanner class="custom-header">
+            <h1 class="custom-title">Book Your Parking Spot</h1>
             <b-breadcrumb align="is-centered" size="is-small">
                 <b-breadcrumb-item tag="router-link" to="/">
                     Home
@@ -22,7 +22,7 @@
                     :key="spot.ID"
                     v-for="spot in spots"
                     :spot="spot"
-                    @booked="onBook"
+                    @on-details="details"
                 ></MoleculeSRPCard>
             </div>
             <div class="nearbytext-container">
@@ -86,8 +86,8 @@ export default {
         },
     },
     methods: {
-        onBook() {
-            this.$router.push({ name: 'contactUs' });
+        details(spotID) {
+            this.$emit('details', spotID);
         },
     },
 };
