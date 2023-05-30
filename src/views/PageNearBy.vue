@@ -2,6 +2,7 @@
     <TemplateNearBy
         :nearByLocation="nearByLocation"
         :spots="spots"
+        @details="spotDetails"
     ></TemplateNearBy>
 </template>
 
@@ -55,6 +56,15 @@ export default {
                 });
             this.spots = [...pageData.Sites];
             console.log(pageData);
+        },
+        spotDetails(spotID) {
+            const route = this.$router.resolve({
+                name: 'spot-detail',
+                params: {
+                    spotId: spotID,
+                },
+            });
+            window.open(route.href);
         },
     },
 };
