@@ -87,7 +87,6 @@ export default {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
             const location = { lat, lng };
-            console.log('jhe', location);
             this.updateUserLatLng(location);
         },
         onGeoError(error) {
