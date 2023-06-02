@@ -60,7 +60,7 @@ const mutations = {
 
         state.recentSearch = [...uniqueRecentSearches];
         // JSON used to store array as string in LS
-        localStorage.setItem('recent', JSON.stringify(state.recentSearch));
+        localStorage.setItem('recentNew', JSON.stringify(state.recentSearch));
     },
 
     'update-selected-location-latlng'(state, selectedLocationLatLng) {
@@ -125,7 +125,7 @@ const actions = {
     },
 
     getFromRecent({ state }) {
-        state.recentSearch = JSON.parse(localStorage.getItem('recent'));
+        state.recentSearch = JSON.parse(localStorage.getItem('recentNew'));
         if (state.recentSearch === null) {
             return (state.recentSearch = []);
         }
