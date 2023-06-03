@@ -12,6 +12,7 @@ const state = {
                 Earlier motor vehicles...`,
             time: 'Nov 2, 2020',
             dateTime: '2020-02-11',
+            component: 'OrganismBlogEliminatingTraffic',
         },
         {
             id: 'Parking-Challenges-in-Office-Area',
@@ -24,6 +25,7 @@ const state = {
                 searching for the...`,
             time: 'Aug 30, 2021',
             dateTime: '2021-30-07',
+            component: 'OrganismBlogParkingChallenges',
         },
         {
             id: 'NO-Parking',
@@ -36,6 +38,7 @@ const state = {
                 In order to tackl...`,
             time: 'Aug 5, 2021',
             dateTime: '2021-05-07',
+            component: 'OrganismBlogNoParking',
         },
     ],
 };
