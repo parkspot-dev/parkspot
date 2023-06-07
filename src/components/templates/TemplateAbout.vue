@@ -1,27 +1,33 @@
 <template>
     <BodyWrapper>
+        <AtomParagraph class="custom-subtitle"> About Us </AtomParagraph>
         <div class="about-container">
             <AtomImage
                 :src="aboutImg"
                 :alt="'About Image'"
                 class="about-img"
             ></AtomImage>
-            <div class="about-desc" data-aos="zoom-in">
-                <AtomHeading class="mb-3"> Why Choose Us? </AtomHeading>
-                <AtomParagraph class="mb-2">
+            <div class="about-desc" data-aos="zoom-in">             
+                <h2 class="mb-3 first-heading"> What is ParkSpot? </h2>
+                <p class="mb-5">
+                    We at ParkSpot strive to solve the crucial problem of
+                    finding or booking available parking slots in vicinity which
+                    is faced by millions of people on a daily basis. Building
+                    solution to use technology for comport, security, and also
+                    generate side income.
+                </p>
+                <h2 class="mb-3 second-heading"> Why Choose Us? </h2>
+                <p class="mb-5">
                     Comfortable parking experience. Brokerage free. Genuine Owners. 
-                    Ensured security of your vehicle. Available for residents and visitors.
-                     Surveillance parking. Simple steps to list property. Earn money on the go. 
-                     Available on app and website. 
-                </AtomParagraph>
-                <AtomParagraph class="mb-6">
-                    ParkSpot is part of this new initiative and incorporates
-                    various features aimed at improving the parking experience
-                    for residents and visitors. These will include removing the
-                    need for entry barriers at car park entrances and exits for
-                    a seamless flow of traffic, as vehicle plates will be
-                    registered via cameras.
-                </AtomParagraph>
+                    Ensured security of your vehicle. Available for residents and 
+                    visitors. Surveillance parking. Simple steps to list property. 
+                    Earn money on the go. Available on app and website.
+                </p>
+                <p class="mb-4">
+                    <router-link :to="'/'" class="link">
+                         Find your parking spot now!
+                    </router-link>
+                </p>
                 <div class="about-links">
                     <AtomParagraph :variation="'large'" class="park-link">
                         Get ParkSpot App
@@ -47,14 +53,12 @@
 
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
-import AtomHeading from '../atoms/AtomHeading.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomImage from '../atoms/AtomImage.vue';
 export default {
     name: 'TemplateAbout',
     components: {
         BodyWrapper,
-        AtomHeading,
         AtomParagraph,
         AtomImage,
     },
@@ -68,9 +72,54 @@ export default {
 </script>
 
 <style scoped>
+
+.about-desc .first-heading {
+    font-size: 2.7rem;
+    font-weight: 500;
+}
+
+.custom-subtitle {
+    color: var(--secondary-color);
+    font-weight: var(--semi-bold-font);
+    text-align: center;
+    padding-bottom: 1.8rem;
+}
+
+@media only screen and (max-width: 1024px) {
+    .about-desc .first-heading {
+        font-size: 2.2rem;
+    }
+}
+
+.second-heading {
+    font-size: 2.7rem;
+    font-weight: 500;
+}
+
 .about-links {
     align-items: center;
     display: flex;     
+}
+
+.link, .router-link-active {
+    color: var(--primary-text);
+}
+
+.link:hover {
+    color: var(--secondary-color);
+}
+
+.btn {
+    color: var(--primary-text);
+    font-size: 1.1rem;
+    font-weight: 400;
+    border-radius: 50px;
+    border-style: none;
+}
+
+.btn:hover {
+    color: var( --secondary-color);
+    cursor: pointer;
 }
 
 .about-links .park-link {
