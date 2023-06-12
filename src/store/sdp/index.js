@@ -90,6 +90,13 @@ const actions = {
             throw res.DisplayMsg;
         }
     },
+
+    async updateAvailability({ commit, state }, status) {
+        const url = '/owner/update-site';
+        state.ownerInfoDetails.SlotsAvailable = status;
+        const res = await mayaClient.post(url, state.ownerInfoDetails);
+        console.log(res);
+    },
 };
 
 export default {

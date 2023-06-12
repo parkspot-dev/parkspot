@@ -103,6 +103,16 @@
                             Interested VO's
                         </AtomButton>
                     </div>
+                    <div class="goto-btn">
+                        <AtomButton @click.native="changeAvailability(-1)">
+                            Mark Rented
+                        </AtomButton>
+                    </div>
+                    <div class="goto-btn">
+                        <AtomButton @click.native="changeAvailability(1)">
+                            Mark Available
+                        </AtomButton>
+                    </div>
                 </div>
             </div>
 
@@ -148,6 +158,9 @@ export default {
     methods: {
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
+        },
+        changeAvailability(status) {
+            this.$emit('changeAvailability', status);
         },
     },
 };
