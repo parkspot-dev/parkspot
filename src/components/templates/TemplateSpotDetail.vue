@@ -103,6 +103,16 @@
                             Interested VO's
                         </AtomButton>
                     </div>
+                    <div class="goto-btn" v-if="isAvailable">
+                        <AtomButton @click.native="changeAvailability(-1)">
+                            Mark Rented
+                        </AtomButton>
+                    </div>
+                    <div class="goto-btn" v-if="!isAvailable">
+                        <AtomButton @click.native="changeAvailability(1)">
+                            Mark Available
+                        </AtomButton>
+                    </div>
                 </div>
             </div>
 
@@ -139,15 +149,19 @@ export default {
         },
     },
     computed: {
-        ...mapState('sdp', {
-            spotDetails: (state) => state.spotDetails,
-            ownerInfoDetails: (state) => state.ownerInfoDetails,
-            selectedSpot: (state) => state.selectedSpot,
-        }),
+        ...mapState('sdp', [
+            'spotDetails',
+            'ownerInfoDetails',
+            'selectedSpot',
+            'isAvailable',
+        ]),
     },
     methods: {
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
+        },
+        changeAvailability(availableCount) {
+            this.$emit('changeAvailability', availableCount);
         },
     },
 };
