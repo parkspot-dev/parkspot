@@ -9,10 +9,11 @@
             <div class="about-desc" data-aos="zoom-in">
                 <AtomHeading class="mb-3"> Why Choose Us? </AtomHeading>
                 <AtomParagraph class="mb-2">
-                    Comfortable parking experience. Brokerage free. Genuine Owners. 
-                    Ensured security of your vehicle. Available for residents and visitors.
-                     Surveillance parking. Simple steps to list property. Earn money on the go. 
-                     Available on app and website. 
+                    Comfortable parking experience. Brokerage free. Genuine
+                    Owners. Ensured security of your vehicle. Available for
+                    residents and visitors. Surveillance parking. Simple steps
+                    to list property. Earn money on the go. Available on app and
+                    website.
                 </AtomParagraph>
                 <AtomParagraph class="mb-6">
                     ParkSpot is part of this new initiative and incorporates
@@ -22,23 +23,38 @@
                     a seamless flow of traffic, as vehicle plates will be
                     registered via cameras.
                 </AtomParagraph>
-                <div class="about-links">
-                    <AtomParagraph :variation="'large'" class="park-link">
-                        Get ParkSpot App
-                    </AtomParagraph>
-                    <span class="pl-2">
-                        <a
-                            href="https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website"
-                            target="_blank"
-                        >
-                            <figure class="card-img image">
-                                <img
-                                    alt="parking spot link"
-                                    :src="appLinkImg"
-                                />
-                            </figure>
-                        </a>
-                    </span>
+                <div class="about-links-container">
+                    <div class="about-links">
+                        <p class="park-link">Get ParkSpot App</p>
+                        <div class="app-links">
+                            <span>
+                                <a
+                                    href="https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website"
+                                    target="_blank"
+                                >
+                                    <figure class="card-img image">
+                                        <img
+                                            alt="google app link"
+                                            :src="appLinkImg"
+                                        />
+                                    </figure>
+                                </a>
+                            </span>
+                            <span>
+                                <a
+                                    href="https://apps.apple.com/in/app/parkspot-find-book-parking/id6449634064"
+                                    target="_blank"
+                                >
+                                    <figure class="card-img image">
+                                        <img
+                                            alt="ios app link"
+                                            :src="iosAppLinkImg"
+                                        />
+                                    </figure>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -60,17 +76,28 @@ export default {
     },
     data() {
         return {
-            appLinkImg: require('@/assets/google-play-badge.png'),
+            appLinkImg: require('@/assets/google-play-badge.svg'),
+            iosAppLinkImg: require('@/assets/apple-store.svg'),
             aboutImg: require('@/assets/about.svg'),
         };
     },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .about-links {
+    display: flex;
     align-items: center;
-    display: flex;     
+    gap: 50px;
+
+    @media (max-width: 1024px) {
+        gap: 5px;
+    }
+    .app-links {
+        display: flex;
+        gap: 10px;
+        width: 300px;
+    }
 }
 
 .about-links .park-link {
@@ -84,8 +111,8 @@ export default {
 }
 
 .about-container {
-    align-items: center;
     display: flex;
+    align-items: center;
     gap: 2rem;
 }
 
