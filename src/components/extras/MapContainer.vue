@@ -4,7 +4,7 @@
 
 <script>
 // import mapboxgl from 'mapbox-gl';
-import { Loader } from '@googlemaps/js-api-loader';
+// import { Loader } from '@googlemaps/js-api-loader';
 // import { mapGetters, mapMutations } from 'vuex';
 export default {
     name: 'MapContainer',
@@ -30,7 +30,8 @@ export default {
             accessToken: process.env.VUE_APP_MAP_ACCESS_TOKEN,
             parkspotMarkerIcon: require('@/assets/parkspotMarkerIcon.png'),
             map: null, // map for mapbox
-            userMarker: null, // user marker for location
+            userMarker: null, // user marker for location,
+            mapCenter: { lat: 37.77392, lng: -122.223 },
         };
     },
     watch: {
@@ -39,122 +40,111 @@ export default {
         // },
     },
     mounted() {
-        const loader = new Loader({
-            apiKey: process.env.VUE_APP_GOOGLE_MAP_TOKEN,
-            version: 'weekly',
-        });
+        // const loader = new Loader({
+        //     apiKey: process.env.VUE_APP_GOOGLE_MAP_TOKEN,
+        //     version: 'weekly',
+        // });
+        // loader.load().then(async () => {
+        //     const { Map, InfoWindow } = await google.maps.importLibrary('maps');
+        //     const { AdvancedMarkerElement, PinElement } =
+        //         await google.maps.importLibrary('marker');
+        //     // creating map with config
+        //     this.map = new Map(document.getElementById('map'), {
+        //         center: this.center,
+        //         zoom: 12,
+        //         mapId: 'PARKSPOT_MAP',
+        //     });
+        //     // user marker styles
+        //     const pinScaled = new PinElement({
+        //         scale: 1.5,
+        //         // background: '#ffdd57',
+        //         // borderColor: '#0085ad',
+        //         // glyphColor: '#0085ad',
+        //     });
+        //     console.log('here', this.userLatLng);
+        //     // adding user marker in the map
+        //     this.userMarker = new AdvancedMarkerElement({
+        //         map: this.map,
+        //         position: this.userLatLng,
+        //         title: 'Your Location',
+        //         content: pinScaled.element,
+        //         gmpDraggable: this.drag, // make draggable marker
+        //     });
+        //     console.log(this.userMarker);
+        //     // Create an info window to share between markers.
+        //     const userInfoWindow = new InfoWindow();
+        //     this.userMarker.addListener('click', ({ domEvent, latLng }) => {
+        //         const { target } = domEvent;
+        //         console.log(target);
+        //         userInfoWindow.close();
+        //         userInfoWindow.setContent(this.userMarker.title);
+        //         userInfoWindow.open(this.userMarker.map, this.userMarker);
+        //     });
+        //     // when drag is true we can drag the marker
+        //     if (this.drag) {
+        //         this.userMarker.addListener('dragend', (event) => {
+        //             const position = draggableMarker.position;
+        //             userInfoWindow.close();
+        //             userInfoWindow.setContent(
+        //                 `Pin dropped at: ${position.lat()}, ${position.lng()}`,
+        //             );
+        //             userInfoWindow.open(draggableMarker.map, draggableMarker);
+        //         });
+        //     }
+        //     this.spotsList.forEach((spot) => {
+        //         const contentString = `<div dir="ltr" style="" jstcache="0">
+        //                 <div jstcache="34" class="poi-info-window gm-style">
+        //                     <div jstcache="2">
+        //                         <div jstcache="3" class="title full-width" jsan="7.title,7.full-width">${spot.Name}</div>
+        //                         <div class="address">
+        //                             <div jstcache="4" jsinstance="0" class="address-line full-width" jsan="7.address-line,7.full-width">${spot.Address}</div>
+        //                             <div jstcache="4" jsinstance="*3" class="address-line full-width" jsan="7.address-line,7.full-width">India</div>
+        //                         </div>
+        //                     </div>
+        //                     <div jstcache="5" style="margin-top: 0.5rem;">Distance: ${spot.Distance} Km</div>
+        //                     <div style="display: flex;justify-content: space-between;align-items: center;margin-top: 1.5rem">
+        //                         <div style="font-size:1rem;font-weight: 700;color: rgba(0,95,0,1);line-height: 1.25;">&#8377; ${spot.Rate}/-</div>
+        //                         <button style="background-color: #ffe08a;border-color: transparent;border-radius: 3px;color: rgba(0, 0, 0, 0.7);">
+        //                             <a style="display:flex;align-items: center;background-color: #ffe08a;color: rgba(0, 0, 0, 0.7);" href="https://www.parkspot.in/spot-details/${spot.ID}" target="_blank">
+        //                                 <span style="font-size:0.75rem;font-weight:700"> View Spot </span>
+        //                                 <span  style="display: inline-flex;width: 18px;height: 21px;"> <svg xmlns="http://www.w3.org/2000/svg"  class="pointer-events-none max-h-full max-w-full"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"><path vector-effect="non-scaling-stroke" d="M10 17l5-5M10 7l5 5"></path></g></svg> </span>
+        //                             </a>
+        //                         </button>
+        //                     </div>
+        //                 </div>
+        //             </div>`;
+        //         // Create an info window to share between markers.
+        //         const spotInfoWindow = new InfoWindow({
+        //             content: contentString,
+        //             ariaLabel: 'Uluru',
+        //         });
+        //         const lat = spot.Lat;
+        //         const lng = spot.Long;
+        //         // creating spot marker
+        //         const glyphImg = document.createElement('img');
+        //         glyphImg.src = this.parkspotMarkerIcon;
+        //         const glyphSvgPinElement = new PinElement({
+        //             glyph: glyphImg,
+        //         });
+        //         // adding spot marker in the map
+        //         const spotMarker = new AdvancedMarkerElement({
+        //             map: this.map,
+        //             position: { lat: lat, lng: lng },
+        //             title: spot.Name,
+        //             content: glyphSvgPinElement.element,
+        //         });
+        //         // Add a click listener for each marker, and set up the info window.
+        //         spotMarker.addListener('click', ({ domEvent, latLng }) => {
+        //             const { target } = domEvent;
+        //             console.log(target);
+        //             spotInfoWindow.close();
+        //             // spotInfoWindow.setContent(spotMarker.title);
+        //             spotInfoWindow.open(spotMarker.map, spotMarker);
+        //         });
+        //     });
+        // });
 
-        loader.load().then(async () => {
-            const { Map, InfoWindow } = await google.maps.importLibrary('maps');
-            const { AdvancedMarkerElement, PinElement } =
-                await google.maps.importLibrary('marker');
-
-            // creating map with config
-            this.map = new Map(document.getElementById('map'), {
-                center: this.center,
-                zoom: 12,
-                mapId: 'PARKSPOT_MAP',
-            });
-
-            // user marker styles
-            const pinScaled = new PinElement({
-                scale: 1.5,
-                // background: '#ffdd57',
-                // borderColor: '#0085ad',
-                // glyphColor: '#0085ad',
-            });
-
-            console.log('here', this.userLatLng);
-            // adding user marker in the map
-            this.userMarker = new AdvancedMarkerElement({
-                map: this.map,
-                position: this.userLatLng,
-                title: 'Your Location',
-                content: pinScaled.element,
-                gmpDraggable: this.drag, // make draggable marker
-            });
-            console.log(this.userMarker);
-            // Create an info window to share between markers.
-            const userInfoWindow = new InfoWindow();
-
-            this.userMarker.addListener('click', ({ domEvent, latLng }) => {
-                const { target } = domEvent;
-                console.log(target);
-                userInfoWindow.close();
-                userInfoWindow.setContent(this.userMarker.title);
-                userInfoWindow.open(this.userMarker.map, this.userMarker);
-            });
-
-            // when drag is true we can drag the marker
-            if (this.drag) {
-                this.userMarker.addListener('dragend', (event) => {
-                    const position = draggableMarker.position;
-
-                    userInfoWindow.close();
-                    userInfoWindow.setContent(
-                        `Pin dropped at: ${position.lat()}, ${position.lng()}`,
-                    );
-                    userInfoWindow.open(draggableMarker.map, draggableMarker);
-                });
-            }
-
-            this.spotsList.forEach((spot) => {
-                const contentString = `<div dir="ltr" style="" jstcache="0">
-                        <div jstcache="34" class="poi-info-window gm-style">
-                            <div jstcache="2"> 
-                                <div jstcache="3" class="title full-width" jsan="7.title,7.full-width">${spot.Name}</div>
-                                <div class="address"> 
-                                    <div jstcache="4" jsinstance="0" class="address-line full-width" jsan="7.address-line,7.full-width">${spot.Address}</div>
-                                    <div jstcache="4" jsinstance="*3" class="address-line full-width" jsan="7.address-line,7.full-width">India</div> 
-                                </div> 
-                            </div> 
-                            <div jstcache="5" style="margin-top: 0.5rem;">Distance: ${spot.Distance} Km</div>
-                            <div style="display: flex;justify-content: space-between;align-items: center;margin-top: 1.5rem">
-                                <div style="font-size:1rem;font-weight: 700;color: rgba(0,95,0,1);line-height: 1.25;">&#8377; ${spot.Rate}/-</div>
-                                <button style="background-color: #ffe08a;border-color: transparent;border-radius: 3px;color: rgba(0, 0, 0, 0.7);"> 
-                                    <a style="display:flex;align-items: center;background-color: #ffe08a;color: rgba(0, 0, 0, 0.7);" href="https://www.parkspot.in/spot-details/${spot.ID}" target="_blank">
-                                        <span style="font-size:0.75rem;font-weight:700"> View Spot </span> 
-                                        <span  style="display: inline-flex;width: 18px;height: 21px;"> <svg xmlns="http://www.w3.org/2000/svg"  class="pointer-events-none max-h-full max-w-full"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"><path vector-effect="non-scaling-stroke" d="M10 17l5-5M10 7l5 5"></path></g></svg> </span>
-                                    </a>
-                                </button>
-                            </div>
-                        </div>
-                    </div>`;
-
-                // Create an info window to share between markers.
-                const spotInfoWindow = new InfoWindow({
-                    content: contentString,
-                    ariaLabel: 'Uluru',
-                });
-
-                const lat = spot.Lat;
-                const lng = spot.Long;
-
-                // creating spot marker
-                const glyphImg = document.createElement('img');
-                glyphImg.src = this.parkspotMarkerIcon;
-                const glyphSvgPinElement = new PinElement({
-                    glyph: glyphImg,
-                });
-
-                // adding spot marker in the map
-                const spotMarker = new AdvancedMarkerElement({
-                    map: this.map,
-                    position: { lat: lat, lng: lng },
-                    title: spot.Name,
-                    content: glyphSvgPinElement.element,
-                });
-
-                // Add a click listener for each marker, and set up the info window.
-                spotMarker.addListener('click', ({ domEvent, latLng }) => {
-                    const { target } = domEvent;
-                    console.log(target);
-                    spotInfoWindow.close();
-                    // spotInfoWindow.setContent(spotMarker.title);
-                    spotInfoWindow.open(spotMarker.map, spotMarker);
-                });
-            });
-        });
+        this.initMap();
     },
     methods: {
         // recenterMap(center) {
@@ -163,6 +153,14 @@ export default {
         //     });
         //     this.marker.setLngLat(center);
         // },
+
+        async initMap() {
+            const { Map } = await google.maps.importLibrary('maps');
+            this.map = new Map(document.getElementById('map'), {
+                center: { lat: -34.397, lng: 150.644 },
+                zoom: 8,
+            });
+        },
     },
 };
 </script>
