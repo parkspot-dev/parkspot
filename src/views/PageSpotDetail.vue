@@ -108,8 +108,8 @@ export default {
             this.updateSOLatLngInput(latLng.join(','));
             this.$router.push({ name: 'SearchPortal' });
         },
-        async changeAvailability(status) {
-            await this.updateAvailability(status);
+        async changeAvailability(availableCount) {
+            await this.updateAvailability(availableCount);
             await this.getSpotDetails({
                 spotId: this.spotId,
                 isAdmin: this.isAdmin,

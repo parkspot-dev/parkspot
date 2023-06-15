@@ -160,8 +160,8 @@ export default {
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
-        changeAvailability(status) {
-            this.$emit('changeAvailability', status);
+        changeAvailability(availableCount) {
+            this.$emit('changeAvailability', availableCount);
         },
     },
 };
