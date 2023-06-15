@@ -93,9 +93,8 @@ const actions = {
 
     async updateAvailability({ commit, state }, status) {
         const url = '/owner/update-site';
-        state.ownerInfoDetails.SlotsAvailable = status;
-        const res = await mayaClient.post(url, state.ownerInfoDetails);
-        console.log(res);
+        state.spotDetails.SlotsAvailable = status;
+        await mayaClient.post(url, state.spotDetails);
     },
 };
 
