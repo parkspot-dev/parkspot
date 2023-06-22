@@ -66,6 +66,9 @@ import AtomImage from '../atoms/AtomImage.vue';
 import OrganismBlogNoParking from '../organisms/OrganismBlogNoParking';
 import OrganismBlogEliminatingTraffic from '../organisms/OrganismBlogEliminatingTraffic';
 import OrganismBlogParkingChallenges from '../organisms/OrganismBlogParkingChallenges';
+import OrganismBlogExtraIncome from '../organisms/OrganismBlogExtraIncome';
+import OrganismBlogPerfectParking from '../organisms/OrganismBlogPerfectParking';
+
 export default {
     name: 'TemplateBlogPost',
     components: {
@@ -77,6 +80,8 @@ export default {
         OrganismBlogNoParking,
         OrganismBlogEliminatingTraffic,
         OrganismBlogParkingChallenges,
+        OrganismBlogExtraIncome,
+        OrganismBlogPerfectParking,
     },
     props: {
         blog: {

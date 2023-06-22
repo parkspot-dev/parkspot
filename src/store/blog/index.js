@@ -40,6 +40,32 @@ const state = {
             dateTime: '2021-05-07',
             component: 'OrganismBlogNoParking',
         },
+        {
+            id: 'Extra-Income',
+            title: ' An Easy Way to Earn Extra Income!',
+            author: 'Sudhanshu Kumar',
+            author_img: require('@/assets/team/sud.jpg'),
+            img: require('@/assets/blog/comfort-parking-3.jpg'),
+            desc: `Are you looking for a way to earn some extra income without putting 
+                in a lot of effort? If so, consider renting out your parking space. 
+                Whether you have an unused driv...`,
+            time: 'June 10, 2023',
+            dateTime: '2023-06-10',
+            component: 'OrganismBlogExtraIncome',
+        },
+        {
+            id: 'Perfect-Parking',
+            title: 'Finding the Perfect Parking Spot!',
+            author: 'Ishwar Kumar',
+            author_img: require('@/assets/team/ish.jpg'),
+            img: require('@/assets/blog/1490246624-boston-parking-spaces.jpg'),
+            desc: `Are you tired of endlessly circling the block in search of a parking spot? 
+                Fear not, because in this vlog we'll be sharing some tips and tricks for 
+                finding the perfect parking spot...`,
+            time: 'June 15, 2023',
+            dateTime: '2023-06-15',
+            component: 'OrganismBlogPerfectParking',
+        },
     ],
 };
 // getters
@@ -64,7 +90,7 @@ const mutations = {
 // actions
 const actions = {
     getContentById(state, id) {
-        const result = require(`../../blogs/${id}.json`);
+        // const result = require(`../../blogs/${id}.json`);
         return result.content;
     },
 };
