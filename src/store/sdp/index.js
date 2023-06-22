@@ -10,7 +10,7 @@ const state = {
     title: '',
     thumbnail: [],
     images: [],
-    userLatLng: null,
+    userLatLng: { lat: 37.77392, lng: -122.223 },
 };
 
 const getters = {};
