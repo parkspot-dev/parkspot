@@ -119,6 +119,8 @@ export default {
                         'formatted_address',
                     ],
                     strictBounds: false,
+                    componentRestrictions: { country: 'in' }, // 2-letters code
+                    locationBias: 'IP_BIAS',
                     types: ['establishment'],
                 };
                 const autocomplete = new google.maps.places.Autocomplete(
