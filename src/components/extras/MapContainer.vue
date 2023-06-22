@@ -93,6 +93,11 @@ export default {
                                 </div>
                             </div>
                             <div jstcache="5" style="margin-top: 0.5rem;">Distance: ${spot.Distance} Km</div>
+                            <div jstcache="5" style="margin-top: 0.5rem;">
+                                Click 
+                                <a href="https://www.google.com/maps/dir/'${this.center.lat},${this.center.lng}'/'${spot.Latitude},${spot.Longitude}'/@18.2566348,76.9574504,6z/data=!3m1!4b1!4m10!4m9!1m3!2m2!1d${this.center.lat},${this.center.lng}!1m3!2m2!1d${spot.Longitude}!2d${spot.Latitude}!3e0" target="_blank"> here </a>
+                                for map direction.
+                            </div>
                             <div style="display: flex;justify-content: space-between;align-items: center;margin-top: 1.5rem">
                                 <div style="font-size:1rem;font-weight: 700;color: rgba(0,95,0,1);line-height: 1.25;">&#8377; ${spot.Rate}/-</div>
                                 <button style="background-color: #ffe08a;border-color: transparent;border-radius: 3px;color: rgba(0, 0, 0, 0.7);">

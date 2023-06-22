@@ -1,6 +1,6 @@
 <template>
     <BodyWrapper>
-        <div>
+        <div v-if="spotDetails">
             <!-- image gallery -->
             <div class="spot-image-container">
                 <ImageGallery></ImageGallery>
@@ -44,7 +44,6 @@
                 <MapContainer
                     class="sdp-map"
                     :spotsList="[...spotDetails]"
-                    :key="reRender"
                     :center="{ lat: spotDetails.Lat, lng: spotDetails.Long }"
                     :userLatLng="userLatLng"
                 ></MapContainer>
@@ -157,6 +156,7 @@ export default {
             'ownerInfoDetails',
             'selectedSpot',
             'isAvailable',
+            'userLatLng',
         ]),
     },
     methods: {

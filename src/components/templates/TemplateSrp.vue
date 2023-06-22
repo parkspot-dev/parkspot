@@ -108,11 +108,11 @@ export default {
         onOutsideFilter() {
             this.showFilterCheckbox = false;
         },
+        onChange() {
+            this.$emit('flyToSrp');
+        },
         handleFilter(filterOptions) {
             this.$emit('filter', filterOptions);
-        },
-        onChange() {
-            console.log('onChangeonChange');
         },
     },
 };

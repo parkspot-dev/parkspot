@@ -56,7 +56,11 @@ export default {
         },
     },
     computed: {
-        ...mapState('map', ['srpResults', 'filteredSrpResults']),
+        ...mapState('map', [
+            'srpResults',
+            'filteredSrpResults',
+            'selectedLocationLatLng',
+        ]),
     },
 
     async mounted() {
@@ -93,19 +97,20 @@ export default {
 
         flyToSrp() {
             this.$nextTick(() => {
+                console.log('flytosrp', this.selectedLocationLatLng);
                 const coordinate = getCoordinate(
-                    this.LocDetails.lnglat.toString(),
-                )
-                    .reverse()
-                    .toString();
-
+                    [
+                        this.selectedLocationLatLng.lat,
+                        this.selectedLocationLatLng.lng,
+                    ].toString(),
+                ).toString();
                 this.$router.push({
                     name: 'srp',
                     query: {
                         latlng: coordinate,
                     },
                     params: {
-                        location: this.LocDetails.locDetails.locName,
+                        location: this.selectedLocationLatLng.formattedAddress,
                     },
                 });
             });
