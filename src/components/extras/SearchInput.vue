@@ -94,7 +94,9 @@ export default {
             });
         },
     },
-    watch: {},
+    async created() {
+        await google.maps.importLibrary('maps');
+    },
     methods: {
         ...mapActions('map', [
             'getPredictedLocations',
@@ -109,7 +111,6 @@ export default {
                 fot this function   */
             this.isFetching = true;
             try {
-                await google.maps.importLibrary('maps');
                 const inputRef = this.$refs.autocomplete;
                 const options = {
                     fields: [
@@ -155,7 +156,7 @@ export default {
             });
 
             this.getSelectedLocationLatLng(res.results[0]);
-            // this.$emit('changed');
+            this.$emit('changed');
         },
     },
 };
