@@ -33,34 +33,34 @@ const mutations = {
     },
 
     'update-selected-location'(state, selectedLocation) {
-        console.log(selectedLocation);
+        // console.log(selectedLocation);
         state.selectedLocation = selectedLocation;
 
-        const recentSearchObj = {
-            fromLS: true,
-            ...selectedLocation,
-        };
+        // const recentSearchObj = {
+        //     fromLS: true,
+        //     ...selectedLocation,
+        // };
 
-        const recentSearches = [...state.recentSearch];
+        // const recentSearches = [...state.recentSearch];
 
-        const uniqueRecentSearches = recentSearches.filter((recentSearch) => {
-            if (recentSearch.place_id === recentSearchObj.place_id) {
-                return false;
-            }
-            return true;
-        });
+        // const uniqueRecentSearches = recentSearches.filter((recentSearch) => {
+        //     if (recentSearch.place_id === recentSearchObj.place_id) {
+        //         return false;
+        //     }
+        //     return true;
+        // });
 
-        // performing LIFO in size of 3.
-        if (uniqueRecentSearches.length >= 3) {
-            uniqueRecentSearches.pop();
-            uniqueRecentSearches.unshift(recentSearchObj);
-        } else {
-            uniqueRecentSearches.unshift(recentSearchObj);
-        }
+        // // performing LIFO in size of 3.
+        // if (uniqueRecentSearches.length >= 3) {
+        //     uniqueRecentSearches.pop();
+        //     uniqueRecentSearches.unshift(recentSearchObj);
+        // } else {
+        //     uniqueRecentSearches.unshift(recentSearchObj);
+        // }
 
-        state.recentSearch = [...uniqueRecentSearches];
-        // JSON used to store array as string in LS
-        localStorage.setItem('recentNew', JSON.stringify(state.recentSearch));
+        // state.recentSearch = [...uniqueRecentSearches];
+        // // JSON used to store array as string in LS
+        // localStorage.setItem('recentNew', JSON.stringify(state.recentSearch));
     },
 
     'update-selected-location-latlng'(state, selectedLocationLatLng) {
@@ -91,24 +91,18 @@ const actions = {
         const credentials = await res.val();
         commit('update-google-token', credentials.google_map.token);
     },
-    async getPredictedLocations({ commit, state }, query) {
-        // autocomplete prediction api give list of location prediction contains place_id
-        const autocompleteURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&components=country:in&key=${state.GOOGLE_TOKEN}`;
-        const predictionLocRes = await fetch(autocompleteURL);
-        const locDetails = await predictionLocRes.json();
-        const locDetailsArr = locDetails.predictions;
-        commit('update-location', locDetailsArr);
-    },
 
     async getSelectedLocationLatLng({ commit, state }, selectedLocation) {
-        commit('update-selected-location', selectedLocation);
-        const placeId = selectedLocation.place_id;
-        const latLngURL = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${state.GOOGLE_TOKEN}`;
-        const placeDetailRes = await fetch(latLngURL);
-        const placeDetail = await placeDetailRes.json();
-        commit('update-selected-location-latlng', placeDetail.results[0]);
-        const latLng = placeDetail.results[0].geometry.location;
-        commit('update-map-center', latLng);
+        const lat = selectedLocation.geometry.location.lat();
+        const lng = selectedLocation.geometry.location.lng();
+        const formattedAddress = selectedLocation.formatted_address;
+
+        commit('update-selected-location-latlng', {
+            lat,
+            lng,
+            formattedAddress,
+        });
+        commit('update-map-center', { lat, lng });
     },
 
     async srpCall({ state, commit }) {

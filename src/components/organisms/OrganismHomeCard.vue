@@ -70,11 +70,11 @@ export default {
     },
     methods: {
         flyToSrp() {
-            console.log;
+            console.log('flytosrp', this.selectedLocationLatLng);
             const coordinate = getCoordinate(
                 [
-                    this.selectedLocationLatLng.geometry.location.lat,
-                    this.selectedLocationLatLng.geometry.location.lng,
+                    this.selectedLocationLatLng.lat,
+                    this.selectedLocationLatLng.lng,
                 ].toString(),
             ).toString();
             this.$router.push({
@@ -83,7 +83,7 @@ export default {
                     latlng: coordinate,
                 },
                 params: {
-                    location: this.selectedLocationLatLng.formatted_address,
+                    location: this.selectedLocationLatLng.formattedAddress,
                 },
             });
         },
