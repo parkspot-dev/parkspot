@@ -2,6 +2,7 @@
     <div>
         <TemplateSpotDetail
             @goToSearchPortal="goToSearchPortal"
+            @changeAvailability="changeAvailability"
         ></TemplateSpotDetail>
         <LoaderModal :isLoading="isLoading"></LoaderModal>
     </div>
@@ -62,9 +63,7 @@ export default {
         this.getUserLocation();
     },
     methods: {
-        ...mapActions('sdp', {
-            getSpotDetails: 'getSpotDetails',
-        }),
+        ...mapActions('sdp', ['getSpotDetails', 'updateAvailability']),
         ...mapActions('searchPortal', [
             'updateActiveTab',
             'updateSOLatLngInput',
@@ -108,6 +107,13 @@ export default {
             this.updateActiveTab(1);
             this.updateSOLatLngInput(latLng.join(','));
             this.$router.push({ name: 'SearchPortal' });
+        },
+        async changeAvailability(availableCount) {
+            await this.updateAvailability(availableCount);
+            await this.getSpotDetails({
+                spotId: this.spotId,
+                isAdmin: this.isAdmin,
+            });
         },
     },
 };

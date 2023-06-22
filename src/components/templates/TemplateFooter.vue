@@ -21,19 +21,34 @@
                             We provide the cheap and best parking spot in India.
                             You can't park cheaper!
                         </AtomParagraph>
-                        <span class="pl-2">
-                            <a
-                                href="https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website"
-                                target="_blank"
-                            >
-                                <figure class="card-img image is-128x128">
-                                    <img
-                                        alt="parking spot link"
-                                        :src="appLinkImg"
-                                    />
-                                </figure>
-                            </a>
-                        </span>
+                        <div class="app-links">
+                            <span class="pl-2">
+                                <a
+                                    href="https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website"
+                                    target="_blank"
+                                >
+                                    <figure class="card-img image is-128x128">
+                                        <img
+                                            alt="google app link"
+                                            :src="appLinkImg"
+                                        />
+                                    </figure>
+                                </a>
+                            </span>
+                            <span class="pl-2">
+                                <a
+                                    href="https://apps.apple.com/in/app/parkspot-find-book-parking/id6449634064"
+                                    target="_blank"
+                                >
+                                    <figure class="card-img image is-128x128">
+                                        <img
+                                            alt="ios app link"
+                                            :src="iosAppLinkImg"
+                                        />
+                                    </figure>
+                                </a>
+                            </span>
+                        </div>
                     </div>
 
                     <div class="top-search">
@@ -233,10 +248,12 @@
                 <section class="secondary-container">
                     <div>
                         <AtomParagraph>
-                            © 2021 NeoSpot Pvt Ltd.- ALL RIGHTS RESERVED
+                            © 2023 NeoSpot Technologies Pvt Ltd.- ALL RIGHTS
+                            RESERVED
                         </AtomParagraph>
                         <AtomParagraph>
-                            <a class="tnc"
+                            <a
+                                class="tnc"
                                 href="https://www.parkspot.in/terms-and-conditions"
                                 target="_blank"
                             >
@@ -294,13 +311,14 @@ export default {
     data() {
         return {
             psfooterImg: require('@/assets/psfooterlogo.png'),
-            appLinkImg: require('@/assets/google-play-badge.png'),
+            appLinkImg: require('@/assets/google-play-badge.svg'),
+            iosAppLinkImg: require('@/assets/apple-store.svg'),
         };
     },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .parkspot-logo {
     width: 250px;
 }
@@ -324,12 +342,12 @@ export default {
 }
 
 .tnc {
-    color:#888d93;
+    color: #888d93;
 }
 
 .footer-heading {
-    color: #fff;
     margin-bottom: 1rem;
+    color: #ffffff;
 }
 
 .primary-container {
@@ -348,6 +366,10 @@ export default {
     display: flex;
     flex: 22%;
     flex-direction: column;
+
+    .app-links {
+        display: flex;
+    }
 }
 
 .contact-info {
@@ -368,8 +390,8 @@ export default {
 }
 
 .social-icon {
-    color: var(--primary-text);
     padding: 0.5rem;
+    color: var(--primary-text);
 }
 
 .social-icon:hover {
@@ -385,12 +407,12 @@ export default {
 }
 
 .footer-discovery-list ul li::before {
-    color: var(--primary-color);
-    content: '\2022';
-    font-size: 25px;
-    left: -19px;
     position: absolute;
     top: -7px;
+    left: -19px;
+    font-size: 25px;
+    color: var(--primary-color);
+    content: '\2022';
 }
 
 .location-icon {
