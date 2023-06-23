@@ -66,7 +66,6 @@ export default {
     async mounted() {
         try {
             this.isLoading = true;
-            // await this.updateMapOptions(this.getLatLng());
             await this.srpCall();
             this.reRender++;
             this.isLoading = false;
@@ -91,7 +90,6 @@ export default {
         getLatLng() {
             const queryParam = new URLSearchParams(window.location.search);
             const coordinate = getCoordinate(queryParam.get('latlng'));
-            // coordinate.reverse(); // map center takes [lng, lat] so reverse() used
             return { lat: coordinate[0], lng: coordinate[1] };
         },
 

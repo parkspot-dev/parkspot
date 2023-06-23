@@ -2,7 +2,6 @@ const zlib = require('zlib');
 const PrerenderSPAPlugin = require('prerender-spa-plugin');
 const path = require('path');
 module.exports = {
-    // was working but now not working why?
     devServer: {
         host: 'parkspot.localhost',
         proxy: 'https://www.parkspot.in',
