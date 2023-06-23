@@ -38,12 +38,14 @@ export default {
             const { Map, InfoWindow } = await google.maps.importLibrary('maps');
             const { AdvancedMarkerElement, PinElement } =
                 await google.maps.importLibrary('marker');
+
             // creating map with config
             this.map = new Map(document.getElementById('map'), {
                 center: this.center,
                 zoom: 12,
                 mapId: 'PARKSPOT_MAP',
             });
+
             // user marker styles
             const pinScaled = new PinElement({
                 scale: 1.5,
@@ -51,7 +53,7 @@ export default {
                 // borderColor: '#0085ad',
                 // glyphColor: '#0085ad',
             });
-            console.log('here', this.userLatLng);
+
             // adding user marker in the map
             this.userMarker = new AdvancedMarkerElement({
                 map: this.map,
@@ -60,12 +62,10 @@ export default {
                 content: pinScaled.element,
                 gmpDraggable: this.drag, // make draggable marker
             });
-            console.log(this.userMarker);
+
             // Create an info window to share between markers.
             const userInfoWindow = new InfoWindow();
             this.userMarker.addListener('click', ({ domEvent, latLng }) => {
-                const { target } = domEvent;
-                console.log(target);
                 userInfoWindow.close();
                 userInfoWindow.setContent(this.userMarker.title);
                 userInfoWindow.open(this.userMarker.map, this.userMarker);
@@ -131,10 +131,7 @@ export default {
                 });
                 // Add a click listener for each marker, and set up the info window.
                 spotMarker.addListener('click', ({ domEvent, latLng }) => {
-                    const { target } = domEvent;
-                    console.log(target);
                     spotInfoWindow.close();
-                    // spotInfoWindow.setContent(spotMarker.title);
                     spotInfoWindow.open(spotMarker.map, spotMarker);
                 });
             });

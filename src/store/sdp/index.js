@@ -50,7 +50,6 @@ const mutations = {
         state.title = title;
     },
     'update-user-lat-lng'(state, userLocation) {
-        console.log('kjhdsfa');
         state.userLatLng = userLocation;
     },
 };
@@ -58,7 +57,6 @@ const mutations = {
 const actions = {
     async getSpotDetails({ commit }, { spotId, isAdmin }) {
         commit('update-loading', true);
-        console.log('spotid', spotId);
         let url;
         if (isAdmin) {
             const db = getDatabase(firebase);
