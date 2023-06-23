@@ -87,7 +87,6 @@ export default {
         // Add a listener for when the input field is focused
         inputRef.addEventListener('focus', () => {
             this.getSearchHistory((results) => {
-                console.log('hello', results);
                 autocompleteService.getPlacePredictions(
                     {
                         input: this.searchWord,
@@ -171,8 +170,8 @@ export default {
                 searchHistory = localSearchHistory;
             });
             searchHistory.unshift(formattedAddress); // add in the top , so the top will always be latest
-            searchHistory.slice(0, 3); // only upto 3
-            const uniqueSearchHistory = [...new Set(searchHistory)];
+            const newSearchHistory = searchHistory.slice(0, 3); // only upto 3
+            const uniqueSearchHistory = [...new Set(newSearchHistory)];
             localStorage.setItem(
                 'searchHistory',
                 JSON.stringify(uniqueSearchHistory),

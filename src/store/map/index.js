@@ -66,7 +66,6 @@ const actions = {
     },
 
     updateInitialSelectedLatLng({ commit, state }, selectedLocation) {
-        console.log('updateInitialSelectedLatLng');
         const formattedAddress = selectedLocation.formatted_address;
 
         commit('update-selected-location-latlng', {
