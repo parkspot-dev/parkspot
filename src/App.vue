@@ -31,12 +31,6 @@ export default {
             loginModal: (state) => state.loginModal,
         }),
     },
-    mounted() {
-        this.getGoogleToken();
-    },
-    methods: {
-        ...mapActions('map', ['getGoogleToken']),
-    },
 };
 </script>
 

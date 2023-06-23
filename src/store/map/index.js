@@ -1,5 +1,4 @@
 import { mayaClient } from '@/services/api';
-import { firebase, getDatabase, ref, get, child } from '../../firebase';
 
 const state = {
     locations: [],
@@ -9,7 +8,6 @@ const state = {
     srpResults: [],
     recentSearch: [],
     recentID: 0,
-    GOOGLE_TOKEN: '',
     filteredSrpResults: [],
 };
 
@@ -33,34 +31,7 @@ const mutations = {
     },
 
     'update-selected-location'(state, selectedLocation) {
-        // console.log(selectedLocation);
         state.selectedLocation = selectedLocation;
-
-        // const recentSearchObj = {
-        //     fromLS: true,
-        //     ...selectedLocation,
-        // };
-
-        // const recentSearches = [...state.recentSearch];
-
-        // const uniqueRecentSearches = recentSearches.filter((recentSearch) => {
-        //     if (recentSearch.place_id === recentSearchObj.place_id) {
-        //         return false;
-        //     }
-        //     return true;
-        // });
-
-        // // performing LIFO in size of 3.
-        // if (uniqueRecentSearches.length >= 3) {
-        //     uniqueRecentSearches.pop();
-        //     uniqueRecentSearches.unshift(recentSearchObj);
-        // } else {
-        //     uniqueRecentSearches.unshift(recentSearchObj);
-        // }
-
-        // state.recentSearch = [...uniqueRecentSearches];
-        // // JSON used to store array as string in LS
-        // localStorage.setItem('recentNew', JSON.stringify(state.recentSearch));
     },
 
     'update-selected-location-latlng'(state, selectedLocationLatLng) {
@@ -78,20 +49,9 @@ const mutations = {
     'update-filtered-srp-results'(state, srpResults) {
         state.filteredSrpResults = srpResults;
     },
-    'update-google-token'(state, token) {
-        state.GOOGLE_TOKEN = token;
-    },
 };
 
 const actions = {
-    async getGoogleToken({ commit }) {
-        const db = getDatabase(firebase);
-        const dbref = ref(db);
-        const res = await get(child(dbref, `admin`));
-        const credentials = await res.val();
-        commit('update-google-token', credentials.google_map.token);
-    },
-
     async getSelectedLocationLatLng({ commit, state }, selectedLocation) {
         const lat = selectedLocation.geometry.location.lat();
         const lng = selectedLocation.geometry.location.lng();
