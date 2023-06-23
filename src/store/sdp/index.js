@@ -10,7 +10,7 @@ const state = {
     title: '',
     thumbnail: [],
     images: [],
-    userLatLng: { lat: 37.77392, lng: -122.223 },
+    userLatLng: { lat: 12.9716, lng: 77.5946 }, // default location if user refused to share its location
 };
 
 const getters = {};

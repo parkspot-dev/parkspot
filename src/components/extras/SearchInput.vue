@@ -1,46 +1,5 @@
 <template>
     <section>
-        <!-- <b-field :label="label">
-            <b-autocomplete
-                v-model="search"
-                :data="filteredLocationName"
-                ref="autocomplete"
-                placeholder="e.g. Bengaluru"
-                field="description"
-                icon="magnify"
-                :loading="isFetching"
-                @typing="getAsyncData"
-                @select="onSelect"
-                keep-first
-                :open-on-focus="true"
-                @click.native="addToRecentSearches()"
-            >
-                <template slot-scope="props">
-                    <div class="media">
-                        <p>fromLS should be renamed</p>
-                        <div
-                            class="media-left custom-color"
-                            v-show="props.option.fromLS"
-                        >
-                            <AtomIcon :icon="'history'"> </AtomIcon>
-                        </div>
-
-                        <div
-                            class="media-content"
-                            :class="{
-                                'custom-color': props.option.fromLS,
-                            }"
-                        >
-                            {{ props.option.description }}
-                        </div>
-                    </div>
-                </template>
-                <template #empty>
-                    {{ search || 'No Recent Searches' }}
-                </template>
-            </b-autocomplete>
-        </b-field> -->
-
         <div class="search-box-controller">
             <input
                 class="search-box"
@@ -75,7 +34,6 @@ export default {
     emits: ['changed'],
     data() {
         return {
-            isFetching: false,
             search: '',
         };
     },
@@ -109,7 +67,7 @@ export default {
             /*  'this' is working as expected here but
                 eslint is showing error so it is disabled
                 fot this function   */
-            this.isFetching = true;
+
             try {
                 const inputRef = this.$refs.autocomplete;
                 const options = {
@@ -134,19 +92,8 @@ export default {
             } catch (error) {
                 console.log(error);
             } finally {
-                this.isFetching = false;
             }
         }, 500),
-
-        async addToRecentSearches() {
-            console.log('addToRecentSearches');
-            const recentSearches = await this.getFromRecent();
-            if (this.LocationName.length === 0) {
-                for (const recentSearch of recentSearches) {
-                    this.LocationName.push(recentSearch);
-                }
-            }
-        },
 
         async onSelect(autocomplete) {
             const selectedLocation = autocomplete.getPlace();
