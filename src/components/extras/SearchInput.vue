@@ -49,7 +49,6 @@ export default {
             searchHistory = localSearchHistory;
         });
         if (searchHistory.length) {
-            console.log(searchHistory);
             this.searchWord = searchHistory[0].formatted_address;
             this.updateInitialSelectedLatLng(searchHistory[0]);
         }
@@ -60,9 +59,11 @@ export default {
         const options = {
             fields: ['place_id', 'geometry', 'name', 'formatted_address'],
             strictBounds: false,
-            componentRestrictions: { country: 'in' }, // 2-letters code
+            componentRestrictions: {
+                country: 'in',
+            }, // 2-letters code
             locationBias: 'IP_BIAS',
-            types: ['geocode'],
+            types: ['address'],
         };
 
         // Create a new autocomplete object and attach it to the input field
@@ -82,14 +83,14 @@ export default {
 
         // Add a listener for when the input field is focused
         inputRef.addEventListener('focus', () => {
-            console.log('focus');
             this.getSearchHistory((results) => {
-                console.log('this.getSearchHistory', results);
                 autocompleteService.getPlacePredictions(
                     {
                         input: this.searchWord,
-                        types: ['geocode'],
-                        componentRestrictions: { country: 'in' },
+                        types: ['address'],
+                        componentRestrictions: {
+                            country: 'in',
+                        },
                         sessionToken:
                             new google.maps.places.AutocompleteSessionToken(),
                         fields: [
@@ -101,7 +102,6 @@ export default {
                         strictBounds: false,
                     },
                     (predictions, status) => {
-                        console.log('inseid', predictions);
                         if (
                             status === google.maps.places.PlacesServiceStatus.OK
                         ) {
@@ -112,8 +112,10 @@ export default {
                                 (prediction) => prediction.description,
                             );
                             autocomplete.setOptions({
-                                types: ['geocode'],
-                                componentRestrictions: { country: 'in' },
+                                types: ['address'],
+                                componentRestrictions: {
+                                    country: 'in',
+                                },
                                 sessionToken:
                                     new google.maps.places.AutocompleteSessionToken(),
                                 fields: [

@@ -119,6 +119,10 @@ const actions = {
 
         commit('update-filtered-srp-results', filteredSrpResults);
     },
+
+    updateMapCenter({ commit }, mapCenter) {
+        commit('update-map-center', mapCenter);
+    },
 };
 
 export default {
