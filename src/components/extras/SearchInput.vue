@@ -72,6 +72,9 @@ export default {
             options,
         );
 
+        // setting the fields that will be returned in the autocomplete suggestions
+        autocomplete.setFields(['address_components', 'name']);
+
         // Create a new autocomplete service object
         const autocompleteService =
             new google.maps.places.AutocompleteService();
@@ -84,6 +87,7 @@ export default {
         // Add a listener for when the input field is focused
         inputRef.addEventListener('focus', () => {
             this.getSearchHistory((results) => {
+                console.log('hello', results);
                 autocompleteService.getPlacePredictions(
                     {
                         input: this.searchWord,
