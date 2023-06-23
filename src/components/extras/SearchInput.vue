@@ -122,7 +122,7 @@ export default {
                     strictBounds: false,
                     componentRestrictions: { country: 'in' }, // 2-letters code
                     locationBias: 'IP_BIAS',
-                    types: ['establishment'],
+                    types: ['geocode'],
                 };
                 const autocomplete = new google.maps.places.Autocomplete(
                     inputRef,
