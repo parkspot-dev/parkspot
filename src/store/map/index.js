@@ -105,6 +105,21 @@ const actions = {
         commit('update-map-center', { lat, lng });
     },
 
+    updateInitialSelectedLatLng({ commit, state }, selectedLocation) {
+        console.log('updateInitialSelectedLatLng');
+        const formattedAddress = selectedLocation.formatted_address;
+
+        commit('update-selected-location-latlng', {
+            lat: selectedLocation.geometry.location.lat,
+            lng: selectedLocation.geometry.location.lng,
+            formattedAddress,
+        });
+        commit('update-map-center', {
+            lat: selectedLocation.geometry.location.lat,
+            lng: selectedLocation.geometry.location.lng,
+        });
+    },
+
     async srpCall({ state, commit }) {
         const data = await mayaClient.get(
             `/search?lat=${state.mapCenter.lat}&long=${state.mapCenter.lng}&start=20201115t1250&end=20201115t1400`,

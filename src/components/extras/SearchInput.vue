@@ -3,10 +3,10 @@
         <div class="search-box-controller">
             <input
                 class="search-box"
-                ref="autocomplete"
+                id="autocomplete"
                 type="text"
                 :placeholder="'search location'"
-                @click="getAsyncData"
+                v-model="searchWord"
             />
             <AtomIcon class="search-icon" :icon="'magnify'"> </AtomIcon>
         </div>
@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import _ from 'lodash';
 import { mapActions, mapState } from 'vuex';
 import AtomIcon from '../atoms/AtomIcon.vue';
 
@@ -35,68 +34,121 @@ export default {
     data() {
         return {
             search: '',
+            searchWord: '',
         };
     },
     computed: {
         ...mapState('map', {
             LocationName: (state) => state.locations,
         }),
-        filteredLocationName() {
-            return this.LocationName.filter((option) => {
-                return (
-                    option.description
-                        .toString()
-                        .toLowerCase()
-                        .indexOf(this.search.toLowerCase()) >= 0
-                );
-            });
-        },
     },
     async created() {
+        // initial check for search history
+        let searchHistory = [];
+        this.getSearchHistory((localSearchHistory) => {
+            searchHistory = localSearchHistory;
+        });
+        if (searchHistory.length) {
+            console.log(searchHistory);
+            this.searchWord = searchHistory[0].formatted_address;
+            this.updateInitialSelectedLatLng(searchHistory[0]);
+        }
+
+        // import map libraries
         await google.maps.importLibrary('maps');
+        const inputRef = document.getElementById('autocomplete');
+        const options = {
+            fields: ['place_id', 'geometry', 'name', 'formatted_address'],
+            strictBounds: false,
+            componentRestrictions: { country: 'in' }, // 2-letters code
+            locationBias: 'IP_BIAS',
+            types: ['geocode'],
+        };
+
+        // Create a new autocomplete object and attach it to the input field
+        const autocomplete = new google.maps.places.Autocomplete(
+            inputRef,
+            options,
+        );
+
+        // Create a new autocomplete service object
+        const autocompleteService =
+            new google.maps.places.AutocompleteService();
+
+        // Add a listener for when the input field changes
+        autocomplete.addListener('place_changed', () => {
+            this.onSelect(autocomplete);
+        });
+
+        // Add a listener for when the input field is focused
+        inputRef.addEventListener('focus', () => {
+            console.log('focus');
+            this.getSearchHistory((results) => {
+                console.log('this.getSearchHistory', results);
+                autocompleteService.getPlacePredictions(
+                    {
+                        input: this.searchWord,
+                        types: ['geocode'],
+                        componentRestrictions: { country: 'in' },
+                        sessionToken:
+                            new google.maps.places.AutocompleteSessionToken(),
+                        fields: [
+                            'place_id',
+                            'geometry',
+                            'name',
+                            'formatted_address',
+                        ],
+                        strictBounds: false,
+                    },
+                    (predictions, status) => {
+                        console.log('inseid', predictions);
+                        if (
+                            status === google.maps.places.PlacesServiceStatus.OK
+                        ) {
+                            const searchHistory = results.map(
+                                (result) => result.formatted_address,
+                            );
+                            const autocompletePredictions = predictions.map(
+                                (prediction) => prediction.description,
+                            );
+                            autocomplete.setOptions({
+                                types: ['geocode'],
+                                componentRestrictions: { country: 'in' },
+                                sessionToken:
+                                    new google.maps.places.AutocompleteSessionToken(),
+                                fields: [
+                                    'place_id',
+                                    'geometry',
+                                    'name',
+                                    'formatted_address',
+                                ],
+                                strictBounds: false,
+                                // Combine search history and autocomplete predictions
+                                // and remove duplicates
+                                suggestions: Array.from(
+                                    new Set([
+                                        ...searchHistory,
+                                        ...autocompletePredictions,
+                                    ]),
+                                ),
+                            });
+                        }
+                    },
+                );
+            });
+        });
     },
     methods: {
         ...mapActions('map', [
             'getPredictedLocations',
             'getFromRecent',
             'getSelectedLocationLatLng',
+            'updateInitialSelectedLatLng',
         ]),
-
-        getAsyncData: _.debounce(async function (name) {
-            /* eslint-disable */
-            /*  'this' is working as expected here but
-                eslint is showing error so it is disabled
-                fot this function   */
-
-            try {
-                const inputRef = this.$refs.autocomplete;
-                const options = {
-                    fields: [
-                        'place_id',
-                        'geometry',
-                        'name',
-                        'formatted_address',
-                    ],
-                    strictBounds: false,
-                    componentRestrictions: { country: 'in' }, // 2-letters code
-                    locationBias: 'IP_BIAS',
-                    types: ['geocode'],
-                };
-                const autocomplete = new google.maps.places.Autocomplete(
-                    inputRef,
-                    options,
-                );
-                autocomplete.addListener('place_changed', () =>
-                    this.onSelect(autocomplete),
-                );
-            } catch (error) {
-                console.log(error);
-            } finally {
-            }
-        }, 500),
 
         async onSelect(autocomplete) {
             const selectedLocation = autocomplete.getPlace();
+            this.saveSearchHistory(selectedLocation);
             const geocoder = new google.maps.Geocoder();
             const res = await geocoder.geocode({
                 placeId: selectedLocation.place_id,
@@ -104,6 +156,27 @@ export default {
 
             this.getSelectedLocationLatLng(res.results[0]);
             this.$emit('changed');
+        },
+
+        saveSearchHistory(formattedAddress) {
+            // Save the formatted address to local storage or a database
+            let searchHistory = [];
+            this.getSearchHistory((localSearchHistory) => {
+                searchHistory = localSearchHistory;
+            });
+            searchHistory.unshift(formattedAddress); // add in the top , so the top will always be latest
+            searchHistory.slice(0, 3); // only upto 3
+            const uniqueSearchHistory = [...new Set(searchHistory)];
+            localStorage.setItem(
+                'searchHistory',
+                JSON.stringify(uniqueSearchHistory),
+            );
+        },
+
+        getSearchHistory(callback) {
+            // Retrieve the search history from local storage or a database
+            const searchHistory = localStorage.getItem('searchHistory');
+            callback(searchHistory ? JSON.parse(searchHistory) : []);
         },
     },
 };
