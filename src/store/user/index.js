@@ -10,12 +10,7 @@ import {
 
 const state = {
     user: null,
-    userProfile: {
-        FullName: '',
-        EmailID: '',
-        Mobile: '',
-        Type: 'VO',
-    },
+    userProfile: null,
     isAuthReady: false,
     loginModal: false,
     contactForm: {},
@@ -83,6 +78,14 @@ const mutations = {
 
     'update-is-saved-profile-data'(state, isSavedProfileData) {
         state.isSavedProfileData = isSavedProfileData;
+    },
+
+    'update-user-info'(state, userInfo) {
+        const { FullName, EmailID, Mobile, Type } = userInfo;
+        state.userProfile['FullName'] = FullName;
+        state.userProfile['EmailID'] = EmailID;
+        state.userProfile['Mobile'] = Mobile;
+        state.userProfile['Type'] = Type;
     },
 };
 
@@ -237,7 +240,8 @@ const actions = {
         }
     },
 
-    async updateUserInfo({ commit, state }) {
+    async updateUserInfo({ commit, state }, userInfo) {
+        commit('update-user-info', userInfo);
         try {
             await mayaClient.post('/auth/update-fields', state.userProfile);
         } catch (err) {
@@ -248,9 +252,11 @@ const actions = {
 
     async getUserProfile({ commit, dispatch, state }) {
         try {
+            commit('update-is-loading', true);
             dispatch('authenticateWithMaya');
             const userProfile = await mayaClient.get('/auth/user');
             commit('update-user-profile', userProfile);
+            commit('update-is-loading', false);
         } catch (err) {
             // todo write proper exception case
             throw new Error(err);
