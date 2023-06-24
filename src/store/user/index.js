@@ -24,6 +24,7 @@ const state = {
     login: {},
     locationDetails: {},
     preference: {},
+    isLoading: false,
 };
 
 const getters = {};
@@ -74,12 +75,16 @@ const mutations = {
     'update-preference'(state, data = {}) {
         state.preference = data;
     },
+
+    'update-is-loading'(state, isLoading) {
+        state.isLoading = isLoading;
+    },
 };
 
 const actions = {
     async loginWithGoogle({ commit, state }) {
         const gProvider = new GoogleAuthProvider();
-
+        commit('update-is-loading', true);
         try {
             const res = await signInWithPopup(auth, gProvider);
             // todo remove commented code and console log
@@ -88,6 +93,7 @@ const actions = {
             const user = res.user;
             commit('update-user', user);
             commit('update-login-Modal', false);
+            commit('update-is-loading', false);
         } catch (err) {
             // Handle Errors here.
             const errorCode = error.code;
@@ -101,9 +107,11 @@ const actions = {
     },
 
     async logOut({ commit, state }) {
+        commit('update-is-loading', true);
         try {
             await signOut(auth);
             commit('update-user', null);
+            commit('update-is-loading', false);
         } catch (err) {
             // todo write proper exception case
             throw new Error(err);
