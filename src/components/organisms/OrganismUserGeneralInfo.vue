@@ -91,6 +91,9 @@ export default {
         userType(type) {
             this.setUserType(type);
         },
+        userProfile() {
+            this.updateSavedProfileFlag(false);
+        },
     },
     mounted() {
         if (this.userProfile === 'SO') {
@@ -103,9 +106,7 @@ export default {
         ...mapMutations('user', {
             updateUserProfile: 'update-user-profile',
         }),
-        ...mapActions('user', {
-            updateUserInfo: 'updateUserInfo',
-        }),
+        ...mapActions('user', ['updateUserInfo', 'updateSavedProfileFlag']),
         setUserType(userType) {
             if (userType.search('vehicle') === -1) {
                 this.updateUserProfile({ ...this.userProfile, Type: 'SO' });
@@ -122,6 +123,7 @@ export default {
                     if (sucess) {
                         try {
                             await this.updateUserInfo();
+                            this.updateSavedProfileFlag(true);
                             this.$buefy.toast.open({
                                 message: 'Profile updated successfully!',
                                 type: 'is-success',

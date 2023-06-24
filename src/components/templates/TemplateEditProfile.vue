@@ -1,5 +1,5 @@
 <template>
-    <BodyWrapper>
+    <BodyWrapper class="profile-container">
         <LoaderModal :isLoading="!user"></LoaderModal>
         <div class="edit-profile-main" v-if="user">
             <div class="profile-group-head">
@@ -88,27 +88,29 @@ export default {
         };
     },
     computed: {
-        ...mapState('user', {
-            user: (state) => state.user,
-        }),
+        ...mapState('user', ['user', 'isSavedProfileData']),
     },
     methods: {
         updateActiveForm(formNo) {
-            this.isActive = formNo;
-            switch (formNo) {
-                case 1:
-                    this.activeForm = 'OrganismUserGeneralInfo';
-                    break;
+            if (this.isSavedProfileData) {
+                this.isActive = formNo;
+                switch (formNo) {
+                    case 1:
+                        this.activeForm = 'OrganismUserGeneralInfo';
+                        break;
 
-                case 2:
-                    this.activeForm = 'OrganismParkingFacility';
-                    break;
-                case 3:
-                    this.activeForm = 'OrganismKycForm';
-                    break;
-                case 4:
-                    this.activeForm = 'OrganismMapLocation';
-                    break;
+                    case 2:
+                        this.activeForm = 'OrganismParkingFacility';
+                        break;
+                    case 3:
+                        this.activeForm = 'OrganismKycForm';
+                        break;
+                    case 4:
+                        this.activeForm = 'OrganismMapLocation';
+                        break;
+                }
+            } else {
+                alert('please save the data..!');
             }
         },
     },
@@ -116,6 +118,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.profile-container {
+    background-color: #f8f8ff;
+}
+
 .edit-profile-main {
     max-width: 878px;
     margin: 0 auto;

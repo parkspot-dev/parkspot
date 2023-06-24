@@ -25,6 +25,7 @@ const state = {
     locationDetails: {},
     preference: {},
     isLoading: false,
+    isSavedProfileData: true,
 };
 
 const getters = {};
@@ -78,6 +79,10 @@ const mutations = {
 
     'update-is-loading'(state, isLoading) {
         state.isLoading = isLoading;
+    },
+
+    'update-is-saved-profile-data'(state, isSavedProfileData) {
+        state.isSavedProfileData = isSavedProfileData;
     },
 };
 
@@ -250,6 +255,10 @@ const actions = {
             // todo write proper exception case
             throw new Error(err);
         }
+    },
+
+    updateSavedProfileFlag({ commit }, isSavedProfileData) {
+        commit('update-is-saved-profile-data', isSavedProfileData);
     },
 };
 
