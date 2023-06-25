@@ -32,6 +32,15 @@ vuex - 3.6.2
 [vue eslint](https://eslint.vuejs.org/user-guide/#installation)
 [prettier style guide](https://willyadrianp.medium.com/vs-code-setup-for-vue-js-with-eslint-airbnb-config-and-prettier-1ddc3fa14eb9)
 
+### Environment Setup
+
+```
+App will run on  http://parkspot.localhost:8080/. To confifigure the DNS in widows follow below step
+Go to C:\Windows\System32\drivers\etc
+Open host file
+Change "127.0.0.1   localhost" to "127.0.0.1    parkspot.localhost"
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
