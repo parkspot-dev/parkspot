@@ -26,4 +26,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.body-container {
+    .loading-overlay .loading-icon:after {
+        border: 2px solid var(--primary-color);
+        border-right-color: transparent;
+        border-top-color: transparent;
+    }
+}
+</style>
