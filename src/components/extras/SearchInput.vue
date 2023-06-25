@@ -82,12 +82,12 @@ export default {
         ...mapState('map', ['suggestionLocations']),
         filteredDataArray() {
             return this.suggestionLocations.filter((option) => {
-                return (
-                    option.placeName
-                        .toString()
-                        .toLowerCase()
-                        .indexOf(this.searchWord.toLowerCase()) >= 0
-                );
+                return option.placeName
+                    ? option.placeName
+                          .toString()
+                          .toLowerCase()
+                          .indexOf(this.searchWord.toLowerCase()) >= 0
+                    : option.placeName;
             });
         },
     },
