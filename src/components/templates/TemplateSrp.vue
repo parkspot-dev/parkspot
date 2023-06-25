@@ -149,7 +149,7 @@ export default {
                 z-index: 999;
                 padding: 12px 5px 5px 12px;
                 width: 120px;
-                border: 1px solid #000000;
+                border: 1px solid var(--parkspot-black);
                 border-radius: 4px;
                 background-color: #ffffff;
 
@@ -187,8 +187,8 @@ export default {
         --mask-image-content: linear-gradient(
             to bottom,
             transparent,
-            #000000 var(--mask-height),
-            #000000 calc(100% - var(--mask-height)),
+            var(--parkspot-black) var(--mask-height),
+            var(--parkspot-black) calc(100% - var(--mask-height)),
             transparent
         );
 
@@ -197,7 +197,10 @@ export default {
         --mask-size-content: calc(100% - var(--scrollbar-width)) 100%;
 
         /* The scrollbar mask is a black pixel */
-        --mask-image-scrollbar: linear-gradient(#000000, #000000);
+        --mask-image-scrollbar: linear-gradient(
+            var(--parkspot-black),
+            var(--parkspot-black)
+        );
 
         /* The width of our black pixel is the width of the scrollbar.
       The height is the full container height */
