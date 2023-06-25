@@ -1,14 +1,46 @@
 <template>
     <section>
         <div class="search-box-controller">
-            <input
-                class="search-box"
-                id="autocomplete"
-                type="text"
-                :placeholder="'search location'"
-                v-model="searchWord"
-            />
-            <AtomIcon class="search-icon" :icon="'magnify'"> </AtomIcon>
+            <b-field :label="label">
+                <b-autocomplete
+                    v-model="searchWord"
+                    :data="filteredDataArray"
+                    ref="autocomplete"
+                    placeholder="e.g. Bengaluru"
+                    field="placeName"
+                    icon="magnify"
+                    :loading="isFetching"
+                    @typing="getAsyncData"
+                    @select="onSelect"
+                    keep-first
+                    :open-on-focus="true"
+                    @click.native="displayRecentSearches()"
+                >
+                    <template slot-scope="props">
+                        <div class="media">
+                            <!-- fromLS should be renamed -->
+                            <div
+                                class="media-left custom-color"
+                                v-show="props.option.fromLS"
+                            >
+                                <AtomIcon :icon="'history'"> </AtomIcon>
+                            </div>
+
+                            <div
+                                class="media-content"
+                                :class="{
+                                    'custom-color': props.option.fromLS,
+                                }"
+                            >
+                                {{ props.option.placeName }}
+                            </div>
+                        </div>
+                    </template>
+                    <template #empty>
+                        {{ searchWord || 'No Recent Searches' }}
+                    </template>
+                </b-autocomplete>
+            </b-field>
         </div>
     </section>
 </template>
@@ -33,145 +65,123 @@ export default {
     emits: ['changed'],
     data() {
         return {
-            search: '',
             searchWord: '',
+            mapOptions: {
+                fields: ['place_id', 'geometry', 'name', 'formatted_address'],
+                strictBounds: false,
+                componentRestrictions: {
+                    country: 'in',
+                }, // 2-letters code
+                locationBias: 'IP_BIAS',
+                types: ['address'],
+            },
+            isFetching: false,
         };
     },
     computed: {
-        ...mapState('map', {
-            LocationName: (state) => state.locations,
-        }),
+        ...mapState('map', ['suggestionLocations']),
+        filteredDataArray() {
+            return this.suggestionLocations.filter((option) => {
+                return (
+                    option.placeName
+                        .toString()
+                        .toLowerCase()
+                        .indexOf(this.searchWord.toLowerCase()) >= 0
+                );
+            });
+        },
     },
-    async created() {
-        // initial check for search history
-        let searchHistory = [];
-        this.getSearchHistory((localSearchHistory) => {
-            searchHistory = localSearchHistory;
-        });
-        if (searchHistory.length) {
-            this.searchWord = searchHistory[0].formatted_address;
-            this.updateInitialSelectedLatLng(searchHistory[0]);
-        }
+    methods: {
+        ...mapActions('map', [
+            'getSelectedLocationLatLng',
+            'updateInitialSelectedLatLng',
+            'addSuggestionLocations',
+        ]),
 
-        // import map libraries
-        await google.maps.importLibrary('maps');
-        const inputRef = document.getElementById('autocomplete');
-        const options = {
-            fields: ['place_id', 'geometry', 'name', 'formatted_address'],
-            strictBounds: false,
-            componentRestrictions: {
-                country: 'in',
-            }, // 2-letters code
-            locationBias: 'IP_BIAS',
-            types: ['address'],
-        };
+        async displayRecentSearches() {
+            // let suggestions = [];
+            // this.getSearchHistory((localSearchHistory) => {
+            //     suggestions = localSearchHistory;
+            // });
+            // this.addSuggestionLocations(suggestions);
+        },
 
-        // Create a new autocomplete object and attach it to the input field
-        const autocomplete = new google.maps.places.Autocomplete(
-            inputRef,
-            options,
-        );
+        async getAsyncData() {
+            // import map libraries
+            await google.maps.importLibrary('maps');
+            const autocompleteService =
+                new google.maps.places.AutocompleteService();
 
-        // setting the fields that will be returned in the autocomplete suggestions
-        autocomplete.setFields(['address_components', 'name']);
-
-        // Create a new autocomplete service object
-        const autocompleteService =
-            new google.maps.places.AutocompleteService();
-
-        // Add a listener for when the input field changes
-        autocomplete.addListener('place_changed', () => {
-            this.onSelect(autocomplete);
-        });
-
-        // Add a listener for when the input field is focused
-        inputRef.addEventListener('focus', () => {
+            // Add a listener for when the input field is focused
             this.getSearchHistory((results) => {
+                console.log(results);
                 autocompleteService.getPlacePredictions(
                     {
-                        input: this.searchWord,
-                        types: ['address'],
-                        componentRestrictions: {
-                            country: 'in',
-                        },
+                        ...this.mapOptions,
                         sessionToken:
                             new google.maps.places.AutocompleteSessionToken(),
-                        fields: [
-                            'place_id',
-                            'geometry',
-                            'name',
-                            'formatted_address',
-                        ],
-                        strictBounds: false,
+                        input: this.searchWord,
                     },
                     (predictions, status) => {
                         if (
                             status === google.maps.places.PlacesServiceStatus.OK
                         ) {
-                            const searchHistory = results.map(
-                                (result) => result.formatted_address,
-                            );
+                            const searchHistory = results;
+
                             const autocompletePredictions = predictions.map(
-                                (prediction) => prediction.description,
-                            );
-                            autocomplete.setOptions({
-                                types: ['address'],
-                                componentRestrictions: {
-                                    country: 'in',
+                                (prediction) => {
+                                    return {
+                                        placeName: prediction.description,
+                                        placeId: prediction.place_id,
+                                    };
                                 },
-                                sessionToken:
-                                    new google.maps.places.AutocompleteSessionToken(),
-                                fields: [
-                                    'place_id',
-                                    'geometry',
-                                    'name',
-                                    'formatted_address',
-                                ],
-                                strictBounds: false,
-                                // Combine search history and autocomplete predictions
-                                // and remove duplicates
-                                suggestions: Array.from(
-                                    new Set([
-                                        ...searchHistory,
-                                        ...autocompletePredictions,
-                                    ]),
-                                ),
-                            });
+                            );
+
+                            const suggestions = Array.from(
+                                new Set([
+                                    ...searchHistory,
+                                    ...autocompletePredictions,
+                                ]),
+                            );
+
+                            const suggestionsSet = new Set(
+                                suggestions.map(JSON.stringify),
+                            );
+                            const uniqueSuggestions = Array.from(
+                                suggestionsSet,
+                            ).map(JSON.parse);
+                            this.addSuggestionLocations(uniqueSuggestions);
                         }
                     },
                 );
             });
-        });
-    },
-    methods: {
-        ...mapActions('map', [
-            'getPredictedLocations',
-            'getFromRecent',
-            'getSelectedLocationLatLng',
-            'updateInitialSelectedLatLng',
-        ]),
+        },
 
-        async onSelect(autocomplete) {
-            const selectedLocation = autocomplete.getPlace();
-            this.saveSearchHistory(selectedLocation);
+        async onSelect(selectedLocation) {
+            await google.maps.importLibrary('maps');
+            this.saveSearchHistory({ ...selectedLocation, fromLS: true });
             const geocoder = new google.maps.Geocoder();
             const res = await geocoder.geocode({
-                placeId: selectedLocation.place_id,
+                placeId: selectedLocation.placeId,
             });
-
             this.getSelectedLocationLatLng(res.results[0]);
             this.$emit('changed');
         },
 
-        saveSearchHistory(formattedAddress) {
+        saveSearchHistory(selectedLocation) {
             // Save the formatted address to local storage or a database
             let searchHistory = [];
             this.getSearchHistory((localSearchHistory) => {
                 searchHistory = localSearchHistory;
             });
-            searchHistory.unshift(formattedAddress); // add in the top , so the top will always be latest
+            searchHistory.unshift(selectedLocation); // add in the top , so the top will always be latest
             const newSearchHistory = searchHistory.slice(0, 3); // only upto 3
-            const uniqueSearchHistory = [...new Set(newSearchHistory)];
+            const searchHistorySet = new Set(
+                newSearchHistory.map(JSON.stringify),
+            );
+            const uniqueSearchHistory = Array.from(searchHistorySet).map(
+                JSON.parse,
+            );
             localStorage.setItem(
                 'searchHistory',
                 JSON.stringify(uniqueSearchHistory),
