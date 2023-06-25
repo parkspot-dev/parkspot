@@ -39,9 +39,9 @@ export default {
 @import url('./assets/styles/variables.css');
 
 #app {
-    color: #555;
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
+    color: #555555;
 }
 
 .body-container {
@@ -61,12 +61,12 @@ export default {
 
 /* color of the scrollbar thumb */
 ::-webkit-scrollbar-thumb {
-    background-color: #888;
     border-radius: 5px;
+    background-color: #888888;
 }
 
 /* color of the scrollbar thumb when hovering */
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
+    background-color: #555555;
 }
 </style>
