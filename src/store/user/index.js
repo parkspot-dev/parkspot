@@ -241,9 +241,29 @@ const actions = {
     },
 
     async updateUserInfo({ commit, state }, userInfo) {
-        commit('update-user-info', userInfo);
         try {
+            commit('update-user-info', userInfo);
             await mayaClient.post('/auth/update-fields', state.userProfile);
+        } catch (err) {
+            // todo write proper exception case
+            throw new Error(err);
+        }
+    },
+
+    async updateVOParkingFacility({ commit, state }, parkingFacility) {
+        try {
+            // commit('update-user-info', userInfo);
+            // await mayaClient.post('/auth/update-fields', state.userProfile);
+        } catch (err) {
+            // todo write proper exception case
+            throw new Error(err);
+        }
+    },
+
+    async updateSOParkingFacility({ commit, state }, parkingFacility) {
+        try {
+            // commit('update-user-info', userInfo);
+            // await mayaClient.post('/auth/update-fields', state.userProfile);
         } catch (err) {
             // todo write proper exception case
             throw new Error(err);
@@ -253,7 +273,7 @@ const actions = {
     async getUserProfile({ commit, dispatch, state }) {
         try {
             commit('update-is-loading', true);
-            dispatch('authenticateWithMaya');
+            await dispatch('authenticateWithMaya');
             const userProfile = await mayaClient.get('/auth/user');
             commit('update-user-profile', userProfile);
             commit('update-is-loading', false);

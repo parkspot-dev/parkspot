@@ -108,7 +108,7 @@ export default {
     },
     watch: {
         userProfile(userProfileData) {
-            this.Type = userProfileData.Type;
+            this.localType = userProfileData.Type;
         },
         localFullName(newFullName) {
             if (newFullName != this.userProfile.FullName) {
