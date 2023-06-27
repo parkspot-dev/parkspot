@@ -8,7 +8,11 @@
                 @on-search="getBookingDetails"
             ></molecule-search-box>
         </div>
+<<<<<<< HEAD
         <p v-if="hasError">{{ errorMessage }}</p>
+=======
+        <p v-if="hasError"> {{ errorMessage }}</p>
+>>>>>>> 0723eb3e (create booking portal store)
         <template-booking-portal v-else></template-booking-portal>
     </div>
 </template>
@@ -25,12 +29,17 @@ export default {
             bookingID: '',
         };
     },
+<<<<<<< HEAD
     computed: {
         ...mapState('bookingPortal', ['hasError', 'errorMessage']),
     },
     methods: {
         ...mapActions('bookingPortal', ['getBookingDetails']),
     },
+=======
+    computed: mapState('bookingPortal', ['hasError', 'errorMessage']),
+    methods: mapActions('bookingPortal', ['getBookingDetails']),
+>>>>>>> 0723eb3e (create booking portal store)
 };
 </script>
 
