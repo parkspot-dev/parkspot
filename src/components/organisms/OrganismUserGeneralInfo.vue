@@ -103,12 +103,12 @@ export default {
             return this.userProfile.Mobile;
         },
         userType() {
-            return this.userTypeData[this.userProfile.Type];
+            return this.userTypeData[this.userProfile.Type - 1];
         },
     },
     watch: {
         userProfile(userProfileData) {
-            this.localType = userProfileData.Type;
+            this.localType = userProfileData.Type - 1;
         },
         localFullName(newFullName) {
             if (newFullName != this.userProfile.FullName) {
@@ -156,9 +156,9 @@ export default {
                     break;
                 case 'Type':
                     if (userData === this.userTypeData[0]) {
-                        this.localType = 0;
-                    } else if (userData === this.userTypeData[1]) {
                         this.localType = 1;
+                    } else if (userData === this.userTypeData[1]) {
+                        this.localType = 2;
                     }
                     break;
             }

@@ -5,7 +5,7 @@
             <h2>Please fill all the fields</h2>
         </div>
         <div class="parking-facility-form">
-            <div class="parking-facility-form-VO" v-if="userProfile.Type === 0">
+            <div class="parking-facility-form-VO" v-if="userProfile.Type === 1">
                 <div class="py-4">
                     <MoleculeSelectInput
                         :fieldName="PARKING_FACILITY.VO.PARKING_TYPE"
@@ -34,7 +34,7 @@
                     ></MoleculeSelectInput>
                 </div>
             </div>
-            <div class="parking-facility-form-SO" v-if="userProfile.Type === 1">
+            <div class="parking-facility-form-SO" v-if="userProfile.Type === 2">
                 <div class="py-4">
                     <MoleculeNameInput
                         :fieldName="PARKING_FACILITY.SO.BUILDING_ADDR"
@@ -168,7 +168,7 @@ export default {
         },
 
         async saveProfile() {
-            if (this.userProfile.Type === 0) {
+            if (this.userProfile.Type === 1) {
                 try {
                     await this.updateVOParkingFacility({
                         ParkingType: this.localParkingType,
@@ -189,7 +189,7 @@ export default {
                     });
                 }
             }
-            if (this.userProfile.Type === 1) {
+            if (this.userProfile.Type === 2) {
                 try {
                     await this.updateSOParkingFacility({
                         FullName: this.localFullName,
