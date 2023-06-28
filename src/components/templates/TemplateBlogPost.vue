@@ -64,6 +64,11 @@ import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomImage from '../atoms/AtomImage.vue';
 import OrganismBlogNoParking from '../organisms/OrganismBlogNoParking';
+import OrganismBlogEliminatingTraffic from '../organisms/OrganismBlogEliminatingTraffic';
+import OrganismBlogParkingChallenges from '../organisms/OrganismBlogParkingChallenges';
+import OrganismBlogExtraIncome from '../organisms/OrganismBlogExtraIncome';
+import OrganismBlogPerfectParking from '../organisms/OrganismBlogPerfectParking';
+
 export default {
     name: 'TemplateBlogPost',
     components: {
@@ -73,6 +78,10 @@ export default {
         AtomImage,
         BodyWrapper,
         OrganismBlogNoParking,
+        OrganismBlogEliminatingTraffic,
+        OrganismBlogParkingChallenges,
+        OrganismBlogExtraIncome,
+        OrganismBlogPerfectParking,
     },
     props: {
         blog: {
