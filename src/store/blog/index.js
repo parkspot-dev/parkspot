@@ -56,7 +56,7 @@ const state = {
         {
             id: 'Perfect-Parking',
             title: 'Finding the Perfect Parking Spot!',
-            author: 'Ishwar Kumar',
+            author: 'Nitya Aggarwal',
             author_img: require('@/assets/team/ish.jpg'),
             img: require('@/assets/blog/1490246624-boston-parking-spaces.jpg'),
             desc: `Are you tired of endlessly circling the block in search of a parking spot? 
@@ -89,10 +89,7 @@ const mutations = {
 
 // actions
 const actions = {
-    getContentById(state, id) {
-        // const result = require(`../../blogs/${id}.json`);
-        return result.content;
-    },
+    
 };
 
 export default {
