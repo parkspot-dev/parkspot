@@ -65,7 +65,7 @@ export default {
     background-color: #888888;
 }
 
-/* color of the scrollbar thumb when hovering */
+/* color of the scrollbar thumb when hover*/
 ::-webkit-scrollbar-thumb:hover {
     background-color: #555555;
 }
