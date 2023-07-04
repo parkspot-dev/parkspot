@@ -118,6 +118,8 @@ export default {
 
                 await res.json();
 
+                this.getParkingRequests();
+
                 this.$buefy.toast.open({
                     message: `Sucessfully updated!`,
                     type: 'is-success',
