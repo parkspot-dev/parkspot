@@ -1,9 +1,7 @@
 <template>
     <div>
         <!---  Booking details-->
-        <atom-heading level="h3" class="sub-heading">
-            Booking Details</atom-heading
-        >
+        <h3 class="sub-heading">Booking Details</h3>
         <div class="columns">
             <span class="column is-2">
                 <strong> Booking ID: </strong> {{ bookingDetails.Booking.ID }}
@@ -25,9 +23,8 @@
         </div>
         <hr />
         <!-- VO details-->
-        <atom-heading level="h3" class="sub-heading"> VO Details</atom-heading>
+        <h3 class="sub-heading">VO Details</h3>
         <div class="columns">
-            
             <span class="column is-2">
                 <strong> Full Name: </strong>
                 {{ bookingDetails.Booking.Name }}
@@ -43,8 +40,8 @@
             </span>
 
             <span class="column is-3">
-                <strong> UserName: </strong
-                >{{ bookingDetails.Booking.UserName }}
+                <strong> UserName: </strong>
+                {{ bookingDetails.Booking.UserName }}
             </span>
 
             <span class="column is-3">
@@ -53,9 +50,7 @@
         </div>
         <hr />
         <!-- rent details-->
-        <atom-heading level="h3" class="sub-heading">
-            Rent Details</atom-heading
-        >
+        <h3 class="sub-heading">Rent Details</h3>
         <div class="columns">
             <span class="column is-2">
                 <strong> Rent: </strong>{{ bookingDetails.Booking.Rent }}
@@ -83,9 +78,7 @@
         </div>
         <hr />
         <!-- Payments-->
-        <atom-heading level="h3" class="sub-heading">
-            Payment Details</atom-heading
-        >
+        <h3 class="sub-heading">Payment Details</h3>
         <div
             v-for="payment in bookingDetails.Payments"
             :key="payment.PaymentID"
@@ -95,8 +88,8 @@
                     <strong> Payment ID:</strong> {{ payment.PaymentID }}
                 </span>
                 <span class="column is-2">
-                    <strong> Date: </strong
-                    >{{ payment.UpdatedAt.split('T')[0] }}
+                    <strong> Date: </strong>
+                    {{ payment.UpdatedAt.split('T')[0] }}
                 </span>
                 <span class="column is-2">
                     <strong> Amount: </strong>{{ payment.Amount }}
@@ -112,10 +105,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import AtomHeading from '../atoms/AtomHeading.vue';
 export default {
     name: 'TemplateBookingPortal',
-    components: { AtomHeading },
     computed: {
         ...mapState('bookingPortal', {
             bookingDetails: (state) => state.bookingDetails,
