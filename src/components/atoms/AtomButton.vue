@@ -31,9 +31,11 @@ export default {
          */
         left: {
             type: String,
+            default: ""
         },
         right: {
             type: String,
+            default: ""
         },
         outlined: {
             type: Boolean,
