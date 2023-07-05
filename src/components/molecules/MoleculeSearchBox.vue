@@ -1,14 +1,14 @@
 <template>
     <div class="search-control">
         <p></p>
-        <atom-input v-model="searchModel" :placeholder="placeholder">
-        </atom-input>
-        <atom-button
+        <AtomInput v-model="searchModel" :placeholder="placeholder">
+        </AtomInput>
+        <AtomButton
             class="search-button"
             @click.native="emitSearchEvent"
             left="magnify"
-            >Search</atom-button
-        >
+            >Search
+        </AtomButton>
     </div>
 </template>
 
@@ -37,7 +37,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .search-button {
     margin-left: 8px;
 }

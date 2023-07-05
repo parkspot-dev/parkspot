@@ -179,7 +179,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .columns {
     margin-top: 4px;
 }
