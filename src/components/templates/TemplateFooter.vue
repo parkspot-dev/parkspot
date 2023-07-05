@@ -391,7 +391,7 @@ export default {
 
 .social-icon {
     padding: 0.5rem;
-    color: var(--primary-text);
+    color: var(--parkspot-black);
 }
 
 .social-icon:hover {

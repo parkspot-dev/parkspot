@@ -103,7 +103,7 @@ export default {
 .options {
     border: 2px solid transparent;
     border-radius: var(--border-default);
-    color: var(--primary-text);
+    color: var(--parkspot-black);
     display: block;
     margin-bottom: 0.75rem;
     padding: 1rem 0.5rem;
@@ -137,7 +137,7 @@ export default {
 }
 
 .social-icon {
-    color: var(--primary-text);
+    color: var(--parkspot-black);
     padding: 0.5rem;
     position: relative;
     z-index: 1;

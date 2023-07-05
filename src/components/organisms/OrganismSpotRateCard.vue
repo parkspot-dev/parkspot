@@ -25,8 +25,8 @@
             </div>
             <div>
                 <div class="negative-margin">
-                    <p style="margin-right: 5px">Conv. fee (
-                         <span class="bold-text"> One time </span> ) 
+                    <p style="margin-right: 5px">
+                        Conv. fee ( <span class="bold-text"> One time </span> )
                     </p>
                     <AtomTooltip :label="tooltipMsg">
                         <AtomIcon
@@ -113,7 +113,7 @@ export default {
 .rate-card {
     width: 328px;
     height: 400px;
-    border: 1px solid #000000;
+    border: 1px solid var(--parkspot-black);
     border-radius: var(--border-default);
     padding: 16px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

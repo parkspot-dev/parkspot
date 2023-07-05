@@ -179,7 +179,6 @@ hr {
     display: flex;
     align-items: center;
     justify-content: center;
-    // background-color: #00000061;
     border-radius: var(--border-default);
     overflow: hidden;
 
