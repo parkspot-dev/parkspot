@@ -99,11 +99,11 @@ export default {
         ]),
 
         async displayRecentSearches() {
-            // let suggestions = [];
-            // this.getSearchHistory((localSearchHistory) => {
-            //     suggestions = localSearchHistory;
-            // });
-            // this.addSuggestionLocations(suggestions);
+            let suggestions = [];
+            this.getSearchHistory((localSearchHistory) => {
+                suggestions = localSearchHistory;
+            });
+            this.addSuggestionLocations(suggestions);
         },
 
         async getAsyncData() {
