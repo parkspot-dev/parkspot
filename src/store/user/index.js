@@ -103,13 +103,12 @@ const actions = {
             commit('update-login-Modal', false);
             commit('update-is-loading', false);
         } catch (err) {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
+            const errorCode = err.code;
+            const errorMessage = err.message;
             // The email of the user's account used.
-            const email = error.customData.email;
+            const email = err.customData.email;
             // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
+            const credential = GoogleAuthProvider.credentialFromError(err);
             console.log(errorCode, errorMessage, email, credential);
         }
     },

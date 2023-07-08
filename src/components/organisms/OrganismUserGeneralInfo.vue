@@ -141,7 +141,6 @@ export default {
             }
         },
     },
-    mounted() {},
     methods: {
         ...mapActions('user', ['updateUserInfo', 'updateSavedProfileFlag']),
 
@@ -168,8 +167,8 @@ export default {
         saveProfile() {
             this.$refs.observer
                 .validate()
-                .then(async (sucess) => {
-                    if (sucess) {
+                .then(async (success) => {
+                    if (success) {
                         try {
                             await this.updateUserInfo({
                                 FullName: this.localFullName,

@@ -26,7 +26,6 @@
                                 General
                             </a>
                         </li>
-                        <!-- disabling below features not fully ready yet -->
                         <li>
                             <a
                                 @click="updateActiveForm(2)"
@@ -110,7 +109,7 @@ export default {
                         break;
                 }
             } else {
-                alert('please save the data..!');
+                alert('Please save the data!');
             }
         },
     },
