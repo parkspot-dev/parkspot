@@ -27,7 +27,11 @@
         <!-- VO details-->
         <atom-heading level="h3" class="sub-heading"> VO Details</atom-heading>
         <div class="columns">
-            
+            <span class="column is-2">
+                <strong> UserName: </strong
+                >{{ bookingDetails.Booking.UserName }}
+            </span>
+
             <span class="column is-2">
                 <strong> Full Name: </strong>
                 {{ bookingDetails.Booking.Name }}
@@ -38,17 +42,12 @@
             </span>
 
             <span class="column is-2">
+                <strong> Email: </strong>{{ bookingDetails.Booking.EmailID }}
+            </span>
+
+            <span class="column is-2">
                 <strong> Vehicle Number:</strong>
                 {{ bookingDetails.Booking.VehicleNumber }}
-            </span>
-
-            <span class="column is-3">
-                <strong> UserName: </strong
-                >{{ bookingDetails.Booking.UserName }}
-            </span>
-
-            <span class="column is-3">
-                <strong> Email: </strong>{{ bookingDetails.Booking.EmailID }}
             </span>
         </div>
         <hr />
@@ -111,15 +110,71 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import AtomHeading from '../atoms/AtomHeading.vue';
 export default {
     name: 'TemplateBookingPortal',
     components: { AtomHeading },
-    computed: {
-        ...mapState('bookingPortal', {
-            bookingDetails: (state) => state.bookingDetails,
-        }),
+    props: {
+        // todo: this will come from store.
+        bookingDetails: {
+            type: Object,
+            default() {
+                return {
+                    Booking: {
+                        ID: 1578,
+                        CreatedAt: '2023-02-25T08:24:04.5662536Z',
+                        UpdatedAt: '2023-05-25T23:04:42.532919+05:30',
+                        DeletedAt: null,
+                        UserName: 'parkspot',
+                        Name: 'Prasanth Raghu Vamsi M',
+                        Mobile: '9397111995',
+                        EmailID: '',
+                        VehicleNumber: 'AP39RD1995',
+                        SiteID: 'BLR#JPNagar#SMRCrystal',
+                        Site: null,
+                        SlotID: '',
+                        StartTime: '2022-05-01T00:00:00+05:30',
+                        EndTime: '2023-04-30T23:59:00+05:30',
+                        Status: 1,
+                        Rent: 2300,
+                        BaseAmount: 1800,
+                        ConvenienceFee: 500,
+                        RentCycle: 27,
+                        PaymentPeriod: 0,
+                    },
+                    Payments: [
+                        {
+                            PaymentID: 756,
+                            BookingID: 1578,
+                            TransactionID: '',
+                            Amount: 3000,
+                            Discount: 300,
+                            Cashback: 0,
+                            Promocode: '',
+                            Mode: 6,
+                            Status: 1,
+                            Booking: null,
+                            CreatedAt: '2023-02-25T08:26:00.5131359Z',
+                            UpdatedAt: '0001-01-01T00:00:00Z',
+                        },
+                        {
+                            PaymentID: 757,
+                            BookingID: 1578,
+                            TransactionID: '',
+                            Amount: 3000,
+                            Discount: 0,
+                            Cashback: 0,
+                            Promocode: '',
+                            Mode: 6,
+                            Status: 1,
+                            Booking: null,
+                            CreatedAt: '2023-02-25T08:26:31.3479901Z',
+                            UpdatedAt: '0001-01-01T00:00:00Z',
+                        },
+                    ],
+                };
+            },
+        },
     },
 };
 </script>

@@ -6,7 +6,6 @@ import user from './user';
 import map from './map';
 import sdp from './sdp';
 import searchPortal from './searchPortal';
-import bookingPortal from './bookingPortal';
 
 Vue.use(Vuex);
 
@@ -18,7 +17,6 @@ const store = new Vuex.Store({
         map,
         sdp,
         searchPortal,
-        bookingPortal,
     },
 });
 
