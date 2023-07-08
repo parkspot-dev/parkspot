@@ -11,15 +11,7 @@ const state = {
     filteredSrpResults: [],
 };
 
-const getters = {
-    getNewMapCenter(state) {
-        return state.center;
-    },
-
-    getSrpResults(state) {
-        return state.srpResults;
-    },
-};
+const getters = {};
 
 const mutations = {
     'update-suggestion-location'(state, suggestionLocations) {
