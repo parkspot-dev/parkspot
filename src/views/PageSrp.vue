@@ -43,7 +43,6 @@ export default {
         $route: {
             handler: function (to) {
                 if (to.name == 'srp') {
-                    console.log('sdfads', to);
                     this.title = to.params.location;
                 }
             },
@@ -90,13 +89,11 @@ export default {
         getLatLng() {
             const queryParam = new URLSearchParams(window.location.search);
             const coordinate = getCoordinate(queryParam.get('latlng'));
-            console.log('getLatLng', coordinate);
             return { lat: coordinate[0], lng: coordinate[1] };
         },
 
         flyToSrp() {
             this.$nextTick(() => {
-                console.log('flytosrp', this.selectedLocationLatLng);
                 const coordinate = getCoordinate(
                     [
                         this.selectedLocationLatLng.lat,
