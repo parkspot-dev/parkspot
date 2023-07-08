@@ -1,14 +1,3 @@
-// Todo: Remove Form constants not needed
-export const FORM = {
-    USERNAME: 'Username',
-    NAME: 'full-name',
-    FULLNAME: 'Full Name',
-    FIRSTNAME: 'First Name',
-    LASTNAME: 'Last Name',
-    EMAIL: 'Email',
-    CONTACT_NO: 'Contact No.',
-};
-
 export const PARKING_FACILITY = {
     SO: {
         BUILDING_ADDR: 'Building Address',
