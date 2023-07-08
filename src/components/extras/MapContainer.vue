@@ -49,9 +49,6 @@ export default {
             // user marker styles
             const pinScaled = new PinElement({
                 scale: 1.5,
-                // background: '#ffdd57',
-                // borderColor: '#0085ad',
-                // glyphColor: '#0085ad',
             });
 
             // adding user marker in the map
@@ -70,6 +67,7 @@ export default {
                 userInfoWindow.setContent(this.userMarker.title);
                 userInfoWindow.open(this.userMarker.map, this.userMarker);
             });
+
             // when drag is true we can drag the marker
             if (this.drag) {
                 this.userMarker.addListener('dragend', (event) => {
@@ -109,6 +107,7 @@ export default {
                             </div>
                         </div>
                     </div>`;
+
                 // Create an info window to share between markers.
                 const spotInfoWindow = new InfoWindow({
                     content: contentString,
@@ -116,12 +115,14 @@ export default {
                 });
                 const lat = spot.Lat;
                 const lng = spot.Long;
+
                 // creating spot marker
                 const glyphImg = document.createElement('img');
                 glyphImg.src = this.parkspotMarkerIcon;
                 const glyphSvgPinElement = new PinElement({
                     glyph: glyphImg,
                 });
+
                 // adding spot marker in the map
                 const spotMarker = new AdvancedMarkerElement({
                     map: this.map,
@@ -129,6 +130,7 @@ export default {
                     title: spot.Name,
                     content: glyphSvgPinElement.element,
                 });
+
                 // Add a click listener for each marker, and set up the info window.
                 spotMarker.addListener('click', ({ domEvent, latLng }) => {
                     spotInfoWindow.close();
