@@ -34,12 +34,12 @@ export default {
     },
     watch: {
         // Handles internal model changes.
-        checkboxGroup(newVal) {
-            this.$emit('input', newVal);
+        checkboxGroup(newCheckboxVal) {
+            this.$emit('input', newCheckboxVal);
         },
         // Handles external model changes.
-        value(newVal) {
-            this.checkboxGroup = newVal;
+        value(newCheckboxVal) {
+            this.checkboxGroup = newCheckboxVal;
         },
     },
 };
