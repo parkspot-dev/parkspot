@@ -66,7 +66,6 @@ export default {
     async mounted() {
         try {
             this.isLoading = true;
-            // await this.updateMapConfig(this.getLatLng()); // map center takes [lng, lat]
             await this.srpCall();
             this.reRender++;
             this.isLoading = false;
