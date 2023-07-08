@@ -5,7 +5,10 @@
             <h2>Please fill all the fields</h2>
         </div>
         <div class="parking-facility-form">
-            <div class="parking-facility-form-VO" v-if="userProfile.Type === 1">
+            <div
+                class="parking-facility-form-VO"
+                v-if="userProfile.Type === USER_PROFILE_TYPE.VO"
+            >
                 <div class="py-4">
                     <MoleculeSelectInput
                         :fieldName="PARKING_FACILITY.VO.PARKING_TYPE"
@@ -34,7 +37,10 @@
                     ></MoleculeSelectInput>
                 </div>
             </div>
-            <div class="parking-facility-form-SO" v-if="userProfile.Type === 2">
+            <div
+                class="parking-facility-form-SO"
+                v-if="userProfile.Type === USER_PROFILE_TYPE.SO"
+            >
                 <div class="py-4">
                     <MoleculeNameInput
                         :fieldName="PARKING_FACILITY.SO.BUILDING_ADDR"
@@ -97,7 +103,7 @@ import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
 import MoleculeUpload from '../molecules/MoleculeUpload.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
-import { PARKING_FACILITY } from '../../constant/constant';
+import { PARKING_FACILITY, USER_PROFILE_TYPE } from '../../constant/constant';
 import { mapActions, mapState } from 'vuex';
 export default {
     name: 'OrganismParkingFacility',
@@ -111,6 +117,7 @@ export default {
     data() {
         return {
             PARKING_FACILITY,
+            USER_PROFILE_TYPE,
             validation: {
                 buildingAddr: 'required',
                 totalParking: '',
@@ -168,7 +175,7 @@ export default {
         },
 
         async saveProfile() {
-            if (this.userProfile.Type === 1) {
+            if (this.userProfile.Type === USER_PROFILE_TYPE.SO) {
                 try {
                     await this.updateVOParkingFacility({
                         ParkingType: this.localParkingType,
@@ -189,7 +196,7 @@ export default {
                     });
                 }
             }
-            if (this.userProfile.Type === 2) {
+            if (this.userProfile.Type === USER_PROFILE_TYPE.VO) {
                 try {
                     await this.updateSOParkingFacility({
                         FullName: this.localFullName,

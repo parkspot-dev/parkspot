@@ -110,3 +110,8 @@ export const PAGE_TITLE = {
     DISCOVER: 'Parking Near ',
     SEARCH: 'ParkSpot | ',
 };
+
+export const USER_PROFILE_TYPE = {
+    SO: 1,
+    VO: 2,
+};
