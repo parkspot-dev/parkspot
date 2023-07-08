@@ -8,11 +8,13 @@
                 @on-search="getBookingDetails"
             ></molecule-search-box>
         </div>
-        <template-booking-portal></template-booking-portal>
+        <p v-if="hasError">{{ errorMessage }}</p>
+        <template-booking-portal v-else></template-booking-portal>
     </div>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
 import TemplateBookingPortal from '../components/templates/TemplateBookingPortal.vue';
 export default {
@@ -23,10 +25,11 @@ export default {
             bookingID: '',
         };
     },
+    computed: {
+        ...mapState('bookingPortal', ['hasError', 'errorMessage']),
+    },
     methods: {
-        getBookingDetails(bookingID) {
-            console.log('booking id ::', { bookingID });
-        },
+        ...mapActions('bookingPortal', ['getBookingDetails']),
     },
 };
 </script>
@@ -34,6 +37,7 @@ export default {
 <style lang="scss" scoped>
 .booking-portal-root {
     padding: 16px;
+    text-align: center;
 }
 
 .search-control {
