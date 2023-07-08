@@ -72,8 +72,8 @@
             </span>
 
             <span class="column is-2">
-                <strong> Priodicity: </strong
-                >{{ bookingDetails.Booking.PaymentPeriod }}
+                <strong> Priodicity: </strong>
+                {{ bookingDetails.Booking.PaymentPeriod }}
             </span>
         </div>
         <hr />
@@ -96,7 +96,10 @@
                 </span>
 
                 <span class="column is-2">
-                    <strong> Status: </strong>{{ payment.Status }}
+                    <strong> Status: </strong>
+                    <span v-bind:class="getPaymentClass(payment.Status)"
+                        >{{ getPaymentStatusLabel(payment.Status) }}
+                    </span>
                 </span>
             </div>
         </div>
@@ -105,12 +108,29 @@
 
 <script>
 import { mapState } from 'vuex';
+import { PaymentStatus, getPaymentStatusLabel } from '@/constant/enums';
 export default {
     name: 'TemplateBookingPortal',
     computed: {
         ...mapState('bookingPortal', {
             bookingDetails: (state) => state.bookingDetails,
         }),
+    },
+    methods: {
+        getPaymentStatusLabel(paymentStatus) {
+            return getPaymentStatusLabel(paymentStatus);
+        },
+        getPaymentClass(status) {
+            if (status == PaymentStatus.PaymentSuccess) {
+                return 'payment-success';
+            } else if (
+                status == PaymentStatus.PaymentPending ||
+                status == PaymentStatus.PaymentIncomplete
+            ) {
+                return 'payment-pending';
+            }
+            return 'payment-failed';
+        },
     },
 };
 </script>
@@ -119,6 +139,7 @@ export default {
 .columns {
     margin-top: 4px;
 }
+
 .column {
     display: flex;
     flex-direction: column;
@@ -126,5 +147,29 @@ export default {
 
 .sub-heading {
     color: var(--secondary-color);
+}
+
+.payment-success {
+    border-color: #78d965;
+    color: #78d965;
+    box-shadow: 0px 0px 4px 1px #94e185;
+    border-style: solid;
+    font-weight: 500;
+}
+
+.payment-pending {
+    border-color: #ffb161;
+    color: #ffb161;
+    box-shadow: 0px 0px 4px 1px #ffc182;
+    border-style: solid;
+    font-weight: 500;
+}
+
+.payment-failed {
+    border-color: #c42c3b;
+    color: #c42c3b;
+    box-shadow: 0px 0px 4px 1px #c9404d;
+    border-style: solid;
+    font-weight: 500;
 }
 </style>
