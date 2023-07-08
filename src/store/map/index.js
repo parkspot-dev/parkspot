@@ -1,7 +1,7 @@
 import { mayaClient } from '@/services/api';
 
 const state = {
-    locations: [],
+    suggestionLocations: [],
     selectedLocation: null,
     selectedLocationLatLng: null,
     mapCenter: { lat: 17.471356, lng: 78.3344256 }, //  default bengaluru lat, lng.
@@ -12,10 +12,6 @@ const state = {
 };
 
 const getters = {
-    getLocationName(state) {
-        return state.locations;
-    },
-
     getNewMapCenter(state) {
         return state.center;
     },
@@ -26,8 +22,8 @@ const getters = {
 };
 
 const mutations = {
-    'update-location'(state, locations) {
-        state.locations = [...state.recentSearch, ...locations];
+    'update-suggestion-location'(state, suggestionLocations) {
+        state.suggestionLocations = suggestionLocations;
     },
 
     'update-selected-location'(state, selectedLocation) {
@@ -121,6 +117,10 @@ const actions = {
 
     updateMapCenter({ commit }, mapCenter) {
         commit('update-map-center', mapCenter);
+    },
+
+    addSuggestionLocations({ commit }, suggestionLocations) {
+        commit('update-suggestion-location', suggestionLocations);
     },
 };
 
