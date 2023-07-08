@@ -25,7 +25,7 @@ export default {
     data() {
         return {
             parkspotMarkerIcon: require('@/assets/parkspotMarkerIcon.png'),
-            map: null, // map for mapbox
+            map: null, // map for google map
             userMarker: null, // user marker for location,
             mapCenter: { lat: 12.9716, lng: 77.5946 },
         };
