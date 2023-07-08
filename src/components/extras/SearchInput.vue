@@ -18,7 +18,6 @@
                 >
                     <template slot-scope="props">
                         <div class="media">
-                            <!-- fromLS should be renamed -->
                             <div
                                 class="media-left custom-color"
                                 v-show="props.option.fromLS"
