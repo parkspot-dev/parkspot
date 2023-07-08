@@ -10,12 +10,7 @@ import {
 
 const state = {
     user: null,
-    userProfile: {
-        FullName: '',
-        EmailID: '',
-        Mobile: '',
-        Type: 'VO',
-    },
+    userProfile: null,
     isAuthReady: false,
     loginModal: false,
     contactForm: {},
@@ -24,6 +19,8 @@ const state = {
     login: {},
     locationDetails: {},
     preference: {},
+    isLoading: false,
+    isSavedProfileData: true,
 };
 
 const getters = {};
@@ -74,12 +71,28 @@ const mutations = {
     'update-preference'(state, data = {}) {
         state.preference = data;
     },
+
+    'update-is-loading'(state, isLoading) {
+        state.isLoading = isLoading;
+    },
+
+    'update-is-saved-profile-data'(state, isSavedProfileData) {
+        state.isSavedProfileData = isSavedProfileData;
+    },
+
+    'update-user-info'(state, userInfo) {
+        const { FullName, EmailID, Mobile, Type } = userInfo;
+        state.userProfile['FullName'] = FullName;
+        state.userProfile['EmailID'] = EmailID;
+        state.userProfile['Mobile'] = Mobile;
+        state.userProfile['Type'] = Type;
+    },
 };
 
 const actions = {
     async loginWithGoogle({ commit, state }) {
         const gProvider = new GoogleAuthProvider();
-
+        commit('update-is-loading', true);
         try {
             const res = await signInWithPopup(auth, gProvider);
             // todo remove commented code and console log
@@ -88,22 +101,24 @@ const actions = {
             const user = res.user;
             commit('update-user', user);
             commit('update-login-Modal', false);
+            commit('update-is-loading', false);
         } catch (err) {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
+            const errorCode = err.code;
+            const errorMessage = err.message;
             // The email of the user's account used.
-            const email = error.customData.email;
+            const email = err.customData.email;
             // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
+            const credential = GoogleAuthProvider.credentialFromError(err);
             console.log(errorCode, errorMessage, email, credential);
         }
     },
 
     async logOut({ commit, state }) {
+        commit('update-is-loading', true);
         try {
             await signOut(auth);
             commit('update-user', null);
+            commit('update-is-loading', false);
         } catch (err) {
             // todo write proper exception case
             throw new Error(err);
@@ -224,9 +239,30 @@ const actions = {
         }
     },
 
-    async updateUserInfo({ commit, state }) {
+    async updateUserInfo({ commit, state }, userInfo) {
         try {
+            commit('update-user-info', userInfo);
             await mayaClient.post('/auth/update-fields', state.userProfile);
+        } catch (err) {
+            // todo write proper exception case
+            throw new Error(err);
+        }
+    },
+
+    async updateVOParkingFacility({ commit, state }, parkingFacility) {
+        try {
+            // commit('update-user-info', userInfo);
+            // await mayaClient.post('/auth/update-fields', state.userProfile);
+        } catch (err) {
+            // todo write proper exception case
+            throw new Error(err);
+        }
+    },
+
+    async updateSOParkingFacility({ commit, state }, parkingFacility) {
+        try {
+            // commit('update-user-info', userInfo);
+            // await mayaClient.post('/auth/update-fields', state.userProfile);
         } catch (err) {
             // todo write proper exception case
             throw new Error(err);
@@ -235,13 +271,19 @@ const actions = {
 
     async getUserProfile({ commit, dispatch, state }) {
         try {
-            dispatch('authenticateWithMaya');
+            commit('update-is-loading', true);
+            await dispatch('authenticateWithMaya');
             const userProfile = await mayaClient.get('/auth/user');
             commit('update-user-profile', userProfile);
+            commit('update-is-loading', false);
         } catch (err) {
             // todo write proper exception case
             throw new Error(err);
         }
+    },
+
+    updateSavedProfileFlag({ commit }, isSavedProfileData) {
+        commit('update-is-saved-profile-data', isSavedProfileData);
     },
 };
 

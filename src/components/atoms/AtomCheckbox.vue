@@ -4,7 +4,6 @@
             :key="value"
             v-for="value in values"
             v-model="checkboxGroup"
-            @input="handleCheckbox"
             :native-value="value"
             :size="size"
             type="is-warning"
@@ -33,9 +32,14 @@ export default {
             checkboxGroup: [],
         };
     },
-    methods: {
-        handleCheckbox() {
-            this.$emit('input', this.checkboxGroup);
+    watch: {
+        // Handles internal model changes.
+        checkboxGroup(newCheckboxVal) {
+            this.$emit('input', newCheckboxVal);
+        },
+        // Handles external model changes.
+        value(newCheckboxVal) {
+            this.checkboxGroup = newCheckboxVal;
         },
     },
 };
