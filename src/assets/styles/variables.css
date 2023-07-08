@@ -3,6 +3,31 @@
     --primary-color: #ffe08a;
     --secondary-color: #0085ad;
     --parkspot-black: #252525;
+    --parkspot-white: #f7f8ff;
+    /* #555555
+    #f1f1f1
+    #888888
+    #555555
+    #f1f1f1
+    #ffffff
+    #50c878
+    #6b6b6b
+    #85bb65
+    #367e18
+    #367e18
+    #8c8c8c
+    #e8faff
+    #757575
+    #e8faff
+    #d7d7d7
+    #474747
+    #000
+    #abaab5
+    #6e6d7a
+    #888d93
+    #1f2e3b
+    #888d93
+    #f7f8ff */
 
     /* shades */
     --grey-shade: #a9a9a9;
@@ -24,6 +49,5 @@
     --lh-para: 1.6;
 
     /* background colors */
-    --bg-color-secondary: #f7f8ff;
     --bg-color-tertiary: #171c37;
 }
