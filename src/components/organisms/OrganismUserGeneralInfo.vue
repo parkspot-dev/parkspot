@@ -63,6 +63,7 @@ import AtomButton from '../atoms/AtomButton.vue';
 import LoaderModal from '../extras/LoaderModal.vue';
 import { ValidationObserver } from 'vee-validate';
 import { mapActions, mapState } from 'vuex';
+import { USER_PROFILE_TYPE } from '../../constant/constant';
 
 export default {
     name: 'OrganismUserGeneralInfo',
@@ -75,6 +76,7 @@ export default {
     },
     data() {
         return {
+            USER_PROFILE_TYPE,
             userTypeData: [
                 'I am a vehicle owner, looking for parking',
                 'I own a parking spot, want to rent it',
@@ -156,9 +158,9 @@ export default {
                     break;
                 case 'Type':
                     if (userData === this.userTypeData[0]) {
-                        this.localType = 1;
+                        this.localType = USER_PROFILE_TYPE.SO;
                     } else if (userData === this.userTypeData[1]) {
-                        this.localType = 2;
+                        this.localType = USER_PROFILE_TYPE.VO;
                     }
                     break;
             }
