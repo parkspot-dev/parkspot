@@ -44,6 +44,7 @@ export const pages = {
     TEMP                    : '/temp',
     THANK_YOU               : '/thank-you',
     ERROR                   : '/error',
+    BOOKING_PORTAL          : "/internal/booking-portal"
 };
 
 export const routes = [
@@ -148,6 +149,11 @@ export const routes = [
         path: pages.ERROR,
         name: 'error',
         component: () => import('@/views/PageError.vue'),
+    },
+    {
+        path: pages.BOOKING_PORTAL,
+        name: "booking-portal",
+        component: () => import('@/views/BookingPortal.vue')
     },
     // Todo Delete below code before deployment
     {
