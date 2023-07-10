@@ -101,7 +101,7 @@ export default {
     max-width: 640px;
     height: 532px;
     border-radius: var(--border-default);
-    background: #ffffff;
+    background: var(--parkspot-white);
 
     @media only screen and (max-width: 1024px) {
         height: 480px;

@@ -44,7 +44,7 @@ export default {
 <style lang="scss" scoped>
 $g-line-height: 1.5 !default;
 $g-spacing: $g-line-height * 1em;
-$white: #fff;
+$white: var(--parkspot-white);
 $g-background-color-dark: #18181b;
 
 .content-wrapper {

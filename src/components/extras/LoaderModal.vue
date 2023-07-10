@@ -31,7 +31,7 @@ export default {
 <style lang="scss">
 .ghost-container {
     height: 100vh;
-    background-color: #f1f1f1;
+    background-color: var(--parkspot-white);
 }
 
 .body-container {

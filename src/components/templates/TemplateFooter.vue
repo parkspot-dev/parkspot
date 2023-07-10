@@ -347,7 +347,7 @@ export default {
 
 .footer-heading {
     margin-bottom: 1rem;
-    color: #ffffff;
+    color: var(--parkspot-white);
 }
 
 .primary-container {

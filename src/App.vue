@@ -41,7 +41,7 @@ export default {
 #app {
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
-    color: #555555;
+    color: var(--parkspot-black);
 }
 
 .body-container {
@@ -56,7 +56,7 @@ export default {
 
 /* background color of the scrollbar */
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--parkspot-white);
 }
 
 /* color of the scrollbar thumb */
@@ -67,6 +67,6 @@ export default {
 
 /* color of the scrollbar thumb when hover*/
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #555555;
+    background-color: var(--parkspot-black);
 }
 </style>
