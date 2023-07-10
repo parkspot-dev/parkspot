@@ -70,7 +70,6 @@ export default {
     },
     methods: {
         flyToSrp() {
-            console.log('flytosrp', this.selectedLocationLatLng);
             const coordinate = getCoordinate(
                 [
                     this.selectedLocationLatLng.lat,

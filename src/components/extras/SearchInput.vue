@@ -113,7 +113,6 @@ export default {
 
             // Add a listener for when the input field is focused
             this.getSearchHistory((results) => {
-                console.log(results);
                 autocompleteService.getPlacePredictions(
                     {
                         ...this.mapOptions,
