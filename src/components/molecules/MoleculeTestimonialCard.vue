@@ -54,7 +54,7 @@ $g-background-color-dark: #18181b;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     .content {
         padding: $g-spacing * 2 $g-spacing;
-        color: var(--primary-text);
+        color: var(--parkspot-black);
 
         .quote {
             width: 64px;

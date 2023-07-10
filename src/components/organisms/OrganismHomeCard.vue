@@ -153,7 +153,7 @@ export default {
             font-size: 48px;
             font-weight: 600;
             line-height: 58px;
-            color: #000000;
+            color: var(--parkspot-black);
 
             @media only screen and (max-width: 1024px) {
                 font-size: 32px;

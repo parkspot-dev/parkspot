@@ -74,6 +74,9 @@ export default {
 
 .blog-container {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 56px;
 
     @media only screen and (max-width: 1024px) {

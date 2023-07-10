@@ -148,9 +148,6 @@ export default {
     cursor: pointer;
     color: var(--secondary-color);
     display: inline;
-    /* margin: 0% 50%; */
-    /* background-color: #000000; */
-    /* box-shadow: 0px -8px 13px 2px #9e9d9d; */
 }
 
 /* TRANSITION */
