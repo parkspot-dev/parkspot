@@ -25,16 +25,12 @@ export default {
         BodyWrapper,
         OrganismHomeCard,
     },
-    emits: ['flyToSrp'],
     data() {
         return {
             activeTab: 'VO',
         };
     },
     methods: {
-        flyToSrp() {
-            this.$emit('flyToSrp');
-        },
         getActiveTab(activeTab) {
             this.activeTab = activeTab;
         },

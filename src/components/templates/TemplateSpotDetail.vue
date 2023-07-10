@@ -1,6 +1,6 @@
 <template>
     <BodyWrapper>
-        <div>
+        <div v-if="spotDetails">
             <!-- image gallery -->
             <div class="spot-image-container">
                 <ImageGallery></ImageGallery>
@@ -43,7 +43,9 @@
                 <h2>How to get here?</h2>
                 <MapContainer
                     class="sdp-map"
-                    :spotsList="selectedSpot"
+                    :spotsList="[...spotDetails]"
+                    :center="{ lat: spotDetails.Lat, lng: spotDetails.Long }"
+                    :userLatLng="userLatLng"
                 ></MapContainer>
             </div>
 
@@ -154,6 +156,7 @@ export default {
             'ownerInfoDetails',
             'selectedSpot',
             'isAvailable',
+            'userLatLng',
         ]),
     },
     methods: {
@@ -171,19 +174,20 @@ export default {
 hr {
     width: 600px;
 }
+
 .spot-image-container {
-    width: 100%;
-    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
     margin-bottom: 48px;
     margin-left: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
+    height: 400px;
     border-radius: var(--border-default);
-    overflow: hidden;
 
     @media only screen and (max-width: 1024px) {
-        margin-left: 0px;
+        margin-left: unset;
     }
 
     img {
@@ -200,6 +204,7 @@ hr {
         left: 50%;
         transform: translate(-50%, 0);
     }
+
     .card-position {
         position: absolute;
         top: 0;
@@ -212,6 +217,7 @@ hr {
 
 .rate-card-container-mobile {
     display: none;
+
     @media only screen and (max-width: 1024px) {
         display: block;
         min-height: 450px;
@@ -219,23 +225,23 @@ hr {
 }
 
 .spot-detail-main-description {
-    width: 600px;
     margin-left: 20px;
+    width: 600px;
 
     @media only screen and (max-width: 1024px) {
-        margin-left: 0px;
+        margin-left: unset;
     }
 
     .title-container {
         display: flex;
-        align-items: center;
         justify-content: space-between;
+        align-items: center;
 
         h1 {
+            margin-bottom: 13px;
             font-size: 32px;
             font-weight: 500;
-            margin-bottom: 13px;
-            color: black;
+            color: #000000;
         }
     }
 
@@ -246,19 +252,19 @@ hr {
 }
 
 .spot-detail-amenities {
+    margin-left: 20px;
     width: 600px;
     min-height: 158px;
-    margin-left: 20px;
 
     @media only screen and (max-width: 1024px) {
-        margin-left: 0px;
+        margin-left: unset;
     }
 
     h2 {
+        margin-bottom: 26px;
         font-size: 24px;
         font-weight: 500;
-        margin-bottom: 26px;
-        color: black;
+        color: #000000;
     }
 
     ul {
@@ -267,9 +273,9 @@ hr {
 
     ul li:before {
         content: '✓ ';
-        color: hsl(141, 53%, 53%);
-        font-weight: bold;
         font-size: 20px;
+        font-weight: bold;
+        color: #35ac5e;
     }
 }
 
@@ -277,28 +283,29 @@ hr {
     margin-left: 20px;
 
     @media only screen and (max-width: 1024px) {
-        margin-left: 0px;
+        margin-left: unset;
     }
 
     h2 {
+        margin-bottom: 26px;
         font-size: 24px;
         font-weight: 500;
-        margin-bottom: 26px;
-        color: black;
+        color: #000000;
     }
 
     .sdp-map {
-        border: 1px solid black;
+        border: 1px solid #000000;
     }
 }
 
 .spot-detail-things {
     margin-left: 20px;
+
     h2 {
+        margin-bottom: 26px;
         font-size: 24px;
         font-weight: 500;
-        margin-bottom: 26px;
-        color: black;
+        color: #000000;
     }
 
     p {
@@ -307,13 +314,14 @@ hr {
 }
 
 .spot-detail-owner {
-    margin-left: 20px;
     margin-top: 50px;
+    margin-left: 20px;
+
     h2 {
+        margin-bottom: 26px;
         font-size: 24px;
         font-weight: 500;
-        margin-bottom: 26px;
-        color: black;
+        color: #000000;
     }
 
     p {
@@ -332,8 +340,8 @@ hr {
     table,
     th,
     td {
-        border: 1px solid;
         padding: 5px;
+        border: 1px solid;
     }
 }
 </style>
