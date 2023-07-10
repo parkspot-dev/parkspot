@@ -65,7 +65,7 @@ export default {
     async mounted() {
         try {
             this.isLoading = true;
-            await this.srpCall();
+            await this.callSrp();
             this.reRender++;
             this.isLoading = false;
         } catch (errorMsg) {
@@ -80,7 +80,7 @@ export default {
             updateMapCenter: 'map/update-map-center',
         }),
         ...mapActions({
-            srpCall: 'map/srpCall',
+            callSrp: 'map/callSrp',
             updateCenterSrp: 'map/updateCenterSrp',
             updateSrpResults: 'map/updateSrpResults',
         }),

@@ -67,7 +67,7 @@ const actions = {
         });
     },
 
-    async srpCall({ state, commit }) {
+    async callSrp({ state, commit }) {
         const data = await mayaClient.get(
             `/search?lat=${state.mapCenter.lat}&long=${state.mapCenter.lng}&start=20201115t1250&end=20201115t1400`,
         );

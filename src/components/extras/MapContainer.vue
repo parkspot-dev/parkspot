@@ -111,7 +111,7 @@ export default {
                 // Create an info window to share between markers.
                 const spotInfoWindow = new InfoWindow({
                     content: contentString,
-                    ariaLabel: 'Uluru',
+                    ariaLabel: 'Uluru', // font used by google
                 });
                 const lat = spot.Lat;
                 const lng = spot.Long;

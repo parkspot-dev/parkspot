@@ -55,7 +55,6 @@ export default {
     data() {
         return {};
     },
-    computed: {},
     watch: {
         formSubmitted(newVal) {
             if (newVal) {
