@@ -2,8 +2,10 @@
     <section>
         <TemplateSrp
             :spots="filteredSrpResults"
+            :totals="totalPages"
             :currentPage="currentPage"
             :reRender="reRender"
+            @changed="onPageChange"
             @flyToSrp="flyToSrp"
             @details="spotDetails"
             @filter="onFilter"
@@ -13,7 +15,7 @@
 </template>
 <script>
 import TemplateSrp from '../components/templates/TemplateSrp.vue';
-import { mapState, mapActions, mapMutations } from 'vuex';
+import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import { getCoordinate } from '../includes/LatLng';
 import { PAGE_TITLE } from '@/constant/constant';
@@ -35,8 +37,6 @@ export default {
             reRender: 0,
             isLoading: false,
             currentPage: 1,
-            title: undefined,
-            PAGE_TITLE,
         };
     },
     watch: {
@@ -55,17 +55,19 @@ export default {
         },
     },
     computed: {
-        ...mapState('map', [
-            'srpResults',
-            'filteredSrpResults',
-            'selectedLocationLatLng',
-        ]),
+        ...mapGetters({
+            paginatedSrpResults: 'map/getPaginateSrpResults',
+            totalPages: 'map/getTotalPages',
+            LocDetails: 'map/getLocDetails',
+        }),
+        ...mapState('map', ['srpResults', 'filteredSrpResults']),
     },
 
     async mounted() {
         try {
             this.isLoading = true;
-            await this.callSrp();
+            await this.updateMapConfig(this.getLatLng()); // map center takes [lng, lat]
+            await this.srpCall();
             this.reRender++;
             this.isLoading = false;
         } catch (errorMsg) {
@@ -78,35 +80,47 @@ export default {
     methods: {
         ...mapMutations({
             updateMapCenter: 'map/update-map-center',
+            updateMapConfig: 'map/update-map-config',
+            updatePaginatedSrpData: 'map/update-paginated-srp-data',
         }),
         ...mapActions({
-            callSrp: 'map/callSrp',
+            srpCall: 'map/srpCall',
             updateCenterSrp: 'map/updateCenterSrp',
             updateSrpResults: 'map/updateSrpResults',
         }),
 
+        onPageChange(pageNum) {
+            this.isLoading = true;
+            this.updatePaginatedSrpData(pageNum);
+            this.updateCenterSrp();
+            this.currentPage = pageNum;
+            this.reRender++;
+            this.isLoading = false;
+        },
         // methods to get Lat and Long
+
         getLatLng() {
             const queryParam = new URLSearchParams(window.location.search);
             const coordinate = getCoordinate(queryParam.get('latlng'));
-            return { lat: coordinate[0], lng: coordinate[1] };
+            coordinate.reverse(); // map center takes [lng, lat] so reverse() used
+            return coordinate;
         },
 
         flyToSrp() {
             this.$nextTick(() => {
                 const coordinate = getCoordinate(
-                    [
-                        this.selectedLocationLatLng.lat,
-                        this.selectedLocationLatLng.lng,
-                    ].toString(),
-                ).toString();
+                    this.LocDetails.lnglat.toString(),
+                )
+                    .reverse()
+                    .toString();
+
                 this.$router.push({
                     name: 'srp',
                     query: {
                         latlng: coordinate,
                     },
                     params: {
-                        location: this.selectedLocationLatLng.formattedAddress,
+                        location: this.LocDetails.locDetails.locName,
                     },
                 });
             });

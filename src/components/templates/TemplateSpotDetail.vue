@@ -1,6 +1,6 @@
 <template>
     <BodyWrapper>
-        <div v-if="spotDetails">
+        <div>
             <!-- image gallery -->
             <div class="spot-image-container">
                 <ImageGallery></ImageGallery>
@@ -43,9 +43,7 @@
                 <h2>How to get here?</h2>
                 <MapContainer
                     class="sdp-map"
-                    :spotsList="[...spotDetails]"
-                    :center="{ lat: spotDetails.Lat, lng: spotDetails.Long }"
-                    :userLatLng="userLatLng"
+                    :spotsList="selectedSpot"
                 ></MapContainer>
             </div>
 
@@ -156,7 +154,6 @@ export default {
             'ownerInfoDetails',
             'selectedSpot',
             'isAvailable',
-            'userLatLng',
         ]),
     },
     methods: {
@@ -174,20 +171,19 @@ export default {
 hr {
     width: 600px;
 }
-
 .spot-image-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    margin-bottom: 48px;
-    margin-left: 20px;
     width: 100%;
     height: 400px;
+    margin-bottom: 48px;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: var(--border-default);
+    overflow: hidden;
 
     @media only screen and (max-width: 1024px) {
-        margin-left: unset;
+        margin-left: 0px;
     }
 
     img {
@@ -204,7 +200,6 @@ hr {
         left: 50%;
         transform: translate(-50%, 0);
     }
-
     .card-position {
         position: absolute;
         top: 0;
@@ -217,7 +212,6 @@ hr {
 
 .rate-card-container-mobile {
     display: none;
-
     @media only screen and (max-width: 1024px) {
         display: block;
         min-height: 450px;
@@ -225,23 +219,23 @@ hr {
 }
 
 .spot-detail-main-description {
-    margin-left: 20px;
     width: 600px;
+    margin-left: 20px;
 
     @media only screen and (max-width: 1024px) {
-        margin-left: unset;
+        margin-left: 0px;
     }
 
     .title-container {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
 
         h1 {
-            margin-bottom: 13px;
             font-size: 32px;
             font-weight: 500;
-            color: #000000;
+            margin-bottom: 13px;
+            color: black;
         }
     }
 
@@ -252,19 +246,19 @@ hr {
 }
 
 .spot-detail-amenities {
-    margin-left: 20px;
     width: 600px;
     min-height: 158px;
+    margin-left: 20px;
 
     @media only screen and (max-width: 1024px) {
-        margin-left: unset;
+        margin-left: 0px;
     }
 
     h2 {
-        margin-bottom: 26px;
         font-size: 24px;
         font-weight: 500;
-        color: #000000;
+        margin-bottom: 26px;
+        color: black;
     }
 
     ul {
@@ -273,9 +267,9 @@ hr {
 
     ul li:before {
         content: '✓ ';
-        font-size: 20px;
+        color: hsl(141, 53%, 53%);
         font-weight: bold;
-        color: #35ac5e;
+        font-size: 20px;
     }
 }
 
@@ -283,29 +277,28 @@ hr {
     margin-left: 20px;
 
     @media only screen and (max-width: 1024px) {
-        margin-left: unset;
+        margin-left: 0px;
     }
 
     h2 {
-        margin-bottom: 26px;
         font-size: 24px;
         font-weight: 500;
-        color: #000000;
+        margin-bottom: 26px;
+        color: black;
     }
 
     .sdp-map {
-        border: 1px solid #000000;
+        border: 1px solid black;
     }
 }
 
 .spot-detail-things {
     margin-left: 20px;
-
     h2 {
-        margin-bottom: 26px;
         font-size: 24px;
         font-weight: 500;
-        color: #000000;
+        margin-bottom: 26px;
+        color: black;
     }
 
     p {
@@ -314,14 +307,13 @@ hr {
 }
 
 .spot-detail-owner {
-    margin-top: 50px;
     margin-left: 20px;
-
+    margin-top: 50px;
     h2 {
-        margin-bottom: 26px;
         font-size: 24px;
         font-weight: 500;
-        color: #000000;
+        margin-bottom: 26px;
+        color: black;
     }
 
     p {
@@ -340,8 +332,8 @@ hr {
     table,
     th,
     td {
-        padding: 5px;
         border: 1px solid;
+        padding: 5px;
     }
 }
 </style>

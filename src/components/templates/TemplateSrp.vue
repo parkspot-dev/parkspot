@@ -51,15 +51,15 @@
                 class="map-container"
                 :spotsList="spots"
                 :key="reRender"
-                :center="mapCenter"
-                :userLatLng="mapCenter"
             ></MapContainer>
         </div>
     </div>
 </template>
 
 <script>
+// import PaginationBody from '../extras/PaginationBody.vue';
 import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
+// import AtomRadioButton from '../atoms/AtomRadioButton.vue';
 import AtomCheckbox from '../atoms/AtomCheckbox.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import SearchInput from '../extras/SearchInput.vue';
@@ -77,10 +77,13 @@ export default {
         SearchInput,
         AtomCheckbox,
     },
-    emits: ['flyToSrp', 'details'],
+    emits: ['changed', 'flyToSrp', 'details'],
     props: {
         spots: {
             type: Array,
+        },
+        totals: {
+            type: Number,
         },
         reRender: {
             type: Number,
@@ -96,20 +99,23 @@ export default {
         };
     },
     computed: {
-        ...mapState('map', ['selectedLocation', 'mapCenter']),
+        ...mapState('map', ['selectedLocation']),
     },
     methods: {
+        onPageChange(page) {
+            this.$emit('changed', page);
+        },
         details(spotID) {
             this.$emit('details', spotID);
+        },
+        onChange() {
+            this.$emit('flyToSrp');
         },
         activateFilter() {
             this.showFilterCheckbox = !this.showFilterCheckbox;
         },
         onOutsideFilter() {
             this.showFilterCheckbox = false;
-        },
-        onChange() {
-            this.$emit('flyToSrp');
         },
         handleFilter(filterOptions) {
             this.$emit('filter', filterOptions);
