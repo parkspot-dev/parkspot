@@ -1,5 +1,6 @@
 <template>
-    <b-button
+    <b-button 
+        class="btn-Container"
         @click="onClick"
         :icon-left="left"
         :type="type"
@@ -57,4 +58,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.btn-Container.button.is-warning {
+    background-color: var(--primary-color);
+}
+</style>

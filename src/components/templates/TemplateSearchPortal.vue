@@ -653,6 +653,10 @@ $portal-font-size: 13px;
         }
     }
 
+    .status-column .status-part .tag:not(body).is-warning {
+        background-color: var(--primary-color);
+    }
+
     .lat-lng-column {
         font-size: $portal-font-size;
         .lat-lng-link {
