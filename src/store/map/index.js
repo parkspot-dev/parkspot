@@ -1,37 +1,138 @@
-import { mayaClient } from '@/services/api';
+import { mapBoxClient, mayaClient } from '@/services/api';
+import _ from 'lodash';
 
 const state = {
-    suggestionLocations: [],
-    selectedLocation: null,
-    selectedLocationLatLng: null,
-    mapCenter: { lat: 17.471356, lng: 78.3344256 }, //  default bengaluru lat, lng.
+    locations: [],
+    selectedLocation: {
+        city: '',
+        state: '',
+        country: '',
+        locName: '',
+    },
+    mapConfig: {
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [77.5946, 12.9716], //  default bengaluru lat, lng.
+        zoom: 11,
+    },
+    center: null,
+    totalPages: 1, // default page number
     srpResults: [],
+    paginateSrpResults: [],
     recentSearch: [],
     recentID: 0,
     filteredSrpResults: [],
 };
 
-const getters = {};
+const getters = {
+    getMapConfig(state) {
+        return state.mapConfig;
+    },
+
+    getLocationName(state) {
+        return state.locations;
+    },
+
+    getNewMapCenter(state) {
+        return state.center;
+    },
+
+    getLocDetails(state) {
+        return {
+            locDetails: state.selectedLocation,
+            lnglat: state.center,
+        };
+    },
+
+    getSrpResults(state) {
+        return state.srpResults;
+    },
+
+    getPaginateSrpResults(state) {
+        return state.paginateSrpResults;
+    },
+
+    getTotalPages() {
+        return state.totalPages;
+    },
+};
 
 const mutations = {
-    'update-suggestion-location'(state, suggestionLocations) {
-        state.suggestionLocations = suggestionLocations;
+    'update-location'(state, locations) {
+        state.locations = [...state.recentSearch, ...locations];
     },
 
-    'update-selected-location'(state, selectedLocation) {
-        state.selectedLocation = selectedLocation;
+    'update-selected-location'(state, location) {
+        state.selectedLocation.locName = location.place_name;
+
+        const recentSearchObj = {
+            fromLS: true,
+            ...location,
+        };
+
+        const recentSearches = [...state.recentSearch];
+
+        const uniqueRecentSearches = recentSearches.filter((recentSearch) => {
+            if (recentSearch.id === recentSearchObj.id) {
+                return false;
+            }
+            return true;
+        });
+
+        // performing LIFO in size of 3.
+        if (uniqueRecentSearches.length >= 3) {
+            uniqueRecentSearches.pop();
+            uniqueRecentSearches.unshift(recentSearchObj);
+        } else {
+            uniqueRecentSearches.unshift(recentSearchObj);
+        }
+
+        state.recentSearch = [...uniqueRecentSearches];
+        // JSON used to store array as string in LS
+        localStorage.setItem('recent', JSON.stringify(state.recentSearch));
     },
 
-    'update-selected-location-latlng'(state, selectedLocationLatLng) {
-        state.selectedLocationLatLng = selectedLocationLatLng;
+    'update-selected-city'(state, city) {
+        state.selectedLocation.city = city.text || '';
     },
 
-    'update-map-center'(state, center) {
-        state.mapCenter = center;
+    // region is same as state like jharkhand, karnataka etc.
+    'update-selected-state'(state, region) {
+        state.selectedLocation.state = region.text || '';
+    },
+
+    'update-selected-country'(state, country) {
+        state.selectedLocation.country = country.text || '';
+    },
+
+    'update-map-config'(state, center) {
+        state.mapConfig.center = center;
+        state.center = center;
+    },
+
+    'update-total-pages'(state, data) {
+        state.totalPages = data;
     },
 
     'update-srp-results'(state, srpResults) {
         state.srpResults = srpResults;
+    },
+
+    'update-map-center'(state, data) {
+        state.center = data;
+    },
+
+    'update-paginated-srp-data'(state, currPageNum) {
+        state.paginateSrpResults = [];
+
+        // loop to get list of srp result in current page
+        for (
+            let i = (currPageNum - 1) * 3;
+            i < currPageNum * 3 && i < state.srpResults.length;
+            i++
+        ) {
+            state.paginateSrpResults.push(state.srpResults[i]);
+        }
     },
 
     'update-filtered-srp-results'(state, srpResults) {
@@ -40,39 +141,23 @@ const mutations = {
 };
 
 const actions = {
-    async getSelectedLocationLatLng({ commit, state }, selectedLocation) {
-        const lat = selectedLocation.geometry.location.lat();
-        const lng = selectedLocation.geometry.location.lng();
-        const formattedAddress = selectedLocation.formatted_address;
-
-        commit('update-selected-location-latlng', {
-            lat,
-            lng,
-            formattedAddress,
-        });
-        commit('update-map-center', { lat, lng });
+    async searchLocation({ commit }, query) {
+        const token =
+            'pk.eyJ1IjoiaWFtZmlhc2NvIiwiYSI6ImNrOWZiankzdjA5d2kzbWp3NGNzNmIwaHAifQ.E2UwYdvpjc6yNoCmBjfTaQ';
+        const url = `/geocoding/v5/mapbox.places/${query}.json?access_token=${token}&proximity=77.4977,12.9716`;
+        const responseData = await mapBoxClient.get(url);
+        const searchResult = _.get(responseData, 'features', []);
+        commit('update-location', searchResult);
     },
 
-    updateInitialSelectedLatLng({ commit, state }, selectedLocation) {
-        const formattedAddress = selectedLocation.formatted_address;
-
-        commit('update-selected-location-latlng', {
-            lat: selectedLocation.geometry.location.lat,
-            lng: selectedLocation.geometry.location.lng,
-            formattedAddress,
-        });
-        commit('update-map-center', {
-            lat: selectedLocation.geometry.location.lat,
-            lng: selectedLocation.geometry.location.lng,
-        });
-    },
-
-    async callSrp({ state, commit }) {
+    async srpCall({ state, commit }) {
         const data = await mayaClient.get(
-            `/search?lat=${state.mapCenter.lat}&long=${state.mapCenter.lng}&start=20201115t1250&end=20201115t1400`,
+            `/search?lat=${state.center[1]}&long=${state.center[0]}&start=20201115t1250&end=20201115t1400`,
         );
         if (data && Object.prototype.hasOwnProperty.call(data, 'Sites')) {
             commit('update-srp-results', data.Sites);
+            commit('update-total-pages', data.Sites.length);
+            commit('update-paginated-srp-data', 1); // paginated srp result stored
             state.srpResults = data.Sites;
             commit('update-filtered-srp-results', state.srpResults);
         } else {
@@ -80,8 +165,21 @@ const actions = {
         }
     },
 
+    updateCenterSrp({ state, commit }) {
+        const ys = state.paginateSrpResults.reduce((long, site) => {
+            return long + site.Long;
+        }, 0);
+        const xs = state.paginateSrpResults.reduce((a, site) => {
+            return a + site.Lat;
+        }, 0);
+        commit('update-map-config', [
+            ys / state.paginateSrpResults.length,
+            xs / state.paginateSrpResults.length,
+        ]);
+    },
+
     getFromRecent({ state }) {
-        state.recentSearch = JSON.parse(localStorage.getItem('recentNew'));
+        state.recentSearch = JSON.parse(localStorage.getItem('recent'));
         if (state.recentSearch === null) {
             return (state.recentSearch = []);
         }
@@ -105,14 +203,6 @@ const actions = {
         }
 
         commit('update-filtered-srp-results', filteredSrpResults);
-    },
-
-    updateMapCenter({ commit }, mapCenter) {
-        commit('update-map-center', mapCenter);
-    },
-
-    addSuggestionLocations({ commit }, suggestionLocations) {
-        commit('update-suggestion-location', suggestionLocations);
     },
 };
 

@@ -1,51 +1,51 @@
 <template>
     <section>
-        <div class="search-box-controller">
-            <b-field :label="label">
-                <b-autocomplete
-                    v-model="searchWord"
-                    :data="filteredDataArray"
-                    ref="autocomplete"
-                    placeholder="e.g. Bengaluru"
-                    field="placeName"
-                    icon="magnify"
-                    :loading="isFetching"
-                    @typing="getAsyncData"
-                    @select="onSelect"
-                    keep-first
-                    :open-on-focus="true"
-                    @click.native="displayRecentSearches()"
-                >
-                    <template slot-scope="props">
-                        <div class="media">
-                            <div
-                                class="media-left custom-color"
-                                v-show="props.option.fromLS"
-                            >
-                                <AtomIcon :icon="'history'"> </AtomIcon>
-                            </div>
-
-                            <div
-                                class="media-content"
-                                :class="{
-                                    'custom-color': props.option.fromLS,
-                                }"
-                            >
-                                {{ props.option.placeName }}
-                            </div>
+        <b-field :label="label">
+            <b-autocomplete
+                v-model="search"
+                :data="filteredLocationName"
+                ref="autocomplete"
+                placeholder="e.g. Bengaluru"
+                field="place_name"
+                icon="magnify"
+                :loading="isFetching"
+                @typing="getAsyncData"
+                @select="onSelect"
+                keep-first
+                :open-on-focus="true"
+                @click.native="addRecentSearches()"
+            >
+                <template slot-scope="props">
+                    <div class="media">
+                        <!-- fromLS should be renamed -->
+                        <div
+                            class="media-left custom-color"
+                            v-show="props.option.fromLS"
+                        >
+                            <AtomIcon :icon="'history'"> </AtomIcon>
                         </div>
-                    </template>
-                    <template #empty>
-                        {{ searchWord || 'No Recent Searches' }}
-                    </template>
-                </b-autocomplete>
-            </b-field>
-        </div>
+
+                        <div
+                            class="media-content"
+                            :class="{
+                                'custom-color': props.option.fromLS,
+                            }"
+                        >
+                            {{ props.option.place_name }}
+                        </div>
+                    </div>
+                </template>
+                <template #empty>
+                    {{ search || 'No Recent Searches' }}
+                </template>
+            </b-autocomplete>
+        </b-field>
     </section>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import _ from 'lodash';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 import AtomIcon from '../atoms/AtomIcon.vue';
 
 export default {
@@ -64,189 +64,83 @@ export default {
     emits: ['changed'],
     data() {
         return {
-            searchWord: '',
-            mapOptions: {
-                fields: ['place_id', 'geometry', 'name', 'formatted_address'],
-                strictBounds: false,
-                componentRestrictions: {
-                    country: 'in',
-                }, // 2-letters code
-                locationBias: 'IP_BIAS',
-                types: ['address'],
-            },
+            selected: null,
             isFetching: false,
+            search: '',
         };
     },
     computed: {
-        ...mapState('map', ['suggestionLocations']),
-        filteredDataArray() {
-            return this.suggestionLocations.filter((option) => {
-                return option.placeName
-                    ? option.placeName
-                          .toString()
-                          .toLowerCase()
-                          .indexOf(this.searchWord.toLowerCase()) >= 0
-                    : option.placeName;
-            });
-        },
-    },
-    methods: {
-        ...mapActions('map', [
-            'getSelectedLocationLatLng',
-            'updateInitialSelectedLatLng',
-            'addSuggestionLocations',
-        ]),
-
-        async displayRecentSearches() {
-            let suggestions = [];
-            this.getSearchHistory((localSearchHistory) => {
-                suggestions = localSearchHistory;
-            });
-            this.addSuggestionLocations(suggestions);
-        },
-
-        async getAsyncData() {
-            // import map libraries
-            await google.maps.importLibrary('maps');
-            const autocompleteService =
-                new google.maps.places.AutocompleteService();
-
-            // Add a listener for when the input field is focused
-            this.getSearchHistory((results) => {
-                autocompleteService.getPlacePredictions(
-                    {
-                        ...this.mapOptions,
-                        sessionToken:
-                            new google.maps.places.AutocompleteSessionToken(),
-                        input: this.searchWord,
-                    },
-                    (predictions, status) => {
-                        if (
-                            status === google.maps.places.PlacesServiceStatus.OK
-                        ) {
-                            const searchHistory = results;
-
-                            const autocompletePredictions = predictions.map(
-                                (prediction) => {
-                                    return {
-                                        placeName: prediction.description,
-                                        placeId: prediction.place_id,
-                                    };
-                                },
-                            );
-
-                            const suggestions = Array.from(
-                                new Set([
-                                    ...searchHistory,
-                                    ...autocompletePredictions,
-                                ]),
-                            );
-
-                            const suggestionsSet = new Set(
-                                suggestions.map(JSON.stringify),
-                            );
-                            const uniqueSuggestions = Array.from(
-                                suggestionsSet,
-                            ).map(JSON.parse);
-                            this.addSuggestionLocations(uniqueSuggestions);
-                        }
-                    },
+        ...mapGetters({
+            LocationName: 'map/getLocationName',
+        }),
+        filteredLocationName() {
+            return this.LocationName.filter((option) => {
+                return (
+                    option.place_name
+                        .toString()
+                        .toLowerCase()
+                        .indexOf(this.search.toLowerCase()) >= 0
                 );
             });
         },
+    },
+    watch: {
+        selected(location) {
+            this.updateMapConfig([location.center[0], location.center[1]]); // needed for recentering of map.
+            this.updateSelectedLocation(location); // get the actual value of selected option.
+            this.updateSelectedCity(location.context[0]); // update selected city
+            this.updateSelectedState(location.context[1]); // update selected state
+            this.updateSelectedCountry(location.context[2]); // update selected country
+        },
+    },
+    methods: {
+        ...mapMutations({
+            updateSelectedLocation: 'map/update-selected-location',
+            updateSelectedCity: 'map/update-selected-city',
+            updateSelectedState: 'map/update-selected-state',
+            updateSelectedCountry: 'map/update-selected-country',
+            updateMapConfig: 'map/update-map-config',
+            updateRecentLocation: 'map/update-recent-location',
+        }),
+        ...mapActions({
+            searchLocation: 'map/searchLocation',
+            getFromRecent: 'map/getFromRecent',
+        }),
 
-        async onSelect(selectedLocation) {
-            await google.maps.importLibrary('maps');
-            this.saveSearchHistory({ ...selectedLocation, fromLS: true });
-            const geocoder = new google.maps.Geocoder();
-            const res = await geocoder.geocode({
-                placeId: selectedLocation.placeId,
-            });
-            this.getSelectedLocationLatLng(res.results[0]);
+        getAsyncData: _.debounce(async function (name) {
+            /* eslint-disable */
+            /*  'this' is working as expected here but
+                eslint is showing error so it is disabled
+                fot this function   */
+            this.isFetching = true;
+            try {
+                await this.searchLocation(name);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isFetching = false;
+            }
+        }, 500),
+
+        async addRecentSearches() {
+            const recentSearches = await this.getFromRecent();
+            if (this.LocationName.length === 0) {
+                for (const recentSearch of recentSearches) {
+                    this.LocationName.push(recentSearch);
+                }
+            }
+        },
+
+        onSelect(option) {
+            this.selected = option;
             this.$emit('changed');
-        },
-
-        saveSearchHistory(selectedLocation) {
-            // Save the formatted address to local storage or a database
-            let searchHistory = [];
-            this.getSearchHistory((localSearchHistory) => {
-                searchHistory = localSearchHistory;
-            });
-            searchHistory.unshift(selectedLocation); // add in the top , so the top will always be latest
-            const newSearchHistory = searchHistory.slice(0, 3); // only upto 3
-            const searchHistorySet = new Set(
-                newSearchHistory.map(JSON.stringify),
-            );
-            const uniqueSearchHistory = Array.from(searchHistorySet).map(
-                JSON.parse,
-            );
-            localStorage.setItem(
-                'searchHistory',
-                JSON.stringify(uniqueSearchHistory),
-            );
-        },
-
-        getSearchHistory(callback) {
-            // Retrieve the search history from local storage or a database
-            const searchHistory = localStorage.getItem('searchHistory');
-            callback(searchHistory ? JSON.parse(searchHistory) : []);
         },
     },
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .custom-color {
     color: var(--grey-shade);
-}
-
-.search-box-controller {
-    box-sizing: border-box;
-    clear: both;
-    font-size: 1rem;
-    position: relative;
-    text-align: inherit;
-
-    .search-box {
-        width: 100%;
-        border: 1px solid #dbdbdb;
-        height: 2.5em;
-        padding-bottom: calc(0.5em - 1px);
-        padding-left: calc(0.75em - 1px);
-        padding-right: calc(0.75em - 1px);
-        padding-top: calc(0.5em - 1px);
-        font-size: 1rem;
-        align-items: center;
-        display: inline-flex;
-        position: relative;
-        padding-left: 2.5em;
-    }
-
-    .search-icon {
-        color: #dbdbdb;
-        height: 1.85em;
-        pointer-events: none;
-        position: absolute;
-        top: 0;
-        width: 1.75em;
-        z-index: 4;
-        left: 0;
-        font-size: 24px;
-    }
-}
-
-::placeholder {
-    color: #dbdbdb;
-    opacity: 1; /* Firefox */
-}
-
-:-ms-input-placeholder {
-    /* Internet Explorer 10-11 */
-    color: #dbdbdb;
-}
-
-::-ms-input-placeholder {
-    /* Microsoft Edge */
-    color: #dbdbdb;
 }
 </style>

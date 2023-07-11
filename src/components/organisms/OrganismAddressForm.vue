@@ -31,7 +31,7 @@ import SearchInput from '../extras/SearchInput.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
-import { mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 export default {
     name: 'OrganismAddressForm',
     components: {
@@ -54,6 +54,11 @@ export default {
     emits: ['formValidate'],
     data() {
         return {};
+    },
+    computed: {
+        ...mapGetters({
+            locDetails: 'map/getLocDetails',
+        }),
     },
     watch: {
         formSubmitted(newVal) {

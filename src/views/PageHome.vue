@@ -1,6 +1,6 @@
 <template>
     <div id="Home">
-        <TemplateHomeBanner></TemplateHomeBanner>
+        <TemplateHomeBanner @flyToSrp="flyToSrp"></TemplateHomeBanner>
         <TemplateFeatureHome></TemplateFeatureHome>
         <TemplateOurProducts @arrowBtn="onArrowBtn"></TemplateOurProducts>
         <PageAbout></PageAbout>

@@ -68,8 +68,8 @@ export default {
             'updateActiveTab',
             'updateSOLatLngInput',
         ]),
-        ...mapMutations('sdp', {
-            updateUserLatLng: 'update-user-lat-lng',
+        ...mapMutations('map', {
+            updateManConfig: 'update-map-config',
         }),
         getUserLocation() {
             const geolocation = navigator.geolocation;
@@ -85,8 +85,8 @@ export default {
         onGeoSuccess(position) {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
-            const location = { lat, lng };
-            this.updateUserLatLng(location);
+            const location = [lng, lat];
+            this.updateManConfig(location);
         },
         onGeoError(error) {
             let detailError;

@@ -32,9 +32,13 @@ export default {
         };
     },
     computed: {
-        ...mapState('sdp', ['images', 'thumbnail', 'spotDetails']),
+        ...mapState('sdp', {
+            images: (state) => state.images,
+            thumbnail: (state) => state.thumbnail,
+            selectedSpot: (state) => state.selectedSpot,
+        }),
         locationName() {
-            return this.spotDetails.Name;
+            return this.selectedSpot[0]['Name'];
         },
     },
     mounted() {
