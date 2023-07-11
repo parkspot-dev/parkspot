@@ -13,7 +13,7 @@
 </template>
 <script>
 import TemplateSrp from '../components/templates/TemplateSrp.vue';
-import { mapState, mapActions, mapMutations } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import { getCoordinate } from '../includes/LatLng';
 import { PAGE_TITLE } from '@/constant/constant';
@@ -65,6 +65,7 @@ export default {
     async mounted() {
         try {
             this.isLoading = true;
+            this.updateMapCenter(this.getLatLng());
             await this.callSrp();
             this.reRender++;
             this.isLoading = false;
@@ -76,14 +77,11 @@ export default {
         }
     },
     methods: {
-        ...mapMutations({
-            updateMapCenter: 'map/update-map-center',
-        }),
-        ...mapActions({
-            callSrp: 'map/callSrp',
-            updateCenterSrp: 'map/updateCenterSrp',
-            updateSrpResults: 'map/updateSrpResults',
-        }),
+        ...mapActions('map', [
+            'callSrp',
+            'updateSrpResults',
+            'updateMapCenter',
+        ]),
 
         // methods to get Lat and Long
         getLatLng() {
