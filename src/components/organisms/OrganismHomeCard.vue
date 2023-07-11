@@ -164,7 +164,7 @@ export default {
             margin-top: 24px;
             margin-bottom: 32px;
             font-size: 16px;
-            color: #8c8c8c;
+            color: var(--parkspot-muted-black);
             line-height: 19px;
 
             @media only screen and (max-width: 1024px) {
@@ -174,8 +174,8 @@ export default {
 
         .learn-more {
             font-size: 14px;
-            border-bottom: 1px solid #8c8c8c;
-            color: #8c8c8c;
+            border-bottom: 1px solid var(--parkspot-muted-black);
+            color: var(--parkspot-muted-black);
             line-height: 19px;
             cursor: pointer;
         }
