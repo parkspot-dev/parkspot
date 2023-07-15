@@ -40,11 +40,9 @@ export default {
         }),
     },
     async mounted() {
-        console.log(this.$route.params);
         this.spotId = this.$route.params.spotId;
         if (this.spotId.includes('#')) {
             this.spotId = encodeURIComponent(this.spotId);
-            console.log(this.spotId);
         }
         if (this.$route.name === 'adminOnly-spot-detail') {
             this.isAdmin = true;
