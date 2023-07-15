@@ -91,9 +91,7 @@
                                 <td>KYCStatus</td>
                                 <td>
                                     {{
-                                        getKYCStatusLabel(
-                                            ownerInfoDetails.KYCStatus,
-                                        )
+                                        getKYCStatus(ownerInfoDetails.KYCStatus)
                                     }}
                                 </td>
                             </tr>
@@ -179,7 +177,7 @@ export default {
         changeAvailability(availableCount) {
             this.$emit('changeAvailability', availableCount);
         },
-        getKYCStatusLabel(kycStatus) {
+        getKYCStatus(kycStatus) {
             return getKYCStatusLabel(kycStatus);
         },
     },
