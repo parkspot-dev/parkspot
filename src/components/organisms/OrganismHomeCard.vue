@@ -76,6 +76,7 @@ export default {
                     this.selectedLocationLatLng.lng,
                 ].toString(),
             ).toString();
+            console.log(coordinate);
             this.$router.push({
                 name: 'srp',
                 query: {

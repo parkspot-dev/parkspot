@@ -35,6 +35,7 @@ export default {
     },
     methods: {
         async initMap() {
+            console.log('initmap');
             const { Map, InfoWindow } = await google.maps.importLibrary('maps');
             const { AdvancedMarkerElement, PinElement } =
                 await google.maps.importLibrary('marker');
