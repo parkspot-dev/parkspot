@@ -1,6 +1,6 @@
 <template>
     <b-button 
-        class="my-button"
+        class="btn-wrapper"
         @click="onClick"
         :icon-left="left"
         :type="type"
@@ -19,7 +19,7 @@ export default {
     props: {
         /**
          * Type of Button
-         * @values , is-danger
+         * @values is-danger
          */
         type: {
             type: String,
@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style>
-.my-button.btn-color {
+.btn-wrapper.btn-color {
     background-color: var(--primary-color);
 }
 </style>
