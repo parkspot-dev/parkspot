@@ -89,7 +89,19 @@
                             </tr>
                             <tr v-if="ownerInfoDetails.KYCStatus">
                                 <td>KYCStatus</td>
-                                <td>{{ ownerInfoDetails.KYCStatus }}</td>
+                                <td>
+                                    {{
+                                        getKYCStatusLabel(
+                                            ownerInfoDetails.KYCStatus,
+                                        )
+                                    }}
+                                </td>
+                            </tr>
+                            <tr v-if="spotDetails.UpdatedAt">
+                                <td>Updated At</td>
+                                <td>
+                                    {{ spotDetails.UpdatedAt.split('T')[0] }}
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -132,6 +144,7 @@ import MapContainer from '@/components/extras/MapContainer.vue';
 import ImageGallery from '../organisms/OrganismImageGallery.vue';
 import InfographicSteps from '../molecules/MoleculeInfographicSteps.vue';
 import AtomButton from '@/components/atoms/AtomButton.vue';
+import { getKYCStatusLabel } from '@/constant/enums';
 import { mapState } from 'vuex';
 
 export default {
@@ -165,6 +178,9 @@ export default {
         },
         changeAvailability(availableCount) {
             this.$emit('changeAvailability', availableCount);
+        },
+        getKYCStatusLabel(kycStatus) {
+            return getKYCStatusLabel(kycStatus);
         },
     },
 };
