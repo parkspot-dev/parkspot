@@ -87,7 +87,7 @@ export default {
         getLatLng() {
             const queryParam = new URLSearchParams(window.location.search);
             const coordinate = getCoordinate(queryParam.get('latlng'));
-            return { lat: coordinate[0], lng: coordinate[1] };
+            return { lat: Number(coordinate[0]), lng: Number(coordinate[1]) };
         },
 
         flyToSrp() {
