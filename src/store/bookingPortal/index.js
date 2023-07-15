@@ -4,6 +4,7 @@ const state = {
     bookingDetails: Object,
     hasError: false,
     errorMessage: String,
+    paymentDetails: null,
 };
 
 const getters = {};
@@ -17,6 +18,9 @@ const mutations = {
         state.hasError = true;
         state.errorMessage = errorMessage;
     },
+    'set-payment-details'(state, paymentDetails) {
+        state.paymentDetails = paymentDetails;
+    },
 };
 
 const actions = {
@@ -26,6 +30,19 @@ const actions = {
         );
         if (res.Booking) {
             commit('update-booking', res);
+        } else if (res.DisplayMsg) {
+            commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
+        }
+    },
+    async getPaymentLink({ commit }, reqBody) {
+        const res = await mayaClient.post(
+            '/payment/generate-payment-link',
+            reqBody,
+        );
+        if (res) {
+            console.log(res);
+
+            commit('set-payment-details', res);
         } else if (res.DisplayMsg) {
             commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
         }

@@ -3,13 +3,16 @@
         <!--- Search Bar-->
         <div class="search-control">
             <p></p>
-            <molecule-search-box
+            <MoleculeSearchBox
                 placeholder="Booking ID"
                 @on-search="getBookingDetails"
-            ></molecule-search-box>
+            ></MoleculeSearchBox>
         </div>
-        <p v-if="hasError"> {{ errorMessage }}</p>
-        <template-booking-portal v-else></template-booking-portal>
+        <p v-if="hasError">{{ errorMessage }}</p>
+        <TemplateBookingPortal
+            v-else
+            @payment-link="getPaymentLink"
+        ></TemplateBookingPortal>
     </div>
 </template>
 
@@ -29,7 +32,7 @@ export default {
         ...mapState('bookingPortal', ['hasError', 'errorMessage']),
     },
     methods: {
-        ...mapActions('bookingPortal', ['getBookingDetails']),
+        ...mapActions('bookingPortal', ['getBookingDetails', 'getPaymentLink']),
     },
 };
 </script>

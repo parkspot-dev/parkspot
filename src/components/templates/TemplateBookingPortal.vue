@@ -1,80 +1,144 @@
 <template>
     <div>
+        <!-- payment link button -->
+        <div class="payment-link-btn-wrapper">
+            <AtomButton @click.native="onClick">
+                Generate Payment Link
+            </AtomButton>
+        </div>
+        <div class="payment-detail-container" v-if="paymentDetails">
+            {{ paymentDetails }}
+        </div>
         <!---  Booking details-->
-        <h3 class="sub-heading">Booking Details</h3>
-        <div class="columns">
-            <span class="column is-2">
-                <strong> Booking ID: </strong> {{ bookingDetails.Booking.ID }}
-            </span>
+        <div class="booking-card">
+            <h3 class="sub-heading">Booking Details</h3>
+            <div class="card-body">
+                <div class="field-col">
+                    <p>
+                        <strong> Booking ID: </strong>
+                    </p>
+                    <p>
+                        <strong> Site ID:</strong>
+                    </p>
+                </div>
+                <div class="value-col">
+                    <p>
+                        {{ bookingDetails.Booking.ID }}
+                    </p>
+                    <p>
+                        {{ bookingDetails.Booking.SiteID }}
+                    </p>
+                </div>
 
-            <span class="column is-2">
-                <strong> Site ID:</strong> {{ bookingDetails.Booking.SiteID }}
-            </span>
+                <span class="field-col">
+                    <p>
+                        <strong> Created At:</strong>
+                    </p>
 
-            <span class="column is-2">
-                <strong> Created At:</strong>
-                {{ bookingDetails.Booking.CreatedAt.split('T')[0] }}
-            </span>
-
-            <span class="column is-2">
-                <strong> Started At:</strong>
-                {{ bookingDetails.Booking.StartTime.split('T')[0] }}
-            </span>
+                    <p>
+                        <strong> Started At:</strong>
+                    </p>
+                </span>
+                <span class="value-col">
+                    <p>
+                        {{ bookingDetails.Booking.CreatedAt.split('T')[0] }}
+                    </p>
+                    <p>
+                        {{ bookingDetails.Booking.StartTime.split('T')[0] }}
+                    </p>
+                </span>
+            </div>
         </div>
-        <hr />
         <!-- VO details-->
-        <h3 class="sub-heading">VO Details</h3>
-        <div class="columns">
-            <span class="column is-2">
-                <strong> Full Name: </strong>
-                {{ bookingDetails.Booking.Name }}
-            </span>
+        <div class="booking-card">
+            <h3 class="sub-heading">VO Details</h3>
+            <div class="card-body">
+                <div class="field-col">
+                    <p>
+                        <strong> UserName: </strong>
+                    </p>
+                    <p>
+                        <strong> Full Name: </strong>
+                    </p>
+                    <p>
+                        <strong> Mobile: </strong>
+                    </p>
+                </div>
 
-            <span class="column is-2">
-                <strong> Mobile: </strong>{{ bookingDetails.Booking.Mobile }}
-            </span>
+                <div class="value-col">
+                    <p>
+                        {{ bookingDetails.Booking.UserName }}
+                    </p>
+                    <p>
+                        {{ bookingDetails.Booking.Name }}
+                    </p>
+                    <p>
+                        {{ bookingDetails.Booking.Mobile }}
+                    </p>
+                </div>
 
-            <span class="column is-2">
-                <strong> Vehicle Number:</strong>
-                {{ bookingDetails.Booking.VehicleNumber }}
-            </span>
+                <div class="field-col">
+                    <p>
+                        <strong> Vehicle Number:</strong>
+                    </p>
+                    <p>
+                        <strong> Email: </strong>
+                    </p>
+                </div>
 
-            <span class="column is-3">
-                <strong> UserName: </strong>
-                {{ bookingDetails.Booking.UserName }}
-            </span>
-
-            <span class="column is-3">
-                <strong> Email: </strong>{{ bookingDetails.Booking.EmailID }}
-            </span>
+                <div class="value-col">
+                    <p>
+                        {{ bookingDetails.Booking.VehicleNumber }}
+                    </p>
+                    <p>
+                        {{ bookingDetails.Booking.EmailID }}
+                    </p>
+                </div>
+            </div>
         </div>
-        <hr />
+
         <!-- rent details-->
-        <h3 class="sub-heading">Rent Details</h3>
-        <div class="columns">
-            <span class="column is-2">
-                <strong> Rent: </strong>{{ bookingDetails.Booking.Rent }}
-            </span>
+        <div class="booking-card">
+            <h3 class="sub-heading">Rent Details</h3>
+            <div class="card-body">
+                <div class="field-col">
+                    <p>
+                        <strong> Rent: </strong>
+                    </p>
+                    <p>
+                        <strong> Base Amount: </strong>
+                    </p>
+                    <p><strong> Priodicity: </strong></p>
+                </div>
+                <div class="value-col">
+                    <p>
+                        {{ bookingDetails.Booking.Rent }}
+                    </p>
+                    <p>
+                        {{ bookingDetails.Booking.BaseAmount }}
+                    </p>
+                    <p>
+                        {{ bookingDetails.Booking.PaymentPeriod }}
+                    </p>
+                </div>
 
-            <span class="column is-2">
-                <strong> Base Amount: </strong>
-                {{ bookingDetails.Booking.BaseAmount }}
-            </span>
-
-            <span class="column is-2">
-                <strong> ConvenienceFee: </strong
-                >{{ bookingDetails.Booking.ConvenienceFee }}
-            </span>
-
-            <span class="column is-2">
-                <strong> Rent Cycle: </strong>
-                {{ bookingDetails.Booking.RentCycle }}
-            </span>
-
-            <span class="column is-2">
-                <strong> Priodicity: </strong>
-                {{ bookingDetails.Booking.PaymentPeriod }}
-            </span>
+                <div class="field-col">
+                    <p>
+                        <strong> ConvenienceFee: </strong>
+                    </p>
+                    <p>
+                        <strong> Rent Cycle: </strong>
+                    </p>
+                </div>
+                <div class="value-col">
+                    <p>
+                        {{ bookingDetails.Booking.ConvenienceFee }}
+                    </p>
+                    <p>
+                        {{ bookingDetails.Booking.RentCycle }}
+                    </p>
+                </div>
+            </div>
         </div>
         <hr />
         <!-- Payments-->
@@ -84,23 +148,23 @@
             :key="payment.PaymentID"
         >
             <div class="columns">
-                <span class="column is-2">
+                <div class="column is-2">
                     <strong> Payment ID:</strong> {{ payment.PaymentID }}
-                </span>
-                <span class="column is-2">
+                </div>
+                <div class="column is-2">
                     <strong> Date: </strong>
                     {{ payment.UpdatedAt.split('T')[0] }}
-                </span>
-                <span class="column is-2">
+                </div>
+                <div class="column is-2">
                     <strong> Amount: </strong>{{ payment.Amount }}
-                </span>
+                </div>
 
-                <span class="column is-2">
+                <div class="column is-2">
                     <strong> Status: </strong>
-                    <span v-bind:class="getPaymentClass(payment.Status)"
-                        >{{ getPaymentStatusLabel(payment.Status) }}
-                    </span>
-                </span>
+                    <div v-bind:class="getPaymentClass(payment.Status)">
+                        {{ getPaymentStatusLabel(payment.Status) }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -109,12 +173,12 @@
 <script>
 import { mapState } from 'vuex';
 import { PaymentStatus, getPaymentStatusLabel } from '@/constant/enums';
+import AtomButton from '../atoms/AtomButton.vue';
 export default {
+    components: { AtomButton },
     name: 'TemplateBookingPortal',
     computed: {
-        ...mapState('bookingPortal', {
-            bookingDetails: (state) => state.bookingDetails,
-        }),
+        ...mapState('bookingPortal', ['bookingDetails', 'paymentDetails']),
     },
     methods: {
         getPaymentStatusLabel(paymentStatus) {
@@ -131,11 +195,20 @@ export default {
             }
             return 'payment-failed';
         },
+        onClick() {
+            const reqBody = {
+                BookingID: this.bookingDetails.Booking.ID.toString(),
+                Discount: 0.0,
+                Promocode: '',
+            };
+
+            this.$emit('payment-link', reqBody);
+        },
     },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .columns {
     margin-top: 4px;
 }
@@ -147,6 +220,7 @@ export default {
 
 .sub-heading {
     color: var(--secondary-color);
+    margin-bottom: 24px;
 }
 
 .payment-success {
@@ -171,5 +245,38 @@ export default {
     box-shadow: 0px 0px 4px 1px #c9404d;
     border-style: solid;
     font-weight: 500;
+}
+
+.payment-link-btn-wrapper {
+    margin-bottom: 24px;
+}
+.booking-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+
+    .card-body {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .field-col {
+        width: 50%;
+        text-align: left;
+
+        p {
+            margin-bottom: 16px;
+        }
+    }
+    .value-col {
+        width: 50%;
+        text-align: left;
+
+        p {
+            margin-bottom: 16px;
+        }
+    }
 }
 </style>
