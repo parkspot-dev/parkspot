@@ -1,6 +1,7 @@
 import Home from '../views/PageHome.vue';
 import PageAbout from '@/views/PageAbout.vue';
 import { firebase, getDatabase, ref, get, child } from '../firebase';
+import { APP_LINK } from '../constant/constant';
 
 const guardThisRoute = async (to, from, next) => {
     const db = getDatabase(firebase);
@@ -44,7 +45,8 @@ export const pages = {
     TEMP                    : '/temp',
     THANK_YOU               : '/thank-you',
     ERROR                   : '/error',
-    BOOKING_PORTAL          : "/internal/booking-portal"
+    BOOKING_PORTAL          : "/internal/booking-portal",
+    APP                     : "/app"
 };
 
 export const routes = [
@@ -152,8 +154,24 @@ export const routes = [
     },
     {
         path: pages.BOOKING_PORTAL,
-        name: "booking-portal",
-        component: () => import('@/views/BookingPortal.vue')
+        name: 'booking-portal',
+        component: () => import('@/views/BookingPortal.vue'),
+    },
+    {
+        path: pages.APP,
+        name: 't-about',
+        component: PageAbout,
+        beforeEnter(to, from, next) {
+            const androidRegexp = /android/i;
+            if (androidRegexp.test(navigator.userAgent)) {
+                window.location.href = APP_LINK.ANDROID;
+            }
+            const iOSRegexp = /iphone|ipad/i;
+            if (iOSRegexp.test(navigator.userAgent)) {
+                window.location.href = APP_LINK.IOS;
+            }
+            next();
+        },
     },
     // Todo Delete below code before deployment
     {
