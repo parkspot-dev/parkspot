@@ -53,10 +53,20 @@
                     </div>
                     <div class="value-col">
                         <p>
-                            {{ bookingDetails.Booking.CreatedAt.split('T')[0] }}
+                            <!-- {{ bookingDetails.Booking.CreatedAt.split('T')[0] }} -->
+                            {{
+                                getFormattedDate(
+                                    bookingDetails.Booking.CreatedAt,
+                                )
+                            }}
                         </p>
                         <p>
-                            {{ bookingDetails.Booking.StartTime.split('T')[0] }}
+                            <!-- {{ bookingDetails.Booking.StartTime.split('T')[0] }} -->
+                            {{
+                                getFormattedDate(
+                                    bookingDetails.Booking.StartTime,
+                                )
+                            }}
                         </p>
                     </div>
                 </div>
@@ -168,48 +178,31 @@
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
                 </div>
-                <div
-                    v-for="payment in bookingDetails.Payments"
-                    :key="payment.PaymentID"
-                    class="row"
-                >
-                    <div class="cell">{{ payment.PaymentID }}</div>
-                    <div class="cell">
-                        {{ payment.UpdatedAt.split('T')[0] }}
-                    </div>
+                <div v-if="bookingDetails.payments">
                     <div
-                        class="cell"
-                        v-bind:class="getPaymentClass(payment.Status)"
+                        v-for="payment in bookingDetails.Payments"
+                        :key="payment.PaymentID"
+                        class="row"
                     >
-                        {{ getPaymentStatusLabel(payment.Status) }}
-                    </div>
-                    <div class="cell">{{ payment.Amount }}</div>
-                </div>
-            </div>
-            <!-- <div
-                v-for="payment in bookingDetails.Payments"
-                :key="payment.PaymentID"
-            >
-                <div class="columns">
-                    <div class="column is-2">
-                        <strong> Payment ID:</strong> {{ payment.PaymentID }}
-                    </div>
-                    <div class="column is-2">
-                        <strong> Date: </strong>
-                        {{ payment.UpdatedAt.split('T')[0] }}
-                    </div>
-                    <div class="column is-2">
-                        <strong> Amount: </strong>{{ payment.Amount }}
-                    </div>
-
-                    <div class="column is-2">
-                        <strong> Status: </strong>
-                        <div v-bind:class="getPaymentClass(payment.Status)">
-                            {{ getPaymentStatusLabel(payment.Status) }}
+                        <div class="cell">{{ payment.PaymentID }}</div>
+                        <div class="cell">
+                            {{ getFormattedDate(payment.UpdatedAt) }}
                         </div>
+                        <div class="cell">
+                            <div
+                                class="status-indicator"
+                                v-bind:class="getPaymentClass(payment.Status)"
+                            >
+                                <span class="status-label">
+                                    {{ getPaymentStatusLabel(payment.Status) }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="cell">₹ {{ payment.Amount }}</div>
                     </div>
                 </div>
-            </div> -->
+                <div v-else>No payment history found.</div>
+            </div>
         </div>
     </section>
 </template>
@@ -221,6 +214,7 @@ import AtomButton from '../atoms/AtomButton.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
 import AtomTooltip from '../atoms/AtomTooltip.vue';
 // import BodyWrapper from '../extras/BodyWrapper.vue';
+import moment from 'moment';
 export default {
     components: { AtomButton, AtomIcon, AtomTooltip },
     name: 'TemplateBookingPortal',
@@ -269,49 +263,19 @@ export default {
 
             this.toolTipLabel = 'Copied!!';
         },
+        getFormattedDate(date) {
+            console.log(moment(date).format('MMMM Do YYYY, h:mm:ss a'));
+            return moment(date).format('MMMM Do YYYY');
+        },
     },
 };
 </script>
 
 <style lang="scss" scoped>
-.columns {
-    margin-top: 4px;
-}
-
-.column {
-    display: flex;
-    flex-direction: column;
-}
-
 .sub-heading {
     color: var(--secondary-color);
     margin-bottom: 24px;
 }
-
-.payment-success {
-    border-color: #78d965;
-    color: #78d965;
-    box-shadow: 0px 0px 4px 1px #94e185;
-    border-style: solid;
-    font-weight: 500;
-}
-
-.payment-pending {
-    border-color: #ffb161;
-    color: #ffb161;
-    box-shadow: 0px 0px 4px 1px #ffc182;
-    border-style: solid;
-    font-weight: 500;
-}
-
-.payment-failed {
-    border-color: #c42c3b;
-    color: #c42c3b;
-    box-shadow: 0px 0px 4px 1px #c9404d;
-    border-style: solid;
-    font-weight: 500;
-}
-
 .payment-link-btn-wrapper {
     margin-bottom: 24px;
 }
@@ -389,6 +353,7 @@ export default {
     }
 
     .header {
+        background-color: #f5f5fb;
     }
 
     .row {
@@ -398,7 +363,41 @@ export default {
     .cell {
         flex: 1;
         padding: 10px;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid #eee;
+    }
+
+    .status-indicator {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .status-label {
+        color: white;
+        font-weight: 500;
+    }
+
+    /* Define different styles for different status labels */
+    .payment-success {
+        background-color: #b5fca1;
+
+        .status-label {
+            color: green;
+        }
+    }
+
+    .payment-failed {
+        background-color: #ffa5a5;
+        .status-label {
+            color: red;
+        }
+    }
+
+    .payment-pending {
+        background-color: #fce2c3;
+        .status-label {
+            color: orange;
+        }
     }
 }
 </style>
