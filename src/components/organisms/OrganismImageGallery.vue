@@ -99,7 +99,7 @@ export default {
     .gallery-item {
         position: absolute;
         opacity: 1;
-        border: 1px solid black;
+        border: 1px solid var(--parkspot-black);
         display: flex;
         justify-content: center;
         align-items: center;

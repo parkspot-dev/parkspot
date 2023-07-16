@@ -5,6 +5,10 @@
         <main class="body-container">
             <router-view :key="$route.fullPath" />
         </main>
+        <div class="buttons">
+            <a class="button is-primary">Primary</a>
+            <a class="button is-link">Link</a>
+        </div>
         <TemplateFooter></TemplateFooter>
     </div>
 </template>

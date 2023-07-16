@@ -151,7 +151,7 @@ export default {
     margin-bottom: 32px;
 
     h1 {
-        color: black;
+        color: var(--parkspot-black);
         font-weight: 600;
         font-size: 24px;
     }
