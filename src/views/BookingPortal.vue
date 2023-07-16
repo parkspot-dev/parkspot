@@ -10,18 +10,21 @@
         </div>
         <p v-if="hasError">{{ errorMessage }}</p>
         <TemplateBookingPortal
-            v-else
+            v-if="!hasError && !isLoading"
             @payment-link="getPaymentLink"
         ></TemplateBookingPortal>
+        <LoaderModal :isLoading="isLoading"></LoaderModal>
     </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import LoaderModal from '../components/extras/LoaderModal.vue';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
 import TemplateBookingPortal from '../components/templates/TemplateBookingPortal.vue';
+
 export default {
-    components: { MoleculeSearchBox, TemplateBookingPortal },
+    components: { MoleculeSearchBox, TemplateBookingPortal, LoaderModal },
     name: 'BookingPortal',
     data() {
         return {
@@ -29,7 +32,7 @@ export default {
         };
     },
     computed: {
-        ...mapState('bookingPortal', ['hasError', 'errorMessage']),
+        ...mapState('bookingPortal', ['hasError', 'errorMessage', 'isLoading']),
     },
     methods: {
         ...mapActions('bookingPortal', ['getBookingDetails', 'getPaymentLink']),
