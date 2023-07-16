@@ -23,34 +23,30 @@ export default {
 
 <style lang="scss" scoped>
 .loader-container {
-    height: 100vh;
-    background-color: #f1f1f1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
+    background-color: rgba(0, 0, 0, 50%);
 }
 
 .loader {
-    border: 8px solid #f3f3f3;
-    /* Light grey */
-    border-top: 8px solid var(--primary-color);
-    /* Dark Green */
-    border-radius: 50%;
     width: 136px;
     height: 136px;
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid var(--primary-color);
+    border-radius: 50%;
     animation: spinloader 2s linear infinite;
 }
 
 .loader img {
-    height: 120px;
     width: 120px;
+    height: 120px;
     animation: spinlogo 2s linear infinite;
 }
 
