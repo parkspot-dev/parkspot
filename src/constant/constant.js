@@ -115,3 +115,9 @@ export const USER_PROFILE_TYPE = {
     SO: 1,
     VO: 2,
 };
+
+export const APP_LINK = {
+    IOS: 'https://apps.apple.com/in/app/parkspot-find-book-parking/id6449634064',
+    ANDROID:
+        'https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website',
+};

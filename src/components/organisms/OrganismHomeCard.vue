@@ -57,7 +57,7 @@
 <script>
 import SearchInput from '../extras/SearchInput.vue';
 import AtomButton from '../atoms/AtomButton.vue';
-import { mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import { getCoordinate } from '../../includes/LatLng';
 export default {
     name: 'HomeCard',
@@ -66,22 +66,23 @@ export default {
         AtomButton,
     },
     computed: {
-        ...mapGetters({
-            LocDetails: 'map/getLocDetails',
-        }),
+        ...mapState('map', ['selectedLocationLatLng']),
     },
     methods: {
         flyToSrp() {
-            const coordinate = getCoordinate(this.LocDetails.lnglat.toString())
-                .reverse()
-                .toString();
+            const coordinate = getCoordinate(
+                [
+                    this.selectedLocationLatLng.lat,
+                    this.selectedLocationLatLng.lng,
+                ].toString(),
+            ).toString();
             this.$router.push({
                 name: 'srp',
                 query: {
                     latlng: coordinate,
                 },
                 params: {
-                    location: this.LocDetails.locDetails.locName,
+                    location: this.selectedLocationLatLng.formattedAddress,
                 },
             });
         },
@@ -151,7 +152,7 @@ export default {
             font-size: 48px;
             font-weight: 600;
             line-height: 58px;
-            color: #000000;
+            color: var(--parkspot-black);
 
             @media only screen and (max-width: 1024px) {
                 font-size: 32px;
