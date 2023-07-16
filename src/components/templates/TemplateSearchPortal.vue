@@ -116,7 +116,7 @@
                     class="tag"
                     :class="{
                         'is-info': props.row.Priority === 1,
-                        'is-warning': props.row.Priority === 2,
+                        'my-status': props.row.Priority === 2,
                         'is-danger': props.row.Priority === 3,
                     }"
                 >
@@ -144,7 +144,7 @@
                 <template v-slot="props">
                     <div class="status-column">
                         <div class="status-part">
-                            <span class="tag is-warning">
+                            <span class="tag my-status">
                                 {{ props.row.Agent }}
                             </span>
                             <AtomSelectInput
@@ -240,7 +240,7 @@
                 <template v-slot="props">
                     <div class="status-column">
                         <div class="status-part">
-                            <span class="tag is-warning">
+                            <span class="tag my-status">
                                 {{ statusList[props.row.Status].name }}
                             </span>
                             <AtomSelectInput
@@ -255,14 +255,14 @@
                         </div>
                         <div class="next-call-part">
                             <span
-                                class="tag is-warning"
+                                class="tag my-status"
                                 :class="{
                                     'is-danger': isCallDelayed(
                                         props.row.NextCall,
                                     ),
                                 }"
                             >
-                                <span>
+                                <span class="upcoming">
                                     {{
                                         isCallDelayed(props.row.NextCall)
                                             ? 'Delayed :'
@@ -544,6 +544,14 @@ $portal-font-size: 13px;
         background: #cfcfcd !important;
         color: rgb(0, 0, 0) !important;
     }
+}
+
+.search-portal-wrapper .status-column .status-part .tag:not(body).my-status {
+    background-color: var(--primary-color);
+}
+
+.tag:not(body) {
+    background-color: var(--primary-color);
 }
 
 .search-portal-wrapper {
