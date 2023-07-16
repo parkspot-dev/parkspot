@@ -12,7 +12,7 @@ $custom-colors: null !default;
 /* stylelint-disable-next-line annotation-no-unknown */
 $custom-shades: null !default;
 
-// Setup $colors to use as bulma classes (e.g. 'is-twitter')
+// Setup $colors to use as bulma classes
 /* stylelint-disable-next-line function-name-case , function-no-unknown */
 $colors: mergeColorMaps(
     (
