@@ -178,7 +178,7 @@
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
                 </div>
-                <div v-if="bookingDetails.payments">
+                <div v-if="bookingDetails.Payments">
                     <div
                         v-for="payment in bookingDetails.Payments"
                         :key="payment.PaymentID"
