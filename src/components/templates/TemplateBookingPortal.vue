@@ -289,6 +289,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
+    background: white;
 
     .copy-icon {
         cursor: pointer;
@@ -308,6 +309,7 @@ export default {
     border-radius: 5px;
     padding: 20px;
     margin-bottom: 20px;
+    background: white;
 
     .card-body {
         display: flex;
@@ -353,7 +355,7 @@ export default {
     }
 
     .header {
-        background-color: #f5f5fb;
+        background-color: #ebebfb;
     }
 
     .row {

@@ -44,6 +44,7 @@ export default {
 .booking-portal-root {
     padding: 16px;
     text-align: center;
+    background: #f5f5fb;
 }
 
 .search-control {
