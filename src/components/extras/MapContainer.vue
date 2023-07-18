@@ -71,12 +71,13 @@ export default {
             // when drag is true we can drag the marker
             if (this.drag) {
                 this.userMarker.addListener('dragend', (event) => {
-                    const position = draggableMarker.position;
+                    const position = this.userMarker.position;
                     userInfoWindow.close();
-                    userInfoWindow.setContent(
-                        `Pin dropped at: ${position.lat()}, ${position.lng()}`,
-                    );
-                    userInfoWindow.open(draggableMarker.map, draggableMarker);
+                    userInfoWindow.open(this.userMarker.map, this.userMarker);
+                    this.$emit('change-position', {
+                        lat: position.lat,
+                        lng: position.lng,
+                    });
                 });
             }
 
