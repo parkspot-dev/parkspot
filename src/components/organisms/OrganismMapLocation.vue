@@ -4,18 +4,7 @@
             <h1>Map Location</h1>
             <h2>Please fill all the fields</h2>
         </div>
-        <GmapMap
-            ref="mapRef"
-            :center="center"
-            :zoom="10"
-            style="width: 620px; height: 30rem"
-            @click="onMapClick"
-        >
-            <GmapMarker
-                ref="myMarker"
-                :position="google && new google.maps.LatLng(markerPostion)"
-            />
-        </GmapMap>
+        <MapContainer class="user-profile-map"></MapContainer>
         <AtomButton
             :class="['is-pulled-right', 'save-btn']"
             @click.native="saveProfile"
@@ -27,13 +16,14 @@
 
 <script>
 import AtomButton from '../atoms/AtomButton.vue';
-import { gmapApi } from 'vue2-google-maps';
+import MapContainer from '../extras/MapContainer.vue';
 import { getUserLocation } from '../../includes/UserLocation';
 
 export default {
     name: 'OrganismMapLocation',
     components: {
         AtomButton,
+        MapContainer,
     },
     data() {
         return {
@@ -41,9 +31,7 @@ export default {
             center: { lat: 12.92442, lng: 77.580643 },
         };
     },
-    computed: {
-        google: gmapApi,
-    },
+    computed: {},
     mounted() {
         getUserLocation((userLocation) => {
             this.center = userLocation;
@@ -53,13 +41,13 @@ export default {
         // its map has not been initialized.
         // Therefore we need to write mapRef.$mapPromise.then(() => ...)
 
-        this.$refs.mapRef.$mapPromise.then((map) => {
-            map.panTo(this.center);
-        });
+        // this.$refs.mapRef.$mapPromise.then((map) => {
+        //     map.panTo(this.center);
+        // });
     },
     methods: {
         onMapClick(mapsMouseEvent) {
-            this.markerPostion = mapsMouseEvent.latLng.toJSON();
+            // this.markerPostion = mapsMouseEvent.latLng.toJSON();
         },
     },
 };
@@ -81,6 +69,9 @@ export default {
         color: #e8faff;
         font-size: 14px;
     }
+}
+
+.user-profile-map {
 }
 
 .save-btn {
