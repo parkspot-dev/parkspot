@@ -157,9 +157,9 @@ export default {
                     break;
                 case 'Type':
                     if (userData === this.userTypeData[0]) {
-                        this.localType = USER_PROFILE_TYPE.SO;
-                    } else if (userData === this.userTypeData[1]) {
                         this.localType = USER_PROFILE_TYPE.VO;
+                    } else if (userData === this.userTypeData[1]) {
+                        this.localType = USER_PROFILE_TYPE.SO;
                     }
                     break;
             }

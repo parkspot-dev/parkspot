@@ -112,8 +112,8 @@ export const PAGE_TITLE = {
 };
 
 export const USER_PROFILE_TYPE = {
-    SO: 1,
-    VO: 2,
+    VO: 1,
+    SO: 2,
 };
 
 export const APP_LINK = {
