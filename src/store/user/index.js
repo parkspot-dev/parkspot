@@ -21,6 +21,7 @@ const state = {
     preference: {},
     isLoading: false,
     isSavedProfileData: true,
+    userLatLng: { lat: 12.9716, lng: 77.5946 }, // default location if user refused to share its location
 };
 
 const getters = {};
@@ -86,6 +87,10 @@ const mutations = {
         state.userProfile['EmailID'] = EmailID;
         state.userProfile['Mobile'] = Mobile;
         state.userProfile['Type'] = Type;
+    },
+
+    'set-user-lat-lng'(state, userLocation) {
+        state.userLatLng = userLocation;
     },
 };
 
@@ -284,6 +289,10 @@ const actions = {
 
     updateSavedProfileFlag({ commit }, isSavedProfileData) {
         commit('update-is-saved-profile-data', isSavedProfileData);
+    },
+
+    updateUserProfileLatLng({ commit }, userLocation) {
+        commit('set-user-lat-lng', userLocation);
     },
 };
 

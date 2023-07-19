@@ -11,22 +11,10 @@ import './includes/VeeValidate';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import VueMeta from 'vue-meta';
-import * as VueGoogleMaps from 'vue2-google-maps';
 
 Vue.use(VueMeta);
 Vue.use(Buefy);
-Vue.use(VueGoogleMaps, {
-    load: {
-        key: 'AIzaSyAtHsC3zbjqgFkphcIjgG5OhrISlJ0bOaI',
-        libraries: 'places', // This is required if you use the Autocomplete plugin
-        // OR: libraries: 'places,drawing'
-        // OR: libraries: 'places,drawing,visualization'
-        // (as you require)
 
-        //  If you want to set the version, you can do so:
-        // v: '3.26',
-    },
-});
 Vue.config.productionTip = false;
 
 // main app instance created and mounted

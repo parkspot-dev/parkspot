@@ -4,18 +4,13 @@
             <h1>Map Location</h1>
             <h2>Please fill all the fields</h2>
         </div>
-        <GmapMap
-            ref="mapRef"
-            :center="center"
-            :zoom="10"
-            style="width: 620px; height: 30rem"
-            @click="onMapClick"
-        >
-            <GmapMarker
-                ref="myMarker"
-                :position="google && new google.maps.LatLng(markerPostion)"
-            />
-        </GmapMap>
+        <MapContainer
+            class="user-profile-map"
+            :center="userLatLng"
+            :userLatLng="userLatLng"
+            :drag="true"
+            @change-position="updateUserProfileLatLng"
+        ></MapContainer>
         <AtomButton
             :class="['is-pulled-right', 'save-btn']"
             @click.native="saveProfile"
@@ -26,40 +21,55 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
 import AtomButton from '../atoms/AtomButton.vue';
-import { gmapApi } from 'vue2-google-maps';
-import { getUserLocation } from '../../includes/UserLocation';
+import MapContainer from '../extras/MapContainer.vue';
 
 export default {
     name: 'OrganismMapLocation',
     components: {
         AtomButton,
-    },
-    data() {
-        return {
-            markerPostion: { lat: 12.92442, lng: 77.580643 },
-            center: { lat: 12.92442, lng: 77.580643 },
-        };
+        MapContainer,
     },
     computed: {
-        google: gmapApi,
+        ...mapState('user', ['userLatLng']),
     },
     mounted() {
-        getUserLocation((userLocation) => {
-            this.center = userLocation;
-            this.markerPostion = userLocation;
-        });
-        // At this point, the child GmapMap has been mounted, but
-        // its map has not been initialized.
-        // Therefore we need to write mapRef.$mapPromise.then(() => ...)
-
-        this.$refs.mapRef.$mapPromise.then((map) => {
-            map.panTo(this.center);
-        });
+        this.getUserLocation();
     },
     methods: {
-        onMapClick(mapsMouseEvent) {
-            this.markerPostion = mapsMouseEvent.latLng.toJSON();
+        ...mapActions('user', ['updateUserProfileLatLng']),
+        getUserLocation() {
+            const geolocation = navigator.geolocation;
+            if (geolocation) {
+                geolocation.getCurrentPosition(
+                    this.onGeoSuccess,
+                    this.onGeoError,
+                );
+            } else {
+                console.log('Geolocation is not supported by this browser.');
+            }
+        },
+        onGeoSuccess(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const location = { lat, lng };
+            this.updateUserProfileLatLng(location);
+        },
+        onGeoError(error) {
+            let detailError;
+
+            if (error.code === error.PERMISSION_DENIED) {
+                detailError = 'User denied the request for Geolocation.';
+            } else if (error.code === error.POSITION_UNAVAILABLE) {
+                detailError = 'Location information is unavailable.';
+            } else if (error.code === error.TIMEOUT) {
+                detailError = 'The request to get user location timed out.';
+            } else if (error.code === error.UNKNOWN_ERROR) {
+                detailError = 'An unknown error occurred.';
+            }
+
+            console.log(detailError);
         },
     },
 };
@@ -81,6 +91,9 @@ export default {
         color: #e8faff;
         font-size: 14px;
     }
+}
+
+.user-profile-map {
 }
 
 .save-btn {

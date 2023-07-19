@@ -71,18 +71,20 @@ export default {
             // when drag is true we can drag the marker
             if (this.drag) {
                 this.userMarker.addListener('dragend', (event) => {
-                    const position = draggableMarker.position;
+                    const position = this.userMarker.position;
                     userInfoWindow.close();
-                    userInfoWindow.setContent(
-                        `Pin dropped at: ${position.lat()}, ${position.lng()}`,
-                    );
-                    userInfoWindow.open(draggableMarker.map, draggableMarker);
+                    userInfoWindow.open(this.userMarker.map, this.userMarker);
+                    this.$emit('change-position', {
+                        lat: position.lat,
+                        lng: position.lng,
+                    });
                 });
             }
 
-            this.spotsList.forEach((spot) => {
-                const encodedSpotId = encodeURIComponent(spot.ID);
-                const contentString = `<div dir="ltr" style="" jstcache="0">
+            if (this.spotsList) {
+                this.spotsList.forEach((spot) => {
+                    const encodedSpotId = encodeURIComponent(spot.ID);
+                    const contentString = `<div dir="ltr" style="" jstcache="0">
                         <div jstcache="34" class="poi-info-window gm-style">
                             <div jstcache="2">
                                 <div jstcache="3" class="title full-width" jsan="7.title,7.full-width"> ${spot.Name} </div>
@@ -109,35 +111,36 @@ export default {
                         </div>
                     </div>`;
 
-                // Create an info window to share between markers.
-                const spotInfoWindow = new InfoWindow({
-                    content: contentString,
-                    ariaLabel: 'Uluru', // font used by google
-                });
-                const lat = spot.Lat;
-                const lng = spot.Long;
+                    // Create an info window to share between markers.
+                    const spotInfoWindow = new InfoWindow({
+                        content: contentString,
+                        ariaLabel: 'Uluru', // font used by google
+                    });
+                    const lat = spot.Lat;
+                    const lng = spot.Long;
 
-                // creating spot marker
-                const glyphImg = document.createElement('img');
-                glyphImg.src = this.parkspotMarkerIcon;
-                const glyphSvgPinElement = new PinElement({
-                    glyph: glyphImg,
-                });
+                    // creating spot marker
+                    const glyphImg = document.createElement('img');
+                    glyphImg.src = this.parkspotMarkerIcon;
+                    const glyphSvgPinElement = new PinElement({
+                        glyph: glyphImg,
+                    });
 
-                // adding spot marker in the map
-                const spotMarker = new AdvancedMarkerElement({
-                    map: this.map,
-                    position: { lat: lat, lng: lng },
-                    title: spot.Name,
-                    content: glyphSvgPinElement.element,
-                });
+                    // adding spot marker in the map
+                    const spotMarker = new AdvancedMarkerElement({
+                        map: this.map,
+                        position: { lat: lat, lng: lng },
+                        title: spot.Name,
+                        content: glyphSvgPinElement.element,
+                    });
 
-                // Add a click listener for each marker, and set up the info window.
-                spotMarker.addListener('click', ({ domEvent, latLng }) => {
-                    spotInfoWindow.close();
-                    spotInfoWindow.open(spotMarker.map, spotMarker);
+                    // Add a click listener for each marker, and set up the info window.
+                    spotMarker.addListener('click', ({ domEvent, latLng }) => {
+                        spotInfoWindow.close();
+                        spotInfoWindow.open(spotMarker.map, spotMarker);
+                    });
                 });
-            });
+            }
         },
     },
 };
