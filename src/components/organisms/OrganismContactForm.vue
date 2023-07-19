@@ -2,27 +2,27 @@
     <ValidationObserver ref="observer" v-slot="{}">
         <MoleculeNameInput
             :rules="validation.fullname"
-            :fieldName="CONTACT_FORM.FULLNAME"
+            :fieldName="'Full name'"
             v-model="model.fullname"
-            :placeholder="CONTACT_FORM.FULLNAME"
-            :label="CONTACT_FORM.FULLNAME"
+            :placeholder="'Full name'"
+            :label="'Full name'"
         >
         </MoleculeNameInput>
         <MoleculeNameInput
             :rules="validation.email"
-            :fieldName="CONTACT_FORM.EMAIL"
+            :fieldName="'Email'"
             v-model="model.email"
-            :placeholder="CONTACT_FORM.EMAIL"
+            :placeholder="'Email'"
             :inputType="'email'"
-            :label="CONTACT_FORM.EMAIL"
+            :label="'Email'"
         >
         </MoleculeNameInput>
         <MoleculeNameInput
             :rules="validation.cno"
-            :fieldName="CONTACT_FORM.CONTACT_NO"
+            :fieldName="'Contact No.'"
             v-model="model.cno"
-            :placeholder="CONTACT_FORM.CONTACT_NO"
-            :label="CONTACT_FORM.CONTACT_NO"
+            :placeholder="'Contact No.'"
+            :label="'Contact No.'"
         >
         </MoleculeNameInput>
         <MoleculeNameInput
@@ -44,7 +44,6 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate';
-import { FORM } from '../../constant/constant';
 import { mapMutations } from 'vuex';
 import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
@@ -82,7 +81,6 @@ export default {
                 cno: 'required|integer|phone',
                 addr: 'required',
             },
-            CONTACT_FORM: FORM,
             isEnable: false,
         };
     },
