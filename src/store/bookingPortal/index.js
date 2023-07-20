@@ -15,13 +15,16 @@ const mutations = {
         state.hasError = false;
         state.bookingDetails = bookingDetails;
     },
+
     'set-error'(state, errorMessage) {
         state.hasError = true;
         state.errorMessage = errorMessage;
     },
+
     'set-payment-details'(state, paymentDetails) {
         state.paymentDetails = paymentDetails;
     },
+
     'set-loading'(state, isLoading) {
         state.isLoading = isLoading;
     },
@@ -40,17 +43,18 @@ const actions = {
         }
         commit('set-loading', false);
     },
+
     async getPaymentLink({ dispatch, commit }, reqBody) {
         commit('set-loading', true);
         const res = await mayaClient.post(
             '/payment/generate-payment-link',
             reqBody,
         );
-        if (res) {
+        if (res.DisplayMsg) {
+            commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
+        } else if (res) {
             commit('set-payment-details', res);
             dispatch('getBookingDetails', reqBody.BookingID);
-        } else if (res.DisplayMsg) {
-            commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
         }
         commit('set-loading', false);
     },

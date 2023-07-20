@@ -24,16 +24,19 @@ import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
 import TemplateBookingPortal from '../components/templates/TemplateBookingPortal.vue';
 
 export default {
-    components: { MoleculeSearchBox, TemplateBookingPortal, LoaderModal },
     name: 'BookingPortal',
+    components: { MoleculeSearchBox, TemplateBookingPortal, LoaderModal },
+
     data() {
         return {
             bookingID: '',
         };
     },
+
     computed: {
         ...mapState('bookingPortal', ['hasError', 'errorMessage', 'isLoading']),
     },
+
     methods: {
         ...mapActions('bookingPortal', ['getBookingDetails', 'getPaymentLink']),
     },

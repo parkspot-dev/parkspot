@@ -213,23 +213,27 @@ import { PaymentStatus, getPaymentStatusLabel } from '@/constant/enums';
 import AtomButton from '../atoms/AtomButton.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
 import AtomTooltip from '../atoms/AtomTooltip.vue';
-// import BodyWrapper from '../extras/BodyWrapper.vue';
 import moment from 'moment';
+
 export default {
-    components: { AtomButton, AtomIcon, AtomTooltip },
     name: 'TemplateBookingPortal',
-    computed: {
-        ...mapState('bookingPortal', ['bookingDetails', 'paymentDetails']),
-    },
+    components: { AtomButton, AtomIcon, AtomTooltip },
+
     data() {
         return {
             toolTipLabel: 'Copy payment url!',
         };
     },
+
+    computed: {
+        ...mapState('bookingPortal', ['bookingDetails', 'paymentDetails']),
+    },
+
     methods: {
         getPaymentStatusLabel(paymentStatus) {
             return getPaymentStatusLabel(paymentStatus);
         },
+
         getPaymentClass(status) {
             if (status == PaymentStatus.PaymentSuccess) {
                 return 'payment-success';
@@ -241,6 +245,7 @@ export default {
             }
             return 'payment-failed';
         },
+
         onClick() {
             this.toolTipLabel = 'Copy payment url!';
             const reqBody = {
@@ -251,6 +256,7 @@ export default {
 
             this.$emit('payment-link', reqBody);
         },
+
         copyUrl() {
             navigator.clipboard
                 .writeText(this.paymentDetails.PayUrl)
@@ -263,8 +269,9 @@ export default {
 
             this.toolTipLabel = 'Copied!!';
         },
+
         getFormattedDate(date) {
-            return moment(date).format('MMMM Do YYYY');
+            return moment(date).format('MMMM Do YYYY, hh:mm A');
         },
     },
 };
