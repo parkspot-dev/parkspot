@@ -24,15 +24,15 @@ export const PaymentStatus = Object.freeze({
 });
 
 const PaymentStatusLabel = [
-    'PaymentNotDefined',
-    'PaymentPending',
-    'PaymentIncomplete',
-    'PaymentFailed',
-    'PaymentUserDropped',
-    'PaymentFlagged',
-    'PaymentSuccess',
-    'PaymentCancelled',
-    'PaymentVoid',
+    'Not Defined',
+    'Pending',
+    'Incomplete',
+    'Failed',
+    'User Dropped',
+    'Flagged',
+    'Success',
+    'Cancelled',
+    'Void',
 ];
 
 /**
