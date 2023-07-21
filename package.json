@@ -21,6 +21,7 @@
     "lightgallery.js": "^1.4.0",
     "lodash": "^4.17.21",
     "mapbox-gl": "^1.13.2",
+    "moment": "^2.29.4",
     "swiper": "^8.4.4",
     "v-click-outside": "^3.2.0",
     "vee-validate": "^3.4.14",
