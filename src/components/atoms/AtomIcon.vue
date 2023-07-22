@@ -25,7 +25,7 @@ export default {
         },
         /**
          * color of icon
-         * @values is-warning(primary), is-info(secondary)
+         * @values (primary), is-info(secondary)
          */
         type: {
             type: String,

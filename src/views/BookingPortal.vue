@@ -3,33 +3,42 @@
         <!--- Search Bar-->
         <div class="search-control">
             <p></p>
-            <molecule-search-box
+            <MoleculeSearchBox
                 placeholder="Booking ID"
                 @on-search="getBookingDetails"
-            ></molecule-search-box>
+            ></MoleculeSearchBox>
         </div>
-        <p v-if="hasError"> {{ errorMessage }}</p>
-        <template-booking-portal v-else></template-booking-portal>
+        <p v-if="hasError">{{ errorMessage }}</p>
+        <TemplateBookingPortal
+            v-if="!hasError && !isLoading"
+            @payment-link="getPaymentLink"
+        ></TemplateBookingPortal>
+        <LoaderModal :isLoading="isLoading"></LoaderModal>
     </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import LoaderModal from '../components/extras/LoaderModal.vue';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
 import TemplateBookingPortal from '../components/templates/TemplateBookingPortal.vue';
+
 export default {
-    components: { MoleculeSearchBox, TemplateBookingPortal },
     name: 'BookingPortal',
+    components: { MoleculeSearchBox, TemplateBookingPortal, LoaderModal },
+
     data() {
         return {
             bookingID: '',
         };
     },
+
     computed: {
-        ...mapState('bookingPortal', ['hasError', 'errorMessage']),
+        ...mapState('bookingPortal', ['hasError', 'errorMessage', 'isLoading']),
     },
+
     methods: {
-        ...mapActions('bookingPortal', ['getBookingDetails']),
+        ...mapActions('bookingPortal', ['getBookingDetails', 'getPaymentLink']),
     },
 };
 </script>
@@ -38,6 +47,7 @@ export default {
 .booking-portal-root {
     padding: 16px;
     text-align: center;
+    background: #f5f5fb;
 }
 
 .search-control {
