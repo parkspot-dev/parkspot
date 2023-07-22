@@ -159,10 +159,10 @@ export default {
 }
 
 .custom-header-title {
-    color: #fff;
+    color: var(--parkspot-white);
 }
 
 .arrow-white {
-    color: #fff;
+    color: var(--parkspot-white);
 }
 </style>

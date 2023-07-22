@@ -65,7 +65,7 @@ export default {
 }
 
 .custom-content-wrapper {
-    background: #fff;
+    background: var(--parkspot-white);
     border-radius: var(--border-default);
     box-shadow: 0 0 15px #000;
     display: block;

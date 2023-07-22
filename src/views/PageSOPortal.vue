@@ -75,7 +75,7 @@ export default {
 }
 
 .bg-decor {
-    background-color: #fff;
+    background-color: var(--parkspot-white);
     clip-path: polygon(-54% 0, 184% 0, 50% 100%);
     height: 526px;
     left: 0;

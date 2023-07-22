@@ -34,39 +34,4 @@ export default {
 };
 </script>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Rubik:wght@400;500;600;700&display=swap');
-@import url('./assets/styles/variables.css');
-
-#app {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    color: #555555;
-}
-
-.body-container {
-    padding-top: 4.375rem;
-}
-
-/* width and height of the scrollbar */
-::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-}
-
-/* background color of the scrollbar */
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-/* color of the scrollbar thumb */
-::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    background-color: #888888;
-}
-
-/* color of the scrollbar thumb when hover*/
-::-webkit-scrollbar-thumb:hover {
-    background-color: #555555;
-}
-</style>
+<style lang="scss" src="./app.scss"></style>

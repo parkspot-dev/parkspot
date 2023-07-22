@@ -1,0 +1,112 @@
+@import 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Rubik:wght@400;500;600;700&display=swap';
+@import './assets/styles/variables.css';
+/* stylelint-disable-next-line scss/at-import-no-partial-leading-underscore */
+@import '~bulma/sass/utilities/_all';
+
+// Set your colors
+$warning: #ffe08a; // primary color for parkspot
+
+// Lists and maps
+/* stylelint-disable-next-line annotation-no-unknown */
+$custom-colors: null !default;
+/* stylelint-disable-next-line annotation-no-unknown */
+$custom-shades: null !default;
+
+// Setup $colors to use as bulma classes
+/* stylelint-disable-next-line function-name-case , function-no-unknown */
+$colors: mergeColorMaps(
+    (
+        'white': (
+            $white,
+            $black,
+        ),
+        'black': (
+            $black,
+            $white,
+        ),
+        'light': (
+            $light,
+            $light-invert,
+        ),
+        'dark': (
+            $dark,
+            $dark-invert,
+        ),
+        'primary': (
+            $primary,
+            $primary-invert,
+            $primary-light,
+            $primary-dark,
+        ),
+        'link': (
+            $link,
+            $link-invert,
+            $link-light,
+            $link-dark,
+        ),
+        'info': (
+            $info,
+            $info-invert,
+            $info-light,
+            $info-dark,
+        ),
+        'success': (
+            $success,
+            $success-invert,
+            $success-light,
+            $success-dark,
+        ),
+        'warning': (
+            $warning,
+            $warning-invert,
+            $warning-light,
+            $warning-dark,
+        ),
+        'danger': (
+            $danger,
+            $danger-invert,
+            $danger-light,
+            $danger-dark,
+        ),
+    ),
+    $custom-colors
+);
+
+/* stylelint-disable-next-line selector-max-id */
+#app {
+    font-family: Poppins, sans-serif;
+    font-weight: 400;
+    color: var(--parkspot-black);
+}
+
+.body-container {
+    padding-top: 4.375rem;
+}
+
+/* width and height of the scrollbar */
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+/* background color of the scrollbar */
+::-webkit-scrollbar-track {
+    background: var(--parkspot-white);
+}
+
+/* color of the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #888888;
+}
+
+/* color of the scrollbar thumb when hover */
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--parkspot-black);
+}
+
+// Import Bulma and Buefy styles
+/* stylelint-disable-next-line no-invalid-position-at-import-rule */
+@import '~bulma';
+/* stylelint-disable-next-line no-invalid-position-at-import-rule */
+@import '~buefy/src/scss/buefy';

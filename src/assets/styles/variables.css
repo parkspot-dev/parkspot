@@ -3,10 +3,25 @@
     --primary-color: #ffe08a;
     --secondary-color: #0085ad;
     --parkspot-black: #252525;
+    --parkspot-white: #ffffff;
+    --parkspot-green: #28a745;
+    --parkspot-muted-black: #4d4d4d;
+    /* 
+    #e8faff
+    #757575
+    #e8faff
+    #d7d7d7
+    #474747
+    #000
+    #abaab5
+    #6e6d7a
+    #888d93
+    #1f2e3b
+    #888d93
+    #f7f8ff */
 
     /* shades */
     --grey-shade: #a9a9a9;
-    --secondary-grey-shade: #6b6b6b;
 
     /* border radius */
     --border-default: 9px;
@@ -24,6 +39,5 @@
     --lh-para: 1.6;
 
     /* background colors */
-    --bg-color-secondary: #f7f8ff;
     --bg-color-tertiary: #171c37;
 }

@@ -114,7 +114,7 @@ export default {
 $g-line-height: 1.5 !default;
 $g-spacing: $g-line-height * 1em;
 $black: #000;
-$white: #fff;
+$white: var(--parkspot-white);
 $g-background-color-dark: #18181b;
 
 .swiper {
@@ -191,12 +191,12 @@ $g-background-color-dark: #18181b;
 
         .swiper-pagination-bullet {
             margin: 0;
-            background: #fff !important;
+            background: var(--parkspot-white) !important;
         }
     }
 }
 .swiper-pagination-bullet {
-    background: #fff !important;
+    background: var(--parkspot-white) !important;
     transition: all 0.2s ease-in-out;
 }
 

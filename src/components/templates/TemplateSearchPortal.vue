@@ -580,7 +580,7 @@ $portal-font-size: 13px;
             text-align: right;
         }
         .so-summary {
-            border: 1px solid black;
+            border: 1px solid var(--parkspot-black);
             padding: 1.25rem;
             max-width: 430px;
             background-color: #f5f5dc;

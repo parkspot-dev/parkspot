@@ -145,7 +145,7 @@ export default {
                 width: 120px;
                 border: 1px solid var(--parkspot-black);
                 border-radius: 4px;
-                background-color: #ffffff;
+                background-color: var(--parkspot-white);
 
                 ul {
                     font-size: 16px;

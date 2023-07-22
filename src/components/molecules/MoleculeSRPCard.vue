@@ -146,7 +146,7 @@ export default {
         font-size: 12px;
         gap: 5px;
         line-height: 1.1;
-        color: #6b6b6b;
+        color: var(--parkspot-muted-black);
 
         .location-icon {
             font-size: 16px;
@@ -204,7 +204,7 @@ export default {
 
     .card-spot-green {
         font-weight: var(--bold-font);
-        color: #367e18;
+        color: var(--parkspot-green);
     }
 
     .card-btn {

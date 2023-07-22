@@ -146,9 +146,9 @@ export default {
             font-size: 20px;
             font-weight: 500;
             line-height: 29px;
-            color: black;
+            color: var(--parkspot-black);
             a {
-                color: black;
+                color: var(--parkspot-black);
             }
 
             span {
@@ -182,7 +182,7 @@ export default {
                     color: #6e6d7a;
                 }
                 .link-active {
-                    color: black;
+                    color: var(--parkspot-black);
                     font-weight: 600;
                 }
             }
