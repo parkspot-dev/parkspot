@@ -8,7 +8,7 @@
     >
         <label class="label"><slot></slot></label>
         <AtomCheckbox
-            @change.native="handleChange"
+            v-model="checkboxData"
             :values="values"
             class="mb-5"
         ></AtomCheckbox>
@@ -45,13 +45,17 @@ export default {
             checkboxData: [],
         };
     },
-    methods: {
-        async handleChange(data) {
-            const { valid } = await this.$refs.provider.validate(data);
+    watch: {
+        // Handles internal model changes.
+        async checkboxData(newVal) {
+            const { valid } = await this.$refs.provider.validate(newVal);
             if (valid) {
-                this.checkboxData.push(data.target.value);
-                this.$emit('data', this.checkboxData);
+                this.$emit('input', newVal);
             }
+        },
+        // Handles external model changes.
+        value(newVal) {
+            this.checkboxData = newVal;
         },
     },
 };

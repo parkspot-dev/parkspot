@@ -5,55 +5,10 @@
             <h2>Please fill all the fields</h2>
         </div>
         <div class="parking-facility-form">
-            <div class="parking-facility-form-SO" v-if="userType === 'SO'">
-                <div class="py-4">
-                    <MoleculeNameInput
-                        :fieldName="PARKING_FACILITY.SO.BUILDING_ADDR"
-                        :placeholder="PARKING_FACILITY.SO.BUILDING_ADDR"
-                        :rules="validation.buildingAddr"
-                        v-model="model.buildingAddr"
-                        :label="PARKING_FACILITY.SO.BUILDING_ADDR"
-                    ></MoleculeNameInput>
-                </div>
-                <div class="py-4">
-                    <MoleculeNameInput
-                        :fieldName="PARKING_FACILITY.SO.LANDMARK"
-                        :placeholder="PARKING_FACILITY.SO.LANDMARK"
-                        :rules="validation.landmark"
-                        v-model="model.landmark"
-                        :label="PARKING_FACILITY.SO.LANDMARK"
-                    ></MoleculeNameInput>
-                    <p>Is there a landmark near the parking spot?</p>
-                </div>
-                <div class="py-4">
-                    <MoleculeNameInput
-                        :fieldName="PARKING_FACILITY.SO.TOTAL_PARKING"
-                        :placeholder="PARKING_FACILITY.SO.TOTAL_PARKING"
-                        :rules="validation.totalParking"
-                        v-model="model.totalParking"
-                        :label="PARKING_FACILITY.SO.TOTAL_PARKING"
-                    ></MoleculeNameInput>
-                </div>
-                <div class="py-4">
-                    <MoleculeCheckbox
-                        :fieldName="PARKING_FACILITY.SO.FACILITIES"
-                        :rules="validation.amenities"
-                        :values="PARKING_FACILITY.SO.FACILITIES_DATA"
-                        @data="updateAmenitiesData"
-                    >
-                        {{ PARKING_FACILITY.SO.FACILITIES }}
-                    </MoleculeCheckbox>
-                </div>
-                <div class="py-4">
-                    <p>Photos(Parking spot pictures)</p>
-                    <MoleculeUpload
-                        @data="updateParkingSpotImg"
-                        :fieldName="'document'"
-                        :rules="validation.parkingSpotImg"
-                    ></MoleculeUpload>
-                </div>
-            </div>
-            <div class="parking-facility-form-VO" v-else>
+            <div
+                class="parking-facility-form-VO"
+                v-if="userProfile.Type === USER_PROFILE_TYPE.VO"
+            >
                 <div class="py-4">
                     <MoleculeSelectInput
                         :fieldName="PARKING_FACILITY.VO.PARKING_TYPE"
@@ -82,8 +37,62 @@
                     ></MoleculeSelectInput>
                 </div>
             </div>
+            <div
+                class="parking-facility-form-SO"
+                v-if="userProfile.Type === USER_PROFILE_TYPE.SO"
+            >
+                <div class="py-4">
+                    <MoleculeNameInput
+                        :fieldName="PARKING_FACILITY.SO.BUILDING_ADDR"
+                        :placeholder="PARKING_FACILITY.SO.BUILDING_ADDR"
+                        :rules="validation.buildingAddr"
+                        v-model="localBuildingAddr"
+                        :label="PARKING_FACILITY.SO.BUILDING_ADDR"
+                    ></MoleculeNameInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeNameInput
+                        :fieldName="PARKING_FACILITY.SO.LANDMARK"
+                        :placeholder="PARKING_FACILITY.SO.LANDMARK"
+                        :rules="validation.landmark"
+                        v-model="localLandmark"
+                        :label="PARKING_FACILITY.SO.LANDMARK"
+                    ></MoleculeNameInput>
+                    <p>Is there a landmark near the parking spot?</p>
+                </div>
+                <div class="py-4">
+                    <MoleculeNameInput
+                        :fieldName="PARKING_FACILITY.SO.TOTAL_PARKING"
+                        :placeholder="PARKING_FACILITY.SO.TOTAL_PARKING"
+                        :rules="validation.totalParking"
+                        v-model="localTotalParking"
+                        :label="PARKING_FACILITY.SO.TOTAL_PARKING"
+                    ></MoleculeNameInput>
+                </div>
+                <div class="py-4">
+                    <MoleculeCheckbox
+                        :fieldName="PARKING_FACILITY.SO.FACILITIES"
+                        :rules="validation.amenities"
+                        :values="PARKING_FACILITY.SO.FACILITIES_DATA"
+                        v-model="localAmenities"
+                    >
+                        {{ PARKING_FACILITY.SO.FACILITIES }}
+                    </MoleculeCheckbox>
+                </div>
+                <div class="py-4">
+                    <p>Photos(Parking spot pictures)</p>
+                    <MoleculeUpload
+                        @data="updateParkingSpotImg"
+                        :fieldName="'document'"
+                        :rules="validation.parkingSpotImg"
+                    ></MoleculeUpload>
+                </div>
+            </div>
+
             <!-- todo: map integration (not decided yet google map or mapbox) -->
-            <AtomButton class="is-pulled-right">Save Profile</AtomButton>
+            <AtomButton class="is-pulled-right" @click="saveProfile">
+                Save Profile
+            </AtomButton>
         </div>
     </div>
 </template>
@@ -94,8 +103,8 @@ import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
 import MoleculeUpload from '../molecules/MoleculeUpload.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
-import { PARKING_FACILITY } from '../../constant/constant';
-import { mapState } from 'vuex';
+import { PARKING_FACILITY, USER_PROFILE_TYPE } from '../../constant/constant';
+import { mapActions, mapState } from 'vuex';
 export default {
     name: 'OrganismParkingFacility',
     components: {
@@ -108,12 +117,7 @@ export default {
     data() {
         return {
             PARKING_FACILITY,
-            model: {
-                buildingAddr: '',
-                totalParking: '',
-                landmark: '',
-                parkingSpotImg: null,
-            },
+            USER_PROFILE_TYPE,
             validation: {
                 buildingAddr: 'required',
                 totalParking: '',
@@ -121,36 +125,99 @@ export default {
                 landmark: '',
                 parkingType: '',
             },
+            // so variables
+            localBuildingAddr: '',
+            localTotalParking: '',
+            localLandmark: '',
+            localParkingSpotImg: null,
+            localAmenities: '',
+            // vo variables
+            localParkingType: '',
+            localMinDur: '',
+            localCarType: '',
         };
     },
     computed: {
-        ...mapState('user', {
-            userType: (state) => state.userProfile.Type,
-        }),
+        ...mapState('user', ['userProfile']),
+        // to be used when backend api implemented
+        // voParkingType() {
+        //     return 1;
+        // },
+        // voMinDur() {
+        //     return 1;
+        // },
+        // voCarType() {
+        //     return 1;
+        // },
     },
     methods: {
-        updateParkingSpotImg(data) {
-            this.model.parkingSpotImg = data;
-        },
+        ...mapActions('user', [
+            'updateVOParkingFacility',
+            'updateSOParkingFacility',
+        ]),
 
-        updateAmenitiesData(amenitiesData) {
-            // todo
-            console.log(amenitiesData);
+        updateParkingSpotImg(spotImg) {
+            this.localParkingSpotImg = spotImg;
         },
 
         updateType(typeData) {
-            // todo
-            console.log(typeData);
+            this.localParkingType =
+                PARKING_FACILITY.VO.PARKING_TYPE_LIST[typeData].name;
         },
 
         updateMinDur(minDur) {
-            // todo
-            console.log(minDur);
+            this.localMinDur =
+                PARKING_FACILITY.VO.MINIMUM_DURATION_DATA[minDur].name;
         },
 
         updateCarType(carType) {
-            // todo
-            console.log(carType);
+            this.localCarType = PARKING_FACILITY.VO.CAR_TYPE[carType].name;
+        },
+
+        async saveProfile() {
+            if (this.userProfile.Type === USER_PROFILE_TYPE.SO) {
+                try {
+                    await this.updateVOParkingFacility({
+                        ParkingType: this.localParkingType,
+                        MinDur: this.localMinDur,
+                        CarType: this.localCarType,
+                    });
+                    this.updateSavedProfileFlag(true);
+                    this.$buefy.toast.open({
+                        message: 'Profile updated successfully!',
+                        type: 'is-success',
+                        duration: 2000,
+                    });
+                } catch (error) {
+                    this.$buefy.toast.open({
+                        message: `Something went wrong!`,
+                        type: 'is-danger',
+                        duration: 2000,
+                    });
+                }
+            }
+            if (this.userProfile.Type === USER_PROFILE_TYPE.VO) {
+                try {
+                    await this.updateSOParkingFacility({
+                        FullName: this.localFullName,
+                        EmailID: this.localEmailID,
+                        Mobile: this.localMobile,
+                        Type: this.localType,
+                    });
+                    this.updateSavedProfileFlag(true);
+                    this.$buefy.toast.open({
+                        message: 'Profile updated successfully!',
+                        type: 'is-success',
+                        duration: 2000,
+                    });
+                } catch (error) {
+                    this.$buefy.toast.open({
+                        message: `Something went wrong!`,
+                        type: 'is-danger',
+                        duration: 2000,
+                    });
+                }
+            }
         },
     },
 };

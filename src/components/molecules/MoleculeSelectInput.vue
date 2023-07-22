@@ -99,7 +99,7 @@ export default {
 }
 
 .custom-tooltip {
-    left: 16%;
+    left: 85px;
     position: absolute;
     top: 0%;
 }
