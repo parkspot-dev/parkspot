@@ -434,4 +434,4 @@ export default {
 };
 </script>
 
-<style lang="scss" src="./navbar.scss"></style>
+<style lang="scss" src="@/styles/navbar.scss"></style>
