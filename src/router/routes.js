@@ -42,7 +42,7 @@ export const pages = {
     SEARCH_PORTAL           : '/search-portal',
     PAYMENTGATEWAY          : '/payment/*',
     NEARBY                  : '/bangalore/parking-near-*',
-    TEMP                    : '/temp',
+    TEMP                    : '/development-purpose', // only for development and testing purpose
     THANK_YOU               : '/thank-you',
     ERROR                   : '/error',
     BOOKING_PORTAL          : "/internal/booking-portal",
@@ -173,11 +173,11 @@ export const routes = [
             next();
         },
     },
-    // Todo Delete below code before deployment
+    // note: Only for development and testing purpose
     {
         path: pages.TEMP,
-        name: 'temp',
-        component: () => import('@/views/PageTemp.vue'),
+        name: 'DevelopmentPage',
+        component: () => import('@/views/DevelopmentPage.vue'),
     },
     {
         path: '*',
