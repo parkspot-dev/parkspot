@@ -193,7 +193,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .card-wrapper {
     margin: 0 auto;
     max-width: 600px;

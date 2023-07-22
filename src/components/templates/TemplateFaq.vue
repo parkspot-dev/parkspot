@@ -145,8 +145,8 @@ export default {
 <style scoped>
 .custom-wrapper {
     margin: 0 auto;
-    max-width: 960px;
     padding: 60px 0px 100px 0px;
+    max-width: 960px;
 }
 
 .custom-title {

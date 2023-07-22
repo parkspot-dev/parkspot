@@ -202,37 +202,10 @@ export default {
 
 .search-box-controller {
     box-sizing: border-box;
+    position: relative;
     clear: both;
     font-size: 1rem;
-    position: relative;
     text-align: inherit;
-
-    .search-box {
-        width: 100%;
-        border: 1px solid #dbdbdb;
-        height: 2.5em;
-        padding-bottom: calc(0.5em - 1px);
-        padding-left: calc(0.75em - 1px);
-        padding-right: calc(0.75em - 1px);
-        padding-top: calc(0.5em - 1px);
-        font-size: 1rem;
-        align-items: center;
-        display: inline-flex;
-        position: relative;
-        padding-left: 2.5em;
-    }
-
-    .search-icon {
-        color: #dbdbdb;
-        height: 1.85em;
-        pointer-events: none;
-        position: absolute;
-        top: 0;
-        width: 1.75em;
-        z-index: 4;
-        left: 0;
-        font-size: 24px;
-    }
 }
 
 ::placeholder {
@@ -240,11 +213,13 @@ export default {
     opacity: 1; /* Firefox */
 }
 
+/* stylelint-disable-next-line selector-no-vendor-prefix */
 :-ms-input-placeholder {
     /* Internet Explorer 10-11 */
     color: #dbdbdb;
 }
 
+/* stylelint-disable-next-line selector-no-vendor-prefix */
 ::-ms-input-placeholder {
     /* Microsoft Edge */
     color: #dbdbdb;

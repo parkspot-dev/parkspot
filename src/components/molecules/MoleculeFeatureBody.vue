@@ -33,30 +33,33 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .features-card {
     max-height: fit-content;
-}
 
-.features-title {
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
+    .features-title {
+        margin-bottom: 1rem;
+        font-size: 2rem;
+        font-weight: 600;
+    }
 
-.features-img {
-    max-width: 2.5rem;
-}
+    .features-img {
+        max-width: 2.5rem;
+    }
 
-.features-text {
-    -webkit-box-orient: vertical;
-    display: -webkit-box;
-    overflow: hidden;
-}
-.features-text-set {
-    -webkit-line-clamp: 6;
-}
-.features-text-unset {
-    -webkit-line-clamp: unset;
+    .features-text {
+        -webkit-box-orient: vertical;
+        /* stylelint-disable-next-line value-no-vendor-prefix */
+        display: -webkit-box;
+        overflow: hidden;
+    }
+
+    .features-text-set {
+        -webkit-line-clamp: 6;
+    }
+
+    .features-text-unset {
+        -webkit-line-clamp: unset;
+    }
 }
 </style>

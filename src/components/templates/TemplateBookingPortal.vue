@@ -279,23 +279,24 @@ export default {
 
 <style lang="scss" scoped>
 .sub-heading {
-    color: var(--secondary-color);
     margin-bottom: 24px;
+    color: var(--secondary-color);
 }
+
 .payment-link-btn-wrapper {
     margin-bottom: 24px;
 }
 
 .payment-link-detail-container {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
-    margin-bottom: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 24px;
+    padding: 20px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
     flex-direction: column;
-    background: white;
+    background: var(--parkspot-white);
 
     .copy-icon {
         cursor: pointer;
@@ -304,18 +305,18 @@ export default {
         background: transparent;
 
         &:hover {
-            background: var(--primary-color);
             border-radius: 50%;
+            background: var(--primary-color);
         }
     }
 }
 
 .booking-card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
     margin-bottom: 20px;
-    background: white;
+    padding: 20px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    background: var(--parkspot-white);
 
     .card-body {
         display: flex;
@@ -331,6 +332,7 @@ export default {
         display: flex;
         justify-content: space-between;
         width: 50%;
+
         @media only screen and (max-width: 1024px) {
             width: 100%;
         }
@@ -371,7 +373,7 @@ export default {
     .cell {
         flex: 1;
         padding: 10px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #eeeeee;
     }
 
     .status-indicator {
@@ -381,8 +383,8 @@ export default {
     }
 
     .status-label {
-        color: white;
         font-weight: 500;
+        color: var(--parkspot-white);
     }
 
     /* Define different styles for different status labels */

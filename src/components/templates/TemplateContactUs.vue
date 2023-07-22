@@ -59,29 +59,31 @@ export default {
     },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .contact-form {
     max-width: 500px;
 }
+
 .card-padding {
+    padding-top: 3rem !important;
+    padding-right: 1.5rem !important;
     padding-bottom: 4rem !important;
     padding-left: 1.5rem !important;
-    padding-right: 1.5rem !important;
-    padding-top: 3rem !important;
 }
+
 .cta-btn {
+    position: absolute;
     bottom: 6%;
     left: 50%;
     padding: 1.25rem 2rem;
-    position: absolute;
     transform: translate(-50%, 0);
 }
 
 .btn-wrap {
-    align-items: center;
     display: flex;
-    gap: 0.15rem;
     justify-content: center;
+    align-items: center;
+    gap: 0.15rem;
 }
 
 .btn-text {

@@ -87,136 +87,136 @@ export default {
 
 <style lang="scss" scoped>
 .gallery-container {
-    width: 100%;
-    height: 100%;
     position: relative;
     overflow: hidden;
+    width: 100%;
+    height: 100%;
 
     .gallery-item {
         position: absolute;
-        opacity: 1;
-        border: 1px solid var(--parkspot-black);
         display: flex;
         justify-content: center;
         align-items: center;
+        border: 1px solid var(--parkspot-black);
         background: rgb(87, 86, 86);
+        opacity: 1;
 
         .img-responsive {
-            height: 100%;
             width: auto;
-            background: white;
+            height: 100%;
+            background: var(--parkspot-white);
         }
     }
 
     .image-one {
-        width: 100%;
-        height: 400px;
         top: 0;
         left: 0;
+        width: 100%;
+        height: 400px;
     }
 
     .image-two {
         &:nth-child(1) {
-            width: 660px;
-            height: 400px;
             top: 0;
             left: 0;
+            width: 660px;
+            height: 400px;
         }
 
         &:nth-child(2) {
-            width: 667px;
-            height: 400px;
             top: 0;
             left: 675px;
+            width: 667px;
+            height: 400px;
         }
     }
 
     .image-three {
         &:nth-child(1) {
-            width: 660px;
-            height: 400px;
             top: 0;
             left: 0;
+            width: 660px;
+            height: 400px;
         }
 
         &:nth-child(2) {
-            width: 667px;
-            height: 195px;
             top: 0;
             left: 675px;
+            width: 667px;
+            height: 195px;
         }
 
         &:nth-child(3) {
-            width: 667px;
-            height: 195px;
             top: 205px;
             left: 675px;
+            width: 667px;
+            height: 195px;
         }
     }
 
     .image-four {
         &:nth-child(1) {
-            width: 660px;
-            height: 400px;
             top: 0;
             left: 0;
+            width: 660px;
+            height: 400px;
         }
 
         &:nth-child(2) {
-            width: 330px;
-            height: 400px;
             top: 0;
             left: 675px;
+            width: 330px;
+            height: 400px;
         }
 
         &:nth-child(3) {
-            width: 330px;
-            height: 195px;
             top: 0;
             left: 1013px;
+            width: 330px;
+            height: 195px;
         }
 
         &:nth-child(4) {
-            width: 330px;
-            height: 195px;
             top: 205px;
             left: 1013px;
+            width: 330px;
+            height: 195px;
         }
     }
     .image-five {
         &:nth-child(1) {
-            width: 660px;
-            height: 400px;
             top: 0;
             left: 0;
+            width: 660px;
+            height: 400px;
         }
 
         &:nth-child(2) {
-            width: 330px;
-            height: 195px;
             top: 0;
             left: 675px;
+            width: 330px;
+            height: 195px;
         }
 
         &:nth-child(3) {
-            width: 330px;
-            height: 195px;
             top: 205px;
             left: 675px;
+            width: 330px;
+            height: 195px;
         }
 
         &:nth-child(4) {
-            width: 330px;
-            height: 195px;
             top: 0;
             left: 1013px;
+            width: 330px;
+            height: 195px;
         }
 
         &:nth-child(5) {
-            width: 330px;
-            height: 195px;
             top: 205px;
             left: 1013px;
+            width: 330px;
+            height: 195px;
         }
 
         // it will apply to all the child from 6 includes itself

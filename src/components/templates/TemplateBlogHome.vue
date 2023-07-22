@@ -60,9 +60,9 @@ export default {
 <style lang="scss" scoped>
 .blog-header {
     display: flex;
-    height: 200px;
     justify-content: center;
     align-items: center;
+    height: 200px;
     flex-direction: column;
     align-content: space-around;
 

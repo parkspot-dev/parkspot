@@ -65,15 +65,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .custom-title {
     margin-bottom: 4rem;
     text-align: center;
 }
 
 .custom-subtitle {
-    color: var(--secondary-color);
     font-weight: var(--semi-bold-font);
     text-align: center;
+    color: var(--secondary-color);
 }
 </style>

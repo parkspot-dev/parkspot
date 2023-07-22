@@ -113,13 +113,14 @@ export default {
 <style lang="scss" scoped>
 $g-line-height: 1.5 !default;
 $g-spacing: $g-line-height * 1em;
-$black: #000;
+$black: var(--parkspot-black);
 $white: var(--parkspot-white);
 $g-background-color-dark: #18181b;
 
 .swiper {
     padding: 2.5em 1.5em;
     height: 700px;
+
     .swiper-slide {
         margin: 0;
         height: auto;
@@ -129,12 +130,14 @@ $g-background-color-dark: #18181b;
         background: rgba(255, 255, 255, 0.33);
         border-radius: 6px;
         transition: all 0.5s ease-in-out;
+
         &.swiper-slide-active {
             background: rgba(255, 255, 255, 1);
             opacity: 1;
             transform: scale(1.1);
         }
     }
+
     .swiper-nav-wrapper {
         bottom: 0;
         left: 0;
@@ -144,17 +147,19 @@ $g-background-color-dark: #18181b;
         align-items: center;
         margin: 0 auto;
         width: auto;
+
         .swiper-button-next,
         .swiper-button-prev {
-            top: 0;
-            top: auto;
-            left: auto;
-            right: auto;
             position: relative !important;
+            top: auto;
+            right: auto;
+            left: auto;
+
             &:after {
                 display: none;
             }
         }
+
         .swiper-button-next,
         .swiper-container-rtl .swiper-button-prev {
             background-image: url("data:image/svg+xml,%0A%3Csvg width='9px' height='16px' viewBox='0 0 9 16' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='chevron-right' fill='%23000000' fill-rule='nonzero'%3E%3Cpath d='M8.674805,7.066406 L1.924805,0.316406 C1.696288,0.105468 1.432619,0 1.133789,0 C0.834959,0 0.57129,0.105468 0.342773,0.316406 C0.114257,0.544923 0,0.808592 0,1.107422 C0,1.406251 0.114257,1.669921 0.342773,1.898438 L6.301758,7.857422 L0.342773,13.816406 C0.114257,14.044923 0,14.308592 0,14.607422 C0,14.906251 0.114257,15.169921 0.342773,15.398438 C0.465821,15.521485 0.584472,15.609375 0.69873,15.662109 C0.812989,15.714844 0.958007,15.741211 1.133789,15.741211 C1.309571,15.741211 1.454589,15.714844 1.568848,15.662109 C1.683106,15.609375 1.801757,15.521485 1.924805,15.398438 L8.674805,8.648438 C8.903321,8.419921 9.017578,8.156251 9.017578,7.857422 C9.017578,7.558592 8.903321,7.294923 8.674805,7.066406 Z' id='Path'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E") !important;
@@ -180,12 +185,12 @@ $g-background-color-dark: #18181b;
 }
 
 .swiper-pagination {
+    position: relative !important;
+    display: block;
     margin: 0;
     padding: 0;
     width: auto;
-    position: relative !important;
-    display: block;
-    width: auto;
+
     .swiper-pagination-bullets {
         margin: 0;
 

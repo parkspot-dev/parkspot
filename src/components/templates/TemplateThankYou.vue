@@ -58,7 +58,7 @@ export default {
     },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .custom-header {
     font-size: 4rem;
     font-weight: var(--semi-bold-font);
@@ -66,9 +66,9 @@ export default {
 }
 
 .custom-para {
-    color: var(--grey-shade);
     margin-bottom: 2rem;
     text-align: center;
+    color: var(--grey-shade);
 }
 
 .custom-button {
@@ -77,9 +77,9 @@ export default {
 }
 
 .custom-img-wrapper {
-    align-items: center;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .custom-img {

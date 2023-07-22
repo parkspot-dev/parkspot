@@ -74,17 +74,18 @@ export default {
 
 <style lang="scss" scoped>
 .login-card {
-    background-color: white;
-    border-radius: var(--border-default);
-    max-width: 480px;
     margin: 0 auto;
-    padding: 50px 25px 10px 25px;
+    padding: 50px 25px 10px;
+    max-width: 480px;
+    border-radius: var(--border-default);
+    background-color: var(--parkspot-white);
 
     .logo-wrapper {
-        width: 64px;
-        height: 64px;
         margin: auto;
         margin-bottom: 30px;
+        width: 64px;
+        height: 64px;
+
         .login-logo {
             width: 64px;
             height: 64px;
@@ -92,31 +93,31 @@ export default {
     }
 
     .login-title {
+        margin-bottom: 15px;
         font-size: 25px;
         font-weight: 600;
         text-align: center;
-        margin-bottom: 15px;
     }
 
     .login-subtitle {
+        margin-bottom: 15px;
         font-size: 14px;
         text-align: center;
         color: var(--grey-shade);
-        margin-bottom: 15px;
     }
 
     .google-btn {
         display: flex;
-        align-items: center;
         justify-content: center;
+        align-items: center;
+        margin-bottom: 48px;
+        padding: 8px 16px;
+        width: 100%;
+        height: auto;
+        min-height: 40px;
         direction: ltr;
         font-weight: 500;
-        height: auto;
         line-height: normal;
-        min-height: 40px;
-        padding: 8px 16px;
-        margin-bottom: 48px;
-        width: 100%;
         border: none;
         cursor: pointer;
         background-color: var(--parkspot-white);
@@ -124,31 +125,33 @@ export default {
             0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%);
 
         .google-btn-icon-wrapper {
-            height: 18px;
             width: 18px;
+            height: 18px;
+
             img {
-                height: 18px;
                 width: 18px;
+                height: 18px;
             }
         }
 
         .google-btn-text {
-            font-size: 14px;
             padding-left: 16px;
+            font-size: 14px;
             text-transform: none;
             color: #757575;
         }
     }
     .login-footer {
         padding: 0 60px;
+
         p {
+            margin-top: 0;
+            margin-bottom: 24px;
+            font-size: 12px;
+            text-align: center;
             color: #757575;
             direction: ltr;
-            font-size: 12px;
             line-height: 16px;
-            margin-bottom: 24px;
-            margin-top: 0;
-            text-align: center;
         }
     }
 }

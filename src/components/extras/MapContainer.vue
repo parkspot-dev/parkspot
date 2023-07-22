@@ -144,6 +144,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* stylelint-disable-next-line selector-max-id */
 #map {
     width: 100%;
 }
