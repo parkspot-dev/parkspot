@@ -1,6 +1,6 @@
 <template>
     <div class="blog-card">
-        <div class="blog-image">
+        <div class="img-wrapper blog-image">
             <AtomImage
                 :alt="'image'"
                 :src="blog.img"
@@ -18,7 +18,13 @@
 
             <div class="blog-desc">
                 <p>{{ blog.desc }}</p>
-                <time :datetime="blog.dateTime">{{ blog.time }}</time>
+                <time :datetime="blog.dateTime">{{ blog.time }} </time>
+                <span>
+                    <button 
+                        class="btn-text" 
+                        @click="onBlogClick(blog.id)">Read more...
+                    </button>
+                </span>           
             </div>
         </div>
     </div>
@@ -36,12 +42,18 @@ export default {
     components: {
         AtomImage,
     },
+    emits:['onBtnClick'],
+    methods: {
+        onBlogClick(data) {
+            console.log("Data",data);
+            this.$emit('onBtnClick', data);
+        },
+    },
 };
 </script>
 
 <style lang="scss" scoped>
 .blog-card {
-    cursor: pointer;
     min-width: 374px;
     min-height: 379px;
     border-radius: var(--border-default);
@@ -78,7 +90,6 @@ export default {
         }
 
         .blog-title {
-            cursor: pointer;
             margin-bottom: 1rem;
 
             &:hover {
@@ -107,5 +118,29 @@ export default {
             }
         }
     }
+}
+
+.blog-card {
+    .img-wrapper.blog-image {
+        border-top-left-radius: 45px;
+        border-top-right-radius: 45px;
+        border-bottom-left-radius: 25px;
+        border-bottom-right-radius: 25px;
+        padding: 12px;        
+    }
+}
+
+.blog-card .blog-content .blog-desc .btn-text {
+    float: right; 
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-text);
+    border-radius: 50px;
+    border-style: none;
+    padding: 4px 10px;
+    cursor: pointer;
+
+    &:hover {
+                color: var(--secondary-color) ;
+            }
 }
 </style>
