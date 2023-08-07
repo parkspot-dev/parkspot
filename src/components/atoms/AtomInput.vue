@@ -71,7 +71,7 @@ export default {
          *  User input value in the input field
          */
         value: {
-            type: String,
+            type: [String, Number],
             default: null,
         },
 
