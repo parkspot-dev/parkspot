@@ -58,6 +58,17 @@ const actions = {
         }
         commit('set-loading', false);
     },
+
+    async updateBookingDetails({ commit, dispatch }, reqBody) {
+        commit('set-loading', true);
+        const res = await mayaClient.post('/booking/update', reqBody);
+        if (res.Success) {
+            dispatch('getBookingDetails', reqBody.ID);
+        } else if (res.DisplayMsg) {
+            commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
+        }
+        commit('set-loading', false);
+    },
 };
 
 export default {
