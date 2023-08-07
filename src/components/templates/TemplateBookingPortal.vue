@@ -393,7 +393,6 @@ export default {
         },
 
         enableEdit(fieldName) {
-            console.log('edit', fieldName);
             this.editField = fieldName;
         },
 
@@ -401,7 +400,6 @@ export default {
             this.editField = null;
             const reqBody = {
                 ID: this.bookingDetails.Booking.ID,
-                // Status: 3,
                 Rent: this.rent ? Number(this.rent) : this.bookingDetails.rent,
                 BaseAmount: this.baseAmt
                     ? Number(this.baseAmt)
