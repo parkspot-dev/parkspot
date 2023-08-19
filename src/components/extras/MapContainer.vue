@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { getMapDirectionUrl } from '@/includes/MapUtils';
 export default {
     name: 'MapContainer',
     props: {
@@ -81,24 +82,35 @@ export default {
             }
 
             this.spotsList.forEach((spot) => {
-                const encodedSpotId = encodeURIComponent(spot.ID);
+                                const encodedSpotId = encodeURIComponent(spot.ID);
                 const contentString = `<div dir="ltr" style="" jstcache="0">
                         <div jstcache="34" class="poi-info-window gm-style">
                             <div jstcache="2">
-                                <div jstcache="3" class="title full-width" jsan="7.title,7.full-width"> ${spot.Name} </div>
+                                <div jstcache="3" class="title full-width" jsan="7.title,7.full-width"> ${
+                                    spot.Name
+                                } </div>
                                 <div class="address">
-                                    <div jstcache="4" jsinstance="0" class="address-line full-width" jsan="7.address-line,7.full-width"> ${spot.Address} </div>
+                                    <div jstcache="4" jsinstance="0" class="address-line full-width" jsan="7.address-line,7.full-width"> ${
+                                        spot.Address
+                                    } </div>
                                     <div jstcache="4" jsinstance="*3" class="address-line full-width" jsan="7.address-line,7.full-width">India</div>
                                 </div>
                             </div>
-                            <div jstcache="5" style="margin-top: 0.5rem;">Distance: ${spot.Distance} Km</div>
+                            <div jstcache="5" style="margin-top: 0.5rem;">Distance: ${
+                                spot.Distance
+                            } Km</div>
                             <div jstcache="5" style="margin-top: 0.5rem;">
                                 Click
-                                <a href="https://www.google.com/maps/dir/'${this.center.lat},${this.center.lng}'/'${spot.Latitude},${spot.Longitude}'/@18.2566348,76.9574504,6z/data=!3m1!4b1!4m10!4m9!1m3!2m2!1d${this.center.lat},${this.center.lng}!1m3!2m2!1d${spot.Longitude}!2d${spot.Latitude}!3e0" target="_blank"> here </a>
+                                <a href="${getMapDirectionUrl(
+                                    spot.Lat,
+                                    spot.Long,
+                                )}" target="_blank"> here </a>
                                 for map direction.
                             </div>
                             <div style="display: flex;justify-content: space-between;align-items: center;margin-top: 1.5rem">
-                                <div style="font-size:1rem;font-weight: 700;color: rgba(0,95,0,1);line-height: 1.25;">&#8377; ${spot.Rate}/-</div>
+                                <div style="font-size:1rem;font-weight: 700;color: rgba(0,95,0,1);line-height: 1.25;">&#8377; ${
+                                    spot.Rate
+                                }/-</div>
                                 <button style="background-color: #ffe08a;border-color: transparent;border-radius: 3px;color: rgba(0, 0, 0, 0.7);">
                                     <a style="display:flex;align-items: center;background-color: #ffe08a;color: rgba(0, 0, 0, 0.7);" href="https://www.parkspot.in/spot-details/${encodedSpotId}" target="_blank">
                                         <span style="font-size:0.75rem;font-weight:700"> View Spot </span>
