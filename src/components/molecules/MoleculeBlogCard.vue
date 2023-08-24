@@ -45,7 +45,6 @@ export default {
     emits:['onBtnClick'],
     methods: {
         onBlogClick(data) {
-            console.log("Data",data);
             this.$emit('onBtnClick', data);
         },
     },
