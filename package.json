@@ -11,6 +11,7 @@
     "test": "jest --watch"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.15.2",
     "aos": "^2.3.4",
     "axios": "^0.26.1",
     "babel-core": "^7.0.0-bridge.0",
@@ -21,6 +22,7 @@
     "lightgallery.js": "^1.4.0",
     "lodash": "^4.17.21",
     "mapbox-gl": "^1.13.2",
+    "moment": "^2.29.4",
     "swiper": "^8.4.4",
     "v-click-outside": "^3.2.0",
     "vee-validate": "^3.4.14",

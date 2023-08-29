@@ -38,8 +38,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$leftPos: 200px;
-$rightPos: 735px;
+$left-pos: 200px;
+$right-pos: 735px;
+
 .infographic-container {
     position: relative;
 
@@ -49,10 +50,11 @@ $rightPos: 735px;
         align-items: center;
         gap: 80px;
     }
+
     .infographic-bg-img {
+        position: relative;
         width: 100%;
         height: 1200px;
-        position: relative;
         background-image: url('../../assets/infographic-line.png');
         background-position: center;
         background-repeat: no-repeat;
@@ -67,10 +69,12 @@ $rightPos: 735px;
         font-size: 24px;
         line-height: 29px;
     }
+
     .steps-container {
+        position: absolute;
         width: 390px;
         text-align: center;
-        position: absolute;
+
         @media only screen and (max-width: 1024px) {
             position: relative;
             top: unset !important;
@@ -80,27 +84,32 @@ $rightPos: 735px;
 
     .infographic-first {
         top: 210px;
-        left: $leftPos;
+        left: $left-pos;
     }
+
     .infographic-second {
         top: 330px;
-        left: $rightPos;
+        left: $right-pos;
     }
+
     .infographic-third {
         top: 535px;
-        left: $leftPos;
+        left: $left-pos;
     }
+
     .infographic-fourth {
         top: 625px;
-        left: $rightPos;
+        left: $right-pos;
     }
+
     .infographic-fifth {
         top: 845px;
-        left: $leftPos;
+        left: $left-pos;
     }
+
     .infographic-sixth {
         top: 935px;
-        left: $rightPos;
+        left: $right-pos;
     }
 }
 </style>

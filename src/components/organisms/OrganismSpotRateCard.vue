@@ -25,8 +25,8 @@
             </div>
             <div>
                 <div class="negative-margin">
-                    <p style="margin-right: 5px">Conv. fee (
-                         <span class="bold-text"> One time </span> ) 
+                    <p style="margin-right: 5px">
+                        Conv. fee ( <span class="bold-text"> One time </span> )
                     </p>
                     <AtomTooltip :label="tooltipMsg">
                         <AtomIcon
@@ -111,45 +111,45 @@ export default {
 
 <style lang="scss" scoped>
 .rate-card {
+    overflow: hidden;
+    padding: 16px;
     width: 328px;
     height: 400px;
-    border: 1px solid #000000;
+    border: 1px solid var(--parkspot-black);
     border-radius: var(--border-default);
-    padding: 16px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    overflow: hidden;
 
     hr {
-        background-color: #d7d7d7;
         height: 2px;
+        background-color: #d7d7d7;
     }
 
     .rate-container {
         display: flex;
-        gap: 10px;
         align-items: flex-start;
+        gap: 10px;
 
         .rate {
-            font-weight: 600;
             font-size: 20px;
+            font-weight: 600;
             text-decoration: line-through;
             color: #474747;
         }
 
         .discount-rate {
-            font-weight: 600;
             font-size: 24px;
-            color: #000;
+            font-weight: 600;
+            color: var(--parkspot-black);
         }
 
         .discount-label {
-            font-size: 15px;
-            font-weight: bold;
-            background: hsl(141deg, 53%, 53%);
-            padding: 2px 28px;
             position: absolute;
             top: 13px;
             right: -24px;
+            padding: 2px 28px;
+            font-size: 15px;
+            font-weight: bold;
+            background: hsl(141deg, 53%, 53%);
             transform: rotate(40deg);
         }
     }
@@ -177,16 +177,16 @@ export default {
 
     ul {
         position: relative;
-        font-size: 16px;
         margin-left: 20px;
+        font-size: 16px;
 
         li:before {
-            content: '. ';
-            font-weight: bold;
-            font-size: 50px;
             position: absolute;
             top: -38.5px;
             left: -18px;
+            content: '. ';
+            font-size: 50px;
+            font-weight: bold;
         }
         .status-green {
             color: hsl(141, 53%, 53%);

@@ -81,16 +81,16 @@ export default {
     },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .contact-us {
-    padding-left: 4rem;
     padding-right: 12rem;
+    padding-left: 4rem;
 }
 
 @media only screen and (max-width: 1200px) {
     .contact-us {
-        padding-left: 2rem;
         padding-right: 8rem;
+        padding-left: 2rem;
     }
 }
 
@@ -101,12 +101,12 @@ export default {
 }
 
 .options {
-    border: 2px solid transparent;
-    border-radius: var(--border-default);
-    color: var(--primary-text);
     display: block;
     margin-bottom: 0.75rem;
     padding: 1rem 0.5rem;
+    border: 2px solid transparent;
+    border-radius: var(--border-default);
+    color: var(--parkspot-black);
     transition: all 0.3s;
 }
 
@@ -126,6 +126,7 @@ export default {
     .mg-large {
         margin-bottom: 3rem;
     }
+
     .mg-medium {
         margin-bottom: 1rem;
     }
@@ -137,10 +138,10 @@ export default {
 }
 
 .social-icon {
-    color: var(--primary-text);
-    padding: 0.5rem;
     position: relative;
     z-index: 1;
+    padding: 0.5rem;
+    color: var(--parkspot-black);
 }
 
 .social-icon:hover {
@@ -148,13 +149,13 @@ export default {
 }
 
 .social-icon:hover::after {
-    background-color: var(--secondary-color);
-    border-radius: 100%;
-    content: '';
-    left: -5px;
-    padding: 1.75rem;
     position: absolute;
     top: -4px;
+    left: -5px;
     z-index: -1;
+    padding: 1.75rem;
+    border-radius: 100%;
+    background-color: var(--secondary-color);
+    content: '';
 }
 </style>

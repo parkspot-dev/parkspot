@@ -29,7 +29,7 @@
                         <div class="app-links">
                             <span>
                                 <a
-                                    href="https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website"
+                                    :href="APP_LINK.ANDROID"
                                     target="_blank"
                                 >
                                     <figure class="card-img image">
@@ -41,10 +41,7 @@
                                 </a>
                             </span>
                             <span>
-                                <a
-                                    href="https://apps.apple.com/in/app/parkspot-find-book-parking/id6449634064"
-                                    target="_blank"
-                                >
+                                <a :href="APP_LINK.IOS" target="_blank">
                                     <figure class="card-img image">
                                         <img
                                             alt="ios app link"
@@ -66,6 +63,7 @@ import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomImage from '../atoms/AtomImage.vue';
+import { APP_LINK } from '@/constant/constant';
 export default {
     name: 'TemplateAbout',
     components: {
@@ -79,6 +77,7 @@ export default {
             appLinkImg: require('@/assets/google-play-badge.svg'),
             iosAppLinkImg: require('@/assets/apple-store.svg'),
             aboutImg: require('@/assets/about.svg'),
+            APP_LINK,
         };
     },
 };

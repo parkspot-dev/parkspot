@@ -117,8 +117,8 @@ export default {
 
 <style lang="scss" scoped>
 .edit-profile-main {
-    max-width: 878px;
     margin: 0 auto;
+    max-width: 878px;
 }
 .profile-group-head {
     position: relative;
@@ -127,10 +127,10 @@ export default {
     margin-bottom: 30px;
 
     .user-avatar {
+        margin-bottom: 32px;
         width: 48px;
         height: 48px;
         border-radius: 100%;
-        margin-bottom: 32px;
 
         img {
             width: 100%;
@@ -146,22 +146,23 @@ export default {
             font-size: 20px;
             font-weight: 500;
             line-height: 29px;
-            color: black;
+            color: var(--parkspot-black);
+
             a {
-                color: black;
+                color: var(--parkspot-black);
             }
 
             span {
-                color: #abaab5;
                 margin: 0 3px;
+                color: #abaab5;
             }
         }
 
         h2 {
             display: inline-block;
-            color: #6e6d7a;
             font-size: 14px;
             font-weight: normal;
+            color: #6e6d7a;
         }
     }
 }
@@ -178,12 +179,14 @@ export default {
         ul {
             li {
                 padding: 7px 0;
+
                 a {
                     color: #6e6d7a;
                 }
+
                 .link-active {
-                    color: black;
                     font-weight: 600;
+                    color: var(--parkspot-black);
                 }
             }
         }

@@ -3,10 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import fbApp from './FB-App.vue';
-
-import 'bulma/css/bulma.css';
 import Buefy from 'buefy';
-import 'buefy/dist/buefy.css';
 import './includes/VeeValidate';
 import AOS from 'aos';
 import 'aos/dist/aos.css';

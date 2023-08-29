@@ -26,20 +26,20 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .custom-card {
-    border: 2px dotted var(--secondary-color);
-    border-radius: var(--border-default);
-    border-style: dashed;
     padding: 2rem 3rem;
+    border: 2px dotted var(--secondary-color);
+    border-style: dashed;
+    border-radius: var(--border-default);
     transition: transform 0.3s ease;
 }
 
 .custom-card:hover,
 .custom-card:focus {
-    background-color: var(--primary-color);
     border: 2px solid transparent;
     color: var(--secondary-color);
+    background-color: var(--primary-color);
     transform: scale(1.05);
 }
 </style>

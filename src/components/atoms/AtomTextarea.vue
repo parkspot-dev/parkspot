@@ -53,7 +53,7 @@ export default {
          */
         rowNo: {
             type: Number,
-            default: 9,
+            default: 5,
         },
     },
     emits: ['input', 'changed'],
