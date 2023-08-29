@@ -157,19 +157,19 @@ export default {
 </script>
 <style lang="scss" scoped>
 .parking-facility-header {
-    background-color: var(--secondary-color);
-    padding: 20px 32px;
     margin-bottom: 32px;
+    padding: 20px 32px;
+    background-color: var(--secondary-color);
 
     h1 {
-        color: var(--parkspot-black);
-        font-weight: 600;
         font-size: 24px;
+        font-weight: 600;
+        color: var(--parkspot-black);
     }
 
     h2 {
-        color: #e8faff;
         font-size: 14px;
+        color: #e8faff;
     }
 }
 

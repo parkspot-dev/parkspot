@@ -59,22 +59,22 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .card-wrapper {
     height: 450px;
 }
 
 .custom-content-wrapper {
-    background: var(--parkspot-white);
-    border-radius: var(--border-default);
-    box-shadow: 0 0 15px #000;
-    display: block;
-    left: 50%;
-    padding: 1.5rem 2rem;
     position: absolute;
     top: 100%;
-    transform: translate(-50%, -50%);
+    left: 50%;
+    display: block;
+    padding: 1.5rem 2rem;
     width: 80%;
+    border-radius: var(--border-default);
+    background: var(--parkspot-white);
+    box-shadow: 0 0 15px #000000;
+    transform: translate(-50%, -50%);
 }
 
 .custom-content {

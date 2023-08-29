@@ -55,10 +55,10 @@ export default {
 
     .blog-image {
         cursor: pointer;
+        overflow: hidden;
+        height: 189px;
         opacity: 1;
         transition: 0.3s ease-in-out;
-        height: 189px;
-        overflow: hidden;
         border-top-left-radius: var(--border-default);
         border-top-right-radius: var(--border-default);
 
@@ -73,6 +73,7 @@ export default {
 
     .blog-content {
         padding: 0.75rem;
+
         .blog-image:hover {
             opacity: 0.5;
         }
@@ -97,8 +98,8 @@ export default {
         }
 
         .blog-desc {
-            font-weight: 400;
             font-size: 1rem;
+            font-weight: 400;
             line-height: 24px;
             color: var(--grey-shade);
 

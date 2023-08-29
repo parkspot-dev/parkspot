@@ -132,22 +132,22 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .features-card {
-    /* margin-bottom: 1rem; */
     border: solid 1px #eeeeee;
-    /* border-bottom: 0px; */
 }
+
 .feature-card__details {
-    max-height: 300px;
     overflow: hidden;
+    max-height: 300px;
 }
+
 .feature-card__show,
 .feature-card__hide {
+    display: inline;
     text-align: center;
     cursor: pointer;
     color: var(--secondary-color);
-    display: inline;
 }
 
 /* TRANSITION */
@@ -155,6 +155,7 @@ export default {
 .expand-transition {
     transition: all 1.5s ease;
 }
+
 /* .expand-enter defines the starting state for entering */
 /* .expand-leave defines the ending state for leaving */
 .expand-enter,
