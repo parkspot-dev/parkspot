@@ -20,7 +20,29 @@
         </div>
         <!---  Booking details-->
         <div class="booking-card">
-            <h3 class="sub-heading">Booking Details</h3>
+            <div class="card-top">
+                <h3 class="sub-heading">Booking Details</h3>
+                <div class="action-group">
+                    <span class="edit-icon">
+                        <AtomIcon
+                            @click.native="enableEdit('Booking Details')"
+                            :icon="'file-edit-outline'"
+                        >
+                        </AtomIcon>
+                    </span>
+                    <span class="save-icon">
+                        <AtomIcon
+                            @click.native="saveField"
+                            :icon="'content-save-outline'"
+                        >
+                        </AtomIcon>
+                    </span>
+                    <span class="cancel-icon">
+                        <AtomIcon @click.native="cancelField" :icon="'close'">
+                        </AtomIcon>
+                    </span>
+                </div>
+            </div>
             <div class="card-body">
                 <div class="col-wrapper">
                     <div class="field-col">
@@ -53,15 +75,24 @@
                     </div>
                     <div class="value-col">
                         <p>
-                            <!-- {{ bookingDetails.Booking.CreatedAt.split('T')[0] }} -->
                             {{
                                 getFormattedDate(
                                     bookingDetails.Booking.CreatedAt,
                                 )
                             }}
                         </p>
-                        <p>
-                            <!-- {{ bookingDetails.Booking.StartTime.split('T')[0] }} -->
+                        <div
+                            class="input-field"
+                            v-if="editField === 'Booking Details'"
+                        >
+                            <AtomDatePicker
+                                :size="'is-small'"
+                                class="column-width"
+                                @changed="onStartDateUpdate"
+                            >
+                            </AtomDatePicker>
+                        </div>
+                        <p v-else>
                             {{
                                 getFormattedDate(
                                     bookingDetails.Booking.StartTime,
@@ -123,7 +154,29 @@
 
         <!-- rent details-->
         <div class="booking-card">
-            <h3 class="sub-heading">Rent Details</h3>
+            <div class="card-top">
+                <h3 class="sub-heading">Rent Details</h3>
+                <div class="action-group">
+                    <span class="edit-icon">
+                        <AtomIcon
+                            @click.native="enableEdit('Rent Details')"
+                            :icon="'file-edit-outline'"
+                        >
+                        </AtomIcon>
+                    </span>
+                    <span class="save-icon">
+                        <AtomIcon
+                            @click.native="saveField"
+                            :icon="'content-save-outline'"
+                        >
+                        </AtomIcon>
+                    </span>
+                    <span class="cancel-icon">
+                        <AtomIcon @click.native="cancelField" :icon="'close'">
+                        </AtomIcon>
+                    </span>
+                </div>
+            </div>
             <div class="card-body">
                 <div class="col-wrapper">
                     <div class="field-col">
@@ -136,13 +189,43 @@
                         <p><strong> Priodicity: </strong></p>
                     </div>
                     <div class="value-col">
-                        <p>
+                        <div
+                            class="input-field"
+                            v-if="editField === 'Rent Details'"
+                        >
+                            <AtomInput
+                                :size="'is-small'"
+                                :value="bookingDetails.Booking.Rent"
+                                @input="onRentUpdate"
+                            ></AtomInput>
+                        </div>
+                        <p v-else>
                             {{ bookingDetails.Booking.Rent }}
                         </p>
-                        <p>
+                        <div
+                            class="input-field"
+                            v-if="editField === 'Rent Details'"
+                        >
+                            <AtomInput
+                                :size="'is-small'"
+                                :value="bookingDetails.Booking.BaseAmount"
+                                @input="onBaseAmtUpdate"
+                            ></AtomInput>
+                        </div>
+                        <p v-else>
                             {{ bookingDetails.Booking.BaseAmount }}
                         </p>
-                        <p>
+                        <div
+                            class="input-field"
+                            v-if="editField === 'Rent Details'"
+                        >
+                            <AtomInput
+                                :size="'is-small'"
+                                :value="bookingDetails.Booking.PaymentPeriod"
+                                @input="onPeriodicityUpdate"
+                            ></AtomInput>
+                        </div>
+                        <p v-else>
                             {{ bookingDetails.Booking.PaymentPeriod }}
                         </p>
                     </div>
@@ -157,10 +240,30 @@
                         </p>
                     </div>
                     <div class="value-col">
-                        <p>
+                        <div
+                            class="input-field"
+                            v-if="editField === 'Rent Details'"
+                        >
+                            <AtomInput
+                                :size="'is-small'"
+                                :value="bookingDetails.Booking.ConvenienceFee"
+                                @input="onConvFeeUpdate"
+                            ></AtomInput>
+                        </div>
+                        <p v-else>
                             {{ bookingDetails.Booking.ConvenienceFee }}
                         </p>
-                        <p>
+                        <div
+                            class="input-field"
+                            v-if="editField === 'Rent Details'"
+                        >
+                            <AtomInput
+                                :size="'is-small'"
+                                :value="bookingDetails.Booking.RentCycle"
+                                @input="onRentCycleUpdate"
+                            ></AtomInput>
+                        </div>
+                        <p v-else>
                             {{ bookingDetails.Booking.RentCycle }}
                         </p>
                     </div>
@@ -213,15 +316,30 @@ import { PaymentStatus, getPaymentStatusLabel } from '@/constant/enums';
 import AtomButton from '../atoms/AtomButton.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
 import AtomTooltip from '../atoms/AtomTooltip.vue';
+import AtomDatePicker from '../atoms/AtomDatePicker.vue';
+import AtomInput from '../atoms/AtomInput.vue';
 import moment from 'moment';
 
 export default {
     name: 'TemplateBookingPortal',
-    components: { AtomButton, AtomIcon, AtomTooltip },
+    components: {
+        AtomButton,
+        AtomIcon,
+        AtomTooltip,
+        AtomDatePicker,
+        AtomInput,
+    },
 
     data() {
         return {
             toolTipLabel: 'Copy payment url!',
+            editField: null,
+            startDate: '',
+            rent: '',
+            convFee: '',
+            baseAmt: '',
+            rentCycle: '',
+            periodicity: '',
         };
     },
 
@@ -273,6 +391,60 @@ export default {
         getFormattedDate(date) {
             return moment(date).format('MMMM Do YYYY, hh:mm A');
         },
+
+        enableEdit(fieldName) {
+            this.editField = fieldName;
+        },
+
+        saveField() {
+            this.editField = null;
+            const reqBody = {
+                ID: this.bookingDetails.Booking.ID,
+                Rent: this.rent ? Number(this.rent) : this.bookingDetails.rent,
+                BaseAmount: this.baseAmt
+                    ? Number(this.baseAmt)
+                    : this.bookingDetails.BaseAmount,
+                ConvenienceFee: this.convFee
+                    ? Number(this.convFee)
+                    : this.bookingDetails.ConvenienceFee,
+                RentCycle: this.rentCycle
+                    ? Number(this.rentCycle)
+                    : this.bookingDetails.RentCycle,
+                StartTime: this.startDate
+                    ? this.startDate
+                    : this.bookingDetails.StartTime, // 2023-06-04T00:00:00.000Z
+            };
+
+            this.$emit('update-booking-details', reqBody);
+        },
+
+        cancelField() {
+            this.editField = null;
+        },
+
+        onStartDateUpdate(updatedDate) {
+            this.startDate = updatedDate;
+        },
+
+        onRentUpdate(updatedRent) {
+            this.rent = updatedRent;
+        },
+
+        onBaseAmtUpdate(updatedBaseAmt) {
+            this.baseAmt = updatedBaseAmt;
+        },
+
+        onPeriodicityUpdate(updatedPeriodicity) {
+            this.periodicity = updatedPeriodicity;
+        },
+
+        onConvFeeUpdate(updatedConvFee) {
+            this.convFee = updatedConvFee;
+        },
+
+        onRentCycleUpdate(updatedRentCycle) {
+            this.rentCycle = updatedRentCycle;
+        },
     },
 };
 </script>
@@ -313,10 +485,7 @@ export default {
 
 .booking-card {
     margin-bottom: 20px;
-    padding: 20px;
-    border: 1px solid #cccccc;
-    border-radius: 5px;
-    background: var(--parkspot-white);
+    background: white;
 
     .card-body {
         display: flex;
@@ -325,6 +494,10 @@ export default {
 
         @media only screen and (max-width: 1024px) {
             flex-direction: column;
+        }
+
+        .input-field {
+            margin-bottom: 6px;
         }
     }
 
@@ -352,6 +525,29 @@ export default {
 
         p {
             margin-bottom: 16px;
+        }
+    }
+    .edit-col {
+        width: 50%;
+        text-align: left;
+
+        p {
+            margin-bottom: 16px;
+        }
+
+        span {
+            margin-left: 12px;
+            cursor: pointer;
+        }
+
+        .edit-icon {
+            color: var(--primary-color);
+        }
+        .save-icon {
+            color: var(--parkspot-green);
+        }
+        .cancel-icon {
+            color: var(--parkspot-red);
         }
     }
 }

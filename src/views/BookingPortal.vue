@@ -12,6 +12,7 @@
         <TemplateBookingPortal
             v-if="!hasError && !isLoading"
             @payment-link="getPaymentLink"
+            @update-booking-details="updateBookingDetails"
         ></TemplateBookingPortal>
         <LoaderModal :isLoading="isLoading"></LoaderModal>
     </div>
@@ -38,7 +39,11 @@ export default {
     },
 
     methods: {
-        ...mapActions('bookingPortal', ['getBookingDetails', 'getPaymentLink']),
+        ...mapActions('bookingPortal', [
+            'getBookingDetails',
+            'getPaymentLink',
+            'updateBookingDetails',
+        ]),
     },
 };
 </script>
