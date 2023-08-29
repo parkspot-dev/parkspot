@@ -22,7 +22,7 @@
                     :key="blog.id"
                     v-for="blog in blogs"
                     :blog="blog"
-                    @click.native="onBlogClick(blog.id)"
+                    @onBtnClick="onBlogClick"
                     data-aos="zoom-in-up"
                 ></MoleculeBlogCard>
             </div>
