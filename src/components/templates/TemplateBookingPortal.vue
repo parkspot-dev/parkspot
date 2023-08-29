@@ -485,35 +485,7 @@ export default {
 
 .booking-card {
     margin-bottom: 20px;
-    padding: 20px;
-    border: 1px solid #cccccc;
-    border-radius: 5px;
-    background: var(--parkspot-white);
-
-    .card-top {
-        position: relative;
-
-        .action-group {
-            position: absolute;
-            top: 0;
-            right: 0;
-
-            span {
-                margin-left: 12px;
-                cursor: pointer;
-            }
-
-            .edit-icon {
-                color: var(--primary-color);
-            }
-            .save-icon {
-                color: var(--parkspot-green);
-            }
-            .cancel-icon {
-                color: var(--parkspot-red);
-            }
-        }
-    }
+    background: white;
 
     .card-body {
         display: flex;

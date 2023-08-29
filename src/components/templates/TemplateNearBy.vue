@@ -93,15 +93,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .custom-header {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 1rem;
     height: 100px;
     flex-direction: column;
     align-content: space-between;
-    margin-bottom: 1rem;
     text-align: center;
 }
 
@@ -117,7 +117,7 @@ export default {
 }
 
 .custom-nearby {
-    color: var(--grey-shade);
     margin-bottom: 1rem;
+    color: var(--grey-shade);
 }
 </style>

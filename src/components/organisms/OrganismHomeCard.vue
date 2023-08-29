@@ -154,9 +154,9 @@ export default {
             color: var(--parkspot-black);
 
             @media only screen and (max-width: 1024px) {
+                margin-bottom: 62px;
                 font-size: 32px;
                 line-height: 39px;
-                margin-bottom: 62px;
             }
         }
 

@@ -51,7 +51,7 @@ export default {
     },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .main-heading {
     background: url('../../assets/main-header-blob.svg');
     background-repeat: no-repeat;
@@ -87,9 +87,9 @@ export default {
 }
 
 .title-second {
-    color: var(--secondary-color);
     font-size: 1.5em;
     font-weight: 700;
+    color: var(--secondary-color);
 }
 
 @media only screen and (min-width: 1024px) {
