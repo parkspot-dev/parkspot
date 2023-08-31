@@ -12,6 +12,7 @@ const state = {
                 Earlier motor vehicles...`,
             time: 'Nov 2, 2020',
             dateTime: '2020-02-11',
+            component: 'OrganismEliminatingTrafficPageDesign',
         },
         {
             id: 'Parking-Challenges-in-Office-Area',
@@ -24,6 +25,7 @@ const state = {
                 searching for the...`,
             time: 'Aug 30, 2021',
             dateTime: '2021-30-07',
+            component: 'OrganismParkingChallengesPageDesign',
         },
         {
             id: 'NO-Parking',
@@ -36,6 +38,33 @@ const state = {
                 In order to tackl...`,
             time: 'Aug 5, 2021',
             dateTime: '2021-05-07',
+            component: 'OrganismNoParkingPageDesign',
+        },
+        {
+            id: 'Extra-Income',
+            title: ' An Easy Way to Earn Extra Income!',
+            author: 'Sudhanshu Kumar',
+            author_img: require('@/assets/team/sud.jpg'),
+            img: require('@/assets/blog/comfort-parking-3.jpg'),
+            desc: `Are you looking for a way to earn some extra income without putting 
+                in a lot of effort? If so, consider renting out your parking space. 
+                Whether you have an unused driv...`,
+            time: 'June 10, 2023',
+            dateTime: '2023-06-10',
+            component: 'OrganismExtraIncomePageDesign',
+        },
+        {
+            id: 'Perfect-Parking',
+            title: 'Finding the Perfect Parking Spot!',
+            author: 'Nitya Aggarwal',
+            author_img: require('@/assets/team/ish.jpg'),
+            img: require('@/assets/blog/1490246624-boston-parking-spaces.jpg'),
+            desc: `Are you tired of endlessly circling the block in search of a parking spot? 
+                Fear not, because in this vlog we'll be sharing some tips and tricks for 
+                finding the perfect parking spot...`,
+            time: 'June 15, 2023',
+            dateTime: '2023-06-15',
+            component: 'OrganismPerfectParkingPageDesign',
         },
     ],
 };
@@ -60,10 +89,7 @@ const mutations = {
 
 // actions
 const actions = {
-    getContentById(state, id) {
-        const result = require(`../../blogs/${id}.json`);
-        return result.content;
-    },
+
 };
 
 export default {

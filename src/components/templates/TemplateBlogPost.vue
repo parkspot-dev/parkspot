@@ -51,7 +51,7 @@
                     :ratio="'16by9'"
                     class="mb-4"
                 ></AtomImage>
-                <section v-html="content"></section>
+                <component :is="blog.component"></component>
             </article>
         </BodyWrapper>
     </div>
@@ -63,6 +63,12 @@ import AtomHeading from '../atoms/AtomHeading.vue';
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomImage from '../atoms/AtomImage.vue';
+import OrganismNoParkingPageDesign from '../organisms/OrganismNoParkingPageDesign';
+import OrganismEliminatingTrafficPageDesign from '../organisms/OrganismEliminatingTrafficPageDesign';
+import OrganismParkingChallengesPageDesign from '../organisms/OrganismParkingChallengesPageDesign';
+import OrganismExtraIncomePageDesign from '../organisms/OrganismExtraIncomePageDesign';
+import OrganismPerfectParkingPageDesign from '../organisms/OrganismPerfectParkingPageDesign';
+
 export default {
     name: 'TemplateBlogPost',
     components: {
@@ -71,17 +77,16 @@ export default {
         AtomParagraph,
         AtomImage,
         BodyWrapper,
+        OrganismNoParkingPageDesign,
+        OrganismEliminatingTrafficPageDesign,
+        OrganismParkingChallengesPageDesign,
+        OrganismExtraIncomePageDesign,
+        OrganismPerfectParkingPageDesign,
     },
     props: {
         blog: {
             type: Object,
         },
-        content: {
-            type: String,
-        },
-    },
-    data() {
-        return {};
     },
 };
 </script>
