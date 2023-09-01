@@ -53,7 +53,7 @@ export default {
 
 <style lang="scss" scoped>
 .blog-card {
-    min-width: 374px;
+    width: 374px;
     min-height: 379px;
     border-radius: var(--border-default);
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
@@ -133,7 +133,7 @@ export default {
 .blog-card .blog-content .blog-desc .btn-text {
     float: right; 
     font-family: 'Poppins', sans-serif;
-    color: var(--primary-text);
+    color: var(--parkspot-black);
     border-radius: 50px;
     border-style: none;
     padding: 4px 10px;
