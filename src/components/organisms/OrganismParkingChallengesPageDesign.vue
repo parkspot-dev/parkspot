@@ -47,7 +47,7 @@
         <h3 class="custom-heading">Solutions:</h3>
         <ol class="pl-5" >
             <li class="mb-1">
-                <spam class="custom-bold-text">Stacked Spaces:</spam> Parking cars one after the other in form of
+                <span class="custom-bold-text">Stacked Spaces:</span> Parking cars one after the other in form of
                 stacks. This would work if the one who has parked the car inside
                 would leave later. But this can not be the case always. So,
                 figuring out a method through which only those cars that leave
@@ -56,19 +56,19 @@
                 through valley parking.
             </li>
             <li class="mb-1">
-                <spam class="custom-bold-text">Transportation Allowance:</spam> The company can help its employees by
+                <span class="custom-bold-text">Transportation Allowance:</span> The company can help its employees by
                 providing an allowance for public transport or uber. This will
                 help in encouraging them to use public transport and avoid
                 coming by personal car.
             </li>
             <li class="mb-1">
-                <spam class="custom-bold-text">Talk to your employees:</spam> Getting to know personal insights and
+                <span class="custom-bold-text">Talk to your employees:</span> Getting to know personal insights and
                 feedback is very important. Speak to your employees on this,
                 what challenges do they face, what solutions would help them in
                 this situation.
             </li>
             <li class="mb-1">
-                <spam class="custom-bold-text">Using ParkSpot App:</spam> ParkSpot provides a digital parking
+                <span class="custom-bold-text">Using ParkSpot App:</span> ParkSpot provides a digital parking
                 solution. The app has an interactive map that provides real-time
                 data and helps users find and book a parking spot. The best part
                 is that this online solution is user friendly and free of cost.

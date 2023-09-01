@@ -45,7 +45,7 @@ const state = {
             title: ' An Easy Way to Earn Extra Income!',
             author: 'Sudhanshu Kumar',
             author_img: require('@/assets/team/sud.jpg'),
-            img: require('@/assets/blog/comfort-parking-3.jpg'),
+            img: require('@/assets/blog/blog4.jpg'),
             desc: `Are you looking for a way to earn some extra income without putting 
                 in a lot of effort? If so, consider renting out your parking space. 
                 Whether you have an unused driv...`,
@@ -58,7 +58,7 @@ const state = {
             title: 'Finding the Perfect Parking Spot!',
             author: 'Nitya Aggarwal',
             author_img: require('@/assets/team/ish.jpg'),
-            img: require('@/assets/blog/1490246624-boston-parking-spaces.jpg'),
+            img: require('@/assets/blog/blog5.jpg'),
             desc: `Are you tired of endlessly circling the block in search of a parking spot? 
                 Fear not, because in this vlog we'll be sharing some tips and tricks for 
                 finding the perfect parking spot...`,

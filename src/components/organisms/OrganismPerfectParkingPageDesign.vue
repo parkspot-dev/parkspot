@@ -11,28 +11,28 @@
 
         <ol class="pl-5">
             <li class="mb-1">
-                <spam class="custom-bold-text">Use parking apps:</spam> There are several apps that can help you find a 
+                <span class="custom-bold-text">Use parking apps:</span> There are several apps that can help you find a 
                 nearby parking spot. Some of these apps allow you to reserve and pay 
                 for your parking spot in advance, saving your time and hassle.
             </li>
             <li class="mb-1">
-                <spam class="custom-bold-text">Check for street parking:</spam> Street parking can be a great option if 
+                <span class="custom-bold-text">Check for street parking:</span> Street parking can be a great option if 
                 you're in a residential or commercial area. Just make sure to check 
                 for any parking restrictions or time limits before leaving your car.
             </li>
             <li class="mb-1">
-                <spam class="custom-bold-text">Look for private parking options:</spam> Many businesses and private property 
+                <span class="custom-bold-text">Look for private parking options:</span> Many businesses and private property 
                 owners rent out parking spots, garages, or driveways for additional income. 
                 This can be a great option if you're in a crowded area or attending an event.
             </li>
             <li class="mb-1">
-                <spam class="custom-bold-text">Consider car sharing or carpooling:</spam> Sharing a ride with others can save 
+                <span class="custom-bold-text">Consider car sharing or carpooling:</span> Sharing a ride with others can save 
                 your money and hassle when it comes to finding a parking spot. 
                 Car sharing and carpooling services are becoming increasingly popular 
                 and can be a great option for those who want to avoid the stress of parking.
             </li>
             <li class="mb-1">
-                <spam class="custom-bold-text">Plan ahead for events:</spam> If you're attending a concert, sporting event, 
+                <span class="custom-bold-text">Plan ahead for events:</span> If you're attending a concert, sporting event, 
                 or other large gathering, make sure to plan ahead for parking. 
                 Check for nearby parking lots or garages, or consider taking public 
                 transportation or an Uber/Lyft to avoid the hassle of finding parking.
