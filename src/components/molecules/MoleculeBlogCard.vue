@@ -65,7 +65,6 @@ export default {
     }
 
     .blog-image {
-        cursor: pointer;
         overflow: hidden;
         height: 189px;
         opacity: 1;
@@ -92,16 +91,14 @@ export default {
         .blog-title {
             margin-bottom: 1rem;
 
-            &:hover {
-                color: var(--secondary-color) !important;
-            }
-
             h2 {
+                cursor: text;
                 font: 1.25rem;
                 font-weight: 500;
             }
 
             p {
+                cursor: text;
                 font: 1rem;
                 font-weight: 400;
             }
@@ -138,6 +135,7 @@ export default {
     border-style: none;
     padding: 4px 10px;
     cursor: pointer;
+    background-color: #f7f8ff;
 
     &:hover {
                 color: var(--secondary-color) ;
