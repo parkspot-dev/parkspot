@@ -25,16 +25,12 @@ export default {
         BodyWrapper,
         OrganismHomeCard,
     },
-    emits: ['flyToSrp'],
     data() {
         return {
             activeTab: 'VO',
         };
     },
     methods: {
-        flyToSrp() {
-            this.$emit('flyToSrp');
-        },
         getActiveTab(activeTab) {
             this.activeTab = activeTab;
         },
@@ -49,7 +45,7 @@ export default {
 
     @media only screen and (max-width: 1024px) {
         background-image: unset;
-        background-color: #ffffff;
+        background-color: var(--parkspot-white);
     }
 }
 .image-car-owner {
@@ -58,7 +54,7 @@ export default {
 
     @media only screen and (max-width: 1024px) {
         background-image: unset;
-        background-color: #ffffff;
+        background-color: var(--parkspot-white);
     }
 }
 .home-banner {

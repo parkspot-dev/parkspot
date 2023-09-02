@@ -74,23 +74,23 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .bg-wrap {
-    background-color: var(--bg-color-secondary);
-    padding: 2.5rem 0;
     position: relative;
+    padding: 2.5rem 0;
+    background-color: var(--parkspot-white);
 }
 
 .bg-wrap::before {
-    background-color: var(--bg-color-tertiary);
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
     clip-path: polygon(300px 0, 100% 0, 100% 100%, 0 100%);
     content: '';
-    display: block;
-    height: 100%;
-    position: absolute;
-    right: 0;
-    top: 0;
     width: calc(50vw + 150px);
+    height: 100%;
+    background-color: var(--bg-color-tertiary);
 }
 
 @media only screen and (max-width: 760px) {

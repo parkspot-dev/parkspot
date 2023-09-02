@@ -33,17 +33,18 @@ export default {
 
 <style lang="scss" scoped>
 .login-card {
-    max-width: 480px;
     margin: 0 auto;
-    background-color: white;
     padding: 50px 25px;
+    max-width: 480px;
     border-radius: var(--border-default);
+    background-color: var(--parkspot-white);
 
     .logo-wrapper {
-        width: 64px;
-        height: 64px;
         margin: auto;
         margin-bottom: 50px;
+        width: 64px;
+        height: 64px;
+
         .login-logo {
             width: 64px;
             height: 64px;
@@ -51,16 +52,16 @@ export default {
     }
 
     .login-title {
+        margin-bottom: 16px;
         font-size: 24px;
         font-weight: 600;
         text-align: center;
-        margin-bottom: 16px;
     }
 
     .login-subtitle {
+        margin-bottom: 15px;
         text-align: center;
         color: var(--grey-shade);
-        margin-bottom: 15px;
     }
 }
 </style>

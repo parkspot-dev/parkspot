@@ -56,7 +56,7 @@ const state = {
         {
             id: 'Perfect-Parking',
             title: 'Finding the Perfect Parking Spot!',
-            author: 'Nitya Aggarwal',
+            author: 'Nitya Agrawal',
             author_img: require('@/assets/team/ish.jpg'),
             img: require('@/assets/blog/blog5.jpg'),
             desc: `Are you tired of endlessly circling the block in search of a parking spot? 
@@ -89,7 +89,6 @@ const mutations = {
 
 // actions
 const actions = {
-
 };
 
 export default {

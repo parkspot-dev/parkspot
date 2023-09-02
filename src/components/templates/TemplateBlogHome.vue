@@ -22,7 +22,7 @@
                     :key="blog.id"
                     v-for="blog in blogs"
                     :blog="blog"
-                    @click.native="onBlogClick(blog.id)"
+                    @onBtnClick="onBlogClick"
                     data-aos="zoom-in-up"
                 ></MoleculeBlogCard>
             </div>
@@ -60,9 +60,9 @@ export default {
 <style lang="scss" scoped>
 .blog-header {
     display: flex;
-    height: 200px;
     justify-content: center;
     align-items: center;
+    height: 200px;
     flex-direction: column;
     align-content: space-around;
 

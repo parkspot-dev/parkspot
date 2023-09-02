@@ -51,15 +51,15 @@
                 class="map-container"
                 :spotsList="spots"
                 :key="reRender"
+                :center="mapCenter"
+                :userLatLng="mapCenter"
             ></MapContainer>
         </div>
     </div>
 </template>
 
 <script>
-// import PaginationBody from '../extras/PaginationBody.vue';
 import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
-// import AtomRadioButton from '../atoms/AtomRadioButton.vue';
 import AtomCheckbox from '../atoms/AtomCheckbox.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import SearchInput from '../extras/SearchInput.vue';
@@ -77,13 +77,10 @@ export default {
         SearchInput,
         AtomCheckbox,
     },
-    emits: ['changed', 'flyToSrp', 'details'],
+    emits: ['flyToSrp', 'details'],
     props: {
         spots: {
             type: Array,
-        },
-        totals: {
-            type: Number,
         },
         reRender: {
             type: Number,
@@ -99,23 +96,20 @@ export default {
         };
     },
     computed: {
-        ...mapState('map', ['selectedLocation']),
+        ...mapState('map', ['selectedLocation', 'mapCenter']),
     },
     methods: {
-        onPageChange(page) {
-            this.$emit('changed', page);
-        },
         details(spotID) {
             this.$emit('details', spotID);
-        },
-        onChange() {
-            this.$emit('flyToSrp');
         },
         activateFilter() {
             this.showFilterCheckbox = !this.showFilterCheckbox;
         },
         onOutsideFilter() {
             this.showFilterCheckbox = false;
+        },
+        onChange() {
+            this.$emit('flyToSrp');
         },
         handleFilter(filterOptions) {
             this.$emit('filter', filterOptions);
@@ -149,9 +143,9 @@ export default {
                 z-index: 999;
                 padding: 12px 5px 5px 12px;
                 width: 120px;
-                border: 1px solid #000000;
+                border: 1px solid var(--parkspot-black);
                 border-radius: 4px;
-                background-color: #ffffff;
+                background-color: var(--parkspot-white);
 
                 ul {
                     font-size: 16px;
@@ -187,8 +181,8 @@ export default {
         --mask-image-content: linear-gradient(
             to bottom,
             transparent,
-            #000000 var(--mask-height),
-            #000000 calc(100% - var(--mask-height)),
+            var(--parkspot-black) var(--mask-height),
+            var(--parkspot-black) calc(100% - var(--mask-height)),
             transparent
         );
 
@@ -197,7 +191,10 @@ export default {
         --mask-size-content: calc(100% - var(--scrollbar-width)) 100%;
 
         /* The scrollbar mask is a black pixel */
-        --mask-image-scrollbar: linear-gradient(#000000, #000000);
+        --mask-image-scrollbar: linear-gradient(
+            var(--parkspot-black),
+            var(--parkspot-black)
+        );
 
         /* The width of our black pixel is the width of the scrollbar.
       The height is the full container height */

@@ -130,6 +130,7 @@ export default {
     }
 
     .card-title {
+        /* stylelint-disable-next-line value-no-vendor-prefix */
         display: -webkit-box;
         overflow: hidden;
         font-size: 15px;
@@ -146,7 +147,7 @@ export default {
         font-size: 12px;
         gap: 5px;
         line-height: 1.1;
-        color: #6b6b6b;
+        color: var(--parkspot-muted-black);
 
         .location-icon {
             font-size: 16px;
@@ -154,6 +155,7 @@ export default {
 
         .location-text {
             -webkit-box-orient: vertical;
+            /* stylelint-disable-next-line value-no-vendor-prefix */
             display: -webkit-box;
             -webkit-line-clamp: 2;
             overflow: hidden;
@@ -204,7 +206,7 @@ export default {
 
     .card-spot-green {
         font-weight: var(--bold-font);
-        color: #367e18;
+        color: var(--parkspot-green);
     }
 
     .card-btn {

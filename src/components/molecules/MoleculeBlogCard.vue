@@ -1,6 +1,6 @@
 <template>
     <div class="blog-card">
-        <div class="blog-image">
+        <div class="img-wrapper blog-image">
             <AtomImage
                 :alt="'image'"
                 :src="blog.img"
@@ -18,7 +18,13 @@
 
             <div class="blog-desc">
                 <p>{{ blog.desc }}</p>
-                <time :datetime="blog.dateTime">{{ blog.time }}</time>
+                <time :datetime="blog.dateTime">{{ blog.time }} </time>
+                <span>
+                    <button 
+                        class="btn-text" 
+                        @click="onBlogClick(blog.id)">Read more...
+                    </button>
+                </span>           
             </div>
         </div>
     </div>
@@ -35,6 +41,12 @@ export default {
     },
     components: {
         AtomImage,
+    },
+    emits:['onBtnClick'],
+    methods: {
+        onBlogClick(data) {
+            this.$emit('onBtnClick', data);
+        },
     },
 };
 </script>
@@ -55,10 +67,10 @@ export default {
 
     .blog-image {
         cursor: pointer;
+        overflow: hidden;
+        height: 189px;
         opacity: 1;
         transition: 0.3s ease-in-out;
-        height: 189px;
-        overflow: hidden;
         border-top-left-radius: var(--border-default);
         border-top-right-radius: var(--border-default);
 
@@ -73,12 +85,12 @@ export default {
 
     .blog-content {
         padding: 0.75rem;
+
         .blog-image:hover {
             opacity: 0.5;
         }
 
         .blog-title {
-            cursor: pointer;
             margin-bottom: 1rem;
 
             &:hover {
@@ -97,8 +109,8 @@ export default {
         }
 
         .blog-desc {
-            font-weight: 400;
             font-size: 1rem;
+            font-weight: 400;
             line-height: 24px;
             color: var(--grey-shade);
 
@@ -107,5 +119,29 @@ export default {
             }
         }
     }
+}
+
+.blog-card {
+    .img-wrapper.blog-image {
+        border-top-left-radius: 45px;
+        border-top-right-radius: 45px;
+        border-bottom-left-radius: 25px;
+        border-bottom-right-radius: 25px;
+        padding: 12px;        
+    }
+}
+
+.blog-card .blog-content .blog-desc .btn-text {
+    float: right; 
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-text);
+    border-radius: 50px;
+    border-style: none;
+    padding: 4px 10px;
+    cursor: pointer;
+
+    &:hover {
+                color: var(--secondary-color) ;
+            }
 }
 </style>
