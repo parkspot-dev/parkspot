@@ -63,11 +63,11 @@ import AtomHeading from '../atoms/AtomHeading.vue';
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomImage from '../atoms/AtomImage.vue';
-import OrganismBlogNoParking from '../organisms/OrganismBlogNoParking';
-import OrganismBlogEliminatingTraffic from '../organisms/OrganismBlogEliminatingTraffic';
-import OrganismBlogParkingChallenges from '../organisms/OrganismBlogParkingChallenges';
-import OrganismBlogExtraIncome from '../organisms/OrganismBlogExtraIncome';
-import OrganismBlogPerfectParking from '../organisms/OrganismBlogPerfectParking';
+import OrganismNoParkingPageDesign from '../organisms/OrganismNoParkingPageDesign';
+import OrganismEliminatingTrafficPageDesign from '../organisms/OrganismEliminatingTrafficPageDesign';
+import OrganismParkingChallengesPageDesign from '../organisms/OrganismParkingChallengesPageDesign';
+import OrganismExtraIncomePageDesign from '../organisms/OrganismExtraIncomePageDesign';
+import OrganismPerfectParkingPageDesign from '../organisms/OrganismPerfectParkingPageDesign';
 
 export default {
     name: 'TemplateBlogPost',
@@ -77,18 +77,15 @@ export default {
         AtomParagraph,
         AtomImage,
         BodyWrapper,
-        OrganismBlogNoParking,
-        OrganismBlogEliminatingTraffic,
-        OrganismBlogParkingChallenges,
-        OrganismBlogExtraIncome,
-        OrganismBlogPerfectParking,
+        OrganismNoParkingPageDesign,
+        OrganismEliminatingTrafficPageDesign,
+        OrganismParkingChallengesPageDesign,
+        OrganismExtraIncomePageDesign,
+        OrganismPerfectParkingPageDesign,
     },
     props: {
         blog: {
             type: Object,
-        },
-        content: {
-            type: String,
         },
     },
 };

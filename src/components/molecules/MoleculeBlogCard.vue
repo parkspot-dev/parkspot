@@ -130,7 +130,7 @@ export default {
 .blog-card .blog-content .blog-desc .btn-text {
     float: right; 
     font-family: 'Poppins', sans-serif;
-    color: var(--parkspot-black);
+    color: var(--primary-text);
     border-radius: 50px;
     border-style: none;
     padding: 4px 10px;
