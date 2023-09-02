@@ -53,7 +53,8 @@ export default {
 
 <style lang="scss" scoped>
 .blog-card {
-    min-width: 374px;
+    cursor: pointer;
+    width: 374px;
     min-height: 379px;
     border-radius: var(--border-default);
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
