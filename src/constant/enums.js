@@ -74,8 +74,50 @@ const KYCStatusLabel = [
 /**
  *
  * @param {int} kyStatus
- * @return {string}: label for kyc Status
+ * @return {string}: label for kyc status
  */
 export function getKYCStatusLabel(kyStatus) {
     return getEnumLabel(KYCStatusLabel, kyStatus);
+}
+
+export const BookingStatus = Object.freeze({
+    // BookingInitiated => fired tentative, SO not confirmed yet.
+    BookingInitiated: 0, // tentative
+    BookingConfirmed: 1, // active
+    BookingCancelled: 2, // past
+    BookingRefunded: 3, // past
+    // BookingFailedUnavailiblity => spot NOT available or owner declined.
+    BookingFailedUnavailiblity: 4, // tentative
+    BookingFailedError: 5,
+    // BookingPaymentPending => SO confirmed waiting for payment.
+    // only incase when visit is not needed.
+    BookingPaymentPending: 6, // active
+    // BookingVisiting => VO has paid conv fee. VO will visit/visited the spot.
+    BookingVisiting: 7,
+    // SO confirmed waiting for payment to schedule visit
+    BookingScheduleVisit: 8,
+    // Booking in progress but upcoming rent is due.
+    BookingRentDue: 9,
+});
+
+export const BookingStatusLabels = [
+    'Initiated',
+    'Confirmed',
+    'Cancelled',
+    'Refunded',
+    'Unavailable',
+    'Failed Error',
+    'Payment Pending (Rent + Conv fee due)',
+    'Visiting (Rent due)',
+    'Schedule Visit (Conv fee due)',
+    'Rent Due',
+];
+
+/**
+ *
+ * @param {int} bookingStatus
+ * @return {string}: label for booking status
+ */
+export function getBookingStatusLabel(bookingStatus) {
+    return getEnumLabel(BookingStatusLabels, bookingStatus);
 }
