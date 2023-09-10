@@ -155,7 +155,7 @@ export const routes = [
     {
         path: pages.BOOKING_PORTAL,
         name: 'booking-portal',
-        component: () => import('@/views/BookingPortal.vue'),
+        component: () => import('@/views/PageError.vue'),
     },
     {
         path: pages.APP,
