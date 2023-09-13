@@ -9,7 +9,9 @@
             ></AtomImage>
         </div>
         <div class="blog-content">
-            <div class="blog-title">
+            <div class="blog-title"
+                @click="onBlogClick(blog.id)"
+            >
                 <h2 :variation="'large'">
                     {{ blog.title }}
                 </h2>
@@ -92,15 +94,18 @@ export default {
             margin-bottom: 1rem;
 
             h2 {
-                cursor: text;
+                cursor: pointer;
                 font: 1.25rem;
                 font-weight: 500;
             }
 
             p {
-                cursor: text;
+                cursor: pointer;
                 font: 1rem;
                 font-weight: 400;
+            }
+            &:hover {
+                color: var(--secondary-color) ;
             }
         }
 
