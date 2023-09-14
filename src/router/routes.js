@@ -159,7 +159,7 @@ export const routes = [
     },
     {
         path: pages.APP,
-        name: 't-about',
+        name: 'App',
         component: PageAbout,
         beforeEnter(to, from, next) {
             const androidRegexp = /android/i;

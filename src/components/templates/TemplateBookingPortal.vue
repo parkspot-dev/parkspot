@@ -2,7 +2,7 @@
     <section>
         <!-- payment link button -->
         <div class="payment-link-btn-wrapper">
-            <AtomButton @click.native="onClick">
+            <AtomButton @click.native="getPaymentLink">
                 Generate Payment Link
             </AtomButton>
         </div>
@@ -26,7 +26,8 @@
                     <span class="edit-icon">
                         <AtomIcon
                             @click.native="enableEdit('Booking Details')"
-                            :icon="'file-edit-outline'"
+                            :icon="'pencil'"
+                            size=""
                         >
                         </AtomIcon>
                     </span>
@@ -34,11 +35,16 @@
                         <AtomIcon
                             @click.native="saveField"
                             :icon="'content-save-outline'"
+                            size=""
                         >
                         </AtomIcon>
                     </span>
                     <span class="cancel-icon">
-                        <AtomIcon @click.native="cancelField" :icon="'close'">
+                        <AtomIcon
+                            @click.native="cancelField"
+                            :icon="'close'"
+                            size=""
+                        >
                         </AtomIcon>
                     </span>
                 </div>
@@ -52,6 +58,9 @@
                         <p>
                             <strong> Site ID:</strong>
                         </p>
+                        <p>
+                            <strong> Status:</strong>
+                        </p>
                     </div>
                     <div class="value-col">
                         <p>
@@ -59,6 +68,29 @@
                         </p>
                         <p>
                             {{ bookingDetails.Booking.SiteID }}
+                        </p>
+                        <div
+                            v-if="editField === 'Booking Details'"
+                            class="select"
+                        >
+                            <select v-model="bookingDetails.Booking.Status">
+                                <option
+                                    v-for="(
+                                        label, index
+                                    ) in bookingStatusLabels"
+                                    :key="label"
+                                    :value="index"
+                                >
+                                    {{ label }}
+                                </option>
+                            </select>
+                        </div>
+                        <p v-else>
+                            {{
+                                getBookingStatusLabel(
+                                    bookingDetails.Booking.Status,
+                                )
+                            }}
                         </p>
                     </div>
                 </div>
@@ -160,7 +192,8 @@
                     <span class="edit-icon">
                         <AtomIcon
                             @click.native="enableEdit('Rent Details')"
-                            :icon="'file-edit-outline'"
+                            :icon="'pencil'"
+                            size=""
                         >
                         </AtomIcon>
                     </span>
@@ -168,11 +201,16 @@
                         <AtomIcon
                             @click.native="saveField"
                             :icon="'content-save-outline'"
+                            size=""
                         >
                         </AtomIcon>
                     </span>
                     <span class="cancel-icon">
-                        <AtomIcon @click.native="cancelField" :icon="'close'">
+                        <AtomIcon
+                            @click.native="cancelField"
+                            :icon="'close'"
+                            size=""
+                        >
                         </AtomIcon>
                     </span>
                 </div>
@@ -312,7 +350,12 @@
 
 <script>
 import { mapState } from 'vuex';
-import { PaymentStatus, getPaymentStatusLabel } from '@/constant/enums';
+import {
+    PaymentStatus,
+    getPaymentStatusLabel,
+    getBookingStatusLabel,
+    BookingStatusLabels,
+} from '@/constant/enums';
 import AtomButton from '../atoms/AtomButton.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
 import AtomTooltip from '../atoms/AtomTooltip.vue';
@@ -340,6 +383,7 @@ export default {
             baseAmt: '',
             rentCycle: '',
             periodicity: '',
+            bookingStatusLabels: BookingStatusLabels,
         };
     },
 
@@ -350,6 +394,10 @@ export default {
     methods: {
         getPaymentStatusLabel(paymentStatus) {
             return getPaymentStatusLabel(paymentStatus);
+        },
+
+        getBookingStatusLabel(bookingStatus) {
+            return getBookingStatusLabel(bookingStatus);
         },
 
         getPaymentClass(status) {
@@ -364,7 +412,7 @@ export default {
             return 'payment-failed';
         },
 
-        onClick() {
+        getPaymentLink() {
             this.toolTipLabel = 'Copy payment url!';
             const reqBody = {
                 BookingID: this.bookingDetails.Booking.ID.toString(),
@@ -413,6 +461,7 @@ export default {
                 StartTime: this.startDate
                     ? this.startDate
                     : this.bookingDetails.StartTime, // 2023-06-04T00:00:00.000Z
+                Status: this.bookingDetails.Booking.Status,
             };
 
             this.$emit('update-booking-details', reqBody);
@@ -485,7 +534,31 @@ export default {
 
 .booking-card {
     margin-bottom: 20px;
-    background: white;
+    padding: 20px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    background: var(--parkspot-white);
+    .card-top {
+        position: relative;
+        .action-group {
+            position: absolute;
+            top: 0;
+            right: 0;
+            span {
+                margin-left: 12px;
+                cursor: pointer;
+            }
+            .edit-icon {
+                color: var(--secondary-color);
+            }
+            .save-icon {
+                color: var(--parkspot-green);
+            }
+            .cancel-icon {
+                color: var(--parkspot-red);
+            }
+        }
+    }
 
     .card-body {
         display: flex;

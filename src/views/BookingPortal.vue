@@ -10,7 +10,7 @@
         </div>
         <p v-if="hasError">{{ errorMessage }}</p>
         <TemplateBookingPortal
-            v-if="!hasError && !isLoading"
+            v-if="bookingDetails"
             @payment-link="getPaymentLink"
             @update-booking-details="updateBookingDetails"
         ></TemplateBookingPortal>
@@ -35,7 +35,12 @@ export default {
     },
 
     computed: {
-        ...mapState('bookingPortal', ['hasError', 'errorMessage', 'isLoading']),
+        ...mapState('bookingPortal', [
+            'hasError',
+            'errorMessage',
+            'isLoading',
+            'bookingDetails',
+        ]),
     },
 
     methods: {

@@ -1,7 +1,7 @@
 import { mayaClient } from '@/services/api';
 
 const state = {
-    bookingDetails: Object,
+    bookingDetails: null,
     hasError: false,
     errorMessage: String,
     paymentDetails: null,
