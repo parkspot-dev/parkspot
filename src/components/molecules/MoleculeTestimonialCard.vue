@@ -49,20 +49,22 @@ $g-background-color-dark: #18181b;
 
 .content-wrapper {
     position: relative;
-    height: 500px;
     width: 100%;
+    height: 500px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
     .content {
         padding: $g-spacing * 2 $g-spacing;
         color: var(--parkspot-black);
 
         .quote {
-            width: 64px;
-            opacity: 15%;
             position: absolute;
             top: 120px;
             left: 0;
+            width: 64px;
+            opacity: 15%;
         }
+
         .swiper-avatar {
             display: flex;
             align-items: center;
@@ -70,27 +72,28 @@ $g-background-color-dark: #18181b;
             margin-bottom: 20px;
 
             img {
-                border-radius: 500px;
-                height: 64px;
                 width: 64px;
+                height: 64px;
+                border-radius: 500px;
             }
 
             p {
-                font-weight: 500;
-                font-size: 20px;
-                line-height: 24px;
                 margin: 0;
+                font-size: 20px;
+                font-weight: 500;
+                line-height: 24px;
             }
         }
 
         p {
-            font-weight: 400;
-            font-size: 14px;
-            line-height: 24px;
-            margin-bottom: 20px;
-            -webkit-box-orient: vertical;
+            /* stylelint-disable-next-line value-no-vendor-prefix */
             display: -webkit-box;
             overflow: hidden;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 24px;
+            -webkit-box-orient: vertical;
             -webkit-line-clamp: 12;
         }
 

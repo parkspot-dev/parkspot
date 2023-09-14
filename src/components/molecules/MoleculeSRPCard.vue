@@ -130,6 +130,7 @@ export default {
     }
 
     .card-title {
+        /* stylelint-disable-next-line value-no-vendor-prefix */
         display: -webkit-box;
         overflow: hidden;
         font-size: 15px;
@@ -154,6 +155,7 @@ export default {
 
         .location-text {
             -webkit-box-orient: vertical;
+            /* stylelint-disable-next-line value-no-vendor-prefix */
             display: -webkit-box;
             -webkit-line-clamp: 2;
             overflow: hidden;

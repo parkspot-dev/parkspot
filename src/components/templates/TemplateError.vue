@@ -65,9 +65,9 @@ export default {
 }
 
 .error-para {
-    color: var(--grey-shade);
     margin-bottom: 2rem;
     text-align: center;
+    color: var(--grey-shade);
 }
 
 .error-button {
@@ -76,9 +76,9 @@ export default {
 }
 
 .error-img-wrapper {
-    align-items: center;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .error-img {

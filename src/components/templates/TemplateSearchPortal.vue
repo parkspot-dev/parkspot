@@ -116,7 +116,7 @@
                     class="tag"
                     :class="{
                         'is-info': props.row.Priority === 1,
-                        'is-warning': props.row.Priority === 2,
+                        'my-status': props.row.Priority === 2,
                         'is-danger': props.row.Priority === 3,
                     }"
                 >
@@ -144,7 +144,7 @@
                 <template v-slot="props">
                     <div class="status-column">
                         <div class="status-part">
-                            <span class="tag is-warning">
+                            <span class="tag my-status">
                                 {{ props.row.Agent }}
                             </span>
                             <AtomSelectInput
@@ -240,7 +240,7 @@
                 <template v-slot="props">
                     <div class="status-column">
                         <div class="status-part">
-                            <span class="tag is-warning">
+                            <span class="tag my-status">
                                 {{ statusList[props.row.Status].name }}
                             </span>
                             <AtomSelectInput
@@ -255,14 +255,14 @@
                         </div>
                         <div class="next-call-part">
                             <span
-                                class="tag is-warning"
+                                class="tag my-status"
                                 :class="{
                                     'is-danger': isCallDelayed(
                                         props.row.NextCall,
                                     ),
                                 }"
                             >
-                                <span>
+                                <span class="upcoming">
                                     {{
                                         isCallDelayed(props.row.NextCall)
                                             ? 'Delayed :'
@@ -541,9 +541,17 @@ $portal-font-size: 13px;
 
 @media only screen and (max-width: 1024px) {
     .id-column-parent {
-        background: #cfcfcd !important;
         color: rgb(0, 0, 0) !important;
+        background: #cfcfcd !important;
     }
+}
+
+.search-portal-wrapper .status-column .status-part .tag:not(body).my-status {
+    background-color: var(--primary-color);
+}
+
+.tag:not(body) {
+    background-color: var(--primary-color);
 }
 
 .search-portal-wrapper {
@@ -572,14 +580,14 @@ $portal-font-size: 13px;
             text-align: right;
         }
         .so-summary {
-            border: 1px solid black;
-            padding: 1.25rem;
-            max-width: 430px;
-            background-color: #f5f5dc;
             position: absolute;
             top: 120px;
             right: 12px;
             z-index: 9999;
+            padding: 1.25rem;
+            max-width: 430px;
+            border: 1px solid var(--parkspot-black);
+            background-color: #f5f5dc;
             // display: none;
 
             .so-total {
@@ -589,15 +597,15 @@ $portal-font-size: 13px;
             }
 
             .so-live-request {
-                font-size: $portal-font-size;
                 display: flex;
+                font-size: $portal-font-size;
                 gap: 6rem;
             }
 
             .so-priority {
-                font-size: $portal-font-size;
                 display: flex;
                 justify-content: space-between;
+                font-size: $portal-font-size;
             }
 
             .so-status {
@@ -606,31 +614,35 @@ $portal-font-size: 13px;
                 column-gap: 2.5rem;
 
                 p {
-                    font-size: $portal-font-size;
                     display: flex;
                     justify-content: space-between;
+                    font-size: $portal-font-size;
                 }
             }
         }
     }
+
     .id-column {
         font-size: $portal-font-size;
     }
 
     .date-column {
-        font-size: $portal-font-size;
         display: flex;
         flex-direction: column;
+        font-size: $portal-font-size;
         gap: 10px;
     }
+
     .contact-column {
-        font-size: $portal-font-size;
         position: relative;
+        font-size: $portal-font-size;
+
         .more-icon {
             cursor: pointer;
             position: absolute;
             top: 0;
             right: 0;
+
             @media only screen and (max-width: 1024px) {
                 position: unset;
             }
@@ -639,6 +651,7 @@ $portal-font-size: 13px;
 
     .status-column {
         font-size: $portal-font-size;
+
         .status-part {
             display: flex;
             flex-direction: column;
@@ -655,6 +668,7 @@ $portal-font-size: 13px;
 
     .lat-lng-column {
         font-size: $portal-font-size;
+
         .lat-lng-link {
             margin-bottom: 20px;
         }

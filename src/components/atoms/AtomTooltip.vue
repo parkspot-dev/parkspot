@@ -1,7 +1,7 @@
 <template>
     <b-tooltip
         :label="label"
-        type="is-warning is-light"
+        type="tool-color is-light"
         position="is-top"
         multilined
     >
@@ -24,4 +24,14 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.b-tooltip.tool-color.tooltip-content {
+    background-color: var(--primary-color);
+    
+}
+
+.b-tooltip.tool-color.is-light .tooltip-content {
+    background-color: #fffaeb;
+    color: #946c00;
+}
+</style>
