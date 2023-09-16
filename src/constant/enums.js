@@ -121,3 +121,20 @@ export const BookingStatusLabels = [
 export function getBookingStatusLabel(bookingStatus) {
     return getEnumLabel(BookingStatusLabels, bookingStatus);
 }
+
+export const PaymentPeriodicity = Object.freeze({
+    PeriodicityOnce: 0,
+    PeriodicityDaily: 1,
+    PeriodicityMonthly: 2,
+});
+
+export const PaymentPeriodicityLabels = ['Once', 'Daily', 'Monthly'];
+
+/**
+ *
+ * @param {int} paymentPeriodicity
+ * @return {string}: label for payment periodicity
+ */
+export function getPaymentPeriodicityLabel(paymentPeriodicity) {
+    return getEnumLabel(PaymentPeriodicityLabels, paymentPeriodicity);
+}

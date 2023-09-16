@@ -257,14 +257,26 @@
                             class="input-field"
                             v-if="editField === 'Rent Details'"
                         >
-                            <AtomInput
-                                :size="'is-small'"
-                                :value="bookingDetails.Booking.PaymentPeriod"
-                                @input="onPeriodicityUpdate"
-                            ></AtomInput>
+                            <select
+                                v-model="bookingDetails.Booking.PaymentPeriod"
+                            >
+                                <option
+                                    v-for="(
+                                        label, index
+                                    ) in paymentPeriodicityLabels"
+                                    :key="label"
+                                    :value="index"
+                                >
+                                    {{ label }}
+                                </option>
+                            </select>
                         </div>
                         <p v-else>
-                            {{ bookingDetails.Booking.PaymentPeriod }}
+                            {{
+                                getPaymentPeriodicityLabel(
+                                    bookingDetails.Booking.PaymentPeriod,
+                                )
+                            }}
                         </p>
                     </div>
                 </div>
@@ -354,7 +366,9 @@ import {
     PaymentStatus,
     getPaymentStatusLabel,
     getBookingStatusLabel,
+    getPaymentPeriodicityLabel,
     BookingStatusLabels,
+    PaymentPeriodicityLabels,
 } from '@/constant/enums';
 import AtomButton from '../atoms/AtomButton.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
@@ -384,6 +398,7 @@ export default {
             rentCycle: '',
             periodicity: '',
             bookingStatusLabels: BookingStatusLabels,
+            paymentPeriodicityLabels: PaymentPeriodicityLabels,
         };
     },
 
@@ -395,7 +410,9 @@ export default {
         getPaymentStatusLabel(paymentStatus) {
             return getPaymentStatusLabel(paymentStatus);
         },
-
+        getPaymentPeriodicityLabel(paymentPeriodicity) {
+            return getPaymentPeriodicityLabel(paymentPeriodicity);
+        },
         getBookingStatusLabel(bookingStatus) {
             return getBookingStatusLabel(bookingStatus);
         },
@@ -462,6 +479,7 @@ export default {
                     ? this.startDate
                     : this.bookingDetails.StartTime, // 2023-06-04T00:00:00.000Z
                 Status: this.bookingDetails.Booking.Status,
+                PaymentPeriod: this.bookingDetails.Booking.PaymentPeriod,
             };
 
             this.$emit('update-booking-details', reqBody);
@@ -482,11 +500,6 @@ export default {
         onBaseAmtUpdate(updatedBaseAmt) {
             this.baseAmt = updatedBaseAmt;
         },
-
-        onPeriodicityUpdate(updatedPeriodicity) {
-            this.periodicity = updatedPeriodicity;
-        },
-
         onConvFeeUpdate(updatedConvFee) {
             this.convFee = updatedConvFee;
         },
