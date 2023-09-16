@@ -234,7 +234,7 @@
                         :list="statusList"
                         class="column-width"
                         v-model="props.filters['Status']"
-                    >
+                                            >
                     </AtomSelectInput>
                 </template>
                 <template v-slot="props">
@@ -250,7 +250,7 @@
                                 @changed="
                                     onStatusUpdate(props.row, ...arguments)
                                 "
-                            >
+                                                            >
                             </AtomSelectInput>
                         </div>
                         <div class="next-call-part">
@@ -368,13 +368,13 @@ export default {
             isHoverable: false,
             isFocusable: false,
             hasMobileCards: true,
-
+            
             agentList: [
-                { id: 0, name: 'Sud' },
-                { id: 1, name: 'Ish' },
-                { id: 2, name: 'Nitya' },
-                { id: 3, name: 'Preeti' },
-                { id: 4, name: 'NA' },
+                { id: 'NA', name: 'NA' },
+                { id: 'Preeti', name: 'Preeti' },
+                { id: 'Nitya', name: 'Nitya' },
+                { id: 'Ish', name: 'Ish' },
+                { id: 'Sud', name: 'Sud' },
             ],
 
             statusList: [
@@ -474,7 +474,7 @@ export default {
             });
             this.$emit('updateRequest', spotData);
         },
-
+        
         getLatLng(lat, lng) {
             return lat + ',' + lng;
         },
