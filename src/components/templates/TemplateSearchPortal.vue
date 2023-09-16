@@ -370,11 +370,11 @@ export default {
             hasMobileCards: true,
 
             agentList: [
-                { id: 0, name: 'Sud' },
-                { id: 1, name: 'Ish' },
-                { id: 2, name: 'Nitya' },
-                { id: 3, name: 'Preeti' },
-                { id: 4, name: 'NA' },
+                { id: 'NA', name: 'NA' },
+                { id: 'Preeti', name: 'Preeti' },
+                { id: 'Nitya', name: 'Nitya' },
+                { id: 'Ish', name: 'Ish' },
+                { id: 'Sud', name: 'Sud' },
             ],
 
             statusList: [
