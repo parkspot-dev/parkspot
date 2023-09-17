@@ -286,6 +286,9 @@
                             <strong> ConvenienceFee: </strong>
                         </p>
                         <p>
+                            <strong> Security Deposit: </strong>
+                        </p>
+                        <p>
                             <strong> Rent Cycle: </strong>
                         </p>
                     </div>
@@ -302,6 +305,19 @@
                         </div>
                         <p v-else>
                             {{ bookingDetails.Booking.ConvenienceFee }}
+                        </p>
+                        <div
+                            class="input-field"
+                            v-if="editField === 'Rent Details'"
+                        >
+                            <AtomInput
+                                :size="'is-small'"
+                                :value="bookingDetails.Booking.SecurityDeposit"
+                                @input="onSecurityDepositUpdate"
+                            ></AtomInput>
+                        </div>
+                        <p v-else>
+                            {{ bookingDetails.Booking.SecurityDeposit }}
                         </p>
                         <div
                             class="input-field"
@@ -397,6 +413,7 @@ export default {
             baseAmt: '',
             rentCycle: '',
             periodicity: '',
+            securityDeposit: '',
             bookingStatusLabels: BookingStatusLabels,
             paymentPeriodicityLabels: PaymentPeriodicityLabels,
         };
@@ -480,6 +497,9 @@ export default {
                     : this.bookingDetails.StartTime, // 2023-06-04T00:00:00.000Z
                 Status: this.bookingDetails.Booking.Status,
                 PaymentPeriod: this.bookingDetails.Booking.PaymentPeriod,
+                SecurityDeposit: this.securityDeposit
+                    ? Number(this.securityDeposit)
+                    : this.bookingDetails.SecurityDeposit,
             };
 
             this.$emit('update-booking-details', reqBody);
@@ -502,6 +522,9 @@ export default {
         },
         onConvFeeUpdate(updatedConvFee) {
             this.convFee = updatedConvFee;
+        },
+        onSecurityDepositUpdate(updatedSecurityDeposit) {
+            this.securityDeposit = updatedSecurityDeposit;
         },
 
         onRentCycleUpdate(updatedRentCycle) {
