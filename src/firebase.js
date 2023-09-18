@@ -26,15 +26,14 @@ const firebase = initializeApp(firebaseConfig);
 const auth = getAuth(firebase);
 
 /**
- * 
- * @param {String} path 
+ * getValueFromFirebase returns the value at the path. Value can be a JSON 
+ * object or primitive data.
+ *
+ * @param {String} path: complete path to the node starting from root.
  */
 async function getValueFromFirebase(path) {
     const res = await get(child(ref(getDatabase(firebase)), path));
     return await res.val();
 }
 
-export {
-    auth,
-    getValueFromFirebase
-};
+export { auth, getValueFromFirebase };
