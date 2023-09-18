@@ -64,6 +64,15 @@
                         </li>
                     </ul>
                 </div>
+                <!-- mweb phone link -->
+                <div class="mobile-phone-link">
+                    <p>
+                        <a :href="helplineRef">
+                            <b-icon icon="phone" size="is-small"> </b-icon>
+                            {{ helplineNumber }}
+                        </a>
+                    </p>
+                </div>
                 <div class="menu-wrapper-right">
                     <!-- phone link -->
                     <ul>
