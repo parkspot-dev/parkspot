@@ -1,13 +1,10 @@
 import Home from '../views/PageHome.vue';
 import PageAbout from '@/views/PageAbout.vue';
-import { firebase, getDatabase, ref, get, child } from '../firebase';
+import { getValueFromFirebase } from '../firebase';
 import { APP_LINK } from '../constant/constant';
 
 const guardThisRoute = async (to, from, next) => {
-    const db = getDatabase(firebase);
-    const dbref = ref(db);
-    const res = await get(child(dbref, `portal-user`));
-    const credentials = await res.val();
+    const credentials = await getValueFromFirebase(`portal-user`);
     let userNameLocal = localStorage.getItem('searchPortalUser');
     let userNamePwdLocal = localStorage.getItem('searchPortalUserPwd');
     if (

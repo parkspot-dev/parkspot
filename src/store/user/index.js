@@ -82,9 +82,6 @@ const actions = {
 
         try {
             const res = await signInWithPopup(auth, gProvider);
-            // todo remove commented code and console log
-            // const credential = GoogleAuthProvider.credentialFromResult(res);
-            // const token = credential.accessToken;
             const user = res.user;
             commit('update-user', user);
             commit('update-login-Modal', false);
