@@ -152,21 +152,6 @@
     }
 }
 
-.mobile-phone-link {
-    display: none;
-    margin: 0 auto;
-
-    a {
-        font-size: 1.25rem;
-        font-weight: 500;
-        border-bottom: 2px solid var(--primary-color);
-        color: var(--parkspot-black);
-    }
-
-    @media only screen and (max-width: 750px) {
-        display: block;
-    }
-}
 
 .menu-wrapper-right {
     display: flex;

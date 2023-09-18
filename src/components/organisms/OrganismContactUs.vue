@@ -10,9 +10,9 @@
 
         <div>
             <div class="contact-us-options mg-medium">
-                <a class="options" href="tel:+918092996057">
+                <a class="options" :href="helplineRef">
                     <AtomIcon :icon="'phone'"> </AtomIcon>
-                    <span> +91 80929 96057 </span>
+                    <span> {{ helplineNumber }} </span>
                 </a>
                 <a class="options" href="mailto:connect@parkspot.in">
                     <AtomIcon :icon="'email'"> </AtomIcon>
@@ -78,6 +78,9 @@ export default {
           2sNextcoworks!8m2!3d12.9033359!4d77.6050157!4m8!1m0!1m5!1m1!1s0x3bae1503ac2c2bc5
           :0x8b4a7cefbd0adbfd!2m2!1d77.6050157!2d12.9033359!3e2`,
         };
+    },
+    computed: {
+        ...mapState('config', ['helplineNumber', 'helplineRef']),
     },
 };
 </script>

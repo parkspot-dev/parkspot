@@ -19,7 +19,7 @@
             </AtomButton>
         </div>
         <AtomParagraph :type="'p'" class="custom-para"
-            >If you have any issues. Call +91 80929 96057
+            >If you have any issues. Call <a :href="helplineRef"> {{ helplineNumber }}</a>
         </AtomParagraph>
     </BodyWrapper>
 </template>
@@ -44,6 +44,9 @@ export default {
         },
     },
     emits: ['homeBtn'],
+    computed: {
+        ...mapState('config', ['helplineNumber', 'helplineRef']),
+    },
     data() {
         return {
             img: require('@/assets/thankyou.svg'),
