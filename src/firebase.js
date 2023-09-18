@@ -25,13 +25,17 @@ const firebase = initializeApp(firebaseConfig);
 // initialize firebase auth
 const auth = getAuth(firebase);
 
+/**
+ * 
+ * @param {String} path 
+ */
+async function getValueFromFirebase(path) {
+    console.log('sud:: path', path)
+    const res = await get(child(ref(getDatabase(firebase)), path));
+    return await res.val();
+}
+
 export {
-    firebase,
-    getDatabase,
-    ref,
-    get,
-    child,
     auth,
-    // dbref, pageData
-    // app
+    getValueFromFirebase
 };
