@@ -63,6 +63,7 @@
 import AtomHeading from '../atoms/AtomHeading.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
+import { mapState } from 'vuex';
 export default {
     name: 'OrganismContactUs',
     components: {

@@ -31,6 +31,7 @@
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomImage from '../atoms/AtomImage.vue';
 import AtomButton from '../atoms/AtomButton.vue';
+import { mapState } from 'vuex';
 export default {
     name: 'TemplateError',
     components: {

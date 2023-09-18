@@ -296,6 +296,7 @@
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
+import { mapState } from 'vuex';
 // import AtomImage from "../atoms/AtomImage.vue";
 export default {
     name: 'TemplateFooter',

@@ -2,7 +2,7 @@ import { getValueFromFirebase } from '../../firebase';
 
 const state = {
     helplineNumber: '+91 74882 39471',
-    helplineRef: 'tel:' + helplineNumber,
+    helplineRef: 'tel:+91 74882 39471',
 };
 
 const mutations = {
