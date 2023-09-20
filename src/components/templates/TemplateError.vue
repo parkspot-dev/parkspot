@@ -20,7 +20,9 @@
         </div>
         <div class="error-para">
             <p>If you have any issues.</p>
-            <p>Call +91 80929 96057.</p>
+            <p>
+                <a :href="helplineRef"> {{ helplineNumber }}</a>
+            </p>
         </div>
     </BodyWrapper>
 </template>
@@ -29,6 +31,7 @@
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomImage from '../atoms/AtomImage.vue';
 import AtomButton from '../atoms/AtomButton.vue';
+import { mapState } from 'vuex';
 export default {
     name: 'TemplateError',
     components: {
@@ -49,6 +52,9 @@ export default {
             imgName: 'error',
             imgRatio: '1by1',
         };
+    },
+    computed: {
+        ...mapState('config', ['helplineNumber', 'helplineRef']),
     },
     methods: {
         homeBtn() {

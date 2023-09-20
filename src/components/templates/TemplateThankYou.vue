@@ -19,7 +19,7 @@
             </AtomButton>
         </div>
         <AtomParagraph :type="'p'" class="custom-para"
-            >If you have any issues. Call +91 80929 96057
+            >If you have any issues. Call <a :href="helplineRef"> {{ helplineNumber }}</a>
         </AtomParagraph>
     </BodyWrapper>
 </template>
@@ -29,6 +29,7 @@ import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomImage from '../atoms/AtomImage.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomButton from '../atoms/AtomButton.vue';
+import { mapState } from 'vuex';
 export default {
     name: 'TemplateThankYou',
     components: {
@@ -44,6 +45,9 @@ export default {
         },
     },
     emits: ['homeBtn'],
+    computed: {
+        ...mapState('config', ['helplineNumber', 'helplineRef']),
+    },
     data() {
         return {
             img: require('@/assets/thankyou.svg'),

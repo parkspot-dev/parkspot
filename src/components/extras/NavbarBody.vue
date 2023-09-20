@@ -64,28 +64,30 @@
                         </li>
                     </ul>
                 </div>
-                <!-- phone link -->
+                <!-- mweb phone link -->
                 <div class="mobile-phone-link">
                     <p>
-                        <a href="tel:+91 80929 96057">
+                        <a :href="helplineRef">
                             <b-icon icon="phone" size="is-small"> </b-icon>
-                            +91 809-299-6057
+                            {{ helplineNumber }}
                         </a>
                     </p>
                 </div>
-                <!-- login buttons -->
                 <div class="menu-wrapper-right">
+                    <!-- phone link -->
                     <ul>
                         <li>
                             <p>
-                                <a href="tel:+91 80929 96057">
+                                <a :href="helplineRef">
                                     <b-icon icon="phone" size="is-small">
                                     </b-icon>
-                                    +91 809-299-6057
+                                    {{ helplineNumber }}
                                 </a>
                             </p>
                         </li>
                     </ul>
+                    <!-- login buttons -->
+
                     <template v-if="isAuthReady">
                         <div class="login-options" v-if="!user">
                             <AtomButton
@@ -392,11 +394,13 @@ export default {
             activeSlide: 0,
         };
     },
+
     computed: {
         ...mapState('user', {
             user: (state) => state.user,
             isAuthReady: (state) => state.isAuthReady,
         }),
+        ...mapState('config', ['helplineNumber', 'helplineRef']),
     },
     methods: {
         ...mapMutations('user', {
@@ -434,4 +438,8 @@ export default {
 };
 </script>
 
-<style lang="scss" src="./navbar.scss"></style>
+<style lang="scss" src="./navbar.scss">
+.mobile-phone-link {
+    margin-inline-end: 8px;
+}
+</style>

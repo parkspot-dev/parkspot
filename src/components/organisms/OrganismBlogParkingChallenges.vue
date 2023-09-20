@@ -68,15 +68,20 @@
                 data and helps users find and book a parking spot. The best part
                 is that this online solution is user friendly and free of cost.
                 ParkSpot app is available on google play. Download the app for
-                free and sign up. if you have any questions, just call at +91
-                80929 96057, or email at connect@parkspot.in
+                free and sign up. if you have any questions, just call at
+                <a :href="helplineRef"> {{ helplineNumber }}</a
+                >, or email at connect@parkspot.in
             </li>
         </ol>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
     name: 'OrganismBlogParkingChallenges',
+    computed: {
+        ...mapState('config', ['helplineNumber', 'helplineRef']),
+    },
 };
 </script>

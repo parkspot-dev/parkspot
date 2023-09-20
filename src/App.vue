@@ -14,12 +14,15 @@ import TemplateFooter from './components/templates/TemplateFooter.vue';
 import Navbar from './components/extras/NavbarBody.vue';
 import OrganismLogin from './components/organisms/OrganismLogin.vue';
 import { PAGE_TITLE } from '@/constant/constant';
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 export default {
     components: {
         TemplateFooter,
         Navbar,
         OrganismLogin,
+    },
+    async created() {
+        await this.getHelplineNumber();
     },
     metaInfo() {
         return {
@@ -30,6 +33,9 @@ export default {
         ...mapState('user', {
             loginModal: (state) => state.loginModal,
         }),
+    },
+    methods: {
+        ...mapActions('config', ['getHelplineNumber']),
     },
 };
 </script>

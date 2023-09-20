@@ -150,10 +150,7 @@
                                 Customer Service:
                             </AtomParagraph>
                             <span>
-                                <a
-                                    href="tel:+918092996057"
-                                    class="phone-contact"
-                                >
+                                <a :href="helplineRef" class="phone-contact">
                                     <AtomIcon
                                         :icon="'phone-classic'"
                                         :size="'is-medium'"
@@ -162,7 +159,7 @@
                                 </a>
                             </span>
                             <AtomParagraph :type="'span'">
-                                +91 80929 96057
+                                {{ helplineNumber }}
                             </AtomParagraph>
                         </div>
                     </div>
@@ -299,6 +296,7 @@
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
+import { mapState } from 'vuex';
 // import AtomImage from "../atoms/AtomImage.vue";
 export default {
     name: 'TemplateFooter',
@@ -307,6 +305,9 @@ export default {
         AtomParagraph,
         AtomIcon,
         // AtomImage,
+    },
+    computed: {
+        ...mapState('config', ['helplineNumber', 'helplineRef']),
     },
     data() {
         return {
