@@ -71,7 +71,7 @@ const state = {
             title: "Bengaluru's Tenant Parking Solutions",
             author: 'Nitya Agrawal',
             author_img: require('@/assets/team/ish.jpg'),
-            img: require('@/assets/blog/blog5.jpg'),
+            img: require('@/assets/blog/blog6.jpg'),
             desc: `Introducing Parkspot Upsurge of Renters in Bengaluru's Affluent Areas 
                 Standalone house rentals are gaining traction in Bengaluru's elite localities
                 like HSR Layout, Koramangala.... `,
