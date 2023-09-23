@@ -128,7 +128,7 @@ export const routes = [
     },
     {
         path: pages.NEARBY_HYD,
-        name: 'discover',
+        name: 'discover-hyderabad',
         component: () => import('@/views/PageNearBy.vue'),
     },
     {
