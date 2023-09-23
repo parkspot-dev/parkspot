@@ -83,10 +83,10 @@
                                 <router-link
                                     class="top-search-link"
                                     :to="{
-                                        path: '/bangalore/parking-near-bommanahalli',
+                                        path: '/hyderabad/parking-near-hyderabad',
                                     }"
                                 >
-                                    Parking Spot in Bommanahalli
+                                    Parking Spot in Hyderabad
                                 </router-link>
                             </p>
                             <p>
