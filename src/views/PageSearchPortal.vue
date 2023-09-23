@@ -13,7 +13,7 @@
         <b-tab-item label="Interested Request(VO)">
             <div class="request-search-control">
                 <p></p>
-                <AtomInput v-model="SOLatLng"> </AtomInput>
+                                <AtomInput v-model="SOLatLng"> </AtomInput>
                 <AtomButton @click.native="getInterestedVO">Search</AtomButton>
             </div>
             <TemplateSearchPortal
