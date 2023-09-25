@@ -233,8 +233,8 @@
                         >
                             <AtomInput
                                 :size="'is-small'"
-                                :value="bookingDetails.Booking.Rent"
-                                @input="onRentUpdate"
+                                type="number"
+                                v-model.number="currBookingDetails.Booking.Rent"
                             ></AtomInput>
                         </div>
                         <p v-else>
@@ -246,8 +246,9 @@
                         >
                             <AtomInput
                                 :size="'is-small'"
-                                :value="bookingDetails.Booking.BaseAmount"
-                                @input="onBaseAmtUpdate"
+                                v-model.number="
+                                    currBookingDetails.Booking.BaseAmount
+                                "
                             ></AtomInput>
                         </div>
                         <p v-else>
@@ -299,8 +300,10 @@
                         >
                             <AtomInput
                                 :size="'is-small'"
-                                :value="bookingDetails.Booking.ConvenienceFee"
-                                @input="onConvFeeUpdate"
+                                type="number"
+                                v-model.number="
+                                    currBookingDetails.Booking.ConvenienceFee
+                                "
                             ></AtomInput>
                         </div>
                         <p v-else>
@@ -312,8 +315,10 @@
                         >
                             <AtomInput
                                 :size="'is-small'"
-                                :value="bookingDetails.Booking.SecurityDeposit"
-                                @input="onSecurityDepositUpdate"
+                                type="number"
+                                v-model.number="
+                                    currBookingDetails.Booking.SecurityDeposit
+                                "
                             ></AtomInput>
                         </div>
                         <p v-else>
@@ -325,8 +330,10 @@
                         >
                             <AtomInput
                                 :size="'is-small'"
-                                :value="bookingDetails.Booking.RentCycle"
-                                @input="onRentCycleUpdate"
+                                type="number"
+                                v-model.number="
+                                    currBookingDetails.Booking.RentCycle
+                                "
                             ></AtomInput>
                         </div>
                         <p v-else>
@@ -407,18 +414,19 @@ export default {
         return {
             toolTipLabel: 'Copy payment url!',
             editField: null,
-            startDate: '',
-            rent: '',
-            convFee: '',
-            baseAmt: '',
-            rentCycle: '',
-            periodicity: '',
-            securityDeposit: '',
+            currBookingDetails: null,
             bookingStatusLabels: BookingStatusLabels,
             paymentPeriodicityLabels: PaymentPeriodicityLabels,
         };
     },
-
+    beforeMount() {
+        this.currBookingDetails = this.bookingDetails; // make a local copy of bookingDetails
+    },
+    watch: {
+        '$store.state.bookingPortal.bookingDetails'(val) {
+            this.currBookingDetails = val; // make a local copy of bookingDetails
+        },
+    },
     computed: {
         ...mapState('bookingPortal', ['bookingDetails', 'paymentDetails']),
     },
@@ -480,28 +488,7 @@ export default {
 
         saveField() {
             this.editField = null;
-            const reqBody = {
-                ID: this.bookingDetails.Booking.ID,
-                Rent: this.rent ? Number(this.rent) : this.bookingDetails.rent,
-                BaseAmount: this.baseAmt
-                    ? Number(this.baseAmt)
-                    : this.bookingDetails.BaseAmount,
-                ConvenienceFee: this.convFee
-                    ? Number(this.convFee)
-                    : this.bookingDetails.ConvenienceFee,
-                RentCycle: this.rentCycle
-                    ? Number(this.rentCycle)
-                    : this.bookingDetails.RentCycle,
-                StartTime: this.startDate
-                    ? this.startDate
-                    : this.bookingDetails.StartTime, // 2023-06-04T00:00:00.000Z
-                Status: this.bookingDetails.Booking.Status,
-                PaymentPeriod: this.bookingDetails.Booking.PaymentPeriod,
-                SecurityDeposit: this.securityDeposit
-                    ? Number(this.securityDeposit)
-                    : this.bookingDetails.SecurityDeposit,
-            };
-
+            const reqBody = this.currBookingDetails.Booking;
             this.$emit('update-booking-details', reqBody);
         },
 
@@ -510,7 +497,7 @@ export default {
         },
 
         onStartDateUpdate(updatedDate) {
-            this.startDate = updatedDate;
+            this.currBookingDetails.Booking.StartTime = updatedDate;
         },
 
         onRentUpdate(updatedRent) {
