@@ -66,9 +66,11 @@
                         <p>
                             {{ currBookingDetails.Booking.ID }}
                         </p>
-                        <p>
-                            {{ currBookingDetails.Booking.SiteID }}
-                        </p>
+                        <a :href="sdpURL" target="_blank">
+                            <p>
+                                {{ currBookingDetails.Booking.SiteID }}
+                            </p>
+                        </a>
                         <div
                             v-if="editField === 'Booking Details'"
                             class="select"
@@ -433,6 +435,14 @@ export default {
     },
     computed: {
         ...mapState('bookingPortal', ['bookingDetails', 'paymentDetails']),
+        sdpURL() {
+            return this.$router.resolve({
+                name: 'spot-detail',
+                params: {
+                    spotId: this.currBookingDetails.Booking.SiteID,
+                },
+            }).href;
+        },
     },
 
     methods: {
