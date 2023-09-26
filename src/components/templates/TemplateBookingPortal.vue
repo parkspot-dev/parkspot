@@ -135,54 +135,6 @@
                 </div>
             </div>
         </div>
-        <!-- VO details-->
-        <div class="booking-card">
-            <h3 class="sub-heading">VO Details</h3>
-            <div class="card-body">
-                <div class="col-wrapper">
-                    <div class="field-col">
-                        <p>
-                            <strong> UserName: </strong>
-                        </p>
-                        <p>
-                            <strong> Full Name: </strong>
-                        </p>
-                        <p>
-                            <strong> Mobile: </strong>
-                        </p>
-                    </div>
-                    <div class="value-col">
-                        <p>
-                            {{ currBookingDetails.Booking.UserName }}
-                        </p>
-                        <p>
-                            {{ currBookingDetails.Booking.Name }}
-                        </p>
-                        <p>
-                            {{ currBookingDetails.Booking.Mobile }}
-                        </p>
-                    </div>
-                </div>
-                <div class="col-wrapper">
-                    <div class="field-col">
-                        <p>
-                            <strong> Vehicle Number:</strong>
-                        </p>
-                        <p>
-                            <strong> Email: </strong>
-                        </p>
-                    </div>
-                    <div class="value-col">
-                        <p>
-                            {{ currBookingDetails.Booking.VehicleNumber }}
-                        </p>
-                        <p>
-                            {{ currBookingDetails.Booking.EmailID }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- rent details-->
         <div class="booking-card">
@@ -343,6 +295,56 @@
                 </div>
             </div>
         </div>
+        
+        <!-- VO details-->
+        <div class="booking-card">
+            <h3 class="sub-heading">VO Details</h3>
+            <div class="card-body">
+                <div class="col-wrapper">
+                    <div class="field-col">
+                        <p>
+                            <strong> UserName: </strong>
+                        </p>
+                        <p>
+                            <strong> Full Name: </strong>
+                        </p>
+                        <p>
+                            <strong> Mobile: </strong>
+                        </p>
+                    </div>
+                    <div class="value-col">
+                        <p>
+                            {{ currBookingDetails.Booking.UserName }}
+                        </p>
+                        <p>
+                            {{ currBookingDetails.Booking.Name }}
+                        </p>
+                        <p>
+                            {{ currBookingDetails.Booking.Mobile }}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-wrapper">
+                    <div class="field-col">
+                        <p>
+                            <strong> Vehicle Number:</strong>
+                        </p>
+                        <p>
+                            <strong> Email: </strong>
+                        </p>
+                    </div>
+                    <div class="value-col">
+                        <p>
+                            {{ currBookingDetails.Booking.VehicleNumber }}
+                        </p>
+                        <p>
+                            {{ currBookingDetails.Booking.EmailID }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <hr />
         <!-- Payments-->
         <div class="payment-history-container">
