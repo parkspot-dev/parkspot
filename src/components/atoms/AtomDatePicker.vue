@@ -31,7 +31,6 @@ export default {
     methods: {
         onChange(val) {
             this.$emit('changed', val);
-            console.log({ 'sud:: time change': val });
         },
     },
 };
