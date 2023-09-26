@@ -73,6 +73,7 @@ module.exports = {
                             '/bangalore/parking-near-Kengeri-Gate',
                             '/bangalore/parking-near-Chickpet',
                             '/bangalore/parking-near-Yalahanka',
+                            '/hyderabad/parking-near-hyderabad',
                             // '/bangalore/parking-near-Subramanyanagar',
                             // '/bangalore/parking-near-Halasoor',
                             // '/bangalore/parking-near-Halasoor-Gate',

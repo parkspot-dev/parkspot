@@ -39,6 +39,7 @@ export const pages = {
     SEARCH_PORTAL           : '/search-portal',
     PAYMENTGATEWAY          : '/payment/*',
     NEARBY                  : '/bangalore/parking-near-*',
+    NEARBY_HYD              : '/hyderabad/parking-near-*',
     TEMP                    : '/temp',
     THANK_YOU               : '/thank-you',
     ERROR                   : '/error',
@@ -123,6 +124,11 @@ export const routes = [
     {
         path: pages.NEARBY,
         name: 'discover',
+        component: () => import('@/views/PageNearBy.vue'),
+    },
+    {
+        path: pages.NEARBY_HYD,
+        name: 'discover-hyderabad',
         component: () => import('@/views/PageNearBy.vue'),
     },
     {
