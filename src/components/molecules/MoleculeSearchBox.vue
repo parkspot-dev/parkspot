@@ -1,7 +1,11 @@
 <template>
     <div class="search-control">
         <p></p>
-        <AtomInput v-model="searchModel" :placeholder="placeholder">
+        <AtomInput
+            v-model="searchModel"
+            :placeholder="placeholder"
+            @keyup.native.enter="emitSearchEvent"
+        >
         </AtomInput>
         <AtomButton
             class="search-button"
