@@ -211,7 +211,9 @@
                             v-if="editField === 'Rent Details'"
                         >
                             <select
-                                v-model="currBookingDetails.Booking.PaymentPeriod"
+                                v-model="
+                                    currBookingDetails.Booking.PaymentPeriod
+                                "
                             >
                                 <option
                                     v-for="(
@@ -295,7 +297,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- VO details-->
         <div class="booking-card">
             <h3 class="sub-heading">VO Details</h3>
@@ -503,24 +505,6 @@ export default {
 
         onStartDateUpdate(updatedDate) {
             this.currBookingDetails.Booking.StartTime = updatedDate;
-        },
-
-        onRentUpdate(updatedRent) {
-            this.rent = updatedRent;
-        },
-
-        onBaseAmtUpdate(updatedBaseAmt) {
-            this.baseAmt = updatedBaseAmt;
-        },
-        onConvFeeUpdate(updatedConvFee) {
-            this.convFee = updatedConvFee;
-        },
-        onSecurityDepositUpdate(updatedSecurityDeposit) {
-            this.securityDeposit = updatedSecurityDeposit;
-        },
-
-        onRentCycleUpdate(updatedRentCycle) {
-            this.rentCycle = updatedRentCycle;
         },
     },
 };
