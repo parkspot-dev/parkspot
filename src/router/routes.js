@@ -39,7 +39,7 @@ export const pages = {
     SEARCH_PORTAL           : '/search-portal',
     PAYMENTGATEWAY          : '/payment/*',
     NEARBY                  : '/bangalore/parking-near-*',
-    NEARBY_HYD                  : '/hyderabad/parking-near-*',
+    NEARBY_HYD              : '/hyderabad/parking-near-*',
     TEMP                    : '/temp',
     THANK_YOU               : '/thank-you',
     ERROR                   : '/error',
