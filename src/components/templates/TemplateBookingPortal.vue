@@ -64,16 +64,16 @@
                     </div>
                     <div class="value-col">
                         <p>
-                            {{ bookingDetails.Booking.ID }}
+                            {{ currBookingDetails.Booking.ID }}
                         </p>
                         <p>
-                            {{ bookingDetails.Booking.SiteID }}
+                            {{ currBookingDetails.Booking.SiteID }}
                         </p>
                         <div
                             v-if="editField === 'Booking Details'"
                             class="select"
                         >
-                            <select v-model="bookingDetails.Booking.Status">
+                            <select v-model="currBookingDetails.Booking.Status">
                                 <option
                                     v-for="(
                                         label, index
@@ -88,7 +88,7 @@
                         <p v-else>
                             {{
                                 getBookingStatusLabel(
-                                    bookingDetails.Booking.Status,
+                                    currBookingDetails.Booking.Status,
                                 )
                             }}
                         </p>
@@ -109,7 +109,7 @@
                         <p>
                             {{
                                 getFormattedDate(
-                                    bookingDetails.Booking.CreatedAt,
+                                    currBookingDetails.Booking.CreatedAt,
                                 )
                             }}
                         </p>
@@ -127,7 +127,7 @@
                         <p v-else>
                             {{
                                 getFormattedDate(
-                                    bookingDetails.Booking.StartTime,
+                                    currBookingDetails.Booking.StartTime,
                                 )
                             }}
                         </p>
@@ -153,13 +153,13 @@
                     </div>
                     <div class="value-col">
                         <p>
-                            {{ bookingDetails.Booking.UserName }}
+                            {{ currBookingDetails.Booking.UserName }}
                         </p>
                         <p>
-                            {{ bookingDetails.Booking.Name }}
+                            {{ currBookingDetails.Booking.Name }}
                         </p>
                         <p>
-                            {{ bookingDetails.Booking.Mobile }}
+                            {{ currBookingDetails.Booking.Mobile }}
                         </p>
                     </div>
                 </div>
@@ -174,10 +174,10 @@
                     </div>
                     <div class="value-col">
                         <p>
-                            {{ bookingDetails.Booking.VehicleNumber }}
+                            {{ currBookingDetails.Booking.VehicleNumber }}
                         </p>
                         <p>
-                            {{ bookingDetails.Booking.EmailID }}
+                            {{ currBookingDetails.Booking.EmailID }}
                         </p>
                     </div>
                 </div>
@@ -238,7 +238,7 @@
                             ></AtomInput>
                         </div>
                         <p v-else>
-                            {{ bookingDetails.Booking.Rent }}
+                            {{ currBookingDetails.Booking.Rent }}
                         </p>
                         <div
                             class="input-field"
@@ -252,14 +252,14 @@
                             ></AtomInput>
                         </div>
                         <p v-else>
-                            {{ bookingDetails.Booking.BaseAmount }}
+                            {{ currBookingDetails.Booking.BaseAmount }}
                         </p>
                         <div
                             class="input-field"
                             v-if="editField === 'Rent Details'"
                         >
                             <select
-                                v-model="bookingDetails.Booking.PaymentPeriod"
+                                v-model="currBookingDetails.Booking.PaymentPeriod"
                             >
                                 <option
                                     v-for="(
@@ -275,7 +275,7 @@
                         <p v-else>
                             {{
                                 getPaymentPeriodicityLabel(
-                                    bookingDetails.Booking.PaymentPeriod,
+                                    currBookingDetails.Booking.PaymentPeriod,
                                 )
                             }}
                         </p>
@@ -307,7 +307,7 @@
                             ></AtomInput>
                         </div>
                         <p v-else>
-                            {{ bookingDetails.Booking.ConvenienceFee }}
+                            {{ currBookingDetails.Booking.ConvenienceFee }}
                         </p>
                         <div
                             class="input-field"
@@ -322,7 +322,7 @@
                             ></AtomInput>
                         </div>
                         <p v-else>
-                            {{ bookingDetails.Booking.SecurityDeposit }}
+                            {{ currBookingDetails.Booking.SecurityDeposit }}
                         </p>
                         <div
                             class="input-field"
@@ -337,7 +337,7 @@
                             ></AtomInput>
                         </div>
                         <p v-else>
-                            {{ bookingDetails.Booking.RentCycle }}
+                            {{ currBookingDetails.Booking.RentCycle }}
                         </p>
                     </div>
                 </div>
@@ -354,9 +354,9 @@
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
                 </div>
-                <div v-if="bookingDetails.Payments">
+                <div v-if="currBookingDetails.Payments">
                     <div
-                        v-for="payment in bookingDetails.Payments"
+                        v-for="payment in currBookingDetails.Payments"
                         :key="payment.PaymentID"
                         class="row"
                     >
@@ -420,11 +420,11 @@ export default {
         };
     },
     beforeMount() {
-        this.currBookingDetails = this.bookingDetails; // make a local copy of bookingDetails
+        this.currBookingDetails = structuredClone(this.bookingDetails); // make a local copy of bookingDetails
     },
     watch: {
         '$store.state.bookingPortal.bookingDetails'(val) {
-            this.currBookingDetails = val; // make a local copy of bookingDetails
+            this.currBookingDetails = structuredClone(val); // make a local copy of bookingDetails
         },
     },
     computed: {
@@ -457,7 +457,7 @@ export default {
         getPaymentLink() {
             this.toolTipLabel = 'Copy payment url!';
             const reqBody = {
-                BookingID: this.bookingDetails.Booking.ID.toString(),
+                BookingID: this.currBookingDetails.Booking.ID.toString(),
                 Discount: 0.0,
                 Promocode: '',
             };
@@ -488,12 +488,15 @@ export default {
 
         saveField() {
             this.editField = null;
-            const reqBody = this.currBookingDetails.Booking;
-            this.$emit('update-booking-details', reqBody);
+            this.$emit(
+                'update-booking-details',
+                this.currBookingDetails.Booking,
+            );
         },
 
         cancelField() {
             this.editField = null;
+            this.currBookingDetails = structuredClone(this.bookingDetails);
         },
 
         onStartDateUpdate(updatedDate) {
