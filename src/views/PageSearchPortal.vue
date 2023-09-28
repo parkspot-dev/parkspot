@@ -2,7 +2,6 @@
     <b-tabs v-model="activeTabView">
         <b-tab-item label="Parking Request (VO/SO)">
             <div class="request-search-control">
-                <p></p>
                 <AtomInput v-model="VOMobile"> </AtomInput>
                 <AtomButton @click.native="getParkingRequests">Search</AtomButton>
             </div>
@@ -91,22 +90,14 @@ export default {
         ]),
         async getParkingRequests() {
             this.isLoading = true;
-            const mobile = this.VOMobile;
-            if (mobile === mobile) {
-                const mobileNo = await mayaClient.get(
-                    `internal/parking-requests?mobile=${mobile}`,
-                );
-                this.parkingRequests = mobileNo;
-                this.isLoading = false;
+            let parkingRequestURL = '/internal/parking-requests';
+            if ((this.VOMobile != '') && (this.VOMobile != null)) {
+                parkingRequestURL = parkingRequestURL + `?mobile=${this.VOMobile}`
             }
-
-            if (mobile === '') {
-                const mobileNo = await mayaClient.get(
-                    '/internal/parking-requests',
-                );
-                this.parkingRequests = mobileNo,
-                this.isLoading = false
-            }
+            this.parkingRequests = await mayaClient.get(
+                 parkingRequestURL,
+            );
+            this.isLoading = false;
         },
         async getInterestedVO() {
             this.isLoading = true;
