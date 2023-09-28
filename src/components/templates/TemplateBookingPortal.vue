@@ -200,6 +200,7 @@
                         >
                             <AtomInput
                                 :size="'is-small'"
+                                type="number"
                                 v-model.number="
                                     currBookingDetails.Booking.BaseAmount
                                 "
