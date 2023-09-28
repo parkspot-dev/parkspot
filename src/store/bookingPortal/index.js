@@ -59,6 +59,22 @@ const actions = {
         commit('set-loading', false);
     },
 
+    async refreshPaymentStatus({ dispatch, commit, state }, paymentId) {
+        if (paymentId == 0) {
+            return;
+        }
+        commit('set-loading', true);
+        const res = await mayaClient.get(
+            '/payment/status?order_id=' + paymentId,
+        );
+        commit('set-loading', false);
+        if (res.DisplayMsg) {
+            commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
+        } else if (res) {
+            dispatch('getBookingDetails', state.bookingDetails.Booking.ID);
+        }
+    },
+
     async updateBookingDetails({ commit, dispatch }, reqBody) {
         commit('set-loading', true);
         const res = await mayaClient.post('/booking/update', reqBody);
