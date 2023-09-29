@@ -64,16 +64,18 @@
                     </div>
                     <div class="value-col">
                         <p>
-                            {{ bookingDetails.Booking.ID }}
+                            {{ currBookingDetails.Booking.ID }}
                         </p>
-                        <p>
-                            {{ bookingDetails.Booking.SiteID }}
-                        </p>
+                        <a :href="sdpURL" target="_blank">
+                            <p>
+                                {{ currBookingDetails.Booking.SiteID }}
+                            </p>
+                        </a>
                         <div
                             v-if="editField === 'Booking Details'"
                             class="select"
                         >
-                            <select v-model="bookingDetails.Booking.Status">
+                            <select v-model="currBookingDetails.Booking.Status">
                                 <option
                                     v-for="(
                                         label, index
@@ -88,7 +90,7 @@
                         <p v-else>
                             {{
                                 getBookingStatusLabel(
-                                    bookingDetails.Booking.Status,
+                                    currBookingDetails.Booking.Status,
                                 )
                             }}
                         </p>
@@ -109,7 +111,7 @@
                         <p>
                             {{
                                 getFormattedDate(
-                                    bookingDetails.Booking.CreatedAt,
+                                    currBookingDetails.Booking.CreatedAt,
                                 )
                             }}
                         </p>
@@ -127,57 +129,9 @@
                         <p v-else>
                             {{
                                 getFormattedDate(
-                                    bookingDetails.Booking.StartTime,
+                                    currBookingDetails.Booking.StartTime,
                                 )
                             }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- VO details-->
-        <div class="booking-card">
-            <h3 class="sub-heading">VO Details</h3>
-            <div class="card-body">
-                <div class="col-wrapper">
-                    <div class="field-col">
-                        <p>
-                            <strong> UserName: </strong>
-                        </p>
-                        <p>
-                            <strong> Full Name: </strong>
-                        </p>
-                        <p>
-                            <strong> Mobile: </strong>
-                        </p>
-                    </div>
-                    <div class="value-col">
-                        <p>
-                            {{ bookingDetails.Booking.UserName }}
-                        </p>
-                        <p>
-                            {{ bookingDetails.Booking.Name }}
-                        </p>
-                        <p>
-                            {{ bookingDetails.Booking.Mobile }}
-                        </p>
-                    </div>
-                </div>
-                <div class="col-wrapper">
-                    <div class="field-col">
-                        <p>
-                            <strong> Vehicle Number:</strong>
-                        </p>
-                        <p>
-                            <strong> Email: </strong>
-                        </p>
-                    </div>
-                    <div class="value-col">
-                        <p>
-                            {{ bookingDetails.Booking.VehicleNumber }}
-                        </p>
-                        <p>
-                            {{ bookingDetails.Booking.EmailID }}
                         </p>
                     </div>
                 </div>
@@ -233,12 +187,12 @@
                         >
                             <AtomInput
                                 :size="'is-small'"
-                                :value="bookingDetails.Booking.Rent"
-                                @input="onRentUpdate"
+                                type="number"
+                                v-model.number="currBookingDetails.Booking.Rent"
                             ></AtomInput>
                         </div>
                         <p v-else>
-                            {{ bookingDetails.Booking.Rent }}
+                            {{ currBookingDetails.Booking.Rent }}
                         </p>
                         <div
                             class="input-field"
@@ -246,19 +200,23 @@
                         >
                             <AtomInput
                                 :size="'is-small'"
-                                :value="bookingDetails.Booking.BaseAmount"
-                                @input="onBaseAmtUpdate"
+                                type="number"
+                                v-model.number="
+                                    currBookingDetails.Booking.BaseAmount
+                                "
                             ></AtomInput>
                         </div>
                         <p v-else>
-                            {{ bookingDetails.Booking.BaseAmount }}
+                            {{ currBookingDetails.Booking.BaseAmount }}
                         </p>
                         <div
                             class="input-field"
                             v-if="editField === 'Rent Details'"
                         >
                             <select
-                                v-model="bookingDetails.Booking.PaymentPeriod"
+                                v-model="
+                                    currBookingDetails.Booking.PaymentPeriod
+                                "
                             >
                                 <option
                                     v-for="(
@@ -274,7 +232,7 @@
                         <p v-else>
                             {{
                                 getPaymentPeriodicityLabel(
-                                    bookingDetails.Booking.PaymentPeriod,
+                                    currBookingDetails.Booking.PaymentPeriod,
                                 )
                             }}
                         </p>
@@ -299,12 +257,14 @@
                         >
                             <AtomInput
                                 :size="'is-small'"
-                                :value="bookingDetails.Booking.ConvenienceFee"
-                                @input="onConvFeeUpdate"
+                                type="number"
+                                v-model.number="
+                                    currBookingDetails.Booking.ConvenienceFee
+                                "
                             ></AtomInput>
                         </div>
                         <p v-else>
-                            {{ bookingDetails.Booking.ConvenienceFee }}
+                            {{ currBookingDetails.Booking.ConvenienceFee }}
                         </p>
                         <div
                             class="input-field"
@@ -312,12 +272,14 @@
                         >
                             <AtomInput
                                 :size="'is-small'"
-                                :value="bookingDetails.Booking.SecurityDeposit"
-                                @input="onSecurityDepositUpdate"
+                                type="number"
+                                v-model.number="
+                                    currBookingDetails.Booking.SecurityDeposit
+                                "
                             ></AtomInput>
                         </div>
                         <p v-else>
-                            {{ bookingDetails.Booking.SecurityDeposit }}
+                            {{ currBookingDetails.Booking.SecurityDeposit }}
                         </p>
                         <div
                             class="input-field"
@@ -325,17 +287,69 @@
                         >
                             <AtomInput
                                 :size="'is-small'"
-                                :value="bookingDetails.Booking.RentCycle"
-                                @input="onRentCycleUpdate"
+                                type="number"
+                                v-model.number="
+                                    currBookingDetails.Booking.RentCycle
+                                "
                             ></AtomInput>
                         </div>
                         <p v-else>
-                            {{ bookingDetails.Booking.RentCycle }}
+                            {{ currBookingDetails.Booking.RentCycle }}
                         </p>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- VO details-->
+        <div class="booking-card">
+            <h3 class="sub-heading">VO Details</h3>
+            <div class="card-body">
+                <div class="col-wrapper">
+                    <div class="field-col">
+                        <p>
+                            <strong> UserName: </strong>
+                        </p>
+                        <p>
+                            <strong> Full Name: </strong>
+                        </p>
+                        <p>
+                            <strong> Mobile: </strong>
+                        </p>
+                    </div>
+                    <div class="value-col">
+                        <p>
+                            {{ currBookingDetails.Booking.UserName }}
+                        </p>
+                        <p>
+                            {{ currBookingDetails.Booking.Name }}
+                        </p>
+                        <p>
+                            {{ currBookingDetails.Booking.Mobile }}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-wrapper">
+                    <div class="field-col">
+                        <p>
+                            <strong> Vehicle Number:</strong>
+                        </p>
+                        <p>
+                            <strong> Email: </strong>
+                        </p>
+                    </div>
+                    <div class="value-col">
+                        <p>
+                            {{ currBookingDetails.Booking.VehicleNumber }}
+                        </p>
+                        <p>
+                            {{ currBookingDetails.Booking.EmailID }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <hr />
         <!-- Payments-->
         <div class="payment-history-container">
@@ -347,9 +361,9 @@
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
                 </div>
-                <div v-if="bookingDetails.Payments">
+                <div v-if="currBookingDetails.Payments">
                     <div
-                        v-for="payment in bookingDetails.Payments"
+                        v-for="payment in currBookingDetails.Payments"
                         :key="payment.PaymentID"
                         class="row"
                     >
@@ -407,20 +421,29 @@ export default {
         return {
             toolTipLabel: 'Copy payment url!',
             editField: null,
-            startDate: '',
-            rent: '',
-            convFee: '',
-            baseAmt: '',
-            rentCycle: '',
-            periodicity: '',
-            securityDeposit: '',
+            currBookingDetails: null,
             bookingStatusLabels: BookingStatusLabels,
             paymentPeriodicityLabels: PaymentPeriodicityLabels,
         };
     },
-
+    beforeMount() {
+        this.currBookingDetails = structuredClone(this.bookingDetails); // make a local copy of bookingDetails
+    },
+    watch: {
+        '$store.state.bookingPortal.bookingDetails'(val) {
+            this.currBookingDetails = structuredClone(val); // make a local copy of bookingDetails
+        },
+    },
     computed: {
         ...mapState('bookingPortal', ['bookingDetails', 'paymentDetails']),
+        sdpURL() {
+            return this.$router.resolve({
+                name: 'spot-detail',
+                params: {
+                    spotId: this.currBookingDetails.Booking.SiteID,
+                },
+            }).href;
+        },
     },
 
     methods: {
@@ -449,7 +472,7 @@ export default {
         getPaymentLink() {
             this.toolTipLabel = 'Copy payment url!';
             const reqBody = {
-                BookingID: this.bookingDetails.Booking.ID.toString(),
+                BookingID: this.currBookingDetails.Booking.ID.toString(),
                 Discount: 0.0,
                 Promocode: '',
             };
@@ -480,55 +503,19 @@ export default {
 
         saveField() {
             this.editField = null;
-            const reqBody = {
-                ID: this.bookingDetails.Booking.ID,
-                Rent: this.rent ? Number(this.rent) : this.bookingDetails.rent,
-                BaseAmount: this.baseAmt
-                    ? Number(this.baseAmt)
-                    : this.bookingDetails.BaseAmount,
-                ConvenienceFee: this.convFee
-                    ? Number(this.convFee)
-                    : this.bookingDetails.ConvenienceFee,
-                RentCycle: this.rentCycle
-                    ? Number(this.rentCycle)
-                    : this.bookingDetails.RentCycle,
-                StartTime: this.startDate
-                    ? this.startDate
-                    : this.bookingDetails.StartTime, // 2023-06-04T00:00:00.000Z
-                Status: this.bookingDetails.Booking.Status,
-                PaymentPeriod: this.bookingDetails.Booking.PaymentPeriod,
-                SecurityDeposit: this.securityDeposit
-                    ? Number(this.securityDeposit)
-                    : this.bookingDetails.SecurityDeposit,
-            };
-
-            this.$emit('update-booking-details', reqBody);
+            this.$emit(
+                'update-booking-details',
+                this.currBookingDetails.Booking,
+            );
         },
 
         cancelField() {
             this.editField = null;
+            this.currBookingDetails = structuredClone(this.bookingDetails);
         },
 
         onStartDateUpdate(updatedDate) {
-            this.startDate = updatedDate;
-        },
-
-        onRentUpdate(updatedRent) {
-            this.rent = updatedRent;
-        },
-
-        onBaseAmtUpdate(updatedBaseAmt) {
-            this.baseAmt = updatedBaseAmt;
-        },
-        onConvFeeUpdate(updatedConvFee) {
-            this.convFee = updatedConvFee;
-        },
-        onSecurityDepositUpdate(updatedSecurityDeposit) {
-            this.securityDeposit = updatedSecurityDeposit;
-        },
-
-        onRentCycleUpdate(updatedRentCycle) {
-            this.rentCycle = updatedRentCycle;
+            this.currBookingDetails.Booking.StartTime = updatedDate;
         },
     },
 };
