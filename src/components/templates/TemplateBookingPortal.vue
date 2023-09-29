@@ -379,6 +379,19 @@
                                 <span class="status-label">
                                     {{ getPaymentStatusLabel(payment.Status) }}
                                 </span>
+                                <AtomIcon
+                                    v-if="
+                                        getPaymentClass(payment.Status) !=
+                                        'payment-success'
+                                    "
+                                    :icon="'refresh'"
+                                    type="primary"
+                                    size="is-small"
+                                    @click.native="
+                                        refreshPaymentStatus(payment.PaymentID)
+                                    "
+                                >
+                                </AtomIcon>
                             </div>
                         </div>
                         <div class="cell">₹ {{ payment.Amount }}</div>
@@ -478,6 +491,10 @@ export default {
             };
 
             this.$emit('payment-link', reqBody);
+        },
+
+        refreshPaymentStatus(paymentId) {
+            this.$emit('refresh-payment-status', paymentId);
         },
 
         copyUrl() {
@@ -672,6 +689,7 @@ export default {
         display: inline-block;
         padding: 5px 10px;
         border-radius: 5px;
+        min-width: 108px;
     }
 
     .status-label {

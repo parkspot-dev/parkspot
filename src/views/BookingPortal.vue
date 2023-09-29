@@ -12,6 +12,7 @@
         <TemplateBookingPortal
             v-if="bookingDetails"
             @payment-link="getPaymentLink"
+            @refresh-payment-status="refreshPaymentStatus"
             @update-booking-details="updateBookingDetails"
         ></TemplateBookingPortal>
         <LoaderModal :isLoading="isLoading"></LoaderModal>
@@ -48,6 +49,7 @@ export default {
             'getBookingDetails',
             'getPaymentLink',
             'updateBookingDetails',
+            'refreshPaymentStatus',
         ]),
     },
 };
