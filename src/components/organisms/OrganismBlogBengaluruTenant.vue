@@ -7,7 +7,7 @@
             While these neighborhoods promise a luxurious lifestyle, a common 
             challenge persists – the scarcity of parking spaces.
         </p>
-        <h3 class="is-size-3 has-text-weight-medium py-3">
+        <h3 class="is-size-3 has-text-weight-normal py-3">
             Vehicles: Essential for Evolving Lifestyles
         </h3>
         <p>
@@ -19,26 +19,21 @@
         <blockquote class="bengaluru-tenant-quote">
             “Introducing Parkspot: Your Stress-free Solution to Bengaluru's Tenant Parking Woes.”
         </blockquote>
-        <h3 class="is-size-3 has-text-weight-medium py-3">
+        <h3 class="is-size-3 has-text-weight-normal py-3">
             The Street Parking Struggle
         </h3>
-        <p>
+        <p class="pb-2">
             The absence of dedicated parking spots often forces tenants to 
             compete for limited street parking. Sadly, this restricted street space 
             fails to accommodate the growing number of vehicles, leading to inconvenience 
-            and safety concerns.
-        </p>
-        <h3 class="is-size-3 has-text-weight-medium py-3">
-            Street Parking Hazards: Theft, Towing, and Exposure
-        </h3>
-        <p>
+            and safety concerns.<strong>Street Parking Hazards: Theft, Towing, and Exposure.</strong>
             Street-parked vehicles are vulnerable to risks like theft, 
             frequent towing by authorities, and exposure to harsh weather. 
             These challenges can result in financial and emotional distress 
             for renters.
         </p>
-        <h3 class="is-size-3 has-text-weight-medium py-3">
-            Introducing Parkspot: The Ultimate Fix
+        <h3 class="is-size-3 has-text-weight-normal py-4">
+            Parkspot: The Ultimate Fix
         </h3>
         <p>
             Enter Parkspot, an innovative solution that confronts parking 
@@ -46,11 +41,7 @@
             can effortlessly locate secure and budget-friendly parking spaces 
             nearby. Parkspot goes the extra mile by offering attractive 
             discounts to enhance its appeal.
-        </p>
-        <h3 class="is-size-3 has-text-weight-medium py-3">
-            Conclusion: Carefree Parking with Parkspot
-        </h3>
-        <p>
+            <strong>Hence, Carefree Parking with Parkspot.</strong>
             With standalone house rentals becoming a trend in Bengaluru, 
             addressing parking woes is imperative. Parkspot emerges as 
             the ultimate problem solver, providing a seamless way to 
