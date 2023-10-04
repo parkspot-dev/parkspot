@@ -91,7 +91,7 @@ export default {
         async getParkingRequests() {
             this.isLoading = true;
             let parkingRequestURL = '/internal/parking-requests';
-            if ((this.VOMobile != '') && (this.VOMobile != null)) {
+            if (this.VOMobile != '') {
                 parkingRequestURL = parkingRequestURL + `?mobile=${this.VOMobile}`
             }
             this.parkingRequests = await mayaClient.get(
