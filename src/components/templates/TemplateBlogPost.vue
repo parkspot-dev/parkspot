@@ -68,6 +68,7 @@ import OrganismEliminatingTrafficPageDesign from '../organisms/OrganismEliminati
 import OrganismParkingChallengesPageDesign from '../organisms/OrganismParkingChallengesPageDesign';
 import OrganismExtraIncomePageDesign from '../organisms/OrganismExtraIncomePageDesign';
 import OrganismPerfectParkingPageDesign from '../organisms/OrganismPerfectParkingPageDesign';
+import OrganismBlogBengaluruTenant from '../organisms/OrganismBlogBengaluruTenant';
 
 export default {
     name: 'TemplateBlogPost',
@@ -82,6 +83,7 @@ export default {
         OrganismParkingChallengesPageDesign,
         OrganismExtraIncomePageDesign,
         OrganismPerfectParkingPageDesign,
+        OrganismBlogBengaluruTenant,
     },
     props: {
         blog: {

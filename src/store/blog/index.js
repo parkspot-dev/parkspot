@@ -66,6 +66,19 @@ const state = {
             dateTime: '2023-06-15',
             component: 'OrganismPerfectParkingPageDesign',
         },
+        {
+            id: "Bengaluru's Tenant Parking" ,
+            title: "Bengaluru's Tenant Parking Solutions",
+            author: 'Nitya Agrawal',
+            author_img: require('@/assets/team/ish.jpg'),
+            img: require('@/assets/blog/blog6.jpg'),
+            desc: `Introducing Parkspot Upsurge of Renters in Bengaluru's Affluent Areas 
+                Standalone house rentals are gaining traction in Bengaluru's elite localities
+                like HSR Layout, Koramangala.... `,
+            time: 'Sep 5, 2023',
+            dateTime: '2023-09-5',
+            component: 'OrganismBlogBengaluruTenant',
+        },
     ],
 };
 // getters
