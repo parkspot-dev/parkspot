@@ -7,7 +7,7 @@
             While these neighborhoods promise a luxurious lifestyle, a common 
             challenge persists – the scarcity of parking spaces.
         </p>
-        <h3 class="is-size-3 has-text-weight-normal py-3">
+        <h3 class="is-size-3 has-text-weight-medium py-3">
             Vehicles: Essential for Evolving Lifestyles
         </h3>
         <p>
@@ -19,7 +19,7 @@
         <blockquote class="bengaluru-tenant-quote">
             “Introducing Parkspot: Your Stress-free Solution to Bengaluru's Tenant Parking Woes.”
         </blockquote>
-        <h3 class="is-size-3 has-text-weight-normal py-3">
+        <h3 class="is-size-3 has-text-weight-medium py-3">
             The Street Parking Struggle
         </h3>
         <p class="pb-2">
@@ -32,7 +32,7 @@
             These challenges can result in financial and emotional distress 
             for renters.
         </p>
-        <h3 class="is-size-3 has-text-weight-normal py-4">
+        <h3 class="is-size-3 has-text-weight-medium py-4">
             Parkspot: The Ultimate Fix
         </h3>
         <p>
@@ -42,13 +42,17 @@
             nearby. Parkspot goes the extra mile by offering attractive 
             discounts to enhance its appeal.
             <strong>Hence, Carefree Parking with Parkspot.</strong>
+        </p>
+        <br />
+        <p>
             With standalone house rentals becoming a trend in Bengaluru, 
-            addressing parking woes is imperative. Parkspot emerges as 
-            the ultimate problem solver, providing a seamless way to 
-            discover safe and cost-effective parking alternatives. 
+            addressing parking woes is imperative.
+            Parkspot emerges as the ultimate problem solver, providing a seamless way to 
+            discover safe and cost-effective parking alternatives.
             By entrusting parking concerns to Parkspot, tenants can 
             fully enjoy city life without the constant worry of parking-related issues.
         </p>
+        
         <br /><br />
         
     </div>
