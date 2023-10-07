@@ -76,6 +76,7 @@ class BaseApiService {
             return response.data;
         } catch (err) {
             this.handleErrors(err);
+            return err.response.data;
         }
     }
 
@@ -90,6 +91,7 @@ class BaseApiService {
             return response.data;
         } catch (err) {
             this.handleErrors(err);
+            return err.response.data;
         }
     }
 
@@ -117,6 +119,7 @@ class BaseApiService {
             return response.data;
         } catch (err) {
             this.handleErrors(err);
+            return err.response.data;
         }
     }
 }
