@@ -57,7 +57,7 @@ const state = {
             id: 'Perfect-Parking',
             title: 'Finding the Perfect Parking Spot!',
             author: 'Nitya Agrawal',
-            author_img: require('@/assets/team/ish.jpg'),
+            author_img: require('@/assets/team/nitya.jpg'),
             img: require('@/assets/blog/blog5.jpg'),
             desc: `Are you tired of endlessly circling the block in search of a parking spot? 
                 Fear not, because in this vlog we'll be sharing some tips and tricks for 
@@ -69,8 +69,8 @@ const state = {
         {
             id: "Bengaluru's Tenant Parking" ,
             title: "Bengaluru's Tenant Parking Solutions",
-            author: 'Nitya Agrawal',
-            author_img: require('@/assets/team/ish.jpg'),
+            author: 'Anuj Singh',
+            author_img: require('@/assets/team/anuj.jpg'),
             img: require('@/assets/blog/blog6.jpg'),
             desc: `Introducing Parkspot Upsurge of Renters in Bengaluru's Affluent Areas 
                 Standalone house rentals are gaining traction in Bengaluru's elite localities
