@@ -471,7 +471,10 @@ export default {
         },
 
         getPaymentClass(status) {
-            if (status == PaymentStatus.PaymentSuccess) {
+            if (
+                status == PaymentStatus.PaymentSuccess ||
+                status == PaymentStatus.PaymentTransferred
+            ) {
                 return 'payment-success';
             } else if (
                 status == PaymentStatus.PaymentPending ||
@@ -700,6 +703,7 @@ export default {
     /* Define different styles for different status labels */
     .payment-success {
         background-color: #b5fca1;
+        min-width: 132px;
 
         .status-label {
             color: green;
@@ -708,6 +712,7 @@ export default {
 
     .payment-failed {
         background-color: #ffa5a5;
+        min-width: 132px;
         .status-label {
             color: red;
         }
@@ -715,6 +720,7 @@ export default {
 
     .payment-pending {
         background-color: #fce2c3;
+        min-width: 132px;
         .status-label {
             color: orange;
         }
