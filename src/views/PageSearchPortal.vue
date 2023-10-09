@@ -2,7 +2,10 @@
     <b-tabs v-model="activeTabView">
         <b-tab-item label="Parking Request (VO/SO)">
             <div class="request-search-control">
-                <AtomInput v-model="VOMobile"> </AtomInput>
+                <AtomInput 
+                    v-model="VOMobile"
+                    placeholder="+91 74882 39471"
+                ></AtomInput>
                 <AtomButton @click.native="getParkingRequests">Search</AtomButton>
             </div>
             <TemplateSearchPortal
