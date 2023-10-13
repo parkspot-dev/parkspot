@@ -4,7 +4,7 @@
             <div class="request-search-control">
                 <AtomInput 
                     v-model="VOMobile"
-                    placeholder="+91 74882 39471"
+                    placeholder="Mobile no"
                 ></AtomInput>
                 <AtomButton @click.native="getParkingRequests">Search</AtomButton>
             </div>
