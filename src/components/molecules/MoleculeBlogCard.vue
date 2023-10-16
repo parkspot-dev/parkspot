@@ -3,7 +3,7 @@
         <div class="img-wrapper blog-image">
             <AtomImage
                 :alt="'image'"
-                :src="blog.img"
+                :src="blog.thumbnail"
                 :ratio="'5by4'"
                 class="image-container"
             ></AtomImage>
