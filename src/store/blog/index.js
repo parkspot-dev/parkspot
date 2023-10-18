@@ -7,6 +7,7 @@ const state = {
             author: 'Nikhil Surya Mukhi',
             author_img: require('@/assets/team/nik.jpg'),
             img: 'https://www.stevenvanbelleghem.com/wp-content/uploads/2020/04/Heavy-rains-lash-Delhi-NCR-traffic-snarls-at-many-places.jpg',
+            thumbnail: 'https://www.stevenvanbelleghem.com/wp-content/uploads/2020/04/Heavy-rains-lash-Delhi-NCR-traffic-snarls-at-many-places.jpg',
             desc: `In the recent years all over the globe production 
                 and demand for motor vehicles has increased dramatically.
                 Earlier motor vehicles...`,
@@ -20,6 +21,7 @@ const state = {
             author: 'Sujeet Kumar',
             author_img: require('@/assets/team/sujeet.jpg'),
             img: require('@/assets/blog/blog2.jpg'),
+            thumbnail: require('@/assets/blog/blog2.jpg'),
             desc: `Parking has been a major concern in major cities. Due
                 to fewer parking spaces, people have to spend a lot of time
                 searching for the...`,
@@ -33,6 +35,7 @@ const state = {
             author: 'Ishwar Kumar',
             author_img: require('@/assets/team/ish.jpg'),
             img: require('@/assets/blog/blog3.jpg'),
+            thumbnail: require('@/assets/blog/blog3.jpg'),
             desc: `Parking problems have always been an issue and this issue
                 has grown exponentially with the increase of population.
                 In order to tackl...`,
@@ -46,6 +49,7 @@ const state = {
             author: 'Sudhanshu Kumar',
             author_img: require('@/assets/team/sud.jpg'),
             img: require('@/assets/blog/blog4.jpg'),
+            thumbnail: require('@/assets/blog/blog4-thumbnail.jpg'),
             desc: `Are you looking for a way to earn some extra income without putting 
                 in a lot of effort? If so, consider renting out your parking space. 
                 Whether you have an unused driv...`,
@@ -59,6 +63,7 @@ const state = {
             author: 'Nitya Agrawal',
             author_img: require('@/assets/team/nitya.jpg'),
             img: require('@/assets/blog/blog5.jpg'),
+            thumbnail: require('@/assets/blog/blog5.jpg'),
             desc: `Are you tired of endlessly circling the block in search of a parking spot? 
                 Fear not, because in this vlog we'll be sharing some tips and tricks for 
                 finding the perfect parking spot...`,
@@ -72,6 +77,7 @@ const state = {
             author: 'Anuj Singh',
             author_img: require('@/assets/team/anuj.jpg'),
             img: require('@/assets/blog/blog6.jpg'),
+            thumbnail: require('@/assets/blog/blog6-thumbnail.jpg'),
             desc: `Introducing Parkspot Upsurge of Renters in Bengaluru's Affluent Areas 
                 Standalone house rentals are gaining traction in Bengaluru's elite localities
                 like HSR Layout, Koramangala.... `,
