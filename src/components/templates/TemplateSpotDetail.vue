@@ -96,7 +96,11 @@
                             <tr v-if="spotDetails.UpdatedAt">
                                 <td>Updated At</td>
                                 <td>
-                                    {{ spotDetails.UpdatedAt.split('T')[0] }}
+                                    <AtomDatePicker
+                                        :size="'is-small'"
+                                        class="column-width"
+                                    >
+                                    </AtomDatePicker>
                                 </td>
                             </tr>
                         </table>
@@ -140,6 +144,7 @@ import MapContainer from '@/components/extras/MapContainer.vue';
 import ImageGallery from '../organisms/OrganismImageGallery.vue';
 import InfographicSteps from '../molecules/MoleculeInfographicSteps.vue';
 import AtomButton from '@/components/atoms/AtomButton.vue';
+import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import { getKYCStatusLabel } from '@/constant/enums';
 import { mapState } from 'vuex';
 
@@ -152,6 +157,7 @@ export default {
         ImageGallery,
         InfographicSteps,
         AtomButton,
+        AtomDatePicker,
     },
     props: {
         isAdmin: {
