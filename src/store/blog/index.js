@@ -2,7 +2,7 @@
 const state = {
     blogs: [
         {
-            id: 'Eliminating-Traffic-jams-in-India',
+            id: 'eliminating-traffic-jams-in-india',
             title: 'Eliminating Traffic jams in India!',
             author: 'Nikhil Surya Mukhi',
             author_img: require('@/assets/team/nik.jpg'),
@@ -16,7 +16,7 @@ const state = {
             component: 'OrganismEliminatingTrafficPageDesign',
         },
         {
-            id: 'Parking-Challenges-in-Office-Area',
+            id: 'parking-challenges-in-office-area',
             title: 'Parking Challenges in Office Area!',
             author: 'Sujeet Kumar',
             author_img: require('@/assets/team/sujeet.jpg'),
@@ -30,7 +30,7 @@ const state = {
             component: 'OrganismParkingChallengesPageDesign',
         },
         {
-            id: 'NO-Parking',
+            id: 'no-parking',
             title: 'NO Parking',
             author: 'Ishwar Kumar',
             author_img: require('@/assets/team/ish.jpg'),
@@ -44,7 +44,7 @@ const state = {
             component: 'OrganismNoParkingPageDesign',
         },
         {
-            id: 'Extra-Income',
+            id: 'extra-income',
             title: ' An Easy Way to Earn Extra Income!',
             author: 'Sudhanshu Kumar',
             author_img: require('@/assets/team/sud.jpg'),
@@ -58,7 +58,7 @@ const state = {
             component: 'OrganismExtraIncomePageDesign',
         },
         {
-            id: 'Perfect-Parking',
+            id: 'perfect-parking',
             title: 'Finding the Perfect Parking Spot!',
             author: 'Nitya Agrawal',
             author_img: require('@/assets/team/nitya.jpg'),
@@ -72,7 +72,7 @@ const state = {
             component: 'OrganismPerfectParkingPageDesign',
         },
         {
-            id: "Bengaluru's Tenant Parking" ,
+            id: "bengaluru-tenant-parking" ,
             title: "Bengaluru's Tenant Parking Solutions",
             author: 'Anuj Singh',
             author_img: require('@/assets/team/anuj.jpg'),

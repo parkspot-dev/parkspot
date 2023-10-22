@@ -1,184 +1,187 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://www.parkspot.in</loc>
+        <loc>https://www.parkspot.in/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/faq</loc>
+        <loc>https://www.parkspot.in/faq/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/about</loc>
+        <loc>https://www.parkspot.in/about/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/features</loc>
+        <loc>https://www.parkspot.in/features/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/contact</loc>
+        <loc>https://www.parkspot.in/contact/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/blog</loc>
+        <loc>https://www.parkspot.in/blog/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/blog/1/Eliminating-Traffic-jams-in-India</loc>
+        <loc>https://www.parkspot.in/blog/eliminating-traffic-jams-in-india/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/blog/2/Parking-Challenges-in-Office-Area</loc>
+        <loc>https://www.parkspot.in/blog/parking-challenges-in-office-area/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/blog/3/NO-Parking</loc>
+        <loc>https://www.parkspot.in/blog/no-parking/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/get-parking-spot</loc>
-    </url>
-    <!-- SEO Pages -->
-    <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-BTM</loc>
+        <loc>https://www.parkspot.in/blog/extra-income/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Adugodi</loc>
+        <loc>https://www.parkspot.in/blog/perfect-parking/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Ashoknagar</loc>
+        <loc>https://www.parkspot.in/blog/bengaluru-tenant-parking"/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Banashankari</loc>
+        <loc>https://www.parkspot.in/get-parking-spot/</loc>
+    </url>
+    <!-- seo pages -->
+    <url>
+        <loc>https://www.parkspot.in/bangalore/parking-near-btm/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Bharathinagar</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-adugodi/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Bommanahalli</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-ashoknagar/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Byappanahalli</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-banashankari/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Byatarayanapura</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-bharathinagar/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Chandra-Layout</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-bommanahalli/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Chikkajala</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-byappanahalli/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-City-Market</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-byatarayanapura/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Commercial-Street</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-chandra-layout/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Devanahalli</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-city-market/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Electronic-City</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-commercial-street/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Gangammanagudi</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-devanahalli/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Girinagar</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-electronic-city/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-HSR-Layout</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-gangammanagudi/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Hennur</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-girinagar/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-High-Ground</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-hsr-layout/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Hulimavu</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-hennur/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Indiranagar</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-high-ground/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-JC-Nagar</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-hulimavu/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-JP-Nagar</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-indiranagar/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Jalahalli</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-jc-nagar/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Jayanagar</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-jp-nagar/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Jeevan-Bima-Nagar</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-jalahalli/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Kadugodi</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-jayanagar/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Kalasipalya</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-jeevan-bima-nagar/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Kamakshipalya</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-kadugodi/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Kempapura-Agrahara</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-kalasipalya/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Kempegowda-International-Airport</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-kamakshipalya/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Kengeri</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-kempegowda-international-airport/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Kodigehalli</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-kengeri/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Konanakunte</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-kodigehalli/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Koramangala</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-konanakunte/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Mahadevapura</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-koramangala/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Malleshwarm</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-mahadevapura/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Marathahalli</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-malleshwarm/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Mico-Layout</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-marathahalli/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Sadashivanagar</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-mico-layout/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Srirampuram</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-sadashivanagar/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Subramanyapura</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-srirampuram/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Vijayanagar</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-subramanyapura/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Whitefield</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-vijayanagar/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Yelahanka</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-whitefield/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Kengeri-Gate</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-yelahanka/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Chickpet</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-kengeri-gate/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/bangalore/parking-near-Yalahanka</loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-chickpet/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/hyderabad/parking-near-hyderabad </loc>
+        <loc>https://www.parkspot.in/bangalore/parking-near-yalahanka/</loc>
     </url>
     <url>
-        <loc>https://www.parkspot.in/srp</loc>
+        <loc>https://www.parkspot.in/hyderabad/parking-near-hyderabad/</loc>
+    </url>
+    <url>
+        <loc>https://www.parkspot.in/srp/</loc>
     </url>
 </urlset>
