@@ -72,7 +72,8 @@ export default {
         }
 
         // create DOM element for the parking site marker
-        for (const spots of this.spotsList) {
+        for (const spot of this.spotsList) {
+            const encodedSpotId = 'abcd';
             const psMarker = document.createElement('div');
 
             psMarker.className = 'marker';
@@ -82,11 +83,62 @@ export default {
             psMarker.style.backgroundSize = '110%';
 
             const psPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-                `<p><strong>${spots.Name}</strong></p><p><strong>Distance :</strong> ${spots.Distance} Km</p>`,
+                `
+<style>
+  .name {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  .address {
+    font-size: 0.75rem;
+  }
+
+  .rate {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem
+  }
+
+  .view-spot {
+    display: flex;
+    align-items: center;
+    font-size: .75rem;
+    font-weight: 700;
+    background-color: #ffe08a;
+    border-radius: 3px;
+    border-color: #dbdbdb;
+    border-width: 1px;
+    cursor: pointer;
+    justify-content: center;
+    padding-bottom: calc(.5em - 1px);
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: calc(.5em - 1px);
+    text-align: center;
+    white-space: nowrap;
+  }
+</style>
+<div>
+  <div class="name">${spot.Name}</div>
+  <div class="address"> ${spot.Address} <div>India</div>
+  </div>
+</div>
+<div style="margin-top:.5rem"><b>Distance: </b> ${spot.Distance} Km</div>
+<div style="margin-top:.5rem">
+  <a href="">Click</a> for map direction.
+</div>
+<div class="rate">
+  <div>&#8377; ${spot.Rate}/-</div>
+  <button class="view-spot">
+    <a href="https://www.parkspot.in/spot-details/${encodedSpotId}" target="_blank"> View Spot </a>
+  </button>
+</div>`,
             );
 
             new mapboxgl.Marker(psMarker)
-                .setLngLat([spots.Long, spots.Lat])
+                .setLngLat([spot.Long, spot.Lat])
                 .setPopup(psPopup)
                 .addTo(this.map);
         }
