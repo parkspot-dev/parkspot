@@ -78,7 +78,7 @@ export default {
             },
             validation: {
                 fullname: 'required',
-                email: 'required|email',
+                email: 'email',
                 cno: 'required|integer|phone',
                 addr: 'required',
             },
