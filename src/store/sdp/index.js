@@ -25,6 +25,7 @@ const mutations = {
     },
 
     'update-selected-spot'(state, spot) {
+        console.log('update-spot', spot);
         state.selectedSpot = [];
         state.selectedSpot = [...state.selectedSpot, spot];
     },
@@ -72,9 +73,13 @@ const actions = {
             commit('update-spot-details', res.Site);
             commit('update-owner-info-details', res.User);
             const spot = {
-                Name: res.Site['Name'],
-                Lat: res.Site['Lat'],
-                Long: res.Site['Long'],
+                ID: res.Site.SiteID,
+                Name: res.Site.Name,
+                Address: res.Site.Address,
+                Lat: res.Site.Lat,
+                Long: res.Site.Long,
+                Rate: res.Site.Rate,
+                Distance: 0, // res.Site.Distance
             };
             commit('update-selected-spot', spot);
             commit('update-is-available', res.Site['SlotsAvailable']);
