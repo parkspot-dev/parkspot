@@ -132,7 +132,7 @@ export default {
 <div style="margin-top:.5rem"><b>Distance: </b> ${spot.Distance} Km</div>
 <div><b>Rent: </b> &#8377; ${spot.Rate}/- </div>
 <div class="btn-container">
-    <a href="https://www.google.com/maps/dir//${spot.Lat},${spot.Long}/" target="_blank">
+    <a href="https://www.google.com/maps/search/?api=1&query=${spot.Lat},${spot.Long}" target="_blank">
   <button class="btn">
      Navigate 
   </button>
