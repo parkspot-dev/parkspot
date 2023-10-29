@@ -8,15 +8,15 @@
             :label="CONTACT_FORM.FULLNAME"
         >
         </MoleculeNameInput>
-        <MoleculeNameInput
-            :rules="validation.email"
-            :fieldName="CONTACT_FORM.EMAIL"
+        <AtomInput
             v-model="model.email"
             :placeholder="CONTACT_FORM.EMAIL"
-            :inputType="'email'"
+            :type="'email'"
+            :errorMessage="errors"
             :label="CONTACT_FORM.EMAIL"
+            class="mb-1"
         >
-        </MoleculeNameInput>
+        </AtomInput>
         <MoleculeNameInput
             :rules="validation.cno"
             :fieldName="CONTACT_FORM.CONTACT_NO"
@@ -48,6 +48,7 @@ import { FORM } from '../../constant/constant';
 import { mapMutations } from 'vuex';
 import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
+import AtomInput from '../atoms/AtomInput.vue';
 
 export default {
     name: 'OrganismContactForm',
@@ -55,6 +56,7 @@ export default {
         ValidationObserver,
         MoleculeNameInput,
         AtomTextarea,
+        AtomInput,
     },
     props: {
         formSubmitted: {
@@ -78,7 +80,7 @@ export default {
             },
             validation: {
                 fullname: 'required',
-                email: 'required|email',
+                email: '',
                 cno: 'required|integer|phone',
                 addr: 'required',
             },

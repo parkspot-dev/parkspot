@@ -72,7 +72,9 @@ export default {
         }
 
         // create DOM element for the parking site marker
-        for (const spots of this.spotsList) {
+        for (const spot of this.spotsList) {
+            console.log('spot', spot);
+            const encodedSpotId = encodeURIComponent(spot.ID);
             const psMarker = document.createElement('div');
 
             psMarker.className = 'marker';
@@ -82,11 +84,69 @@ export default {
             psMarker.style.backgroundSize = '110%';
 
             const psPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-                `<p><strong>${spots.Name}</strong></p><p><strong>Distance :</strong> ${spots.Distance} Km</p>`,
+                `
+<style>
+    .name {
+        font-weight: bold;
+        font-size: 1rem;
+    }
+
+    .address {
+        font-size: 0.75rem;
+    }
+
+    .btn-container {
+        align-content: space-around;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+
+    }
+
+    .btn {
+        align-items: center;
+        background-color: #ffe08a;
+        border-radius: 8px;
+        border-color: #dbdbdb;
+        border-width: 2px;
+        cursor: pointer;
+        font-size: .75rem;
+        font-weight: 700;
+        justify-content: center;
+        margin:4px;
+        padding-bottom: calc(.5em - 1px);
+        padding-left: 1em;
+        padding-right: 1em;
+        padding-top: calc(.5em - 1px);
+        text-align: center;
+        white-space: nowrap;
+    }
+</style>
+<div>
+    <div class="name">${spot.Name}</div>
+    <div class="address"> ${spot.Address}
+        <div>India</div>
+    </div>
+</div>
+<div style="margin-top:.5rem"><b>Distance: </b> ${spot.Distance} Km</div>
+<div><b>Rent: </b> &#8377; ${spot.Rate}/- </div>
+<div class="btn-container">
+    <a href="https://www.google.com/maps/search/?api=1&query=${spot.Lat},${spot.Long}" target="_blank">
+  <button class="btn">
+     Navigate 
+  </button>
+</a>
+    <a href="https://www.parkspot.in/spot-details/${encodedSpotId}" target="_blank">
+  <button class="btn">
+     View Spot 
+  </button>
+</a>
+</div>`,
             );
 
             new mapboxgl.Marker(psMarker)
-                .setLngLat([spots.Long, spots.Lat])
+                .setLngLat([spot.Long, spot.Lat])
                 .setPopup(psPopup)
                 .addTo(this.map);
         }
