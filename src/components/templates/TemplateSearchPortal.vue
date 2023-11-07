@@ -48,7 +48,7 @@
         </div>
         <b-table
             :paginated="true"
-            :per-page="30"
+            :per-page="6"
             :data="isEmpty ? [] : parkingRequests"
             :bordered="true"
             :hoverable="true"
@@ -57,7 +57,7 @@
             :mobile-cards="hasMobileCards"
             :narrowed="true"
             :sticky-header="true"
-            height="5000"
+            height="500"
         >
             <b-table-column
                 field="ID"
@@ -172,7 +172,12 @@
                 </div>
             </b-table-column>
 
-            <b-table-column field="comments" label="Comments" v-slot="props">
+            <b-table-column
+                field="comments"
+                label="Comments"
+                v-slot="props"
+                width="10px"
+            >
                 <AtomTextarea
                     :size="'is-small'"
                     :value="props.row.Comments"
@@ -224,7 +229,7 @@
             <b-table-column
                 field="NextCall"
                 label="Status/Next Call"
-                width="100px"
+                width="90px"
                 sortable
                 searchable
             >
@@ -262,13 +267,6 @@
                                     ),
                                 }"
                             >
-                                <span class="upcoming">
-                                    {{
-                                        isCallDelayed(props.row.NextCall)
-                                            ? 'Delayed :'
-                                            : 'Upcoming :'
-                                    }}
-                                </span>
                                 <b>
                                     {{
                                         new Date(
@@ -562,14 +560,14 @@ $portal-font-size: 13px;
     }
 
     .column-width {
-        width: 200px;
+        width: 100px;
         @media only screen and (max-width: 1024px) {
             width: 150px;
         }
     }
 
     .comment-width {
-        width: 350px;
+        width: 330px;
         @media only screen and (max-width: 1024px) {
             width: 200px;
         }
