@@ -2,11 +2,13 @@
     <b-tabs v-model="activeTabView">
         <b-tab-item label="Parking Request (VO/SO)">
             <div class="request-search-control">
-                <AtomInput 
+                <AtomInput
                     v-model="VOMobile"
                     placeholder="Mobile no"
                 ></AtomInput>
-                <AtomButton @click.native="getParkingRequests">Search</AtomButton>
+                <AtomButton @click.native="getParkingRequests"
+                    >Search</AtomButton
+                >
             </div>
             <TemplateSearchPortal
                 :parkingRequests="parkingRequests"
@@ -58,7 +60,7 @@ export default {
             parkingRequests: [],
             isLoading: false,
             intrestedVOList: [],
-            VOMobile:'',
+            VOMobile: '',
         };
     },
     computed: {
@@ -95,11 +97,11 @@ export default {
             this.isLoading = true;
             let parkingRequestURL = '/internal/parking-requests';
             if (this.VOMobile != '') {
-                parkingRequestURL = parkingRequestURL + `?mobile=${this.VOMobile}`
+                parkingRequestURL =
+                    parkingRequestURL +
+                    `?mobile=${this.VOMobile.replace(/\s+/g, '')}`;
             }
-            this.parkingRequests = await mayaClient.get(
-                 parkingRequestURL,
-            );
+            this.parkingRequests = await mayaClient.get(parkingRequestURL);
             this.isLoading = false;
         },
         async getInterestedVO() {
