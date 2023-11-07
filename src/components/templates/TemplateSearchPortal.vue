@@ -125,44 +125,6 @@
             </b-table-column>
 
             <b-table-column
-                field="Agent"
-                label="Agent"
-                width="100px"
-                sortable
-                searchable
-            >
-                <template #searchable="props">
-                    <AtomSelectInput
-                        :size="'is-small'"
-                        :list="agentList"
-                        v-model="props.filters['Agent']"
-                        label=""
-                        placeholder="Agent"
-                    >
-                    </AtomSelectInput>
-                </template>
-                <template v-slot="props">
-                    <div class="status-column">
-                        <div class="status-part">
-                            <span class="tag my-status">
-                                {{ props.row.Agent }}
-                            </span>
-                            <AtomSelectInput
-                                :size="'is-small'"
-                                :list="agentList"
-                                @changed="
-                                    onAgentUpdate(props.row, ...arguments)
-                                "
-                                label=""
-                                placeholder="Select Agent"
-                            >
-                            </AtomSelectInput>
-                        </div>
-                    </div>
-                </template>
-            </b-table-column>
-
-            <b-table-column
                 field="contact"
                 label="Contact Details"
                 v-slot="props"
@@ -219,6 +181,44 @@
                     :rowNo="8"
                     @changed="onCommentUpdate(props.row, ...arguments)"
                 ></AtomTextarea>
+            </b-table-column>
+
+            <b-table-column
+                field="Agent"
+                label="Agent"
+                width="100px"
+                sortable
+                searchable
+            >
+                <template #searchable="props">
+                    <AtomSelectInput
+                        :size="'is-small'"
+                        :list="agentList"
+                        v-model="props.filters['Agent']"
+                        label=""
+                        placeholder="Agent"
+                    >
+                    </AtomSelectInput>
+                </template>
+                <template v-slot="props">
+                    <div class="status-column">
+                        <div class="status-part">
+                            <span class="tag my-status">
+                                {{ props.row.Agent }}
+                            </span>
+                            <AtomSelectInput
+                                :size="'is-small'"
+                                :list="agentList"
+                                @changed="
+                                    onAgentUpdate(props.row, ...arguments)
+                                "
+                                label=""
+                                placeholder="Select Agent"
+                            >
+                            </AtomSelectInput>
+                        </div>
+                    </div>
+                </template>
             </b-table-column>
 
             <b-table-column
