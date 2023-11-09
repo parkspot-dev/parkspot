@@ -48,7 +48,7 @@
         </div>
         <b-table
             :paginated="true"
-            :per-page="6"
+            :per-page="10"
             :data="isEmpty ? [] : parkingRequests"
             :bordered="true"
             :hoverable="true"
@@ -57,7 +57,7 @@
             :mobile-cards="hasMobileCards"
             :narrowed="true"
             :sticky-header="true"
-            height="500"
+            height="800"
         >
             <b-table-column
                 field="ID"
