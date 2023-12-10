@@ -45,4 +45,10 @@ export default {
 .search-button {
     margin-left: 8px;
 }
+
+.search-control {
+    display: flex;
+    justify-content: center;
+    margin: 16px;
+}
 </style>

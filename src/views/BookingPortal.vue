@@ -61,10 +61,4 @@ export default {
     text-align: center;
     background: #f5f5fb;
 }
-
-.search-control {
-    display: flex;
-    justify-content: center;
-    margin: 16px;
-}
 </style>
