@@ -1,11 +1,12 @@
 <template>
     <div>
+        <LoaderModal v-if="isLoading"></LoaderModal>
         <TemplateSpotDetail
+            v-else
             @goToSearchPortal="goToSearchPortal"
             @changeAvailability="changeAvailability"
             @changeLastCallDate="changeLastCallDate"
         ></TemplateSpotDetail>
-        <LoaderModal :isLoading="isLoading"></LoaderModal>
     </div>
 </template>
 
@@ -31,7 +32,6 @@ export default {
         return {
             spotId: null,
             spotDetails: null,
-            isAdmin: false,
         };
     },
     computed: {
@@ -45,13 +45,9 @@ export default {
         if (this.spotId.includes('#')) {
             this.spotId = encodeURIComponent(this.spotId);
         }
-        if (this.$route.name === 'adminOnly-spot-detail') {
-            this.isAdmin = true;
-        }
         try {
             await this.getSpotDetails({
                 spotId: this.spotId,
-                isAdmin: this.isAdmin,
             });
         } catch (error) {
             this.$buefy.toast.open({
@@ -64,7 +60,11 @@ export default {
         this.getUserLocation();
     },
     methods: {
-        ...mapActions('sdp', ['getSpotDetails', 'updateAvailability']),
+        ...mapActions('sdp', [
+            'getSpotDetails',
+            'updateAvailability',
+            'updateLastCallDate',
+        ]),
         ...mapActions('searchPortal', [
             'updateActiveTab',
             'updateSOLatLngInput',
@@ -113,14 +113,12 @@ export default {
             await this.updateAvailability(availableCount);
             await this.getSpotDetails({
                 spotId: this.spotId,
-                isAdmin: this.isAdmin,
             });
         },
         async changeLastCallDate(lastCallDate) {
             await this.updateLastCallDate(lastCallDate);
             await this.getSpotDetails({
                 spotId: this.spotId,
-                isAdmin: this.isAdmin,
             });
         },
     },

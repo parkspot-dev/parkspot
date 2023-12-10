@@ -2,7 +2,7 @@
     <section class="custom-bg">
         <div class="bg-decor"></div>
         <TemplateSOPortal @finalSubmit="onFinalSubmit"></TemplateSOPortal>
-        <LoaderModal :isLoading="isLoading"></LoaderModal>
+        <LoaderModal v-if="isLoading"></LoaderModal>
     </section>
 </template>
 
