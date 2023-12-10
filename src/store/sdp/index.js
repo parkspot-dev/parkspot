@@ -92,6 +92,12 @@ const actions = {
         state.spotDetails.SlotsAvailable = availableCount;
         await mayaClient.post(url, state.spotDetails);
     },
+    
+    async updateLastCallDate({ commit, state }, lastCallDate) {
+        const url = '/owner/update-site';
+        state.spotDetails.LastCallDate = lastCallDate.toISOString();
+        await mayaClient.post(url, state.spotDetails);
+    },
 };
 
 export default {

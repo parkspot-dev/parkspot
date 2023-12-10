@@ -94,11 +94,12 @@
                                 </td>
                             </tr>
                             <tr v-if="spotDetails.UpdatedAt">
-                                <td>Updated At</td>
+                                <td>Last Call Date</td>
                                 <td>
                                     <AtomDatePicker
+                                        :assignedDate="spotDetails.LastCallDate"
                                         :size="'is-small'"
-                                        class="column-width"
+                                        @changed="changeLastCallDate"
                                     >
                                     </AtomDatePicker>
                                 </td>
@@ -173,12 +174,16 @@ export default {
             'isAvailable',
         ]),
     },
+    emits: ['goToSearchPortal', 'changeAvailability', 'changeLastCallDate'],
     methods: {
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
         changeAvailability(availableCount) {
             this.$emit('changeAvailability', availableCount);
+        },
+        changeLastCallDate(lastCallDate) {
+            this.$emit('changeLastCallDate', lastCallDate);
         },
         getKYCStatus(kycStatus) {
             return getKYCStatusLabel(kycStatus);

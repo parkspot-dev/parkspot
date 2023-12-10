@@ -3,6 +3,7 @@
         <TemplateSpotDetail
             @goToSearchPortal="goToSearchPortal"
             @changeAvailability="changeAvailability"
+            @changeLastCallDate="changeLastCallDate"
         ></TemplateSpotDetail>
         <LoaderModal :isLoading="isLoading"></LoaderModal>
     </div>
@@ -110,6 +111,13 @@ export default {
         },
         async changeAvailability(availableCount) {
             await this.updateAvailability(availableCount);
+            await this.getSpotDetails({
+                spotId: this.spotId,
+                isAdmin: this.isAdmin,
+            });
+        },
+        async changeLastCallDate(lastCallDate) {
+            await this.updateLastCallDate(lastCallDate);
             await this.getSpotDetails({
                 spotId: this.spotId,
                 isAdmin: this.isAdmin,
