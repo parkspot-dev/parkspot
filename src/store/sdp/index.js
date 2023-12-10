@@ -1,13 +1,11 @@
 import { mayaClient } from '@/services/api';
-import { getValueFromFirebase } from '../../firebase';
-// import _ from 'lodash';
 
 const state = {
     spotDetails: null,
     ownerInfoDetails: null,
     selectedSpot: [],
     isAvailable: false,
-    loading: false,
+    loading: true,
     title: '',
     thumbnail: [],
     images: [],
@@ -57,17 +55,9 @@ const mutations = {
 };
 
 const actions = {
-    async getSpotDetails({ commit }, { spotId, isAdmin }) {
+    async getSpotDetails({ commit }, { spotId }) {
         commit('update-loading', true);
-        let url;
-        if (isAdmin) {
-            const credentials = getValueFromFirebase(`admin`);
-            url = `/site?site-id=${spotId}&get-owner-info=true&auth-key=${credentials.auth_password}`;
-        } else {
-            url = `/site?site-id=${spotId}`;
-        }
-
-        const res = await mayaClient.get(url);
+        const res = await mayaClient.get(`/site?site-id=${spotId}`);
         if (res.Site) {
             commit('update-spot-details', res.Site);
             commit('update-owner-info-details', res.User);
@@ -92,7 +82,7 @@ const actions = {
         state.spotDetails.SlotsAvailable = availableCount;
         await mayaClient.post(url, state.spotDetails);
     },
-    
+
     async updateLastCallDate({ commit, state }, lastCallDate) {
         const url = '/owner/update-site';
         state.spotDetails.LastCallDate = lastCallDate.toISOString();
