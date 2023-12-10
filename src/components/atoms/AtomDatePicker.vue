@@ -3,6 +3,7 @@
         <b-datepicker
             v-model="date"
             placeholder="Click to select..."
+            :date-formatter="istFormatter"
             @input="onChange"
             :size="size"
         >
@@ -15,7 +16,8 @@ export default {
     name: 'AtomDatePicker',
     props: {
         assignedDate: {
-            type: Date,
+            type: String,
+            default: '',
         },
         size: {
             type: String,
@@ -25,12 +27,21 @@ export default {
     emits: ['changed'],
     data() {
         return {
-            date: new Date(),
+            date:
+                this.assignedDate != ''
+                    ? new Date(this.assignedDate)
+                    : new Date(),
         };
     },
     methods: {
         onChange(val) {
             this.$emit('changed', val);
+        },
+        istFormatter(date) {
+            return new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Asia/Kolkata',
+                dateStyle: 'medium'
+            }).format(date);
         },
     },
 };
