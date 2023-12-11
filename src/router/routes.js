@@ -135,15 +135,6 @@ export const routes = [
         path: pages.SPOT_DETAIL,
         name: 'spot-detail',
         component: () => import('@/views/PageSpotDetail.vue'),
-        children: [
-            {
-                // when /spot-details/:id/internal is matched
-                path: 'admin',
-                name: 'adminOnly-spot-detail',
-                component: () => import('@/views/PageSpotDetail.vue'),
-                beforeEnter: guardThisRoute,
-            },
-        ],
     },
     {
         path: pages.THANK_YOU,

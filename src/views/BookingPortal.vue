@@ -15,7 +15,7 @@
             @refresh-payment-status="refreshPaymentStatus"
             @update-booking-details="updateBookingDetails"
         ></TemplateBookingPortal>
-        <LoaderModal :isLoading="isLoading"></LoaderModal>
+        <LoaderModal v-if="isLoading"></LoaderModal>
     </div>
 </template>
 

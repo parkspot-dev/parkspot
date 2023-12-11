@@ -94,9 +94,14 @@
                                 </td>
                             </tr>
                             <tr v-if="spotDetails.UpdatedAt">
-                                <td>Updated At</td>
+                                <td>Last Call Date</td>
                                 <td>
-                                    {{ spotDetails.UpdatedAt.split('T')[0] }}
+                                    <AtomDatePicker
+                                        :assignedDate="spotDetails.LastCallDate"
+                                        :size="'is-small'"
+                                        @changed="changeLastCallDate"
+                                    >
+                                    </AtomDatePicker>
                                 </td>
                             </tr>
                         </table>
@@ -140,6 +145,7 @@ import MapContainer from '@/components/extras/MapContainer.vue';
 import ImageGallery from '../organisms/OrganismImageGallery.vue';
 import InfographicSteps from '../molecules/MoleculeInfographicSteps.vue';
 import AtomButton from '@/components/atoms/AtomButton.vue';
+import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import { getKYCStatusLabel } from '@/constant/enums';
 import { mapState } from 'vuex';
 
@@ -152,6 +158,7 @@ export default {
         ImageGallery,
         InfographicSteps,
         AtomButton,
+        AtomDatePicker,
     },
     props: {
         isAdmin: {
@@ -167,12 +174,16 @@ export default {
             'isAvailable',
         ]),
     },
+    emits: ['goToSearchPortal', 'changeAvailability', 'changeLastCallDate'],
     methods: {
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
         changeAvailability(availableCount) {
             this.$emit('changeAvailability', availableCount);
+        },
+        changeLastCallDate(lastCallDate) {
+            this.$emit('changeLastCallDate', lastCallDate);
         },
         getKYCStatus(kycStatus) {
             return getKYCStatusLabel(kycStatus);

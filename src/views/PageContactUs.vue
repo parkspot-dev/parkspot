@@ -1,7 +1,7 @@
 <template>
     <div class="bg-wrap">
         <TemplateContactUs @contactUs="fireContact"></TemplateContactUs>
-        <LoaderModal :isLoading="isLoading"></LoaderModal>
+        <LoaderModal v-if="isLoading"></LoaderModal>
     </div>
 </template>
 

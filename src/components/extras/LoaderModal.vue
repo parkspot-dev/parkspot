@@ -1,5 +1,5 @@
 <template>
-    <div class="loader-container" v-if="isLoading">
+    <div class="loader-container">
         <div class="loader">
             <img src="../../assets/pstopmini.png" />
         </div>
@@ -9,15 +9,6 @@
 <script>
 export default {
     name: 'LoaderModal',
-    /**
-     * show loading animation
-     */
-    props: {
-        isLoading: {
-            type: Boolean,
-            default: false,
-        },
-    },
 };
 </script>
 

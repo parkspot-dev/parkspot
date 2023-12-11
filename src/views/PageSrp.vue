@@ -10,7 +10,7 @@
             @details="spotDetails"
             @filter="onFilter"
         ></TemplateSrp>
-        <LoaderModal :isLoading="isLoading"></LoaderModal>
+        <LoaderModal v-if="isLoading"></LoaderModal>
     </section>
 </template>
 <script>
