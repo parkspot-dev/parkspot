@@ -1,26 +1,6 @@
 import Home from '../views/PageHome.vue';
 import PageAbout from '@/views/PageAbout.vue';
-import { getValueFromFirebase } from '../firebase';
 import { APP_LINK } from '../constant/constant';
-
-const guardThisRoute = async (to, from, next) => {
-    const credentials = await getValueFromFirebase(`portal-user`);
-    let userNameLocal = localStorage.getItem('searchPortalUser');
-    let userNamePwdLocal = localStorage.getItem('searchPortalUserPwd');
-    if (
-        userNameLocal === credentials.userName &&
-        userNamePwdLocal === credentials.password
-    ) {
-        next();
-    } else {
-        alert('Invalid username/password');
-        userNameLocal = prompt('Enter User Name:');
-        userNamePwdLocal = prompt('Enter Password:');
-        localStorage.setItem('searchPortalUser', userNameLocal);
-        localStorage.setItem('searchPortalUserPwd', userNamePwdLocal);
-        next('/search-portal');
-    }
-};
 
 // prettier-ignore
 export const pages = {
@@ -113,7 +93,6 @@ export const routes = [
         path: pages.SEARCH_PORTAL,
         name: 'SearchPortal',
         component: () => import('@/views/PageSearchPortal.vue'),
-        beforeEnter: guardThisRoute,
     },
     {
         path: pages.PAYMENTGATEWAY,
