@@ -6,30 +6,6 @@ const state = {
     errorMessage: String,
     paymentDetails: null,
     isLoading: false,
-    /*   [{
-        "ID": 809,
-        "CreatedAt": "2022-02-24T15:59:15.6168782Z",
-        "UpdatedAt": "2023-11-26T10:31:41.4142083Z",
-        "DeletedAt": null,
-        "UserName": "HAZyqmXVwZXmIo6cjMq2DFKUGTY2",
-        "Name": "Jayaram",
-        "Mobile": "7975011411",
-        "EmailID": "",
-        "VehicleNumber": "",
-        "SiteID": "BLR#Sai#Avenue",
-        "Site": null,
-        "SlotID": "",
-        "StartTime": "2022-01-25T00:00:00+05:30",
-        "EndTime": "2023-01-24T23:59:00+05:30",
-        "Status": 1,
-        "Rent": 1900,
-        "BaseAmount": 1400,
-        "ConvenienceFee": 0,
-        "RentCycle": 25,
-        "PaymentPeriod": 2,
-        "SecurityDeposit": 0
-      }] */
-    activeBookings: [],
 };
 
 const getters = {};
@@ -51,10 +27,6 @@ const mutations = {
 
     'set-loading'(state, isLoading) {
         state.isLoading = isLoading;
-    },
-
-    'set-active-bookings'(state, activeBookings) {
-        state.activeBookings = activeBookings;
     },
 };
 
@@ -110,17 +82,6 @@ const actions = {
             dispatch('getBookingDetails', reqBody.ID);
         } else if (res.DisplayMsg) {
             commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
-        }
-        commit('set-loading', false);
-    },
-
-    async getActiveBooking({ commit }) {
-        commit('set-loading', true);
-        const res = await mayaClient.get('/internal/active-bookings');
-        if (res.DisplayMsg) {
-            commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
-        } else {
-            commit('set-active-bookings', res);
         }
         commit('set-loading', false);
     },

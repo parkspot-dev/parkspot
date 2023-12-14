@@ -92,13 +92,7 @@ export default {
             this.isLoading = true;
             let parkingRequestURL = '/internal/parking-requests';
             if (voMobile != '') {
-                this.$router.push({
-                    path: this.$route.fullPath,
-                    query: { mobile: voMobile },
-                });
-                parkingRequestURL =
-                    parkingRequestURL +
-                    `?mobile=${voMobile.replace(/\s+/g, '')}`;
+                parkingRequestURL = parkingRequestURL + `?mobile=${voMobile.replace(/\s+/g, '')}`;
             }
             this.parkingRequests = await mayaClient.get(parkingRequestURL);
             this.isLoading = false;
