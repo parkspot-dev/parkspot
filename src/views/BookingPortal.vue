@@ -8,6 +8,7 @@
                 @on-search="getBookingDetails"
             ></MoleculeSearchBox>
         </div>
+        <LoaderModal v-if="isLoading"></LoaderModal>
         <p v-if="hasError">{{ errorMessage }}</p>
         <TemplateBookingPortal
             v-if="bookingDetails"
@@ -16,7 +17,6 @@
             @update-booking-details="updateBookingDetails"
         ></TemplateBookingPortal>
         <ActiveBookings v-else></ActiveBookings>
-        <LoaderModal :isLoading="isLoading"></LoaderModal>
     </div>
 </template>
 

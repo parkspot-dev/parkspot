@@ -3,12 +3,11 @@
         <b-table
             :paginated="true"
             :per-page="20"
-            :data="isEmpty ? [] : activeBookings"
+            :data="activeBookings"
             :bordered="true"
             :hoverable="true"
-            :loading="isLoading"
             :focusable="true"
-            :mobile-cards="hasMobileCards"
+            :mobile-cards="true"
             :narrowed="true"
             :sticky-header="true"
             height="500"
@@ -88,8 +87,8 @@
 import { mapActions, mapState } from 'vuex';
 import { getPaymentPeriodicityLabel } from '@/constant/enums';
 export default {
-    created() {
-        this.getActiveBooking();
+    async created() {
+        await this.getActiveBooking();
     },
     computed: {
         ...mapState('bookingPortal', ['activeBookings']),
