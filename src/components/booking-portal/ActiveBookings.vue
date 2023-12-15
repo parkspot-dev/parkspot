@@ -26,10 +26,10 @@
             </b-table-column>
 
             <b-table-column
+                cell-class="has-text-left"
                 field="Name"
                 label="VO Name"
                 width="40"
-                numeric
                 v-slot="props"
                 sortable
             >
@@ -39,10 +39,10 @@
             </b-table-column>
 
             <b-table-column
+                cell-class="has-text-left"
                 field="SiteID"
                 label="SiteID"
                 width="40"
-                numeric
                 v-slot="props"
                 sortable
             >
@@ -68,10 +68,10 @@
                 </div>
             </b-table-column>
             <b-table-column
+                cell-class="has-text-left"
                 field="PaymentPeriod"
                 label="Periodicity"
                 width="40"
-                numeric
                 v-slot="props"
                 sortable
             >
@@ -113,5 +113,9 @@ export default {
 <style lang="scss">
 .root {
     padding: 16px;
+}
+.header-row {
+    justify-content: center;
+    text-align: center;
 }
 </style>
