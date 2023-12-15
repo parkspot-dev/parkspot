@@ -23,7 +23,6 @@ const mutations = {
     },
 
     'update-selected-spot'(state, spot) {
-        console.log('update-spot', spot);
         state.selectedSpot = [];
         state.selectedSpot = [...state.selectedSpot, spot];
     },
@@ -85,6 +84,8 @@ const actions = {
     async updateAvailability({ commit, state }, availableCount) {
         const url = '/owner/update-site';
         state.spotDetails.SlotsAvailable = availableCount;
+        // Updating availabilty means agent connected with SO today.
+        state.spotDetails.LastCallDate = new Date().toISOString();
         await mayaClient.post(url, state.spotDetails);
     },
 
