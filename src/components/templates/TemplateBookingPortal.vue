@@ -125,6 +125,9 @@
                         >
                             <AtomDatePicker
                                 :size="'is-small'"
+                                :assignedDate="
+                                    currBookingDetails.Booking.StartTime
+                                "
                                 class="column-width"
                                 @changed="onStartDateUpdate"
                             >
@@ -143,6 +146,9 @@
                         >
                             <AtomDatePicker
                                 :size="'is-small'"
+                                :assignedDate="
+                                    currBookingDetails.Booking.EndTime
+                                "
                                 class="column-width"
                                 @changed="onEndDateUpdate"
                             >
