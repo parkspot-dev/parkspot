@@ -106,6 +106,10 @@
                         <p>
                             <strong> Started At:</strong>
                         </p>
+
+                        <p>
+                            <strong> End Date:</strong>
+                        </p>
                     </div>
                     <div class="value-col">
                         <p>
@@ -130,6 +134,24 @@
                             {{
                                 getFormattedDate(
                                     currBookingDetails.Booking.StartTime,
+                                )
+                            }}
+                        </p>
+                        <div
+                            class="input-field"
+                            v-if="editField === 'Booking Details'"
+                        >
+                            <AtomDatePicker
+                                :size="'is-small'"
+                                class="column-width"
+                                @changed="onEndDateUpdate"
+                            >
+                            </AtomDatePicker>
+                        </div>
+                        <p v-else>
+                            {{
+                                getFormattedDate(
+                                    currBookingDetails.Booking.EndTime,
                                 )
                             }}
                         </p>
@@ -536,6 +558,10 @@ export default {
 
         onStartDateUpdate(updatedDate) {
             this.currBookingDetails.Booking.StartTime = updatedDate;
+        },
+
+        onEndDateUpdate(updatedEndDate) {
+            this.currBookingDetails.Booking.EndTime = updatedEndDate;
         },
     },
 };

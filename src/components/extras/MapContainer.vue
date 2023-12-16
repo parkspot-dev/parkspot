@@ -73,7 +73,6 @@ export default {
 
         // create DOM element for the parking site marker
         for (const spot of this.spotsList) {
-            console.log('spot', spot);
             const encodedSpotId = encodeURIComponent(spot.ID);
             const psMarker = document.createElement('div');
 
