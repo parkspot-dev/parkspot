@@ -21,7 +21,11 @@
                 sortable
             >
                 <div>
-                    {{ props.row.ID }}
+                    <a :href="bookingDetailsURL(props.row.ID)">
+                        <div>
+                            {{ props.row.ID }}
+                        </div>
+                    </a>
                 </div>
             </b-table-column>
 
@@ -84,22 +88,25 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
 import { getPaymentPeriodicityLabel } from '@/constant/enums';
 export default {
-    async created() {
-        await this.getActiveBooking();
-    },
-    computed: {
-        ...mapState('bookingPortal', ['activeBookings']),
+    props: {
+        activeBookings: Array,
     },
     methods: {
-        ...mapActions('bookingPortal', ['getActiveBooking']),
-        sdpURL(siteID) {
+        sdpURL(siteId) {
             return this.$router.resolve({
                 name: 'spot-detail',
                 params: {
-                    spotId: siteID,
+                    spotId: siteId,
+                },
+            }).href;
+        },
+        bookingDetailsURL(bookingId) {
+            return this.$router.resolve({
+                name: 'booking-portal',
+                query: {
+                    bookingId: bookingId,
                 },
             }).href;
         },

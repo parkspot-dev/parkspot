@@ -5,7 +5,7 @@
             <p></p>
             <MoleculeSearchBox
                 placeholder="Booking ID"
-                @on-search="getBookingDetails"
+                @on-search="searchBooking"
             ></MoleculeSearchBox>
         </div>
         <LoaderModal v-if="isLoading"></LoaderModal>
@@ -16,7 +16,10 @@
             @refresh-payment-status="refreshPaymentStatus"
             @update-booking-details="updateBookingDetails"
         ></TemplateBookingPortal>
-        <ActiveBookings v-else></ActiveBookings>
+        <ActiveBookings
+            v-else
+            :activeBookings="activeBookings"
+        ></ActiveBookings>
     </div>
 </template>
 
@@ -41,13 +44,20 @@ export default {
             bookingID: '',
         };
     },
-
+    async created() {
+        if (this.$route.query['bookingId'] != undefined) {
+            this.getBookingDetails(this.$route.query['bookingId']);
+        } else {
+            this.getActiveBooking();
+        }
+    },
     computed: {
         ...mapState('bookingPortal', [
             'hasError',
             'errorMessage',
             'isLoading',
             'bookingDetails',
+            'activeBookings',
         ]),
     },
 
@@ -55,9 +65,17 @@ export default {
         ...mapActions('bookingPortal', [
             'getBookingDetails',
             'getPaymentLink',
+            'getActiveBooking',
             'updateBookingDetails',
             'refreshPaymentStatus',
         ]),
+        searchBooking(bookingId) {
+            this.$router.push({
+                path: this.$route.path,
+                query: { bookingId: bookingId },
+            });
+            this.getBookingDetails(bookingId);
+        },
     },
 };
 </script>
