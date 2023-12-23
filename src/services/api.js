@@ -182,10 +182,8 @@ const getAuthToken = (function () {
     console.log('sud:: token', token);
     if (token) {
         return token;
-    } else {
-        return '';
     }
-    // config.headers['PSAuthKey'] = `${localStorage.getItem('PSAuthKey')}`;
+    return '';
 })();
 
 /**
