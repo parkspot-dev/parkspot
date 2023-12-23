@@ -171,7 +171,6 @@ class MapBoxApiService extends BaseApiService {
         const baseHeaderMap = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            // 'Flavour': flavour,
         };
         super(mapBoxDomain, baseHeaderMap, 5000, false);
     }
@@ -179,7 +178,6 @@ class MapBoxApiService extends BaseApiService {
 
 const getAuthToken = (function () {
     const token = localStorage.getItem('PSAuthKey');
-    console.log('sud:: token', token);
     if (token) {
         return token;
     }
