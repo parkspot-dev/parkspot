@@ -117,19 +117,7 @@ export default {
         async updateRequest(request) {
             try {
                 this.isLoading = true;
-                const res = await fetch(
-                    'https://maya.parkspot.in/owner/request-comments',
-                    {
-                        method: 'PATCH',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(request),
-                    },
-                );
-
-                await res.json();
-
+                await mayaClient.patch('/owner/request-comments', request)
                 this.$buefy.toast.open({
                     message: `Sucessfully updated!`,
                     type: 'is-success',
