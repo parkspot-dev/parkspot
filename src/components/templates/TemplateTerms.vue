@@ -3,24 +3,21 @@
         <div class="terms-container">
             <AtomHeading class="mb-10"> Terms and Conditions </AtomHeading>
 
-            <blockquote class="vo">
-                Terms and Conditions for Vehicle Owner(ParkSpot user who is seeking/found 
-                a parking spot on the ParkSpot platform)
-            </blockquote>
+            <AtomParagraph class="vo">
+                Vehicle Owner : User who is seeking/finding a parking spot.
+            </AtomParagraph>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Submission of Documents:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             Vehicle owners are required to submit a copy of 
                             a valid government-issued identity card.
                         </AtomParagraph>
-
                     </li>
-
                     <li>
                         <AtomParagraph>
                             Vehicle owners must submit Vehicle ownership 
@@ -28,16 +25,14 @@
                             (RC) or proof of insurance.
                         </AtomParagraph>
                     </li>
-
-                    
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Accuracy of Information:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             The vehicle owner specifies that all information 
@@ -45,14 +40,14 @@
                             and up-to-date.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Confidentiality:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             ParkSpot assures that all submitted documents will be treated 
@@ -60,14 +55,14 @@
                             purpose of verifying ownership.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Verification Process:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             ParkSpot team will review the submitted documents of the vehicle
@@ -75,14 +70,14 @@
                             clarification if needed from the vehicle owner.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Suspension of Services:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             ParkSpot team reserves the right to refuse 
@@ -101,14 +96,14 @@
                             booking and barring re-entry of the vehicle owner. 
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Digital Management:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             The vehicle owner agrees to use the services from 
@@ -117,14 +112,14 @@
                             and managing booking. ParkSpot’s liability will be limited to the same.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Subletting &  Assignment:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             The Vehicle Owner shall be entitled to use the 
@@ -134,14 +129,14 @@
                             and ParkSpot.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Cancellation:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             For cancellation of the active booking of a 
@@ -153,14 +148,14 @@
                             pay the rent for next month.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Landlord Cooperation in Unfortunate Events:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             In the event of any unfortunate incidents, 
@@ -176,14 +171,14 @@
                             the landlord's liability.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Prepaid Rent and Service Fee:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             Rent and security deposit are required 
@@ -197,19 +192,18 @@
                             confirms the booking.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
-            <blockquote class="so">
-                Terms and Conditions for Spot Owner(ParkSpot user who is 
-                renting out his/her parking spot on the ParkSpot platform.
-            </blockquote>
-
+            <AtomParagraph class="so">
+                Spot Owner : User who is renting out his/her parking spot .
+            </AtomParagraph>
+            
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Listing Creation:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             The ParkSpot company undertakes to 
@@ -217,28 +211,28 @@
                             the parking spot on its website and mobile app.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Ownership Authentication:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             The spot owner must provide authentic 
                             documents verifying ownership of the parking spot.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Documentation Requirement:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             Failing to provide the necessary documents for 
@@ -246,14 +240,14 @@
                             of the parking spot from the ParkSpot portal.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Termination of Services:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             In the event of non-compliance with ownership 
@@ -261,14 +255,14 @@
                             the right to remove the parking spot from the platform.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Customer Referral Restriction:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             If the ownership verification process is not 
@@ -277,14 +271,14 @@
                             necessary documentation is provided.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Monthly Service Fee:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             As part of the agreement, the spot owner acknowledges 
@@ -297,14 +291,14 @@
                             associated with the services provided by the Company.
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Rent Handling:
                 </AtomParagraph>
-                <ol class="pl-6">
+                <ul class="pl-6" style="list-style-type:disc;">
                     <li>
                         <AtomParagraph>
                             The ParkSpot company will collect monthly rent from the vehicle 
@@ -313,45 +307,57 @@
                             the balance into the landlord's designated bank account. Both parties 
                             acknowledge and accept these streamlined procedures for efficient 
                             financial transactions.
-
                         </AtomParagraph>
                     </li>
-                </ol>
+                </ul>
             </div>
 
-            
             <div class="mb-3">
-                <AtomParagraph :variation="'large'"> Refund :</AtomParagraph>
-                <AtomParagraph>
-                    Only if booking cancelled within 15 days of booking or
-                    before parking start date (whichever is early).
+                <AtomParagraph :variation="'large'"> 
+                    Refund :
                 </AtomParagraph>
+                <ul class="pl-6" style="list-style-type:disc;">
+                    <li>
+                        <AtomParagraph>
+                            Only if booking cancelled within 15 days of booking or
+                            before parking start date (whichever is early).
+                        </AtomParagraph>
+                    </li>
+                </ul>    
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Cancellation Policies :
                 </AtomParagraph>
-                <AtomParagraph>
-                    Cancellation request of the ongoing booking must be made in
-                    one month advance.
-                </AtomParagraph>
+                <ul class="pl-6" style="list-style-type:disc;">
+                    <li>
+                        <AtomParagraph>
+                            Cancellation request of the ongoing booking must be made in
+                            one month advance.
+                        </AtomParagraph>
+                    </li>
+                </ul>
             </div>
 
             <div class="mb-3">
                 <AtomParagraph :variation="'large'">
                     Changes to These Terms and Conditions :
                 </AtomParagraph>
-                <AtomParagraph>
-                    We reserve the right, at Our sole discretion, to modify or
-                    replace these Terms at any time.What constitutes a material
-                    change will be determined at Our sole discretion.By
-                    continuing to access or use Our Service after those
-                    revisions become effective, You agree to be bound by the
-                    revised terms. If You do not agree to the new terms, in
-                    whole or in part, please stop using the website and the
-                    Service.
-                </AtomParagraph>
+                <ul class="pl-6" style="list-style-type:disc;">
+                    <li>
+                        <AtomParagraph>
+                            We reserve the right, at Our sole discretion, to modify or
+                            replace these Terms at any time.What constitutes a material
+                            change will be determined at Our sole discretion.By
+                            continuing to access or use Our Service after those
+                            revisions become effective, You agree to be bound by the
+                            revised terms. If You do not agree to the new terms, in
+                            whole or in part, please stop using the website and the
+                            Service.
+                        </AtomParagraph>
+                    </li>
+                </ul>
             </div>
         </div>
     </BodyWrapper>
@@ -379,7 +385,7 @@ export default {
 
 .vo {
     margin: 3rem 0rem;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: var(--semi-bold-font);
     border-inline-start-style: solid;
     border-inline-start-width: var(--ricos-custom-quote-border-width,3px);
@@ -390,7 +396,7 @@ export default {
 
 .so {
     margin: 3rem 0rem;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: var(--semi-bold-font);
     border-inline-start-style: solid;
     border-inline-start-width: var(--ricos-custom-quote-border-width,3px);
