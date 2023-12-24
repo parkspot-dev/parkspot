@@ -100,17 +100,6 @@ class BaseApiService {
      * @param { any } resource - url .
      */
     async get(resource) {
-        this.client.interceptors.request.use(
-            (config) => {
-                config.headers['PSAuthKey'] = `${localStorage.getItem(
-                    'PSAuthKey',
-                )}`;
-                return config;
-            },
-            (error) => {
-                return Promise.reject(error);
-            },
-        );
         try {
             const response = await this.client.get(resource);
             if (!response) {
@@ -138,6 +127,7 @@ class MayaApiService extends BaseApiService {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Flavour': flavour,
+            'PSAuthKey': authToken,
         };
         super(mayaDomain, baseHeaderMap, 5000, true);
     }
@@ -181,11 +171,18 @@ class MapBoxApiService extends BaseApiService {
         const baseHeaderMap = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            // 'Flavour': flavour,
         };
         super(mapBoxDomain, baseHeaderMap, 5000, false);
     }
 }
+
+const getAuthToken = (function () {
+    const token = localStorage.getItem('PSAuthKey');
+    if (token) {
+        return token;
+    }
+    return '';
+})();
 
 /**
  * IIFE function to
@@ -203,7 +200,7 @@ const getFlavour = (function () {
     }
 })();
 
-const mayaClient = new MayaApiService(getFlavour);
+const mayaClient = new MayaApiService(getFlavour, getAuthToken);
 const mapBoxClient = new MapBoxApiService();
 
 export { mayaClient, mapBoxClient };
