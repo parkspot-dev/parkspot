@@ -119,9 +119,8 @@ class MayaApiService extends BaseApiService {
     /**
      * Create a MayaApiService.
      *  @param { function } flavour - getFlavour function.
-     *  @param { function } authToken - getAuthToken function.
      */
-    constructor(flavour, authToken) {
+    constructor(flavour) {
         const mayaDomain = 'https://maya.parkspot.in'; //   TODO: we can pick from .env files.
         const baseHeaderMap = {
             'Content-Type': 'application/json',
@@ -186,15 +185,23 @@ class MapBoxApiService extends BaseApiService {
     }
 }
 
-const getAuthToken = (function () {
-    const token = localStorage.getItem('PSAuthKey');
-    if (token) {
-        return token;
+/**
+ * IIFE function to
+ * get the device mobile or desktop
+ * @return {string} mweb or dweb.
+ */
+const getFlavour = (function () {
+    const details = navigator.userAgent;
+    const regexp = /android|iphone|kindle|ipad/i;
+    const isMobileDevice = regexp.test(details);
+    if (isMobileDevice) {
+        return 'mweb';
+    } else {
+        return 'dweb';
     }
-    return '';
 })();
+const mayaClient = new MayaApiService(getFlavour);
 
-const mayaClient = new MayaApiService(getFlavour, getAuthToken);
 const mapBoxClient = new MapBoxApiService();
 
 export { mayaClient, mapBoxClient };
