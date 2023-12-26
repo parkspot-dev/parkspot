@@ -201,6 +201,7 @@ const getFlavour = (function () {
     }
 })();
 const mayaClient = new MayaApiService(getFlavour);
+
 const mapBoxClient = new MapBoxApiService();
 
 export { mayaClient, mapBoxClient };
