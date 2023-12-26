@@ -127,9 +127,19 @@ class MayaApiService extends BaseApiService {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Flavour': flavour,
-            'PSAuthKey': authToken,
         };
         super(mayaDomain, baseHeaderMap, 5000, true);
+        this.client.interceptors.request.use(
+            (config) => {
+                config.headers['PSAuthKey'] = `${localStorage.getItem(
+                    'PSAuthKey',
+                )}`;
+                return config;
+            },
+            (error) => {
+                return Promise.reject(error);
+            },
+        );
     }
 
     /**
@@ -182,22 +192,6 @@ const getAuthToken = (function () {
         return token;
     }
     return '';
-})();
-
-/**
- * IIFE function to
- * get the device mobile or desktop
- * @return {string} mweb or dweb.
- */
-const getFlavour = (function () {
-    const details = navigator.userAgent;
-    const regexp = /android|iphone|kindle|ipad/i;
-    const isMobileDevice = regexp.test(details);
-    if (isMobileDevice) {
-        return 'mweb';
-    } else {
-        return 'dweb';
-    }
 })();
 
 const mayaClient = new MayaApiService(getFlavour, getAuthToken);
