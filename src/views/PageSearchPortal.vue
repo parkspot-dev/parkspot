@@ -117,12 +117,23 @@ export default {
         async updateRequest(request) {
             try {
                 this.isLoading = true;
-                await mayaClient.patch('/owner/request-comments', request)
-                this.$buefy.toast.open({
-                    message: `Sucessfully updated!`,
-                    type: 'is-success',
-                    duration: 2000,
-                });
+                const response = await mayaClient.patch(
+                    '/owner/request-comments',
+                    request,
+                );
+                if (response.Success) {
+                    this.$buefy.toast.open({
+                        message: `Sucessfully updated!`,
+                        type: 'is-success',
+                        duration: 2000,
+                    });
+                } else {
+                    this.$buefy.toast.open({
+                        message: response.DisplayMsg,
+                        type: 'is-danger',
+                        duration: 2000,
+                    });
+                }
             } catch (error) {
                 console.error({ error });
 
