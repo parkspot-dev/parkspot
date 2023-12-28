@@ -100,8 +100,17 @@ export default {
                     parkingRequestURL +
                     `?mobile=${voMobile.replace(/\s+/g, '')}`;
             }
-            this.parkingRequests = await mayaClient.get(parkingRequestURL);
+            const response = await mayaClient.get(parkingRequestURL);
             this.isLoading = false;
+            if (response.ErrorCode) {
+                this.$buefy.toast.open({
+                    message: response.DisplayMsg,
+                    type: 'is-danger',
+                    duration: 8000,
+                });
+                return;
+            }
+            this.parkingRequests = response;
         },
         async getInterestedVO(latlng) {
             this.isLoading = true;
@@ -111,8 +120,16 @@ export default {
             const parkingRequestList = await mayaClient.get(
                 `/search-requests?lat=${lat}&long=${lng}`,
             );
-            this.intrestedVOList = parkingRequestList;
             this.isLoading = false;
+            if (parkingRequestList.ErrorCode) {
+                this.$buefy.toast.open({
+                    message: parkingRequestList.DisplayMsg,
+                    type: 'is-danger',
+                    duration: 6000,
+                });
+                return;
+            }
+            this.intrestedVOList = parkingRequestList;
         },
         async updateRequest(request) {
             try {
@@ -121,16 +138,16 @@ export default {
                     '/owner/request-comments',
                     request,
                 );
-                if (response.Success) {
-                    this.$buefy.toast.open({
-                        message: `Sucessfully updated!`,
-                        type: 'is-success',
-                        duration: 2000,
-                    });
-                } else {
+                if (response.ErrorCode) {
                     this.$buefy.toast.open({
                         message: response.DisplayMsg,
                         type: 'is-danger',
+                        duration: 6000,
+                    });
+                } else {
+                    this.$buefy.toast.open({
+                        message: `Sucessfully updated!`,
+                        type: 'is-success',
                         duration: 2000,
                     });
                 }
