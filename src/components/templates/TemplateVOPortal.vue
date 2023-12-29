@@ -29,7 +29,7 @@
                         @formValidate="contactFormValidate"
                     ></OrganismContactForm>
                 </b-step-item>
-<!-- 
+
                 <b-step-item
                     step="2"
                     label="Step 2"
@@ -47,11 +47,11 @@
                         @formValidate="addressFormValidate"
                         :reRender="reRender"
                     ></OrganismAddressForm>
-                </b-step-item> -->
+                </b-step-item>
 
                 <b-step-item
-                    :step="2"
-                    label="Step 2"
+                    :step="3"
+                    label="Step 3"
                     :clickable="isStepsClickable"
                     disabled
                     :type="btnStack[2] ? 'is-success' : 'is-warning'"
@@ -103,7 +103,7 @@
 <script>
 import OrganismContactForm from '../organisms/OrganismContactForm.vue';
 import OrganismPreferenceForm from '../organisms/OrganismPreferenceForm.vue';
-// import OrganismAddressForm from '../organisms/OrganismAddressForm.vue';
+import OrganismAddressForm from '../organisms/OrganismAddressForm.vue';
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 export default {
@@ -111,7 +111,7 @@ export default {
     components: {
         OrganismContactForm,
         OrganismPreferenceForm,
-        // OrganismAddressForm,
+        OrganismAddressForm,
         AtomHeading,
         BodyWrapper,
     },
