@@ -1,0 +1,12 @@
+[
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.parkspot.maya_nagri",
+            "sha256_cert_fingerprints": [
+                "FE:7F:71:47:CD:17:5C:C6:82:FD:0C:48:91:F7:EB:AB:53:4F:09:97:30:00:FD:4A:2B:3E:01:6C:E4:B3:9B:A7"
+            ]
+        }
+    }
+]
