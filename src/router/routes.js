@@ -24,7 +24,8 @@ export const pages = {
     THANK_YOU               : '/thank-you',
     ERROR                   : '/error',
     BOOKING_PORTAL          : "/internal/booking-portal",
-    APP                     : "/app"
+    APP                     : "/app",
+    PRIVACY                 : "/privacy-policy"
 };
 
 export const routes = [
@@ -78,6 +79,11 @@ export const routes = [
         path: '/terms-and-conditions',
         name: 'Terms',
         component: () => import('@/views/PageTerms.vue'),
+    },
+    {
+        path: pages.PRIVACY,
+        name: 'PrivacyPolicy',
+        component: () => import('@/views/PagePrivacyPolicy.vue'),
     },
     {
         path: pages.BLOG,
