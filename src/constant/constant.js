@@ -113,7 +113,7 @@ export const PAGE_TITLE = {
     VO_PORTAL: 'Get Parking Spot',
     SO_PORTAL: 'Register Parking Spot',
     TERMS: 'Terms & Conditions',
-    PRIVACY: 'Privacy - Policy',
+    PRIVACY: 'Privacy Policy',
     THANK: 'Thank You!',
     ERROR: 'Oops... Something went wrong!!',
     BLOG: 'Parking Blogs',
