@@ -254,7 +254,14 @@
                                 href="https://www.parkspot.in/terms-and-conditions"
                                 target="_blank"
                             >
-                                Terms & Conditions
+                                Terms & Conditions 
+                            </a>
+                            <a
+                                class="privacy"
+                                href="https://www.parkspot.in/privacy-policy"
+                                target="_blank"
+                            >
+                                | Privacy-Policy
                             </a>
                         </AtomParagraph>
                     </div>
@@ -343,6 +350,10 @@ export default {
 }
 
 .tnc {
+    color: #888d93;
+}
+
+.privacy {
     color: #888d93;
 }
 
