@@ -69,6 +69,7 @@ import OrganismParkingChallengesPageDesign from '../organisms/OrganismParkingCha
 import OrganismExtraIncomePageDesign from '../organisms/OrganismExtraIncomePageDesign';
 import OrganismPerfectParkingPageDesign from '../organisms/OrganismPerfectParkingPageDesign';
 import OrganismBlogBengaluruTenant from '../organisms/OrganismBlogBengaluruTenant';
+import OrganismBlogEmpoweringTheDrive from '../organisms/OrganismBlogEmpoweringTheDrive';
 import OrganismBlogSmartParkingSolutions from '../organisms/OrganismBlogSmartParkingSolutions';
 import OrganismBlogParkingInMallSocieties from '../organisms/OrganismBlogParkingInMallSocieties';
 
@@ -86,6 +87,7 @@ export default {
         OrganismExtraIncomePageDesign,
         OrganismPerfectParkingPageDesign,
         OrganismBlogBengaluruTenant,
+        OrganismBlogEmpoweringTheDrive,
         OrganismBlogSmartParkingSolutions,
         OrganismBlogParkingInMallSocieties,
     },

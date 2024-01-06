@@ -86,6 +86,21 @@ const state = {
             component: 'OrganismBlogBengaluruTenant',
         },
         {
+            id: "empowering-the-drive" ,
+            title: "Electric Evolution of EV Charging",
+            author: 'Anuj Singh',
+            author_img: require('@/assets/team/anuj.jpg'),
+            img: require('@/assets/blog/blog10.jpg'),
+            thumbnail: require('@/assets/blog/blog10-thumbnail.jpg'),
+            desc: `In the era of sustainable mobility, the rise of electric vehicles (EVs) has 
+                sparked a parallel revolution in charging infrastructure. The convenience and 
+                accessibility of EV charging .... `,
+            time: 'Dec 24, 2023',
+            dateTime: '2023-12-24',
+            component: 'OrganismBlogEmpoweringTheDrive',
+        },
+        {
+
             id: "smart-parking-solutions" ,
             title: "Smart Parking Solutions",
             author: 'Anuj Singh',
