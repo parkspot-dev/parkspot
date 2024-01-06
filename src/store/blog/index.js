@@ -99,6 +99,20 @@ const state = {
             dateTime: '2023-12-20',
             component: 'OrganismBlogSmartParkingSolutions',
         },
+        {
+            id: "parking-services-in-malls-and-societies" ,
+            title: "Parking Services in Malls and Societies",
+            author: 'Anuj Singh',
+            author_img: require('@/assets/team/anuj.jpg'),
+            img: require('@/assets/blog/blog8.jpg'),
+            thumbnail: require('@/assets/blog/blog8-thumbnail.jpg'),
+            desc: `In the hustle and bustle of modern life, finding a parking space has become 
+                a daily challenge. Whether you're heading to the mall for a shopping spree or returning 
+                home to your society .... `,
+            time: 'Dec 16, 2023',
+            dateTime: '2023-12-16',
+            component: 'OrganismBlogParkingInMallSocieties',
+        },
     ],
 };
 // getters

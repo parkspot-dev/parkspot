@@ -370,7 +370,7 @@ export default {
             agentList: [
                 { id: 'NA', name: 'NA' },
                 { id: 'Preeti', name: 'Preeti' },
-                { id: 'AG', name: 'AG' },
+                { id: 'Puja', name: 'Puja' },
                 { id: 'Nitya', name: 'Nitya' },
                 { id: 'Ish', name: 'Ish' },
                 { id: 'Sud', name: 'Sud' },
