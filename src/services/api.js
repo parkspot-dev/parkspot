@@ -100,17 +100,6 @@ class BaseApiService {
      * @param { any } resource - url .
      */
     async get(resource) {
-        this.client.interceptors.request.use(
-            (config) => {
-                config.headers['PSAuthKey'] = `${localStorage.getItem(
-                    'PSAuthKey',
-                )}`;
-                return config;
-            },
-            (error) => {
-                return Promise.reject(error);
-            },
-        );
         try {
             const response = await this.client.get(resource);
             if (!response) {
@@ -130,9 +119,8 @@ class MayaApiService extends BaseApiService {
     /**
      * Create a MayaApiService.
      *  @param { function } flavour - getFlavour function.
-     *  @param { function } authToken - getAuthToken function.
      */
-    constructor(flavour, authToken) {
+    constructor(flavour) {
         const mayaDomain = 'https://maya.parkspot.in'; //   TODO: we can pick from .env files.
         const baseHeaderMap = {
             'Content-Type': 'application/json',
@@ -140,6 +128,17 @@ class MayaApiService extends BaseApiService {
             'Flavour': flavour,
         };
         super(mayaDomain, baseHeaderMap, 5000, true);
+        this.client.interceptors.request.use(
+            (config) => {
+                config.headers['PSAuthKey'] = `${localStorage.getItem(
+                    'PSAuthKey',
+                )}`;
+                return config;
+            },
+            (error) => {
+                return Promise.reject(error);
+            },
+        );
     }
 
     /**
@@ -181,7 +180,6 @@ class MapBoxApiService extends BaseApiService {
         const baseHeaderMap = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            // 'Flavour': flavour,
         };
         super(mapBoxDomain, baseHeaderMap, 5000, false);
     }
@@ -202,8 +200,8 @@ const getFlavour = (function () {
         return 'dweb';
     }
 })();
-
 const mayaClient = new MayaApiService(getFlavour);
+
 const mapBoxClient = new MapBoxApiService();
 
 export { mayaClient, mapBoxClient };

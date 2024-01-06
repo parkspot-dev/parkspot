@@ -250,11 +250,18 @@
                         </AtomParagraph>
                         <AtomParagraph>
                             <a
-                                class="tnc"
+                                class="footer-link"
                                 href="https://www.parkspot.in/terms-and-conditions"
                                 target="_blank"
                             >
                                 Terms & Conditions
+                            </a>
+                            <a
+                                class="footer-link"
+                                href="https://www.parkspot.in/privacy-policy"
+                                target="_blank"
+                            >
+                                | Privacy Policy
                             </a>
                         </AtomParagraph>
                     </div>
@@ -342,7 +349,7 @@ export default {
     background-color: #162029;
 }
 
-.tnc {
+.footer-link {
     color: #888d93;
 }
 

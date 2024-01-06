@@ -70,6 +70,9 @@ import OrganismExtraIncomePageDesign from '../organisms/OrganismExtraIncomePageD
 import OrganismPerfectParkingPageDesign from '../organisms/OrganismPerfectParkingPageDesign';
 import OrganismBlogBengaluruTenant from '../organisms/OrganismBlogBengaluruTenant';
 import OrganismBlogDrivingChange from '../organisms/OrganismBlogDrivingChange';
+import OrganismBlogEmpoweringTheDrive from '../organisms/OrganismBlogEmpoweringTheDrive';
+import OrganismBlogSmartParkingSolutions from '../organisms/OrganismBlogSmartParkingSolutions';
+import OrganismBlogParkingInMallSocieties from '../organisms/OrganismBlogParkingInMallSocieties';
 
 export default {
     name: 'TemplateBlogPost',
@@ -86,6 +89,9 @@ export default {
         OrganismPerfectParkingPageDesign,
         OrganismBlogBengaluruTenant,
         OrganismBlogDrivingChange,
+        OrganismBlogEmpoweringTheDrive,
+        OrganismBlogSmartParkingSolutions,
+        OrganismBlogParkingInMallSocieties,
     },
     props: {
         blog: {
