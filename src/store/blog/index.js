@@ -86,6 +86,20 @@ const state = {
             component: 'OrganismBlogBengaluruTenant',
         },
         {
+            id: "fastag-parking-payment" ,
+            title: "Fastag Parking Payment Service",
+            author: 'Anuj Singh',
+            author_img: require('@/assets/team/anuj.jpg'),
+            img: require('@/assets/blog/blog7.jpg'),
+            thumbnail: require('@/assets/blog/blog7-thumbnail.jpg'),
+            desc: `In the age of digital acceleration, every aspect of our daily lives is undergoing 
+            transformation, and parking payments are no exception. The advent of Fastag technology 
+            .... `,
+            time: 'Dec 14, 2023',
+            dateTime: '2023-12-14',
+            component: 'OrganismBlogFastagParkingPaymentService',
+        },
+        {
             id: "driving-change" ,
             title: "Evolution in the Parking Industry",
             author: 'Anuj Singh',
