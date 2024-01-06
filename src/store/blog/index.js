@@ -99,6 +99,35 @@ const state = {
             dateTime: '2023-12-24',
             component: 'OrganismBlogEmpoweringTheDrive',
         },
+        {
+
+            id: "smart-parking-solutions" ,
+            title: "Smart Parking Solutions",
+            author: 'Anuj Singh',
+            author_img: require('@/assets/team/anuj.jpg'),
+            img: require('@/assets/blog/blog9.jpg'),
+            thumbnail: require('@/assets/blog/blog9-thumbnail.jpg'),
+            desc: `In the rapidly evolving landscape of urban living, the need for innovative solutions 
+                to address parking challenges has never been more critical. Enter smart parking solutions, 
+                a beacon of hope for transforming.... `,
+            time: 'Dec 20, 2023',
+            dateTime: '2023-12-20',
+            component: 'OrganismBlogSmartParkingSolutions',
+        },
+        {
+            id: "parking-services-in-malls-and-societies" ,
+            title: "Parking Services in Malls and Societies",
+            author: 'Anuj Singh',
+            author_img: require('@/assets/team/anuj.jpg'),
+            img: require('@/assets/blog/blog8.jpg'),
+            thumbnail: require('@/assets/blog/blog8-thumbnail.jpg'),
+            desc: `In the hustle and bustle of modern life, finding a parking space has become 
+                a daily challenge. Whether you're heading to the mall for a shopping spree or returning 
+                home to your society .... `,
+            time: 'Dec 16, 2023',
+            dateTime: '2023-12-16',
+            component: 'OrganismBlogParkingInMallSocieties',
+        },
     ],
 };
 // getters
