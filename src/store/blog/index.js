@@ -86,7 +86,7 @@ const state = {
             component: 'OrganismBlogBengaluruTenant',
         },
         {
-            id: "Fastag-Parking-Payment" ,
+            id: "fastag-parking-payment" ,
             title: "Fastag Parking Payment Service",
             author: 'Anuj Singh',
             author_img: require('@/assets/team/anuj.jpg'),
