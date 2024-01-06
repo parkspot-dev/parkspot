@@ -4,7 +4,7 @@
             <div class="request-search-control">
                 <MoleculeSearchBox
                     placeholder="Mobile"
-                    @on-search="getParkingRequests"
+                    @on-search="searchRequestWithMobile"
                 ></MoleculeSearchBox>
             </div>
             <TemplateSearchPortal
@@ -78,7 +78,7 @@ export default {
         },
     },
     created() {
-        this.getParkingRequests();
+        this.getParkingRequests(this.$route.query['mobile']);
         if (this.SOLatLngInput) {
             this.getInterestedVO(this.SOLatLngInput);
         }
@@ -88,20 +88,34 @@ export default {
             'updateActiveTab',
             'updateSOLatLngInput',
         ]),
-        async getParkingRequests(voMobile = '') {
-            this.isLoading = true;
-            let parkingRequestURL = '/internal/parking-requests';
+        async searchRequestWithMobile(voMobile) {
             if (voMobile != '') {
                 this.$router.push({
                     path: this.$route.fullPath,
                     query: { mobile: voMobile },
                 });
+                this.getParkingRequests(voMobile);
+            }
+        },
+        async getParkingRequests(voMobile = '') {
+            this.isLoading = true;
+            let parkingRequestURL = '/internal/parking-requests';
+            if (voMobile != '') {
                 parkingRequestURL =
                     parkingRequestURL +
                     `?mobile=${voMobile.replace(/\s+/g, '')}`;
             }
-            this.parkingRequests = await mayaClient.get(parkingRequestURL);
+            const response = await mayaClient.get(parkingRequestURL);
             this.isLoading = false;
+            if (response.ErrorCode) {
+                this.$buefy.toast.open({
+                    message: response.DisplayMsg,
+                    type: 'is-danger',
+                    duration: 8000,
+                });
+                return;
+            }
+            this.parkingRequests = response;
         },
         async getInterestedVO(latlng) {
             this.isLoading = true;
@@ -111,18 +125,37 @@ export default {
             const parkingRequestList = await mayaClient.get(
                 `/search-requests?lat=${lat}&long=${lng}`,
             );
-            this.intrestedVOList = parkingRequestList;
             this.isLoading = false;
+            if (parkingRequestList.ErrorCode) {
+                this.$buefy.toast.open({
+                    message: parkingRequestList.DisplayMsg,
+                    type: 'is-danger',
+                    duration: 6000,
+                });
+                return;
+            }
+            this.intrestedVOList = parkingRequestList;
         },
         async updateRequest(request) {
             try {
                 this.isLoading = true;
-                await mayaClient.patch('/owner/request-comments', request)
-                this.$buefy.toast.open({
-                    message: `Sucessfully updated!`,
-                    type: 'is-success',
-                    duration: 2000,
-                });
+                const response = await mayaClient.patch(
+                    '/owner/request-comments',
+                    request,
+                );
+                if (response.ErrorCode) {
+                    this.$buefy.toast.open({
+                        message: response.DisplayMsg,
+                        type: 'is-danger',
+                        duration: 6000,
+                    });
+                } else {
+                    this.$buefy.toast.open({
+                        message: `Sucessfully updated!`,
+                        type: 'is-success',
+                        duration: 2000,
+                    });
+                }
             } catch (error) {
                 console.error({ error });
 
