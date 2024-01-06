@@ -85,6 +85,20 @@ const state = {
             dateTime: '2023-09-5',
             component: 'OrganismBlogBengaluruTenant',
         },
+        {
+            id: "driving-change" ,
+            title: "Evolution in the Parking Industry",
+            author: 'Anuj Singh',
+            author_img: require('@/assets/team/anuj.jpg'),
+            img: require('@/assets/blog/blog11.jpg'),
+            thumbnail: require('@/assets/blog/blog11-thumbnail.jpg'),
+            desc: `The parking industry, often overlooked in the hustle of urban life, has undergone 
+                a transformative evolution. From traditional lots to innovative smart solutions, the 
+                journey has been remarkable.... `,
+            time: 'Dec 28, 2023',
+            dateTime: '2023-12-28',
+            component: 'OrganismBlogDrivingChange',
+        },
     ],
 };
 // getters
