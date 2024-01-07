@@ -85,7 +85,7 @@ const actions = {
             const user = res.user;
             commit('update-user', user);
             commit('update-login-Modal', false);
-        } catch (err) {
+        } catch (error) {
             // Handle Errors here.
             const errorCode = error.code;
             const errorMessage = error.message;
