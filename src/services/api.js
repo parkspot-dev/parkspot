@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { auth } from '../firebase';
 
 // BaseApiService create http client with basic configurations and error handling.
 /** Class representing a BaseApiService. */
@@ -129,7 +130,8 @@ class MayaApiService extends BaseApiService {
         };
         super(mayaDomain, baseHeaderMap, 5000, true);
         this.client.interceptors.request.use(
-            (config) => {
+            async (config) => {
+                await auth.authStateReady();
                 config.headers['PSAuthKey'] = `${localStorage.getItem(
                     'PSAuthKey',
                 )}`;
