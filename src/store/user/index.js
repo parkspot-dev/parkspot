@@ -77,7 +77,7 @@ const mutations = {
 };
 
 const actions = {
-    async loginWithGoogle({ commit, state }) {
+    async loginWithGoogle({ commit, dispatch }) {
         const gProvider = new GoogleAuthProvider();
 
         try {
@@ -85,6 +85,7 @@ const actions = {
             const user = res.user;
             commit('update-user', user);
             commit('update-login-Modal', false);
+            dispatch('authenticateWithMaya');
         } catch (error) {
             // Handle Errors here.
             const errorCode = error.code;
@@ -232,7 +233,6 @@ const actions = {
 
     async getUserProfile({ commit, dispatch, state }) {
         try {
-            dispatch('authenticateWithMaya');
             const userProfile = await mayaClient.get('/auth/user');
             commit('update-user-profile', userProfile);
         } catch (err) {
