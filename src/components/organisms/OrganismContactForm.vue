@@ -12,7 +12,6 @@
             v-model="model.email"
             :placeholder="CONTACT_FORM.EMAIL"
             :type="'email'"
-            :errorMessage="errors"
             :label="CONTACT_FORM.EMAIL"
             class="mb-1"
         >
