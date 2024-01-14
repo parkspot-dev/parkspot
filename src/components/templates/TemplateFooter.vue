@@ -251,14 +251,14 @@
                         <AtomParagraph>
                             <a
                                 class="footer-link"
-                                href="https://www.parkspot.in/terms-and-conditions"
+                                href="/terms-and-conditions"
                                 target="_blank"
                             >
                                 Terms & Conditions
                             </a>
                             <a
                                 class="footer-link"
-                                href="https://www.parkspot.in/privacy-policy"
+                                href="/privacy"
                                 target="_blank"
                             >
                                 | Privacy Policy
