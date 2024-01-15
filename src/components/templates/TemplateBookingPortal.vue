@@ -61,6 +61,10 @@
                         <p>
                             <strong> Status:</strong>
                         </p>
+
+                        <p>
+                            <strong> Remark:</strong>
+                        </p>
                     </div>
                     <div class="value-col">
                         <p>
@@ -93,6 +97,19 @@
                                     currBookingDetails.Booking.Status,
                                 )
                             }}
+                        </p>
+                        <span
+                            class="input-field"
+                            v-if="editField === 'Booking Details'"
+                        >
+                            <AtomInput
+                                :size="'is-small'"
+                                type="text"
+                                v-model="currBookingDetails.Booking.Remark"
+                            ></AtomInput>
+                        </span>
+                        <p v-else>
+                            {{ currBookingDetails.Booking.Remark }}
                         </p>
                     </div>
                 </div>
@@ -660,7 +677,7 @@ export default {
     }
 
     .field-col {
-        width: 50%;
+        width: 30%;
         text-align: left;
 
         p {
@@ -668,7 +685,7 @@ export default {
         }
     }
     .value-col {
-        width: 50%;
+        width: 70%;
         text-align: left;
 
         p {

@@ -27,7 +27,8 @@ const state = {
         "ConvenienceFee": 0,
         "RentCycle": 25,
         "PaymentPeriod": 2,
-        "SecurityDeposit": 0
+        "SecurityDeposit": 0,
+        "Remark": "Booking remark"
       }] */
     activeBookings: [],
 };
