@@ -62,6 +62,12 @@
                                 </ul>
                             </div>
                         </li>
+
+                        <li class="menu-item">
+                            <span>
+                                <a href="/Faq">Faq</a>
+                            </span>
+                        </li>
                     </ul>
                 </div>
                 <!-- mweb phone link -->
@@ -442,4 +448,14 @@ export default {
 .mobile-phone-link {
     margin-inline-end: 8px;
 }
+
+.menu-wrapper-left .menu-item .menu-title {
+    font-weight: 500;
+}
+
+.menu-item {
+    color: var(--parkspot-black);
+    font-weight: 500;
+}
+
 </style>
