@@ -13,6 +13,8 @@
 <script>
 import TemplatePaymentGateway from '../components/templates/TemplatePaymentGateway.vue';
 import { PAGE_TITLE } from '@/constant/constant';
+import { PaymentType } from '@/constant/enums';
+
 export default {
     name: 'PagePaymentGateway',
     components: {
@@ -80,9 +82,19 @@ export default {
                             dueDate: data.DueDate,
                             amount: data.PaymentInfo.Amount,
                             discount: data.PaymentInfo.Discount,
-                            convenienceFee: data.PaymentInfo.ConvenienceFee,
-                            baseAmount: data.PaymentInfo.BaseAmount,
+                            baseAmount: data.BookingInfo.Rent,
+                            convenienceFee: 0,
                         };
+                        // Show convenience fee only if payment amount includes convenience fee.
+                        if (
+                            data.PaymentInfo.Type ==
+                                PaymentType.ConvenienceFee ||
+                            data.PaymentInfo.Type ==
+                                PaymentType.MonthlyRentWithConvenienceFeeAndSecurityDeposit
+                        ) {
+                            this.bookingDetails.convenienceFee =
+                                data.BookingInfo.ConvenienceFee;
+                        }
                         this.paymentMode = { ...data.Payment };
                     }
                 }
@@ -123,5 +135,4 @@ export default {
     },
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>
