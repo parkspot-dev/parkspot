@@ -36,9 +36,24 @@
                 width="40"
                 v-slot="props"
                 sortable
+                searchable
             >
                 <div>
                     {{ props.row.Name }}
+                </div>
+            </b-table-column>
+
+            <b-table-column
+                cell-class="has-text-left"
+                field="Mobile"
+                label="VO Mobile"
+                width="40"
+                v-slot="props"
+                sortable
+                searchable
+            >
+                <div>
+                    {{ props.row.Mobile }}
                 </div>
             </b-table-column>
 
