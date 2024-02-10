@@ -21,7 +21,7 @@ export const PaymentStatus = Object.freeze({
     PaymentSuccess: 6,
     PaymentCancelled: 7,
     PaymentVoid: 8,
-    PaymentTransferred:9,
+    PaymentTransferred: 9,
 });
 
 const PaymentStatusLabel = [
@@ -34,7 +34,7 @@ const PaymentStatusLabel = [
     'Success',
     'Cancelled',
     'Void',
-    'Transferred'
+    'Transferred',
 ];
 
 /**
@@ -139,4 +139,29 @@ export const PaymentPeriodicityLabels = ['Once', 'Daily', 'Monthly'];
  */
 export function getPaymentPeriodicityLabel(paymentPeriodicity) {
     return getEnumLabel(PaymentPeriodicityLabels, paymentPeriodicity);
+}
+
+export const PaymentType = Object.freeze({
+    PaymentTypeNotSet: 0,
+    ConvenienceFee: 1,
+    MonthlyRentWithConvenienceFeeAndSecurityDeposit: 2,
+    MonthlyRentAndSecurityDeposit: 3,
+    MonthlyRent: 4,
+});
+
+export const PaymentTypeLabels = [
+    'PaymentTypeNotSet',
+    'ConvenienceFee',
+    'MonthlyRentWithConvenienceFeeAndSecurityDeposit',
+    'MonthlyRentAndSecurityDeposit',
+    'MonthlyRent',
+];
+
+/**
+ *
+ * @param {int} paymentType
+ * @return {string}: label for payment Type
+ */
+export function getPaymentTypeLabel(paymentType) {
+    return getEnumLabel(PaymentTypeLabels, paymentType);
 }
