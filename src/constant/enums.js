@@ -22,6 +22,7 @@ export const PaymentStatus = Object.freeze({
     PaymentCancelled: 7,
     PaymentVoid: 8,
     PaymentTransferred: 9,
+    PaymentExpired: 10,
 });
 
 const PaymentStatusLabel = [
@@ -35,6 +36,7 @@ const PaymentStatusLabel = [
     'Cancelled',
     'Void',
     'Transferred',
+    'Expired',
 ];
 
 /**
