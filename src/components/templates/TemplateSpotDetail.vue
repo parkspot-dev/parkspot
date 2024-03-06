@@ -104,6 +104,16 @@
                                     </AtomDatePicker>
                                 </td>
                             </tr>
+                            <tr>
+                                <td>Remark</td>
+                                <td>
+                                    <AtomTextarea
+                                        :value="spotDetails.Remark"
+                                        :rowNo="2"
+                                        @changed="changeRemark"
+                                    />
+                                </td>
+                            </tr>
                         </table>
                     </div>
                     <div class="goto-btn">
@@ -148,6 +158,7 @@ import AtomButton from '@/components/atoms/AtomButton.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import { getKYCStatusLabel } from '@/constant/enums';
 import { mapState } from 'vuex';
+import AtomTextarea from '../atoms/AtomTextarea.vue';
 
 export default {
     name: 'TemplateSpotDetail',
@@ -159,6 +170,7 @@ export default {
         InfographicSteps,
         AtomButton,
         AtomDatePicker,
+        AtomTextarea,
     },
     props: {
         isAdmin: {
@@ -184,6 +196,9 @@ export default {
         },
         changeLastCallDate(lastCallDate) {
             this.$emit('changeLastCallDate', lastCallDate);
+        },
+        changeRemark(remark) {
+            this.$emit('changeRemark', remark);
         },
         getKYCStatus(kycStatus) {
             return getKYCStatusLabel(kycStatus);

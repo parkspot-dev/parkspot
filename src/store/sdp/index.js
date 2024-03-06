@@ -1,5 +1,6 @@
 import { mayaClient } from '@/services/api';
 
+const UPDATE_SITE_ENDPOINT = '/owner/update-site';
 const state = {
     spotDetails: null,
     ownerInfoDetails: null,
@@ -81,18 +82,21 @@ const actions = {
         }
     },
 
-    async updateAvailability({ commit, state }, availableCount) {
-        const url = '/owner/update-site';
+    async updateAvailability({ state }, availableCount) {
         state.spotDetails.SlotsAvailable = availableCount;
         // Updating availabilty means agent connected with SO today.
         state.spotDetails.LastCallDate = new Date().toISOString();
-        await mayaClient.post(url, state.spotDetails);
+        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 
-    async updateLastCallDate({ commit, state }, lastCallDate) {
-        const url = '/owner/update-site';
+    async updateLastCallDate({ state }, lastCallDate) {
         state.spotDetails.LastCallDate = lastCallDate.toISOString();
-        await mayaClient.post(url, state.spotDetails);
+        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
+    },
+
+    async updateRemark({ state }, remark) {
+        state.spotDetails.Remark = remark;
+        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 };
 

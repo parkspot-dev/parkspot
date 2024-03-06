@@ -6,6 +6,7 @@
             @goToSearchPortal="goToSearchPortal"
             @changeAvailability="changeAvailability"
             @changeLastCallDate="changeLastCallDate"
+            @changeRemark="changeRemark"
         ></TemplateSpotDetail>
     </div>
 </template>
@@ -64,6 +65,7 @@ export default {
             'getSpotDetails',
             'updateAvailability',
             'updateLastCallDate',
+            'updateRemark',
         ]),
         ...mapActions('searchPortal', [
             'updateActiveTab',
@@ -117,6 +119,12 @@ export default {
         },
         async changeLastCallDate(lastCallDate) {
             await this.updateLastCallDate(lastCallDate);
+            await this.getSpotDetails({
+                spotId: this.spotId,
+            });
+        },
+        async changeRemark(remark) {
+            await this.updateRemark(remark);
             await this.getSpotDetails({
                 spotId: this.spotId,
             });
