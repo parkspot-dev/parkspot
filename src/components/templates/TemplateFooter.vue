@@ -229,7 +229,7 @@
                                                 name: 'Faq',
                                             }"
                                         >
-                                            Faq
+                                            FAQ
                                         </router-link>
                                     </p>
                                 </li>
