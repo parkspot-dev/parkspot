@@ -63,7 +63,7 @@
                             </div>
                         </li>
                         <li class="menu-item">
-                            <a href="/Faq" style="color:var(--parkspot-black); font-weight:500;">FAQ</a>
+                            <a href="/faq" style="color:var(--parkspot-black); font-weight:500;">FAQ</a>
                         </li>
                     </ul>
                 </div>
