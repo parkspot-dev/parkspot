@@ -62,6 +62,9 @@
                                 </ul>
                             </div>
                         </li>
+                        <li class="menu-item">
+                            <a href="/faq" style="color:var(--parkspot-black); font-weight:500;">FAQ</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- mweb phone link -->
