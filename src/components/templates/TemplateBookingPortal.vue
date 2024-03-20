@@ -426,9 +426,10 @@
                                 </span>
                                 <AtomIcon
                                     v-if="
-                                        getPaymentClass(payment.Status) !=
-                                        'payment-success'
+                                        getPaymentClass(payment.Status) ==
+                                        'payment-pending'
                                     "
+                                    :icon="'refresh'"
                                     type="primary"
                                     size="is-small"
                                     @click.native="
