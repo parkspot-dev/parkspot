@@ -429,7 +429,6 @@
                                         getPaymentClass(payment.Status) !=
                                         'payment-success'
                                     "
-                                    :icon="'refresh'"
                                     type="primary"
                                     size="is-small"
                                     @click.native="
