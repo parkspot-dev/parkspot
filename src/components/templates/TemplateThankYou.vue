@@ -41,7 +41,7 @@ export default {
     props: {
         msg: {
             type: String,
-            default: "We've registered the parkspot for you.",
+            default: "We are happy to receive your request. Our team is diligently working on your query and will get back within 12 hours.",
         },
     },
     emits: ['homeBtn'],
