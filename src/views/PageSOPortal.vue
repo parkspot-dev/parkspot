@@ -39,15 +39,6 @@ export default {
             try {
                 this.isLoading = true;
                 this.contact();
-                // await this.register();
-                // setTimeout(async () => {
-                //     await Promise.all([
-                //         this.login(),
-                //         this.kyc(),
-                //         this.contact(), // todo contact can be fired in parallel
-                //     ]);
-                // }, 1000);
-
                 this.isLoading = false;
                 this.$buefy.toast.open({
                     message: 'ParkSpot registered successfully!',
@@ -62,7 +53,10 @@ export default {
                     type: 'is-danger',
                     duration: 2000,
                 });
-                this.$router.push({ name: 'error' });
+                this.$router.push({
+                    name: 'error',
+                    params: { msg: error.DisplayMsg },
+                });
             }
         },
     },

@@ -30,7 +30,10 @@ export default {
         },
 
         getMsg() {
-            if (this.$route.params.msg != null) {
+            if (
+                this.$route.params.msg != null &&
+                this.$route.params.msg != ''
+            ) {
                 this.msg = this.$route.params.msg;
             }
         },
