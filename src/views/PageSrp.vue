@@ -71,9 +71,12 @@ export default {
             this.reRender++;
             this.isLoading = false;
         } catch (errorMsg) {
-            console.log(errorMsg);
             this.$router.push({
                 name: 'error',
+                params: {
+                    msg: errorMsg,
+                },
+                replace: true,
             });
         }
     },

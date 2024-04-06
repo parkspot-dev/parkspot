@@ -74,6 +74,9 @@ export default {
                         } else {
                             this.$router.push({
                                 name: 'error',
+                                params: {
+                                    msg: data.DisplayMsg,
+                                },
                             });
                         }
                     } else {
@@ -125,6 +128,11 @@ export default {
                 this.$router.push({
                     name: 'error',
                     params: { msg: 'Your order is still pending!' },
+                });
+            } else if (data.ErrorCode > 0) {
+                this.$router.push({
+                    name: 'error',
+                    params: { msg: data.DisplayMsg },
                 });
             } else {
                 this.$router.push({

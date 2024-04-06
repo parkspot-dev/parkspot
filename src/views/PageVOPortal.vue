@@ -50,7 +50,10 @@ export default {
                     type: 'is-danger',
                     duration: 2000,
                 });
-                this.$router.push({ name: 'error' });
+                this.$router.push({
+                    name: 'error',
+                    params: { msg: error.DisplayMsg },
+                });
             }
         },
     },
