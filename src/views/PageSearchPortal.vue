@@ -97,6 +97,11 @@ export default {
                 icon: 'alert-circle',
                 ariaRole: 'alertdialog',
                 ariaModal: true,
+                // reload page on error
+                // This will hamper interested VO section experience,
+                // because interested VO does not change the URL and
+                // reload the page will take to /search-portal
+                onConfirm: () => location.reload(),
             });
         },
         async searchRequestWithMobile(voMobile) {
