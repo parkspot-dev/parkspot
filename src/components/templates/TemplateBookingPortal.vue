@@ -406,9 +406,9 @@
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
                 </div>
-                <div v-if="currBookingDetails.Booking.Payments">
+                <div v-if="currBookingDetails.Payments">
                     <div
-                        v-for="payment in currBookingDetails.Booking.Payments"
+                        v-for="payment in currBookingDetails.Payments"
                         :key="payment.PaymentID"
                         class="row"
                     >
