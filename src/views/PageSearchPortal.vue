@@ -88,6 +88,17 @@ export default {
             'updateActiveTab',
             'updateSOLatLngInput',
         ]),
+        alertError(msg) {
+            this.$buefy.dialog.alert({
+                title: 'Error',
+                message: msg,
+                type: 'is-danger',
+                hasIcon: true,
+                icon: 'alert-circle',
+                ariaRole: 'alertdialog',
+                ariaModal: true,
+            });
+        },
         async searchRequestWithMobile(voMobile) {
             if (voMobile != '') {
                 this.$router.push({
@@ -108,11 +119,7 @@ export default {
             const response = await mayaClient.get(parkingRequestURL);
             this.isLoading = false;
             if (response.ErrorCode) {
-                this.$buefy.toast.open({
-                    message: response.DisplayMsg,
-                    type: 'is-danger',
-                    duration: 8000,
-                });
+                this.alertError(response.DisplayMsg);
                 return;
             }
             this.parkingRequests = response;
@@ -127,11 +134,7 @@ export default {
             );
             this.isLoading = false;
             if (parkingRequestList.ErrorCode) {
-                this.$buefy.toast.open({
-                    message: parkingRequestList.DisplayMsg,
-                    type: 'is-danger',
-                    duration: 6000,
-                });
+                this.alertError(parkingRequestList.DisplayMsg);
                 return;
             }
             this.intrestedVOList = parkingRequestList;
@@ -144,11 +147,7 @@ export default {
                     request,
                 );
                 if (response.ErrorCode) {
-                    this.$buefy.toast.open({
-                        message: response.DisplayMsg,
-                        type: 'is-danger',
-                        duration: 6000,
-                    });
+                    this.alertError(response.DisplayMsg);
                 } else {
                     this.$buefy.toast.open({
                         message: `Sucessfully updated!`,
@@ -158,12 +157,7 @@ export default {
                 }
             } catch (error) {
                 console.error({ error });
-
-                this.$buefy.toast.open({
-                    message: `Something went wrong!`,
-                    type: 'is-danger',
-                    duration: 2000,
-                });
+                this.alertError('Something went wrong!');
             }
 
             this.isLoading = false;
