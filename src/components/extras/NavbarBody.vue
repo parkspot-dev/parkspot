@@ -215,6 +215,11 @@
                                         </p>
                                         <b-icon icon="chevron-right"> </b-icon>
                                     </li>
+                                    <li class="scroll-item">
+                                        <p>
+                                            <a href="/faq" style="color: var(--parkspot-black); font-weight: 400;">FAQ</a>
+                                        </p>
+                                    </li>
                                 </ul>
                                 <template v-if="isAuthReady">
                                     <div v-if="!user">
