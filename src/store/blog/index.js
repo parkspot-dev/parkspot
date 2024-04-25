@@ -156,6 +156,46 @@ const state = {
             dateTime: '2023-12-16',
             component: 'OrganismBlogParkingInMallSocieties',
         },
+        {
+            id: "parking-problem-in-urban-areas" ,
+            title: "Parking Problem in Urban Areas",
+            author: 'Shravan Kumar',
+            author_img: require('@/assets/team/shravan.jpg'),
+            img: require('@/assets/blog/blog12.jpg'),
+            thumbnail: require('@/assets/blog/blog12-thumbnail.jpg'),
+            desc: `In the bustling landscape of urban areas, the mere act of finding a parking spot for 
+                your car can often feel like navigating a maze with no end in sight. The scarcity of parking 
+                spaces coupled .... `,
+            time: 'April 20, 2024',
+            dateTime: '2024-04-20',
+            component: 'OrganismBlogParkingProblemInUrbanAreas',
+        },
+        {
+            id: "future-of-parking" ,
+            title: "The Future of Parking: How Technology is Revolutionizing the Parking Industry",
+            author: 'Juhi Pandey',
+            author_img: require('@/assets/team/juhi.jpg'),
+            img: require('@/assets/blog/blog13.jpg'),
+            thumbnail: require('@/assets/blog/blog13-thumbnail.jpg'),
+            desc: `In the fast-paced world of urban living, the search for parking can often feel like a journey 
+                with no end in sight. However, with the rapid advancement of technology, the parking industry  .... `,
+            time: 'April 20, 2024',
+            dateTime: '2024-04-20',
+            component: 'OrganismBlogRevolutionizingTheParkingIndustry',
+        },
+        {
+            id: "parking-apps-in-india" ,
+            title: "Navigating the Concrete Jungle: Top 10 Smart Parking Apps in India",
+            author: 'Priyanka Singh',
+            author_img: require('@/assets/team/priyanka.jpg'),
+            img: require('@/assets/blog/blog14.jpg'),
+            thumbnail: require('@/assets/blog/blog14-thumbnail.jpg'),
+            desc: `In the hustle and bustle of India's urban landscape, finding a parking spot can often feel like a 
+                daunting task. However, with the rise of smart parking apps, the process has become more .... `,
+            time: 'April 20, 2024',
+            dateTime: '2024-04-20',
+            component: 'OrganismBlogSmartParkingAppsinIndia',
+        },
     ],
 };
 // getters
