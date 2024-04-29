@@ -74,6 +74,9 @@ import OrganismBlogDrivingChange from '../organisms/OrganismBlogDrivingChange';
 import OrganismBlogEmpoweringTheDrive from '../organisms/OrganismBlogEmpoweringTheDrive';
 import OrganismBlogSmartParkingSolutions from '../organisms/OrganismBlogSmartParkingSolutions';
 import OrganismBlogParkingInMallSocieties from '../organisms/OrganismBlogParkingInMallSocieties';
+import OrganismBlogParkingProblemInUrbanAreas from '../organisms/OrganismBlogParkingProblemInUrbanAreas';
+import OrganismBlogRevolutionizingTheParkingIndustry from '../organisms/OrganismBlogRevolutionizingTheParkingIndustry';
+import OrganismBlogSmartParkingAppsinIndia from '../organisms/OrganismBlogSmartParkingAppsinIndia';
 
 export default {
     name: 'TemplateBlogPost',
@@ -94,6 +97,9 @@ export default {
         OrganismBlogEmpoweringTheDrive,
         OrganismBlogSmartParkingSolutions,
         OrganismBlogParkingInMallSocieties,
+        OrganismBlogParkingProblemInUrbanAreas,
+        OrganismBlogRevolutionizingTheParkingIndustry,
+        OrganismBlogSmartParkingAppsinIndia,
     },
     props: {
         blog: {
