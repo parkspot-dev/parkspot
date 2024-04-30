@@ -6,8 +6,8 @@ const state = {
             title: 'Eliminating Traffic jams in India!',
             author: 'Nikhil Surya Mukhi',
             author_img: require('@/assets/team/nik.jpg'),
-            img: 'https://www.stevenvanbelleghem.com/wp-content/uploads/2020/04/Heavy-rains-lash-Delhi-NCR-traffic-snarls-at-many-places.jpg',
-            thumbnail: 'https://www.stevenvanbelleghem.com/wp-content/uploads/2020/04/Heavy-rains-lash-Delhi-NCR-traffic-snarls-at-many-places.jpg',
+            img: require('@/assets/blog/blog1.jpg'),
+            thumbnail: require('@/assets/blog/blog1-thumbnail.jpg'),
             desc: `In the recent years all over the globe production 
                 and demand for motor vehicles has increased dramatically.
                 Earlier motor vehicles...`,
@@ -21,7 +21,7 @@ const state = {
             author: 'Sujeet Kumar',
             author_img: require('@/assets/team/sujeet.jpg'),
             img: require('@/assets/blog/blog2.jpg'),
-            thumbnail: require('@/assets/blog/blog2.jpg'),
+            thumbnail: require('@/assets/blog/blog2-thumbnail.jpg'),
             desc: `Parking has been a major concern in major cities. Due
                 to fewer parking spaces, people have to spend a lot of time
                 searching for the...`,
@@ -35,7 +35,7 @@ const state = {
             author: 'Ishwar Kumar',
             author_img: require('@/assets/team/ish.jpg'),
             img: require('@/assets/blog/blog3.jpg'),
-            thumbnail: require('@/assets/blog/blog3.jpg'),
+            thumbnail: require('@/assets/blog/blog3-thumbnail.jpg'),
             desc: `Parking problems have always been an issue and this issue
                 has grown exponentially with the increase of population.
                 In order to tackl...`,
