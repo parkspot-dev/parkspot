@@ -67,6 +67,12 @@ export default {
     font-size: 4rem;
     font-weight: var(--semi-bold-font);
     text-align: center;
+
+    @media only screen and (max-width: 400px ) {
+        width: 330px;
+        min-width: 300px;
+        font-size: 2rem;
+    }
 }
 
 .custom-para {
