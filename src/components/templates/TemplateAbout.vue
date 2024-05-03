@@ -7,15 +7,15 @@
                 class="about-img"
             ></AtomImage>
             <div class="about-desc" data-aos="zoom-in">
-                <AtomHeading class="mb-3"> Why Choose Us? </AtomHeading>
-                <AtomParagraph class="mb-2">
+                <AtomHeading class="mb-3 ml-1"> Why Choose Us? </AtomHeading>
+                <AtomParagraph class="mb-2 ml-1 mr-1">
                     Comfortable parking experience. Brokerage free. Genuine
                     Owners. Ensured security of your vehicle. Available for
                     residents and visitors. Surveillance parking. Simple steps
                     to list property. Earn money on the go. Available on app and
                     website.
                 </AtomParagraph>
-                <AtomParagraph class="mb-6">
+                <AtomParagraph class="mb-6 ml-1 mr-1">
                     ParkSpot is part of this new initiative and incorporates
                     various features aimed at improving the parking experience
                     for residents and visitors. These will include removing the
@@ -94,8 +94,8 @@ export default {
     }
     .app-links {
         display: flex;
-        gap: 10px;
-        width: 300px;
+        gap: 8px;
+        width: 300px; 
     }
 }
 
