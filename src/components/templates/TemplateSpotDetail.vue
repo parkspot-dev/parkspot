@@ -266,6 +266,10 @@ hr {
         margin-left: 0px;
     }
 
+    @media only screen and (max-width: 540px) {
+        width: 335px;
+    }
+
     .title-container {
         display: flex;
         align-items: center;
