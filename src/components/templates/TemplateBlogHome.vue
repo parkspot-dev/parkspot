@@ -80,7 +80,6 @@ export default {
     gap: 56px;
 
     @media only screen and (max-width: 1024px) {
-        flex-direction: column;
         align-items: center;
     }
 }
