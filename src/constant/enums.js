@@ -23,6 +23,8 @@ export const PaymentStatus = Object.freeze({
     PaymentVoid: 8,
     PaymentTransferred: 9,
     PaymentExpired: 10,
+    FullRefund: 11,
+    PartialRefund: 12,
 });
 
 const PaymentStatusLabel = [
@@ -37,6 +39,8 @@ const PaymentStatusLabel = [
     'Void',
     'Transferred',
     'Expired',
+    'Full Refund',
+    'Partial Refund',
 ];
 
 /**
