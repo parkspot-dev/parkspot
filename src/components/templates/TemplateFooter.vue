@@ -19,7 +19,7 @@
                         </div>
                         <AtomParagraph class="pl-4 mb-5">
                             We provide the cheap and best parking spot in India.
-                            You can't park cheaper!
+                            Betcha, you can't park cheaper!
                         </AtomParagraph>
                         <div class="app-links">
                             <span class="pl-2">
