@@ -43,7 +43,7 @@ extend('phone', {
 
 extend('address', {
     validate: (value) => {
-        const addressRegex = new RegExp('^([a-zA-Z0-9\s,.-]{5,})$');
+        const addressRegex = new RegExp('([a-zA-Z0-9]{5,})$');
         if (value == '') return true;
         return addressRegex.test(value);
     },
