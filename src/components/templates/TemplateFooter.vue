@@ -233,6 +233,18 @@
                                         </router-link>
                                     </p>
                                 </li>
+                                <li>
+                                    <p>
+                                        <router-link
+                                            class="top-search-link"
+                                            :to="{
+                                                name: 'contactUs',
+                                            }"
+                                        >
+                                            Contact Us
+                                        </router-link>
+                                    </p>
+                                </li>
                             </ul>
                         </div>
                     </div>
