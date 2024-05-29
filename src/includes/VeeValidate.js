@@ -40,3 +40,11 @@ extend('phone', {
     },
     message: `The {_field_} is not valid.`,
 });
+
+extend('address', {
+    validate: (value) => {
+        const addressRegex = new RegExp(/^[a-zA-Z0-9\s,':.-]{5,}/);
+        return addressRegex.test(value);
+    },
+    message: `The {_field_} is not valid.`,
+});

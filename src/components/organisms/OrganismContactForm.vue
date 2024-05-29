@@ -81,7 +81,7 @@ export default {
                 fullname: 'required',
                 email: '',
                 cno: 'required|integer|phone',
-                addr: 'required',
+                addr: 'required|address',
             },
             CONTACT_FORM: FORM,
             isEnable: false,
