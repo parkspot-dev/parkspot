@@ -99,6 +99,7 @@
                                     <AtomDatePicker
                                         :assignedDate="spotDetails.LastCallDate"
                                         :size="'is-small'"
+                                        :focusedDate="new Date()"
                                         @changed="changeLastCallDate"
                                     >
                                     </AtomDatePicker>

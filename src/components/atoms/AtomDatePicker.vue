@@ -2,9 +2,10 @@
     <b-field>
         <b-datepicker
             v-model="date"
+            @input="onChange"
             placeholder="Click to select..."
             :date-formatter="istFormatter"
-            @input="onChange"
+            :focused-date="focusedDate"
             :size="size"
         >
         </b-datepicker>
@@ -23,9 +24,13 @@ export default {
             type: String,
             default: '',
         },
+        focusedDate: {
+            type: Date,
+        },
     },
     emits: ['changed'],
     data() {
+        console.log('sud: focused date', this.focusedDate);
         return {
             date:
                 this.assignedDate != ''
@@ -35,12 +40,13 @@ export default {
     },
     methods: {
         onChange(val) {
+            console.log('sud:: onchange ', val);
             this.$emit('changed', val);
         },
         istFormatter(date) {
             return new Intl.DateTimeFormat('en-US', {
                 timeZone: 'Asia/Kolkata',
-                dateStyle: 'medium'
+                dateStyle: 'medium',
             }).format(date);
         },
     },
