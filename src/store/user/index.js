@@ -200,14 +200,14 @@ const actions = {
             Name        : state.contactForm.fullname,
             Mobile      : state.contactForm.cno,
             EmailID     : state.contactForm.email,
-            Country     : state.locationDetails.locDetails.country,
-            State       : state.locationDetails.locDetails.state,
-            City        : state.locationDetails.locDetails.city,
-            Latitude    : state.locationDetails.lnglat.lat,
-            Longitude   : state.locationDetails.lnglat.lng,
             CarModel    : state.preference.carModel,
             Duration    : state.preference.minDur,
-            Landmark    : state.locationDetails.locDetails.city.country,
+            // Country     : state.locationDetails.locDetails.country,
+            // State       : state.locationDetails.locDetails.state,
+            // City        : state.locationDetails.locDetails.city,
+            // Latitude    : state.locationDetails.lnglat.lat,
+            // Longitude   : state.locationDetails.lnglat.lng,
+            // Landmark    : state.locationDetails.locDetails.city.country,
         };
 
         mayaClient.post('/owner/parking-request', req);

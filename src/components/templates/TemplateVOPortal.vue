@@ -30,7 +30,7 @@
                     ></OrganismContactForm>
                 </b-step-item>
 
-                <b-step-item
+                <!-- <b-step-item
                     step="2"
                     label="Step 2"
                     :clickable="isStepsClickable"
@@ -47,14 +47,14 @@
                         @formValidate="addressFormValidate"
                         :reRender="reRender"
                     ></OrganismAddressForm>
-                </b-step-item>
+                </b-step-item> -->
 
                 <b-step-item
-                    :step="3"
-                    label="Step 3"
+                    :step="2"
+                    label="Step 2"
                     :clickable="isStepsClickable"
                     disabled
-                    :type="btnStack[2] ? 'is-success' : 'is-warning'"
+                    :type="btnStack[1] ? 'is-success' : 'is-warning'"
                     ><AtomHeading
                         :level="headingLevel"
                         class="mb-5 has-text-centered"
@@ -62,7 +62,7 @@
                         Additional Details
                     </AtomHeading>
                     <OrganismPreferenceForm
-                        :formSubmitted="btnStack[2]"
+                        :formSubmitted="btnStack[1]"
                         @formValidate="preferenceFormValidate"
                     ></OrganismPreferenceForm>
                 </b-step-item>
@@ -103,7 +103,7 @@
 <script>
 import OrganismContactForm from '../organisms/OrganismContactForm.vue';
 import OrganismPreferenceForm from '../organisms/OrganismPreferenceForm.vue';
-import OrganismAddressForm from '../organisms/OrganismAddressForm.vue';
+// import OrganismAddressForm from '../organisms/OrganismAddressForm.vue';
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 export default {
@@ -111,7 +111,7 @@ export default {
     components: {
         OrganismContactForm,
         OrganismPreferenceForm,
-        OrganismAddressForm,
+        // OrganismAddressForm,
         AtomHeading,
         BodyWrapper,
     },
@@ -138,7 +138,7 @@ export default {
 
             nextEnable: null,
             nextText: 'Next',
-            btnStack: [false, false, false],
+            btnStack: [false, false],
             top: 0,
 
             reRender: 0,
@@ -165,6 +165,7 @@ export default {
             if (this.btnStack[this.top]) {
                 this.nextEnable.action();
                 this.top++;
+                this.nextText = 'Finish';
             }
         },
         kycFormValidate(val) {
@@ -174,14 +175,14 @@ export default {
                 this.top++;
             }
         },
-        addressFormValidate(val) {
-            this.btnStack.splice(this.top, 1, val);
-            if (this.btnStack[this.top]) {
-                this.nextEnable.action();
-                this.nextText = 'Finish';
-                this.top++;
-            }
-        },
+        // addressFormValidate(val) {
+        //     this.btnStack.splice(this.top, 1, val);
+        //     if (this.btnStack[this.top]) {
+        //         this.nextEnable.action();
+        //         this.nextText = 'Finish';
+        //         this.top++;
+        //     }
+        // },
         preferenceFormValidate(val) {
             this.btnStack.splice(this.top, 1, val);
             if (this.btnStack[this.top]) {
