@@ -5,24 +5,29 @@
             <div class="step-img"></div>
             <img src="../../assets/first.png" alt="find" />
             <p>Find a listing you like on ParkSpot.</p>
+            <img src="../../assets/dashed_down_arrow.jpg" />
         </div>
         <div class="infographic-second steps-container">
             <img src="../../assets/second.png" alt="find" />
             <p>Complete your registration.</p>
+            <img src="../../assets/dashed_down_arrow.jpg" />
         </div>
         <div class="infographic-third steps-container">
             <img src="../../assets/third.png" alt="find" />
             <p>Visit the parking and verify the facts.</p>
+            <img src="../../assets/dashed_down_arrow.jpg" />
         </div>
         <div class="infographic-fourth steps-container">
             <img src="../../assets/fourth.png" alt="find" />
             <p>
                 If you like the parking, process the rent and security deposit.
             </p>
+            <img src="../../assets/dashed_down_arrow.jpg" />
         </div>
         <div class="infographic-fifth steps-container">
             <img src="../../assets/fifth.png" alt="find" />
             <p>Start parking your vehicle.</p>
+            <img src="../../assets/dashed_down_arrow.jpg" />
         </div>
         <div class="infographic-sixth steps-container">
             <img src="../../assets/sixth.png" alt="find" />
@@ -48,7 +53,7 @@ $right-pos: 735px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 80px;
+        gap: 20px;
     }
 
     .infographic-bg-img {
