@@ -221,7 +221,7 @@
                             <strong> Rent: </strong>
                         </p>
                         <p>
-                            <strong> Base Amount: </strong>
+                            <strong> SO Charges: </strong>
                         </p>
                         <p><strong> Priodicity: </strong></p>
                     </div>
