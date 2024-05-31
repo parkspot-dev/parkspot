@@ -115,8 +115,8 @@ export const BookingStatusLabels = [
     'Refunded',
     'Unavailable',
     'Failed Error',
-    'Payment Pending (Rent + Conv fee due)',
-    'Visiting (Rent due)',
+    'Payment Pending (Rent + SD)',
+    'Visiting (Rent + SD)',
     'Schedule Visit (Conv fee due)',
     'Rent Due',
 ];
