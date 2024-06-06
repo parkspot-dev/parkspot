@@ -337,7 +337,6 @@ export default {
     text-transform: capitalize;
 }
 
-.custom-footer,
 .footer-para {
     color: #888d93;
     text-transform: none;
