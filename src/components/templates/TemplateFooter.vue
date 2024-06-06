@@ -17,8 +17,8 @@
                                 </figure>
                             </router-link>
                         </div>
-                        <AtomParagraph class="pl-4 mb-5">
-                            We provide the cheap and best parking spot in India.
+                        <AtomParagraph class="pl-4 mb-5 footer-para">
+                            We provide the cheap and best parking spot in India.<br/>
                             You can't park cheaper!
                         </AtomParagraph>
                         <div class="app-links">
@@ -347,6 +347,11 @@ export default {
 .top-search-link {
     color: #888d93;
     text-transform: capitalize;
+}
+
+.footer-para {
+    color: #888d93;
+    text-transform: none;
 }
 
 .top-search-link:hover {
