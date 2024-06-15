@@ -1,11 +1,14 @@
 <template>
-    <div id="app">
-        <Navbar></Navbar>
-        <OrganismLogin :is-show="loginModal"></OrganismLogin>
-        <main class="body-container">
-            <router-view :key="$route.fullPath" />
-        </main>
-        <TemplateFooter></TemplateFooter>
+    <div>
+        <div id="app">
+            <Navbar></Navbar>
+            <OrganismLogin :is-show="loginModal"></OrganismLogin>
+            <main class="body-container">
+                <router-view :key="$route.fullPath" />
+            </main>
+            <TemplateFooter></TemplateFooter>
+        </div>
+        <AtomChat />
     </div>
 </template>
 
@@ -13,6 +16,7 @@
 import TemplateFooter from './components/templates/TemplateFooter.vue';
 import Navbar from './components/extras/NavbarBody.vue';
 import OrganismLogin from './components/organisms/OrganismLogin.vue';
+import AtomChat from './components/atoms/AtomChat.vue';
 import { PAGE_TITLE } from '@/constant/constant';
 import { mapActions, mapState } from 'vuex';
 export default {
@@ -20,6 +24,7 @@ export default {
         TemplateFooter,
         Navbar,
         OrganismLogin,
+        AtomChat,
     },
     async created() {
         await this.getHelplineNumber();

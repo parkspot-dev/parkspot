@@ -2,7 +2,6 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import fbApp from './FB-App.vue';
 import Buefy from 'buefy';
 import './includes/VeeValidate';
 import AOS from 'aos';
@@ -45,13 +44,3 @@ const app = new Vue({
     render: (h) => h(App),
 });
 app.$mount('#app');
-
-// fb chat app created and mounted via
-// async call with 5 sec after the main app
-const fb = new Vue({
-    render: (h) => h(fbApp),
-});
-
-setTimeout(() => {
-    fb.$mount('#fb-app');
-}, 5000);
