@@ -5,7 +5,7 @@
             target="_blank"
         >
             <img
-                src="../../assets/WhatsApp_icon.png"
+                src="../../assets/wa-icon.png"
                 alt="chat-icon"
                 class="chat-icon"
             />
