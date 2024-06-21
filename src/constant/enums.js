@@ -121,6 +121,14 @@ export const BookingStatusLabels = [
     'Rent Due',
 ];
 
+export const AgentListLabels = [
+    'Sud',
+    'Nitya',
+    'Ish',
+    'Preeti',
+    'Navneet',
+];
+
 /**
  *
  * @param {int} bookingStatus
@@ -128,6 +136,15 @@ export const BookingStatusLabels = [
  */
 export function getBookingStatusLabel(bookingStatus) {
     return getEnumLabel(BookingStatusLabels, bookingStatus);
+}
+
+/**
+ * 
+ * @param {int} agentList
+ * @return {string}: label for agent list
+ */
+export function getAgentListLabels(agentList) {
+    return getEnumLabel(AgentListLabels, agentList);
 }
 
 export const PaymentPeriodicity = Object.freeze({

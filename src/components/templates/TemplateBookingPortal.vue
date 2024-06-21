@@ -127,6 +127,10 @@
                         <p>
                             <strong> End Date:</strong>
                         </p>
+
+                        <p>
+                            <strong> Agent:</strong>
+                        </p>
                     </div>
                     <div class="value-col">
                         <p>
@@ -175,6 +179,29 @@
                             {{
                                 getFormattedDate(
                                     currBookingDetails.Booking.EndTime,
+                                )
+                            }}
+                        </p>
+                        <div
+                            v-if="editField === 'Booking Details'"
+                            class="select"
+                        >
+                            <select v-model="currBookingDetails.Booking.Agent">
+                                <option
+                                    v-for="(
+                                        label, index
+                                    ) in agentListLabels"
+                                    :key="label"
+                                    :value="index"
+                                >
+                                    {{ label }}
+                                </option>
+                            </select>
+                        </div>
+                        <p v-else>
+                            {{
+                                getAgentListLabels(
+                                    currBookingDetails.Booking.Agent,
                                 )
                             }}
                         </p>
@@ -456,6 +483,8 @@ import {
     getBookingStatusLabel,
     getPaymentPeriodicityLabel,
     BookingStatusLabels,
+    AgentListLabels,
+    getAgentListLabels,
     PaymentPeriodicityLabels,
 } from '@/constant/enums';
 import AtomButton from '../atoms/AtomButton.vue';
@@ -482,6 +511,7 @@ export default {
             currBookingDetails: null,
             bookingStatusLabels: BookingStatusLabels,
             paymentPeriodicityLabels: PaymentPeriodicityLabels,
+            agentListLabels: AgentListLabels,
         };
     },
     beforeMount() {
@@ -513,6 +543,9 @@ export default {
         },
         getBookingStatusLabel(bookingStatus) {
             return getBookingStatusLabel(bookingStatus);
+        },
+        getAgentListLabels(agent) {
+            return getAgentListLabels(agent);
         },
 
         getPaymentClass(status) {
