@@ -7,21 +7,16 @@
                 class="about-img"
             ></AtomImage>
             <div class="about-desc" data-aos="zoom-in">
-                <AtomHeading class="mb-3 ml-1"> Why Choose Us? </AtomHeading>
+                <AtomHeading class="mb-3 ml-1">Company Overview:</AtomHeading>
                 <AtomParagraph class="mb-2 ml-1 mr-1">
-                    Comfortable parking experience. Brokerage free. Genuine
-                    Owners. Ensured security of your vehicle. Available for
-                    residents and visitors. Surveillance parking. Simple steps
-                    to list property. Earn money on the go. Available on app and
-                    website.
+                    Welcome to ParkSpot, your ultimate destination for hassle-free monthly car parking solutions. At ParkSpot, our mission is to revolutionize the parking experience by providing convenient and reliable monthly car parking services. We value efficiency, reliability, and customer satisfaction above all else.
                 </AtomParagraph>
-                <AtomParagraph class="mb-6 ml-1 mr-1">
-                    ParkSpot is part of this new initiative and incorporates
-                    various features aimed at improving the parking experience
-                    for residents and visitors. These will include removing the
-                    need for entry barriers at car park entrances and exits for
-                    a seamless flow of traffic, as vehicle plates will be
-                    registered via cameras.
+                <AtomHeading class="mb-3 ml-1">Our Services:</AtomHeading>
+                <AtomParagraph class="mb-2 ml-1 mr-1">
+                    ParkSpot offers a range of monthly car parking services designed to meet your needs. With our user-friendly platform, finding and booking a parking spot is quick and easy. Experience the convenience and benefits of secure parking tailored to your requirements.
+                </AtomParagraph>
+                <AtomParagraph class="mb-2 ml-1 mr-1">
+                Let's get started and <a href="/get-parking-spot">get your Parking Spot</a> or <a href="/register-parking-spot">register your Parking Spot</a> with your parking companion.
                 </AtomParagraph>
                 <div class="about-links-container">
                     <div class="about-links">
