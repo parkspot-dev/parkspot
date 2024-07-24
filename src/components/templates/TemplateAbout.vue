@@ -7,14 +7,16 @@
                 class="about-img"
             ></AtomImage>
             <div class="about-desc" data-aos="zoom-in">
-                <AtomHeading class="mb-3 ml-1">Company Overview:</AtomHeading>
+                <AtomHeading class="mb-3 ml-1" level="h3">Company Overview:</AtomHeading>
                 <AtomParagraph class="mb-2 ml-1 mr-1">
                     Welcome to ParkSpot, your ultimate destination for hassle-free monthly car parking solutions. At ParkSpot, our mission is to revolutionize the parking experience by providing convenient and reliable monthly car parking services. We value efficiency, reliability, and customer satisfaction above all else.
                 </AtomParagraph>
-                <AtomHeading class="mb-3 ml-1">Our Services:</AtomHeading>
+                <hr />
+                <AtomHeading class="mb-3 ml-1" level="h3">Our Services:</AtomHeading>
                 <AtomParagraph class="mb-2 ml-1 mr-1">
                     ParkSpot offers a range of monthly car parking services designed to meet your needs. With our user-friendly platform, finding and booking a parking spot is quick and easy. Experience the convenience and benefits of secure parking tailored to your requirements.
                 </AtomParagraph>
+                <br/>
                 <AtomParagraph class="mb-2 ml-1 mr-1">
                 Let's get started and <a href="/get-parking-spot">get your Parking Spot</a> or <a href="/register-parking-spot">register your Parking Spot</a> with your parking companion.
                 </AtomParagraph>
