@@ -5,17 +5,21 @@
             <AtomButton @click.native="getPaymentLink">
                 Generate Payment Link
             </AtomButton>
+
+            <select v-model="selectedAgent">
+                <option disabled value="">Select agent</option>
+                <option v-for="(label, index) in agents" :key="label" :value="index">
+                    {{ label }}
+                </option>
+            </select>
+
         </div>
         <div class="payment-link-detail-container" v-if="paymentDetails">
             <p>
                 {{ paymentDetails.PayUrl }}
             </p>
             <AtomTooltip :label="toolTipLabel">
-                <AtomIcon
-                    class="copy-icon"
-                    :icon="'content-copy'"
-                    @click.native="copyUrl"
-                ></AtomIcon>
+                <AtomIcon class="copy-icon" :icon="'content-copy'" @click.native="copyUrl"></AtomIcon>
             </AtomTooltip>
         </div>
         <!---  Booking details-->
@@ -24,27 +28,15 @@
                 <h3 class="sub-heading">Booking Details</h3>
                 <div class="action-group">
                     <span class="edit-icon">
-                        <AtomIcon
-                            @click.native="enableEdit('Booking Details')"
-                            :icon="'pencil'"
-                            size=""
-                        >
+                        <AtomIcon @click.native="enableEdit('Booking Details')" :icon="'pencil'" size="">
                         </AtomIcon>
                     </span>
                     <span class="save-icon">
-                        <AtomIcon
-                            @click.native="saveField"
-                            :icon="'content-save-outline'"
-                            size=""
-                        >
+                        <AtomIcon @click.native="saveField" :icon="'content-save-outline'" size="">
                         </AtomIcon>
                     </span>
                     <span class="cancel-icon">
-                        <AtomIcon
-                            @click.native="cancelField"
-                            :icon="'close'"
-                            size=""
-                        >
+                        <AtomIcon @click.native="cancelField" :icon="'close'" size="">
                         </AtomIcon>
                     </span>
                 </div>
@@ -75,18 +67,11 @@
                                 {{ currBookingDetails.Booking.SiteID }}
                             </p>
                         </a>
-                        <div
-                            v-if="editField === 'Booking Details'"
-                            class="select"
-                        >
+                        <div v-if="editField === 'Booking Details'" class="select">
                             <select v-model="currBookingDetails.Booking.Status">
-                                <option
-                                    v-for="(
+                                <option v-for="(
                                         label, index
-                                    ) in bookingStatusLabels"
-                                    :key="label"
-                                    :value="index"
-                                >
+                                    ) in bookingStatusLabels" :key="label" :value="index">
                                     {{ label }}
                                 </option>
                             </select>
@@ -98,15 +83,9 @@
                                 )
                             }}
                         </p>
-                        <span
-                            class="input-field"
-                            v-if="editField === 'Booking Details'"
-                        >
-                            <AtomInput
-                                :size="'is-small'"
-                                type="text"
-                                v-model="currBookingDetails.Booking.Remark"
-                            ></AtomInput>
+                        <span class="input-field" v-if="editField === 'Booking Details'">
+                            <AtomInput :size="'is-small'" type="text" v-model="currBookingDetails.Booking.Remark">
+                            </AtomInput>
                         </span>
                         <p v-else>
                             {{ currBookingDetails.Booking.Remark }}
@@ -136,18 +115,9 @@
                                 )
                             }}
                         </p>
-                        <div
-                            class="input-field"
-                            v-if="editField === 'Booking Details'"
-                        >
-                            <AtomDatePicker
-                                :size="'is-small'"
-                                :assignedDate="
-                                    currBookingDetails.Booking.StartTime
-                                "
-                                class="column-width"
-                                @changed="onStartDateUpdate"
-                            >
+                        <div class="input-field" v-if="editField === 'Booking Details'">
+                            <AtomDatePicker :size="'is-small'" :assignedDate="currBookingDetails.Booking.StartTime
+                                " class="column-width" @changed="onStartDateUpdate">
                             </AtomDatePicker>
                         </div>
                         <p v-else>
@@ -157,18 +127,9 @@
                                 )
                             }}
                         </p>
-                        <div
-                            class="input-field"
-                            v-if="editField === 'Booking Details'"
-                        >
-                            <AtomDatePicker
-                                :size="'is-small'"
-                                :assignedDate="
-                                    currBookingDetails.Booking.EndTime
-                                "
-                                class="column-width"
-                                @changed="onEndDateUpdate"
-                            >
+                        <div class="input-field" v-if="editField === 'Booking Details'">
+                            <AtomDatePicker :size="'is-small'" :assignedDate="currBookingDetails.Booking.EndTime
+                                " class="column-width" @changed="onEndDateUpdate">
                             </AtomDatePicker>
                         </div>
                         <p v-else>
@@ -189,27 +150,15 @@
                 <h3 class="sub-heading">Rent Details</h3>
                 <div class="action-group">
                     <span class="edit-icon">
-                        <AtomIcon
-                            @click.native="enableEdit('Rent Details')"
-                            :icon="'pencil'"
-                            size=""
-                        >
+                        <AtomIcon @click.native="enableEdit('Rent Details')" :icon="'pencil'" size="">
                         </AtomIcon>
                     </span>
                     <span class="save-icon">
-                        <AtomIcon
-                            @click.native="saveField"
-                            :icon="'content-save-outline'"
-                            size=""
-                        >
+                        <AtomIcon @click.native="saveField" :icon="'content-save-outline'" size="">
                         </AtomIcon>
                     </span>
                     <span class="cancel-icon">
-                        <AtomIcon
-                            @click.native="cancelField"
-                            :icon="'close'"
-                            size=""
-                        >
+                        <AtomIcon @click.native="cancelField" :icon="'close'" size="">
                         </AtomIcon>
                     </span>
                 </div>
@@ -226,50 +175,26 @@
                         <p><strong> Priodicity: </strong></p>
                     </div>
                     <div class="value-col">
-                        <div
-                            class="input-field"
-                            v-if="editField === 'Rent Details'"
-                        >
-                            <AtomInput
-                                :size="'is-small'"
-                                type="number"
-                                v-model.number="currBookingDetails.Booking.Rent"
-                            ></AtomInput>
+                        <div class="input-field" v-if="editField === 'Rent Details'">
+                            <AtomInput :size="'is-small'" type="number"
+                                v-model.number="currBookingDetails.Booking.Rent"></AtomInput>
                         </div>
                         <p v-else>
                             {{ currBookingDetails.Booking.Rent }}
                         </p>
-                        <div
-                            class="input-field"
-                            v-if="editField === 'Rent Details'"
-                        >
-                            <AtomInput
-                                :size="'is-small'"
-                                type="number"
-                                v-model.number="
-                                    currBookingDetails.Booking.BaseAmount
-                                "
-                            ></AtomInput>
+                        <div class="input-field" v-if="editField === 'Rent Details'">
+                            <AtomInput :size="'is-small'" type="number" v-model.number="currBookingDetails.Booking.BaseAmount
+                                "></AtomInput>
                         </div>
                         <p v-else>
                             {{ currBookingDetails.Booking.BaseAmount }}
                         </p>
-                        <div
-                            class="input-field"
-                            v-if="editField === 'Rent Details'"
-                        >
-                            <select
-                                v-model="
-                                    currBookingDetails.Booking.PaymentPeriod
-                                "
-                            >
-                                <option
-                                    v-for="(
+                        <div class="input-field" v-if="editField === 'Rent Details'">
+                            <select v-model="currBookingDetails.Booking.PaymentPeriod
+                                ">
+                                <option v-for="(
                                         label, index
-                                    ) in paymentPeriodicityLabels"
-                                    :key="label"
-                                    :value="index"
-                                >
+                                    ) in paymentPeriodicityLabels" :key="label" :value="index">
                                     {{ label }}
                                 </option>
                             </select>
@@ -296,47 +221,23 @@
                         </p>
                     </div>
                     <div class="value-col">
-                        <div
-                            class="input-field"
-                            v-if="editField === 'Rent Details'"
-                        >
-                            <AtomInput
-                                :size="'is-small'"
-                                type="number"
-                                v-model.number="
-                                    currBookingDetails.Booking.ConvenienceFee
-                                "
-                            ></AtomInput>
+                        <div class="input-field" v-if="editField === 'Rent Details'">
+                            <AtomInput :size="'is-small'" type="number" v-model.number="currBookingDetails.Booking.ConvenienceFee
+                                "></AtomInput>
                         </div>
                         <p v-else>
                             {{ currBookingDetails.Booking.ConvenienceFee }}
                         </p>
-                        <div
-                            class="input-field"
-                            v-if="editField === 'Rent Details'"
-                        >
-                            <AtomInput
-                                :size="'is-small'"
-                                type="number"
-                                v-model.number="
-                                    currBookingDetails.Booking.SecurityDeposit
-                                "
-                            ></AtomInput>
+                        <div class="input-field" v-if="editField === 'Rent Details'">
+                            <AtomInput :size="'is-small'" type="number" v-model.number="currBookingDetails.Booking.SecurityDeposit
+                                "></AtomInput>
                         </div>
                         <p v-else>
                             {{ currBookingDetails.Booking.SecurityDeposit }}
                         </p>
-                        <div
-                            class="input-field"
-                            v-if="editField === 'Rent Details'"
-                        >
-                            <AtomInput
-                                :size="'is-small'"
-                                type="number"
-                                v-model.number="
-                                    currBookingDetails.Booking.RentCycle
-                                "
-                            ></AtomInput>
+                        <div class="input-field" v-if="editField === 'Rent Details'">
+                            <AtomInput :size="'is-small'" type="number" v-model.number="currBookingDetails.Booking.RentCycle
+                                "></AtomInput>
                         </div>
                         <p v-else>
                             {{ currBookingDetails.Booking.RentCycle }}
@@ -407,35 +308,22 @@
                     <div class="cell"><strong> Amount </strong></div>
                 </div>
                 <div v-if="currBookingDetails.Payments">
-                    <div
-                        v-for="payment in currBookingDetails.Payments"
-                        :key="payment.PaymentID"
-                        class="row"
-                    >
+                    <div v-for="payment in currBookingDetails.Payments" :key="payment.PaymentID" class="row">
                         <div class="cell">{{ payment.PaymentID }}</div>
                         <div class="cell">
                             {{ getFormattedDate(payment.UpdatedAt) }}
                         </div>
                         <div class="cell">
-                            <div
-                                class="status-indicator"
-                                v-bind:class="getPaymentClass(payment.Status)"
-                            >
+                            <div class="status-indicator" v-bind:class="getPaymentClass(payment.Status)">
                                 <span class="status-label">
                                     {{ getPaymentStatusLabel(payment.Status) }}
                                 </span>
-                                <AtomIcon
-                                    v-if="
-                                        getPaymentClass(payment.Status) ==
-                                        'payment-pending'
-                                    "
-                                    :icon="'refresh'"
-                                    type="primary"
-                                    size="is-small"
-                                    @click.native="
-                                        refreshPaymentStatus(payment.PaymentID)
-                                    "
-                                >
+                                <AtomIcon v-if="
+                                    getPaymentClass(payment.Status) ==
+                                    'payment-pending'
+                                " :icon="'refresh'" type="primary" size="is-small" @click.native="
+                                    refreshPaymentStatus(payment.PaymentID)
+                                    ">
                                 </AtomIcon>
                             </div>
                         </div>
@@ -478,6 +366,7 @@ export default {
     data() {
         return {
             toolTipLabel: 'Copy payment url!',
+            selectedAgent: "",
             editField: null,
             currBookingDetails: null,
             bookingStatusLabels: BookingStatusLabels,
@@ -493,7 +382,7 @@ export default {
         },
     },
     computed: {
-        ...mapState('bookingPortal', ['bookingDetails', 'paymentDetails']),
+        ...mapState('bookingPortal', ['bookingDetails', 'paymentDetails', 'agents']),
         sdpURL() {
             return this.$router.resolve({
                 name: 'spot-detail',
@@ -630,22 +519,28 @@ export default {
     border: 1px solid #cccccc;
     border-radius: 5px;
     background: var(--parkspot-white);
+
     .card-top {
         position: relative;
+
         .action-group {
             position: absolute;
             top: 0;
             right: 0;
+
             span {
                 margin-left: 12px;
                 cursor: pointer;
             }
+
             .edit-icon {
                 color: var(--secondary-color);
             }
+
             .save-icon {
                 color: var(--parkspot-green);
             }
+
             .cancel-icon {
                 color: var(--parkspot-red);
             }
@@ -684,6 +579,7 @@ export default {
             margin-bottom: 16px;
         }
     }
+
     .value-col {
         width: 70%;
         text-align: left;
@@ -692,6 +588,7 @@ export default {
             margin-bottom: 16px;
         }
     }
+
     .edit-col {
         width: 50%;
         text-align: left;
@@ -708,9 +605,11 @@ export default {
         .edit-icon {
             color: var(--primary-color);
         }
+
         .save-icon {
             color: var(--parkspot-green);
         }
+
         .cancel-icon {
             color: var(--parkspot-red);
         }
@@ -762,6 +661,7 @@ export default {
     .payment-failed {
         background-color: #ffa5a5;
         min-width: 132px;
+
         .status-label {
             color: red;
         }
@@ -770,6 +670,7 @@ export default {
     .payment-pending {
         background-color: #fce2c3;
         min-width: 132px;
+
         .status-label {
             color: orange;
         }

@@ -1,4 +1,6 @@
 import { mayaClient } from '@/services/api';
+import { getValueFromFirebase } from '../../firebase';
+
 
 const state = {
     bookingDetails: null,
@@ -31,6 +33,7 @@ const state = {
         "Remark": "Booking remark"
       }] */
     activeBookings: [],
+    agents: {},
 };
 
 const getters = {};
@@ -57,10 +60,21 @@ const mutations = {
     'set-active-bookings'(state, activeBookings) {
         state.activeBookings = activeBookings;
     },
+
+    'set-agent-list'(state, agents) {
+        debugger;
+        state.agents = agents;
+    }
 };
 
 const actions = {
+
+    async getAgents({ commit }) {
+        commit('set-agent-list', await getValueFromFirebase('agents'));
+    },
+
     async getBookingDetails({ commit }, bookingId) {
+        console.log('getBookingDetails is called');
         commit('set-loading', true);
         const res = await mayaClient.get(
             '/booking/details?booking-id=' + bookingId,

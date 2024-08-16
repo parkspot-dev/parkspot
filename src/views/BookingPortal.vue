@@ -46,6 +46,7 @@ export default {
     },
     async created() {
         if (this.$route.query['bookingId'] != undefined) {
+            this.getAgents();
             this.getBookingDetails(this.$route.query['bookingId']);
         } else {
             this.getActiveBooking();
@@ -68,6 +69,7 @@ export default {
             'getActiveBooking',
             'updateBookingDetails',
             'refreshPaymentStatus',
+            'getAgents'
         ]),
         searchBooking(bookingId) {
             this.$router.push({
