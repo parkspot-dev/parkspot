@@ -374,6 +374,7 @@ export default {
                 { id: 'Ish', name: 'Ish' },
                 { id: 'Sud', name: 'Sud' },
                 { id: 'Raginee', name: 'Raginee' },
+                { id: 'Sejal', name: 'Sejal' },
             ],
 
             statusList: [
