@@ -6,12 +6,7 @@
                 Generate Payment Link
             </AtomButton>
 
-            <select v-model="selectedAgent">
-                <option disabled value="">Select agent</option>
-                <option v-for="(label, index) in agents" :key="label" :value="index">
-                    {{ label }}
-                </option>
-            </select>
+
 
         </div>
         <div class="payment-link-detail-container" v-if="paymentDetails">
@@ -106,6 +101,8 @@
                         <p>
                             <strong> End Date:</strong>
                         </p>
+
+                        <p><strong> Agent </strong></p>
                     </div>
                     <div class="value-col">
                         <p>
@@ -137,6 +134,20 @@
                                 getFormattedDate(
                                     currBookingDetails.Booking.EndTime,
                                 )
+                            }}
+                        </p>
+
+                        <div class="select" v-if="editField === 'Booking Details'">
+                            <select v-model="selectedAgent">
+                                <option disabled value="">Select agent</option>
+                                <option v-for="(label, index) in agents" :key="label" :value="index">
+                                    {{ label.FullName.split(' ')[0] }}
+                                </option>
+                            </select>
+                        </div>
+                        <p v-else>
+                            {{
+                                currBookingDetails.Booking.agents
                             }}
                         </p>
                     </div>
@@ -366,7 +377,6 @@ export default {
     data() {
         return {
             toolTipLabel: 'Copy payment url!',
-            selectedAgent: "",
             editField: null,
             currBookingDetails: null,
             bookingStatusLabels: BookingStatusLabels,
@@ -382,6 +392,17 @@ export default {
         },
     },
     computed: {
+        selectedAgent: {
+            get() {
+                // If no agent is selected, default to empty string
+                return this.currBookingDetails.Booking.Agents || "";
+            },
+            set(value) {
+                debugger;
+                this.currBookingDetails.Booking.Agents = this.agents[value].FullName.split(' ')[0];
+                
+            }
+        },
         ...mapState('bookingPortal', ['bookingDetails', 'paymentDetails', 'agents']),
         sdpURL() {
             return this.$router.resolve({
