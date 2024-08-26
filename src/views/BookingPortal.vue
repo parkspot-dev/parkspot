@@ -69,7 +69,7 @@ export default {
             'getActiveBooking',
             'updateBookingDetails',
             'refreshPaymentStatus',
-            'getAgents'
+            'getAgents',
         ]),
         searchBooking(bookingId) {
             this.$router.push({

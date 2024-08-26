@@ -1,6 +1,5 @@
 import { mayaClient } from '@/services/api';
 
-
 const state = {
     bookingDetails: null,
     hasError: false,
@@ -61,15 +60,14 @@ const mutations = {
     },
 
     'set-agent-list'(state, agents) {
-        state.agents = agents.filter(agent => {
+        state.agents = agents.filter((agent) => {
             const fullName = agent.FullName.toLowerCase();
-            return !(fullName.startsWith("[") && fullName.endsWith("]"));
+            return !(fullName.startsWith('[') && fullName.endsWith(']'));
         });
-    }
+    },
 };
 
 const actions = {
-
     async getAgents({ commit }) {
         commit('set-agent-list', await mayaClient.get('/auth/user/agents'));
     },
