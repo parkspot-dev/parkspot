@@ -61,8 +61,10 @@ const mutations = {
     },
 
     'set-agent-list'(state, agents) {
-        debugger;
-        state.agents = agents;
+        state.agents = agents.filter(agent => {
+            const fullName = agent.FullName.toLowerCase();
+            return !(fullName.startsWith("[") && fullName.endsWith("]"));
+        });
     }
 };
 
