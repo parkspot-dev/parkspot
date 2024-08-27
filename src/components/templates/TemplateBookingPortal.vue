@@ -562,6 +562,9 @@ export default {
         },
 
         getAgentName(agents, agentUserName) {
+            if (agentUserName === '') {
+                return '';
+            }
             return agents
                 .find((item) => item.UserName == agentUserName)
                 .FullName.split(' ')[0];

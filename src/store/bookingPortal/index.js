@@ -118,7 +118,6 @@ const actions = {
     },
 
     async updateBookingDetails({ commit, dispatch }, reqBody) {
-        debugger;
         commit('set-loading', true);
         const res = await mayaClient.post('/booking/update', reqBody);
         if (res.Success) {
