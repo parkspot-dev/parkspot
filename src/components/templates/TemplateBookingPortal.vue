@@ -190,7 +190,7 @@
                                 <option disabled value="">Select agent</option>
                                 <option
                                     v-for="(label, index) in agents"
-                                    :key="label"
+                                    :key="label.UserName"
                                     :value="index"
                                 >
                                     {{ label.FullName.split(' ')[0] }}
@@ -198,7 +198,13 @@
                             </select>
                         </div>
                         <p v-else>
-                            {{ currBookingDetails.Booking.agents }}
+                            {{
+                                getAgentName(
+                                    agents,
+                                    this.currBookingDetails.Booking
+                                        .AgentUserName,
+                                )
+                            }}
                         </p>
                     </div>
                 </div>
@@ -515,17 +521,6 @@ export default {
         },
     },
     computed: {
-        selectedAgent: {
-            get() {
-                // If no agent is selected, default to empty string
-                return this.currBookingDetails.Booking.Agents || '';
-            },
-            set(value) {
-                debugger;
-                this.currBookingDetails.Booking.Agents =
-                    this.agents[value].FullName.split(' ')[0];
-            },
-        },
         ...mapState('bookingPortal', [
             'bookingDetails',
             'paymentDetails',
@@ -539,6 +534,20 @@ export default {
                 },
             }).href;
         },
+        selectedAgent: {
+            get() {
+                const index = this.agents.findIndex(
+                    (item) =>
+                        item.UserName ===
+                        this.currBookingDetails.Booking.AgentUserName,
+                );
+                return index >= 0 ? index : '';
+            },
+            set(value) {
+                this.currBookingDetails.Booking.AgentUserName =
+                    this.agents[value].UserName;
+            },
+        },
     },
 
     methods: {
@@ -550,6 +559,12 @@ export default {
         },
         getBookingStatusLabel(bookingStatus) {
             return getBookingStatusLabel(bookingStatus);
+        },
+
+        getAgentName(agents, agentUserName) {
+            return agents
+                .find((item) => item.UserName == agentUserName)
+                .FullName.split(' ')[0];
         },
 
         getPaymentClass(status) {
