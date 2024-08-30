@@ -60,6 +60,7 @@ const mutations = {
     },
 
     'set-agent-list'(state, agents) {
+        // filtering agent list to filter out the one which has fullname enclosed within []
         state.agents = agents.filter((agent) => {
             const fullName = agent.FullName.toLowerCase();
             return !(fullName.startsWith('[') && fullName.endsWith(']'));
@@ -73,7 +74,6 @@ const actions = {
     },
 
     async getBookingDetails({ commit }, bookingId) {
-        console.log('getBookingDetails is called');
         commit('set-loading', true);
         const res = await mayaClient.get(
             '/booking/details?booking-id=' + bookingId,
