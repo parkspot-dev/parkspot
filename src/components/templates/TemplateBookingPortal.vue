@@ -106,7 +106,8 @@
                                 :size="'is-small'"
                                 type="text"
                                 v-model="currBookingDetails.Booking.Remark"
-                            ></AtomInput>
+                            >
+                            </AtomInput>
                         </span>
                         <p v-else>
                             {{ currBookingDetails.Booking.Remark }}
@@ -127,6 +128,8 @@
                         <p>
                             <strong> End Date:</strong>
                         </p>
+
+                        <p><strong> Agent </strong></p>
                     </div>
                     <div class="value-col">
                         <p>
@@ -175,6 +178,31 @@
                             {{
                                 getFormattedDate(
                                     currBookingDetails.Booking.EndTime,
+                                )
+                            }}
+                        </p>
+
+                        <div
+                            class="select"
+                            v-if="editField === 'Booking Details'"
+                        >
+                            <select v-model="selectedAgent">
+                                <option disabled value="">Select agent</option>
+                                <option
+                                    v-for="(label, index) in agents"
+                                    :key="label.UserName"
+                                    :value="index"
+                                >
+                                    {{ label.FullName.split(' ')[0] }}
+                                </option>
+                            </select>
+                        </div>
+                        <p v-else>
+                            {{
+                                getAgentName(
+                                    agents,
+                                    this.currBookingDetails.Booking
+                                        .AgentUserName,
                                 )
                             }}
                         </p>
@@ -493,7 +521,11 @@ export default {
         },
     },
     computed: {
-        ...mapState('bookingPortal', ['bookingDetails', 'paymentDetails']),
+        ...mapState('bookingPortal', [
+            'bookingDetails',
+            'paymentDetails',
+            'agents',
+        ]),
         sdpURL() {
             return this.$router.resolve({
                 name: 'spot-detail',
@@ -501,6 +533,20 @@ export default {
                     spotId: this.currBookingDetails.Booking.SiteID,
                 },
             }).href;
+        },
+        selectedAgent: {
+            get() {
+                const index = this.agents.findIndex(
+                    (item) =>
+                        item.UserName ===
+                        this.currBookingDetails.Booking.AgentUserName,
+                );
+                return index >= 0 ? index : '';
+            },
+            set(value) {
+                this.currBookingDetails.Booking.AgentUserName =
+                    this.agents[value].UserName;
+            },
         },
     },
 
@@ -513,6 +559,15 @@ export default {
         },
         getBookingStatusLabel(bookingStatus) {
             return getBookingStatusLabel(bookingStatus);
+        },
+
+        getAgentName(agents, agentUserName) {
+            if (agentUserName === '') {
+                return '';
+            }
+            return agents
+                .find((item) => item.UserName == agentUserName)
+                .FullName.split(' ')[0];
         },
 
         getPaymentClass(status) {
@@ -630,22 +685,28 @@ export default {
     border: 1px solid #cccccc;
     border-radius: 5px;
     background: var(--parkspot-white);
+
     .card-top {
         position: relative;
+
         .action-group {
             position: absolute;
             top: 0;
             right: 0;
+
             span {
                 margin-left: 12px;
                 cursor: pointer;
             }
+
             .edit-icon {
                 color: var(--secondary-color);
             }
+
             .save-icon {
                 color: var(--parkspot-green);
             }
+
             .cancel-icon {
                 color: var(--parkspot-red);
             }
@@ -684,6 +745,7 @@ export default {
             margin-bottom: 16px;
         }
     }
+
     .value-col {
         width: 70%;
         text-align: left;
@@ -692,6 +754,7 @@ export default {
             margin-bottom: 16px;
         }
     }
+
     .edit-col {
         width: 50%;
         text-align: left;
@@ -708,9 +771,11 @@ export default {
         .edit-icon {
             color: var(--primary-color);
         }
+
         .save-icon {
             color: var(--parkspot-green);
         }
+
         .cancel-icon {
             color: var(--parkspot-red);
         }
@@ -762,6 +827,7 @@ export default {
     .payment-failed {
         background-color: #ffa5a5;
         min-width: 132px;
+
         .status-label {
             color: red;
         }
@@ -770,6 +836,7 @@ export default {
     .payment-pending {
         background-color: #fce2c3;
         min-width: 132px;
+
         .status-label {
             color: orange;
         }

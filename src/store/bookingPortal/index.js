@@ -31,6 +31,7 @@ const state = {
         "Remark": "Booking remark"
       }] */
     activeBookings: [],
+    agents: {},
 };
 
 const getters = {};
@@ -57,9 +58,21 @@ const mutations = {
     'set-active-bookings'(state, activeBookings) {
         state.activeBookings = activeBookings;
     },
+
+    'set-agent-list'(state, agents) {
+        // filtering agent list to filter out the one which has fullname enclosed within []
+        state.agents = agents.filter((agent) => {
+            const fullName = agent.FullName.toLowerCase();
+            return !(fullName.startsWith('[') && fullName.endsWith(']'));
+        });
+    },
 };
 
 const actions = {
+    async getAgents({ commit }) {
+        commit('set-agent-list', await mayaClient.get('/auth/user/agents'));
+    },
+
     async getBookingDetails({ commit }, bookingId) {
         commit('set-loading', true);
         const res = await mayaClient.get(
