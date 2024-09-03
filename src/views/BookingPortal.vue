@@ -9,7 +9,6 @@
             ></MoleculeSearchBox>
         </div>
         <LoaderModal v-if="isLoading"></LoaderModal>
-        <p v-if="hasError">{{ errorMessage }}</p>
         <TemplateBookingPortal
             v-if="bookingDetails"
             @payment-link="getPaymentLink"
@@ -77,6 +76,24 @@ export default {
                 query: { bookingId: bookingId },
             });
             this.getBookingDetails(bookingId);
+        },
+        alertError(msg) {
+            this.$buefy.dialog.alert({
+                title: 'Error',
+                message: msg,
+                type: 'is-danger',
+                hasIcon: true,
+                icon: 'alert-circle',
+                ariaRole: 'alertdialog',
+                ariaModal: true,
+            });
+        },
+    },
+    watch: {
+        hasError(error) {
+            if (error) {
+                this.alertError(this.errorMessage);
+            }
         },
     },
 };
