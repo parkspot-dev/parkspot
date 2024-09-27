@@ -30,13 +30,11 @@
             @data="updateTermsData"
         >
             <template v-slot:extra>
-                <p class="custom-terms">
-                    <a
-                        href="https://www.parkspot.in/terms-and-conditions"
-                        target="_blank"
-                        >T&C</a
-                    >
-                </p>
+                <a
+                    href="https://www.parkspot.in/terms-and-conditions"
+                    target="_blank"
+                    >T&C
+                </a>
             </template>
         </MoleculeCheckbox>
     </ValidationObserver>
@@ -122,10 +120,4 @@ export default {
     },
 };
 </script>
-<style lang="scss" scoped>
-.custom-terms {
-    position: absolute;
-    top: -2px;
-    left: 111px;
-}
-</style>
+<style lang="scss" scoped></style>
