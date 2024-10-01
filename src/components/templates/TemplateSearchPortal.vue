@@ -373,8 +373,8 @@ export default {
                 { id: 'Nitya', name: 'Nitya' },
                 { id: 'Ish', name: 'Ish' },
                 { id: 'Sud', name: 'Sud' },
-                { id: 'Raginee', name: 'Raginee' },
                 { id: 'Sejal', name: 'Sejal' },
+                { id: 'Vidhi', name: 'Vidhi' },
             ],
 
             statusList: [
