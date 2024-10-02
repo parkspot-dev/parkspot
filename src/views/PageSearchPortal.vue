@@ -23,10 +23,10 @@
                 @on-search="getInterestedVO"
             ></MoleculeSearchBox>
             <TemplateSearchPortal
-                :parkingRequests="intrestedVOList"
                 :isLoading="isLoading"
-                @updateRequest="updateRequest"
+                :parkingRequests="intrestedVOList"
                 @toSrp="toSrp"
+                @updateRequest="updateRequest"
             ></TemplateSearchPortal>
         </b-tab-item>
     </b-tabs>
@@ -77,7 +77,8 @@ export default {
             },
         },
     },
-    created() {
+    async created() {
+        this.getAgents();
         this.getParkingRequests(this.$route.query['mobile']);
         if (this.SOLatLngInput) {
             this.getInterestedVO(this.SOLatLngInput);
@@ -87,6 +88,7 @@ export default {
         ...mapActions('searchPortal', [
             'updateActiveTab',
             'updateSOLatLngInput',
+            'getAgents',
         ]),
         alertError(msg) {
             this.$buefy.dialog.alert({

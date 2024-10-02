@@ -334,6 +334,7 @@ import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import AtomInput from '../atoms/AtomInput.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import { getCoordinate } from '../../includes/LatLng';
+import { mapState } from 'vuex';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -357,6 +358,9 @@ export default {
         },
     },
     emits: ['updateRequest', 'toSrp'],
+    computed: {
+        ...mapState('searchPortal', ['agentList']),
+    },
     data() {
         return {
             isEmpty: false,
@@ -367,15 +371,15 @@ export default {
             isFocusable: false,
             hasMobileCards: true,
 
-            agentList: [
-                { id: 'NA', name: 'NA' },
-                { id: 'Preeti', name: 'Preeti' },
-                { id: 'Nitya', name: 'Nitya' },
-                { id: 'Ish', name: 'Ish' },
-                { id: 'Sud', name: 'Sud' },
-                { id: 'Sejal', name: 'Sejal' },
-                { id: 'Vidhi', name: 'Vidhi' },
-            ],
+            // agentList: [
+            //     { id: 'NA', name: 'NA' },
+            //     { id: 'Preeti', name: 'Preeti' },
+            //     { id: 'Nitya', name: 'Nitya' },
+            //     { id: 'Ish', name: 'Ish' },
+            //     { id: 'Sud', name: 'Sud' },
+            //     { id: 'Raginee', name: 'Raginee' },
+            //     { id: 'Sejal', name: 'Sejal' },
+            // ],
 
             statusList: [
                 { id: 0, name: 'StatusNotSet' },
@@ -467,9 +471,9 @@ export default {
         },
 
         onAgentUpdate(spotData, agentid) {
-            this.agentList.forEach((Agent) => {
-                if (Agent.id === agentid) {
-                    spotData['Agent'] = Agent.name;
+            this.agentList.forEach((agent) => {
+                if (agent.id === agentid) {
+                    spotData['Agent'] = agent.name;
                 }
             });
             this.$emit('updateRequest', spotData);

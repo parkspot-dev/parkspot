@@ -1,9 +1,7 @@
-// import { mayaClient } from '@/services/api';
-// import _ from 'lodash';
-
 const state = {
     activeTab: 0,
     SOLatLngInput: '',
+    agentList: [], // array of objects {id, name}
 };
 
 const getters = {};
@@ -15,6 +13,20 @@ const mutations = {
     'update-SO-Lat-Lng-Input'(state, latLng) {
         state.SOLatLngInput = latLng;
     },
+    'set-agent-list'(state, agents) {
+        // filtering agent list to filter out the one which has fullname enclosed within []
+        state.agentList = agents
+            .filter((agent) => {
+                const fullName = agent.FullName.toLowerCase();
+                return !(fullName.startsWith('[') && fullName.endsWith(']'));
+            })
+            .map((agent) => {
+                return {
+                    id: agent.UserName,
+                    name: agent.FullName.split(' ')[0],
+                };
+            });
+    },
 };
 
 const actions = {
@@ -23,6 +35,9 @@ const actions = {
     },
     updateSOLatLngInput({ commit }, latLng) {
         commit('update-SO-Lat-Lng-Input', latLng);
+    },
+    async getAgents({ commit }) {
+        commit('set-agent-list', await mayaClient.get('/auth/user/agents'));
     },
 };
 
