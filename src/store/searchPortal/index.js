@@ -1,7 +1,10 @@
+import { mayaClient } from '@/services/api';
+
 const state = {
     activeTab: 0,
     SOLatLngInput: '',
-    agentList: [], // array of objects {id, name}
+    // array of objects {id, name}, both id and name has agent first name as this used in b-table filtering
+    agentList: [],
 };
 
 const getters = {};
@@ -22,7 +25,7 @@ const mutations = {
             })
             .map((agent) => {
                 return {
-                    id: agent.UserName,
+                    id: agent.FullName.split(' ')[0],
                     name: agent.FullName.split(' ')[0],
                 };
             });
