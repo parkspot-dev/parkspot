@@ -375,10 +375,7 @@ export default {
                 { id: 0, name: 'StatusNotSet' },
                 { id: 1, name: 'Registered' },
                 { id: 2, name: 'Processing' },
-                {
-                    id: 3,
-                    name: 'SpotSuggested',
-                },
+                { id: 3, name: 'SpotSuggested' },
                 { id: 4, name: 'SpotAccepted' },
                 { id: 5, name: 'SpotDenied' },
                 { id: 6, name: 'Archive' },
