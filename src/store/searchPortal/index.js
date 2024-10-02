@@ -29,6 +29,7 @@ const mutations = {
                     name: agent.FullName.split(' ')[0],
                 };
             });
+        state.agentList.push({ id: 'NA', name: 'NA' });
     },
 };
 
