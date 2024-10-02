@@ -370,17 +370,7 @@ export default {
             isHoverable: false,
             isFocusable: false,
             hasMobileCards: true,
-
-            // agentList: [
-            //     { id: 'NA', name: 'NA' },
-            //     { id: 'Preeti', name: 'Preeti' },
-            //     { id: 'Nitya', name: 'Nitya' },
-            //     { id: 'Ish', name: 'Ish' },
-            //     { id: 'Sud', name: 'Sud' },
-            //     { id: 'Raginee', name: 'Raginee' },
-            //     { id: 'Sejal', name: 'Sejal' },
-            // ],
-
+            
             statusList: [
                 { id: 0, name: 'StatusNotSet' },
                 { id: 1, name: 'Registered' },
