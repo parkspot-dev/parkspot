@@ -430,7 +430,9 @@
             <div class="table">
                 <div class="row header">
                     <div class="cell"><strong> Payment ID </strong></div>
-                    <div class="cell"><strong> Date </strong></div>
+                    <div class="cell"><strong> CreatedAt </strong></div>
+                    <div class="cell"><strong> ReceivedAt </strong></div>
+                    <div class="cell"><strong> TransferredAt </strong></div>
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
                 </div>
@@ -442,7 +444,13 @@
                     >
                         <div class="cell">{{ payment.PaymentID }}</div>
                         <div class="cell">
-                            {{ getFormattedDate(payment.UpdatedAt) }}
+                            {{ getFormattedDate(payment.CreatedAt) }}
+                        </div>
+                        <div class="cell">
+                            {{ getFormattedDate(payment.SucceededAt) }}
+                        </div>
+                        <div class="cell">
+                            {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
                         <div class="cell">
                             <div
@@ -614,7 +622,12 @@ export default {
         },
 
         getFormattedDate(date) {
-            return moment(date).format('MMMM Do YYYY, hh:mm A');
+            if (date == '0001-01-01T00:00:00Z') {
+                return '--';
+            }
+
+            console.log(date, moment(date).format('MMM Do YYYY'));
+            return moment(date).format('MMM Do YYYY');
         },
 
         enableEdit(fieldName) {
