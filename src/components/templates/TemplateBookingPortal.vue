@@ -625,8 +625,6 @@ export default {
             if (date == '0001-01-01T00:00:00Z') {
                 return '--';
             }
-
-            console.log(date, moment(date).format('MMM Do YYYY'));
             return moment(date).format('MMM Do YYYY');
         },
 
