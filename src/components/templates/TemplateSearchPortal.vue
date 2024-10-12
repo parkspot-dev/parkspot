@@ -83,14 +83,14 @@
             >
                 <div class="date-column">
                     <div>
-                        <p class="tag">UpdatedAt:</p>
+                        <p class="tag">Update:</p>
                         <strong>
                             {{ getFormattedDate(props.row.UpdatedAt) }}
                         </strong>
                     </div>
 
                     <div>
-                        <p class="tag">CreatedAt:</p>
+                        <p class="tag">Create:</p>
                         <strong>
                             {{ getFormattedDate(props.row.CreatedAt) }}
                         </strong>
@@ -518,7 +518,7 @@ export default {
             }
         },
         getFormattedDate(date) {
-            return moment(date).format('MMM Do YYYY, hh:mm A');
+            return moment(date).format('DD/MM/YY, hh:mm A');
         },
     },
 };
