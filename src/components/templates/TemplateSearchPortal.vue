@@ -84,23 +84,17 @@
                 <div class="date-column">
                     <div>
                         <p class="tag">UpdatedAt:</p>
+                        <br />
                         <strong>
-                            {{
-                                new Date(
-                                    props.row.UpdatedAt,
-                                ).toLocaleDateString('en-GB')
-                            }}
+                            {{ getFormattedDate(props.row.UpdatedAt) }}
                         </strong>
                     </div>
-
+                    <br />
                     <div>
                         <p class="tag">CreatedAt:</p>
+                        <br />
                         <strong>
-                            {{
-                                new Date(
-                                    props.row.CreatedAt,
-                                ).toLocaleDateString('en-GB')
-                            }}
+                            {{ getFormattedDate(props.row.CreatedAt) }}
                         </strong>
                     </div>
                 </div>
@@ -328,13 +322,15 @@
 </template>
 
 <script>
-import AtomTextarea from '../atoms/AtomTextarea.vue';
-import AtomSelectInput from '../atoms/AtomSelectInput.vue';
+import { mapState } from 'vuex';
+import moment from 'moment';
+
+import { getCoordinate } from '../../includes/LatLng';
+import AtomButton from '../atoms/AtomButton.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import AtomInput from '../atoms/AtomInput.vue';
-import AtomButton from '../atoms/AtomButton.vue';
-import { getCoordinate } from '../../includes/LatLng';
-import { mapState } from 'vuex';
+import AtomSelectInput from '../atoms/AtomSelectInput.vue';
+import AtomTextarea from '../atoms/AtomTextarea.vue';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -370,7 +366,7 @@ export default {
             isHoverable: false,
             isFocusable: false,
             hasMobileCards: true,
-            
+
             statusList: [
                 { id: 0, name: 'StatusNotSet' },
                 { id: 1, name: 'Registered' },
@@ -522,6 +518,9 @@ export default {
             } else {
                 this.summary.btn = 'Show';
             }
+        },
+        getFormattedDate(date) {
+            return moment(date).format('DD MMM YY, hh:mm A');
         },
     },
 };
