@@ -5,6 +5,7 @@ import { APP_LINK } from '../constant/constant';
 // prettier-ignore
 export const pages = {
     HOME                    : '/',
+    EDIT_PROFILE            : '/user/edit-profile',
     FAQ                     : '/faq',
     ABOUT                   : '/about',
     FEATURES                : '/features',
@@ -36,7 +37,7 @@ export const routes = [
         component: Home,
     },
     {
-        path: '/user/edit-profile',
+        path: pages.EDIT_PROFILE,
         name: 'editProfile',
         component: () => import('@/views/PageEditProfile.vue'),
     },
