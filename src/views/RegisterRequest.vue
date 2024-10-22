@@ -1,4 +1,4 @@
-<template class="root">
+<template>
     <div class="form-container">
       <h2>Registration Form</h2>
       <form @submit.prevent="handleSubmit">
@@ -23,7 +23,7 @@
           <span v-if="mobileError" class="error">{{ mobileError }}</span>
         </div>
   
-        <!-- Latitude (Compulsory, Float) -->
+        <!-- Latitude (Compulsory) -->
         <div class="form-group left-align">
           <label for="latitude">Latitude: <span>*</span></label>
           <input
@@ -38,7 +38,7 @@
           <span v-if="latitudeError" class="error">{{ latitudeError }}</span>
         </div>
   
-        <!-- Longitude (Compulsory, Float) -->
+        <!-- Longitude (Compulsory) -->
         <div class="form-group left-align">
           <label for="longitude">Longitude: <span>*</span></label>
           <input
@@ -52,7 +52,7 @@
           />
           <span v-if="longitudeError" class="error">{{ longitudeError }}</span>
         </div>
-
+  
         <!-- City -->
         <div class="form-group left-align">
           <label for="city">City:</label>
@@ -77,10 +77,25 @@
           <input v-model="formData.address" type="text" id="address" placeholder="Enter your address" />
         </div>
   
+        <!-- Duration -->
+        <div class="form-group left-align">
+          <label for="duration">Duration:</label>
+          <input
+            v-model="formData.duration"
+            type="text"
+            id="duration"
+            placeholder="Enter duration (e.g., '2 hours')"
+            @input="validateDuration"
+            required
+          />
+          <span v-if="durationError" class="error">{{ durationError }}</span>
+        </div>
+  
         <!-- Remark -->
         <div class="form-group left-align">
           <label for="remark">Remark:</label>
-          <textarea v-model="formData.remark" id="remark" placeholder="Enter remark"></textarea>
+          <textarea v-model="formData.remark" id="remark" placeholder="Enter remark" @input="validateRemark" required></textarea>
+          <span v-if="remarkError" class="error">{{ remarkError }}</span>
         </div>
   
         <!-- Submit Button -->
@@ -101,11 +116,14 @@
           email: '',
           car: '',
           address: '',
-          remark: ''
+          remark: '',
+          duration: ''
         },
         mobileError: '', // Error message for invalid mobile input
         latitudeError: '', // Error message for invalid latitude
-        longitudeError: '' // Error message for invalid longitude
+        longitudeError: '', // Error message for invalid longitude
+        remarkError: '', // Error message for invalid remark
+        durationError: '' // Error message for invalid duration
       };
     },
     methods: {
@@ -115,6 +133,22 @@
           this.mobileError = "Mobile number must be exactly 10 digits.";
         } else {
           this.mobileError = "";
+        }
+      },
+      validateRemark() {
+        const remark = this.formData.remark;
+        if (remark.length > 200) {
+          this.remarkError = 'Remark cannot exceed 200 characters.';
+        } else {
+          this.remarkError = '';
+        }
+      },
+      validateDuration() {
+        const duration = this.formData.duration;
+        if (duration.length > 50) {
+          this.durationError = "Duration should be less than 50 characters.";
+        } else {
+          this.durationError = "";
         }
       },
       validateLatitude() {
@@ -138,19 +172,19 @@
         this.validateMobile();
         this.validateLatitude();
         this.validateLongitude();
-  
+        this.validateRemark();
+        this.validateDuration();
         // Ensure no errors before submission
-        if (this.mobileError || this.latitudeError || this.longitudeError) {
-          alert("Please correct the errors before submitting.");
+        if (this.mobileError || this.latitudeError || this.longitudeError || this.durationError || this.remarkError) {
+        // console.log('Form Not Submitted:', this.formData);
           return;
         }
-  
-        console.log('Form Submitted:', this.formData);
-        // Perform form validation or API calls
+        // console.log('Form Submitted:', this.formData);
       }
     }
   };
   </script>
+  
   
   <style scoped>
   .form-container {
