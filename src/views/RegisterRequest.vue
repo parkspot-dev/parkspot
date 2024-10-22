@@ -52,6 +52,12 @@
           />
           <span v-if="longitudeError" class="error">{{ longitudeError }}</span>
         </div>
+
+        <!-- City -->
+        <div class="form-group left-align">
+          <label for="city">City:</label>
+          <input v-model="formData.city" type="text" id="city" placeholder="Enter city" />
+        </div>
   
         <!-- Email -->
         <div class="form-group left-align">
