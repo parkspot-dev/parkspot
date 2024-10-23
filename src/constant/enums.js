@@ -52,6 +52,35 @@ export function getPaymentStatusLabel(paymentStatus) {
     return getEnumLabel(PaymentStatusLabel, paymentStatus);
 }
 
+export const ParkingRequestStatus = Object.freeze({
+    RequestStatusNotSet: 0,
+    RequestRegistered: 1,
+    RequestProcessing: 2,
+    RequestSpotSuggested: 3,
+    RequestSpotAccepted: 4,
+    RequestSpotDenied: 5,
+    RequestArchive: 6,
+});
+
+const ParkingRequestStatusLabels = [
+    'Not Set',
+    'Registered',
+    'Processing',
+    'Spot Suggested',
+    'Spot Accepted',
+    'Spot Denied',
+    'Archive',
+];
+
+/**
+ *
+ * @param {int} parkingRequestStatus
+ * @return {string}: label for parking request status
+ */
+export function getParkingRequestStatusLabel(parkingRequestStatus) {
+    return getEnumLabel(ParkingRequestStatusLabels, parkingRequestStatus);
+}
+
 export const KYCStatus = Object.freeze({
     // NotSet => KYC information NOT available
     NotSet: 0,
