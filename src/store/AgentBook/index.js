@@ -46,6 +46,9 @@ const mutations = {
     'set-global-error'(state, errorMessage) {
         state.errorMessage = errorMessage;
         state.hasError = true;
+    },
+    'reset-hasError'(state){
+      state.hasError=false;
     }
 };
 
@@ -89,8 +92,8 @@ const actions = {
         }
     },
     async submitForm({ dispatch, commit, state }) {
-      state.hasError = false;
-
+      commit('reset-hasError');
+      
       dispatch('validateMobile');
       dispatch('validateLatitude');
       dispatch('validateLongitude');
