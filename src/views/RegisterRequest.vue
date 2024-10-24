@@ -104,44 +104,55 @@
 </template>
 
 <script>
-import {  mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
-name: 'RegisterRequest',
-computed: {
-  ...mapState('form', [
-    'formData',
-    'MobileError',
-    'LatitudeError',
-    'LongitudeError',
-    'RemarkError',
-    'DurationError',
-    'isLoading'
-  ])
-},
-methods: {
-  async handleSubmit() {
-    await this.$store.dispatch('form/submitForm');
+  name: 'RegisterRequest',
+  computed: {
+    ...mapState('agentBook', [
+      'formData',
+      'MobileError',
+      'LatitudeError',
+      'LongitudeError',
+      'RemarkError',
+      'DurationError',
+      'hasError',
+      'errorMessage'
+    ])
   },
-  validateMobile() {
-    this.$store.dispatch('form/validateMobile');
+  methods: {
+    ...mapActions('agentBook', [
+      'validateMobile',
+      'validateLatitude',
+      'validateLongitude',
+      'validateDuration',
+      'validateRemark',
+      'submitForm'
+    ]),
+    handleSubmit() {
+      this.submitForm();
+    },
+    alertError(msg) {
+            this.$buefy.dialog.alert({
+                title: 'Error',
+                message: msg,
+                type: 'is-danger',
+                hasIcon: true,
+                icon: 'alert-circle',
+                ariaRole: 'alertdialog',
+                ariaModal: true,
+            });
+    },
   },
-  validateLatitude() {
-    this.$store.dispatch('form/validateLatitude');
-  },
-  validateLongitude() {
-    this.$store.dispatch('form/validateLongitude');
-  },
-  validateDuration() {
-    this.$store.dispatch('form/validateDuration');
-  },
-  validateRemark() {
-    this.$store.dispatch('form/validateRemark');
-  }
-},
+  watch: {
+        hasError(error) {
+            if (error) {
+                this.alertError(this.errorMessage);
+            }
+        },
+    },
 };
 </script>
-
 
 <style scoped>
 .form-container {
