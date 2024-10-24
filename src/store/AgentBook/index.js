@@ -4,14 +4,26 @@ const state = {
   formData: {
     Name: '',
     Mobile: '',
-    Latitude: '',
-    Longitude: '',
+    Latitude: '', 
+    Longitude: '', 
     City: '',
     Email: '',
     Car: '',
     Address: '',
     Remark: '',
     Duration: ''
+  //   {
+  //     "Name":      "test2",
+  //     "Mobile":    "8092996057",
+  //     "Latitude":  11.1234567,
+  //     "Longitude": 22.123456789,  
+  //     "City":      "Varansai",
+  //     "Email": "sds@gmgail.com",
+  //     "Car":  "string", 
+  //     "Address":  "hoause 5",
+  //     "Remark": "Ish", //Remark should return with a [AD]+Remark
+  //     "Duration":  "string"
+  // }
   },
   errors: {
     Mobile: '',
