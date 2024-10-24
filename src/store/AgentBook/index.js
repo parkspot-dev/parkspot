@@ -91,6 +91,18 @@ const actions = {
     async submitForm({ dispatch, commit, state }) {
       state.hasError = false;
 
+      dispatch('validateMobile');
+      dispatch('validateLatitude');
+      dispatch('validateLongitude');
+      dispatch('validateDuration');
+      dispatch('validateRemark');
+
+      // Check if there are any errors
+      if (state.MobileError || state.LatitudeError || state.LongitudeError || state.DurationError || state.RemarkError) {
+          commit('set-global-error', 'Please fix the errors in the form before submitting.');
+          return;
+         }
+      
         try {
             const data= await mayaClient.get(`/internal/parking-requests?mobile=${state.formData.Mobile}`);
 
