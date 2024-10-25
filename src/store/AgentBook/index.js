@@ -26,20 +26,16 @@ const state = {
     //     "Remark": "Ish", // Remark should return with a [AD]+Remark
     //     "Duration":  "string"
     // }
+    DurationError: '',
     MobileError: '',
     LatitudeError: '',
     LongitudeError: '',
     RemarkError: '',
-    DurationError: '',
     hasError: false,
     errorMessage: '',
 };
 
 const mutations = {
-    'update-form-data'(state, formData) {
-        state.formData = { ...state.formData, ...formData };
-        state.hasError = false;
-    },
     'set-error'(state, { field, message }) {
         state[field] = message;
     },
@@ -53,12 +49,11 @@ const mutations = {
 };
 
 const actions = {
-    validateMobile({ commit, state }) {
-        const mobilePattern = /^\d{10}$/;
-        if (!mobilePattern.test(state.formData.Mobile)) {
-            commit('set-error', { field: 'MobileError', message: 'Mobile number must be exactly 10 digits.' });
+    validateDuration({ commit, state }) {
+        if (state.formData.Duration.length > 50) {
+            commit('set-error', { field: 'DurationError', message: 'Duration should be less than 50 characters.' });
         } else {
-            commit('set-error', { field: 'MobileError', message: '' });
+            commit('set-error', { field: 'DurationError', message: '' });
         }
     },
     validateLatitude({ commit, state }) {
@@ -77,11 +72,12 @@ const actions = {
             commit('set-error', { field: 'LongitudeError', message: '' });
         }
     },
-    validateDuration({ commit, state }) {
-        if (state.formData.Duration.length > 50) {
-            commit('set-error', { field: 'DurationError', message: 'Duration should be less than 50 characters.' });
+    validateMobile({ commit, state }) {
+        const mobilePattern = /^\d{10}$/;
+        if (!mobilePattern.test(state.formData.Mobile)) {
+            commit('set-error', { field: 'MobileError', message: 'Mobile number must be exactly 10 digits.' });
         } else {
-            commit('set-error', { field: 'DurationError', message: '' });
+            commit('set-error', { field: 'MobileError', message: '' });
         }
     },
     validateRemark({ commit, state }) {
@@ -95,10 +91,10 @@ const actions = {
       commit('reset-global-Error');
 
       await Promise.all([
-        dispatch('validateMobile'),
+        dispatch('validateDuration'),
         dispatch('validateLatitude'),
         dispatch('validateLongitude'),
-        dispatch('validateDuration'),
+        dispatch('validateMobile'),
         dispatch('validateRemark')
       ]);
 
@@ -116,9 +112,8 @@ const actions = {
 
         try {
             const data= await mayaClient.get(`/internal/parking-requests?mobile=${state.formData.Mobile}`);
-
             let assignedRequest = false;
-            let agentName = "NA";
+            let agentName = 'NA';
 
             for (let i = 0; i < data.length; i++) {
               if (data[i].Agent !== 'NA' && 

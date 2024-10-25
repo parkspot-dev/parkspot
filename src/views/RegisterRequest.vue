@@ -1,99 +1,99 @@
 <template>
   <div class="form-container">
-    <h2>Registration Form</h2>
+    <h2>Vehicle Owner Registration</h2>
     <form @submit.prevent="handleSubmit">
       <!-- Name -->
-      <div class="form-group left-align">
+      <div class="form-group">
         <label for="Name">Name:</label>
-        <input v-model="formData.Name" type="text" id="Name" placeholder="Enter your name" />
+        <input id="Name" placeholder="Enter your name" type="text" v-model="formData.Name"/>
       </div>
 
       <!-- Mobile (Compulsory) -->
-      <div class="form-group left-align">
+      <div class="form-group">
         <label for="Mobile">Mobile: <span>*</span></label>
         <input
+          id="Mobile"
+          @input="validateMobile"
+          maxlength="10"
+          placeholder="Enter your mobile number"
+          required
           type="text"
           v-model="formData.Mobile"
-          id="Mobile"
-          placeholder="Enter your mobile number"
-          maxlength="10"
-          @input="validateMobile"
-          required
         />
-        <span v-if="MobileError" class="error">{{ MobileError }}</span>
+        <span class="error" v-if="MobileError">{{ MobileError }}</span>
       </div>
 
       <!-- Latitude (Compulsory) -->
-      <div class="form-group left-align">
+      <div class="form-group">
         <label for="Latitude">Latitude: <span>*</span></label>
         <input
-          v-model="formData.Latitude"
-          type="number"
-          step="any"
           id="Latitude"
-          placeholder="Enter latitude"
           @input="validateLatitude"
+          placeholder="Enter latitude"
           required
+          step="any"
+          type="number"
+          v-model="formData.Latitude"
         />
         <span v-if="LatitudeError" class="error">{{ LatitudeError }}</span>
       </div>
 
       <!-- Longitude (Compulsory) -->
-      <div class="form-group left-align">
+      <div class="form-group">
         <label for="Longitude">Longitude: <span>*</span></label>
         <input
-          v-model="formData.Longitude"
-          type="number"
-          step="any"
           id="Longitude"
-          placeholder="Enter longitude"
           @input="validateLongitude"
+          placeholder="Enter longitude"
           required
+          step="any"
+          type="number"
+          v-model="formData.Longitude"
         />
         <span v-if="LongitudeError" class="error">{{ LongitudeError }}</span>
       </div>
 
       <!-- City -->
-      <div class="form-group left-align">
+      <div class="form-group">
         <label for="City">City:</label>
-        <input v-model="formData.City" type="text" id="City" placeholder="Enter city" />
+        <input id="City" placeholder="Enter city" type="text" v-model="formData.City"/>
       </div>
 
       <!-- Email -->
-      <div class="form-group left-align">
+      <div class="form-group">
         <label for="Email">Email:</label>
-        <input v-model="formData.Email" type="email" id="Email" placeholder="Enter your email" />
+        <input id="Email" placeholder="Enter your email" type="email" v-model="formData.Email" />
       </div>
 
       <!-- Car -->
-      <div class="form-group left-align">
+      <div class="form-group">
         <label for="Car">Car:</label>
-        <input v-model="formData.Car" type="text" id="Car" placeholder="Enter car details" />
+        <input id="Car" placeholder="Enter car details" type="text" v-model="formData.Car" />
       </div>
 
       <!-- Address -->
-      <div class="form-group left-align">
+      <div class="form-group">
         <label for="Address">Address:</label>
-        <input v-model="formData.Address" type="text" id="Address" placeholder="Enter your address" />
+        <input id="Address" placeholder="Enter your address" type="text" v-model="formData.Address" />
       </div>
 
       <!-- Duration -->
-      <div class="form-group left-align">
+      <div class="form-group">
         <label for="Duration">Duration:</label>
         <input
-          v-model="formData.Duration"
-          type="text"
           id="Duration"
-          placeholder="Enter duration (e.g., '2 hours')"
           @input="validateDuration"
+          placeholder="Enter duration (e.g., '2 hours')"
+          type="text"
+          v-model="formData.Duration"
         />
         <span v-if="DurationError" class="error">{{ DurationError }}</span>
       </div>
 
       <!-- Remark -->
-      <div class="form-group left-align">
+      <div class="form-group">
         <label for="Remark">Remark:</label>
-        <textarea v-model="formData.Remark" id="Remark" placeholder="Enter remark" @input="validateRemark"></textarea>
+        <textarea id="Remark" @input="validateRemark" placeholder="Enter remark" v-model="formData.Remark"></textarea>
         <span v-if="RemarkError" class="error">{{ RemarkError }}</span>
       </div>
 
@@ -111,23 +111,23 @@ export default {
   computed: {
     ...mapState('agentBook', [
       'formData',
-      'MobileError',
+      'DurationError',
+      'errorMessage',
+      'hasError',
       'LatitudeError',
       'LongitudeError',
-      'RemarkError',
-      'DurationError',
-      'hasError',
-      'errorMessage'
+      'MobileError',
+      'RemarkError'
     ])
   },
   methods: {
     ...mapActions('agentBook', [
-      'validateMobile',
+      'submitForm',
+      'validateDuration',
       'validateLatitude',
       'validateLongitude',
-      'validateDuration',
-      'validateRemark',
-      'submitForm'
+      'validateMobile',
+      'validateRemark'
     ]),
     handleSubmit() {
       this.submitForm();
@@ -155,32 +155,26 @@ export default {
 </script>
 
 <style scoped>
-.form-container {
-  background-color: #f9f9f9;
-  padding: 2.5rem;
-  color: #333; 
-  border-radius: 15px;
-  max-width: 500px;
-  margin: 50px auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
-}
 
 h2 {
   text-align: center;
   margin-bottom: 2rem;
-  color: #0085ad; 
+  color: var(--primary-color); 
   font-size: 2rem; 
   font-weight: bold;
+}
+
+.form-container {
+  padding: 2.5rem;
+  max-width: 500px;
+  margin: 50px auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
   margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
-}
-
-.form-group.left-align {
   align-items: flex-start; 
 }
 
@@ -188,7 +182,7 @@ h2 {
   font-size: 1.1rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
-  color: #0085ad; 
+  color: var(--primary-color); 
 }
 
 .form-group input,
@@ -205,63 +199,36 @@ h2 {
 
 .form-group input:focus,
 .form-group textarea:focus {
-  border-color: #0085ad; 
-  background-color: #eaf8fb; 
+  border-color: var(--primary-color); 
+  background-color: #eff9fb; 
   outline: none; 
 }
 
 .form-group textarea {
-  resize: vertical;
   min-height: 100px;
 }
 
 .form-group span {
-  color: #ff4d4d; 
-  font-size: 0.9rem;
+  color: #c72828; 
+  font-size: 0.8rem;
 }
 
 .submit-btn {
   width: 100%;
   padding: 0.9rem;
-  background-color: #0085ad; 
+  background-color: var(--primary-color); 
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.1s ease, transform 0.2s ease;
 }
 
 .submit-btn:hover {
-  background-color: #007099; 
+  background-color: #0f1111; 
   transform: translateY(-2px); 
 }
 
-.submit-btn:active {
-  transform: translateY(0); 
-}
-
-.submit-btn:disabled {
-  background-color: gray; 
-  cursor: not-allowed;
-}
-
-@media (max-width: 500px) {
-  .form-container {
-    padding: 1.5rem;
-  }
-
-  h2 {
-    font-size: 1.8rem;
-  }
-
-  .form-group label {
-    font-size: 1rem;
-  }
-
-  .submit-btn {
-    font-size: 1.1rem;
-  }
-}
 </style>
