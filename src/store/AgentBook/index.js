@@ -1,11 +1,11 @@
 import { mayaClient } from '@/services/api';
-import { getParkingRequestStatusLabel } from '@/constant/enums';
+import { getParkingRequestStatus} from '@/constant/enums';
 const state = {
     formData: {
         Name: '',
         Mobile: '',
-        Latitude: '',
-        Longitude: '',
+        Latitude: null,
+        Longitude: null,
         City: '',
         Email: '',
         Car: '',
@@ -110,16 +110,20 @@ const actions = {
       
 
 
-        try {
+        
             const data= await mayaClient.get(`/internal/parking-requests?mobile=${state.formData.Mobile}`);
+            if(data.DisplayMsg){
+              commit('set-global-error', 'Your request was not registered successfully');
+              return;
+            }
             let assignedRequest = false;
             let agentName = 'NA';
 
             for (let i = 0; i < data.length; i++) {
               if (data[i].Agent !== 'NA' && 
-                [getParkingRequestStatusLabel.RequestRegistered, 
-                 getParkingRequestStatusLabel.RequestProcessing, 
-                 getParkingRequestStatusLabel.RequestSpotSuggested].includes(data[i].Status)) {
+                [getParkingRequestStatus.RequestRegistered, 
+                 getParkingRequestStatus.RequestProcessing, 
+                 getParkingRequestStatus.RequestSpotSuggested].includes(data[i].Status)) {
                      assignedRequest = true;
                      agentName = data[i].Agent;
                      break;  // Exit the loop if condition is met
@@ -135,14 +139,13 @@ const actions = {
                 Remark: `[AD] ${state.formData.Remark}` // Prepend [AD] in Remark
                 };
                 const resp = await mayaClient.post('/owner/parking-request', formDataWithAdRemark);
-                commit('set-global-error', 'Your request has been registered successfully');
-                return resp.data;
+                if(resp.DisplayMsg){
+                 commit('set-global-error', 'Your request was not registered successfully');
+                 return;
+                }
+                commit('set-global-error', 'Your request was registered successfully');
             }
-        } 
-        catch (error) {
-            commit('set-global-error', 'An error occurred while submitting the form.');
-        }
-        
+            return;
     }
 };
 

@@ -62,7 +62,7 @@ export const ParkingRequestStatus = Object.freeze({
     RequestArchive: 6,
 });
 
-const ParkingRequestStatusLabels = [
+const ParkingRequestStatusLabel = [
     'Not Set',
     'Registered',
     'Processing',
@@ -77,8 +77,8 @@ const ParkingRequestStatusLabels = [
  * @param {int} parkingRequestStatus
  * @return {string}: label for parking request status
  */
-export function getParkingRequestStatusLabel(parkingRequestStatus) {
-    return getEnumLabel(ParkingRequestStatusLabels, parkingRequestStatus);
+export function getParkingRequestStatus(parkingRequestStatus) {
+    return getEnumLabel(ParkingRequestStatusLabel, parkingRequestStatus);
 }
 
 export const KYCStatus = Object.freeze({
