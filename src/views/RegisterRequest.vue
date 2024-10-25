@@ -159,7 +159,7 @@ export default {
 h2 {
   text-align: center;
   margin-bottom: 2rem;
-  color: var(--primary-color); 
+  color: var(--secondary-color); 
   font-size: 2rem; 
   font-weight: bold;
 }
@@ -168,7 +168,7 @@ h2 {
   padding: 2.5rem;
   max-width: 500px;
   margin: 50px auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px var(--bg-color-tertiary);
 }
 
 .form-group {
@@ -182,16 +182,16 @@ h2 {
   font-size: 1.1rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
-  color: var(--primary-color); 
+  color: var(--secondary-color); 
 }
 
 .form-group input,
 .form-group textarea {
   padding: 0.9rem 1rem;
-  border: 2px solid #ddd; 
-  border-radius: 8px;
-  background-color: #fff; 
-  color: #333; 
+  border: 2px solid var(--grey-shade); 
+  border-radius: var(--border-default);
+  background-color: var(--parkspot-white); 
+  color: var(--parkspot-black); 
   font-size: 1rem;
   transition: border-color 0.3s ease, background-color 0.3s ease;
   width: 100%; 
@@ -199,8 +199,8 @@ h2 {
 
 .form-group input:focus,
 .form-group textarea:focus {
-  border-color: var(--primary-color); 
-  background-color: #eff9fb; 
+  border-color: var(--secondary-color); 
+  background-color: var(--parkspot-white); 
   outline: none; 
 }
 
@@ -210,14 +210,14 @@ h2 {
 
 .form-group span {
   color: #c72828; 
-  font-size: 0.8rem;
+  font-size: var(--sp-size-sm);
 }
 
 .submit-btn {
   width: 100%;
   padding: 0.9rem;
-  background-color: var(--primary-color); 
-  color: white;
+  background-color: var(--secondary-color); 
+  color: var(--parkspot-white);
   border: none;
   border-radius: 8px;
   font-size: 1.2rem;
@@ -227,7 +227,7 @@ h2 {
 }
 
 .submit-btn:hover {
-  background-color: #0f1111; 
+  background-color: var(--parkspot-black); 
   transform: translateY(-2px); 
 }
 
