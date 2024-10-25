@@ -123,7 +123,7 @@ const actions = {
               if (data[i].Agent !== 'NA' && 
                 [getParkingRequestStatus.RequestRegistered, 
                  getParkingRequestStatus.RequestProcessing, 
-                 getParkingRequestStatus.RequestSpotSuggested].includes(data[i].Status)) {
+                 getParkingRequestStatus.RequestSpotSuggested].includes(data[i].status)) {
                      assignedRequest = true;
                      agentName = data[i].Agent;
                      break;  // Exit the loop if condition is met
