@@ -47,7 +47,7 @@ const mutations = {
         state.errorMessage = errorMessage;
         state.hasError = true;
     },
-    'reset-hasError'(state){
+    'reset-global-Error'(state){
       state.hasError=false;
     }
 };
@@ -92,20 +92,28 @@ const actions = {
         }
     },
     async submitForm({ dispatch, commit, state }) {
-      commit('reset-hasError');
-      
-      dispatch('validateMobile');
-      dispatch('validateLatitude');
-      dispatch('validateLongitude');
-      dispatch('validateDuration');
-      dispatch('validateRemark');
+      commit('reset-global-Error');
+
+      await Promise.all([
+        dispatch('validateMobile'),
+        dispatch('validateLatitude'),
+        dispatch('validateLongitude'),
+        dispatch('validateDuration'),
+        dispatch('validateRemark')
+      ]);
 
       // Check if there are any errors
-      if (state.MobileError || state.LatitudeError || state.LongitudeError || state.DurationError || state.RemarkError) {
+      if (state.MobileError    || 
+          state.LatitudeError  || 
+          state.LongitudeError || 
+          state.DurationError  || 
+          state.RemarkError) {
           commit('set-global-error', 'Please fix the errors in the form before submitting.');
           return;
-         }
+        }
       
+
+
         try {
             const data= await mayaClient.get(`/internal/parking-requests?mobile=${state.formData.Mobile}`);
 
@@ -113,16 +121,20 @@ const actions = {
             let agentName = "NA";
 
             for (let i = 0; i < data.length; i++) {
-              if (data[i].Agent !== 'NA' && [getParkingRequestStatusLabel.RequestRegistered, getParkingRequestStatusLabel.RequestProcessing, getParkingRequestStatusLabel.RequestSpotSuggested].includes(data[i].status)) {
-                  assignedRequest = true;
-                  agentName = data[i].Agent;
-                  break;  // Exit the loop if condition is met
-              }
-          }
+              if (data[i].Agent !== 'NA' && 
+                [getParkingRequestStatusLabel.RequestRegistered, 
+                 getParkingRequestStatusLabel.RequestProcessing, 
+                 getParkingRequestStatusLabel.RequestSpotSuggested].includes(data[i].Status)) {
+                     assignedRequest = true;
+                     agentName = data[i].Agent;
+                     break;  // Exit the loop if condition is met
+                }
+            }
 
             if (assignedRequest === true ) {
                 commit('set-global-error', `This mobile ID has already been assigned to ${agentName}`);
-            } else {
+            } 
+            else {
                 const formDataWithAdRemark = {
                 ...state.formData,
                 Remark: `[AD] ${state.formData.Remark}` // Prepend [AD] in Remark
