@@ -138,7 +138,6 @@ const actions = {
                 commit('set-global-error', 'Your request was registered successfully');
                 return resp.data;
             }
-            return;
     }
 };
 
