@@ -112,10 +112,6 @@ const actions = {
 
         
             const data= await mayaClient.get(`/internal/parking-requests?mobile=${state.formData.Mobile}`);
-            if(data.DisplayMsg){
-              commit('set-global-error', 'Your request was not registered successfully');
-              return;
-            }
             let assignedRequest = false;
             let agentName = 'NA';
 
@@ -139,11 +135,8 @@ const actions = {
                 Remark: `[AD] ${state.formData.Remark}` // Prepend [AD] in Remark
                 };
                 const resp = await mayaClient.post('/owner/parking-request', formDataWithAdRemark);
-                if(resp.DisplayMsg){
-                 commit('set-global-error', 'Your request was not registered successfully');
-                 return;
-                }
                 commit('set-global-error', 'Your request was registered successfully');
+                return resp.data;
             }
             return;
     }
