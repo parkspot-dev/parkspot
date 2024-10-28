@@ -131,14 +131,6 @@ export default {
 
 <style scoped>
 
-h2 {
-    color: var(--secondary-color);
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
 .form-container {
     box-shadow: 0 4px 10px var(--bg-color-tertiary);
     margin: 50px auto;
@@ -188,6 +180,14 @@ h2 {
     min-height: 100px;
 }
 
+h2 {
+    color: var(--secondary-color);
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
 .submit-btn {
     background-color: var(--secondary-color);
     border-radius: 8px;
@@ -205,4 +205,5 @@ h2 {
     background-color: var(--parkspot-black);
     transform: translateY(-2px);
 }
+
 </style>
