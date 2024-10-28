@@ -13,7 +13,7 @@
                 <label for="Mobile">Mobile: <span>*</span></label>
                 <input id="Mobile" @input="validateMobile" maxlength="10" placeholder="Enter your mobile number"
                     required type="text" v-model="formData.Mobile" />
-                <span class="error" v-if="MobileError">{{ MobileError }}</span>
+                <span class="error" v-if="mobileError">{{ mobileError }}</span>
             </div>
 
             <!-- Latitude (Compulsory) -->
@@ -21,7 +21,7 @@
                 <label for="Latitude">Latitude: <span>*</span></label>
                 <input id="Latitude" @input="validateLatitude" placeholder="Enter latitude" required step="any"
                     type="number" v-model="formData.Latitude" />
-                <span v-if="LatitudeError" class="error">{{ LatitudeError }}</span>
+                <span class="error" v-if="latitudeError">{{ latitudeError }}</span>
             </div>
 
             <!-- Longitude (Compulsory) -->
@@ -29,7 +29,7 @@
                 <label for="Longitude">Longitude: <span>*</span></label>
                 <input id="Longitude" @input="validateLongitude" placeholder="Enter longitude" required step="any"
                     type="number" v-model="formData.Longitude" />
-                <span v-if="LongitudeError" class="error">{{ LongitudeError }}</span>
+                <span class="error" v-if="longitudeError">{{ longitudeError }}</span>
             </div>
 
             <!-- City -->
@@ -61,7 +61,7 @@
                 <label for="Duration">Duration:</label>
                 <input id="Duration" @input="validateDuration" placeholder="Enter duration (e.g., '2 hours')"
                     type="text" v-model="formData.Duration" />
-                <span v-if="DurationError" class="error">{{ DurationError }}</span>
+                <span class="error" v-if="durationError">{{ durationError }}</span>
             </div>
 
             <!-- Remark -->
@@ -69,7 +69,7 @@
                 <label for="Remark">Remark:</label>
                 <textarea id="Remark" @input="validateRemark" placeholder="Enter remark"
                     v-model="formData.Remark"></textarea>
-                <span v-if="RemarkError" class="error">{{ RemarkError }}</span>
+                <span v-if="remarkError" class="error">{{ remarkError }}</span>
             </div>
 
             <!-- Submit Button -->
@@ -85,14 +85,14 @@ export default {
     name: 'RegisterRequest',
     computed: {
         ...mapState('agentBook', [
-            'formData',
-            'DurationError',
+            'durationError',
             'errorMessage',
+            'formData',
             'hasError',
-            'LatitudeError',
-            'LongitudeError',
-            'MobileError',
-            'RemarkError'
+            'latitudeError',
+            'longitudeError',
+            'mobileError',
+            'remarkError'
         ])
     },
     methods: {
@@ -109,13 +109,13 @@ export default {
         },
         alertError(msg) {
             this.$buefy.dialog.alert({
-                title: 'Error',
-                message: msg,
-                type: 'is-danger',
+                ariaModal: true,
+                ariaRole: 'alertdialog',
                 hasIcon: true,
                 icon: 'alert-circle',
-                ariaRole: 'alertdialog',
-                ariaModal: true,
+                message: msg,
+                title: 'Error',
+                type: 'is-danger',
             });
         },
     },
@@ -130,56 +130,53 @@ export default {
 </script>
 
 <style scoped>
+
 h2 {
-    text-align: center;
-    margin-bottom: 2rem;
     color: var(--secondary-color);
     font-size: 2rem;
     font-weight: bold;
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
 .form-container {
-    padding: 2.5rem;
-    max-width: 500px;
-    margin: 50px auto;
     box-shadow: 0 4px 10px var(--bg-color-tertiary);
+    margin: 50px auto;
+    max-width: 500px;
+    padding: 2.5rem;
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    align-items: flex-start;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    margin-bottom: 1.5rem;
 }
 
 .form-group label {
+    color: var(--secondary-color);
     font-size: 1.1rem;
     font-weight: 500;
     margin-bottom: 0.5rem;
-    color: var(--secondary-color);
 }
 
 .form-group input,
 .form-group textarea {
-    padding: 0.9rem 1rem;
-    border: 2px solid var(--grey-shade);
-    border-radius: var(--border-default);
     background-color: var(--parkspot-white);
+    border-radius: var(--border-default);
+    border: 2px solid var(--grey-shade);
     color: var(--parkspot-black);
     font-size: 1rem;
+    padding: 0.9rem 1rem;
     transition: border-color 0.3s ease, background-color 0.3s ease;
     width: 100%;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: var(--secondary-color);
     background-color: var(--parkspot-white);
+    border-color: var(--secondary-color);
     outline: none;
-}
-
-.form-group textarea {
-    min-height: 100px;
 }
 
 .form-group span {
@@ -187,17 +184,21 @@ h2 {
     font-size: var(--sp-size-sm);
 }
 
+.form-group textarea {
+    min-height: 100px;
+}
+
 .submit-btn {
-    width: 100%;
-    padding: 0.9rem;
     background-color: var(--secondary-color);
-    color: var(--parkspot-white);
-    border: none;
     border-radius: 8px;
+    border: none;
+    color: var(--parkspot-white);
+    cursor: pointer;
     font-size: 1.2rem;
     font-weight: bold;
-    cursor: pointer;
+    padding: 0.9rem;
     transition: background-color 0.1s ease, transform 0.2s ease;
+    width: 100%;
 }
 
 .submit-btn:hover {
