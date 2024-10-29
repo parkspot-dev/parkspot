@@ -154,6 +154,7 @@ const actions = {
             Latitude: `${state.formData.Latitude}`,
             Longitude: `${state.formData.Longitude}`,
             Duration: `${state.formData.Duration}`,
+            LandMark: `${state.formData.Address}`,
         };
         SEND.Latitude = parseFloat(SEND.Latitude);
         SEND.Longitude = parseFloat(SEND.Longitude);
