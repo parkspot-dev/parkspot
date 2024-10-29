@@ -144,7 +144,7 @@ const actions = {
 
     // Submit the parking request
     async submitParkingRequest({ state }) {
-        const SEND = {
+        const Info = {
             Name: `${state.formData.Name}`,
             Mobile: `${state.formData.Mobile}`,
             EmailId: `${state.formData.Email}`,
@@ -154,10 +154,11 @@ const actions = {
             Latitude: `${state.formData.Latitude}`,
             Longitude: `${state.formData.Longitude}`,
             Duration: `${state.formData.Duration}`,
+            LandMark: `${state.formData.Address}`,
         };
-        SEND.Latitude = parseFloat(SEND.Latitude);
-        SEND.Longitude = parseFloat(SEND.Longitude);
-        return await mayaClient.post('/owner/parking-request', SEND);
+        Info.Latitude = parseFloat(Info.Latitude);
+        Info.Longitude = parseFloat(Info.Longitude);
+        return await mayaClient.post('/owner/parking-request', Info);
     },
 
     // Submit the form
