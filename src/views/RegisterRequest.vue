@@ -84,7 +84,7 @@ import { mapState, mapActions } from 'vuex';
 export default {
     name: 'RegisterRequest',
     computed: {
-        ...mapState('agentBook', [
+        ...mapState('registerRequest', [
             'durationError',
             'errorMessage',
             'formData',
@@ -96,7 +96,7 @@ export default {
         ])
     },
     methods: {
-        ...mapActions('agentBook', [
+        ...mapActions('registerRequest', [
             'submitForm',
             'validateDuration',
             'validateLatitude',
