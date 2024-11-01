@@ -26,6 +26,7 @@ export const pages = {
     BOOKING_PORTAL          : "/internal/booking-portal",
     APP                     : "/app",
     PRIVACY                 : "/privacy",
+    REGISTER_REQUEST        : "/internal/register-request",    
 };
 
 export const routes = [
@@ -135,6 +136,11 @@ export const routes = [
         path: pages.BOOKING_PORTAL,
         name: 'booking-portal',
         component: () => import('@/views/BookingPortal.vue'),
+    },
+    {
+        path: pages.REGISTER_REQUEST,
+        name: 'vehicle-owner-registration',
+        component: () => import('@/views/RegisterRequest.vue'),
     },
     {
         path: pages.APP,
