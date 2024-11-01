@@ -17,6 +17,7 @@
     "boxicons": "^2.0.7",
     "buefy": "^0.9.21",
     "bulma": "^0.9.3",
+    "caniuse-lite": "^1.0.30001676",
     "cashfree-dropjs": "^1.1.4",
     "lightgallery.js": "^1.4.0",
     "lodash": "^4.17.21",
