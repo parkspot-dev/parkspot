@@ -8,7 +8,7 @@ import sdp from './sdp';
 import config from './config';
 import searchPortal from './searchPortal';
 import bookingPortal from './bookingPortal';
-import agentBook from './agentBook';
+import registerRequest from './registerRequest';
 
 Vue.use(Vuex);
 
@@ -22,7 +22,7 @@ const store = new Vuex.Store({
         searchPortal,
         bookingPortal,
         config,
-        agentBook,
+        registerRequest,
     },
 });
 
