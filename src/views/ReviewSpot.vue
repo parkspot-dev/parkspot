@@ -322,41 +322,28 @@ export default {
 
 <style>
 
-.root {
-  margin: 2% 8%;
-  max-width: 100%;
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0px; 
 }
-.scrollable-sections {
-  max-height: 600px;
-  overflow-y: auto;
+.button-group {
+  display: flex;
+  justify-content: end;
+  margin-top: 15px;
 }
-.sub-heading {
-    color: var(--secondary-color);
-    font-size: 1.4rem;
-    font-weight: bold;
-    letter-spacing: normal;
-    margin-bottom: 10px;
+.calendar {
+  margin-left: auto;
+  width: 70%;
 }
-.form-section {
-  border: 1px solid var(--parkspot-black);
-  margin: 1% auto;
-  padding: 1%;
-}
-.form-group {
-  display: grid;
-  gap: 3%;
-  grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
-  padding-bottom: 2%;
+.error {
+  animation: shake 0.5s;
 }
 .form-field {
   align-items: center;
   display: flex;
   justify-content: flex-end;
   margin: 0% 9%;
-}
-.form-field label {
-  font-weight: 600;
-  padding: 1%;
 }
 .form-field input:focus,
 .form-field select:focus,
@@ -374,17 +361,18 @@ export default {
   transition: border-color 0.1s ease, background-color 0.1s ease;
   width: 77%;
 }
-.noborder {
-  background-color: var(--parkspot-white);
-  border: none;
-  font-weight: 600;
+.form-group {
+  display: grid;
+  gap: 3%;
+  grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
+  padding-bottom: 2%;
 }
-.button-group {
-  display: flex;
-  justify-content: end;
-  margin-top: 15px;
+.form-section {
+  border: 1px solid var(--parkspot-black);
+  margin: 1% auto;
+  padding: 1%;
 }
-.heading{
+.heading {
   align-items: center;
   display: flex;
   justify-content: center;
@@ -396,59 +384,18 @@ export default {
   75% { transform: translate(-30px, 0); }
   100% { transform: translate(0,0); }    
 }
-.error {
-  animation: shake 0.5s;
+.noborder {
+  background-color: var(--parkspot-white);
+  border: none;
+  font-weight: 600;
 }
-.calendar{
-  margin-left: auto;
-  width: 70%;
+.root {
+  margin: 2% 8%;
+  max-width: 100%;
 }
-.button-container {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0px; 
-}
-@media (max-width: 768px) {
-  .form-group {
-    grid-template-columns: 1fr;
-    gap: 1%;
-    padding-bottom: 5%;
-  }
-  .scrollable-sections {
-    overflow-y: auto;
-    max-height: 100%;
-  }
-  .root {
-    margin: 1% 1%;
-  }
-  .form-section {
-    margin-bottom: 2%;
-    margin: 1% 1%;
-  }
-  .form-field {
-    font-size: 1rem;
-    margin: 0% 0%;
-  }
-  .form-field input,
-  .form-field select,
-  .form-section textarea {
-    margin-left: auto;
-    transition: border-color 0.1s ease, background-color 0.1s ease;
-    width: 80%;
-  }
-  .sub-heading {
-    font-size: 1.4rem;
-  }
-}
-@media (max-width: 450px) {
-  .form-group {
-    padding-bottom: 10%;
-  }
-  .form-field input,
-  .form-field select,
-  .form-section textarea {
-    width: 70%;
-  }
+.scrollable-sections {
+  max-height: 600px;
+  overflow-y: auto;
 }
 .submit-btn {
   background-color: var(--secondary-color);
@@ -461,11 +408,60 @@ export default {
   padding: 0.9rem;
   transition: background-color 0.1s ease, transform 0.2s ease;
 }
-
 .submit-btn:hover {
   background-color: var(--primary-color);
   color: var(--parkspot-black);
   transform: translateY(-3px);
+}
+.sub-heading {
+  color: var(--secondary-color);
+  font-size: 1.4rem;
+  font-weight: bold;
+  letter-spacing: normal;
+  margin-bottom: 10px;
+}
+@media (max-width: 400px) {
+  .form-field input,
+  .form-field select,
+  .form-section textarea {
+    width: 10%;
+  }
+  .form-group {
+    padding-bottom: 15%;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-field {
+    font-size: 1rem;
+    margin: 0% 0%;
+  }
+  .form-field input,
+  .form-field select,
+  .form-section textarea {
+    margin-left: auto;
+    transition: border-color 0.1s ease, background-color 0.1s ease;
+    width: 70%;
+  }
+  .form-group {
+    gap: 1%;
+    grid-template-columns: 1fr;
+    padding-bottom: 8%;
+  }
+  .form-section {
+    margin-bottom: 2%;
+    margin: 1% 1%;
+  }
+  .root {
+    margin: 1% 1%;
+  }
+  .scrollable-sections {
+    max-height: 100%;
+    overflow-y: auto;
+  }
+  .sub-heading {
+    font-size: 1.4rem;
+  }
 }
 
 </style>
