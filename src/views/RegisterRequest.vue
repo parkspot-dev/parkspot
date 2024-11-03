@@ -11,7 +11,7 @@
             <!-- Mobile (Compulsory) -->
             <div class="form-group">
                 <label for="Mobile">Mobile: <span>*</span></label>
-                <input id="Mobile" @input="validateMobile" maxlength="10" placeholder="Enter your mobile number"
+                <input id="Mobile" @input="validateMobile" maxlength="10" placeholder="Enter VO mobile number"
                     required type="text" v-model="formData.Mobile" />
                 <span class="error" v-if="mobileError">{{ mobileError }}</span>
             </div>
