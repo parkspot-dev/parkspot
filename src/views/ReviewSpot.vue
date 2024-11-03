@@ -1,11 +1,10 @@
 
 <template>
-  <div class="root">
+  <div class="body">
+   <div class="root">
     <!-- Image Upload Section -->
 
-    <!-- Scrollable Form Sections -->
-    <div class="scrollable-sections">
-       <!-- SO Details Section -->
+      <!-- SO Details Section -->
       <div class="form-section">
         <div class="heading">
             <h3 class="sub-heading">SO Details</h3>
@@ -273,11 +272,9 @@
       <div class="button-container">
         <button @click="handleSubmit" class="submit-btn">Update</button>
       </div>
-
-    </div>
-    <!-- END OF SCROLLABLE SECTION -->
   </div>
   <!-- End of root -->
+  </div>
 </template>
 
 <script>
@@ -334,7 +331,11 @@ export default {
 </script>
 
 <style>
-
+.body{
+  padding: 16px;
+  text-align: center;
+  background: #f5f5fb;
+}
 .button-container {
   display: flex;
   justify-content: center;
@@ -367,6 +368,9 @@ export default {
   justify-content: flex-end;
   margin: 0% 9%;
 }
+.form-field label{
+  font-weight: 700;
+}
 .form-field input:focus,
 .form-field select:focus,
 .form-field textarea:focus {
@@ -390,7 +394,9 @@ export default {
   padding-bottom: 2%;
 }
 .form-section {
-  border: 1px solid var(--parkspot-black);
+  background-color: var(--parkspot-white);
+  border-radius: 5px;
+  border: 1px solid #cccccc;
   margin: 1% auto;
   padding: 1%;
 }
@@ -405,7 +411,7 @@ export default {
   font-weight: 600;
 }
 .root {
-  margin: 2% 8%;
+  margin: 1% 8%;
   max-width: 100%;
 }
 .scrollable-sections {
