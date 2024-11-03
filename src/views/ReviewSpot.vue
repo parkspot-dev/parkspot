@@ -38,7 +38,7 @@
              v-model="formdataSO.fullName"/>
           </div>
           <!-- Mobile -->
-          <div class="form-field EXCEPTION">
+          <div class="form-field">
             <label for="mobile">Mobile:<span style="color: red;">*</span> </label>
               <div class="error-field">
                 <input
@@ -91,7 +91,7 @@
             ></textarea>
           </div>
           <!-- Latitude -->
-          <div class="form-field EXCEPTION">
+          <div class="form-field">
             <label for="latitude">Latitude:<span style="color: red;">*</span></label>
             <div class="error-field">
             <input 
@@ -109,7 +109,7 @@
             </div>
           </div>
           <!-- Longitude -->
-          <div class="form-field EXCEPTION">
+          <div class="form-field">
             <label for="longitude">Longitude:<span style="color: red;">*</span></label>
             <div class="error-field">
             <input
@@ -270,7 +270,8 @@
         <!-- END OF Details -->
       <!-- Update -->
       <div class="button-container">
-        <button @click="handleSubmit" class="submit-btn">Update</button>
+        <button @click="handleSave" class="submit-btn">Save</button>
+        <button @click="handleSubmit" class="submit-btn">Publish</button>
       </div>
   </div>
   <!-- End of root -->
@@ -280,52 +281,53 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
-
 export default {
   name: 'ReviewSpot',
-    components: {
-      AtomDatePicker,
-    },
-    computed: {
-        ...mapState('reviewSpot', [
-            'errorMessage',
-            'formdataBooking',
-            'formdataRent',
-            'formdataSO',
-            'hasError',
-            'latitudeError',
-            'longitudeError',
-            'mobileError',
-        ])
-    },
-    methods: {
-        ...mapActions('reviewSpot', [
-            'validateLatitude',
-            'validateLongitude',
-            'validateMobile'
-        ]),
-        handleSubmit() {
-            this.submitForm();
-        },
-        
-        alertError(msg) {
-            this.$buefy.dialog.alert({
-                ariaModal: true,
-                ariaRole: 'alertdialog',
-                hasIcon: true,
-                icon: 'alert-circle',
-                message: msg,
-                title: 'Error',
-                type: 'is-danger',
-            });
+  components: {
+    AtomDatePicker,
+  },
+  computed: {
+      ...mapState('reviewSpot', [
+          'errorMessage',
+          'formdataBooking',
+          'formdataRent',
+          'formdataSO',
+          'hasError',
+          'latitudeError',
+          'longitudeError',
+          'mobileError',
+      ])
+  },
+  methods: {
+      ...mapActions('reviewSpot', [
+          'validateLatitude',
+          'validateLongitude',
+          'validateMobile'
+      ]),
+      handleSubmit() {
+        this.submitForm();
+      },
+      handleSave(){
+        this.saveForm();
+      },
+      alertError(msg) {
+        this.$buefy.dialog.alert({
+          ariaModal: true,
+          ariaRole: 'alertdialog',
+          hasIcon: true,
+          icon: 'alert-circle',
+          message: msg,
+          title: 'Error',
+          type: 'is-danger',
+        });
       },
     },
-    watch: {
-        hasError(error) {
-            if (error) {
-                this.alertError(this.errorMessage);
-            }
-        },
+  watch: {
+      hasError(error) {
+          if (error) {
+              this.alertError(this.errorMessage);
+          }
+      },
     },
 };
 </script>
@@ -359,8 +361,7 @@ export default {
 .error-field{
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  width: 90%;
+  width: 100%;
 }
 .form-field {
   align-items: center;
@@ -420,13 +421,13 @@ export default {
 }
 .submit-btn {
   background-color: var(--secondary-color);
-  border-radius: 8px;
   border: none;
   color: var(--parkspot-white);
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: bold;
-  padding: 0.9rem;
+  padding: 0.6rem;
+  margin: 0px 5px;
   transition: background-color 0.1s ease, transform 0.2s ease;
 }
 .submit-btn:hover {
@@ -451,7 +452,6 @@ export default {
     padding-bottom: 15%;
   }
 }
-
 @media (max-width: 768px) {
   .form-field {
     font-size: 1rem;
