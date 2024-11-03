@@ -39,12 +39,10 @@
              v-model="formdataSO.fullName"/>
           </div>
           <!-- Mobile -->
-          <div class="form-field">
-            <label for="mobile">Mobile: <span style="color: red;">*</span> </label>
+          <div class="form-field EXCEPTION">
+            <label for="mobile">Mobile:<span style="color: red;">*</span> </label>
+              <div class="error-field">
                 <input
-                :class="{
-                  error: mobileError, // checks for Mobile Error
-                }"
                 @input="validateMobile"
                 id="mobile"
                 maxlength="10"
@@ -52,7 +50,12 @@
                 required
                 type="text"
                 v-model="formdataSO.mobile"
-            />
+              />
+              <span 
+               class="error" 
+               v-if="mobileError"
+               >{{ mobileError }}</span>
+              </div>
           </div>
           <!-- EmailId -->
           <div class="form-field">
@@ -89,23 +92,28 @@
             ></textarea>
           </div>
           <!-- Latitude -->
-          <div class="form-field">
-            <label for="latitude">Latitude: <span style="color: red;">*</span></label>
+          <div class="form-field EXCEPTION">
+            <label for="latitude">Latitude:<span style="color: red;">*</span></label>
+            <div class="error-field">
             <input 
               type="number"
-              :class="{ error: latitudeError}" 
               @input="validateLatitude"
               placeholder="Enter latitude"
               required 
               step="any"
               v-model="formdataSO.latitude" 
               />
+            <span 
+             class="error" 
+             v-if="latitudeError"
+             >{{ latitudeError }}</span>
+            </div>
           </div>
           <!-- Longitude -->
-          <div class="form-field">
-            <label for="longitude">Longitude: <span style="color: red;">*</span></label>
+          <div class="form-field EXCEPTION">
+            <label for="longitude">Longitude:<span style="color: red;">*</span></label>
+            <div class="error-field">
             <input
-             :class="{ error: longitudeError}"
              @input="validateLongitude" 
              placeholder="Enter longitude" 
              required 
@@ -113,6 +121,11 @@
              type="number"
              v-model="formdataSO.longitude" 
              />
+             <span 
+             class="error" 
+             v-if="longitudeError"
+             >{{ longitudeError }}</span>
+             </div>
           </div>
         </div>
       </div>
@@ -337,7 +350,16 @@ export default {
   width: 70%;
 }
 .error {
-  animation: shake 0.5s;
+  font-size: 0.6rem;
+  color: red;
+  font-style: italic;
+  margin-left: auto;
+}
+.error-field{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 90%;
 }
 .form-field {
   align-items: center;
@@ -376,13 +398,6 @@ export default {
   align-items: center;
   display: flex;
   justify-content: center;
-}
-@keyframes shake {
-  0% { transform: translate(30px, 0); }
-  25% { transform: translate(-30px, 0); }
-  50% { transform: translate(30px, 0); }
-  75% { transform: translate(-30px, 0); }
-  100% { transform: translate(0,0); }    
 }
 .noborder {
   background-color: var(--parkspot-white);
@@ -463,5 +478,4 @@ export default {
     font-size: 1.4rem;
   }
 }
-
 </style>
