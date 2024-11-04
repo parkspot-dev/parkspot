@@ -26,7 +26,8 @@ export const pages = {
     BOOKING_PORTAL          : "/internal/booking-portal",
     APP                     : "/app",
     PRIVACY                 : "/privacy",
-    REGISTER_REQUEST        : "/internal/register-request",    
+    REGISTER_REQUEST        : "/internal/register-request", 
+    REVIEW_SPOT             : "/internal/review-spot",   
 };
 
 export const routes = [
@@ -141,6 +142,11 @@ export const routes = [
         path: pages.REGISTER_REQUEST,
         name: 'vehicle-owner-registration',
         component: () => import('@/views/RegisterRequest.vue'),
+    },
+    {
+        path: pages.REVIEW_SPOT,
+        name: 'agent-review-spot',
+        component: () => import('@/views/ReviewSpot.vue'),
     },
     {
         path: pages.APP,
