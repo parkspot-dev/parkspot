@@ -31,7 +31,7 @@
           </div>
           <!-- Full name -->
           <div class="form-field">
-            <label for="fullName">FullName: </label>
+            <label for="fullName">Full Name: </label>
             <input 
              placeholder="Enter Full Name" 
              type="text" 
@@ -302,7 +302,8 @@ export default {
       ...mapActions('reviewSpot', [
           'validateLatitude',
           'validateLongitude',
-          'validateMobile'
+          'validateMobile',
+          'initState'
       ]),
       handleSubmit() {
         this.submitForm();
@@ -328,7 +329,10 @@ export default {
               this.alertError(this.errorMessage);
           }
       },
-    },
+  },
+  mounted() {
+      this.initState(); 
+  },
 };
 </script>
 
