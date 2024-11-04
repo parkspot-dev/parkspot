@@ -210,10 +210,10 @@
           <div class="form-field">
             <label for="endDate">End Date:<span style="color: red;">*</span></label>
             <AtomDatePicker
-              v-model="formdataBooking.endDate" 
-              required   
               :size="'is-small'"
               class="calendar"
+              required   
+              v-model="formdataBooking.endDate" 
             >
             </AtomDatePicker>
           </div>
@@ -236,7 +236,7 @@
                 maxlength="50"
                 placeholder="Enter Duration(max 50 characters)"
                 rows="1"
-                v-model="formdataSO.duration"
+                v-model="formdataBooking.duration"
                 ></textarea>
           </div>
           <!-- Spot Request Status -->
@@ -262,7 +262,7 @@
                maxlength="200"
                placeholder="Enter Remark(max 200 characters)"
                rows="2"
-               v-model="formdataSO.remark"
+               v-model="formdataBooking.remark"
               ></textarea>
           </div>
         </div>
@@ -303,7 +303,9 @@ export default {
           'validateLatitude',
           'validateLongitude',
           'validateMobile',
-          'initState'
+          'initState',
+          'submitForm',
+          'saveForm',
       ]),
       handleSubmit() {
         this.submitForm();

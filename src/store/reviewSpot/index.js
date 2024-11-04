@@ -25,7 +25,7 @@ const state = {
         startDate: '',
         endDate: '',
         lastCallDate: '',
-        minDuration: '',
+        duration: '',
         spotrequestStatus: '',
         remark: '',
         },
@@ -50,19 +50,25 @@ const mutations = {
     'setFormData'(state, formData) {
         state.formdataSO = { ...state.formdataSO, ...formData.SO };
         state.formdataRent = { ...state.formdataRent, ...formData.Rent };
-        state.formdataBooking = {...state.formdataBooking,...formData.Booking,};
+        state.formdataBooking = {...state.formdataBooking,...formData.Booking };
     },
 };
 
 const actions = {
-    // Helper to format dates
-    formatDate(_, date) {
-        if (date === '0001-01-01T00:00:00Z') {
-            return '--';
-        }
-        return moment(date).format('MMM Do YYYY');
-    },
+    // Function to format ISO date string to readable format
+    // formatDateToString(_, isoDate) {
+    //     if (isoDate === '0001-01-01T00:00:00Z') {
+    //         return '--'; // Handle empty or null-like dates
+    //     }
+    //     return moment(isoDate).format('MMM Do YYYY, h:mm:ss A');
+    // },
 
+    // // Function to convert a readable date string back to ISO format
+    // convertStringToISO(_, dateString) {
+    //     const isoDate = moment(dateString, 'MMM Do YYYY, h:mm:ss A').toISOString();
+    //     return isoDate;
+    // },
+    
     // Validate Latitude type
     validateLatitude({ commit, state }) {
         const latitudeValue = parseFloat(state.formdataSO.latitude);
@@ -119,12 +125,13 @@ const actions = {
             Address: "Address",
             RentUnit: 1,
             TotalSlots: 3,
-            StartDate: "2024-10-12T11:37:22.6779781Z",
-            EndDate: "2024-10-12T11:37:22.6779781Z",
+            StartDate: "2025-10-12T11:37:22.6779781Z",
+            EndDate: "2025-10-12T11:37:22.6779781Z",
             MinDuration: "2 months",
             Remark: "Remark",
-            LastCallDate: "2024-10-12T11:37:22.6779781Z",
-        };const formData = {
+            LastCallDate: "2025-10-12T11:37:22.6779781Z",
+        };
+        const formData = {
             SO: {
                 spotId: hardcodedInfo.ID,
                 userName: hardcodedInfo.UserName,
@@ -139,17 +146,21 @@ const actions = {
             },
             Rent: {
                 totalSlots: hardcodedInfo.TotalSlots,
-                baseAmount: hardcodedInfo.RentUnit,
+                baseAmount: hardcodedInfo.RentUnit, // not given
                 rentUnit: hardcodedInfo.RentUnit,
             },
             Booking: {
-                startDate:  dispatch('formatDate', hardcodedInfo.StartDate),
-                endDate: dispatch('formatDate', hardcodedInfo.EndDate),
-                lastCallDate: dispatch('formatDate', hardcodedInfo.LastCallDate),
-                minDuration: hardcodedInfo.MinDuration,
+                startDate: new Date(moment(hardcodedInfo.StartDate).format('MMM Do YYYY')),
+                endDate: moment(hardcodedInfo.EndDate).format('MMM Do YYYY'),
+                // lastCallDate: this.formatDateToString(null, hardcodedInfo.LastCallDate),
+                duration: hardcodedInfo.MinDuration,
                 remark: hardcodedInfo.Remark,
             },
         };
+        console.log(formData.Booking.startDate);
+        console.log(hardcodedInfo.StartDate);
+        // console.log()
+        // console.log(lastCallDate);
         commit('setFormData', formData);
     },
 
