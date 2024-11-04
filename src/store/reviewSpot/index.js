@@ -172,7 +172,6 @@ const actions = {
     }
     // -------------WORKING STAGE-------------------------
     // submitForm() {
-
     //     // Validate form fields
     //     dispatch('validateFormFields');
 
