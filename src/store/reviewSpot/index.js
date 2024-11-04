@@ -107,7 +107,7 @@ const actions = {
     // Fetch data from API when the webpage is mounted
     initState({ commit, dispatch }) {
         
-        // API call for get not completed as of now
+        // API call for get not completed as of now  
         const hardcodedInfo = {
             ID: 123,
             Owner: { FullName: "Sud", EmailID: "sud@gmai.com", Mobile: "8092996057" },
@@ -172,7 +172,6 @@ const actions = {
     }
     // -------------WORKING STAGE-------------------------
     // submitForm() {
-
     //     // Validate form fields
     //     dispatch('validateFormFields');
 
