@@ -1,6 +1,18 @@
 import { mayaClient } from '@/services/api';
-import { getParkingRequestStatus as parkingStatus} from '@/constant/enums';
+import { getParkingRequestStatus as parkingStatus } from '@/constant/enums';
 const state = {
+    //     Example:
+    //     "Name":     "test2",
+    //     "Mobile":   "8092996057",
+    //     "Latitude":  11.1234567,
+    //     "Longitude": 22.123456789,
+    //     "City":      "Varansai",
+    //     "Email":     "sds@gmgail.com",
+    //     "Car":       "string",
+    //     "Address":   "house 5",
+    //     "Remark":    "Ish",
+    //     "Duration":  "2 hours"
+    //
     formData: {
         Name: '',
         Mobile: '',
@@ -11,7 +23,7 @@ const state = {
         Car: '',
         Address: '',
         Remark: '',
-        Duration: ''
+        Duration: '',
     },
     durationError: '',
     mobileError: '',
@@ -20,18 +32,6 @@ const state = {
     remarkError: '',
     hasError: false,
     errorMessage: '',
-    //     Example:
-    //     "Name":     "test2",
-    //     "Mobile":   "8092996057",
-    //     "Latitude":  11.1234567,
-    //     "Longitude": 22.123456789,  
-    //     "City":      "Varansai",
-    //     "Email":     "sds@gmgail.com",
-    //     "Car":       "string", 
-    //     "Address":   "house 5",
-    //     "Remark":    "Ish", 
-    //     "Duration":  "2 hours"
-    // 
 };
 
 const mutations = {
@@ -42,18 +42,20 @@ const mutations = {
         state.hasError = true;
         state.errorMessage = errorMessage;
     },
-    'reset-global-Error'(state){
+    'reset-global-Error'(state) {
         state.hasError = false;
         state.errorMessage = '';
-    }
+    },
 };
 
 const actions = {
-
     // Validate Duration length
     validateDuration({ commit, state }) {
         if (state.formData.Duration.length > 50) {
-            commit('set-error', { field: 'durationError', message: 'Duration should be less than 50 characters.' });
+            commit('set-error', {
+                field: 'durationError',
+                message: 'Duration should be less than 50 characters.',
+            });
         } else {
             commit('set-error', { field: 'durationError', message: '' });
         }
@@ -63,7 +65,10 @@ const actions = {
     validateLatitude({ commit, state }) {
         const latitudeValue = parseFloat(state.formData.Latitude);
         if (isNaN(latitudeValue)) {
-            commit('set-error', { field: 'latitudeError', message: 'Latitude must be a valid float.' });
+            commit('set-error', {
+                field: 'latitudeError',
+                message: 'Latitude must be a valid float.',
+            });
         } else {
             commit('set-error', { field: 'latitudeError', message: '' });
             state.formData.Latitude = latitudeValue;
@@ -74,18 +79,24 @@ const actions = {
     validateLongitude({ commit, state }) {
         const longitudeValue = parseFloat(state.formData.Longitude);
         if (isNaN(longitudeValue)) {
-            commit('set-error', { field: 'longitudeError', message: 'Longitude must be a valid float.' });
+            commit('set-error', {
+                field: 'longitudeError',
+                message: 'Longitude must be a valid float.',
+            });
         } else {
             commit('set-error', { field: 'longitudeError', message: '' });
             state.formData.Longitude = longitudeValue;
         }
-    }, 
+    },
 
-    // Validate Mobile length 
+    // Validate Mobile length
     validateMobile({ commit, state }) {
         const mobilePattern = /^\d{10}$/;
         if (!mobilePattern.test(state.formData.Mobile)) {
-            commit('set-error', { field: 'mobileError', message: 'Mobile number must be exactly 10 digits.' });
+            commit('set-error', {
+                field: 'mobileError',
+                message: 'Mobile number must be exactly 10 digits.',
+            });
         } else {
             commit('set-error', { field: 'mobileError', message: '' });
         }
@@ -94,7 +105,10 @@ const actions = {
     // Validate Remark length
     validateRemark({ commit, state }) {
         if (state.formData.Remark.length > 200) {
-            commit('set-error', { field: 'remarkError', message: 'Remark cannot exceed 200 characters.' });
+            commit('set-error', {
+                field: 'remarkError',
+                message: 'Remark cannot exceed 200 characters.',
+            });
         } else {
             commit('set-error', { field: 'remarkError', message: '' });
         }
@@ -107,7 +121,7 @@ const actions = {
             dispatch('validateLatitude'),
             dispatch('validateLongitude'),
             dispatch('validateMobile'),
-            dispatch('validateRemark')
+            dispatch('validateRemark'),
         ]);
     },
 
@@ -124,32 +138,49 @@ const actions = {
 
     // Check if there is an assigned request for the mobile ID
     async checkAssignedRequest({ state }) {
-        const agentInfo = await mayaClient.get(`/internal/parking-requests?mobile=${state.formData.Mobile}`);
-            for (let i = 0; i < agentInfo.length; i++) {
-                if (
-                    agentInfo[i].Agent !== 'NA' &&
-                    [
+        const agentInfo = await mayaClient.get(
+            `/internal/parking-requests?mobile=${state.formData.Mobile}`,
+        );
+        for (let i = 0; i < agentInfo.length; i++) {
+            if (
+                agentInfo[i].Agent !== 'NA' &&
+                [
                     parkingStatus.RequestRegistered,
                     parkingStatus.RequestProcessing,
-                    parkingStatus.RequestSpotSuggested
-                    ].includes(agentInfo[i].status)
-                    ) 
-                    {
-                    return agentInfo[i].Agent; // Return the assigned agent's name
-                }
+                    parkingStatus.RequestSpotSuggested,
+                ].includes(agentInfo[i].status)
+            ) {
+                return agentInfo[i].Agent; // Return the assigned agent's name
             }
+        }
 
         return null; // No assigned request found
     },
 
     // Submit the parking request
     async submitParkingRequest({ state }) {
+<<<<<<< HEAD
         const formDataWithAdRemark = {
         ...state.formData,
         Remark: `[AD] ${state.formData.Remark}` // Prepend [AD] in Remark
         };
 
         return await mayaClient.post('/owner/parking-request', formDataWithAdRemark);
+=======
+        const parkingRequest = {
+            Name: state.formData.Name,
+            Mobile: state.formData.Mobile,
+            EmailId: state.formData.Email,
+            City: state.formData.City,
+            CarModel: state.formData.Car,
+            Comments: `[AD] ${state.formData.Remark}`, // Prepend [AD] with Remarks
+            Latitude: state.formData.Latitude,
+            Longitude: state.formData.Latitude,
+            Duration: state.formData.Duration,
+            LandMark: state.formData.Address,
+        };
+        return await mayaClient.post('/owner/parking-request', parkingRequest);
+>>>>>>> b410616e1fe62115dbca1db6993dd803fdf04636
     },
 
     // Submit the form
@@ -161,29 +192,34 @@ const actions = {
 
         // Check for errors and handle if any exist
         if (await dispatch('hasErrors')) {
-            commit('set-global-error', 'Please fix the errors in the form before submitting.');
+            commit(
+                'set-global-error',
+                'Please fix the errors in the form before submitting.',
+            );
             return;
         }
 
         // Check if the mobile ID has already been assigned
         const assignedAgent = await dispatch('checkAssignedRequest');
-            if (assignedAgent) {
-            commit('set-global-error', `This mobile ID has already been assigned to ${assignedAgent}`);
+        if (assignedAgent) {
+            commit(
+                'set-global-error',
+                `This mobile ID has already been assigned to ${assignedAgent}`,
+            );
             return;
         }
-        
+
         // Submit the parking request
         const response = await dispatch('submitParkingRequest');
         commit('set-global-error', 'Your request was registered successfully');
 
         return response.data;
-
-    }
+    },
 };
 
 export default {
     namespaced: true,
     state,
     mutations,
-    actions
+    actions,
 };
