@@ -144,21 +144,12 @@ const actions = {
 
     // Submit the parking request
     async submitParkingRequest({ state }) {
-        const Info = {
-            Name: `${state.formData.Name}`,
-            Mobile: `${state.formData.Mobile}`,
-            EmailId: `${state.formData.Email}`,
-            City: `${state.formData.City}`,
-            CarModel: `${state.formData.Car}`,
-            Comments: `[AD] ${state.formData.Remark}`, // Prepend [AD] with Remarks       
-            Latitude: `${state.formData.Latitude}`,
-            Longitude: `${state.formData.Longitude}`,
-            Duration: `${state.formData.Duration}`,
-            LandMark: `${state.formData.Address}`,
+        const formDataWithAdRemark = {
+        ...state.formData,
+        Remark: `[AD] ${state.formData.Remark}` // Prepend [AD] in Remark
         };
-        Info.Latitude = parseFloat(Info.Latitude);
-        Info.Longitude = parseFloat(Info.Longitude);
-        return await mayaClient.post('/owner/parking-request', Info);
+
+        return await mayaClient.post('/owner/parking-request', formDataWithAdRemark);
     },
 
     // Submit the form
