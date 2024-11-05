@@ -197,10 +197,13 @@
         <div class="form-group">
           <!-- Start Date -->
           <div class="form-field">
-            <label for="startDate">Start Date:<span style="color: red;">*</span></label>
+            <label for="startDate" >Start Date:<span style="color: red;">*</span></label>
             <AtomDatePicker 
               :size="'is-small'"
               v-model="formdataBooking.startDate"
+              :assignedDate="
+                  formdataBooking.startDate
+              "
               required
               class="calendar"
               >
@@ -210,8 +213,8 @@
           <div class="form-field">
             <label for="endDate">End Date:<span style="color: red;">*</span></label>
             <AtomDatePicker
-              :size="'is-small'"
               class="calendar"
+              :size="'is-small'"
               required   
               v-model="formdataBooking.endDate" 
             >
@@ -333,7 +336,8 @@ export default {
       },
   },
   mounted() {
-      this.initState(); 
+    this.initState();
+     
   },
 };
 </script>
