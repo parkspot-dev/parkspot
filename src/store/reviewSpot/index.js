@@ -1,4 +1,7 @@
-import moment from 'moment';
+import { getSpotRequestStatusLabel as getSpotStatus } from "../../constant/enums";
+import { getParkingSizeLabel as getParkingSize } from "../../constant/enums";
+import { getRentUnitLabel as getRentUnit } from "../../constant/enums";
+import { getSiteTypeLabel as getSiteType } from "../../constant/enums";
 
 const state = {
     editField: null,
@@ -50,25 +53,12 @@ const mutations = {
     'setFormData'(state, formData) {
         state.formdataSO = { ...state.formdataSO, ...formData.SO };
         state.formdataRent = { ...state.formdataRent, ...formData.Rent };
-        state.formdataBooking = {...state.formdataBooking,...formData.Booking };
+        state.formdataBooking = { ...state.formdataBooking, ...formData.Booking };
     },
 };
 
 const actions = {
-    // Function to format ISO date string to readable format
-    // formatDateToString(_, isoDate) {
-    //     if (isoDate === '0001-01-01T00:00:00Z') {
-    //         return '--'; // Handle empty or null-like dates
-    //     }
-    //     return moment(isoDate).format('MMM Do YYYY, h:mm:ss A');
-    // },
 
-    // // Function to convert a readable date string back to ISO format
-    // convertStringToISO(_, dateString) {
-    //     const isoDate = moment(dateString, 'MMM Do YYYY, h:mm:ss A').toISOString();
-    //     return isoDate;
-    // },
-    
     // Validate Latitude type
     validateLatitude({ commit, state }) {
         const latitudeValue = parseFloat(state.formdataSO.latitude);
@@ -110,26 +100,47 @@ const actions = {
         }
     },
 
+    // Helper function for parking size label retrieval
+    getParkingSize(value) {
+        return ParkingSizeEnum[value];
+    },
+
+
     // Fetch data from API when the webpage is mounted
     initState({ commit, dispatch }) {
         
-        // API call for get not completed as of now  
+        // API call for GET, not completed as of now  
         const hardcodedInfo = {
-            ID: 123,
-            Owner: { FullName: "Sud", EmailID: "sud@gmai.com", Mobile: "8092996057" },
-            UserName: "sud",
-            Latitude: 12.123,
-            Longitude: 12.123,
-            City: "Bengaluru",
-            Area: "Area",
-            Address: "Address",
-            RentUnit: 1,
-            TotalSlots: 3,
-            StartDate: "2025-10-12T11:37:22.6779781Z",
-            EndDate: "2025-10-12T11:37:22.6779781Z",
-            MinDuration: "2 months",
-            Remark: "Remark",
-            LastCallDate: "2025-10-12T11:37:22.6779781Z",
+            
+            "ID": 123,
+            "Owner": {
+                "FullName": "Sud",
+                "EmailID": "sud@gmai.com",
+                "Mobile": "8092996057"
+            },
+            "Name": "Site Name",
+            "Latitude": 12.123,
+            "Longitude": 12.123,
+            "BaseAmount": 3000,
+            "TotalSlots": 3,
+            "Address": "Address",
+            "RentUnit": 1,
+            "UserName": "sud",
+            "City": "Bengaluru",
+            "Area": "Area",
+            "Size": 1,  
+            "Type": 1,  
+            "StartDate": "2024-10-12T11:37:22.6779781Z",
+            "EndDate": "2024-10-12T11:37:22.6779781Z",
+            "MinDuration": "2 months",
+            "SpotImages": [
+                "url1",
+                "url2"
+            ],
+            "Status": 1,
+            "Remark": "Remark",
+            "LastCallDate": "2024-10-12T11:37:22.6779781Z"
+
         };
         const formData = {
             SO: {
@@ -146,21 +157,19 @@ const actions = {
             },
             Rent: {
                 totalSlots: hardcodedInfo.TotalSlots,
-                baseAmount: hardcodedInfo.RentUnit, // not given
-                rentUnit: hardcodedInfo.RentUnit,
+                baseAmount: hardcodedInfo.BaseAmount, 
+                rentUnit: getRentUnit(hardcodedInfo.RentUnit),
+                parkingSize: getParkingSize(hardcodedInfo.Size),
+                siteType: getSiteType(hardcodedInfo.Type),
             },
             Booking: {
-                startDate: new Date(moment(hardcodedInfo.StartDate).format('MMM Do YYYY')),
-                endDate: moment(hardcodedInfo.EndDate).format('MMM Do YYYY'),
-                // lastCallDate: this.formatDateToString(null, hardcodedInfo.LastCallDate),
                 duration: hardcodedInfo.MinDuration,
+                startDate: hardcodedInfo.StartDate,
                 remark: hardcodedInfo.Remark,
+                spotrequestStatus: getSpotStatus(hardcodedInfo.Status),
             },
         };
-        console.log(formData.Booking.startDate);
-        console.log(hardcodedInfo.StartDate);
-        // console.log()
-        // console.log(lastCallDate);
+        console.log(hardcodedInfo);
         commit('setFormData', formData);
     },
 
