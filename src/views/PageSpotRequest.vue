@@ -109,7 +109,8 @@ export default {
             });
         },
 
-        // Generate detail URL for a specific Request ID
+        // Generate detail URL for a specific Request ID 
+        // Not working properly
         RequestDetailURL(requestId) {
             return this.$router.resolve({
                 name: 'spot-requests',
