@@ -1,7 +1,6 @@
 import Home from '../views/PageHome.vue';
 import PageAbout from '@/views/PageAbout.vue';
 import { APP_LINK } from '../constant/constant';
-// import { component } from 'vue/types/umd';
 
 // prettier-ignore
 export const pages = {
