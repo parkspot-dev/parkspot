@@ -1,6 +1,7 @@
 import Home from '../views/PageHome.vue';
 import PageAbout from '@/views/PageAbout.vue';
 import { APP_LINK } from '../constant/constant';
+// import { component } from 'vue/types/umd';
 
 // prettier-ignore
 export const pages = {
@@ -26,7 +27,8 @@ export const pages = {
     BOOKING_PORTAL          : "/internal/booking-portal",
     APP                     : "/app",
     PRIVACY                 : "/privacy",
-    REGISTER_REQUEST        : "/internal/register-request",    
+    REGISTER_REQUEST        : "/internal/register-request",  
+    SPOT_REQUESTS           : "/internal/spot-requests"  
 };
 
 export const routes = [
@@ -100,6 +102,11 @@ export const routes = [
         path: pages.SEARCH_PORTAL,
         name: 'SearchPortal',
         component: () => import('@/views/PageSearchPortal.vue'),
+    },
+    {
+        path: pages.SPOT_REQUESTS,
+        name: 'spotResquests',
+        component: () => import('@/views/PageSpotRequest.vue')
     },
     {
         path: pages.PAYMENTGATEWAY,

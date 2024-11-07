@@ -2,12 +2,14 @@
     <div class="search-portal-wrapper">
         <div class="summary" v-if="isSummary">
             <div class="so-btn">
-                <AtomButton @click.native="showSummary">
+                <AtomButton @click.native="showSummary" v-show="!summary.show" >
                     {{ summary.btn }} Summary
                 </AtomButton>
             </div>
             <br />
             <div class="so-summary" v-show="summary.show">
+                <!-- Cross button to close the summary modal -->
+        <button class="close-button" @click="showSummary">✕</button>
                 <p class="so-total">
                     Total Request : {{ summary.totalRequest }}
                 </p>
@@ -529,6 +531,17 @@ export default {
 <style lang="scss">
 $portal-font-size: 13px;
 
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
 @media only screen and (max-width: 1024px) {
     .id-column-parent {
         color: rgb(0, 0, 0) !important;
@@ -611,6 +624,8 @@ $portal-font-size: 13px;
             }
         }
     }
+
+    
 
     .id-column {
         font-size: $portal-font-size;
