@@ -2,12 +2,14 @@
     <div class="search-portal-wrapper">
         <div class="summary" v-if="isSummary">
             <div class="so-btn">
-                <AtomButton @click.native="showSummary">
+                <AtomButton @click.native="showSummary" v-show="!summary.show">
                     {{ summary.btn }} Summary
                 </AtomButton>
             </div>
             <br />
             <div class="so-summary" v-show="summary.show">
+                <!-- Cross button to close the summary modal -->
+                <button class="close-button" @click="showSummary">✕</button>
                 <p class="so-total">
                     Total Request : {{ summary.totalRequest }}
                 </p>
@@ -46,41 +48,17 @@
                 </div>
             </div>
         </div>
-        <b-table
-            :paginated="true"
-            :per-page="10"
-            :data="isEmpty ? [] : parkingRequests"
-            :bordered="true"
-            :hoverable="true"
-            :loading="isLoading"
-            :focusable="true"
-            :mobile-cards="hasMobileCards"
-            :narrowed="true"
-            :sticky-header="true"
-            height="800"
-        >
-            <b-table-column
-                field="ID"
-                label="ID"
-                width="40"
-                numeric
-                v-slot="props"
-                sortable
-                headerClass="id-column-parent"
-                cellClass="id-column-parent"
-            >
+        <b-table :paginated="true" :per-page="10" :data="isEmpty ? [] : parkingRequests" :bordered="true"
+            :hoverable="true" :loading="isLoading" :focusable="true" :mobile-cards="hasMobileCards" :narrowed="true"
+            :sticky-header="true" height="800">
+            <b-table-column field="ID" label="ID" width="40" numeric v-slot="props" sortable
+                headerClass="id-column-parent" cellClass="id-column-parent">
                 <div class="id-column">
                     {{ props.row.ID }}
                 </div>
             </b-table-column>
 
-            <b-table-column
-                field="UpdatedAt"
-                label="Date"
-                centered
-                v-slot="props"
-                sortable
-            >
+            <b-table-column field="UpdatedAt" label="Date" centered v-slot="props" sortable>
                 <div class="date-column">
                     <div>
                         <p class="tag">UpdatedAt:</p>
@@ -100,29 +78,17 @@
                 </div>
             </b-table-column>
 
-            <b-table-column
-                field="Priority"
-                label="Priority"
-                v-slot="props"
-                sortable
-            >
-                <span
-                    class="tag"
-                    :class="{
-                        'is-info': props.row.Priority === 1,
-                        'my-status': props.row.Priority === 2,
-                        'is-danger': props.row.Priority === 3,
-                    }"
-                >
+            <b-table-column field="Priority" label="Priority" v-slot="props" sortable>
+                <span class="tag" :class="{
+                    'is-info': props.row.Priority === 1,
+                    'my-status': props.row.Priority === 2,
+                    'is-danger': props.row.Priority === 3,
+                }">
                     <b> {{ getPriority(props.row.Priority) }}</b>
                 </span>
             </b-table-column>
 
-            <b-table-column
-                field="contact"
-                label="Contact Details"
-                v-slot="props"
-            >
+            <b-table-column field="contact" label="Contact Details" v-slot="props">
                 <div class="contact-column">
                     <div class="primary">
                         <p>
@@ -166,37 +132,15 @@
                 </div>
             </b-table-column>
 
-            <b-table-column
-                field="comments"
-                label="Comments"
-                v-slot="props"
-                width="10px"
-            >
-                <AtomTextarea
-                    :size="'is-small'"
-                    :value="props.row.Comments"
-                    class="comment-width"
-                    :maxlength="1000"
-                    :rowNo="8"
-                    @changed="onCommentUpdate(props.row, ...arguments)"
-                ></AtomTextarea>
+            <b-table-column field="comments" label="Comments" v-slot="props" width="10px">
+                <AtomTextarea :size="'is-small'" :value="props.row.Comments" class="comment-width" :maxlength="1000"
+                    :rowNo="8" @changed="onCommentUpdate(props.row, ...arguments)"></AtomTextarea>
             </b-table-column>
 
-            <b-table-column
-                field="Agent"
-                label="Agent"
-                width="100px"
-                sortable
-                searchable
-            >
+            <b-table-column field="Agent" label="Agent" width="100px" sortable searchable>
                 <template #searchable="props">
-                    <AtomSelectInput
-                        :size="'is-small'"
-                        :list="agentList"
-                        v-model="props.filters['Agent']"
-                        label=""
-                        placeholder="Agent"
-                    >
+                    <AtomSelectInput :size="'is-small'" :list="agentList" v-model="props.filters['Agent']" label=""
+                        placeholder="Agent">
                     </AtomSelectInput>
                 </template>
                 <template v-slot="props">
@@ -205,35 +149,19 @@
                             <span class="tag my-status">
                                 {{ props.row.Agent }}
                             </span>
-                            <AtomSelectInput
-                                :size="'is-small'"
-                                :list="agentList"
-                                @changed="
-                                    onAgentUpdate(props.row, ...arguments)
-                                "
-                                label=""
-                                placeholder="Select Agent"
-                            >
+                            <AtomSelectInput :size="'is-small'" :list="agentList" @changed="
+                                onAgentUpdate(props.row, ...arguments)
+                                " label="" placeholder="Select Agent">
                             </AtomSelectInput>
                         </div>
                     </div>
                 </template>
             </b-table-column>
 
-            <b-table-column
-                field="NextCall"
-                label="Status/Next Call"
-                width="90px"
-                sortable
-                searchable
-            >
+            <b-table-column field="NextCall" label="Status/Next Call" width="90px" sortable searchable>
                 <template #searchable="props">
-                    <AtomSelectInput
-                        :size="'is-small'"
-                        :list="statusList"
-                        class="column-width"
-                        v-model="props.filters['Status']"
-                    >
+                    <AtomSelectInput :size="'is-small'" :list="statusList" class="column-width"
+                        v-model="props.filters['Status']">
                     </AtomSelectInput>
                 </template>
                 <template v-slot="props">
@@ -242,25 +170,17 @@
                             <span class="tag my-status">
                                 {{ statusList[props.row.Status].name }}
                             </span>
-                            <AtomSelectInput
-                                :size="'is-small'"
-                                :list="statusList"
-                                class="column-width"
-                                @changed="
-                                    onStatusUpdate(props.row, ...arguments)
-                                "
-                            >
+                            <AtomSelectInput :size="'is-small'" :list="statusList" class="column-width" @changed="
+                                onStatusUpdate(props.row, ...arguments)
+                                ">
                             </AtomSelectInput>
                         </div>
                         <div class="next-call-part">
-                            <span
-                                class="tag my-status"
-                                :class="{
-                                    'is-danger': isCallDelayed(
-                                        props.row.NextCall,
-                                    ),
-                                }"
-                            >
+                            <span class="tag my-status" :class="{
+                                'is-danger': isCallDelayed(
+                                    props.row.NextCall,
+                                ),
+                            }">
                                 <b>
                                     {{
                                         new Date(
@@ -269,11 +189,8 @@
                                     }}
                                 </b>
                             </span>
-                            <AtomDatePicker
-                                :size="'is-small'"
-                                class="column-width"
-                                @changed="onDateUpdate(props.row, ...arguments)"
-                            >
+                            <AtomDatePicker :size="'is-small'" class="column-width"
+                                @changed="onDateUpdate(props.row, ...arguments)">
                             </AtomDatePicker>
                         </div>
                     </div>
@@ -283,12 +200,9 @@
             <b-table-column field="lat_lng" label="Lat/Lng" v-slot="props">
                 <div class="lat-lng-column">
                     <div class="lat-lng-link">
-                        <a
-                            target="_blank"
-                            @click="
-                                toSrp(props.row.Latitude, props.row.Longitude)
-                            "
-                        >
+                        <a target="_blank" @click="
+                            toSrp(props.row.Latitude, props.row.Longitude)
+                            ">
                             {{
                                 props.row.Latitude.toFixed(6) +
                                 ',' +
@@ -299,16 +213,11 @@
 
                     <div class="lat-lng-input">
                         <p>LatLng:</p>
-                        <AtomInput
-                            :size="'is-small'"
-                            :value="
-                                getLatLng(
-                                    props.row.Latitude.toFixed(6),
-                                    props.row.Longitude.toFixed(6),
-                                )
-                            "
-                            @changed="updateLatLng(props.row, ...arguments)"
-                        >
+                        <AtomInput :size="'is-small'" :value="getLatLng(
+                            props.row.Latitude.toFixed(6),
+                            props.row.Longitude.toFixed(6),
+                        )
+                            " @changed="updateLatLng(props.row, ...arguments)">
                         </AtomInput>
                     </div>
                 </div>
@@ -551,8 +460,19 @@ $portal-font-size: 13px;
         padding: 1rem;
     }
 
+    .close-button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+    }
+
     .column-width {
         width: 100px;
+
         @media only screen and (max-width: 1024px) {
             width: 150px;
         }
@@ -560,6 +480,7 @@ $portal-font-size: 13px;
 
     .comment-width {
         width: 330px;
+
         @media only screen and (max-width: 1024px) {
             width: 200px;
         }
@@ -569,6 +490,7 @@ $portal-font-size: 13px;
         .so-btn {
             text-align: right;
         }
+
         .so-summary {
             position: absolute;
             top: 120px;
@@ -611,6 +533,8 @@ $portal-font-size: 13px;
             }
         }
     }
+
+
 
     .id-column {
         font-size: $portal-font-size;

@@ -200,3 +200,36 @@ export const PaymentTypeLabels = [
 export function getPaymentTypeLabel(paymentType) {
     return getEnumLabel(PaymentTypeLabels, paymentType);
 }
+
+export const SpotRequestStatus = Object.freeze({
+    SpotRequestStatusNotSet: 0,
+    SpotRequestStatusRegistered: 1,
+    SpotRequestStatusProcessing: 2,
+    SpotRequestStatusRequestedModification: 3,
+    SpotRequestStatusVerified: 4,
+    SpotRequestStatusPromoted: 5,
+    SpotRequestStatusDenied: 6,
+    SpotRequestStatusCancelled: 7,
+    SpotRequestStatusDuplicate: 8,
+});
+
+const SpotRequestStatusLabel = [
+    'Not Set',
+    'Registered',
+    'Processing',
+    'Requested Modification',
+    'Verified',
+    'Promoted',
+    'Denied',
+    'Cancelled',
+    'Duplicate',
+];
+
+/**
+ * @param {int} spotRequestStatus
+ * @return {string}: label for spot request status
+ */
+export function getSpotRequestStatusLabel(spotRequestStatus) {
+    return getEnumLabel(SpotRequestStatusLabel, spotRequestStatus);
+}
+

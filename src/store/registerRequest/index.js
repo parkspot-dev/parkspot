@@ -49,6 +49,7 @@ const mutations = {
 };
 
 const actions = {
+    
     // Validate Duration length
     validateDuration({ commit, state }) {
         if (state.formData.Duration.length > 50) {

@@ -26,7 +26,8 @@ export const pages = {
     BOOKING_PORTAL          : "/internal/booking-portal",
     APP                     : "/app",
     PRIVACY                 : "/privacy",
-    REGISTER_REQUEST        : "/internal/register-request",    
+    REGISTER_REQUEST        : "/internal/register-request",  
+    SPOT_REQUESTS           : "/internal/spot-requests"  
 };
 
 export const routes = [
@@ -100,6 +101,11 @@ export const routes = [
         path: pages.SEARCH_PORTAL,
         name: 'SearchPortal',
         component: () => import('@/views/PageSearchPortal.vue'),
+    },
+    {
+        path: pages.SPOT_REQUESTS,
+        name: 'spotResquests',
+        component: () => import('@/views/PageSpotRequest.vue')
     },
     {
         path: pages.PAYMENTGATEWAY,
