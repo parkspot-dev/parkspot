@@ -3,6 +3,7 @@
         <!-- Search Bar -->
         <div class="search-control">
             <MoleculeSearchBox placeholder="Request ID" @on-search="searchSpotRequest"></MoleculeSearchBox>
+            <!-- Loading modal displayed during data fetch -->
             <LoaderModal v-if="isLoading"></LoaderModal>
         </div>
 
@@ -18,45 +19,46 @@
             </b-table-column>
 
             <b-table-column field="Name" label="Name" sortable cell-class="has-text-left">
-                <template v-slot="props">{{ props.row.Name }}</template>
+                <template v-slot="props">
+                    <div>
+                        {{ props.row.Name }}
+                    </div>
+                </template>
             </b-table-column>
 
             <b-table-column field="Address" label="Address" sortable cell-class="has-text-left">
-                <template v-slot="props">{{ props.row.Address }}</template>
+                <template v-slot="props">
+                    <div>
+                        {{ props.row.Address }}
+                    </div>
+                </template>
             </b-table-column>
 
-            <!-- Status Column with Select Input -->
+            <!-- Status Column -->
             <b-table-column field="Status" label="Status" width="150px">
-                <template v-slot="props" >
+                <template v-slot="props">
                     <div class="status-column">
                         <div class="status-part">
                             <span class="tag my-status">
-                                {{ getStatusText(props.row.Status) }}
+                                {{ getSpotRequestStatusLabel(props.row.Status) }}
                             </span>
-                            <AtomSelectInput :size="'is-small'" :list="statusList" v-model="props.row.Status"
-                                @change="onStatusUpdate(props.row)" label="" placeholder="Select Status">
-                            </AtomSelectInput>
                         </div>
                     </div>
                 </template>
             </b-table-column>
 
             <b-table-column field="Remark" label="Remark" sortable cell-class="has-text-left">
-                <template v-slot="props">{{ props.row.Remark }}</template>
+                <template v-slot="props">
+                    <div>
+                        {{ props.row.Remark }}
+                    </div>
+                </template>
             </b-table-column>
 
             <b-table-column field="LastCallDate" label="Last Call Date" sortable cell-class="has-text-left">
-
-                <template v-slot="props" >
-                    <div class="status-column">
-                        <div class="status-part">
-                            <span class="tag my-status">
-                                {{ props.row.LastCallDate }}
-                            </span>
-                            <AtomDatePicker :size="'is-small'" class="column-width"
-                                @changed="onDateUpdate(props.row, ...arguments)">
-                            </AtomDatePicker>
-                        </div>
+                <template v-slot="props">
+                    <div>
+                        {{ props.row.LastCallDate}}
                     </div>
                 </template>
             </b-table-column>
@@ -68,18 +70,16 @@
 import { mapState, mapActions } from 'vuex';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
-import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
-import AtomDatePicker from '../components/atoms/AtomDatePicker.vue';
+import { getSpotRequestStatusLabel } from '../constant/enums';
 
 export default {
     name: 'SpotRequestsPage',
     components: {
-        AtomDatePicker,
-        AtomSelectInput,
         LoaderModal,
         MoleculeSearchBox,
     },
     computed: {
+        // Map Vuex state for loading status and data for spot requests
         ...mapState('spotRequests', [
             'isLoading',
             'hasError',
@@ -87,39 +87,29 @@ export default {
             'spotRequests',
         ]),
     },
-    data() {
-        return {
-            statusList: [
-                { id: 0, name: 'Not Set' },
-                { id: 1, name: 'Registered' },
-                { id: 2, name: 'Processing' },
-                { id: 3, name: 'Requested Modification' },
-                { id: 4, name: 'Verified' },
-                { id: 5, name: 'Promoted' },
-                { id: 6, name: 'Denied' },
-                { id: 7, name: 'Cancelled' },
-                { id: 8, name: 'Duplicate' }
-            ],
-        };
-    },
+    
     mounted() {
+        // Fetch initial spot requests data on component mount
         this.fetchSpotRequests();
     },
     methods: {
         ...mapActions('spotRequests', ['fetchSpotRequests']),
 
+        // Search by Request ID with validation for numeric input
         searchSpotRequest(requestId) {
             const isValidRequestId = /^[0-9]+$/.test(requestId);
             if (!isValidRequestId) {
                 this.alertError('Please enter a valid numeric Request ID.');
                 return;
             }
+            // Update route with search parameter for Request ID
             this.$router.push({
                 path: this.$route.path,
                 query: { requestId: requestId },
             });
         },
 
+        // Generate detail URL for a specific Request ID
         RequestDetailURL(requestId) {
             return this.$router.resolve({
                 name: 'spot-requests',
@@ -127,38 +117,18 @@ export default {
             }).href;
         },
 
-        getStatusText(statusCode) {
-            const statusMap = {
-                0: 'Not Set',
-                1: 'Registered',
-                2: 'Processing',
-                3: 'Requested Modification',
-                4: 'Verified',
-                5: 'Promoted',
-                6: 'Denied',
-                7: 'Cancelled',
-                8: 'Duplicate'
-            };
-
-            return statusMap[statusCode] || 'Unknown Status';
-        },
-
+        // Format date strings to locale-specific format
         formatDate(dateString) {
             const date = new Date(dateString);
             return date.toLocaleString();
         },
 
-        onStatusUpdate(row) {
-            console.log('Status updated for row:', row);
-            // Additional logic to handle status update, like saving to the backend
+        // Get label for status based on the enum value
+        getSpotRequestStatusLabel(spotRequestStatus){
+            return getSpotRequestStatusLabel(spotRequestStatus)
         },
 
-        onDateUpdate(row, selectedDate) {
-            console.log("Date updated for row", row, "Selected Date", selectedDate);
-
-            // Update the date in backend
-        },
-
+        // Display error message in a modal dialog
         alertError(msg) {
             this.$buefy.dialog.alert({
                 title: 'Error',
@@ -172,6 +142,7 @@ export default {
         },
     },
     watch: {
+        // Watch for errors and display alert if an error occurs
         hasError(error) {
             if (error) {
                 this.alertError(this.errorMessage);
