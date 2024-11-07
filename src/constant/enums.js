@@ -81,6 +81,7 @@ export function getParkingRequestStatus(parkingRequestStatus) {
     return getEnumLabel(ParkingRequestStatusLabel, parkingRequestStatus);
 }
 
+<<<<<<< HEAD
 export const SpotRequestStatus = Object.freeze({
     Cancelled: 0,
     Denied: 1,
@@ -115,6 +116,8 @@ export function getSpotRequestStatusLabel(spotRequestStatus) {
 }
 
 
+=======
+>>>>>>> bc549eb3a243c2e47cf51182cdf36cbb7e70f427
 export const KYCStatus = Object.freeze({
     // NotSet => KYC information NOT available
     NotSet: 0,
@@ -235,6 +238,7 @@ export function getPaymentTypeLabel(paymentType) {
     return getEnumLabel(PaymentTypeLabels, paymentType);
 }
 
+<<<<<<< HEAD
 export const ParkingSize = Object.freeze({
     Bike: 0,
     Compact: 1,
@@ -304,3 +308,37 @@ export const SiteTypeLabels = [
 export function getSiteTypeLabel(siteType) {
     return getEnumLabel(SiteTypeLabels, siteType);
 }
+=======
+export const SpotRequestStatus = Object.freeze({
+    SpotRequestStatusNotSet: 0,
+    SpotRequestStatusRegistered: 1,
+    SpotRequestStatusProcessing: 2,
+    SpotRequestStatusRequestedModification: 3,
+    SpotRequestStatusVerified: 4,
+    SpotRequestStatusPromoted: 5,
+    SpotRequestStatusDenied: 6,
+    SpotRequestStatusCancelled: 7,
+    SpotRequestStatusDuplicate: 8,
+});
+
+const SpotRequestStatusLabel = [
+    'Not Set',
+    'Registered',
+    'Processing',
+    'Requested Modification',
+    'Verified',
+    'Promoted',
+    'Denied',
+    'Cancelled',
+    'Duplicate',
+];
+
+/**
+ * @param {int} spotRequestStatus
+ * @return {string}: label for spot request status
+ */
+export function getSpotRequestStatusLabel(spotRequestStatus) {
+    return getEnumLabel(SpotRequestStatusLabel, spotRequestStatus);
+}
+
+>>>>>>> bc549eb3a243c2e47cf51182cdf36cbb7e70f427

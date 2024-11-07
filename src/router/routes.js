@@ -26,8 +26,13 @@ export const pages = {
     BOOKING_PORTAL          : "/internal/booking-portal",
     APP                     : "/app",
     PRIVACY                 : "/privacy",
+<<<<<<< HEAD
     REGISTER_REQUEST        : "/internal/register-request", 
     REVIEW_SPOT             : "/internal/review-spot",   
+=======
+    REGISTER_REQUEST        : "/internal/register-request",  
+    SPOT_REQUESTS           : "/internal/spot-requests"  
+>>>>>>> bc549eb3a243c2e47cf51182cdf36cbb7e70f427
 };
 
 export const routes = [
@@ -103,6 +108,11 @@ export const routes = [
         component: () => import('@/views/PageSearchPortal.vue'),
     },
     {
+        path: pages.SPOT_REQUESTS,
+        name: 'spotResquests',
+        component: () => import('@/views/PageSpotRequest.vue')
+    },
+    {
         path: pages.PAYMENTGATEWAY,
         name: 'paymentGateway',
         component: () => import('@/views/PagePaymentGateway.vue'),
@@ -144,11 +154,14 @@ export const routes = [
         component: () => import('@/views/RegisterRequest.vue'),
     },
     {
+<<<<<<< HEAD
         path: pages.REVIEW_SPOT,
         name: 'agent-review-spot',
         component: () => import('@/views/ReviewSpot.vue'),
     },
     {
+=======
+>>>>>>> bc549eb3a243c2e47cf51182cdf36cbb7e70f427
         path: pages.APP,
         name: 'App',
         component: PageAbout,
