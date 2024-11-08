@@ -200,12 +200,9 @@
             <label for="startDate" >Start Date:<span style="color: red;">*</span></label>
             <AtomDatePicker 
               :size="'is-small'"
-              v-model="formdataBooking.startDate"
-              :assignedDate="
-                  formdataBooking.startDate
-              "
-              required
+              :assignedDate="formdataBooking.startDate"
               class="calendar"
+              required
               >
              </AtomDatePicker>
           </div>
@@ -214,9 +211,9 @@
             <label for="endDate">End Date:<span style="color: red;">*</span></label>
             <AtomDatePicker
               class="calendar"
+              :assignedDate="formdataBooking.endDate"
               :size="'is-small'"
               required   
-              v-model="formdataBooking.endDate" 
             >
             </AtomDatePicker>
           </div>
@@ -225,8 +222,8 @@
             <label for="lastCallDate">Last Call Date:</label>
             <AtomDatePicker 
               class="calendar"
+              :assignedDate="formdataBooking.lastCallDate"
               :size="'is-small'"
-              v-model="formdataBooking.lastCallDate"
               required
               >
               </AtomDatePicker>
@@ -335,7 +332,7 @@ export default {
           }
       },
   },
-  mounted() {
+  beforeMount() {
     this.initState();
      
   },

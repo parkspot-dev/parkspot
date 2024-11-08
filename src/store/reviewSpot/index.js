@@ -130,8 +130,8 @@ const actions = {
             "Area": "Area",
             "Size": 1,  
             "Type": 1,  
-            "StartDate": "2024-10-12T11:37:22.6779781Z",
-            "EndDate": "2024-10-12T11:37:22.6779781Z",
+            "StartDate": "2029-01-12T11:37:22.6779781Z",
+            "EndDate": "2025-04-19T11:37:22.6779781Z",
             "MinDuration": "2 months",
             "SpotImages": [
                 "url1",
@@ -139,7 +139,7 @@ const actions = {
             ],
             "Status": 1,
             "Remark": "Remark",
-            "LastCallDate": "2024-10-12T11:37:22.6779781Z"
+            "LastCallDate": "2029-01-12T11:37:22.6779781Z"
 
         };
         const formData = {
@@ -167,6 +167,8 @@ const actions = {
                 startDate: hardcodedInfo.StartDate,
                 remark: hardcodedInfo.Remark,
                 spotrequestStatus: getSpotStatus(hardcodedInfo.Status),
+                endDate: hardcodedInfo.EndDate,
+                lastCallDate: hardcodedInfo.LastCallDate,
             },
         };
         console.log(hardcodedInfo);
