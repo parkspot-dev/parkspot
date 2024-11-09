@@ -1,8 +1,6 @@
-// Import dependencies and constants
 import { mayaClient } from '@/services/api';
 import { SPOT_REQUESTS } from '../../constant/constant';
 
-// Define initial state
 const state = {
     spotRequests: SPOT_REQUESTS,
     hasError: false,
@@ -10,7 +8,6 @@ const state = {
     isLoading: false,
 };
 
-// Define getters to access state properties
 const getters = {
     allSpotRequests: (state) => state.spotRequests,
     isLoading: (state) => state.isLoading,
@@ -18,7 +15,6 @@ const getters = {
     errorMessage: (state) => state.errorMessage,
 };
 
-// Define mutations to update state
 const mutations = {
     'set-spot-requests'(state, spotRequests) {
         state.hasError = false;
@@ -33,23 +29,23 @@ const mutations = {
     },
 };
 
-// Define actions for asynchronous operations
+
 const actions = {
+    // Fetches spot requests
     async fetchSpotRequests({ commit }) {
-        commit('set-loading', true); // Set loading state
+        commit('set-loading', true); 
         try {
             const res = await mayaClient.get('maya.parkspot.in/owner/spot-request');
-            console.log("spot request response", res);
+            console.log("Spot Request Response", res);
             // TODO: commit the result of Spot Request to set-spot-requests
         } catch (error) {
             commit('set-error', 'Error fetching spot requests');
         } finally {
-            commit('set-loading', false); // Reset loading state
+            commit('set-loading', false); 
         }
     },
 };
 
-// Export the Vuex module with namespacing
 export default {
     namespaced: true,
     state,

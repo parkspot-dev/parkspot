@@ -104,7 +104,7 @@ export const routes = [
     },
     {
         path: pages.SPOT_REQUESTS,
-        name: 'spotResquests',
+        name: 'spotRequest',
         component: () => import('@/views/PageSpotRequest.vue')
     },
     {

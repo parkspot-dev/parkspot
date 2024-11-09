@@ -79,7 +79,6 @@ export default {
         MoleculeSearchBox,
     },
     computed: {
-        // Map Vuex state for loading status and data for spot requests
         ...mapState('spotRequests', [
             'isLoading',
             'hasError',
@@ -89,7 +88,6 @@ export default {
     },
     
     mounted() {
-        // Fetch initial spot requests data on component mount
         this.fetchSpotRequests();
     },
     methods: {
@@ -102,15 +100,13 @@ export default {
                 this.alertError('Please enter a valid numeric Request ID.');
                 return;
             }
-            // Update route with search parameter for Request ID
             this.$router.push({
                 path: this.$route.path,
                 query: { requestId: requestId },
             });
         },
 
-        // Generate detail URL for a specific Request ID 
-        // Not working properly
+        // Generate detail URL for a specific Request ID
         RequestDetailURL(requestId) {
             return this.$router.resolve({
                 name: 'spot-requests',
@@ -129,7 +125,6 @@ export default {
             return getSpotRequestStatusLabel(spotRequestStatus)
         },
 
-        // Display error message in a modal dialog
         alertError(msg) {
             this.$buefy.dialog.alert({
                 title: 'Error',
@@ -143,7 +138,6 @@ export default {
         },
     },
     watch: {
-        // Watch for errors and display alert if an error occurs
         hasError(error) {
             if (error) {
                 this.alertError(this.errorMessage);
