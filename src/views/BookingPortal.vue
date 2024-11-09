@@ -3,22 +3,14 @@
         <!--- Search Bar-->
         <div class="search-control">
             <p></p>
-            <MoleculeSearchBox
-                placeholder="Booking ID"
-                @on-search="searchBooking"
-            ></MoleculeSearchBox>
+            <MoleculeSearchBox placeholder="Booking ID" :initialValue="searchText" @on-search="searchBooking"
+                @clear-input="onClearInput"></MoleculeSearchBox>
         </div>
         <LoaderModal v-if="isLoading"></LoaderModal>
-        <TemplateBookingPortal
-            v-if="bookingDetails"
-            @payment-link="getPaymentLink"
-            @refresh-payment-status="refreshPaymentStatus"
-            @update-booking-details="updateBookingDetails"
-        ></TemplateBookingPortal>
-        <ActiveBookings
-            v-else
-            :activeBookings="activeBookings"
-        ></ActiveBookings>
+        <TemplateBookingPortal v-if="bookingDetails" @payment-link="getPaymentLink"
+            @refresh-payment-status="refreshPaymentStatus" @update-booking-details="updateBookingDetails">
+        </TemplateBookingPortal>
+        <ActiveBookings v-else :activeBookings="activeBookings"></ActiveBookings>
     </div>
 </template>
 
@@ -40,11 +32,13 @@ export default {
 
     data() {
         return {
-            bookingID: '',
+            bookingID: this.searchText,
         };
     },
     async created() {
         if (this.$route.query['bookingId'] != undefined) {
+            const bookingId = this.$route.query['bookingId'];
+            this.updateSearchText(bookingId)
             this.getAgents();
             this.getBookingDetails(this.$route.query['bookingId']);
         } else {
@@ -58,6 +52,7 @@ export default {
             'isLoading',
             'bookingDetails',
             'activeBookings',
+            'searchText'
         ]),
     },
 
@@ -69,14 +64,33 @@ export default {
             'updateBookingDetails',
             'refreshPaymentStatus',
             'getAgents',
+            'updateSearchText'
         ]),
+        
         searchBooking(bookingId) {
+            this.updateSearchText(bookingId)
+
             this.$router.push({
                 path: this.$route.path,
                 query: { bookingId: bookingId },
             });
             this.getBookingDetails(bookingId);
         },
+
+        // Clear Input
+        async onClearInput() {
+            if (this.$route.query.bookingId) {
+                // Update the Search Text
+                this.updateSearchText('')
+
+                // Navigate to the main booking portal route
+                this.$router.push('/internal/booking-portal');
+                
+                // Reload Page
+                location.reload()
+            }
+        },
+
         alertError(msg) {
             this.$buefy.dialog.alert({
                 title: 'Error',
@@ -89,6 +103,7 @@ export default {
             });
         },
     },
+
     watch: {
         hasError(error) {
             if (error) {

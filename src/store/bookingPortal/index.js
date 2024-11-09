@@ -6,6 +6,7 @@ const state = {
     errorMessage: String,
     paymentDetails: null,
     isLoading: false,
+    searchText: '',
     /*   [{
         "ID": 809,
         "CreatedAt": "2022-02-24T15:59:15.6168782Z",
@@ -66,6 +67,10 @@ const mutations = {
             return !(fullName.startsWith('[') && fullName.endsWith(']'));
         });
     },
+
+    'set-search-text'(state, text) {
+        state.searchText = text;
+    }
 };
 
 const actions = {
@@ -138,6 +143,11 @@ const actions = {
         }
         commit('set-loading', false);
     },
+   
+    // Update Search Text
+    updateSearchText({commit}, text){
+       commit('set-search-text', text);
+    }
 };
 
 export default {
