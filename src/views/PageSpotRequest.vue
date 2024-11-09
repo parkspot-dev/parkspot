@@ -215,6 +215,5 @@ $portal-font-size: 13px;
 
 .tag:not(body) {
     background-color: var(--primary-color);
-
 }
 </style>
