@@ -35,11 +35,20 @@
             </b-table-column>
 
             <!-- Status Column -->
-            <b-table-column field="Status" label="Status" width="150px">
+            <b-table-column field="Status" filter label="Status" width="150px" sortable searchable>
+                <template #searchable="props">
+                    <AtomSelectInput :size="'is-small'" :list="spotRequestStatusList" class="column-width"
+                        v-model="props.filters['Status']">
+                    </AtomSelectInput>
+                </template>
                 <template v-slot="props">
                     <div class="status-column">
                         <div class="status-part">
-                            <span class="tag my-status">
+                            <span class="tag" :class="{
+                                'is-success': props.row.Status === 4,
+                                'my-status': props.row.Status === 2,
+                                'is-danger': props.row.Status === 6,
+                            }">
                                 {{ getSpotRequestStatusLabel(props.row.Status) }}
                             </span>
                         </div>
@@ -58,7 +67,7 @@
             <b-table-column field="LastCallDate" label="Last Call Date" sortable cell-class="has-text-left">
                 <template v-slot="props">
                     <div>
-                        {{ props.row.LastCallDate}}
+                        {{ props.row.LastCallDate }}
                     </div>
                 </template>
             </b-table-column>
@@ -71,12 +80,30 @@ import { mapState, mapActions } from 'vuex';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
 import { getSpotRequestStatusLabel } from '../constant/enums';
+import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
 
 export default {
     name: 'SpotRequestsPage',
     components: {
+        AtomSelectInput,
         LoaderModal,
         MoleculeSearchBox,
+    },
+
+    data() {
+        return {
+            spotRequestStatusList: [
+                { id: 0, name: 'Not Set' },
+                { id: 1, name: 'Registered' },
+                { id: 2, name: 'Processing' },
+                { id: 3, name: 'Requested Modification' },
+                { id: 4, name: 'Verified' },
+                { id: 5, name: 'Promoted' },
+                { id: 6, name: 'Denied' },
+                { id: 7, name: 'Cancelled' },
+                { id: 8, name: 'Duplicate' },
+            ]
+        }
     },
     computed: {
         ...mapState('spotRequests', [
@@ -86,7 +113,7 @@ export default {
             'spotRequests',
         ]),
     },
-    
+
     mounted() {
         this.fetchSpotRequests();
     },
@@ -121,7 +148,7 @@ export default {
         },
 
         // Get label for status based on the enum value
-        getSpotRequestStatusLabel(spotRequestStatus){
+        getSpotRequestStatusLabel(spotRequestStatus) {
             return getSpotRequestStatusLabel(spotRequestStatus)
         },
 
@@ -188,5 +215,6 @@ $portal-font-size: 13px;
 
 .tag:not(body) {
     background-color: var(--primary-color);
+
 }
 </style>
