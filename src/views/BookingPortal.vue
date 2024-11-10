@@ -3,14 +3,25 @@
         <!--- Search Bar-->
         <div class="search-control">
             <p></p>
-            <MoleculeSearchBox placeholder="Booking ID" :initialValue="searchText" @on-search="searchBooking"
-                @clear-input="onClearInput"></MoleculeSearchBox>
+            <MoleculeSearchBox
+                placeholder="Booking ID"
+                :initialValue="searchText"
+                @on-search="searchBooking"
+                @clear-input="onClearInput"
+            ></MoleculeSearchBox>
         </div>
         <LoaderModal v-if="isLoading"></LoaderModal>
-        <TemplateBookingPortal v-if="bookingDetails" @payment-link="getPaymentLink"
-            @refresh-payment-status="refreshPaymentStatus" @update-booking-details="updateBookingDetails">
+        <TemplateBookingPortal
+            v-if="bookingDetails"
+            @payment-link="getPaymentLink"
+            @refresh-payment-status="refreshPaymentStatus"
+            @update-booking-details="updateBookingDetails"
+        >
         </TemplateBookingPortal>
-        <ActiveBookings v-else :activeBookings="activeBookings"></ActiveBookings>
+        <ActiveBookings
+            v-else
+            :activeBookings="activeBookings"
+        ></ActiveBookings>
     </div>
 </template>
 
@@ -66,7 +77,7 @@ export default {
             'refreshPaymentStatus',
             'getAgents',
             'updateSearchText',
-            'resetBookingDetails'
+            'resetBookingDetails',
         ]),
         searchBooking(bookingId) {
             this.updateSearchText(bookingId);
@@ -81,9 +92,9 @@ export default {
         async onClearInput() {
             if (this.$route.query.bookingId) {
                 this.updateSearchText('');
-                this.resetBookingDetails()
+                this.resetBookingDetails();
                 // Navigate to the main booking portal route
-                this.$router.push('/internal/booking-portal');
+                this.$router.push({ name: 'booking-portal' });
             }
         },
         alertError(msg) {

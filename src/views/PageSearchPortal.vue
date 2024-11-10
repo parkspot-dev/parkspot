@@ -22,9 +22,7 @@
             <p></p>
             <MoleculeSearchBox
                 placeholder="Lat,Long"
-                :initialValue="SOLatLngInput"
                 @on-search="getInterestedVO"
-                @on-clear="clearLatLngInput"
             ></MoleculeSearchBox>
             <TemplateSearchPortal
                 :isLoading="isLoading"
@@ -63,12 +61,22 @@ export default {
         };
     },
     computed: {
-        ...mapState('searchPortal', ['activeTab', 'SOLatLngInput', 'searchMobile']),
+        ...mapState('searchPortal', [
+            'activeTab',
+            'SOLatLngInput',
+            'searchMobile',
+        ]),
         activeTabView: {
             get() {
                 return this.activeTab;
             },
             set(tabNo) {
+                const currentTab =
+                    tabNo === 0 ? 'parking-request' : 'interested-request';
+                this.$router.push({
+                    path: this.$route.fullPath,
+                    query: { tab: currentTab },
+                });
                 this.updateActiveTab(tabNo);
             },
         },
@@ -82,15 +90,19 @@ export default {
         },
     },
     async created() {
+        const currentTab =
+            this.activeTab === 0 ? 'parking-request' : 'interested-request';
+        this.$router.push({
+            path: this.$route.fullPath,
+            query: { tab: currentTab },
+        });
         this.getAgents();
         const mobile = this.$route.query['mobile'];
-        if(mobile){
-            this.updateMobileInput(mobile)
+        if (mobile) {
+            this.updateMobileInput(mobile);
+        } else {
+            this.updateMobileInput('');
         }
-        else{
-            this.updateMobileInput('')
-        }
-        
 
         this.getParkingRequests(this.$route.query['mobile']);
         if (this.SOLatLngInput) {
@@ -102,7 +114,7 @@ export default {
             'updateActiveTab',
             'updateSOLatLngInput',
             'getAgents',
-            'updateMobileInput'
+            'updateMobileInput',
         ]),
         alertError(msg) {
             this.$buefy.dialog.alert({
@@ -117,15 +129,13 @@ export default {
                 // This will hamper interested VO section experience,
                 // because interested VO does not change the URL and
                 // reload the page will take to /search-portal
-                // onConfirm: () => location.reload(),
-                onConfirm: this.activeTab === 0 ? this.onClearMobileInput : this.clearLatLngInput
+                onConfirm: this.onClearMobileInput,
             });
         },
         async searchRequestWithMobile(voMobile) {
             if (voMobile != '') {
-                // Update Search Text with voMobile 
+                // Update Search Text with voMobile
                 this.updateMobileInput(voMobile);
-
                 this.$router.push({
                     path: this.$route.fullPath,
                     query: { mobile: voMobile },
@@ -133,22 +143,14 @@ export default {
                 this.getParkingRequests(voMobile);
             }
         },
-
-         // Clear Mobile Input
-         async onClearMobileInput() {
+        // Clear Mobile Input
+        async onClearMobileInput() {
             if (this.$route.query.mobile) {
-                this.updateMobileInput('')
-                // Navigate to the main booking portal route
-                this.$router.push('/search-portal');
+                this.updateMobileInput('');
+                this.$router.push({ name : 'SearchPortal' });
                 // Fetch the Agents Data
                 this.getAgents();
             }
-        },
-
-        // Clear latLan Input
-
-        async clearLatLngInput() {
-            this.updateSOLatLngInput('')
         },
 
         async getParkingRequests(voMobile = '') {

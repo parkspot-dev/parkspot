@@ -2,14 +2,25 @@
     <div class="search-control">
         <p></p>
         <div class="search-input">
-            <AtomInput v-model="searchModel" :placeholder="placeholder" @keyup.native.enter="emitSearchEvent">
+            <AtomInput
+                v-model="searchModel"
+                :placeholder="placeholder"
+                @keyup.native.enter="emitSearchEvent"
+            >
             </AtomInput>
-            <span v-if="searchModel" class="cancel-icon" @click="emitClearEvent">
-                <AtomIcon :icon="'close'" size="">
-                </AtomIcon>
+            <span
+                v-if="searchModel"
+                class="cancel-icon"
+                @click="emitClearEvent"
+            >
+                <AtomIcon :icon="'close'" size=""> </AtomIcon>
             </span>
         </div>
-        <AtomButton class="search-button" @click.native="emitSearchEvent" left="magnify">Search
+        <AtomButton
+            class="search-button"
+            @click.native="emitSearchEvent"
+            left="magnify"
+            >Search
         </AtomButton>
     </div>
 </template>
@@ -17,7 +28,7 @@
 <script>
 import AtomInput from '../atoms/AtomInput.vue';
 import AtomButton from '../atoms/AtomButton.vue';
-import AtomIcon from '../atoms/AtomIcon'
+import AtomIcon from '../atoms/AtomIcon';
 export default {
     name: 'MoleculeSearchBox',
     components: { AtomInput, AtomButton, AtomIcon },
@@ -28,8 +39,8 @@ export default {
         },
         initialValue: {
             type: String,
-            default: ''
-        }
+            default: '',
+        },
     },
     data() {
         return {
@@ -42,8 +53,8 @@ export default {
         },
 
         emitClearEvent() {
-            this.searchModel = ''
-            this.$emit('clear-input')
+            this.searchModel = '';
+            this.$emit('clear-input');
         },
     },
 };
@@ -66,12 +77,11 @@ export default {
     justify-content: space-between;
 
     .cancel-icon {
-        position: absolute;
-        border-radius: 50%;
-        color: var(--parkspot-red);
+        color: rgb(147, 147, 147);
         cursor: pointer;
-        padding: 3px;
-        right: 3px;
+        padding: 4px;
+        position: absolute;
+        right: 4px;
         top: 50%;
         transform: translateY(-50%);
     }
