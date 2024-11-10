@@ -70,7 +70,7 @@ const mutations = {
 
     'set-search-text'(state, text) {
         state.searchText = text;
-    }
+    },
 };
 
 const actions = {
@@ -134,6 +134,10 @@ const actions = {
     },
 
     async getActiveBooking({ commit }) {
+        // Check if activeBookings already has data
+        if (state.activeBookings && state.activeBookings.length > 0) {
+            return;
+        }
         commit('set-loading', true);
         const res = await mayaClient.get('/internal/active-bookings');
         if (res.DisplayMsg) {
@@ -143,10 +147,15 @@ const actions = {
         }
         commit('set-loading', false);
     },
-   
+
     // Update Search Text
-    updateSearchText({commit}, text){
-       commit('set-search-text', text);
+    updateSearchText({ commit }, text) {
+        commit('set-search-text', text);
+    },
+
+    // Reset booking details to null
+    resetBookingDetails({ commit }){
+        commit('update-booking', null)
     }
 };
 

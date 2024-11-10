@@ -29,7 +29,6 @@ export default {
         LoaderModal,
         ActiveBookings,
     },
-
     data() {
         return {
             bookingID: this.searchText,
@@ -38,10 +37,12 @@ export default {
     async created() {
         if (this.$route.query['bookingId'] != undefined) {
             const bookingId = this.$route.query['bookingId'];
-            this.updateSearchText(bookingId)
+            this.updateSearchText(bookingId);
             this.getAgents();
             this.getBookingDetails(this.$route.query['bookingId']);
         } else {
+            this.updateSearchText('');
+            this.resetBookingDetails();
             this.getActiveBooking();
         }
     },
@@ -52,7 +53,7 @@ export default {
             'isLoading',
             'bookingDetails',
             'activeBookings',
-            'searchText'
+            'searchText',
         ]),
     },
 
@@ -64,11 +65,11 @@ export default {
             'updateBookingDetails',
             'refreshPaymentStatus',
             'getAgents',
-            'updateSearchText'
+            'updateSearchText',
+            'resetBookingDetails'
         ]),
-        
         searchBooking(bookingId) {
-            this.updateSearchText(bookingId)
+            this.updateSearchText(bookingId);
 
             this.$router.push({
                 path: this.$route.path,
@@ -76,21 +77,15 @@ export default {
             });
             this.getBookingDetails(bookingId);
         },
-
         // Clear Input
         async onClearInput() {
             if (this.$route.query.bookingId) {
-                // Update the Search Text
-                this.updateSearchText('')
-
+                this.updateSearchText('');
+                this.resetBookingDetails()
                 // Navigate to the main booking portal route
                 this.$router.push('/internal/booking-portal');
-                
-                // Reload Page
-                location.reload()
             }
         },
-
         alertError(msg) {
             this.$buefy.dialog.alert({
                 title: 'Error',
@@ -103,7 +98,6 @@ export default {
             });
         },
     },
-
     watch: {
         hasError(error) {
             if (error) {
