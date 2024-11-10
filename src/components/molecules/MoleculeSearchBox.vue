@@ -72,10 +72,9 @@ export default {
 }
 
 .search-input {
-    position: relative;
     display: flex;
     justify-content: space-between;
-
+    position: relative;
     .cancel-icon {
         color: rgb(147, 147, 147);
         cursor: pointer;
