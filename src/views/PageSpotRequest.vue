@@ -45,9 +45,10 @@
                     <div class="status-column">
                         <div class="status-part">
                             <span class="tag" :class="{
+                                'is-info':props.row.Status === 0,
                                 'is-success': props.row.Status === 4,
-                                'my-status': props.row.Status === 2,
-                                'is-danger': props.row.Status === 6,
+                                'my-status': props.row.Status === 1 || 2 || 3,
+                                'is-danger': props.row.Status === 5,
                             }">
                                 {{ getSpotRequestStatusLabel(props.row.Status) }}
                             </span>
@@ -98,10 +99,7 @@ export default {
                 { id: 2, name: 'Processing' },
                 { id: 3, name: 'Requested Modification' },
                 { id: 4, name: 'Verified' },
-                { id: 5, name: 'Promoted' },
-                { id: 6, name: 'Denied' },
-                { id: 7, name: 'Cancelled' },
-                { id: 8, name: 'Duplicate' },
+                { id: 5, name: 'Denied' },
             ]
         }
     },

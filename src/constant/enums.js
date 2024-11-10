@@ -207,10 +207,7 @@ export const SpotRequestStatus = Object.freeze({
     SpotRequestStatusProcessing: 2,
     SpotRequestStatusRequestedModification: 3,
     SpotRequestStatusVerified: 4,
-    SpotRequestStatusPromoted: 5,
-    SpotRequestStatusDenied: 6,
-    SpotRequestStatusCancelled: 7,
-    SpotRequestStatusDuplicate: 8,
+    SpotRequestStatusDenied: 5,
 });
 
 const SpotRequestStatusLabel = [
@@ -219,10 +216,7 @@ const SpotRequestStatusLabel = [
     'Processing',
     'Requested Modification',
     'Verified',
-    'Promoted',
     'Denied',
-    'Cancelled',
-    'Duplicate',
 ];
 
 /**

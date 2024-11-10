@@ -150,7 +150,7 @@ export const SPOT_REQUESTS = [
       "StartDate": "2024-10-12T11:37:22.6779781Z", 
       "EndDate": "2024-10-12T11:37:22.6779781Z", 
       "MinDuration": "2 hours", 
-      "Status": 6, 
+      "Status": 5, 
       "Remark": "Remark", 
       "LastCallDate": "2024-10-12"
     },
@@ -213,7 +213,7 @@ export const SPOT_REQUESTS = [
       "StartDate": "2024-10-12T11:37:22.6779781Z", 
       "EndDate": "2024-10-12T11:37:22.6779781Z", 
       "MinDuration": "2 hours", 
-      "Status": 1, 
+      "Status": 0, 
       "Remark": "Remark", 
       "LastCallDate": "2024-10-12"
     },
