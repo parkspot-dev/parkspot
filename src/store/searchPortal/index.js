@@ -3,6 +3,7 @@ import { mayaClient } from '@/services/api';
 const state = {
     activeTab: 0,
     SOLatLngInput: '',
+    searchMobile: '',
     // array of objects {id, name}, both id and name has agent first name as this used in b-table filtering
     agentList: [],
 };
@@ -31,6 +32,10 @@ const mutations = {
             });
         state.agentList.push({ id: 'NA', name: 'NA' });
     },
+
+    'set-search-mobile'(state, text){
+        state.searchMobile = text
+    }
 };
 
 const actions = {
@@ -43,6 +48,11 @@ const actions = {
     async getAgents({ commit }) {
         commit('set-agent-list', await mayaClient.get('/auth/user/agents'));
     },
+    
+    // Update Search text with text
+    updateMobileInput({commit}, text){
+        commit('set-search-mobile', text)
+    }
 };
 
 export default {

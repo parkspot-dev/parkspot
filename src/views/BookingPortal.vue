@@ -5,7 +5,9 @@
             <p></p>
             <MoleculeSearchBox
                 placeholder="Booking ID"
+                :initialValue="searchText"
                 @on-search="searchBooking"
+                @clear-input="onClearInput"
             ></MoleculeSearchBox>
         </div>
         <LoaderModal v-if="isLoading"></LoaderModal>
@@ -14,7 +16,8 @@
             @payment-link="getPaymentLink"
             @refresh-payment-status="refreshPaymentStatus"
             @update-booking-details="updateBookingDetails"
-        ></TemplateBookingPortal>
+        >
+        </TemplateBookingPortal>
         <ActiveBookings
             v-else
             :activeBookings="activeBookings"
@@ -37,17 +40,20 @@ export default {
         LoaderModal,
         ActiveBookings,
     },
-
     data() {
         return {
-            bookingID: '',
+            bookingID: this.searchText,
         };
     },
     async created() {
         if (this.$route.query['bookingId'] != undefined) {
+            const bookingId = this.$route.query['bookingId'];
+            this.updateSearchText(bookingId);
             this.getAgents();
             this.getBookingDetails(this.$route.query['bookingId']);
         } else {
+            this.updateSearchText('');
+            this.resetBookingDetails();
             this.getActiveBooking();
         }
     },
@@ -58,6 +64,7 @@ export default {
             'isLoading',
             'bookingDetails',
             'activeBookings',
+            'searchText',
         ]),
     },
 
@@ -69,13 +76,26 @@ export default {
             'updateBookingDetails',
             'refreshPaymentStatus',
             'getAgents',
+            'updateSearchText',
+            'resetBookingDetails',
         ]),
         searchBooking(bookingId) {
+            this.updateSearchText(bookingId);
+
             this.$router.push({
                 path: this.$route.path,
                 query: { bookingId: bookingId },
             });
             this.getBookingDetails(bookingId);
+        },
+        // Clear Input
+        async onClearInput() {
+            if (this.$route.query.bookingId) {
+                this.updateSearchText('');
+                this.resetBookingDetails();
+                // Navigate to the main booking portal route
+                this.$router.push({ name: 'booking-portal' });
+            }
         },
         alertError(msg) {
             this.$buefy.dialog.alert({
