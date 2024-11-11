@@ -1,15 +1,22 @@
 import { mayaClient } from '@/services/api';
 
 const state = {
+    loading: false,
+    hasError: false,
+    errorMessage: '',
     activeTab: 0,
     SOLatLngInput: '',
     // array of objects {id, name}, both id and name has agent first name as this used in b-table filtering
     agentList: [],
+    parkingRequests: [],
 };
 
 const getters = {};
 
 const mutations = {
+    'set-loading'(state) {
+        state.loading = !state.loading;
+    },
     'update-active-tab'(state, tabNo) {
         state.activeTab = tabNo;
     },
@@ -31,6 +38,13 @@ const mutations = {
             });
         state.agentList.push({ id: 'NA', name: 'NA' });
     },
+    'set-parking-requests'(state, parkingRequests) {
+        state.parkingRequests = parkingRequests;
+    },
+    'set-error'(state, message) {
+        state.hasError = !state.hasError;
+        state.errorMessage = message;
+    },
 };
 
 const actions = {
@@ -42,6 +56,30 @@ const actions = {
     },
     async getAgents({ commit }) {
         commit('set-agent-list', await mayaClient.get('/auth/user/agents'));
+    },
+
+    async getParkingRequests({ commit, state }, mobile) {
+        if (state.loading) return;
+        commit('set-loading', true);
+        try {
+            let parkingRequestURL = '/internal/parking-requests';
+            if (mobile) {
+                parkingRequestURL += `?mobile=${mobile.replace(/\s+/g, '')}`;
+            }
+            const response = await mayaClient.get(parkingRequestURL);
+            if (response.ErrorCode) {
+                throw new Error(response.DisplayMsg);
+            }
+            commit('set-parking-requests', response);
+        } catch (error) {
+            commit('set-error', error.message);
+        } finally {
+            commit('set-loading', false);
+        }
+    },
+
+    resetError({ commit }) {
+        commit('set-error', '');
     },
 };
 

@@ -9,7 +9,7 @@
             </div>
             <TemplateSearchPortal
                 :parkingRequests="parkingRequests"
-                :isLoading="isLoading"
+                :isLoading="isLoading || this.loading "
                 :isSummary="true"
                 @updateRequest="updateRequest"
                 @toSrp="toSrp"
@@ -23,7 +23,7 @@
                 @on-search="getInterestedVO"
             ></MoleculeSearchBox>
             <TemplateSearchPortal
-                :isLoading="isLoading"
+                :isLoading="isLoading || loading"
                 :parkingRequests="intrestedVOList"
                 @toSrp="toSrp"
                 @updateRequest="updateRequest"
@@ -52,14 +52,20 @@ export default {
     },
     data() {
         return {
-            parkingRequests: [],
             isLoading: false,
             intrestedVOList: [],
             VOMobile: '',
         };
     },
     computed: {
-        ...mapState('searchPortal', ['activeTab', 'SOLatLngInput']),
+        ...mapState('searchPortal', [
+            'activeTab',
+            'SOLatLngInput',
+            'parkingRequests',
+            'loading',
+            'errorMessage',
+            'hasError',
+        ]),
         activeTabView: {
             get() {
                 return this.activeTab;
@@ -89,6 +95,8 @@ export default {
             'updateActiveTab',
             'updateSOLatLngInput',
             'getAgents',
+            'getParkingRequests',
+            'resetError',
         ]),
         alertError(msg) {
             this.$buefy.dialog.alert({
@@ -103,7 +111,10 @@ export default {
                 // This will hamper interested VO section experience,
                 // because interested VO does not change the URL and
                 // reload the page will take to /search-portal
-                onConfirm: () => location.reload(),
+                onConfirm: () => {
+                    this.resetError();
+                    this.$router.push({ name: 'SearchPortal' });
+                },
             });
         },
         async searchRequestWithMobile(voMobile) {
@@ -114,22 +125,6 @@ export default {
                 });
                 this.getParkingRequests(voMobile);
             }
-        },
-        async getParkingRequests(voMobile = '') {
-            this.isLoading = true;
-            let parkingRequestURL = '/internal/parking-requests';
-            if (voMobile != '') {
-                parkingRequestURL =
-                    parkingRequestURL +
-                    `?mobile=${voMobile.replace(/\s+/g, '')}`;
-            }
-            const response = await mayaClient.get(parkingRequestURL);
-            this.isLoading = false;
-            if (response.ErrorCode) {
-                this.alertError(response.DisplayMsg);
-                return;
-            }
-            this.parkingRequests = response;
         },
         async getInterestedVO(latlng) {
             this.isLoading = true;
@@ -178,6 +173,13 @@ export default {
                 },
             });
             window.open(routeData.href, '_blank');
+        },
+    },
+    watch: {
+        hasError(error) {
+            if (error) {
+                this.alertError(this.errorMessage);
+            }
         },
     },
 };
