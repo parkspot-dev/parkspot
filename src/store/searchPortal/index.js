@@ -9,6 +9,7 @@ const state = {
     // array of objects {id, name}, both id and name has agent first name as this used in b-table filtering
     agentList: [],
     parkingRequests: [],
+    intrestedVOList: []
 };
 
 const getters = {};
@@ -41,6 +42,9 @@ const mutations = {
     'set-parking-requests'(state, parkingRequests) {
         state.parkingRequests = parkingRequests;
     },
+    'set-interested-vo-list'(state, list) {
+        state.intrestedVOList = list;
+    },
     'set-error'(state, message) {
         state.hasError = !state.hasError;
         state.errorMessage = message;
@@ -71,6 +75,24 @@ const actions = {
                 throw new Error(response.DisplayMsg);
             }
             commit('set-parking-requests', response);
+        } catch (error) {
+            commit('set-error', error.message);
+        } finally {
+            commit('set-loading', false);
+        }
+    },
+
+    async getInterestedVO({ commit }, latlng) {
+        commit('set-loading', true);
+        try {
+            const [lat, lng] = latlng.trim().split(',').map(coord => coord.trim());
+            const response = await mayaClient.get(`/search-requests?lat=${lat}&long=${lng}`);
+            
+            if (response.ErrorCode) {
+                throw new Error(response.DisplayMsg);
+            }
+            
+            commit('set-interested-vo-list', response);
         } catch (error) {
             commit('set-error', error.message);
         } finally {

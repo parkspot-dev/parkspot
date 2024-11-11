@@ -65,6 +65,7 @@ export default {
             'loading',
             'errorMessage',
             'hasError',
+            'intrestedVOList'
         ]),
         activeTabView: {
             get() {
@@ -97,6 +98,7 @@ export default {
             'getAgents',
             'getParkingRequests',
             'resetError',
+            'getInterestedVO'
         ]),
         alertError(msg) {
             this.$buefy.dialog.alert({
@@ -125,21 +127,6 @@ export default {
                 });
                 this.getParkingRequests(voMobile);
             }
-        },
-        async getInterestedVO(latlng) {
-            this.isLoading = true;
-            const location = latlng.trim().split(',');
-            const lat = location[0].trim();
-            const lng = location[1].trim();
-            const parkingRequestList = await mayaClient.get(
-                `/search-requests?lat=${lat}&long=${lng}`,
-            );
-            this.isLoading = false;
-            if (parkingRequestList.ErrorCode) {
-                this.alertError(parkingRequestList.DisplayMsg);
-                return;
-            }
-            this.intrestedVOList = parkingRequestList;
         },
         async updateRequest(request) {
             try {
