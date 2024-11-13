@@ -9,10 +9,8 @@ const state = {
     searchMobile: '',
     // array of objects {id, name}, both id and name has agent first name as this used in b-table filtering
     agentList: [],
-    totalRequests: [],
     parkingRequests: [],
     interestedVOList: [],
-    isTotalRequestFetched: false,
 };
 
 const getters = {};
@@ -23,6 +21,12 @@ const mutations = {
     },
     'update-active-tab'(state, tabNo) {
         state.activeTab = tabNo;
+    },
+    'set-parking-requests'(state, result) {
+        state.parkingRequests = result;
+    },
+    'set-interested-vo-list'(state, result) {
+        state.interestedVOList = result;
     },
     'update-SO-Lat-Lng-Input'(state, latLng) {
         state.SOLatLngInput = latLng;
@@ -42,16 +46,6 @@ const mutations = {
             });
         state.agentList.push({ id: 'NA', name: 'NA' });
     },
-    'set-total-requests'(state, requests) {
-        state.isTotalRequestFetched = true;
-        state.totalRequests = requests;
-    },
-    'set-parking-requests'(state, parkingRequests) {
-        state.parkingRequests = parkingRequests;
-    },
-    'set-interested-vo-list'(state, list) {
-        state.interestedVOList = list;
-    },
     'set-error'(state, message) {
         state.hasError = !state.hasError;
         state.errorMessage = message;
@@ -67,30 +61,11 @@ const actions = {
     async getAgents({ commit }) {
         commit('set-agent-list', await mayaClient.get('/auth/user/agents'));
     },
-    // Get Total Results
-    async getTotalRequests({ commit, state }) {
-        if (state.loading) return;
-        commit('set-loading', true);
-        try {
-            const parkingRequestURL = '/internal/parking-requests';
-            const response = await mayaClient.get(parkingRequestURL);
-            if (response.ErrorCode) {
-                throw new Error(response.DisplayMsg);
-            }
-            commit('set-total-requests', response);
-            commit('set-parking-requests', response);
-            commit('set-interested-vo-list', response);
-        } catch (error) {
-            commit('set-error', error.message);
-        } finally {
-            commit('set-loading', false);
-        }
-    },
     // Get parking requests by mbile number
     async getParkingRequests({ commit, state }, mobile) {
         if (state.loading) return;
-        commit('set-loading', true);
         try {
+            commit('set-loading', true);
             let parkingRequestURL = '/internal/parking-requests';
             if (mobile) {
                 parkingRequestURL += `?mobile=${mobile.replace(/\s+/g, '')}`;
@@ -100,6 +75,7 @@ const actions = {
                 throw new Error(response.DisplayMsg);
             }
             commit('set-parking-requests', response);
+            commit('set-interested-vo-list', response);
         } catch (error) {
             commit('set-error', error.message);
         } finally {
@@ -129,14 +105,6 @@ const actions = {
     },
     resetError({ commit }) {
         commit('set-error', '');
-    },
-    // Reset parking requests to totalResults
-    resetParkingRequest({ commit }, list) {
-        commit('set-parking-requests', list);
-    },
-    // Reset Interested VO List to totalResults
-    resetInterestedVOList({ commit }, list) {
-        commit('set-interested-vo-list', list);
     },
     // Update Search text with text
     updateMobileInput({ commit }, text) {

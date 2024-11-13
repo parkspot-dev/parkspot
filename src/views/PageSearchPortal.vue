@@ -65,13 +65,11 @@ export default {
             'activeTab',
             'SOLatLngInput',
             'searchMobile',
-            'totalRequests',
             'parkingRequests',
             'interestedVOList',
             'loading',
             'errorMessage',
             'hasError',
-            'isTotalRequestFetched',
         ]),
         activeTabView: {
             get() {
@@ -97,29 +95,26 @@ export default {
         },
     },
     async created() {
-        if (
-            !this.isTotalRequestFetched &&
-            Object.keys(this.$route.query).length === 1
-        ) {
-            this.getTotalRequests();
-        }
         const tab = this.$route.query['tab'];
         if (tab) {
             if (tab === 'interested-request') {
                 this.updateActiveTab(1);
-                if (this.$route.query['lat'] && this.$route.query['lng']) {
-                    const lat = this.$route.query['lat'];
-                    const lng = this.$route.query['lng'];
-                    this.updateSOLatLngInput(lat + ',' + lng);
+                if (this.$route.query['latlng']) {
+                    const latlng = this.$route.query['latlng'];
+                    this.updateSOLatLngInput(latlng);
                     this.getInterestedVO(this.SOLatLngInput);
+                } else {
+                    this.getParkingRequests();
                 }
             } else {
                 this.updateActiveTab(0);
                 const mobile = this.$route.query['mobile'];
                 if (mobile) {
                     this.updateMobileInput(mobile);
+                    this.getParkingRequests(mobile);
+                } else {
+                    this.getParkingRequests();
                 }
-                this.getParkingRequests(this.$route.query['mobile']);
             }
         } else {
             this.updateActiveTab(0);
@@ -127,6 +122,7 @@ export default {
                 path: this.$route.fullPath,
                 query: { tab: 'parking-request' },
             });
+            this.getParkingRequests();
         }
         this.getAgents();
     },
@@ -139,9 +135,6 @@ export default {
             'getParkingRequests',
             'resetError',
             'getInterestedVO',
-            'getTotalRequests',
-            'resetParkingRequest',
-            'resetInterestedVOList',
         ]),
         alertError(msg) {
             this.$buefy.dialog.alert({
@@ -188,40 +181,33 @@ export default {
                     path: this.$route.fullPath,
                     query: { mobile: voMobile },
                 });
-                this.getParkingRequests(voMobile);
             }
         },
         async searchRequestWithLatLng(latlng) {
-            const location = latlng.trim().split(',');
-            const lat = location[0].trim();
-            const lng = location[1].trim();
+            this.updateSOLatLngInput(latlng);
             this.$router.push({
                 path: this.$route.fullPath,
-                query: { lat: lat, lng: lng },
+                query: { latlng: latlng },
             });
-            this.getInterestedVO(lat + ',' + lng);
         },
         // Clear Mobile Input
         async onClearMobileInput() {
             if (this.$route.query.mobile) {
                 this.updateMobileInput('');
-                this.$router.replace({ name: 'SearchPortal' });
-                if (this.totalRequests) {
-                    this.resetParkingRequest(this.totalRequests);
-                }
+                this.$router.push({
+                    name: 'SearchPortal',
+                    query: { tab: 'parking-request' },
+                });
             }
         },
         // Clear LatLng Input
         async onClearLatLngInput() {
-            if (this.$route.query['lat'] && this.$route.query['lng']) {
+            if (this.$route.query['latlng']) {
                 this.updateSOLatLngInput('');
-                this.$router.replace({
+                this.$router.push({
                     name: 'SearchPortal',
                     query: { tab: 'interested-request' },
                 });
-                if (this.totalRequests) {
-                    this.resetInterestedVOList(this.totalRequests);
-                }
             }
         },
         async updateRequest(request) {
