@@ -149,28 +149,7 @@ export default {
                 // This will hamper interested VO section experience,
                 // because interested VO does not change the URL and
                 // reload the page will take to /search-portal
-                onConfirm: () => {
-                    // Make Mobile Input Empty
-                    if (this.searchMobile) {
-                        this.updateMobileInput('');
-                    }
-                    // Make LatLngInput to empty
-                    if (this.SOLatLngInput) {
-                        this.updateSOLatLngInput('');
-                    }
-                    // Check for current tab
-                    const tab =
-                        this.activeTab === 0
-                            ? 'parking-request'
-                            : 'interested-request';
-                    // Reset Error
-                    this.resetError();
-                    // Push Back
-                    this.$router.push({
-                        name: 'SearchPortal',
-                        query: { tab: tab },
-                    });
-                },
+                onConfirm: this.handleConfirm
             });
         },
         async searchRequestWithMobile(voMobile) {
@@ -242,6 +221,28 @@ export default {
             });
             window.open(routeData.href, '_blank');
         },
+        handleConfirm(){
+                    // Make Mobile Input Empty
+                    if (this.searchMobile) {
+                        this.updateMobileInput('');
+                    }
+                    // Make LatLngInput to empty
+                    if (this.SOLatLngInput) {
+                        this.updateSOLatLngInput('');
+                    }
+                    // Check for current tab
+                    const tab =
+                        this.activeTab === 0
+                            ? 'parking-request'
+                            : 'interested-request';
+                    // Reset Error
+                    this.resetError();
+                    // Push Back
+                    this.$router.push({
+                        name: 'SearchPortal',
+                        query: { tab: tab },
+                    });
+        }
     },
     watch: {
         hasError(error) {
