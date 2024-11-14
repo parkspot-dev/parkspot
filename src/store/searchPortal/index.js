@@ -62,14 +62,17 @@ const actions = {
         commit('set-agent-list', await mayaClient.get('/auth/user/agents'));
     },
     // Get parking requests by mbile number
-    async getParkingRequests({ commit, state }, mobile) {
+    async getParkingRequests({ commit, state }) {
         if (state.loading) return;
         try {
             commit('set-loading', true);
-            let parkingRequestURL = '/internal/parking-requests';
-            if (mobile) {
-                parkingRequestURL += `?mobile=${mobile.replace(/\s+/g, '')}`;
-            }
+            const BASE_PARKING_REQUEST_URL = '/internal/parking-requests';
+            const parkingRequestURL = state.searchMobile
+                ? `${BASE_PARKING_REQUEST_URL}?mobile=${state.searchMobile.replace(
+                      /\s+/g,
+                      '',
+                  )}`
+                : BASE_PARKING_REQUEST_URL;
             const response = await mayaClient.get(parkingRequestURL);
             if (response.ErrorCode) {
                 throw new Error(response.DisplayMsg);
