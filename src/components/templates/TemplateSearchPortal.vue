@@ -257,6 +257,7 @@
                                 @changed="
                                     onStatusUpdate(props.row, ...arguments)
                                 "
+                                :key="`select-${props.row.ID}`"
                             >
                             </AtomSelectInput>
                         </div>
