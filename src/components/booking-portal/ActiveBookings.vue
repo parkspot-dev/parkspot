@@ -75,6 +75,19 @@
             </b-table-column>
 
             <b-table-column
+                cell-class="has-text-left"
+                field="Status"
+                label="Status"
+                width="40"
+                v-slot="props"
+                sortable
+            >
+                <div>
+                    {{ getBookingStatusLabel(props.row.Status) }}
+                </div>
+            </b-table-column>
+
+            <b-table-column
                 field="Rent"
                 label="Rent"
                 width="40"
@@ -103,7 +116,10 @@
 </template>
 
 <script>
-import { getPaymentPeriodicityLabel } from '@/constant/enums';
+import {
+    getPaymentPeriodicityLabel,
+    getBookingStatusLabel,
+} from '@/constant/enums';
 export default {
     props: {
         activeBookings: Array,
@@ -127,6 +143,9 @@ export default {
         },
         getPaymentPeriodicityLabel(paymentPeriodicity) {
             return getPaymentPeriodicityLabel(paymentPeriodicity);
+        },
+        getBookingStatusLabel(bookingStatus) {
+            return getBookingStatusLabel(bookingStatus);
         },
     },
 };
