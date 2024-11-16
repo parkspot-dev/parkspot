@@ -41,29 +41,29 @@
                                             Blogs
                                         </router-link>
                                     </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="menu-item">
-                            <span class="menu-title">Services</span>
-                            <!-- menu dropdown -->
-                            <div class="menu-item-dropdown">
-                                <ul>
                                     <li>
-                                        <router-link :to="{ name: 'VOPortal' }">
-                                            Request Spot
-                                        </router-link>
-                                    </li>
-                                    <li>
-                                        <router-link :to="{ name: 'SOPortal' }">
-                                            Register Spot
+                                        <router-link :to="{ name: 'Faq' }">
+                                            FAQ
                                         </router-link>
                                     </li>
                                 </ul>
                             </div>
                         </li>
                         <li class="menu-item">
-                            <a href="/faq" style="color:var(--parkspot-black); font-weight:500;">FAQ</a>
+                            <router-link
+                                class="menu-link"
+                                :to="{ name: 'VOPortal' }"
+                            >
+                                Request Spot
+                            </router-link>
+                        </li>
+                        <li class="menu-item">
+                            <router-link
+                                class="menu-link"
+                                :to="{ name: 'SOPortal' }"
+                            >
+                                Register Spot
+                            </router-link>
                         </li>
                     </ul>
                 </div>
@@ -217,7 +217,16 @@
                                     </li>
                                     <li class="scroll-item">
                                         <p>
-                                            <a href="/faq" style="color: var(--parkspot-black); font-weight: 400;">FAQ</a>
+                                            <a
+                                                href="/faq"
+                                                style="
+                                                    color: var(
+                                                        --parkspot-black
+                                                    );
+                                                    font-weight: 400;
+                                                "
+                                                >FAQ</a
+                                            >
                                         </p>
                                     </li>
                                 </ul>
