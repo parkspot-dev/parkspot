@@ -50,24 +50,20 @@
                             </div>
                         </li>
                         <li class="menu-item">
-                            <a
-                                href="/get-parking-spot"
-                                style="
-                                    color: var(--parkspot-black);
-                                    font-weight: 500;
-                                "
-                                >Request Spot</a
+                            <router-link
+                                class="menu-link"
+                                :to="{ name: 'VOPortal' }"
                             >
+                                Request Spot
+                            </router-link>
                         </li>
                         <li class="menu-item">
-                            <a
-                                href="/register-parking-spot"
-                                style="
-                                    color: var(--parkspot-black);
-                                    font-weight: 500;
-                                "
-                                >Register Spot</a
+                            <router-link
+                                class="menu-link"
+                                :to="{ name: 'SOPortal' }"
                             >
+                                Register Spot
+                            </router-link>
                         </li>
                     </ul>
                 </div>
