@@ -5,7 +5,7 @@
             <!-- Name -->
             <div class="form-group">
                 <label for="Name">Name:</label>
-                <input id="Name" placeholder="Enter your name" type="text" v-model="formData.Name" />
+                <input id="Name" placeholder="Enter VO name" type="text" v-model="formData.Name" />
             </div>
 
             <!-- Mobile (Compulsory) -->
