@@ -7,18 +7,20 @@
                         <p class="content-text-title">
                             {{ items.title }}
                         </p>
-                        <p class="content-text-desc">
-                            {{ items.description }}
-                        </p>
                     </div>
-                    <div class="content-btn">
+                    <router-link
+                        :to="{
+                            path: items.path,
+                        }"
+                        class="content-btn"
+                    >
                         <AtomIcon
                             class="btn-arrow"
                             @click.native="onArrowBtn"
                             :icon="'arrow-right'"
                             :size="'is-medium'"
                         ></AtomIcon>
-                    </div>
+                    </router-link>
                 </div>
             </div>
         </div>
@@ -34,7 +36,7 @@ export default {
     },
     props: {
         items: {
-            type: Array,
+            type: Object,
             required: true,
         },
     },
@@ -50,7 +52,7 @@ export default {
 };
 </script>
 
-<style scoped >
+<style scoped>
 .card-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -92,14 +94,8 @@ export default {
 
 .content-text-title {
     font-size: 1.25rem;
-    color: black;
+    color: var(--parkspot-black);
     margin-bottom: 0.5rem;
-}
-
-.content-text-desc {
-    font-size: 0.875rem;
-    color: var(--text-secondary-color);
-    line-height: 1.5;
 }
 
 .content-btn {
@@ -110,11 +106,11 @@ export default {
 
 .btn-arrow {
     cursor: pointer;
+    color: var(--parkspot-black);
 }
 
 .btn-arrow:hover {
     color: var(--primary-color);
     cursor: pointer;
 }
-
 </style>

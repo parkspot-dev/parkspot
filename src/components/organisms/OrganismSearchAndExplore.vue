@@ -1,6 +1,6 @@
 <template>
     <div class="main-box">
-        <AtomHeading :level="headingLevel" class="mb-5 has-text-centered">
+        <AtomHeading :level="'h2'" class="mb-5 has-text-centered">
             Find the Perfect Parking Spot Near You
         </AtomHeading>
         <div class="search-box">
@@ -29,6 +29,8 @@ import AtomHeading from '../atoms/AtomHeading.vue';
 import SearchInput from '../extras/SearchInput.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import MoleculeTopSearchCard from '../molecules/MoleculeTopSearchCard.vue';
+import { getCoordinate } from '../../includes/LatLng';
+import { mapGetters } from 'vuex';
 export default {
     name: 'OrganismSearchAndExplore',
     components: {
@@ -39,52 +41,74 @@ export default {
         MoleculeTopSearchCard,
     },
 
+    computed: {
+        ...mapGetters({
+            LocDetails: 'map/getLocDetails',
+        }),
+    },
     data() {
         return {
             items: [
                 {
                     id: 1,
                     title: 'Parking Spot in JP-Nagar',
-                    description:
-                        'A serene spot in the city to relax and unwind.',
-                    link: '/places/central-park',
+                    path: '/bangalore/parking-near-jp-nagar',
                 },
                 {
                     id: 2,
                     title: 'Parking Spot in BTM',
-                    description: 'Discover fresh produce and unique crafts.',
-                    link: '/places/downtown-market',
+                    link: '/bangalore/parking-near-btm',
                 },
                 {
                     id: 3,
                     title: 'Parking Spot in Hyderabad',
-                    description: 'Enjoy beautiful sunsets and sandy shores.',
-                    link: '/places/sunset-beach',
+                    link: '/hyderabad/parking-near-hyderabad',
                 },
             ],
         };
+    },
+
+    methods: {
+        flyToSrp() {
+            const coordinate = getCoordinate(this.LocDetails.lnglat.toString())
+                .reverse()
+                .toString();
+            this.$router.push({
+                name: 'srp',
+                query: {
+                    latlng: coordinate,
+                },
+                params: {
+                    location: this.LocDetails.locDetails.locName,
+                },
+            });
+        },
     },
 };
 </script>
 
 <style scoped>
 .main-box {
-    background-color: white;
+    background: linear-gradient(rgba(0, 0, 0, 0.635), rgba(0, 0, 0, 0.635)),
+        url('https://img.freepik.com/free-photo/parking_1127-2044.jpg?ga=GA1.1.1781815373.1722565677&semt=ais_hybrid')
+            no-repeat center/cover;
     padding: 20px 0;
-    border-radius: 10px;
     margin-top: 20px;
     display: flex;
     width: 100%;
     flex-direction: column;
+    border-radius: 10px;
+    color: var(--parkspot-white);
 }
-
 .search-box {
-    width: 50%;
+    margin-top: 20px;
+    width: 40%;
     display: flex;
     justify-content: center;
     align-items: center;
     align-self: center;
-    background-color: #ffffff;
+    background-color: var(--parkspot-white);
+    border-radius: 4px;
 }
 
 .search-input {
@@ -93,8 +117,6 @@ export default {
 
 .btn {
     width: 20%;
-    position: relative;
-    right: 4px;
     font-weight: 700;
 }
 
@@ -102,7 +124,7 @@ export default {
     margin-top: 60px;
     font-weight: var(--semi-bold-font);
     text-align: center;
-    color: var(--secondary-color);
+    color: var(--primary-color);
 }
 
 .cards-row {
