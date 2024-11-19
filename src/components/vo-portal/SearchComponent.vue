@@ -1,6 +1,6 @@
 <template>
     <div class="main-box">
-        <AtomHeading :level="'h2'" class="mb-5 has-text-centered">
+        <AtomHeading :level="'h1'" class="mb-5 has-text-centered">
             Find the Perfect Parking Spot Near You
         </AtomHeading>
         <div class="search-box">
@@ -14,10 +14,10 @@
                 >Most Searched Places</AtomParagraph
             >
             <div class="cards-row">
-                <MoleculeTopSearchCard
+                <TopSearchesCard
                     v-for="item in items"
                     :key="item.id"
-                    :items="item"
+                    :item="item"
                 />
             </div>
         </div>
@@ -28,17 +28,17 @@ import AtomButton from '../atoms/AtomButton.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import SearchInput from '../extras/SearchInput.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
-import MoleculeTopSearchCard from '../molecules/MoleculeTopSearchCard.vue';
+import TopSearchesCard from './TopSearchesCard.vue';
 import { getCoordinate } from '../../includes/LatLng';
 import { mapGetters } from 'vuex';
 export default {
-    name: 'OrganismSearchAndExplore',
+    name: 'SearchComponent',
     components: {
         AtomHeading,
         AtomButton,
         SearchInput,
         AtomParagraph,
-        MoleculeTopSearchCard,
+        TopSearchesCard,
     },
 
     computed: {
@@ -52,17 +52,20 @@ export default {
                 {
                     id: 1,
                     title: 'Parking Spot in JP-Nagar',
+                    spots: 40,
                     path: '/bangalore/parking-near-jp-nagar',
                 },
                 {
                     id: 2,
                     title: 'Parking Spot in BTM',
-                    link: '/bangalore/parking-near-btm',
+                    spots: 20,
+                    path: '/bangalore/parking-near-btm',
                 },
                 {
                     id: 3,
                     title: 'Parking Spot in Hyderabad',
-                    link: '/hyderabad/parking-near-hyderabad',
+                    spots: 60,
+                    path: '/hyderabad/parking-near-hyderabad',
                 },
             ],
         };
@@ -92,23 +95,23 @@ export default {
     background: linear-gradient(rgba(0, 0, 0, 0.635), rgba(0, 0, 0, 0.635)),
         url('https://www.optex.co.jp/e/business-sectors/tdphtg0000006ax6-img/tdphtg0000006axd.png')
             no-repeat center/cover;
-    padding: 20px 0;
-    margin-top: 20px;
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    border-radius: 10px;
     color: var(--parkspot-white);
-}
-.search-box {
-    margin-top: 20px;
-    width: 40%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    margin-top: 20px;
+    padding: 40px 0;
+    width: 100%;
+}
+
+.search-box {
     align-items: center;
     align-self: center;
     background-color: var(--parkspot-white);
-    border-radius: 4px;
+    border-radius: var(--border-default);
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: 40%;
 }
 
 .search-input {
@@ -116,15 +119,15 @@ export default {
 }
 
 .btn {
-    width: 20%;
     font-weight: 700;
+    width: 20%;
 }
 
 .custom-subtitle {
-    margin-top: 60px;
-    font-weight: var(--semi-bold-font);
-    text-align: center;
     color: var(--primary-color);
+    font-weight: var(--semi-bold-font);
+    margin-top: 60px;
+    text-align: center;
 }
 
 .cards-row {
@@ -136,12 +139,20 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+    .main-box{
+        padding: 40px 20px;
+    }
+
     .search-box {
         width: 90%;
     }
 
     .btn {
         width: 40%;
+    }
+
+    .cards-row {
+        gap: 1rem;
     }
 }
 </style>

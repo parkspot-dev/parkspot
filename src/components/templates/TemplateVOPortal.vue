@@ -99,7 +99,7 @@
                 </b-steps>
             </div>
         </BodyWrapper>
-        <OrganismSearchAndExplore />
+        <SearchComponent />
     </div>
 </template>
 
@@ -109,7 +109,7 @@ import OrganismPreferenceForm from '../organisms/OrganismPreferenceForm.vue';
 // import OrganismAddressForm from '../organisms/OrganismAddressForm.vue';
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
-import OrganismSearchAndExplore from '../organisms/OrganismSearchAndExplore.vue';
+import SearchComponent from '../vo-portal/SearchComponent.vue';
 export default {
     name: 'TemplateVOPortal',
     components: {
@@ -118,7 +118,7 @@ export default {
         // OrganismAddressForm,
         AtomHeading,
         BodyWrapper,
-        OrganismSearchAndExplore,
+        SearchComponent,
     },
     emits: ['finalSubmit'],
     data() {
