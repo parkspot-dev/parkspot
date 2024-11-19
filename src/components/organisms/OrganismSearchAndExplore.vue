@@ -90,7 +90,7 @@ export default {
 <style scoped>
 .main-box {
     background: linear-gradient(rgba(0, 0, 0, 0.635), rgba(0, 0, 0, 0.635)),
-        url('https://img.freepik.com/free-photo/parking_1127-2044.jpg?ga=GA1.1.1781815373.1722565677&semt=ais_hybrid')
+        url('https://www.optex.co.jp/e/business-sectors/tdphtg0000006ax6-img/tdphtg0000006axd.png')
             no-repeat center/cover;
     padding: 20px 0;
     margin-top: 20px;
