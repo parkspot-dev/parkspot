@@ -2,15 +2,34 @@
     <div class="spot-requests-root">
         <!-- Search Bar -->
         <div class="search-control">
-            <MoleculeSearchBox placeholder="Request ID" @on-search="searchSpotRequest"></MoleculeSearchBox>
-            <!-- Loading modal displayed during data fetch -->
-            <LoaderModal v-if="isLoading"></LoaderModal>
+            <MoleculeSearchBox
+                placeholder="Request ID"
+                @on-search="searchSpotRequest"
+            ></MoleculeSearchBox>
         </div>
-
+        <!-- Loading modal displayed during data fetch -->
+        <LoaderModal v-if="isLoading"></LoaderModal>
         <!-- Buefy Table for spot requests with pagination -->
-        <b-table :data="spotRequests" :paginated="true" :per-page="10" :bordered="true" :hoverable="true"
-            :focusable="true" :mobile-cards="true" :narrowed="true" :sticky-header="true" height="500">
-            <b-table-column field="ID" label="Request ID" sortable cell-class="has-text-left" width="20">
+        <b-table
+            v-else
+            :data="spotRequests"
+            :paginated="true"
+            :per-page="10"
+            :bordered="true"
+            :hoverable="true"
+            :focusable="true"
+            :mobile-cards="true"
+            :narrowed="true"
+            :sticky-header="true"
+            height="500"
+        >
+            <b-table-column
+                field="ID"
+                label="Request ID"
+                sortable
+                cell-class="has-text-left"
+                width="20"
+            >
                 <template v-slot="props">
                     <a :href="RequestDetailURL(props.row.ID)">
                         <div>{{ props.row.ID }}</div>
@@ -18,7 +37,12 @@
                 </template>
             </b-table-column>
 
-            <b-table-column field="Name" label="Name" sortable cell-class="has-text-left">
+            <b-table-column
+                field="Name"
+                label="Name"
+                sortable
+                cell-class="has-text-left"
+            >
                 <template v-slot="props">
                     <div>
                         {{ props.row.Name }}
@@ -26,7 +50,12 @@
                 </template>
             </b-table-column>
 
-            <b-table-column field="Address" label="Address" sortable cell-class="has-text-left">
+            <b-table-column
+                field="Address"
+                label="Address"
+                sortable
+                cell-class="has-text-left"
+            >
                 <template v-slot="props">
                     <div>
                         {{ props.row.Address }}
@@ -35,29 +64,51 @@
             </b-table-column>
 
             <!-- Status Column -->
-            <b-table-column field="Status" filter label="Status" width="150px" sortable searchable>
+            <b-table-column
+                field="Status"
+                filter
+                label="Status"
+                width="150px"
+                sortable
+                searchable
+            >
                 <template #searchable="props">
-                    <AtomSelectInput :size="'is-small'" :list="spotRequestStatusList" class="column-width"
-                        v-model="props.filters['Status']">
+                    <AtomSelectInput
+                        :size="'is-small'"
+                        :list="spotRequestStatusList"
+                        class="column-width"
+                        v-model="props.filters['Status']"
+                    >
                     </AtomSelectInput>
                 </template>
                 <template v-slot="props">
                     <div class="status-column">
                         <div class="status-part">
-                            <span class="tag" :class="{
-                                'is-info':props.row.Status === 0,
-                                'is-success': props.row.Status === 4,
-                                'my-status': props.row.Status === 1 || 2 || 3,
-                                'is-danger': props.row.Status === 5,
-                            }">
-                                {{ getSpotRequestStatusLabel(props.row.Status) }}
+                            <span
+                                class="tag"
+                                :class="{
+                                    'is-info': props.row.Status === 0,
+                                    'is-success': props.row.Status === 4,
+                                    'my-status':
+                                        props.row.Status === 1 || 2 || 3,
+                                    'is-danger': props.row.Status === 5,
+                                }"
+                            >
+                                {{
+                                    getSpotRequestStatusLabel(props.row.Status)
+                                }}
                             </span>
                         </div>
                     </div>
                 </template>
             </b-table-column>
 
-            <b-table-column field="Remark" label="Remark" sortable cell-class="has-text-left">
+            <b-table-column
+                field="Remark"
+                label="Remark"
+                sortable
+                cell-class="has-text-left"
+            >
                 <template v-slot="props">
                     <div>
                         {{ props.row.Remark }}
@@ -65,10 +116,15 @@
                 </template>
             </b-table-column>
 
-            <b-table-column field="LastCallDate" label="Last Call Date" sortable cell-class="has-text-left">
+            <b-table-column
+                field="LastCallDate"
+                label="Last Call Date"
+                sortable
+                cell-class="has-text-left"
+            >
                 <template v-slot="props">
                     <div>
-                        {{ props.row.LastCallDate }}
+                        {{ props.row.LastCallDate ? formatDate(props.row.LastCallDate) : 'N/A' }}
                     </div>
                 </template>
             </b-table-column>
@@ -100,8 +156,8 @@ export default {
                 { id: 3, name: 'Requested Modification' },
                 { id: 4, name: 'Verified' },
                 { id: 5, name: 'Denied' },
-            ]
-        }
+            ],
+        };
     },
     computed: {
         ...mapState('spotRequests', [
@@ -147,7 +203,7 @@ export default {
 
         // Get label for status based on the enum value
         getSpotRequestStatusLabel(spotRequestStatus) {
-            return getSpotRequestStatusLabel(spotRequestStatus)
+            return getSpotRequestStatusLabel(spotRequestStatus);
         },
 
         alertError(msg) {
