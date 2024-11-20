@@ -11,7 +11,6 @@
         <LoaderModal v-if="isLoading"></LoaderModal>
         <!-- Buefy Table for spot requests with pagination -->
         <b-table
-            v-else
             :data="spotRequests"
             :paginated="true"
             :per-page="10"
