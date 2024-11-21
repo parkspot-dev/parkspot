@@ -128,5 +128,3 @@ export const APP_LINK = {
     ANDROID:
         'https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website',
 };
-
-  
