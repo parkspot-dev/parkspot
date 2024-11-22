@@ -60,7 +60,6 @@ export default {
     width: 300px;
     overflow: hidden;
     transition: 0.3s ease;
-    cursor: pointer;
     padding: 1rem;
 
     &:hover {
