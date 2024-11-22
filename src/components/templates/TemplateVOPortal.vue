@@ -2,102 +2,25 @@
     <div>
         <BodyWrapper>
             <AtomHeading class="mb-5 has-text-centered">
-                Fill the form to Request a Parking Spot
-            </AtomHeading>
-            <div class="card card-wrapper">
-                <b-steps
-                    v-model="activeStep"
-                    :has-navigation="hasNavigation"
-                    :icon-prev="prevIcon"
-                    :icon-next="nextIcon"
-                    :label-position="labelPosition"
-                    :mobile-mode="mobileMode"
-                >
-                    <b-step-item
-                        step="1"
-                        label="Step 1"
-                        :clickable="isStepsClickable"
-                        :type="btnStack[0] ? 'is-success' : 'is-warning'"
-                    >
-                        <AtomHeading
-                            :level="headingLevel"
-                            class="mb-5 has-text-centered"
-                        >
-                            Contact Details
-                        </AtomHeading>
-                        <OrganismContactForm
-                            :formSubmitted="btnStack[0]"
-                            @formValidate="contactFormValidate"
-                        ></OrganismContactForm>
-                    </b-step-item>
-
-                    <!-- <b-step-item
-                    step="2"
-                    label="Step 2"
-                    :clickable="isStepsClickable"
-                    :type="btnStack[1] ? 'is-success' : 'is-warning'"
-                >
+            Fill the form to Request a Parking Spot
+        </AtomHeading>
+        <div class="form-section-wrapper" >
+            <!-- Info graphic -->
+            <div class="info-graphic" ></div>
+            <!-- Parking request form -->
+            <div class="form-wrapper" >
+                <div class="request-form" >
                     <AtomHeading
                         :level="headingLevel"
                         class="mb-5 has-text-centered"
                     >
-                        Location Details
+                        Contact Details
                     </AtomHeading>
-                    <OrganismAddressForm
-                        :formSubmitted="btnStack[1]"
-                        @formValidate="addressFormValidate"
-                        :reRender="reRender"
-                    ></OrganismAddressForm>
-                </b-step-item> -->
-
-                    <b-step-item
-                        :step="2"
-                        label="Step 2"
-                        :clickable="isStepsClickable"
-                        disabled
-                        :type="btnStack[1] ? 'is-success' : 'is-warning'"
-                        ><AtomHeading
-                            :level="headingLevel"
-                            class="mb-5 has-text-centered"
-                        >
-                            Additional Details
-                        </AtomHeading>
-                        <OrganismPreferenceForm
-                            :formSubmitted="btnStack[1]"
-                            @formValidate="preferenceFormValidate"
-                        ></OrganismPreferenceForm>
-                    </b-step-item>
-
-                    <template
-                        v-if="customNavigation"
-                        #navigation="{ previous, next }"
-                    >
-                        <div class="footer-buttons">
-                            <b-button
-                                outlined
-                                type="is-danger"
-                                icon-pack="mdi"
-                                :icon-left="prevIcon"
-                                :disabled="previous.disabled"
-                                @click.prevent="btnPrev(previous)"
-                                class="mr-4"
-                            >
-                                Prev
-                            </b-button>
-                            <b-button
-                                outlined
-                                type="is-success"
-                                icon-pack="mdi"
-                                :icon-right="nextIcon"
-                                :disabled="false"
-                                @click.prevent="btnNext(next)"
-                            >
-                                {{ nextText }}
-                            </b-button>
-                        </div>
-                    </template>
-                </b-steps>
+                <ParkingRequestForm :formSubmitted="btnStack[0]"
+                @formValidate="contactFormValidate" />
+                </div>
             </div>
+        </div>
         </BodyWrapper>
         <SearchComponent />
         <TestimonialSection/>
@@ -105,23 +28,19 @@
 </template>
 
 <script>
-import OrganismContactForm from '../organisms/OrganismContactForm.vue';
-import OrganismPreferenceForm from '../organisms/OrganismPreferenceForm.vue';
-// import OrganismAddressForm from '../organisms/OrganismAddressForm.vue';
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import SearchComponent from '../vo-portal/SearchComponent.vue';
 import TestimonialSection from '../global/TestimonialSection.vue';
+import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
 export default {
     name: 'TemplateVOPortal',
     components: {
-        OrganismContactForm,
-        OrganismPreferenceForm,
-        // OrganismAddressForm,
-        AtomHeading,
         BodyWrapper,
+        AtomHeading,
         SearchComponent,
-        TestimonialSection
+        TestimonialSection,
+        ParkingRequestForm
     },
     emits: ['finalSubmit'],
     data() {
@@ -213,4 +132,22 @@ export default {
     display: flex;
     justify-content: space-between;
 }
+
+.form-section-wrapper{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    .info-graphic{
+        width: 50%;
+    }
+    .form-wrapper{
+        width: 50%;
+        padding: 20px;
+
+        .request-from{
+            
+        }
+    }
+}
+
 </style>
