@@ -11,7 +11,7 @@
             </div>
             <TemplateSearchPortal
                 :parkingRequests="parkingRequests"
-                :isLoading="isLoading"
+                :isLoading="loading"
                 :isSummary="true"
                 @updateRequest="updateRequest"
                 @toSrp="toSrp"
@@ -22,11 +22,13 @@
             <p></p>
             <MoleculeSearchBox
                 placeholder="Lat,Long"
-                @on-search="getInterestedVO"
+                :initialValue="SOLatLngInput"
+                @on-search="searchRequestWithLatLng"
+                @clear-input="onClearLatLngInput"
             ></MoleculeSearchBox>
             <TemplateSearchPortal
-                :isLoading="isLoading"
-                :parkingRequests="intrestedVOList"
+                :isLoading="loading"
+                :parkingRequests="interestedVOList"
                 @toSrp="toSrp"
                 @updateRequest="updateRequest"
             ></TemplateSearchPortal>
@@ -39,6 +41,7 @@ import { PAGE_TITLE } from '@/constant/constant';
 import { mayaClient } from '@/services/api';
 import { mapActions, mapState } from 'vuex';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
+import { getActiveTabStatusLabel } from '../constant/enums'
 
 export default {
     name: 'PageSearchPortal',
@@ -54,9 +57,7 @@ export default {
     },
     data() {
         return {
-            parkingRequests: [],
             isLoading: false,
-            intrestedVOList: [],
             VOMobile: this.searchMobile,
         };
     },
@@ -65,17 +66,20 @@ export default {
             'activeTab',
             'SOLatLngInput',
             'searchMobile',
+            'parkingRequests',
+            'interestedVOList',
+            'loading',
+            'errorMessage',
+            'hasError',
         ]),
         activeTabView: {
             get() {
                 return this.activeTab;
             },
             set(tabNo) {
-                const currentTab =
-                    tabNo === 0 ? 'parking-request' : 'interested-request';
                 this.$router.push({
-                    path: this.$route.fullPath,
-                    query: { tab: currentTab },
+                    path: this.$route.path,
+                    query: { tab: getActiveTabStatusLabel(this.activeTab) },
                 });
                 this.updateActiveTab(tabNo);
             },
@@ -90,24 +94,36 @@ export default {
         },
     },
     async created() {
-        const currentTab =
-            this.activeTab === 0 ? 'parking-request' : 'interested-request';
-        this.$router.push({
-            path: this.$route.fullPath,
-            query: { tab: currentTab },
-        });
-        this.getAgents();
-        const mobile = this.$route.query['mobile'];
-        if (mobile) {
-            this.updateMobileInput(mobile);
+        const tab = this.$route.query['tab'];
+        if (tab) {
+            if (tab === 'interested-request') {
+                this.updateActiveTab(1);
+                if (this.$route.query['latlng']) {
+                    const latlng = this.$route.query['latlng'];
+                    this.updateSOLatLngInput(latlng);
+                    this.getInterestedVO(this.SOLatLngInput);
+                } else {
+                    this.getParkingRequests();
+                }
+            } else {
+                this.updateActiveTab(0);
+                const mobile = this.$route.query['mobile'];
+                if (mobile) {
+                    this.updateMobileInput(mobile);
+                    this.getParkingRequests();
+                } else {
+                    this.getParkingRequests();
+                }
+            }
         } else {
-            this.updateMobileInput('');
+            this.updateActiveTab(0);
+            this.$router.push({
+                path: this.$route.fullPath,
+                query: { tab: getActiveTabStatusLabel(this.activeTab) },
+            });
+            this.getParkingRequests();
         }
-
-        this.getParkingRequests(this.$route.query['mobile']);
-        if (this.SOLatLngInput) {
-            this.getInterestedVO(this.SOLatLngInput);
-        }
+        this.getAgents();
     },
     methods: {
         ...mapActions('searchPortal', [
@@ -115,6 +131,9 @@ export default {
             'updateSOLatLngInput',
             'getAgents',
             'updateMobileInput',
+            'getParkingRequests',
+            'resetError',
+            'getInterestedVO',
         ]),
         alertError(msg) {
             this.$buefy.dialog.alert({
@@ -129,7 +148,7 @@ export default {
                 // This will hamper interested VO section experience,
                 // because interested VO does not change the URL and
                 // reload the page will take to /search-portal
-                onConfirm: this.onClearMobileInput,
+                onConfirm: this.handleConfirm
             });
         },
         async searchRequestWithMobile(voMobile) {
@@ -140,49 +159,34 @@ export default {
                     path: this.$route.fullPath,
                     query: { mobile: voMobile },
                 });
-                this.getParkingRequests(voMobile);
             }
+        },
+        async searchRequestWithLatLng(latlng) {
+            this.updateSOLatLngInput(latlng);
+            this.$router.push({
+                path: this.$route.fullPath,
+                query: { latlng: latlng },
+            });
         },
         // Clear Mobile Input
         async onClearMobileInput() {
             if (this.$route.query.mobile) {
                 this.updateMobileInput('');
-                this.$router.push({ name : 'SearchPortal' });
-                // Fetch the Agents Data
-                this.getAgents();
+                this.$router.push({
+                    name: 'SearchPortal',
+                    query: { tab: getActiveTabStatusLabel(this.activeTab) },
+                });
             }
         },
-
-        async getParkingRequests(voMobile = '') {
-            this.isLoading = true;
-            let parkingRequestURL = '/internal/parking-requests';
-            if (voMobile != '') {
-                parkingRequestURL =
-                    parkingRequestURL +
-                    `?mobile=${voMobile.replace(/\s+/g, '')}`;
+        // Clear LatLng Input
+        async onClearLatLngInput() {
+            if (this.$route.query['latlng']) {
+                this.updateSOLatLngInput('');
+                this.$router.push({
+                    name: 'SearchPortal',
+                    query: { tab: getActiveTabStatusLabel(this.activeTab) },
+                });
             }
-            const response = await mayaClient.get(parkingRequestURL);
-            this.isLoading = false;
-            if (response.ErrorCode) {
-                this.alertError(response.DisplayMsg);
-                return;
-            }
-            this.parkingRequests = response;
-        },
-        async getInterestedVO(latlng) {
-            this.isLoading = true;
-            const location = latlng.trim().split(',');
-            const lat = location[0].trim();
-            const lng = location[1].trim();
-            const parkingRequestList = await mayaClient.get(
-                `/search-requests?lat=${lat}&long=${lng}`,
-            );
-            this.isLoading = false;
-            if (parkingRequestList.ErrorCode) {
-                this.alertError(parkingRequestList.DisplayMsg);
-                return;
-            }
-            this.intrestedVOList = parkingRequestList;
         },
         async updateRequest(request) {
             try {
@@ -204,7 +208,6 @@ export default {
                 console.error({ error });
                 this.alertError('Something went wrong!');
             }
-
             this.isLoading = false;
         },
         toSrp(lat, lng) {
@@ -216,6 +219,30 @@ export default {
                 },
             });
             window.open(routeData.href, '_blank');
+        },
+        handleConfirm(){
+                    // Make Mobile Input Empty
+                    if (this.searchMobile) {
+                        this.updateMobileInput('');
+                    }
+                    // Make LatLngInput to empty
+                    if (this.SOLatLngInput) {
+                        this.updateSOLatLngInput('');
+                    }
+                    // Reset Error
+                    this.resetError();
+                    // Push Back
+                    this.$router.push({
+                        name: 'SearchPortal',
+                        query: { tab: getActiveTabStatusLabel(this.activeTab) },
+                    });
+        }
+    },
+    watch: {
+        hasError(error) {
+            if (error) {
+                this.alertError(this.errorMessage);
+            }
         },
     },
 };

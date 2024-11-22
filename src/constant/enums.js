@@ -200,3 +200,22 @@ export const PaymentTypeLabels = [
 export function getPaymentTypeLabel(paymentType) {
     return getEnumLabel(PaymentTypeLabels, paymentType);
 }
+
+export const ActiveTabStatus = Object.freeze({
+    ParkingRequest: 0,
+    InterestedRequest: 1,
+});
+
+export const ActiveTabStatusLabels = [
+    'parking-request',
+    'interested-request'
+];
+
+/**
+ *
+ * @param {int} activeTabStatus
+ * @return {string}: label for active tab status
+ */
+export function getActiveTabStatusLabel(activeTabStatus) {
+    return getEnumLabel(ActiveTabStatusLabels, activeTabStatus);
+}
