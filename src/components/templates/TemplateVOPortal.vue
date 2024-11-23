@@ -2,28 +2,30 @@
     <div>
         <BodyWrapper>
             <AtomHeading class="mb-5 has-text-centered">
-            Fill the form to Request a Parking Spot
-        </AtomHeading>
-        <div class="form-section-wrapper" >
-            <!-- Info graphic -->
-            <div class="info-graphic" ></div>
-            <!-- Parking request form -->
-            <div class="form-wrapper" >
-                <div class="request-form" >
-                    <AtomHeading
-                        :level="headingLevel"
-                        class="mb-5 has-text-centered"
-                    >
-                        Contact Details
-                    </AtomHeading>
-                <ParkingRequestForm :formSubmitted="btnStack[0]"
-                @formValidate="contactFormValidate" />
+                Fill the form to Request a Parking Spot
+            </AtomHeading>
+            <div class="form-section-wrapper">
+                <!-- Info graphic -->
+                <div class="info-graphic"></div>
+                <!-- Parking request form -->
+                <div class="form-wrapper">
+                    <div class="request-form">
+                        <AtomHeading
+                            :level="headingLevel"
+                            class="mb-5 has-text-centered"
+                        >
+                            Apply for Parking Service
+                        </AtomHeading>
+                        <ParkingRequestForm
+                            :formSubmitted="btnStack[0]"
+                            @formValidate="contactFormValidate"
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
         </BodyWrapper>
         <SearchComponent />
-        <TestimonialSection/>
+        <TestimonialSection />
     </div>
 </template>
 
@@ -40,7 +42,7 @@ export default {
         AtomHeading,
         SearchComponent,
         TestimonialSection,
-        ParkingRequestForm
+        ParkingRequestForm,
     },
     emits: ['finalSubmit'],
     data() {
@@ -61,7 +63,7 @@ export default {
 
             isStepsClickable: false,
 
-            headingLevel: 'h3',
+            headingLevel: 'h5',
 
             nextEnable: null,
             nextText: 'Next',
@@ -133,21 +135,36 @@ export default {
     justify-content: space-between;
 }
 
-.form-section-wrapper{
+.form-section-wrapper {
     display: flex;
     flex-direction: row;
     width: 100%;
-    .info-graphic{
+    .info-graphic {
         width: 50%;
     }
-    .form-wrapper{
+    .form-wrapper {
         width: 50%;
         padding: 20px;
+    }
+}
 
-        .request-from{
-            
+@media (max-width: 768px) {
+    .form-section-wrapper {
+        flex-direction: column;
+        .info-graphic {
+            width: 100%;
+        }
+        .form-wrapper {
+            width: 100%;
+            padding: 10px;
         }
     }
 }
 
+.request-form {
+    // background-color: var(--primary-color);
+    padding: 2rem 1rem;
+    border-radius: var(--border-default);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
+}
 </style>
