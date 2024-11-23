@@ -1,9 +1,8 @@
 
 <template>
   <div class="body">
+  <!-- Image Upload Section -->
    <div class="root">
-    <!-- Image Upload Section -->
-
       <!-- SO Details Section -->
       <div class="form-section">
         <div class="heading">
@@ -13,7 +12,7 @@
         <div class="form-group">
           <!-- Spot Id(This field is disabled to edit as it cannot be changed during runtime) -->
           <div class="form-field">
-            <label for="spotId">SpotId: </label>
+            <label for="spotId">SpotId:</label>
             <input 
              class="noborder" 
              :disabled="true" 
@@ -22,7 +21,7 @@
           </div>
           <!-- user Name(This field is disabled to edit as it cannot be changed during runtime) -->
           <div class="form-field">
-            <label for="userName">UserName: </label>
+            <label for="userName">UserName:</label>
             <input 
              class="noborder" 
              :disabled="true" 
@@ -31,7 +30,7 @@
           </div>
           <!-- Full name -->
           <div class="form-field">
-            <label for="fullName">Full Name: </label>
+            <label for="fullName">Full Name:</label>
             <input 
              placeholder="Enter Full Name" 
              type="text" 
@@ -45,7 +44,7 @@
                 @input="validateMobile"
                 id="mobile"
                 maxlength="10"
-                placeholder="Enter Mobile number"
+                placeholder="Enter SO Mobile number"
                 required
                 type="text"
                 v-model="formdataSO.mobile"
@@ -85,7 +84,7 @@
              <label for="address">Address:</label>
                 <textarea
                 id="address"
-                placeholder="Enter address"
+                placeholder="Enter SO address"
                 rows="2"
                 v-model="formdataSO.address"
             ></textarea>
@@ -95,11 +94,11 @@
             <label for="latitude">Latitude:<span style="color: red;">*</span></label>
             <div class="error-field">
             <input 
-              type="number"
               @input="validateLatitude"
-              placeholder="Enter latitude"
+              placeholder="Enter SO latitude"
               required 
               step="any"
+              type="number"
               v-model="formdataSO.latitude" 
               />
             <span 
@@ -132,7 +131,7 @@
       <!-- Rent Details Section -->
       <div class="form-section">
         <div class="heading">
-          <h3 class="sub-heading">Rent Details </h3>
+          <h3 class="sub-heading">Rent Details</h3>
         </div>
         <!-- Rent Details -->
         <div class="form-group">
@@ -191,7 +190,7 @@
       <!-- Booking Details Section -->
       <div class="form-section">
         <div class="heading">
-          <h3 class="sub-heading">Booking Details </h3>
+          <h3 class="sub-heading">Booking Details</h3>
         </div>
         <!-- Booking Details -->
         <div class="form-group">
@@ -199,8 +198,8 @@
           <div class="form-field">
             <label for="startDate" >Start Date:<span style="color: red;">*</span></label>
             <AtomDatePicker 
-              :size="'is-small'"
               :assignedDate="formdataBooking.startDate"
+              :size="'is-small'"
               class="calendar"
               required
               >
@@ -210,10 +209,10 @@
           <div class="form-field">
             <label for="endDate">End Date:<span style="color: red;">*</span></label>
             <AtomDatePicker
-              class="calendar"
               :assignedDate="formdataBooking.endDate"
               :size="'is-small'"
-              required   
+              class="calendar"
+              required
             >
             </AtomDatePicker>
           </div>
@@ -221,9 +220,9 @@
           <div class="form-field">
             <label for="lastCallDate">Last Call Date:</label>
             <AtomDatePicker 
-              class="calendar"
               :assignedDate="formdataBooking.lastCallDate"
               :size="'is-small'"
+              class="calendar"
               required
               >
               </AtomDatePicker>
@@ -267,11 +266,12 @@
           </div>
         </div>
       </div>
-        <!-- END OF Details -->
+      <!-- END OF Details -->
+      
       <!-- Update -->
       <div class="button-container">
-        <button @click="handleSave" class="submit-btn">Save</button>
-        <button @click="handleSubmit" class="submit-btn">Publish</button>
+        <button @click="handleUpdate" class="submit-btn">Save</button>
+        <button @click="handlePublish" class="submit-btn">Publish</button>
       </div>
   </div>
   <!-- End of root -->
@@ -307,10 +307,13 @@ export default {
           'submitForm',
           'saveForm',
       ]),
-      handleSubmit() {
+      async fetchSpotDetails() {
+        this.formdataSO.spotId = this.$route.query.spotId;
+      },
+      handlePublish() {
         this.submitForm();
       },
-      handleSave(){
+      handleUpdate(){
         this.saveForm();
       },
       alertError(msg) {
@@ -332,18 +335,18 @@ export default {
           }
       },
   },
-  beforeMount() {
+  async beforeMount() {
+    await this.fetchSpotDetails();
     this.initState();
-     
   },
 };
 </script>
 
 <style>
 .body{
+  background: #f5f5fb;
   padding: 16px;
   text-align: center;
-  background: #f5f5fb;
 }
 .button-container {
   display: flex;
@@ -360,8 +363,8 @@ export default {
   width: 70%;
 }
 .error {
-  font-size: 0.6rem;
   color: red;
+  font-size: 0.6rem;
   font-style: italic;
   margin-left: auto;
 }
@@ -433,8 +436,8 @@ export default {
   cursor: pointer;
   font-size: 1.3rem;
   font-weight: bold;
-  padding: 0.6rem;
   margin: 0px 5px;
+  padding: 0.6rem;
   transition: background-color 0.1s ease, transform 0.2s ease;
 }
 .submit-btn:hover {

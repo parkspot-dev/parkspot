@@ -2,6 +2,7 @@ import { getSpotRequestStatusLabel as getSpotStatus } from "../../constant/enums
 import { getParkingSizeLabel as getParkingSize } from "../../constant/enums";
 import { getRentUnitLabel as getRentUnit } from "../../constant/enums";
 import { getSiteTypeLabel as getSiteType } from "../../constant/enums";
+import { mayaClient } from '@/services/api';
 
 const state = {
     editField: null,
@@ -100,78 +101,43 @@ const actions = {
         }
     },
 
-    // Helper function for parking size label retrieval
     getParkingSize(value) {
         return ParkingSizeEnum[value];
     },
 
-
     // Fetch data from API when the webpage is mounted
-    initState({ commit, dispatch }) {
-        
-        // API call for GET, not completed as of now  
-        const hardcodedInfo = {
-            
-            "ID": 123,
-            "Owner": {
-                "FullName": "Sud",
-                "EmailID": "sud@gmai.com",
-                "Mobile": "8092996057"
-            },
-            "Name": "Site Name",
-            "Latitude": 12.123,
-            "Longitude": 12.123,
-            "BaseAmount": 3000,
-            "TotalSlots": 3,
-            "Address": "Address",
-            "RentUnit": 1,
-            "UserName": "sud",
-            "City": "Bengaluru",
-            "Area": "Area",
-            "Size": 1,  
-            "Type": 1,  
-            "StartDate": "2029-01-12T11:37:22.6779781Z",
-            "EndDate": "2025-04-19T11:37:22.6779781Z",
-            "MinDuration": "2 months",
-            "SpotImages": [
-                "url1",
-                "url2"
-            ],
-            "Status": 1,
-            "Remark": "Remark",
-            "LastCallDate": "2029-01-12T11:37:22.6779781Z"
-
-        };
+    initState({ commit }) {
+        const spotInfo = mayaClient.get('/owner/spot-request?spot-id=' + this.formdataSO.spotId);
         const formData = {
             SO: {
-                spotId: hardcodedInfo.ID,
-                userName: hardcodedInfo.UserName,
-                latitude: hardcodedInfo.Latitude,
-                longitude: hardcodedInfo.Longitude,
-                city: hardcodedInfo.City,
-                area: hardcodedInfo.Area,
-                fullName: hardcodedInfo.Owner.FullName,
-                mobile: hardcodedInfo.Owner.Mobile,
-                address: hardcodedInfo.Address,
-                email: hardcodedInfo.Owner.EmailID,
+                spotId: spotInfo.ID,
+                userName: spotInfo.UserName,
+                latitude: spotInfo.Latitude,
+                longitude: spotInfo.Longitude,
+                city: spotInfo.City,
+                area: spotInfo.Area,
+                fullName: spotInfo.FullName,
+                mobile: spotInfo.Mobile,
+                address: spotInfo.Address,
+                email: spotInfo.EmailID,
             },
             Rent: {
-                totalSlots: hardcodedInfo.TotalSlots,
-                baseAmount: hardcodedInfo.BaseAmount, 
-                rentUnit: getRentUnit(hardcodedInfo.RentUnit),
-                parkingSize: getParkingSize(hardcodedInfo.Size),
-                siteType: getSiteType(hardcodedInfo.Type),
+                totalSlots: spotInfo.TotalSlots,
+                baseAmount: spotInfo.BaseAmount, 
+                rentUnit: getRentUnit(spotInfo.RentUnit),
+                parkingSize: getParkingSize(spotInfo.Size),
+                siteType: getSiteType(spotInfo.Type),
             },
             Booking: {
-                duration: hardcodedInfo.MinDuration,
-                startDate: hardcodedInfo.StartDate,
-                remark: hardcodedInfo.Remark,
-                spotrequestStatus: getSpotStatus(hardcodedInfo.Status),
-                endDate: hardcodedInfo.EndDate,
-                lastCallDate: hardcodedInfo.LastCallDate,
+                duration: spotInfo.MinDuration,
+                startDate: spotInfo.StartDate,
+                endDate: spotInfo.EndDate,
+                spotrequestStatus: getSpotStatus(spotInfo.Status),
+                remark: spotInfo.Remark,
+                lastCallDate: spotInfo.LastCallDate,
             },
         };
-        console.log(hardcodedInfo);
+        console.log(spotInfo);
         commit('setFormData', formData);
     },
 
@@ -191,19 +157,11 @@ const actions = {
             state.latitudeError ||
             state.longitudeError
         );
-    }
+    },
+    // saveForm({ state }) {
+    // }
     // -------------WORKING STAGE-------------------------
-    // submitForm() {
-    //     // Validate form fields
-    //     dispatch('validateFormFields');
-
-    //     if (dispatch('hasErrors')) {
-    //         commit('set-global-error', 'Please correct the errors before submitting.');
-    //         return;
-    //     }
-    //     commit('save-form-data');
-    //     const response =  await mayaClient.post('/endpoint', updateHar);
-
+    
     // }
     // -------------------------------------------
 };
