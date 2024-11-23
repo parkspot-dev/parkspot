@@ -307,7 +307,7 @@ export default {
           'submitForm',
           'saveForm',
       ]),
-      async fetchSpotDetails() {
+      fetchSpotDetails() {
         this.formdataSO.spotId = this.$route.query.spotId;
       },
       handlePublish() {
@@ -335,9 +335,9 @@ export default {
           }
       },
   },
-  async beforeMount() {
-    await this.fetchSpotDetails();
-    this.initState();
+   async mounted() {
+    this.fetchSpotDetails();
+    await this.initState();
   },
 };
 </script>

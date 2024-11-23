@@ -8,7 +8,7 @@ const state = {
     editField: null,
     formdataSO: {
         userName: '',
-        spotId: '',
+        spotId: null,
         fullName: '',
         mobile: '',
         email: '',
@@ -106,8 +106,8 @@ const actions = {
     },
 
     // Fetch data from API when the webpage is mounted
-    initState({ commit }) {
-        const spotInfo = mayaClient.get('/owner/spot-request?spot-id=' + this.formdataSO.spotId);
+    async initState({ commit, state }) {
+        const spotInfo = await mayaClient.get('/owner/spot-request?spot-id=' + state.formdataSO.spotId);
         const formData = {
             SO: {
                 spotId: spotInfo.ID,
@@ -137,7 +137,6 @@ const actions = {
                 lastCallDate: spotInfo.LastCallDate,
             },
         };
-        console.log(spotInfo);
         commit('setFormData', formData);
     },
 
@@ -161,7 +160,6 @@ const actions = {
     // saveForm({ state }) {
     // }
     // -------------WORKING STAGE-------------------------
-    
     // }
     // -------------------------------------------
 };
