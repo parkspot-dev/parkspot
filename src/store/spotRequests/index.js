@@ -37,8 +37,7 @@ const actions = {
             if(res.DisplayMsg){
                 commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
             }else {
-                const data = res.reverse();
-                commit('set-spot-requests', data);
+                commit('set-spot-requests', res);
             }
             commit('set-loading', false); 
     },
