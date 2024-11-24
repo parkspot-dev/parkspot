@@ -77,11 +77,11 @@ export default {
                 return this.activeTab;
             },
             set(tabNo) {
+                this.updateActiveTab(tabNo)
                 this.$router.push({
                     path: this.$route.path,
-                    query: { tab: getActiveTabStatusLabel(tabNo) },
+                    query: { tab: getActiveTabStatusLabel(this.activeTab) },
                 });
-                this.updateActiveTab(tabNo)
             },
         },
         SOLatLng: {
