@@ -10,20 +10,20 @@
                     :placeholder="CONTACT_FORM.FULLNAME"
                     :label="CONTACT_FORM.FULLNAME"
                 ></MoleculeNameInput>
-                <AtomInput
-                    v-model="model.email"
-                    :placeholder="CONTACT_FORM.EMAIL"
-                    :type="'email'"
-                    :label="CONTACT_FORM.EMAIL"
-                ></AtomInput>
-            </div>
-            <MoleculeNameInput
+                <MoleculeNameInput
                 :rules="validation.cno"
                 :fieldName="CONTACT_FORM.CONTACT_NO"
                 v-model="model.cno"
                 :placeholder="CONTACT_FORM.CONTACT_NO"
                 :label="CONTACT_FORM.CONTACT_NO"
             ></MoleculeNameInput>
+            </div>
+            <AtomInput
+                    v-model="model.email"
+                    :placeholder="CONTACT_FORM.EMAIL"
+                    :type="'email'"
+                    :label="CONTACT_FORM.EMAIL"
+                ></AtomInput>
             <div class="form-row">
                 <!-- Preference Form Fields -->
                 <MoleculeSelectInput
@@ -41,6 +41,7 @@
                     @input="updateMinDur"
                     :placeholder="'Minimum duration if any'"
                     :label="PREFERENCE.DURATION"
+                    class="min-duration-input"
                 ></MoleculeSelectInput>
             </div>
             <MoleculeNameInput
@@ -89,7 +90,7 @@ import AtomButton from '../atoms/AtomButton.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
 
 export default {
-    name: 'CombinedForm',
+    name: 'ParkingRequestForm',
     components: {
         ValidationObserver,
         MoleculeNameInput,
@@ -182,16 +183,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* Form Container Styles */
 .form-container {
     display: flex;
     flex-direction: column;
     gap: 0.75rem !important;
 }
+
+/* Row Styles */
 .form-row {
     display: flex;
-    width: 100%;
     flex-direction: row;
     gap: 1rem;
+    width: 100%;
 }
 
 .form-row > * {
@@ -200,10 +204,7 @@ export default {
 
 @media (max-width: 768px) {
     .form-row {
-        display: flex;
-        width: 100%;
         flex-direction: column;
-        gap: 1rem;
     }
 
     .form-row > * {
@@ -211,16 +212,30 @@ export default {
     }
 }
 
+.car-modal-input {
+    margin-top: -20px !important;
+}
+
+.min-duration-input {
+    margin-top: 0 !important;
+}
+
+@media (max-width: 768px) {
+    .min-duration-input {
+        margin-top: -20px !important;
+    }
+}
+
 .cta-btn {
-    width: 100%;
     background-color: var(--primary-color);
+    width: 100%;
 }
 
 .btn-wrap {
-    display: flex;
-    justify-content: center;
     align-items: center;
+    display: flex;
     gap: 0.15rem;
+    justify-content: center;
 }
 
 .btn-text {
@@ -232,8 +247,5 @@ export default {
     font-size: 1.25rem;
     transform: rotate(316deg);
 }
-
-.car-modal-input{
-    margin-top: -20px !important;
-}
 </style>
+

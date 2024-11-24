@@ -10,6 +10,25 @@
                 <!-- Parking request form -->
                 <div class="form-wrapper">
                     <div class="request-form">
+                        <div class="whatsapp-link">
+                            <AtomParagraph class="custom-subtitle"
+                                ><span
+                                    >Prefer Quick Assistance?</span
+                                ></AtomParagraph
+                            >
+                            <p>
+                                Chat with us directly on
+                                <a
+                                    href="https://api.whatsapp.com/send/?phone=917488239471&text=I%27m+interested+in+car+parking.&type=phone_number&app_absent=0"
+                                    target="_blank"
+                                    >WhatsApp</a
+                                >
+                                for instant support and queries.
+                            </p>
+                        </div>
+                        <div class="dividing-line">
+                            <span>OR</span>
+                        </div>
                         <AtomHeading
                             :level="headingLevel"
                             class="mb-5 has-text-centered"
@@ -35,6 +54,8 @@ import AtomHeading from '../atoms/AtomHeading.vue';
 import SearchComponent from '../vo-portal/SearchComponent.vue';
 import TestimonialSection from '../global/TestimonialSection.vue';
 import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
+import AtomParagraph from '../atoms/AtomParagraph';
+
 export default {
     name: 'TemplateVOPortal',
     components: {
@@ -43,6 +64,7 @@ export default {
         SearchComponent,
         TestimonialSection,
         ParkingRequestForm,
+        AtomParagraph,
     },
     emits: ['finalSubmit'],
     data() {
@@ -124,47 +146,99 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* Card Wrapper */
 .card-wrapper {
     margin: 0 auto;
     max-width: 600px;
     padding: 2rem 1rem;
 }
 
+/* Footer Buttons */
 .footer-buttons {
     display: flex;
     justify-content: space-between;
 }
 
+/* Form Section Wrapper */
 .form-section-wrapper {
     display: flex;
     flex-direction: row;
     width: 100%;
+
     .info-graphic {
         width: 50%;
     }
+
     .form-wrapper {
-        width: 50%;
         padding: 20px;
+        width: 50%;
     }
 }
 
+/* Responsive Styles */
 @media (max-width: 768px) {
     .form-section-wrapper {
         flex-direction: column;
+
         .info-graphic {
             width: 100%;
         }
+
         .form-wrapper {
-            width: 100%;
             padding: 10px;
+            width: 100%;
         }
     }
 }
 
+/* Request Form */
 .request-form {
-    // background-color: var(--primary-color);
-    padding: 2rem 1rem;
     border-radius: var(--border-default);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 2rem 1rem;
+}
+
+/* Dividing Line */
+.dividing-line {
+    border-bottom: 1px solid var(--parkspot-green);
+    margin-top: 0.75rem;
+    position: relative;
+    text-align: center;
+    width: 100%;
+
+    span {
+        background-color: white;
+        color: var(--parkspot-black);
+        left: 50%;
+        padding: 4px 5px !important;
+        position: absolute;
+        top: -15px;
+        transform: translateX(-50%);
+    }
+}
+
+/* Custom Subtitle */
+.custom-subtitle {
+    text-align: center;
+
+    span {
+        background-color: #19fe4e2c;
+        border-radius: 40px;
+        color: var(--parkspot-green);
+        font-weight: 600;
+        padding: 4px 7px;
+    }
+}
+
+/* WhatsApp Link */
+.whatsapp-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
 }
 </style>
+
