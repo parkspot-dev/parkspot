@@ -235,72 +235,21 @@ export function getPaymentTypeLabel(paymentType) {
     return getEnumLabel(PaymentTypeLabels, paymentType);
 }
 
-export const ParkingSize = Object.freeze({
-    Bike: 0,
-    Compact: 1,
-    FullSize: 2,
-    Hatchback: 4,
-    Unspecified: 5,
+export const ActiveTabStatus = Object.freeze({
+    ParkingRequest: 0,
+    InterestedRequest: 1,
 });
 
-export const ParkingSizeLabels = [
-    'Bike',
-    'Compact',
-    'FullSize',
-    'Hatchback',
-    'Unspecified',
+export const ActiveTabStatusLabels = [
+    'parking-request',
+    'interested-request'
 ];
 
 /**
  *
- * @param {int} parkingSize
- * @return {string}: label for parking size
+ * @param {int} activeTabStatus
+ * @return {string}: label for active tab status
  */
-export function getParkingSizeLabel(parkingSize) {
-    return getEnumLabel(ParkingSizeLabels, parkingSize);
-}
-
-
-export const RentUnit = Object.freeze({
-    PerHour: 0,
-    PerDay: 1,
-    PerSqftMonth: 2,
-});
-
-export const RentUnitLabels = [
-    'PerHour',
-    'PerDay',
-    'PerSqftMonth',
-];
-
-/**
- *
- * @param {int} rentUnit
- * @return {string}: label for rent unit
- */
-export function getRentUnitLabel(rentUnit) {
-    return getEnumLabel(RentUnitLabels, rentUnit);
-}
-
-export const SiteType = Object.freeze({
-    Book: 0,
-    ParkingYard: 1,
-    Register: 2,
-    SearchOnly: 3,
-});
-
-export const SiteTypeLabels = [
-    'Book',
-    'ParkingYard',
-    'Register',
-    'SearchOnly',
-];
-
-/**
- *
- * @param {int} siteType
- * @return {string}: label for site type
- */
-export function getSiteTypeLabel(siteType) {
-    return getEnumLabel(SiteTypeLabels, siteType);
+export function getActiveTabStatusLabel(activeTabStatus) {
+    return getEnumLabel(ActiveTabStatusLabels, activeTabStatus);
 }
