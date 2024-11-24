@@ -10,20 +10,20 @@
                     :placeholder="CONTACT_FORM.FULLNAME"
                     :label="CONTACT_FORM.FULLNAME"
                 ></MoleculeNameInput>
-                <AtomInput
-                    v-model="model.email"
-                    :placeholder="CONTACT_FORM.EMAIL"
-                    :type="'email'"
-                    :label="CONTACT_FORM.EMAIL"
-                ></AtomInput>
+                <MoleculeNameInput
+                    :rules="validation.cno"
+                    :fieldName="CONTACT_FORM.CONTACT_NO"
+                    v-model="model.cno"
+                    :placeholder="CONTACT_FORM.CONTACT_NO"
+                    :label="CONTACT_FORM.CONTACT_NO"
+                ></MoleculeNameInput>
             </div>
-            <MoleculeNameInput
-                :rules="validation.cno"
-                :fieldName="CONTACT_FORM.CONTACT_NO"
-                v-model="model.cno"
-                :placeholder="CONTACT_FORM.CONTACT_NO"
-                :label="CONTACT_FORM.CONTACT_NO"
-            ></MoleculeNameInput>
+            <AtomInput
+                v-model="model.email"
+                :placeholder="CONTACT_FORM.EMAIL"
+                :type="'email'"
+                :label="CONTACT_FORM.EMAIL"
+            ></AtomInput>
             <div class="form-row">
                 <!-- Preference Form Fields -->
                 <MoleculeSelectInput
@@ -41,6 +41,7 @@
                     @input="updateMinDur"
                     :placeholder="'Minimum duration if any'"
                     :label="PREFERENCE.DURATION"
+                    class="min-duration-input"
                 ></MoleculeSelectInput>
             </div>
             <MoleculeNameInput
@@ -77,6 +78,7 @@
         </div>
     </ValidationObserver>
 </template>
+
 <script>
 import { ValidationObserver } from 'vee-validate';
 import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
@@ -89,7 +91,7 @@ import AtomButton from '../atoms/AtomButton.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
 
 export default {
-    name: 'CombinedForm',
+    name: 'ParkingRequestForm',
     components: {
         ValidationObserver,
         MoleculeNameInput,
@@ -187,6 +189,7 @@ export default {
     flex-direction: column;
     gap: 0.75rem !important;
 }
+
 .form-row {
     display: flex;
     width: 100%;
@@ -200,14 +203,25 @@ export default {
 
 @media (max-width: 768px) {
     .form-row {
-        display: flex;
-        width: 100%;
         flex-direction: column;
-        gap: 1rem;
     }
 
     .form-row > * {
         width: 100%;
+    }
+}
+
+.car-modal-input {
+    margin-top: -20px !important;
+}
+
+.min-duration-input {
+    margin-top: 0px !important;
+}
+
+@media (max-width: 768px) {
+    .min-duration-input {
+        margin-top: -20px !important;
     }
 }
 
@@ -231,9 +245,5 @@ export default {
 .btn-icon {
     font-size: 1.25rem;
     transform: rotate(316deg);
-}
-
-.car-modal-input{
-    margin-top: -20px !important;
 }
 </style>
