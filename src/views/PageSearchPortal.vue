@@ -41,7 +41,7 @@ import { PAGE_TITLE } from '@/constant/constant';
 import { mayaClient } from '@/services/api';
 import { mapActions, mapState } from 'vuex';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
-import { getActiveTabStatusLabel } from '../constant/enums'
+import { getActiveTabStatusLabel } from '../constant/enums';
 
 export default {
     name: 'PageSearchPortal',
@@ -77,7 +77,11 @@ export default {
                 return this.activeTab;
             },
             set(tabNo) {
-                this.updateActiveTab(tabNo)
+                // Update activeTab with the selected tab number.
+                // Clear the input field if it contains any value.
+                this.updateActiveTab(tabNo);
+                this.updateMobileInput('');
+                this.updateSOLatLngInput('');
                 this.$router.push({
                     path: this.$route.path,
                     query: { tab: getActiveTabStatusLabel(this.activeTab) },
@@ -148,7 +152,7 @@ export default {
                 // This will hamper interested VO section experience,
                 // because interested VO does not change the URL and
                 // reload the page will take to /search-portal
-                onConfirm: this.handleConfirm
+                onConfirm: this.handleConfirm,
             });
         },
         async searchRequestWithMobile(voMobile) {
@@ -220,23 +224,23 @@ export default {
             });
             window.open(routeData.href, '_blank');
         },
-        handleConfirm(){
-                    // Make Mobile Input Empty
-                    if (this.searchMobile) {
-                        this.updateMobileInput('');
-                    }
-                    // Make LatLngInput to empty
-                    if (this.SOLatLngInput) {
-                        this.updateSOLatLngInput('');
-                    }
-                    // Reset Error
-                    this.resetError();
-                    // Push Back
-                    this.$router.push({
-                        name: 'SearchPortal',
-                        query: { tab: getActiveTabStatusLabel(this.activeTab) },
-                    });
-        }
+        handleConfirm() {
+            // Make Mobile Input Empty
+            if (this.searchMobile) {
+                this.updateMobileInput('');
+            }
+            // Make LatLngInput to empty
+            if (this.SOLatLngInput) {
+                this.updateSOLatLngInput('');
+            }
+            // Reset Error
+            this.resetError();
+            // Push Back
+            this.$router.push({
+                name: 'SearchPortal',
+                query: { tab: getActiveTabStatusLabel(this.activeTab) },
+            });
+        },
     },
     watch: {
         hasError(error) {
