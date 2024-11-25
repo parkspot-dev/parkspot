@@ -53,6 +53,7 @@ const mutations = {
 
     'update-contact'(state, data = {}) {
         state.contactForm = data;
+        console.log("This is data and state preference", data, state.contactForm);
     },
 
     'update-kyc'(state, data = {}) {
@@ -66,13 +67,13 @@ const mutations = {
     'update-login'(state, loginData = {}) {
         state.login = { ...loginData, FirebaseAccessToken: 'test1' };
     },
-
     'update-location-details'(state, data = {}) {
         state.locationDetails = data;
     },
 
     'update-preference'(state, data = {}) {
         state.preference = data;
+        console.log("This is data and state preference", data, state.preference);
     },
 };
 

@@ -19,7 +19,8 @@
                                 <a
                                     href="https://api.whatsapp.com/send/?phone=917488239471&text=I%27m+interested+in+car+parking.&type=phone_number&app_absent=0"
                                     target="_blank"
-                                    >WhatsApp</a
+                                    >WhatsApp<AtomIcon :icon="'whatsapp'"></AtomIcon>
+                                    </a
                                 >
                                 for instant support and queries.
                             </p>
@@ -33,10 +34,7 @@
                         >
                             Apply for Parking Service
                         </AtomHeading>
-                        <ParkingRequestForm
-                            :formSubmitted="btnStack[0]"
-                            @formValidate="contactFormValidate"
-                        />
+                        <ParkingRequestForm @onSubmit="onSubmit"  />
                     </div>
                 </div>
             </div>
@@ -52,6 +50,8 @@ import AtomHeading from '../atoms/AtomHeading.vue';
 import SearchComponent from '../vo-portal/SearchComponent.vue';
 import TestimonialSection from '../global/TestimonialSection.vue';
 import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
+import AtomIcon from '../atoms/AtomIcon.vue';
+
 export default {
     name: 'TemplateVOPortal',
     components: {
@@ -60,81 +60,17 @@ export default {
         SearchComponent,
         TestimonialSection,
         ParkingRequestForm,
+        AtomIcon,
     },
     emits: ['finalSubmit'],
     data() {
         return {
-            activeStep: 0,
-
-            hasNavigation: false,
-            customNavigation: true,
-            isProfileSuccess: false,
-            contactFormStep: false,
-            KYCFormStep: false,
-            AddInfoFormStep: false,
-
-            prevIcon: 'chevron-left',
-            nextIcon: 'chevron-right',
-            labelPosition: 'bottom',
-            mobileMode: 'minimalist',
-
-            isStepsClickable: false,
-
-            headingLevel: 'h5',
-
-            nextEnable: null,
-            nextText: 'Next',
-            btnStack: [false, false],
-            top: 0,
-
-            reRender: 0,
+            headingLevel: 'h5', // Dynamic heading level
         };
     },
     methods: {
-        btnNext(next) {
-            // map fix setTimeout out to load compeletely
-            setTimeout(() => {
-                this.reRender++;
-            }, 10);
-            // this.btnStack[this.top] = true; // this is not updating the array in vue
-            this.btnStack.splice(this.top, 1, true); // this is to trigger validation in the form
-            this.nextEnable = next;
-        },
-        btnPrev(previous) {
-            this.top--;
-            this.btnStack.splice(this.top, 1, false);
-            this.nextText = 'Next';
-            previous.action();
-        },
-        contactFormValidate(val) {
-            this.btnStack.splice(this.top, 1, val);
-            if (this.btnStack[this.top]) {
-                this.nextEnable.action();
-                this.top++;
-                this.nextText = 'Finish';
-            }
-        },
-        kycFormValidate(val) {
-            this.btnStack.splice(this.top, 1, val);
-            if (this.btnStack[this.top]) {
-                this.nextEnable.action();
-                this.top++;
-            }
-        },
-        // addressFormValidate(val) {
-        //     this.btnStack.splice(this.top, 1, val);
-        //     if (this.btnStack[this.top]) {
-        //         this.nextEnable.action();
-        //         this.nextText = 'Finish';
-        //         this.top++;
-        //     }
-        // },
-        preferenceFormValidate(val) {
-            this.btnStack.splice(this.top, 1, val);
-            if (this.btnStack[this.top]) {
-                this.nextEnable.action();
-                this.$emit('finalSubmit');
-            }
+        onSubmit() {
+            this.$emit('finalSubmit'); // Emits finalSubmit event
         },
     },
 };

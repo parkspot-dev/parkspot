@@ -6,20 +6,20 @@
                 <MoleculeNameInput
                     :rules="validation.fullname"
                     :fieldName="CONTACT_FORM.FULLNAME"
-                    v-model="model.fullname"
+                    v-model="contactModel.fullname"
                     :placeholder="CONTACT_FORM.FULLNAME"
                     :label="CONTACT_FORM.FULLNAME"
                 ></MoleculeNameInput>
                 <MoleculeNameInput
                     :rules="validation.cno"
                     :fieldName="CONTACT_FORM.CONTACT_NO"
-                    v-model="model.cno"
+                    v-model="contactModel.cno"
                     :placeholder="CONTACT_FORM.CONTACT_NO"
                     :label="CONTACT_FORM.CONTACT_NO"
                 ></MoleculeNameInput>
             </div>
             <AtomInput
-                v-model="model.email"
+                v-model="contactModel.email"
                 :placeholder="CONTACT_FORM.EMAIL"
                 :type="'email'"
                 :label="CONTACT_FORM.EMAIL"
@@ -48,7 +48,7 @@
                 :fieldName="PREFERENCE.MODEL"
                 :placeholder="PREFERENCE.MODEL"
                 :rules="validation.carModel"
-                v-model="model.carModel"
+                v-model="preferenceModel.carModel"
                 :label="PREFERENCE.MODEL"
                 class="car-modal-input"
             ></MoleculeNameInput>
@@ -66,7 +66,7 @@
                     >
                 </template>
             </MoleculeCheckbox>
-            <AtomButton class="cta-btn" @click.native="sendMsg">
+            <AtomButton class="cta-btn" @click.native="submit">
                 <span class="btn-wrap">
                     <span class="btn-text"> Send </span>
                     <AtomIcon
@@ -106,20 +106,16 @@ export default {
             type: Boolean,
             default: false,
         },
-        textArea: {
-            type: Boolean,
-            default: false,
-        },
     },
     emits: ['formValidate'],
     data() {
         return {
-            model: {
+            contactModel: {
                 fullname: '',
                 email: '',
                 cno: '',
-                addr: '',
-                msg: '',
+            },
+            preferenceModel: {
                 carModel: '',
                 minDur: '',
                 terms: '',
@@ -128,7 +124,6 @@ export default {
                 fullname: 'required',
                 email: 'required|email',
                 cno: 'required|integer|phone',
-                addr: 'required|address',
                 carModel: 'required',
                 minDur: 'required',
                 terms: 'required',
@@ -143,41 +138,23 @@ export default {
             isEnable: false,
         };
     },
-    watch: {
-        formSubmitted(newVal) {
-            if (newVal) {
-                this.$refs.observer
-                    .validate()
-                    .then((isValid) => {
-                        this.$emit('formValidate', isValid);
-                        if (isValid) {
-                            this.submit();
-                        }
-                    })
-                    .catch(console.error);
-            }
-        },
-    },
-    mounted() {
-        this.isEnable = this.$route.name === 'SOPortal';
-    },
     methods: {
         ...mapMutations({
             updateContact: 'user/update-contact',
             updatePreference: 'user/update-preference',
         }),
         submit() {
-            this.updateContact(this.model);
-            this.updatePreference(this.model);
+            this.updateContact(this.contactModel);
+            this.updatePreference(this.preferenceModel);
         },
         updateMinDur(val) {
-            this.model.minDur = this.minDurData[val].name;
+            this.preferenceModel.minDur = this.minDurData[val].name;
         },
         updateType(val) {
-            this.model.spot = this.parkingTypeData[val].name;
+            this.preferenceModel.spot = this.parkingTypeData[val].name;
         },
         updateTermsData(data) {
-            this.model.terms = data;
+            this.preferenceModel.terms = data;
         },
     },
 };
