@@ -1,6 +1,6 @@
 <template>
-    <section class="custom-bg">
-        <div class="bg-decor"></div>
+    <section class="">
+        <!-- <div class="bg-decor"></div> -->
         <TemplateVOPortal @finalSubmit="onFinalSubmit"></TemplateVOPortal>
         <LoaderModal v-if="isLoading"></LoaderModal>
     </section>
