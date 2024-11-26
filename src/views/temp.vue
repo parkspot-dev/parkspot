@@ -8,7 +8,7 @@ export default {
   /**
    * This page is used for development testing purposes.
    */
-  name: "Temp",
+  name: "TempPage",
   components: {
     PagePaymentGateway,
   },
