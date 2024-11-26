@@ -51,7 +51,7 @@ import SearchComponent from '../vo-portal/SearchComponent.vue';
 import TestimonialSection from '../global/TestimonialSection.vue';
 import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
-
+import AtomParagraph from '../atoms/AtomParagraph.vue';
 export default {
     name: 'TemplateVOPortal',
     components: {
@@ -61,16 +61,17 @@ export default {
         TestimonialSection,
         ParkingRequestForm,
         AtomIcon,
+        AtomParagraph
     },
     emits: ['finalSubmit'],
     data() {
         return {
-            headingLevel: 'h5', // Dynamic heading level
+            headingLevel: 'h5',
         };
     },
     methods: {
         onSubmit() {
-            this.$emit('finalSubmit'); // Emits finalSubmit event
+             this.$emit('finalSubmit'); // Emits finalSubmit event
         },
     },
 };

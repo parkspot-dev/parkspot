@@ -9,14 +9,16 @@
                     v-model="contactModel.fullname"
                     :placeholder="CONTACT_FORM.FULLNAME"
                     :label="CONTACT_FORM.FULLNAME"
-                ></MoleculeNameInput>
+                >
+                </MoleculeNameInput>
                 <MoleculeNameInput
                     :rules="validation.cno"
                     :fieldName="CONTACT_FORM.CONTACT_NO"
                     v-model="contactModel.cno"
                     :placeholder="CONTACT_FORM.CONTACT_NO"
                     :label="CONTACT_FORM.CONTACT_NO"
-                ></MoleculeNameInput>
+                >
+                </MoleculeNameInput>
             </div>
             <AtomInput
                 v-model="contactModel.email"
@@ -101,13 +103,6 @@ export default {
         AtomButton,
         AtomIcon,
     },
-    props: {
-        formSubmitted: {
-            type: Boolean,
-            default: false,
-        },
-    },
-    emits: ['formValidate'],
     data() {
         return {
             contactModel: {
@@ -138,14 +133,23 @@ export default {
             isEnable: false,
         };
     },
+    emits: ['onSubmit'],
     methods: {
         ...mapMutations({
             updateContact: 'user/update-contact',
             updatePreference: 'user/update-preference',
         }),
         submit() {
-            this.updateContact(this.contactModel);
-            this.updatePreference(this.preferenceModel);
+            this.$refs.observer
+                .validate()
+                .then((ele) => {
+                    if (ele) {
+                        this.updateContact(this.contactModel);
+                        this.updatePreference(this.preferenceModel);
+                        this.$emit('onSubmit');
+                    }
+                })
+                .catch((err) => console.log('Error while submitting form', err));
         },
         updateMinDur(val) {
             this.preferenceModel.minDur = this.minDurData[val].name;
