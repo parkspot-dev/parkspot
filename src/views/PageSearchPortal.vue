@@ -77,11 +77,15 @@ export default {
                 return this.activeTab;
             },
             set(tabNo) {
+                // Update activeTab with the selected tab number.
+                // Clear the input field if it contains any value.
+                this.updateActiveTab(tabNo);
+                this.updateMobileInput('');
+                this.updateSOLatLngInput('');
                 this.$router.push({
                     path: this.$route.path,
                     query: { tab: getActiveTabStatusLabel(this.activeTab) },
                 });
-                this.updateActiveTab(tabNo);
             },
         },
         SOLatLng: {
