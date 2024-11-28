@@ -19,7 +19,7 @@
                                 <a
                                     href="https://api.whatsapp.com/send/?phone=917488239471&text=I%27m+interested+in+car+parking.&type=phone_number&app_absent=0"
                                     target="_blank"
-                                    >WhatsApp<AtomIcon :icon="'whatsapp'"></AtomIcon>
+                                    ><AtomIcon :icon="'whatsapp'"></AtomIcon> WhatsApp
                                     </a
                                 >
                                 for instant support and queries.
@@ -130,7 +130,7 @@ export default {
 }
 
 .dividing-line {
-    border-bottom: 1px solid var(--parkspot-green);
+    border-bottom: 1px solid var(--secondary-color);
     margin-top: 0.75rem;
     position: relative;
     text-align: center;
@@ -162,5 +162,9 @@ export default {
     flex-direction: column;
     gap: 0.75rem;
     text-align: center;
+
+    p > a{
+        color: var(--parkspot-green);
+    }
 }
 </style>
