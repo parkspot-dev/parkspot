@@ -200,3 +200,48 @@ export const PaymentTypeLabels = [
 export function getPaymentTypeLabel(paymentType) {
     return getEnumLabel(PaymentTypeLabels, paymentType);
 }
+
+export const SpotRequestStatus = Object.freeze({
+    SpotRequestStatusNotSet: 0,
+    SpotRequestStatusRegistered: 1,
+    SpotRequestStatusProcessing: 2,
+    SpotRequestStatusRequestedModification: 3,
+    SpotRequestStatusVerified: 4,
+    SpotRequestStatusDenied: 5,
+});
+
+const SpotRequestStatusLabel = [
+    'Not Set',
+    'Registered',
+    'Processing',
+    'Requested Modification',
+    'Verified',
+    'Denied',
+];
+
+/**
+ * @param {int} spotRequestStatus
+ * @return {string}: label for spot request status
+ */
+export function getSpotRequestStatusLabel(spotRequestStatus) {
+    return getEnumLabel(SpotRequestStatusLabel, spotRequestStatus);
+}
+
+export const ActiveTabStatus = Object.freeze({
+    ParkingRequest: 0,
+    InterestedRequest: 1,
+});
+
+export const ActiveTabStatusLabels = [
+    'parking-request',
+    'interested-request'
+];
+
+/**
+ *
+ * @param {int} activeTabStatus
+ * @return {string}: label for active tab status
+ */
+export function getActiveTabStatusLabel(activeTabStatus) {
+    return getEnumLabel(ActiveTabStatusLabels, activeTabStatus);
+}
