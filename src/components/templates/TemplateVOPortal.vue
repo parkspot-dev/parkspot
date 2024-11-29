@@ -1,9 +1,12 @@
 <template>
     <div>
         <BodyWrapper>
-            <AtomHeading class="mb-5 has-text-centered">
-                Fill the form to Request a Parking Spot
-            </AtomHeading>
+            <div class="heading-container">
+                <h1>We would love to serve you!</h1>
+                <p>
+                    Get your safe and secure hassle free parking space near you
+                </p>
+            </div>
             <div class="form-section-wrapper">
                 <!-- Info graphic -->
                 <div class="info-graphic"></div>
@@ -11,7 +14,7 @@
                 <div class="form-wrapper">
                     <div class="request-form">
                         <div class="whatsapp-link">
-                            <AtomParagraph class="custom-subtitle">
+                            <AtomParagraph class="custom-heading">
                                 <span>Prefer Quick Assistance?</span>
                             </AtomParagraph>
                             <p>
@@ -19,9 +22,9 @@
                                 <a
                                     href="https://api.whatsapp.com/send/?phone=917488239471&text=I%27m+interested+in+car+parking.&type=phone_number&app_absent=0"
                                     target="_blank"
-                                    ><AtomIcon :icon="'whatsapp'"></AtomIcon> WhatsApp
-                                    </a
-                                >
+                                    ><AtomIcon :icon="'whatsapp'"></AtomIcon>
+                                    WhatsApp
+                                </a>
                                 for instant support and queries.
                             </p>
                         </div>
@@ -34,7 +37,7 @@
                         >
                             Apply for Parking Service
                         </AtomHeading>
-                        <ParkingRequestForm @onSubmit="onSubmit"  />
+                        <ParkingRequestForm @onSubmit="onSubmit" />
                     </div>
                 </div>
             </div>
@@ -61,7 +64,7 @@ export default {
         TestimonialSection,
         ParkingRequestForm,
         AtomIcon,
-        AtomParagraph
+        AtomParagraph,
     },
     emits: ['finalSubmit'],
     data() {
@@ -71,14 +74,13 @@ export default {
     },
     methods: {
         onSubmit() {
-             this.$emit('finalSubmit'); // Emits finalSubmit event
+            this.$emit('finalSubmit'); // Emits finalSubmit event
         },
     },
 };
 </script>
 
 <style lang="scss" scoped>
-
 .card-wrapper {
     margin: 0 auto;
     max-width: 600px;
@@ -146,7 +148,7 @@ export default {
         transform: translateX(-50%);
     }
 }
-.custom-subtitle {
+.custom-heading {
     text-align: center;
 
     span {
@@ -163,8 +165,28 @@ export default {
     gap: 0.75rem;
     text-align: center;
 
-    p > a{
+    p > a {
         color: var(--parkspot-green);
+    }
+}
+
+.heading-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+
+    h1 {
+        font-size: 3rem;
+        font-weight: var(--semi-bold-font);
+        letter-spacing: -2px;
+    }
+
+    p{
+        margin-top: -10px;
+        color: var(--secondary-color);
+        font-weight: var(--semi-bold-font);
     }
 }
 </style>
