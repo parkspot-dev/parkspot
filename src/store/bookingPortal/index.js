@@ -6,6 +6,7 @@ const state = {
     errorMessage: String,
     paymentDetails: null,
     isLoading: false,
+    searchText: '',
     /*   [{
         "ID": 809,
         "CreatedAt": "2022-02-24T15:59:15.6168782Z",
@@ -65,6 +66,10 @@ const mutations = {
             const fullName = agent.FullName.toLowerCase();
             return !(fullName.startsWith('[') && fullName.endsWith(']'));
         });
+    },
+
+    'set-search-text'(state, text) {
+        state.searchText = text;
     },
 };
 
@@ -129,6 +134,10 @@ const actions = {
     },
 
     async getActiveBooking({ commit }) {
+        // Check if activeBookings already has data
+        if (state.activeBookings && state.activeBookings.length > 0) {
+            return;
+        }
         commit('set-loading', true);
         const res = await mayaClient.get('/internal/active-bookings');
         if (res.DisplayMsg) {
@@ -138,6 +147,16 @@ const actions = {
         }
         commit('set-loading', false);
     },
+
+    // Update Search Text
+    updateSearchText({ commit }, text) {
+        commit('set-search-text', text);
+    },
+
+    // Reset booking details to null
+    resetBookingDetails({ commit }){
+        commit('update-booking', null)
+    }
 };
 
 export default {
