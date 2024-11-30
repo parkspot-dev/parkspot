@@ -13,30 +13,29 @@
                 <!-- Parking request form -->
                 <div class="form-wrapper">
                     <div class="request-form">
-                        <div class="whatsapp-link">
-                            <AtomParagraph class="custom-heading">
-                                <span>Prefer Quick Assistance?</span>
-                            </AtomParagraph>
-                            <p>
-                                Chat with us directly on
-                                <a
-                                    href="https://api.whatsapp.com/send/?phone=917488239471&text=I%27m+interested+in+car+parking.&type=phone_number&app_absent=0"
-                                    target="_blank"
-                                    ><AtomIcon :icon="'whatsapp'"></AtomIcon>
-                                    WhatsApp
-                                </a>
-                                for instant support and queries.
-                            </p>
+                        <div class="text">
+                            <div class="whatsapp-link">
+                                <AtomParagraph class="custom-heading">
+                                    <span>Prefer Quick Assistance?</span>
+                                </AtomParagraph>
+                                <p>
+                                    Chat with us directly on
+                                    <a
+                                        href="https://api.whatsapp.com/send/?phone=917488239471&text=I%27m+interested+in+car+parking.&type=phone_number&app_absent=0"
+                                        target="_blank"
+                                        ><AtomIcon
+                                            :icon="'whatsapp'"
+                                        ></AtomIcon>
+                                        WhatsApp
+                                    </a>
+                                    for instant support.
+                                </p>
+                            </div>
+                            <div class="dividing-line">
+                                <span>OR</span>
+                            </div>
+                            <p>Apply for Parking Service</p>
                         </div>
-                        <div class="dividing-line">
-                            <span>OR</span>
-                        </div>
-                        <AtomHeading
-                            :level="headingLevel"
-                            class="mb-5 has-text-centered"
-                        >
-                            Apply for Parking Service
-                        </AtomHeading>
                         <ParkingRequestForm @onSubmit="onSubmit" />
                     </div>
                 </div>
@@ -49,7 +48,6 @@
 
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
-import AtomHeading from '../atoms/AtomHeading.vue';
 import SearchComponent from '../vo-portal/SearchComponent.vue';
 import TestimonialSection from '../global/TestimonialSection.vue';
 import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
@@ -59,7 +57,6 @@ export default {
     name: 'TemplateVOPortal',
     components: {
         BodyWrapper,
-        AtomHeading,
         SearchComponent,
         TestimonialSection,
         ParkingRequestForm,
@@ -69,7 +66,7 @@ export default {
     emits: ['finalSubmit'],
     data() {
         return {
-            headingLevel: 'h5',
+            headingLevel: 'h6',
         };
     },
     methods: {
@@ -129,11 +126,23 @@ export default {
     flex-direction: column;
     gap: 0.75rem;
     padding: 2rem 1rem;
+
+    .text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        gap: 1rem;
+
+        p {
+            color: var(--secondary-color);
+            font-weight: var(--semi-bold-font);
+        }
+    }
 }
 
 .dividing-line {
     border-bottom: 1px solid var(--secondary-color);
-    margin-top: 0.75rem;
     position: relative;
     text-align: center;
     width: 100%;
@@ -162,8 +171,12 @@ export default {
 .whatsapp-link {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
     text-align: center;
+
+    p{
+        color: var(--parkspot-black) !important;
+    }
 
     p > a {
         color: var(--parkspot-green);
@@ -183,7 +196,7 @@ export default {
         letter-spacing: -2px;
     }
 
-    p{
+    p {
         margin-top: -10px;
         color: var(--secondary-color);
         font-weight: var(--semi-bold-font);

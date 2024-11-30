@@ -68,7 +68,7 @@
                     >
                 </template>
             </MoleculeCheckbox>
-            <AtomButton class="cta-btn" @click.native="submit">
+                <AtomButton class="cta-btn" @click.native="submit">
                 <span class="btn-wrap">
                     <span class="btn-text"> Send </span>
                     <AtomIcon
@@ -85,11 +85,11 @@
 import { ValidationObserver } from 'vee-validate';
 import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
 import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
-import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
+ import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
 import AtomInput from '../atoms/AtomInput.vue';
 import { ADD_INFO, PREFERENCE, FORM } from '../../constant/constant';
 import { mapMutations } from 'vuex';
-import AtomButton from '../atoms/AtomButton.vue';
+ import AtomButton from '../atoms/AtomButton.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
 
 export default {
@@ -209,13 +209,13 @@ export default {
 .cta-btn {
     width: 100%;
     background-color: var(--primary-color);
+    margin-top: -20px;
 }
 
 .btn-wrap {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.15rem;
 }
 
 .btn-text {
