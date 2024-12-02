@@ -29,6 +29,13 @@ export default {
         AtomIcon,
     },
     props: {
+        // Represents the details of a top search card.
+        // {
+        //     id: number,
+        //     title: string,
+        //     spots: number,
+        //     path: string
+        // },
         item: {
             type: Object,
             required: true,
@@ -49,7 +56,6 @@ export default {
     flex-wrap: wrap;
     gap: 1.5rem;
     justify-content: center;
-    padding: 2rem;
     background-color: var(--background-color-light);
 }
 
@@ -98,4 +104,3 @@ export default {
     justify-content: space-between;
 }
 </style>
-

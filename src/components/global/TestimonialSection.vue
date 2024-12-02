@@ -16,7 +16,7 @@
                         v-for="(item, i) in items"
                         :key="i"
                     >
-                        <TestimonialCard :items="item"></TestimonialCard>
+                        <TestimonialCard :item="item"></TestimonialCard>
                     </div>
                 </div>
 
@@ -33,61 +33,26 @@
 </template>
 
 <script>
-import Swiper, { Navigation, Pagination, Autoplay } from 'swiper';
-import BodyWrapper from '../extras/BodyWrapper.vue';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
-import AtomParagraph from '../atoms/AtomParagraph.vue';
+import { VO_PAGE_TESTIMONIALS } from '../../constant/constant';
 import AtomHeading from '../atoms/AtomHeading.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import Swiper, { Navigation, Pagination, Autoplay } from 'swiper';
 import TestimonialCard from './TestimonialCard.vue';
 
 export default {
     name: 'TestimonialsSection',
     components: {
-        BodyWrapper,
-        AtomParagraph,
         AtomHeading,
+        AtomParagraph,
+        BodyWrapper,
         TestimonialCard,
     },
     data() {
         return {
-            items: [
-                {
-                    name: 'Jay Ravi',
-                    image: 'https://play-lh.googleusercontent.com/a-/ALV-UjXhxZ2PlflnCYGXUOYFA45n0vWzyU7ZA7i9nhEcon2FS-p_ZEiv=s32-rw',
-                    quote: `I recently had the pleasure of using the "ParkSpot" app to find a 
-                      covered car parking spot in Bangalore, and I must say it exceeded my expectations. 
-                      The app's user-friendly interface made it incredibly easy to locate available parking spaces in the bustling city. 
-                      One of the standout features of ParkSpot is its real-time availability updates, 
-                      which helped me save time and frustration. I could see which parking spots were 
-                      open and even reserve a spot in advance, Thanks to Preety.`,
-                    rate: 4.9,
-                    date: '6 Nov 2023',
-                    datetime: '2020-7-29',
-                },
-                {
-                    name: 'Nagarjun Prasad',
-                    image: require('@/assets/testimony2.webp'),
-                    quote: `A highly essential app for anyone in a metropolitan city, 
-                      everyone knows the pains of finding a parking spot for your vehicle and 
-                      this app makes it easy. The app allowed me to easily find any parking 
-                      spots near me. The prices for the spots considering the duration was also
-                      very affordable. Would definitely recommend this to anyone who wants a 
-                      painless experience to park their vehicles or to someone who has free 
-                      spots to rent out and make some cash.`,
-                    rate: 4.7,
-                    date: '15 Feb 2021',
-                    datetime: '2021-2-15',
-                },
-                {
-                    name: 'Ishwar Kumar',
-                    image: 'https://play-lh.googleusercontent.com/a-/ALV-UjWMdPDCgRFBM-Sk4ve5AXPUhk9V1hPJ9WE_YoLhDGZ2oZX3uWmKzA=s32-rw',
-                    quote: `Had a great experience using ParkSpot. I needed a parking space for my vehicle for around 2 months. I searched in ParkSpot and it has numerous results. I chose one of the nearest parking space and prebook it online. This app has also navigation feature which makes very easy for me to get the exact location of the parking space.`,
-                    rate: 4.8,
-                    date: '2021-1-17',
-                    datetime: '2021-1-17',
-                },
-            ],
+            items: VO_PAGE_TESTIMONIALS
         };
     },
 
@@ -155,7 +120,7 @@ $g-background-color-dark: #18181b;
 }
 
 .swiper {
-    height: 700px;
+    max-height: 700px;
     padding: 2.5em 1.5em;
 
     .swiper-slide {
@@ -181,7 +146,7 @@ $g-background-color-dark: #18181b;
         display: flex;
         justify-content: center;
         left: 0;
-        margin: 0 auto;
+        margin-top: 40px;
         right: 0;
         width: auto;
 

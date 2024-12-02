@@ -1,111 +1,95 @@
 <template>
-    <div class="content-wrapper">
-        <div class="content">
-            <div class="swiper-avatar">
-                <img :src="items.image" />
-                <p>{{ items.name }}</p>
-            </div>
-            <div class="quote">
-                <img alt="quote" :src="img" />
-            </div>
-            <p class="quote-text">"{{ items.quote }}"</p>
-            <div class="content-bottom">
-                <AtomRating
-                    class="rating"
-                    :rate="items.rate"
-                    :size="'is-small'"
-                ></AtomRating>
+    <div class="testimonial-card">
+        <div class="author-info">
+            <img class="author-image" :alt="item.name" :src="item.image" />
+            <div>
+                <h4 class="author-name">{{ item.name }}</h4>
+                <p class="author-details">{{ item.date }}</p>
             </div>
         </div>
+        <div class="divider-line"></div>
+        <p class="testimonial-text">
+            {{ item.quote }}
+        </p>
     </div>
 </template>
 
 <script>
-import AtomRating from '../atoms/AtomRating.vue';
 export default {
-    name: 'MoleculeTestimonialCard',
-    components: {
-        AtomRating,
-    },
+    name: 'TestimonialCard',
     props: {
-        items: {
-            type: Object,
+        /**
+         * The item prop should be an object with the following structure:
+         * {
+         *   date: String,      // The display date for the testimonial (e.g., '6 Nov 2023')
+         *   datetime: String,  // ISO format or additional datetime info (e.g., '2020-7-29')
+         *   image: String,     // URL or path to the image of the person
+         *   name: String,      // Name of the person giving the testimonial
+         *   quote: String,     // The testimonial text
+         *   rate: Number,      // Rating given by the person (e.g., 4.9)
+         * }
+         */
+        item: {
             required: true,
+            type: Object,
         },
-    },
-    data() {
-        return {
-            img: require('../../assets/quote.png'),
-        };
     },
 };
 </script>
 
-<style lang="scss" scoped>
-$g-line-height: 1.5 !default;
-$g-spacing: $g-line-height * 1em;
-$white: var(--parkspot-white);
-$g-background-color-dark: #18181b;
+<style scoped>
+.author-details {
+    color: var(--parkspot-muted-black);
+    font-size: 14px;
+    margin: 0;
+}
 
-.content-wrapper {
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    height: 500px;
-    position: relative;
-    width: 100%;
+.author-image {
+    border: 1px solid var(--grey-shade);
+    border-radius: 50%;
+    height: 50px;
+    object-fit: cover;
+    width: 50px;
+}
 
-    .content {
-        color: var(--parkspot-black);
-        padding: $g-spacing * 2 $g-spacing;
+.author-info {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+    margin-top: 1rem;
+}
 
-        .quote {
-            left: 0;
-            opacity: 15%;
-            position: absolute;
-            top: 100px;
-            width: 64px;
-        }
+.author-name {
+    color: var(--parkspot-black);
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+}
 
-        .swiper-avatar {
-            align-items: center;
-            display: flex;
-            gap: 25px;
-            margin-bottom: 20px;
+.testimonial-card {
+    background-color: var(--parkspot-white);
+    border-radius: 8px;
+    border: 1px solid var(--parkspot-white);
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 20px;
+    min-height: 240px;
+    padding: 16px;
 
-            img {
-                border-radius: 500px;
-                height: 64px;
-                width: 64px;
-            }
-
-            p {
-                font-size: 20px;
-                font-weight: 500;
-                line-height: 24px;
-                margin: 0;
-            }
-        }
-
-        p {
-            /* stylelint-disable-next-line value-no-vendor-prefix */
-            display: -webkit-box;
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 24px;
-            margin-bottom: 20px;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 12;
-            overflow: hidden;
-        }
-
-        .quote-text {
-            margin-top: 2rem;
-        }
-
-        .content-bottom {
-            .rating {
-                font-size: 20px;
-            }
-        }
+    .divider-line {
+        background-color: var(--primary-color);
+        height: 1px;
+        width: 100%;
     }
 }
+
+.testimonial-text {
+    color: var(--parkspot-black);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
 </style>
+
