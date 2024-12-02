@@ -1,8 +1,5 @@
 <template>
     <div class="main-box">
-        <AtomHeading :level="'h1'" class="mb-5 has-text-centered">
-            Find the Perfect Parking Spot Near You
-        </AtomHeading>
         <div class="search-box">
             <SearchInput class="search-input"></SearchInput>
             <AtomButton class="btn" @click.native="flyToSrp" :withSearch="true">
@@ -15,29 +12,29 @@
             >
             <div class="cards-row">
                 <TopSearchesCard
-                    v-for="item in items"
-                    :key="item.id"
                     :item="item"
+                    :key="item.id"
+                    v-for="item in items"
                 />
             </div>
         </div>
     </div>
 </template>
 <script>
-import AtomButton from '../atoms/AtomButton.vue';
-import AtomHeading from '../atoms/AtomHeading.vue';
-import SearchInput from '../extras/SearchInput.vue';
-import AtomParagraph from '../atoms/AtomParagraph.vue';
-import TopSearchesCard from './TopSearchesCard.vue';
 import { getCoordinate } from '../../includes/LatLng';
 import { mapGetters } from 'vuex';
+import { TOP_SEARCH_PLACES } from '../../constant/constant';
+import AtomButton from '../atoms/AtomButton.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
+import SearchInput from '../extras/SearchInput.vue';
+import TopSearchesCard from './TopSearchesCard.vue';
+
 export default {
     name: 'SearchComponent',
     components: {
-        AtomHeading,
         AtomButton,
-        SearchInput,
         AtomParagraph,
+        SearchInput,
         TopSearchesCard,
     },
 
@@ -48,26 +45,7 @@ export default {
     },
     data() {
         return {
-            items: [
-                {
-                    id: 1,
-                    title: 'Parking Spot in JP-Nagar',
-                    spots: 40,
-                    path: '/bangalore/parking-near-jp-nagar',
-                },
-                {
-                    id: 2,
-                    title: 'Parking Spot in BTM',
-                    spots: 20,
-                    path: '/bangalore/parking-near-btm',
-                },
-                {
-                    id: 3,
-                    title: 'Parking Spot in Hyderabad',
-                    spots: 60,
-                    path: '/hyderabad/parking-near-hyderabad',
-                },
-            ],
+            items: TOP_SEARCH_PLACES
         };
     },
 
@@ -93,13 +71,13 @@ export default {
 <style scoped>
 .main-box {
     background: linear-gradient(rgba(0, 0, 0, 0.635), rgba(0, 0, 0, 0.635)),
-        url('https://www.optex.co.jp/e/business-sectors/tdphtg0000006ax6-img/tdphtg0000006axd.png')
+        url('../../assets/parking-background.png')
             no-repeat center/cover;
     color: var(--parkspot-white);
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
-    padding: 40px 0;
+    gap: 24px;
+    padding: 80px 0;
     width: 100%;
 }
 
@@ -110,8 +88,13 @@ export default {
     border-radius: var(--border-default);
     display: flex;
     justify-content: center;
-    margin-top: 20px;
     width: 40%;
+}
+
+.most-search-container{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 .search-input {
@@ -126,25 +109,32 @@ export default {
 .custom-subtitle {
     color: var(--primary-color);
     font-weight: var(--semi-bold-font);
-    margin-top: 60px;
     text-align: center;
 }
 
 .cards-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 40px;
     justify-content: center;
-    padding: 1rem;
+}
+
+@media screen and (min-width : 768px) and (max-width : 1200px){
+    .main-box {
+        padding: 40px 80px;
+    }
+    .search-box{
+        width: 80%;
+    }
 }
 
 @media screen and (max-width: 768px) {
-    .main-box{
+    .main-box {
         padding: 40px 20px;
     }
 
     .search-box {
-        width: 90%;
+        width: 300px;
     }
 
     .btn {
@@ -152,7 +142,7 @@ export default {
     }
 
     .cards-row {
-        gap: 1rem;
+        gap: 40px;
     }
 }
 </style>
