@@ -128,3 +128,24 @@ export const APP_LINK = {
     ANDROID:
         'https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&utm_source=parkspot.in&utm_campaign=website',
 };
+
+export const TOP_SEARCH_PLACES = [
+    {
+        id: 1,
+        title: 'Parking Spot in JP-Nagar',
+        spots: 40,
+        path: '/bangalore/parking-near-jp-nagar',
+    },
+    {
+        id: 2,
+        title: 'Parking Spot in BTM',
+        spots: 20,
+        path: '/bangalore/parking-near-btm',
+    },
+    {
+        id: 3,
+        title: 'Parking Spot in Hyderabad',
+        spots: 60,
+        path: '/hyderabad/parking-near-hyderabad',
+    },
+]
