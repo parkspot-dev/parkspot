@@ -1,9 +1,12 @@
 <template>
     <div>
+        <SearchComponent />
         <BodyWrapper>
             <div class="heading-container">
-                <h1>We would love to serve you!</h1>
-                <p>
+                <AtomHeading class="custom-title" :level="'h2'">
+                    What Our Customers Say
+                </AtomHeading>
+                <p class="sub-heading" >
                     Get your safe and secure hassle free parking space near you
                 </p>
             </div>
@@ -34,34 +37,35 @@
                             <div class="dividing-line">
                                 <span>OR</span>
                             </div>
-                            <p>Apply for Parking Service</p>
+                            <p class="sub-heading" >Apply for Parking Service</p>
                         </div>
                         <ParkingRequestForm @onSubmit="onSubmit" />
                     </div>
                 </div>
             </div>
         </BodyWrapper>
-        <SearchComponent />
         <TestimonialSection />
     </div>
 </template>
 
 <script>
+import AtomIcon from '../atoms/AtomIcon.vue';
+import AtomHeading from '../atoms/AtomHeading.vue';
+import AtomParagraph from '../atoms/AtomParagraph.vue';
 import BodyWrapper from '../extras/BodyWrapper.vue';
+import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
 import SearchComponent from '../vo-portal/SearchComponent.vue';
 import TestimonialSection from '../global/TestimonialSection.vue';
-import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
-import AtomIcon from '../atoms/AtomIcon.vue';
-import AtomParagraph from '../atoms/AtomParagraph.vue';
 export default {
     name: 'TemplateVOPortal',
     components: {
+        AtomIcon,
+        AtomHeading,
+        AtomParagraph,
         BodyWrapper,
+        ParkingRequestForm,
         SearchComponent,
         TestimonialSection,
-        ParkingRequestForm,
-        AtomIcon,
-        AtomParagraph,
     },
     emits: ['finalSubmit'],
     data() {
@@ -133,11 +137,6 @@ export default {
         justify-content: center;
         text-align: center;
         gap: 1rem;
-
-        p {
-            color: var(--secondary-color);
-            font-weight: var(--semi-bold-font);
-        }
     }
 }
 
@@ -174,7 +173,7 @@ export default {
     gap: 1rem;
     text-align: center;
 
-    p{
+    p {
         color: var(--parkspot-black) !important;
     }
 
@@ -185,21 +184,22 @@ export default {
 
 .heading-container {
     display: flex;
-    justify-content: center;
     flex-direction: column;
     gap: 10px;
+    justify-content: center;
+    margin-bottom: 40px;
     text-align: center;
 
-    h1 {
-        font-size: 3rem;
-        font-weight: var(--semi-bold-font);
-        letter-spacing: -2px;
-    }
-
-    p {
-        margin-top: -10px;
+    .custom-subtitle {
         color: var(--secondary-color);
         font-weight: var(--semi-bold-font);
+        text-align: center;
     }
+}
+
+.sub-heading{
+    color: var(--secondary-color);
+        font-weight: var(--semi-bold-font);
+        text-align: center;
 }
 </style>

@@ -4,55 +4,56 @@
         <div class="form-container">
             <div class="form-row">
                 <MoleculeNameInput
-                    :rules="validation.fullname"
                     :fieldName="CONTACT_FORM.FULLNAME"
-                    v-model="contactModel.fullname"
-                    :placeholder="CONTACT_FORM.FULLNAME"
                     :label="CONTACT_FORM.FULLNAME"
+                    :placeholder="CONTACT_FORM.FULLNAME"
+                    :rules="validation.fullname"
+                    v-model="contactModel.fullname"
                 >
                 </MoleculeNameInput>
                 <MoleculeNameInput
-                    :rules="validation.cno"
                     :fieldName="CONTACT_FORM.CONTACT_NO"
-                    v-model="contactModel.cno"
-                    :placeholder="CONTACT_FORM.CONTACT_NO"
                     :label="CONTACT_FORM.CONTACT_NO"
+                    :placeholder="CONTACT_FORM.CONTACT_NO"
+                    :rules="validation.cno"
+                    v-model="contactModel.cno"
                 >
                 </MoleculeNameInput>
             </div>
             <AtomInput
-                v-model="contactModel.email"
+                :label="CONTACT_FORM.EMAIL"
                 :placeholder="CONTACT_FORM.EMAIL"
                 :type="'email'"
-                :label="CONTACT_FORM.EMAIL"
+                v-model="contactModel.email"
             ></AtomInput>
             <div class="form-row">
                 <!-- Preference Form Fields -->
                 <MoleculeSelectInput
                     :fieldName="PREFERENCE.PARKING_TYPE"
+                    :label="PREFERENCE.PARKING_TYPE"
                     :list="parkingTypeData"
+                    :placeholder="'Type of Parking'"
                     :rules="validation.parkingType"
                     @input="updateType"
-                    :placeholder="'Type of Parking'"
-                    :label="PREFERENCE.PARKING_TYPE"
+                    class="parking-type-input"
                 ></MoleculeSelectInput>
                 <MoleculeSelectInput
                     :fieldName="PREFERENCE.DURATION"
+                    :label="PREFERENCE.DURATION"
                     :list="minDurData"
+                    :placeholder="'Minimum duration if any'"
                     :rules="validation.minDur"
                     @input="updateMinDur"
-                    :placeholder="'Minimum duration if any'"
-                    :label="PREFERENCE.DURATION"
                     class="min-duration-input"
                 ></MoleculeSelectInput>
             </div>
             <MoleculeNameInput
                 :fieldName="PREFERENCE.MODEL"
+                :label="PREFERENCE.MODEL"
                 :placeholder="PREFERENCE.MODEL"
                 :rules="validation.carModel"
-                v-model="preferenceModel.carModel"
-                :label="PREFERENCE.MODEL"
                 class="car-modal-input"
+                v-model="preferenceModel.carModel"
             ></MoleculeNameInput>
             <MoleculeCheckbox
                 :fieldName="ADD_INFO.TERMS"
@@ -68,7 +69,7 @@
                     >
                 </template>
             </MoleculeCheckbox>
-                <AtomButton class="cta-btn" @click.native="submit">
+            <AtomButton class="cta-btn" @click.native="submit">
                 <span class="btn-wrap">
                     <span class="btn-text"> Send </span>
                     <AtomIcon
@@ -82,26 +83,26 @@
 </template>
 
 <script>
-import { ValidationObserver } from 'vee-validate';
-import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
-import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
- import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
-import AtomInput from '../atoms/AtomInput.vue';
+import AtomButton from '../atoms/AtomButton.vue';
+import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
 import { ADD_INFO, PREFERENCE, FORM } from '../../constant/constant';
 import { mapMutations } from 'vuex';
- import AtomButton from '../atoms/AtomButton.vue';
+import { ValidationObserver } from 'vee-validate';
 import AtomIcon from '../atoms/AtomIcon.vue';
+import AtomInput from '../atoms/AtomInput.vue';
+import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
+import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
 
 export default {
     name: 'ParkingRequestForm',
     components: {
-        ValidationObserver,
-        MoleculeNameInput,
-        MoleculeSelectInput,
-        MoleculeCheckbox,
-        AtomInput,
         AtomButton,
         AtomIcon,
+        AtomInput,
+        MoleculeCheckbox,
+        MoleculeNameInput,
+        MoleculeSelectInput,
+        ValidationObserver,
     },
     data() {
         return {
@@ -149,7 +150,9 @@ export default {
                         this.$emit('onSubmit');
                     }
                 })
-                .catch((err) => console.log('Error while submitting form', err));
+                .catch((err) =>
+                    console.log('Error while submitting form', err),
+                );
         },
         updateMinDur(val) {
             this.preferenceModel.minDur = this.minDurData[val].name;
@@ -173,9 +176,9 @@ export default {
 
 .form-row {
     display: flex;
-    width: 100%;
     flex-direction: row;
     gap: 1rem;
+    width: 100%;
 }
 
 .form-row > * {
@@ -204,18 +207,22 @@ export default {
     .min-duration-input {
         margin-top: -20px !important;
     }
+
+    .parking-type-input{
+        margin-top: 4px;
+    }
 }
 
 .cta-btn {
-    width: 100%;
     background-color: var(--primary-color);
     margin-top: -20px;
+    width: 100%;
 }
 
 .btn-wrap {
+    align-items: center;
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 
 .btn-text {
