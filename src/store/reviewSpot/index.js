@@ -5,7 +5,6 @@ import { getSiteTypeLabel as getSiteType } from "../../constant/enums";
 import { mayaClient } from '@/services/api';
 
 const state = {
-    editField: null,
     formdataSO: {
         userName: '',
         spotId: null,
@@ -60,6 +59,12 @@ const mutations = {
         state.formdataRent = { ...state.formdataRent, ...formData.Rent };
         state.formdataBooking = { ...state.formdataBooking, ...formData.Booking };
     },
+    'update_latitude'(state, latitude) {
+        state.formdataSO.latitude = latitude;
+    },
+    'update_longitude'(state, longitude) {
+        state.formdataSO.longitude = longitude;
+    },
 };
 
 const actions = {
@@ -74,7 +79,7 @@ const actions = {
             });
         } else {
             commit('set-error', { field: 'latitudeError', message: '' });
-            state.formData.Latitude = latitudeValue;
+            commit('update_latitude', latitudeValue);
         }
     },
 
@@ -88,7 +93,7 @@ const actions = {
             });
         } else {
             commit('set-error', { field: 'longitudeError', message: '' });
-            state.formData.Longitude = longitudeValue;
+            commit('update_longitude', longitudeValue);
         }
     },
 
@@ -105,6 +110,7 @@ const actions = {
         }
     },
 
+    // Gets the parking size label from the ParkingSizeEnum based on the given value.
     getParkingSize(value) {
         return ParkingSizeEnum[value];
     },
@@ -112,7 +118,8 @@ const actions = {
     // Fetch data from API when the webpage is mounted
     async fetchSpotDetails({ commit, state }) {
         commit('set-loading', true);
-        const spotInfo = await mayaClient.get(`/owner/spot-request?spot-id=${state.formdataSO.spotId}`);
+        const spotInfo = await mayaClient.get
+            (`/owner/spot-request?spot-id=${state.formdataSO.spotId}`);
         const formData = {
             SO: {
                 spotId: spotInfo.ID,
@@ -163,11 +170,10 @@ const actions = {
             state.longitudeError
         );
     },
+
     // saveForm({ state }) {
-    // }
     // -------------WORKING STAGE-------------------------
     // }
-    // -------------------------------------------
 };
 export default {
     namespaced: true,
