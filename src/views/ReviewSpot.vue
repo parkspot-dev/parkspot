@@ -1,6 +1,9 @@
 
 <template>
   <div class="body">
+  <!-- Loading modal displayed during data fetch -->
+  <LoaderModal v-if="isLoading"></LoaderModal>
+
   <!-- Image Upload Section -->
    <div class="root">
       <!-- SO Details Section -->
@@ -113,7 +116,7 @@
             <div class="error-field">
             <input
              @input="validateLongitude" 
-             placeholder="Enter longitude" 
+             placeholder="Enter SO longitude" 
              required 
              step="any" 
              type="number"
@@ -280,11 +283,13 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import LoaderModal from '@/components/extras/LoaderModal.vue';
 import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
 export default {
   name: 'ReviewSpot',
   components: {
     AtomDatePicker,
+    LoaderModal,
   },
   computed: {
       ...mapState('reviewSpot', [
@@ -293,6 +298,7 @@ export default {
           'formdataRent',
           'formdataSO',
           'hasError',
+          'isLoading',
           'latitudeError',
           'longitudeError',
           'mobileError',
@@ -306,15 +312,16 @@ export default {
           'initState',
           'submitForm',
           'saveForm',
+          'fetchSpotDetails',
       ]),
-      fetchSpotDetails() {
-        this.formdataSO.spotId = this.$route.query.spotId;
-      },
       handlePublish() {
         this.submitForm();
       },
       handleUpdate(){
         this.saveForm();
+    },
+      setSpotId() {
+        this.formdataSO.spotId = this.$route.query.spotId;
       },
       alertError(msg) {
         this.$buefy.dialog.alert({
@@ -335,9 +342,9 @@ export default {
           }
       },
   },
-   async mounted() {
+  mounted() {
+    this.setSpotId();
     this.fetchSpotDetails();
-    await this.initState();
   },
 };
 </script>

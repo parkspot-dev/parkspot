@@ -38,6 +38,7 @@ const state = {
     longitudeError: '',
     hasError: false,
     errorMessage: '',
+    isLoading: false,
 };
 const mutations = {
     'set-error'(state, { field, message }) {
@@ -50,6 +51,9 @@ const mutations = {
     'reset-global-Error'(state) {
         state.hasError = false;
         state.errorMessage = '';
+    },
+    'set-loading'(state, isLoading) {
+        state.isLoading = isLoading;
     },
     'setFormData'(state, formData) {
         state.formdataSO = { ...state.formdataSO, ...formData.SO };
@@ -106,8 +110,9 @@ const actions = {
     },
 
     // Fetch data from API when the webpage is mounted
-    async initState({ commit, state }) {
-        const spotInfo = await mayaClient.get('/owner/spot-request?spot-id=' + state.formdataSO.spotId);
+    async fetchSpotDetails({ commit, state }) {
+        commit('set-loading', true);
+        const spotInfo = await mayaClient.get(`/owner/spot-request?spot-id=${state.formdataSO.spotId}`);
         const formData = {
             SO: {
                 spotId: spotInfo.ID,
@@ -138,6 +143,7 @@ const actions = {
             },
         };
         commit('setFormData', formData);
+        commit('set-loading', false); 
     },
 
     // Validate all the Errors
