@@ -57,6 +57,7 @@ export default {
     display: flex;
     gap: 12px;
     margin-top: 1rem;
+    padding-top: 16px;
 }
 
 .author-name {

@@ -125,13 +125,13 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding: 2rem 1rem;
+        padding: 2rem 0;
         vertical-align: middle;
         width: 50%;
     }
 
     .form-wrapper {
-        padding: 20px;
+        padding: 2rem 0;
         width: 50%;
     }
 }
@@ -139,13 +139,13 @@ export default {
 @media (max-width: 768px) {
     .form-section-wrapper {
         flex-direction: column-reverse;
-
         .join-benefites {
+            padding: 3rem 0 0 0;
             width: 100%;
         }
 
         .form-wrapper {
-            padding: 10px;
+            padding: 3rem 0 0 0;
             width: 100%;
         }
     }
@@ -235,6 +235,14 @@ export default {
     .custom-subtitle {
         font-size: larger;
         text-align: center;
+    }
+
+    .heading-container {
+        margin-bottom: 0px;
+    }
+
+    .benefits{
+        margin-top: 0;
     }
 }
 
