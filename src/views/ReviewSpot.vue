@@ -205,6 +205,7 @@
               :size="'is-small'"
               class="calendar"
               required
+              v-if="formdataBooking.startDate"
               >
              </AtomDatePicker>
           </div>
@@ -216,6 +217,7 @@
               :size="'is-small'"
               class="calendar"
               required
+              v-if="formdataBooking.endDate"
             >
             </AtomDatePicker>
           </div>
@@ -227,6 +229,7 @@
               :size="'is-small'"
               class="calendar"
               required
+              v-if="formdataBooking.lastCallDate"
               >
               </AtomDatePicker>
           </div>
@@ -342,7 +345,7 @@ export default {
           }
       },
   },
-  mounted() {
+  beforeMount() {
     this.setSpotId();
     this.fetchSpotDetails();
   },
