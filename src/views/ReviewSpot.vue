@@ -3,8 +3,6 @@
   <div class="body">
   <!-- Loading modal displayed during data fetch -->
   <LoaderModal v-if="isLoading"></LoaderModal>
-
-  <!-- Image Upload Section -->
    <div class="root">
       <!-- SO Details Section -->
       <div class="form-section">
@@ -13,7 +11,7 @@
         </div>
         <!-- SO Details -->
         <div class="form-group">
-          <!-- Spot Id(This field is disabled to edit as it cannot be changed during runtime) -->
+          <!-- Spot Id(This field is Not allowed to edit) -->
           <div class="form-field">
             <label for="spotId">SpotId:</label>
             <input 
@@ -22,7 +20,7 @@
              type="text" 
              v-model="formdataSO.spotId"/>
           </div>
-          <!-- user Name(This field is disabled to edit as it cannot be changed during runtime) -->
+          <!-- user Name(This field is Not allowed to edit) -->
           <div class="form-field">
             <label for="userName">UserName:</label>
             <input 
@@ -345,7 +343,7 @@ export default {
           }
       },
   },
-  beforeMount() {
+  mounted() {
     this.setSpotId();
     this.fetchSpotDetails();
   },
