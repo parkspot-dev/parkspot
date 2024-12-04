@@ -115,7 +115,7 @@ const actions = {
         return ParkingSizeEnum[value];
     },
 
-    // Fetch data from API when the webpage is mounted
+    // Fetch data [using spotId fetched from url] when the webpage is mounted
     async fetchSpotDetails({ commit, state }) {
         commit('set-loading', true);
         const spotInfo = await mayaClient.get
@@ -170,10 +170,6 @@ const actions = {
             state.longitudeError
         );
     },
-
-    // saveForm({ state }) {
-    // -------------WORKING STAGE-------------------------
-    // }
 };
 export default {
     namespaced: true,
