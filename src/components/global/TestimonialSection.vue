@@ -102,7 +102,7 @@ $g-background-color-dark: #18181b;
 
 .component-wrapper {
     margin-top: -40px;
-    padding: 2rem 1.5rem;
+    padding: 3rem 1.5rem;
 }
 
 .custom-subtitle {
