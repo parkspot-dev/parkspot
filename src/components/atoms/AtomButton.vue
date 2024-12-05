@@ -71,9 +71,6 @@ export default {
 }
 
 .btn-wrapper.btn-border-radius{
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border-radius: 0 4px 4px 0;
 }
 </style>
