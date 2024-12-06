@@ -9,9 +9,9 @@ import config from './config';
 import searchPortal from './searchPortal';
 import bookingPortal from './bookingPortal';
 import registerRequest from './registerRequest';
+import spotRequests from './spotRequests';
 
 Vue.use(Vuex);
-
 const store = new Vuex.Store({
     modules: {
         device,
@@ -23,7 +23,9 @@ const store = new Vuex.Store({
         bookingPortal,
         config,
         registerRequest,
+        spotRequests
     },
 });
+
 
 export default store;
