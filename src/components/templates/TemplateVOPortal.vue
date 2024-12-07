@@ -39,9 +39,6 @@
                     <div class="request-form">
                         <div class="text">
                             <div class="whatsapp-link">
-                                <AtomParagraph class="custom-heading">
-                                    <span>Prefer Quick Assistance?</span>
-                                </AtomParagraph>
                                 <p>
                                     Chat with us directly on
                                     <a
@@ -72,7 +69,6 @@
 <script>
 import AtomIcon from '../atoms/AtomIcon.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
-import AtomParagraph from '../atoms/AtomParagraph.vue';
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
 import SearchComponent from '../vo-portal/SearchComponent.vue';
@@ -83,7 +79,6 @@ export default {
     components: {
         AtomIcon,
         AtomHeading,
-        AtomParagraph,
         BodyWrapper,
         ParkingRequestForm,
         SearchComponent,
@@ -182,17 +177,6 @@ export default {
         position: absolute;
         top: -15px;
         transform: translateX(-50%);
-    }
-}
-.custom-heading {
-    text-align: center;
-
-    span {
-        background-color: #19fe4e2c;
-        border-radius: 40px;
-        color: var(--parkspot-green);
-        font-weight: 600;
-        padding: 4px 7px;
     }
 }
 .whatsapp-link {
