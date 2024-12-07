@@ -6,7 +6,7 @@
                 <AtomHeading class="custom-title" :level="'h2'">
                     We Would love to serve you!
                 </AtomHeading>
-                <p class="sub-heading" >
+                <p class="sub-heading">
                     Get your safe and secure hassle free parking space near you
                 </p>
             </div>
@@ -34,7 +34,7 @@
                             <div class="dividing-line">
                                 <span>OR</span>
                             </div>
-                            <p class="sub-heading" >Apply for Parking Service</p>
+                            <p class="sub-heading">Apply for Parking Service</p>
                         </div>
                         <ParkingRequestForm @onSubmit="onSubmit" />
                     </div>
@@ -181,9 +181,9 @@ export default {
     }
 }
 
-.sub-heading{
+.sub-heading {
     color: var(--secondary-color);
-        font-weight: var(--semi-bold-font);
-        text-align: center;
+    font-weight: var(--semi-bold-font);
+    text-align: center;
 }
 </style>
