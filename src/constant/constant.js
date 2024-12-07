@@ -150,6 +150,7 @@ export const TOP_SEARCH_PLACES = [
     },
 ]
 
+// Clients testimonials for VO Page
 export const VO_PAGE_TESTIMONIALS = [
     {
         name: 'Jay Ravi',

@@ -161,7 +161,7 @@ $g-background-color-dark: #18181b;
                 display: none;
             }
         }
-
+         
         .swiper-button-next,
         .swiper-container-rtl .swiper-button-prev {
             background-image: url("https://cdn-icons-png.flaticon.com/128/271/271228.png") !important;
