@@ -1,14 +1,14 @@
 <template>
     <b-button 
-        :class="{'btn-border-radius': withSearch}"
-        :expanded="expanded"
-        :icon-left="left"
-        :icon-right="right"
-        :inverted="inverted"
-        :outlined="outlined"
-        :type="type"
-        @click="onClick"
         class="btn-wrapper"
+        @click="onClick"
+        :icon-left="left"
+        :type="type"
+        :icon-right="right"
+        :outlined="outlined"
+        :inverted="inverted"
+        :expanded="expanded"
+        :class="{'btn-border-radius': withSearch}"
     >
         <slot></slot>
     </b-button>
@@ -71,6 +71,9 @@ export default {
 }
 
 .btn-wrapper.btn-border-radius{
-    border-radius: 0 4px 4px 0;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 </style>

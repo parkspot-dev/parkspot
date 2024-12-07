@@ -45,7 +45,6 @@ export default {
     },
     data() {
         return {
-            // TODO: Fetch dynamically from Firebase
             items: TOP_SEARCH_PLACES
         };
     },

@@ -8,7 +8,9 @@
             </div>
         </div>
         <div class="divider-line"></div>
-        <p class="testimonial-text" v-html="formattedQuote" ></p>
+        <p class="testimonial-text">
+            {{ item.quote }}
+        </p>
     </div>
 </template>
 
@@ -30,12 +32,6 @@ export default {
         item: {
             required: true,
             type: Object,
-        },
-    },
-    computed: {
-        // Formats the quote to replace newline characters with <br> tags.
-        formattedQuote() {
-            return this.item.quote.replace(/\n/g, '<br>');
         },
     },
 };
@@ -61,7 +57,6 @@ export default {
     display: flex;
     gap: 12px;
     margin-top: 1rem;
-    padding-top: 16px;
 }
 
 .author-name {
@@ -97,3 +92,4 @@ export default {
     margin-bottom: 16px;
 }
 </style>
+
