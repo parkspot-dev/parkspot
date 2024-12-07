@@ -243,3 +243,106 @@ export const ActiveTabStatusLabels = [
 export function getActiveTabStatusLabel(activeTabStatus) {
     return getEnumLabel(ActiveTabStatusLabels, activeTabStatus);
 }
+
+export const SpotApprovalStatus = Object.freeze({
+    Cancelled: 0,
+    Denied: 1,
+    Duplicate: 2,
+    NotSet: 3,
+    Processing: 4,
+    Promoted: 5,
+    Registered: 6,
+    RequestedModification: 7,
+    Verified: 8,
+});
+
+const SpotApprovalStatusLabel = [
+    'Cancelled',
+    'Denied',
+    'Duplicate',
+    'Not Set',
+    'Processing',
+    'Promoted',
+    'Registered',
+    'Requested Modification',
+    'Verified',
+];
+
+/**
+ *
+ * @param {int} SpotApprovalStatus
+ * @return {string}: label for spot request status
+ */
+export function getSpotApprovalStatusLabel(SpotApprovalStatus) {
+    return getEnumLabel(SpotApprovalStatusLabel, SpotApprovalStatus);
+}
+
+export const ParkingSize = Object.freeze({
+    Bike: 0,
+    Compact: 1,
+    FullSize: 2,
+    Hatchback: 4,
+    Unspecified: 5,
+});
+
+export const ParkingSizeLabels = [
+    'Bike',
+    'Compact',
+    'FullSize',
+    'Hatchback',
+    'Unspecified',
+];
+
+/**
+ *
+ * @param {int} parkingSize
+ * @return {string}: label for parking size
+ */
+export function getParkingSizeLabel(parkingSize) {
+    return getEnumLabel(ParkingSizeLabels, parkingSize);
+}
+
+
+export const RentUnit = Object.freeze({
+    PerHour: 0,
+    PerDay: 1,
+    PerSqftMonth: 2,
+});
+
+export const RentUnitLabels = [
+    'PerHour',
+    'PerDay',
+    'PerSqftMonth',
+];
+
+/**
+ *
+ * @param {int} rentUnit
+ * @return {string}: label for rent unit
+ */
+export function getRentUnitLabel(rentUnit) {
+    return getEnumLabel(RentUnitLabels, rentUnit);
+}
+
+export const SiteType = Object.freeze({
+    Book: 0,
+    ParkingYard: 1,
+    Register: 2,
+    SearchOnly: 3,
+});
+
+export const SiteTypeLabels = [
+    'Book',
+    'ParkingYard',
+    'Register',
+    'SearchOnly',
+];
+
+/**
+ *
+ * @param {int} siteType
+ * @return {string}: label for site type
+ */
+export function getSiteTypeLabel(siteType) {
+    return getEnumLabel(SiteTypeLabels, siteType);
+}

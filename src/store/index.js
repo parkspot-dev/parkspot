@@ -10,6 +10,7 @@ import searchPortal from './searchPortal';
 import bookingPortal from './bookingPortal';
 import registerRequest from './registerRequest';
 import spotRequests from './spotRequests';
+import reviewSpot from './reviewSpot';
 
 Vue.use(Vuex);
 const store = new Vuex.Store({
@@ -23,7 +24,8 @@ const store = new Vuex.Store({
         bookingPortal,
         config,
         registerRequest,
-        spotRequests
+        spotRequests,
+        reviewSpot
     },
 });
 
