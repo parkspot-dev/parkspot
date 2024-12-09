@@ -199,10 +199,8 @@ export default {
 
         // Generate detail URL for a specific Request ID
         RequestDetailURL(requestId) {
-            return this.$router.resolve({
-                name: 'spot-requests',
-                query: { requestId },
-            }).href;
+            const detailURL = `${this.$route.path}/?requestId=${requestId}`;
+            return detailURL;
         },
 
 
