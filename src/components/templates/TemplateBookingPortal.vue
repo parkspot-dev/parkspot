@@ -642,9 +642,11 @@ export default {
             const updatedArray = [];
             for (const key in this.initialActiveBookingDetails) {
                 if (
-                    this.initialActiveBookingDetails[key] !==
-                        this.currBookingDetails.Booking[key] &&
-                    !updatedArray.includes(key)
+                    !updatedArray.includes(key) &&
+                    !this.onCompaire(
+                        this.initialActiveBookingDetails[key],
+                        this.currBookingDetails.Booking[key],
+                    )
                 ) {
                     updatedArray.push(key);
                 }
@@ -667,6 +669,17 @@ export default {
 
         onEndDateUpdate(updatedEndDate) {
             this.currBookingDetails.Booking.EndTime = updatedEndDate;
+        },
+        // Function to compare initial value and current value
+        onCompaire(initialValue, currentValue) {
+            if (Array.isArray(initialValue) && Array.isArray(currentValue)) {
+                return (
+                    JSON.stringify(initialValue) ===
+                    JSON.stringify(currentValue)
+                );
+            } else {
+                return initialValue === currentValue;
+            }
         },
     },
 };
