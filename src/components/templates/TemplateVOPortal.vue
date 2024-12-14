@@ -70,7 +70,7 @@ export default {
     },
     methods: {
         onSubmit() {
-            this.$emit('submit'); // Emits finalSubmit event
+            this.$emit('submit'); // Emits submit event
         },
     },
 };
