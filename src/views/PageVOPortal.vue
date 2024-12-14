@@ -1,7 +1,6 @@
 <template>
     <section class="">
-        <!-- <div class="bg-decor"></div> -->
-        <TemplateVOPortal @finalSubmit="onFinalSubmit"></TemplateVOPortal>
+        <TemplateVOPortal @submit="onSubmit"></TemplateVOPortal>
         <LoaderModal v-if="isLoading"></LoaderModal>
     </section>
 </template>
@@ -32,7 +31,7 @@ export default {
         ...mapActions({
             requestSpot: 'user/requestSpot',
         }),
-        async onFinalSubmit() {
+        async onSubmit() {
             try {
                 this.isLoading = true;
                 await this.requestSpot();
