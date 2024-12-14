@@ -199,8 +199,7 @@ export default {
 
         // Generate detail URL for a specific Request ID
         RequestDetailURL(requestId) {
-            const detailURL = `${this.$route.path}/?requestId=${requestId}`;
-            return detailURL;
+            return `${this.$route.path}/?requestId=${requestId}`;
         },
 
 
