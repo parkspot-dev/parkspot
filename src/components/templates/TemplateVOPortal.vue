@@ -62,7 +62,7 @@ export default {
         SearchComponent,
         TestimonialSection,
     },
-    emits: ['finalSubmit'],
+    emits: ['submit'],
     data() {
         return {
             headingLevel: 'h6',
@@ -70,7 +70,7 @@ export default {
     },
     methods: {
         onSubmit() {
-            this.$emit('finalSubmit'); // Emits finalSubmit event
+            this.$emit('submit'); // Emits finalSubmit event
         },
     },
 };
