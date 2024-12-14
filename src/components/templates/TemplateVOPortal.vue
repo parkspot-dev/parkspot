@@ -100,6 +100,7 @@
             </div>
         </BodyWrapper>
         <SearchComponent />
+        <TestimonialSection/>
     </div>
 </template>
 
@@ -110,6 +111,7 @@ import OrganismPreferenceForm from '../organisms/OrganismPreferenceForm.vue';
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import SearchComponent from '../vo-portal/SearchComponent.vue';
+import TestimonialSection from '../global/TestimonialSection.vue';
 export default {
     name: 'TemplateVOPortal',
     components: {
@@ -119,6 +121,7 @@ export default {
         AtomHeading,
         BodyWrapper,
         SearchComponent,
+        TestimonialSection
     },
     emits: ['finalSubmit'],
     data() {
