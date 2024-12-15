@@ -66,7 +66,6 @@ const mutations = {
     'update-login'(state, loginData = {}) {
         state.login = { ...loginData, FirebaseAccessToken: 'test1' };
     },
-
     'update-location-details'(state, data = {}) {
         state.locationDetails = data;
     },
