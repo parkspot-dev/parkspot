@@ -1,13 +1,14 @@
 <template>
     <b-button 
-        class="btn-wrapper"
-        @click="onClick"
-        :icon-left="left"
-        :type="type"
-        :icon-right="right"
-        :outlined="outlined"
-        :inverted="inverted"
+        :class="{'btn-border-radius': withSearch}"
         :expanded="expanded"
+        :icon-left="left"
+        :icon-right="right"
+        :inverted="inverted"
+        :outlined="outlined"
+        :type="type"
+        @click="onClick"
+        class="btn-wrapper"
     >
         <slot></slot>
     </b-button>
@@ -50,6 +51,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        withSearch: {
+            type: Boolean,
+            default: false
+        }
     },
     emits: ['btnClick'],
     methods: {
@@ -63,5 +68,9 @@ export default {
 <style>
 .btn-wrapper.btn-color {
     background-color: var(--primary-color);
+}
+
+.btn-wrapper.btn-border-radius{
+    border-radius: 0 4px 4px 0;
 }
 </style>
