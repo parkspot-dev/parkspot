@@ -1,202 +1,76 @@
 <template>
     <div>
+        <SearchComponent />
         <BodyWrapper>
-            <AtomHeading class="mb-5 has-text-centered">
-                Fill the form to Request a Parking Spot
-            </AtomHeading>
-            <div class="card card-wrapper">
-                <b-steps
-                    v-model="activeStep"
-                    :has-navigation="hasNavigation"
-                    :icon-prev="prevIcon"
-                    :icon-next="nextIcon"
-                    :label-position="labelPosition"
-                    :mobile-mode="mobileMode"
-                >
-                    <b-step-item
-                        step="1"
-                        label="Step 1"
-                        :clickable="isStepsClickable"
-                        :type="btnStack[0] ? 'is-success' : 'is-warning'"
-                    >
-                        <AtomHeading
-                            :level="headingLevel"
-                            class="mb-5 has-text-centered"
-                        >
-                            Contact Details
-                        </AtomHeading>
-                        <OrganismContactForm
-                            :formSubmitted="btnStack[0]"
-                            @formValidate="contactFormValidate"
-                        ></OrganismContactForm>
-                    </b-step-item>
-
-                    <!-- <b-step-item
-                    step="2"
-                    label="Step 2"
-                    :clickable="isStepsClickable"
-                    :type="btnStack[1] ? 'is-success' : 'is-warning'"
-                >
-                    <AtomHeading
-                        :level="headingLevel"
-                        class="mb-5 has-text-centered"
-                    >
-                        Location Details
-                    </AtomHeading>
-                    <OrganismAddressForm
-                        :formSubmitted="btnStack[1]"
-                        @formValidate="addressFormValidate"
-                        :reRender="reRender"
-                    ></OrganismAddressForm>
-                </b-step-item> -->
-
-                    <b-step-item
-                        :step="2"
-                        label="Step 2"
-                        :clickable="isStepsClickable"
-                        disabled
-                        :type="btnStack[1] ? 'is-success' : 'is-warning'"
-                        ><AtomHeading
-                            :level="headingLevel"
-                            class="mb-5 has-text-centered"
-                        >
-                            Additional Details
-                        </AtomHeading>
-                        <OrganismPreferenceForm
-                            :formSubmitted="btnStack[1]"
-                            @formValidate="preferenceFormValidate"
-                        ></OrganismPreferenceForm>
-                    </b-step-item>
-
-                    <template
-                        v-if="customNavigation"
-                        #navigation="{ previous, next }"
-                    >
-                        <div class="footer-buttons">
-                            <b-button
-                                outlined
-                                type="is-danger"
-                                icon-pack="mdi"
-                                :icon-left="prevIcon"
-                                :disabled="previous.disabled"
-                                @click.prevent="btnPrev(previous)"
-                                class="mr-4"
-                            >
-                                Prev
-                            </b-button>
-                            <b-button
-                                outlined
-                                type="is-success"
-                                icon-pack="mdi"
-                                :icon-right="nextIcon"
-                                :disabled="false"
-                                @click.prevent="btnNext(next)"
-                            >
-                                {{ nextText }}
-                            </b-button>
+            <div class="heading-container">
+                <AtomHeading class="custom-title" :level="'h2'">
+                    We Would love to serve you!
+                </AtomHeading>
+                <p class="sub-heading">
+                    Get your safe and secure hassle free parking space near you
+                </p>
+            </div>
+            <div class="form-section-wrapper">
+                <!-- Info graphic -->
+                <div class="info-graphic"></div>
+                <!-- Parking request form -->
+                <div class="form-wrapper">
+                    <div class="request-form">
+                        <div class="text">
+                            <div class="whatsapp-link">
+                                <p>
+                                    Chat with us directly on
+                                    <a
+                                        href="https://api.whatsapp.com/send/?phone=917488239471&text=I%27m+interested+in+car+parking.&type=phone_number&app_absent=0"
+                                        target="_blank"
+                                        ><AtomIcon
+                                            :icon="'whatsapp'"
+                                        ></AtomIcon>
+                                        WhatsApp
+                                    </a>
+                                    for instant support.
+                                </p>
+                            </div>
+                            <div class="dividing-line">
+                                <span>OR</span>
+                            </div>
+                            <p class="sub-heading">Apply for Parking Service</p>
                         </div>
-                    </template>
-                </b-steps>
+                        <ParkingRequestForm @onSubmit="onSubmit" />
+                    </div>
+                </div>
             </div>
         </BodyWrapper>
-        <SearchComponent />
-        <TestimonialSection/>
+        <TestimonialSection />
     </div>
 </template>
 
 <script>
-import OrganismContactForm from '../organisms/OrganismContactForm.vue';
-import OrganismPreferenceForm from '../organisms/OrganismPreferenceForm.vue';
-// import OrganismAddressForm from '../organisms/OrganismAddressForm.vue';
-import BodyWrapper from '../extras/BodyWrapper.vue';
+import AtomIcon from '../atoms/AtomIcon.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
+import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
 import SearchComponent from '../vo-portal/SearchComponent.vue';
 import TestimonialSection from '../global/TestimonialSection.vue';
 export default {
     name: 'TemplateVOPortal',
     components: {
-        OrganismContactForm,
-        OrganismPreferenceForm,
-        // OrganismAddressForm,
+        AtomIcon,
         AtomHeading,
         BodyWrapper,
+        ParkingRequestForm,
         SearchComponent,
-        TestimonialSection
+        TestimonialSection,
     },
-    emits: ['finalSubmit'],
+    emits: ['submit'],
     data() {
         return {
-            activeStep: 0,
-
-            hasNavigation: false,
-            customNavigation: true,
-            isProfileSuccess: false,
-            contactFormStep: false,
-            KYCFormStep: false,
-            AddInfoFormStep: false,
-
-            prevIcon: 'chevron-left',
-            nextIcon: 'chevron-right',
-            labelPosition: 'bottom',
-            mobileMode: 'minimalist',
-
-            isStepsClickable: false,
-
-            headingLevel: 'h3',
-
-            nextEnable: null,
-            nextText: 'Next',
-            btnStack: [false, false],
-            top: 0,
-
-            reRender: 0,
+            headingLevel: 'h6',
         };
     },
     methods: {
-        btnNext(next) {
-            // map fix setTimeout out to load compeletely
-            setTimeout(() => {
-                this.reRender++;
-            }, 10);
-            // this.btnStack[this.top] = true; // this is not updating the array in vue
-            this.btnStack.splice(this.top, 1, true); // this is to trigger validation in the form
-            this.nextEnable = next;
-        },
-        btnPrev(previous) {
-            this.top--;
-            this.btnStack.splice(this.top, 1, false);
-            this.nextText = 'Next';
-            previous.action();
-        },
-        contactFormValidate(val) {
-            this.btnStack.splice(this.top, 1, val);
-            if (this.btnStack[this.top]) {
-                this.nextEnable.action();
-                this.top++;
-                this.nextText = 'Finish';
-            }
-        },
-        kycFormValidate(val) {
-            this.btnStack.splice(this.top, 1, val);
-            if (this.btnStack[this.top]) {
-                this.nextEnable.action();
-                this.top++;
-            }
-        },
-        // addressFormValidate(val) {
-        //     this.btnStack.splice(this.top, 1, val);
-        //     if (this.btnStack[this.top]) {
-        //         this.nextEnable.action();
-        //         this.nextText = 'Finish';
-        //         this.top++;
-        //     }
-        // },
-        preferenceFormValidate(val) {
-            this.btnStack.splice(this.top, 1, val);
-            if (this.btnStack[this.top]) {
-                this.nextEnable.action();
-                this.$emit('finalSubmit');
-            }
+        onSubmit() {
+            this.$emit('submit'); // Emits submit event
         },
     },
 };
@@ -212,5 +86,104 @@ export default {
 .footer-buttons {
     display: flex;
     justify-content: space-between;
+}
+
+.form-section-wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    .info-graphic {
+        width: 50%;
+    }
+
+    .form-wrapper {
+        padding: 20px;
+        width: 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-section-wrapper {
+        flex-direction: column;
+
+        .info-graphic {
+            width: 100%;
+        }
+
+        .form-wrapper {
+            padding: 10px;
+            width: 100%;
+        }
+    }
+}
+
+.request-form {
+    border-radius: var(--border-default);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 2rem 1rem;
+
+    .text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        gap: 1rem;
+    }
+}
+
+.dividing-line {
+    border-bottom: 1px solid var(--secondary-color);
+    position: relative;
+    text-align: center;
+    width: 100%;
+
+    span {
+        background-color: white;
+        color: var(--parkspot-black);
+        left: 50%;
+        padding: 4px 5px !important;
+        position: absolute;
+        top: -15px;
+        transform: translateX(-50%);
+    }
+}
+.whatsapp-link {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+
+    p {
+        color: var(--parkspot-black) !important;
+    }
+
+    p > a {
+        color: var(--parkspot-green);
+    }
+}
+
+.heading-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 40px;
+    text-align: center;
+
+    .custom-subtitle {
+        color: var(--secondary-color);
+        font-weight: var(--semi-bold-font);
+        text-align: center;
+    }
+}
+
+.sub-heading {
+    color: var(--secondary-color);
+    font-weight: var(--semi-bold-font);
+    text-align: center;
 }
 </style>
