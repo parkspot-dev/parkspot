@@ -225,7 +225,7 @@ export default {
         margin-bottom: 0px;
     }
 
-    .benefits{
+    .benefits {
         margin-top: 0;
     }
 }
@@ -274,4 +274,5 @@ export default {
             transition: transform 0.2s, background-color 0.2s;
         }
     }
+}
 </style>
