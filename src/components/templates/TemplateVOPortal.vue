@@ -3,7 +3,7 @@
         <SearchComponent />
         <BodyWrapper>
             <div class="heading-container">
-                <AtomHeading class="custom-title" :level="'h2'">
+                <AtomHeading :level="'h2'">
                     We Would love to serve you!
                 </AtomHeading>
                 <p class="sub-heading">
@@ -11,8 +11,29 @@
                 </p>
             </div>
             <div class="form-section-wrapper">
-                <!-- Info graphic -->
-                <div class="info-graphic"></div>
+                <!-- Joining benefites container -->
+                <div class="join-benefites">
+                    <div class="join-parkspot-container">
+                        <AtomHeading class="custom-subtitle" :level="'h3'"
+                            >Why should you choose Parkspot?</AtomHeading
+                        >
+                        <div class="benefits">
+                            <ul>
+                                <li
+                                    v-for="(benefit, index) in JOINING_BENEFITS"
+                                    :key="index"
+                                >
+                                    <span
+                                        class="material-symbols-outlined icon"
+                                    >
+                                        {{ benefit.icon }}
+                                    </span>
+                                    {{ benefit.text }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <!-- Parking request form -->
                 <div class="form-wrapper">
                     <div class="request-form">
@@ -52,6 +73,7 @@ import BodyWrapper from '../extras/BodyWrapper.vue';
 import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
 import SearchComponent from '../vo-portal/SearchComponent.vue';
 import TestimonialSection from '../global/TestimonialSection.vue';
+import { JOINING_BENEFITS } from '../../constant/constant';
 export default {
     name: 'TemplateVOPortal',
     components: {
@@ -66,6 +88,7 @@ export default {
     data() {
         return {
             headingLevel: 'h6',
+            JOINING_BENEFITS: JOINING_BENEFITS,
         };
     },
     methods: {
@@ -93,26 +116,31 @@ export default {
     flex-direction: row;
     width: 100%;
 
-    .info-graphic {
+    .join-benefites {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 2rem 0;
+        vertical-align: middle;
         width: 50%;
     }
 
     .form-wrapper {
-        padding: 20px;
+        padding: 2rem 0;
         width: 50%;
     }
 }
 
 @media (max-width: 768px) {
     .form-section-wrapper {
-        flex-direction: column;
-
-        .info-graphic {
+        flex-direction: column-reverse;
+        .join-benefites {
+            padding: 3rem 0 0 0;
             width: 100%;
         }
 
         .form-wrapper {
-            padding: 10px;
+            padding: 3rem 0 0 0;
             width: 100%;
         }
     }
@@ -142,7 +170,7 @@ export default {
     width: 100%;
 
     span {
-        background-color: white;
+        background-color: var(--parkspot-white);
         color: var(--parkspot-black);
         left: 50%;
         padding: 4px 5px !important;
@@ -173,12 +201,6 @@ export default {
     justify-content: center;
     margin-bottom: 40px;
     text-align: center;
-
-    .custom-subtitle {
-        color: var(--secondary-color);
-        font-weight: var(--semi-bold-font);
-        text-align: center;
-    }
 }
 
 .sub-heading {
@@ -186,4 +208,70 @@ export default {
     font-weight: var(--semi-bold-font);
     text-align: center;
 }
+
+.custom-subtitle {
+    color: var(--secondary-color);
+    font-weight: var(--semi-bold-font);
+    text-align: start;
+}
+
+@media (max-width: 768px) {
+    .custom-subtitle {
+        font-size: larger;
+        text-align: center;
+    }
+
+    .heading-container {
+        margin-bottom: 0px;
+    }
+
+    .benefits{
+        margin-top: 0;
+    }
+}
+
+.join-parkspot-container {
+    display: flex;
+    color: var(--secondary-color);
+    flex-direction: column;
+    p {
+        color: var(--secondary-color);
+        font-weight: var(--semi-bold-font);
+        text-align: start;
+    }
+
+    .benefits {
+        margin-top: 20px;
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            li {
+                align-items: center;
+                color: var(--parkspot-black);
+                display: flex;
+                font-weight: var(--semi-bold-font);
+                gap: 1rem;
+                list-style: none;
+                margin: 10px 0;
+                vertical-align: middle;
+            }
+        }
+
+        .icon {
+            align-items: center;
+            border-radius: 50%;
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 2px 4px var(--parkspot-muted-black);
+            color: var(--secondary-color);
+            display: flex;
+            font-size: 1.5rem;
+            justify-content: center;
+            min-height: 50px;
+            min-width: 50px;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+    }
 </style>

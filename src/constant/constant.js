@@ -174,3 +174,26 @@ export const VO_PAGE_TESTIMONIALS = [
         date: '17 Jan 2017',
     },
 ]
+
+export const JOINING_BENEFITS = [
+    {
+        text: '5000+ happy customers across various platforms.',
+        icon: 'group',
+    },
+    {
+        text: 'Easy payment process with reminders.',
+        icon: 'id_card',
+    },
+    {
+        text: 'Hassle-free booking process with on-call support.',
+        icon: 'payments',
+    },
+    {
+        text: 'KYC because we care for your security.',
+        icon: 'support_agent',
+    },
+    {
+        text: 'Multi-city presence with a wide network.',
+        icon: 'location_city',
+    },
+]

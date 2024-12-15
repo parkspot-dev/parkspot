@@ -1,6 +1,5 @@
 <template>
     <div class="component-wrapper">
-        <BodyWrapper>
             <AtomParagraph class="custom-subtitle">
                 Testimonials
             </AtomParagraph>
@@ -27,7 +26,6 @@
                     <div class="swiper-button-next"></div>
                 </div>
             </div>
-        </BodyWrapper>
     </div>
 </template>
 
@@ -37,7 +35,6 @@ import 'swiper/swiper.min.css';
 import { VO_PAGE_TESTIMONIALS } from '../../constant/constant';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
-import BodyWrapper from '../extras/BodyWrapper.vue';
 import Swiper, { Navigation, Pagination, Autoplay } from 'swiper';
 import TestimonialCard from './TestimonialCard.vue';
 
@@ -46,7 +43,6 @@ export default {
     components: {
         AtomHeading,
         AtomParagraph,
-        BodyWrapper,
         TestimonialCard,
     },
     data() {
@@ -104,7 +100,8 @@ $white: var(--parkspot-white);
 $g-background-color-dark: #18181b;
 
 .component-wrapper {
-    background-color: $white;
+    margin-top: -40px;
+    padding: 3rem 1.5rem;
 }
 
 .custom-subtitle {
@@ -118,15 +115,19 @@ $g-background-color-dark: #18181b;
     text-align: center;
 }
 
+@media(max-width : 768px){
+    .custom-title{
+        margin-bottom: 3rem;
+    }
+}
+
 .swiper {
     max-height: 700px;
-    padding: 2.5em 1.5em;
-
     .swiper-slide {
         background: rgba(255, 255, 255, 0.33);
         border-radius: 6px;
         height: auto;
-        margin: 0;
+        margin-top: -40px;
         opacity: 0.2;
         padding: 0;
         transition: all 0.5s ease-in-out;
