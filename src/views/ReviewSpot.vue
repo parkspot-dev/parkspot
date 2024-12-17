@@ -1,7 +1,6 @@
 
 <template>
   <div class="body">
-  <!-- Loading modal displayed during data fetch -->
   <LoaderModal v-if="isLoading"></LoaderModal>
    <div class="root">
       <!-- SO Details Section -->
@@ -18,7 +17,8 @@
              class="noborder" 
              :disabled="true" 
              type="text" 
-             v-model="formdataSO.spotId"/>
+             v-model="SO.spotId"
+             />
           </div>
           <!-- user Name(This field is Not allowed to edit) -->
           <div class="form-field">
@@ -27,7 +27,8 @@
              class="noborder" 
              :disabled="true" 
              type="text" 
-             v-model="formdataSO.userName"/>
+             v-model="SO.userName"
+             />
           </div>
           <!-- Full name -->
           <div class="form-field">
@@ -35,11 +36,12 @@
             <input 
              placeholder="Enter Full Name" 
              type="text" 
-             v-model="formdataSO.fullName"/>
+             v-model="SO.fullName"
+             />
           </div>
           <!-- Mobile -->
           <div class="form-field">
-            <label for="mobile">Mobile:<span style="color: red;">*</span> </label>
+            <label for="mobile">Mobile:<span style="color: red;">*</span></label>
               <div class="error-field">
                 <input
                 @input="validateMobile"
@@ -48,7 +50,7 @@
                 placeholder="Enter SO Mobile number"
                 required
                 type="text"
-                v-model="formdataSO.mobile"
+                v-model="SO.mobile"
               />
               <span 
                class="error" 
@@ -62,13 +64,13 @@
             <input 
              placeholder="Enter Email" 
              type="email" 
-             v-model="formdataSO.email"
+             v-model="SO.email"
             />
           </div>
           <!-- City -->
           <div class="form-field">
             <label for="city">City:</label>
-            <select v-model="formdataSO.city">
+            <select v-model="SO.city">
               <option value="Bengaluru">Bengaluru</option>
               <option value="Chennai">Chennai</option>
               <option value="Hyderabad">Hyderabad</option>
@@ -78,7 +80,24 @@
           <!-- Area -->
           <div class="form-field">
             <label for="area">Area:</label>
-            <input type="text" v-model="formdataSO.area"/>
+            <input type="text" v-model="SO.area"/>
+          </div>
+          <!-- Latitude, Longitude-->
+          <div class="form-field">
+            <label for="latlong">Latitude,Longitude:<span style="color: red;">*</span></label>
+            <div class="error-field">
+            <input 
+              @input="validateLatLong"
+              placeholder="Enter SO latitude, longitude"
+              required
+              type="text"
+              v-model="SO.latlong" 
+              />
+            <span 
+             class="error" 
+             v-if="latlongError"
+             >{{ latlongError }}</span>
+            </div>
           </div>
           <!-- Adddress -->
           <div class="form-field">
@@ -87,44 +106,8 @@
                 id="address"
                 placeholder="Enter SO address"
                 rows="2"
-                v-model="formdataSO.address"
+                v-model="SO.address"
             ></textarea>
-          </div>
-          <!-- Latitude -->
-          <div class="form-field">
-            <label for="latitude">Latitude:<span style="color: red;">*</span></label>
-            <div class="error-field">
-            <input 
-              @input="validateLatitude"
-              placeholder="Enter SO latitude"
-              required 
-              step="any"
-              type="number"
-              v-model="formdataSO.latitude" 
-              />
-            <span 
-             class="error" 
-             v-if="latitudeError"
-             >{{ latitudeError }}</span>
-            </div>
-          </div>
-          <!-- Longitude -->
-          <div class="form-field">
-            <label for="longitude">Longitude:<span style="color: red;">*</span></label>
-            <div class="error-field">
-            <input
-             @input="validateLongitude" 
-             placeholder="Enter SO longitude" 
-             required 
-             step="any" 
-             type="number"
-             v-model="formdataSO.longitude" 
-             />
-             <span 
-             class="error" 
-             v-if="longitudeError"
-             >{{ longitudeError }}</span>
-             </div>
           </div>
         </div>
       </div>
@@ -142,7 +125,7 @@
             <input 
              placeholder="Enter the total Slots"
              type="number" 
-             v-model="formdataRent.totalSlots" 
+             v-model="Rent.totalSlots" 
              />
           </div>
           <!-- Base Amount -->
@@ -152,13 +135,14 @@
              placeholder="Enter the SO charges"
              required
              type="number" 
-             v-model="formdataRent.baseAmount" 
+             v-model="Rent.baseAmount" 
             />
           </div>
           <!-- Rent Unit -->
           <div class="form-field">
             <label for="rentUnit">Rent Unit:</label>
-            <select v-model="formdataRent.rentUnit">
+            <select v-model="Rent.rentUnit">
+            <option value="PerSqftMonth">Per Sqft</option>
               <option value="PerHour">Per Hour</option>
               <option value="PerDay">Per Day</option>
               <option value="PerSqftMonth">Per Sqft Month</option>
@@ -167,22 +151,22 @@
           <!-- Parking Size -->
           <div class="form-field">
             <label for="parkingSize">Parking Size:</label>
-            <select v-model="formdataRent.parkingSize">
+            <select v-model="Rent.parkingSize">
               <option value="Bike">Bike</option>
-              <option value="Compact">Compact</option>
-              <option value="FullSize">Full Size</option>
-              <option value="Hatchback">Hatchback</option>
+              <option value="Compact">Compact(Medium)</option>
+              <option value="FullSize">Full Size(Large)</option>
+              <option value="Hatchback">Hatchback(Small)</option>
               <option value="Unspecified">Unspecified</option>
             </select>
           </div>
           <!-- Site Type -->
           <div class="form-field">
             <label for="siteType">Site Type:</label>
-            <select v-model="formdataRent.siteType">
-              <option value="Book">Book</option>
+            <select v-model="Rent.siteType">
               <option value="ParkingYard">Parking Yard</option>
-              <option value="Register">Register</option>
               <option value="SearchOnly">Search Only</option>
+              <option value="Register">Register</option>
+              <option value="Book">Book</option>
             </select>
           </div>
         </div>
@@ -197,13 +181,12 @@
         <div class="form-group">
           <!-- Start Date -->
           <div class="form-field">
-            <label for="startDate" >Start Date:<span style="color: red;">*</span></label>
+            <label for="startDate">Start Date:<span style="color: red;">*</span></label>
             <AtomDatePicker 
-              :assignedDate="formdataBooking.startDate"
-              :size="'is-small'"
+              :assignedDate="Booking.startDate"
               class="calendar"
               required
-              v-if="formdataBooking.startDate"
+              :size="'is-small'"
               >
              </AtomDatePicker>
           </div>
@@ -211,11 +194,10 @@
           <div class="form-field">
             <label for="endDate">End Date:<span style="color: red;">*</span></label>
             <AtomDatePicker
-              :assignedDate="formdataBooking.endDate"
-              :size="'is-small'"
+              :assignedDate="Booking.endDate"
               class="calendar"
               required
-              v-if="formdataBooking.endDate"
+              :size="'is-small'"
             >
             </AtomDatePicker>
           </div>
@@ -223,29 +205,17 @@
           <div class="form-field">
             <label for="lastCallDate">Last Call Date:</label>
             <AtomDatePicker 
-              :assignedDate="formdataBooking.lastCallDate"
-              :size="'is-small'"
+              :assignedDate="Booking.lastCallDate"
               class="calendar"
               required
-              v-if="formdataBooking.lastCallDate"
+              :size="'is-small'"
               >
               </AtomDatePicker>
-          </div>
-          <!-- Duration -->
-          <div class="form-field">
-             <label for="duration">Duration:</label>
-                <textarea
-                id="duration"
-                maxlength="50"
-                placeholder="Enter Duration(max 50 characters)"
-                rows="1"
-                v-model="formdataBooking.duration"
-                ></textarea>
           </div>
           <!-- Spot Request Status -->
           <div class="form-field">
             <label for="spotrequestStatus">Status:</label>
-            <select v-model="formdataBooking.spotrequestStatus">
+            <select v-model="Booking.spotrequestStatus">
               <option value="Cancelled">Cancelled</option>
               <option value="Denied">Denied</option>
               <option value="Duplicate">Duplicate</option>
@@ -257,6 +227,17 @@
               <option value="Verified">Verified</option>
             </select>
           </div>
+          <!-- Duration -->
+          <div class="form-field">
+             <label for="duration">Duration:</label>
+                <textarea
+                id="duration"
+                maxlength="50"
+                placeholder="Enter Duration(max 50 characters)"
+                rows="1"
+                v-model="Booking.duration"
+                ></textarea>
+          </div>
           <!-- Remark -->
           <div class="form-field">
             <label for="remark">Remark:</label>
@@ -265,7 +246,7 @@
                maxlength="200"
                placeholder="Enter Remark(max 200 characters)"
                rows="2"
-               v-model="formdataBooking.remark"
+               v-model="Booking.remark"
               ></textarea>
           </div>
         </div>
@@ -274,8 +255,18 @@
 
       <!-- Update -->
       <div class="button-container">
-        <button @click="handleUpdate" class="submit-btn">Save</button>
-        <button @click="handlePublish" class="submit-btn">Publish</button>
+        <AtomButton
+          class="submit-btn"
+          @click.native="handleUpdate"
+        >
+        Save
+        </AtomButton>
+        <AtomButton
+          class="submit-btn"
+          @click.native="handlePublish"
+        >
+        Publish
+        </AtomButton>
       </div>
   </div>
   <!-- End of root -->
@@ -284,31 +275,32 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import LoaderModal from '@/components/extras/LoaderModal.vue';
+import AtomButton from '../components/atoms/AtomButton.vue';
 import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
+import LoaderModal from '@/components/extras/LoaderModal.vue';
+
 export default {
   name: 'ReviewSpot',
   components: {
+    AtomButton,
     AtomDatePicker,
     LoaderModal,
   },
   computed: {
       ...mapState('reviewSpot', [
+          'Booking',
           'errorMessage',
-          'formdataBooking',
-          'formdataRent',
-          'formdataSO',
           'hasError',
           'isLoading',
-          'latitudeError',
-          'longitudeError',
+          'latlongError',
           'mobileError',
+          'Rent',
+          'SO',
       ])
   },
   methods: {
       ...mapActions('reviewSpot', [
-          'validateLatitude',
-          'validateLongitude',
+          'validateLatLong',
           'validateMobile',
           'initState',
           'submitForm',
@@ -320,9 +312,10 @@ export default {
       },
       handleUpdate(){
         this.saveForm();
-    },
+      },
       setSpotId() {
-        this.formdataSO.spotId = this.$route.query.spotId;
+        this.SO.spotId = this.$route.query.spotId;
+        console.log(this.SO.spotId);
       },
       alertError(msg) {
         this.$buefy.dialog.alert({
@@ -367,8 +360,7 @@ export default {
   margin-top: 15px;
 }
 .calendar {
-  margin-left: auto;
-  width: 70%;
+  width: 100%;
 }
 .error {
   color: red;

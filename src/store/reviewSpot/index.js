@@ -1,11 +1,11 @@
-import { getSpotApprovalStatusLabel as getSpotStatus } from "../../constant/enums";
+import { getSpotRequestStatusLabel as getSpotStatus } from "../../constant/enums";
 import { getParkingSizeLabel as getParkingSize } from "../../constant/enums";
 import { getRentUnitLabel as getRentUnit } from "../../constant/enums";
 import { getSiteTypeLabel as getSiteType } from "../../constant/enums";
 import { mayaClient } from '@/services/api';
 
 const state = {
-    formdataSO: {
+    SO: {
         userName: '',
         spotId: null,
         fullName: '',
@@ -14,17 +14,16 @@ const state = {
         address: '',
         city: '',
         area: '',
-        latitude: null,
-        longitude: null,
+        latlong: '',
       },
-      formdataRent: {
+      Rent: {
         totalSlots: null,
         baseAmount: null,
         rentUnit: '',
         parkingSize: '',
         siteType: '',
       },
-      formdataBooking: {
+      Booking: {
         startDate: '',
         endDate: '',
         lastCallDate: '',
@@ -33,8 +32,7 @@ const state = {
         remark: '',
         },
     mobileError: '',
-    latitudeError: '',
-    longitudeError: '',
+    latlongError: '',
     hasError: false,
     errorMessage: '',
     isLoading: false,
@@ -54,53 +52,47 @@ const mutations = {
     'set-loading'(state, isLoading) {
         state.isLoading = isLoading;
     },
-    'setFormData'(state, formData) {
-        state.formdataSO = { ...state.formdataSO, ...formData.SO };
-        state.formdataRent = { ...state.formdataRent, ...formData.Rent };
-        state.formdataBooking = { ...state.formdataBooking, ...formData.Booking };
+    'set-form-data'(state, formData) {
+        state.SO = { ...state.SO, ...formData.SO };
+        state.Rent = { ...state.Rent, ...formData.Rent };
+        state.Booking = { ...state.Booking, ...formData.Booking };
     },
-    'update_latitude'(state, latitude) {
-        state.formdataSO.latitude = latitude;
+    'update-latlong'(state, latlong) {
+        state.SO.latlong = latlong;
     },
-    'update_longitude'(state, longitude) {
-        state.formdataSO.longitude = longitude;
-    },
+    'combine-lat-long'(latitude, longitude) {
+        return `${latitude},${longitude}`
+    }
 };
 
 const actions = {
 
-    // Validate Latitude type
-    validateLatitude({ commit, state }) {
-        const latitudeValue = parseFloat(state.formdataSO.latitude);
-        if (isNaN(latitudeValue)) {
-            commit('set-error', {
-                field: 'latitudeError',
-                message: 'Latitude must be a valid float.',
-            });
-        } else {
-            commit('set-error', { field: 'latitudeError', message: '' });
-            commit('update_latitude', latitudeValue);
-        }
-    },
+    // Validate Latitude and Longitude type
+    validateLatLong({ commit, input }) {
+        const [latitudeString, longitudeString] = input.split(",");
 
-    // Validate Longitude type
-    validateLongitude({ commit, state }) {
-        const longitudeValue = parseFloat(state.formdataSO.longitude);
-        if (isNaN(longitudeValue)) {
+        // Trim any leading or trailing whitespace
+        const latitude = parseFloat(latitudeString.trim());
+        const longitude = parseFloat(longitudeString.trim());
+
+        // Check if both latitude and longitude are valid numbers (not NaN)
+        if (isNaN(latitude) || isNaN(longitude)) {
             commit('set-error', {
-                field: 'longitudeError',
-                message: 'Longitude must be a valid float.',
+                field: 'latLongError', // Use a combined error field
+                message: 'Latitude and longitude must be valid floats separated by a comma. Eg. 10.00, 12.00',
             });
-        } else {
-            commit('set-error', { field: 'longitudeError', message: '' });
-            commit('update_longitude', longitudeValue);
+        }
+        else {
+            commit('set-error', { field: 'latlongError', message: '' });
+            // const latlong = commit('combine-lat-long', latitude, longitude);
+            // commit('update-latlong', latlong);
         }
     },
 
     // Validate Mobile length
     validateMobile({ commit, state }) {
         const mobilePattern = /^\d{10}$/;
-        if (!mobilePattern.test(state.formdataSO.mobile)) {
+        if (!mobilePattern.test(state.SO.mobile)) {
             commit('set-error', {
                 field: 'mobileError',
                 message: 'Mobile number must be exactly 10 digits.',
@@ -119,13 +111,13 @@ const actions = {
     async fetchSpotDetails({ commit, state }) {
         commit('set-loading', true);
         const spotInfo = await mayaClient.get
-            (`/owner/spot-request?spot-id=${state.formdataSO.spotId}`);
+            (`/owner/spot-request?spot-id=${state.SO.spotId}`);
+        const latlong = commit('combine-lat-long', spotInfo.latitude, spotInfo.longitude);
         const formData = {
             SO: {
                 spotId: spotInfo.ID,
                 userName: spotInfo.UserName,
-                latitude: spotInfo.Latitude,
-                longitude: spotInfo.Longitude,
+                latlong: latlong,
                 city: spotInfo.City,
                 area: spotInfo.Area,
                 fullName: spotInfo.FullName,
@@ -149,7 +141,7 @@ const actions = {
                 lastCallDate: spotInfo.LastCallDate,
             },
         };
-        commit('setFormData', formData);
+        commit('set-form-data', formData);
         commit('set-loading', false); 
     },
 

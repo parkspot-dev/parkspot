@@ -207,22 +207,28 @@ export const SpotRequestStatus = Object.freeze({
     SpotRequestStatusProcessing: 2,
     SpotRequestStatusRequestedModification: 3,
     SpotRequestStatusVerified: 4,
-    SpotRequestStatusDenied: 5,
+    SpotRequestStatusPromoted: 5,
+    SpotRequestStatusDenied: 6,
+    SpotRequestStatusCancelled: 7,
+    SpotRequestStatusDuplicate: 8,
 });
-const SpotRequestStatusLabel = [
+const SpotRequestStatusLabels = [
     'Not Set',
     'Registered',
     'Processing',
     'Requested Modification',
     'Verified',
+    'Promoted',
     'Denied',
+    'Cancelled',
+    'Duplicate',
 ];
 /**
  * @param {int} spotRequestStatus
  * @return {string}: label for spot request status
  */
 export function getSpotRequestStatusLabel(spotRequestStatus) {
-    return getEnumLabel(SpotRequestStatusLabel, spotRequestStatus);
+    return getEnumLabel(SpotRequestStatusLabels, spotRequestStatus);
 }
 
 export const ActiveTabStatus = Object.freeze({
@@ -242,39 +248,6 @@ export const ActiveTabStatusLabels = [
  */
 export function getActiveTabStatusLabel(activeTabStatus) {
     return getEnumLabel(ActiveTabStatusLabels, activeTabStatus);
-}
-
-export const SpotApprovalStatus = Object.freeze({
-    Cancelled: 0,
-    Denied: 1,
-    Duplicate: 2,
-    NotSet: 3,
-    Processing: 4,
-    Promoted: 5,
-    Registered: 6,
-    RequestedModification: 7,
-    Verified: 8,
-});
-
-const SpotApprovalStatusLabel = [
-    'Cancelled',
-    'Denied',
-    'Duplicate',
-    'Not Set',
-    'Processing',
-    'Promoted',
-    'Registered',
-    'Requested Modification',
-    'Verified',
-];
-
-/**
- *
- * @param {int} SpotApprovalStatus
- * @return {string}: label for spot request status
- */
-export function getSpotApprovalStatusLabel(SpotApprovalStatus) {
-    return getEnumLabel(SpotApprovalStatusLabel, SpotApprovalStatus);
 }
 
 export const ParkingSize = Object.freeze({
@@ -304,12 +277,14 @@ export function getParkingSizeLabel(parkingSize) {
 
 
 export const RentUnit = Object.freeze({
-    PerHour: 0,
-    PerDay: 1,
-    PerSqftMonth: 2,
+    PerSqft: 0,
+    PerHour: 1,
+    PerDay: 2,
+    PerSqftMonth: 3,
 });
 
 export const RentUnitLabels = [
+    'PerSqft',
     'PerHour',
     'PerDay',
     'PerSqftMonth',

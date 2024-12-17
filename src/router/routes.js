@@ -28,7 +28,7 @@ export const pages = {
     PRIVACY                 : "/privacy",
     REGISTER_REQUEST        : "/internal/register-request",  
     SPOT_REQUESTS           : "/internal/spot-requests",
-    REVIEW_SPOT             : "/internal/review-spot"
+    REVIEW_SPOT             : "/internal/spot-review"
 };
 
 export const routes = [
