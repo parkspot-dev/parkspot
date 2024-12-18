@@ -207,22 +207,28 @@ export const SpotRequestStatus = Object.freeze({
     SpotRequestStatusProcessing: 2,
     SpotRequestStatusRequestedModification: 3,
     SpotRequestStatusVerified: 4,
-    SpotRequestStatusDenied: 5,
+    SpotRequestStatusPromoted: 5,
+    SpotRequestStatusDenied: 6,
+    SpotRequestStatusCancelled: 7,
+    SpotRequestStatusDuplicate: 8,
 });
-const SpotRequestStatusLabel = [
+const SpotRequestStatusLabels = [
     'Not Set',
     'Registered',
     'Processing',
     'Requested Modification',
     'Verified',
+    'Promoted',
     'Denied',
+    'Cancelled',
+    'Duplicate',
 ];
 /**
  * @param {int} spotRequestStatus
  * @return {string}: label for spot request status
  */
 export function getSpotRequestStatusLabel(spotRequestStatus) {
-    return getEnumLabel(SpotRequestStatusLabel, spotRequestStatus);
+    return getEnumLabel(SpotRequestStatusLabels, spotRequestStatus);
 }
 
 export const ActiveTabStatus = Object.freeze({
@@ -242,4 +248,76 @@ export const ActiveTabStatusLabels = [
  */
 export function getActiveTabStatusLabel(activeTabStatus) {
     return getEnumLabel(ActiveTabStatusLabels, activeTabStatus);
+}
+
+export const ParkingSize = Object.freeze({
+    Bike: 0,
+    Compact: 1,
+    FullSize: 2,
+    Hatchback: 4,
+    Unspecified: 5,
+});
+
+export const ParkingSizeLabels = [
+    'Bike',
+    'Compact',
+    'FullSize',
+    'Hatchback',
+    'Unspecified',
+];
+
+/**
+ *
+ * @param {int} parkingSize
+ * @return {string}: label for parking size
+ */
+export function getParkingSizeLabel(parkingSize) {
+    return getEnumLabel(ParkingSizeLabels, parkingSize);
+}
+
+
+export const RentUnit = Object.freeze({
+    PerSqft: 0,
+    PerHour: 1,
+    PerDay: 2,
+    PerSqftMonth: 3,
+});
+
+export const RentUnitLabels = [
+    'PerSqft',
+    'PerHour',
+    'PerDay',
+    'PerSqftMonth',
+];
+
+/**
+ *
+ * @param {int} rentUnit
+ * @return {string}: label for rent unit
+ */
+export function getRentUnitLabel(rentUnit) {
+    return getEnumLabel(RentUnitLabels, rentUnit);
+}
+
+export const SiteType = Object.freeze({
+    Book: 0,
+    ParkingYard: 1,
+    Register: 2,
+    SearchOnly: 3,
+});
+
+export const SiteTypeLabels = [
+    'Book',
+    'ParkingYard',
+    'Register',
+    'SearchOnly',
+];
+
+/**
+ *
+ * @param {int} siteType
+ * @return {string}: label for site type
+ */
+export function getSiteTypeLabel(siteType) {
+    return getEnumLabel(SiteTypeLabels, siteType);
 }
