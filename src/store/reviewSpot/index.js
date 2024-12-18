@@ -59,9 +59,6 @@ const mutations = {
     },
     'update-latlong'(state, latlong) {
         state.SO.latlong = latlong;
-    },
-    'combine-lat-long'(latitude, longitude) {
-        return `${latitude},${longitude}`
     }
 };
 
@@ -70,7 +67,6 @@ const actions = {
     // Validate Latitude and Longitude type
     validateLatLong({ commit, input }) {
         const [latitudeString, longitudeString] = input.split(",");
-
         // Trim any leading or trailing whitespace
         const latitude = parseFloat(latitudeString.trim());
         const longitude = parseFloat(longitudeString.trim());
@@ -102,9 +98,8 @@ const actions = {
         }
     },
 
-    // Gets the parking size label from the ParkingSizeEnum based on the given value.
-    getParkingSize(value) {
-        return ParkingSizeEnum[value];
+    combineLatLong(latitude, longitude) {
+        return `${latitude},${longitude}`;
     },
 
     // Fetch data [using spotId fetched from url] when the webpage is mounted
@@ -112,12 +107,11 @@ const actions = {
         commit('set-loading', true);
         const spotInfo = await mayaClient.get
             (`/owner/spot-request?spot-id=${state.SO.spotId}`);
-        const latlong = commit('combine-lat-long', spotInfo.latitude, spotInfo.longitude);
         const formData = {
             SO: {
                 spotId: spotInfo.ID,
                 userName: spotInfo.UserName,
-                latlong: latlong,
+                // latlong: combineLatLong(spotInfo.latitude, spotInfo.longitude),
                 city: spotInfo.City,
                 area: spotInfo.Area,
                 fullName: spotInfo.FullName,
@@ -148,8 +142,6 @@ const actions = {
     // Validate all the Errors
     async validateFormFields({ dispatch }) {
         await Promise.all([
-            dispatch('validateLatitude'),
-            dispatch('validateLongitude'),
             dispatch('validateMobile'),
         ]);
     },

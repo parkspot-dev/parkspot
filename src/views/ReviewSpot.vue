@@ -87,7 +87,6 @@
             <label for="latlong">Latitude,Longitude:<span style="color: red;">*</span></label>
             <div class="error-field">
             <input 
-              @input="validateLatLong"
               placeholder="Enter SO latitude, longitude"
               required
               type="text"
@@ -314,8 +313,7 @@ export default {
         this.saveForm();
       },
       setSpotId() {
-        this.SO.spotId = this.$route.query.spotId;
-        console.log(this.SO.spotId);
+        this.SO.spotId = this.$route.query.spotid;
       },
       alertError(msg) {
         this.$buefy.dialog.alert({
@@ -337,8 +335,8 @@ export default {
       },
   },
   mounted() {
-    this.setSpotId();
-    this.fetchSpotDetails();
+    // this.setSpotId();
+    // this.fetchSpotDetails();
   },
 };
 </script>
