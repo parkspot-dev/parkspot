@@ -639,9 +639,9 @@ export default {
         saveField() {
             this.editField = null;
 
-            // Remove Payments field from currentBookingDetails
+            // Remove Payments field from currentBookingDetails.Booking object
             delete this.currBookingDetails.Booking.Payments;
-            
+
             // Iterate through the loop to check for updated fields.
             const updatedArray = [];
             for (const key in this.initialActiveBookingDetails) {
