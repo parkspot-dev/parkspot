@@ -6,6 +6,7 @@
             :date-formatter="istFormatter"
             @input="onChange"
             :size="size"
+            class="date-picker"
         >
         </b-datepicker>
     </b-field>
@@ -46,3 +47,12 @@ export default {
     },
 };
 </script>
+
+<style lang="scss">
+  $datepicker-today-border: 0.5px solid gray;
+
+  .date-picker {
+    border: $datepicker-today-border;
+  }
+</style>
+
