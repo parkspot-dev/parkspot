@@ -638,12 +638,16 @@ export default {
 
         saveField() {
             this.editField = null;
-            // Itrate a loop to check for updated fields
+
+            // Remove Payments field from currentBookingDetails
+            delete this.currBookingDetails.Booking.Payments;
+            
+            // Iterate through the loop to check for updated fields.
             const updatedArray = [];
             for (const key in this.initialActiveBookingDetails) {
                 if (
                     !updatedArray.includes(key) &&
-                    !this.onCompaire(
+                    !this.onCompare(
                         this.initialActiveBookingDetails[key],
                         this.currBookingDetails.Booking[key],
                     )
@@ -671,7 +675,7 @@ export default {
             this.currBookingDetails.Booking.EndTime = updatedEndDate;
         },
         // Function to compare initial value and current value
-        onCompaire(initialValue, currentValue) {
+        onCompare(initialValue, currentValue) {
             if (Array.isArray(initialValue) && Array.isArray(currentValue)) {
                 return (
                     JSON.stringify(initialValue) ===

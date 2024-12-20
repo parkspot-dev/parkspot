@@ -137,8 +137,9 @@ const actions = {
         }
     },
 
-    async updateBookingDetails({ commit, dispatch }, reqBody) {
+    async updateBookingDetails({ commit, dispatch, state }, reqBody) {
         commit('set-loading', true);
+        reqBody = { BookingDetails: reqBody, UpdatedFields : state.updatedFields }
         const res = await mayaClient.post('/booking/update', reqBody);
         if (res.Success) {
             dispatch('getBookingDetails', reqBody.ID);
