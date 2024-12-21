@@ -460,16 +460,12 @@ export default {
     max-height: 600px;
     overflow-y: auto;
 }
-.submit-btn {
-    background-color: var(--secondary-color);
-    border: none;
-    color: var(--parkspot-white);
-    cursor: pointer;
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin: 0px 5px;
-    padding: 0.6rem;
-    transition: background-color 0.1s ease, transform 0.2s ease;
+
+.submit-btn{
+    border-radius: var(--border-default);
+    font-weight: 700;
+    margin: 4px;
+    width: 15%;
 }
 .submit-btn:hover {
     background-color: var(--primary-color);
@@ -533,6 +529,9 @@ export default {
     }
     .sub-heading {
         font-size: 1.4rem;
+    }
+    .submit-btn{
+        width: 25%;
     }
 }
 </style>
