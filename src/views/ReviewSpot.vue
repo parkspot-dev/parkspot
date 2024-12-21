@@ -201,9 +201,7 @@
                     </div>
                     <!-- End Date -->
                     <div class="form-field">
-                        <label for="endDate"
-                            >End Date:</label
-                        >
+                        <label for="endDate">End Date:</label>
                         <AtomDatePicker
                             :assignedDate="Booking.endDate"
                             class="calendar"
@@ -270,15 +268,41 @@
 
             <!-- Update -->
             <div class="button-container">
-                <AtomButton class="submit-btn" @click.native="handleUpdate">
+                <AtomButton
+                    @click.native="openModal('Save')"
+                    class="btn"
+                >
                     Save
                 </AtomButton>
-                <AtomButton class="submit-btn" @click.native="handlePublish">
+                <AtomButton
+                    @click.native="openModal('Publish')"
+                    class="btn"
+                >
                     Publish
                 </AtomButton>
             </div>
         </div>
         <!-- End of root -->
+
+        <!-- Modal -->
+        <div v-if="isModalOpen" class="modal-overlay">
+            <div class="modal-content">
+                <AtomHeading :level="'h5'" class="sub-heading" >{{ modalContent.title }}</AtomHeading>
+                <p>{{ modalContent.message }}</p>
+                <div class="modal-actions">
+                    <AtomButton
+                        @click.native="confirmAction"
+                        class="btn"
+                    >
+                        {{ modalContent.action }}
+                    </AtomButton>
+                    <AtomButton @click.native="closeModal" class="btn">
+                        Cancel
+                    </AtomButton>
+                </div>
+            </div>
+        </div>
+        <!-- End of Modal -->
     </div>
 </template>
 
@@ -286,6 +310,7 @@
 import { mapState, mapActions } from 'vuex';
 import AtomButton from '../components/atoms/AtomButton.vue';
 import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
+import AtomHeading from '@/components/atoms/AtomHeading.vue'
 import LoaderModal from '@/components/extras/LoaderModal.vue';
 
 export default {
@@ -293,7 +318,19 @@ export default {
     components: {
         AtomButton,
         AtomDatePicker,
+        AtomHeading,
         LoaderModal,
+    },
+    data() {
+        return {
+            clickedButton: null, // Tracks which button is clicked
+            isModalOpen: false, // Tracks modal visibility
+            modalContent: {
+                action: '',
+                message: '',
+                title: '',
+            },
+        };
     },
     computed: {
         ...mapState('reviewSpot', [
@@ -316,12 +353,6 @@ export default {
             'saveForm',
             'fetchSpotDetails',
         ]),
-        handlePublish() {
-            this.submitForm();
-        },
-        handleUpdate() {
-            this.saveForm();
-        },
         setSpotId() {
             this.SO.spotId = this.$route.query.spotid;
         },
@@ -335,6 +366,35 @@ export default {
                 title: 'Error',
                 type: 'is-danger',
             });
+        },
+
+        // Modal operations
+        openModal(action) {
+            console.log('Inside openmodal', action);
+            this.clickedButton = action;
+            this.isModalOpen = true;
+
+            if (action === 'Save') {
+                this.modalContent = {
+                    action: 'Save',
+                    message: 'Are you sure you want to save the changes?',
+                    title: 'Confirm Save',
+                };
+            } else if (action === 'Publish') {
+                this.modalContent = {
+                    action: 'Publish',
+                    message: 'Are you sure you want to publish this content?',
+                    title: 'Confirm Publish',
+                };
+            }
+        },
+        closeModal() {
+            this.isModalOpen = false;
+        },
+        confirmAction() {
+            console.log(`${this.clickedButton} action confirmed.`);
+            this.clickedButton === 'Save' ? this.saveForm() : this.submitForm();
+            this.closeModal();
         },
     },
     watch: {
@@ -402,7 +462,7 @@ export default {
         align-items: center;
         display: flex;
         flex-direction: column;
-        font-size: large;
+        /* font-size: large; */
         height: 100%;
         justify-content: center;
         padding: 4px 0;
@@ -461,16 +521,11 @@ export default {
     overflow-y: auto;
 }
 
-.submit-btn{
+.btn {
     border-radius: var(--border-default);
     font-weight: 700;
     margin: 4px;
     width: 15%;
-}
-.submit-btn:hover {
-    background-color: var(--primary-color);
-    color: var(--parkspot-black);
-    transform: translateY(-3px);
 }
 .sub-heading {
     color: var(--secondary-color);
@@ -479,6 +534,32 @@ export default {
     letter-spacing: normal;
     margin-bottom: 10px;
 }
+
+/* Modal Styling */
+
+.modal-overlay {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.modal-content {
+    background: var(--parkspot-white);
+    border-radius: var(--border-default);
+    padding: 20px;
+    text-align: center;
+}
+
+.modal-actions {
+    margin-top: 15px;
+}
+
 @media (max-width: 400px) {
     .form-field input,
     .form-field select,
@@ -530,7 +611,7 @@ export default {
     .sub-heading {
         font-size: 1.4rem;
     }
-    .submit-btn{
+    .btn {
         width: 25%;
     }
 }
