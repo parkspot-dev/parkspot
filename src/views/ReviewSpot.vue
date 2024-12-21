@@ -194,7 +194,6 @@
                         <AtomDatePicker
                             :assignedDate="Booking.startDate"
                             class="calendar"
-                            required
                             :size="'is-small'"
                             v-if="Booking.startDate"
                         >
@@ -203,7 +202,7 @@
                     <!-- End Date -->
                     <div class="form-field">
                         <label for="endDate"
-                            >End Date:<span style="color: red">*</span></label
+                            >End Date:</label
                         >
                         <AtomDatePicker
                             :assignedDate="Booking.endDate"
