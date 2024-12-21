@@ -10,7 +10,7 @@
                 <!-- SO Details -->
                 <div class="form-group">
                     <!-- Spot Id(This field is Not allowed to edit) -->
-                    <div class="readonly-field" >
+                    <div class="readonly-field">
                         <label for="spotId">SpotId:</label>
                         <input
                             class="noborder"
@@ -107,7 +107,7 @@
                             id="address"
                             placeholder="Enter SO address"
                             rows="2"
-                            style="margin-bottom: 36px;"
+                            style="margin-bottom: 36px"
                             v-model="SO.address"
                         ></textarea>
                     </div>
@@ -196,6 +196,7 @@
                             class="calendar"
                             required
                             :size="'is-small'"
+                            v-if="Booking.startDate"
                         >
                         </AtomDatePicker>
                     </div>
@@ -209,6 +210,7 @@
                             class="calendar"
                             required
                             :size="'is-small'"
+                            v-if="Booking.endDate"
                         >
                         </AtomDatePicker>
                     </div>
@@ -217,9 +219,10 @@
                         <label for="lastCallDate">Last Call Date:</label>
                         <AtomDatePicker
                             :assignedDate="Booking.lastCallDate"
+                            :size="'is-small'"
                             class="calendar"
                             required
-                            :size="'is-small'"
+                            v-if="Booking.lastCallDate"
                         >
                         </AtomDatePicker>
                     </div>
@@ -343,8 +346,8 @@ export default {
         },
     },
     mounted() {
-        // this.setSpotId();
-        // this.fetchSpotDetails();
+        this.setSpotId();
+        this.fetchSpotDetails();
     },
 };
 </script>
@@ -381,19 +384,30 @@ export default {
     align-items: flex-start;
     display: flex;
     flex-direction: column;
-    justify-content: center; 
+    justify-content: center;
     margin: 0% 9%;
 }
 
-.readonly-field{
+.readonly-field {
     align-items: flex-end;
     display: flex;
     gap: 2rem;
-    justify-content: start; 
+    justify-content: start;
     padding: 0 9%;
 
-    label{
+    label {
         font-weight: 700;
+    }
+
+    input {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        font-size: large;
+        height: 100%;
+        justify-content: center;
+        padding: 4px 0;
+        text-align: start;
     }
 }
 .form-field label {
@@ -486,7 +500,7 @@ export default {
         margin: 0% 0%;
     }
 
-    .readonly-field{
+    .readonly-field {
         padding: 0% 0%;
     }
     /* .form-field input,
