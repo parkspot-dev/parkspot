@@ -41,7 +41,7 @@ export default {
         istFormatter(date) {
             return new Intl.DateTimeFormat('en-US', {
                 timeZone: 'Asia/Kolkata',
-                dateStyle: 'medium'
+                dateStyle: 'medium',
             }).format(date);
         },
     },
@@ -49,14 +49,27 @@ export default {
 </script>
 
 <style lang="scss">
-  $datepicker-today-border: 1px solid gray;
-  .date-picker {
+$datepicker-today-border: 1px solid gray;
+.date-picker {
     border: $datepicker-today-border;
     padding: 0;
-  }
+}
 
- .input{
+.input {
     border: none;
- }
-</style>
+    outline: none;
 
+    &:focus {
+        background-color: white !important;
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+}
+
+.select{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+</style>
