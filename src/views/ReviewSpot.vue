@@ -471,8 +471,8 @@ export default {
     border: none;
     outline: none;
 }
-.form-field input,
-.form-field select,
+.form-field > input,
+.form-field > select,
 .form-section textarea {
     box-sizing: border-box;
     margin-top: 5px;

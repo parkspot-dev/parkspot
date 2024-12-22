@@ -66,10 +66,4 @@ $datepicker-today-border: 1px solid gray;
         outline: none !important;
     }
 }
-
-.select{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 </style>
