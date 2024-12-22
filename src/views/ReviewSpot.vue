@@ -243,13 +243,11 @@
                     <!-- Duration -->
                     <div class="form-field">
                         <label for="duration">Duration:</label>
-                        <textarea
-                            id="duration"
-                            maxlength="50"
+                        <input
                             placeholder="Enter Duration(max 50 characters)"
-                            rows="1"
+                            type="text"
                             v-model="Booking.duration"
-                        ></textarea>
+                        />
                     </div>
                     <!-- Remark -->
                     <div class="form-field">
@@ -268,16 +266,10 @@
 
             <!-- Update -->
             <div class="button-container">
-                <AtomButton
-                    @click.native="openModal('Save')"
-                    class="btn"
-                >
+                <AtomButton @click.native="openModal('Save')" class="btn">
                     Save
                 </AtomButton>
-                <AtomButton
-                    @click.native="openModal('Publish')"
-                    class="btn"
-                >
+                <AtomButton @click.native="openModal('Publish')" class="btn">
                     Publish
                 </AtomButton>
             </div>
@@ -287,13 +279,12 @@
         <!-- Modal -->
         <div v-if="isModalOpen" class="modal-overlay">
             <div class="modal-content">
-                <AtomHeading :level="'h5'" class="sub-heading" >{{ modalContent.title }}</AtomHeading>
+                <AtomHeading :level="'h5'" class="sub-heading">{{
+                    modalContent.title
+                }}</AtomHeading>
                 <p>{{ modalContent.message }}</p>
                 <div class="modal-actions">
-                    <AtomButton
-                        @click.native="confirmAction"
-                        class="btn"
-                    >
+                    <AtomButton @click.native="confirmAction" class="btn">
                         {{ modalContent.action }}
                     </AtomButton>
                     <AtomButton @click.native="closeModal" class="btn">
@@ -310,7 +301,7 @@
 import { mapState, mapActions } from 'vuex';
 import AtomButton from '../components/atoms/AtomButton.vue';
 import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
-import AtomHeading from '@/components/atoms/AtomHeading.vue'
+import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
 
 export default {
@@ -448,9 +439,9 @@ export default {
 }
 
 .readonly-field {
-    align-items: flex-end;
+    align-items: flex-start;
     display: flex;
-    gap: 2rem;
+    flex-direction: column;
     justify-content: start;
     padding: 0 9%;
 
@@ -462,7 +453,6 @@ export default {
         align-items: center;
         display: flex;
         flex-direction: column;
-        /* font-size: large; */
         height: 100%;
         justify-content: center;
         padding: 4px 0;
