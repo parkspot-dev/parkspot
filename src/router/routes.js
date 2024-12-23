@@ -26,7 +26,8 @@ export const pages = {
     BOOKING_PORTAL          : "/internal/booking-portal",
     APP                     : "/app",
     PRIVACY                 : "/privacy",
-    REGISTER_REQUEST        : "/internal/register-request",    
+    REGISTER_REQUEST        : "/internal/register-request",  
+    SPOT_REQUESTS           : "/internal/spot-requests"  
 };
 
 export const routes = [
@@ -45,6 +46,7 @@ export const routes = [
         name: 'Faq',
         component: () => import('@/views/PageFaq.vue'),
     },
+
 
     {
         path: pages.ABOUT,
@@ -100,6 +102,11 @@ export const routes = [
         path: pages.SEARCH_PORTAL,
         name: 'SearchPortal',
         component: () => import('@/views/PageSearchPortal.vue'),
+    },
+    {
+        path: pages.SPOT_REQUESTS,
+        name: 'spotRequest',
+        component: () => import('@/views/PageSpotRequest.vue')
     },
     {
         path: pages.PAYMENTGATEWAY,

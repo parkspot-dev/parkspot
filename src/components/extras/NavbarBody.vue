@@ -41,29 +41,29 @@
                                             Blogs
                                         </router-link>
                                     </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="menu-item">
-                            <span class="menu-title">Services</span>
-                            <!-- menu dropdown -->
-                            <div class="menu-item-dropdown">
-                                <ul>
                                     <li>
-                                        <router-link :to="{ name: 'VOPortal' }">
-                                            Request Spot
-                                        </router-link>
-                                    </li>
-                                    <li>
-                                        <router-link :to="{ name: 'SOPortal' }">
-                                            Register Spot
+                                        <router-link :to="{ name: 'Faq' }">
+                                            FAQ
                                         </router-link>
                                     </li>
                                 </ul>
                             </div>
                         </li>
                         <li class="menu-item">
-                            <a href="/faq" style="color:var(--parkspot-black); font-weight:500;">FAQ</a>
+                            <router-link
+                                class="menu-link"
+                                :to="{ name: 'VOPortal' }"
+                            >
+                                Request Spot
+                            </router-link>
+                        </li>
+                        <li class="menu-item">
+                            <router-link
+                                class="menu-link"
+                                :to="{ name: 'SOPortal' }"
+                            >
+                                Register Spot
+                            </router-link>
                         </li>
                     </ul>
                 </div>
@@ -206,18 +206,24 @@
                                         </p>
                                         <b-icon icon="chevron-right"> </b-icon>
                                     </li>
-                                    <li
-                                        class="scroll-item"
-                                        @click="toggleSlide(3)"
-                                    >
+                                    <li class="scroll-item">
                                         <p>
-                                            <span> Services </span>
+                                            <router-link
+                                                class="menu-link"
+                                                :to="{ name: 'VOPortal' }"
+                                            >
+                                                Request Spot
+                                            </router-link>
                                         </p>
-                                        <b-icon icon="chevron-right"> </b-icon>
                                     </li>
                                     <li class="scroll-item">
                                         <p>
-                                            <a href="/faq" style="color: var(--parkspot-black); font-weight: 400;">FAQ</a>
+                                            <router-link
+                                                class="menu-link"
+                                                :to="{ name: 'SOPortal' }"
+                                            >
+                                                Register Spot
+                                            </router-link>
                                         </p>
                                     </li>
                                 </ul>
@@ -335,44 +341,13 @@
                                             </router-link>
                                         </p>
                                     </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- service slide -->
-                        <div
-                            :class="[
-                                'menu-slide',
-                                activeSlide === 3 ? 'active-slide' : '',
-                            ]"
-                        >
-                            <div class="slide-header">
-                                <i
-                                    class="back-button"
-                                    @click="backToMainScroll"
-                                >
-                                    <b-icon icon="arrow-left"> </b-icon>
-                                </i>
-                                <p class="slide-header-title">Services</p>
-                            </div>
-                            <div class="scroll-section">
-                                <ul class="scroll-items">
                                     <li class="scroll-item">
                                         <p @click="toggleMobileNav">
                                             <router-link
                                                 class="nav-link"
-                                                :to="{ name: 'VOPortal' }"
+                                                :to="{ name: 'Faq' }"
                                             >
-                                                Request Spot
-                                            </router-link>
-                                        </p>
-                                    </li>
-                                    <li class="scroll-item">
-                                        <p @click="toggleMobileNav">
-                                            <router-link
-                                                class="nav-link"
-                                                :to="{ name: 'SOPortal' }"
-                                            >
-                                                Register Spot
+                                                FAQ
                                             </router-link>
                                         </p>
                                     </li>
