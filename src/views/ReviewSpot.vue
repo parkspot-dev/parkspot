@@ -551,10 +551,8 @@ export default {
 }
 
 @media (max-width: 400px) {
-    .form-field input,
-    .form-field select,
-    .form-section textarea {
-        width: 10%;
+    .form-field{
+        padding: 0 10px;
     }
     .form-group {
         padding-bottom: 15%;
