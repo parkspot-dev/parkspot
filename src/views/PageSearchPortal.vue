@@ -41,7 +41,7 @@ import { PAGE_TITLE } from '@/constant/constant';
 import { mayaClient } from '@/services/api';
 import { mapActions, mapState } from 'vuex';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
-import { getActiveTabStatusLabel } from '../constant/enums'
+import { getActiveTabStatusLabel } from '../constant/enums';
 
 export default {
     name: 'PageSearchPortal',
@@ -152,11 +152,17 @@ export default {
                 // This will hamper interested VO section experience,
                 // because interested VO does not change the URL and
                 // reload the page will take to /search-portal
-                onConfirm: this.handleConfirm
+                onConfirm: this.handleConfirm,
             });
         },
         async searchRequestWithMobile(voMobile) {
             if (voMobile != '') {
+                // Sanitize Mobile Number
+                const sanitizeMobileNumber = this.sanitizeMobile(voMobile);
+
+                if(!sanitizeMobileNumber){
+                    
+                }
                 // Update Search Text with voMobile
                 this.updateMobileInput(voMobile);
                 this.$router.push({
@@ -224,23 +230,34 @@ export default {
             });
             window.open(routeData.href, '_blank');
         },
-        handleConfirm(){
-                    // Make Mobile Input Empty
-                    if (this.searchMobile) {
-                        this.updateMobileInput('');
-                    }
-                    // Make LatLngInput to empty
-                    if (this.SOLatLngInput) {
-                        this.updateSOLatLngInput('');
-                    }
-                    // Reset Error
-                    this.resetError();
-                    // Push Back
-                    this.$router.push({
-                        name: 'SearchPortal',
-                        query: { tab: getActiveTabStatusLabel(this.activeTab) },
-                    });
-        }
+        handleConfirm() {
+            // Make Mobile Input Empty
+            if (this.searchMobile) {
+                this.updateMobileInput('');
+            }
+            // Make LatLngInput to empty
+            if (this.SOLatLngInput) {
+                this.updateSOLatLngInput('');
+            }
+            // Reset Error
+            this.resetError();
+            // Push Back
+            this.$router.push({
+                name: 'SearchPortal',
+                query: { tab: getActiveTabStatusLabel(this.activeTab) },
+            });
+        },
+
+        // Sanitize mobile number
+        sanitizeMobile(input) {
+            console.log("Before sanitize", input);
+            const sanitized = input.replace(/[^\d]/g, '');
+            console.log("After sanitize", sanitized);
+            if (sanitized.length === 10 && /^[6-9]/.test(sanitized)) {
+                return `+91${sanitized}`;
+            }
+            return null; // Invalid number
+        },
     },
     watch: {
         hasError(error) {
