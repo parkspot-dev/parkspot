@@ -1,7 +1,7 @@
-import { getSpotRequestStatusLabel as getSpotStatus } from "../../constant/enums";
 import { getParkingSizeLabel as getParkingSize } from "../../constant/enums";
 import { getRentUnitLabel as getRentUnit } from "../../constant/enums";
 import { getSiteTypeLabel as getSiteType } from "../../constant/enums";
+import { getSpotRequestStatusLabel as getSpotStatus } from "../../constant/enums";
 import { mayaClient } from '@/services/api';
 
 const state = {
@@ -37,6 +37,7 @@ const state = {
     errorMessage: '',
     isLoading: false,
 };
+
 const mutations = {
     'set-error'(state, { field, message }) {
         state[field] = message;
@@ -56,33 +57,43 @@ const mutations = {
         state.SO = { ...state.SO, ...formData.SO };
         state.Rent = { ...state.Rent, ...formData.Rent };
         state.Booking = { ...state.Booking, ...formData.Booking };
-    },
-    'update-latlong'(state, latlong) {
-        state.SO.latlong = latlong;
     }
 };
 
 const actions = {
-
     // Validate Latitude and Longitude type
-    validateLatLong({ commit, input }) {
-        const [latitudeString, longitudeString] = input.split(",");
-        // Trim any leading or trailing whitespace
-        const latitude = parseFloat(latitudeString.trim());
-        const longitude = parseFloat(longitudeString.trim());
-
-        // Check if both latitude and longitude are valid numbers (not NaN)
+    validateLatLong({ commit, state }) {
+        const input = state.SO.latlong;
+        // Check for empty input
+        if (!input || typeof input !== 'string') {
+            commit('set-error', {
+                field: 'latlongError',
+                message: 'Latitude and longitude are required and must be a non-empty string.',
+            });
+            return;
+        }
+        // Split input into latitude and longitude
+        const [latitudeString, longitudeString] = input.split(",").map((str) => str.trim());
+        // Check if input has exactly one comma and valid components
+        if (!latitudeString || !longitudeString || input.split(",").length !== 2) {
+            commit('set-error', {
+                field: 'latlongError',
+                message: 'Latitude and longitude must be separated by exactly one comma. Eg. 10.00, 12.00',
+            });
+            return;
+        }
+        // Convert strings to floats
+        const latitude = parseFloat(latitudeString);
+        const longitude = parseFloat(longitudeString);
+        // Check if parsed values are valid numbers
         if (isNaN(latitude) || isNaN(longitude)) {
             commit('set-error', {
-                field: 'latLongError', // Use a combined error field
+                field: 'latlongError',
                 message: 'Latitude and longitude must be valid floats separated by a comma. Eg. 10.00, 12.00',
             });
+            return;
         }
-        else {
-            commit('set-error', { field: 'latlongError', message: '' });
-            // const latlong = commit('combine-lat-long', latitude, longitude);
-            // commit('update-latlong', latlong);
-        }
+        commit('set-error', { field: 'latlongError', message: '' });
     },
 
     // Validate Mobile length
@@ -93,16 +104,12 @@ const actions = {
                 field: 'mobileError',
                 message: 'Mobile number must be exactly 10 digits.',
             });
-        } else {
-            commit('set-error', { field: 'mobileError', message: '' });
+            return;
         }
+        commit('set-error', { field: 'mobileError', message: '' });
     },
 
-    combineLatLong(latitude, longitude) {
-        return `${latitude},${longitude}`;
-    },
-
-    // Fetch data [using spotId fetched from url] when the webpage is mounted
+    // Fetch spotdata [using spotId fetched from url] when the webpage is mounted
     async fetchSpotDetails({ commit, state }) {
         commit('set-loading', true);
         const spotInfo = await mayaClient.get
@@ -111,7 +118,7 @@ const actions = {
             SO: {
                 spotId: spotInfo.ID,
                 userName: spotInfo.UserName,
-                // latlong: combineLatLong(spotInfo.latitude, spotInfo.longitude),
+                latlong: `${spotInfo.Latitude},${spotInfo.Longitude}`,
                 city: spotInfo.City,
                 area: spotInfo.Area,
                 fullName: spotInfo.FullName,
@@ -143,6 +150,7 @@ const actions = {
     async validateFormFields({ dispatch }) {
         await Promise.all([
             dispatch('validateMobile'),
+            dispatch('validateLatLong'),
         ]);
     },
 
@@ -150,11 +158,70 @@ const actions = {
     hasErrors({ state }) {
         return (
             state.mobileError ||
-            state.latitudeError ||
-            state.longitudeError
+            state.latlongError
         );
     },
+
+    // Validates form fields and checks for errors.
+    async handleFormErrors({ dispatch, commit }) {
+        commit('reset-global-Error');
+        await dispatch('validateFormFields');
+        if (await dispatch('hasErrors')) {
+            commit('set-global-error', 'Please fix the errors in the form before submitting.');
+            return false; 
+        }
+        return true; 
+    },
+
+    // Updates the spot request details
+    async updateSpotRequest({ state }) {
+        const [latitude, longitude] = state.SO.latlong.split(',').map(parseFloat);
+        const spotRequest = {
+            ID: state.SO.spotId,
+            Name: state.SO.fullName,
+            Lat: latitude,
+            Long: longitude,
+            City: state.SO.city,
+            Area: state.SO.area,
+            Address: state.SO.address,
+            BaseAmount: state.Rent.baseAmount,
+            TotalSlots: state.Rent.totalSlots,
+            RentUnit: state.Rent.rentUnit,
+            Size: state.Rent.parkingSize,
+            Type: state.Rent.siteType,
+            StartDate: state.Booking.startDate,
+            EndDate: state.Booking.endDate,
+            MinDuration: state.Booking.duration,
+            Status: state.Booking.spotrequestStatus,
+            Remark: state.Booking.remark,
+            LastCallDate: state.Booking.lastCallDate,
+        };
+        return await mayaClient.patch('/owner/spot-request', spotRequest);
+    },
+
+    // saveForm validates form data for errors and updates the spot request data on the backend (for temporary saving or drafts)
+    async saveForm({ dispatch, commit }) {
+        const isValid = await dispatch('handleFormErrors');
+        if (!isValid) {
+            return;
+        }
+        const response = await dispatch('updateSpotRequest');
+        commit('set-global-error', 'Your request was saved successfully');
+        return response;
+    },
+
+    // Submits the spot request form for final processing after validating any errors and updating the backend data.
+    async submitForm({ state, dispatch, commit }) {
+        const isValid = await dispatch('handleFormErrors');
+        if (!isValid) {
+            return;
+        }
+        const response = await mayaClient.post(`/owner/spot-update?spot-id=${state.SO.spotId}`);
+        commit('set-global-error', 'Your request was registered successfully');
+        return response.data;
+    }
 };
+
 export default {
     namespaced: true,
     state,

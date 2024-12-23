@@ -89,6 +89,7 @@
                             ></label
                         >
                         <input
+                            @input="validateLatLong"
                             id="latlong"
                             placeholder="Enter SO latitude, longitude"
                             required
