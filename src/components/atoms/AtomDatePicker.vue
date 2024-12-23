@@ -48,7 +48,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $datepicker-today-border: 1px solid gray;
 .date-picker {
     border: $datepicker-today-border;
