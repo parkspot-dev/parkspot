@@ -568,19 +568,7 @@ export default {
     .readonly-field {
         padding: 0% 0%;
     }
-    /* .form-field input,
-    .form-field select,
-    .form-section textarea {
-         margin-left: auto;
-        transition: border-color 0.1s ease, background-color 0.1s ease;
-        width: 70%; 
-        display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center; 
-    margin: 0% 9%;
-    background-color: red;
-    } */
+
     .form-group {
         gap: 1%;
         grid-template-columns: 1fr;
