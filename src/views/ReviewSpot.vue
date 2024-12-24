@@ -346,7 +346,7 @@ export default {
             'fetchSpotDetails',
         ]),
         setSpotId() {
-            this.SO.spotId = this.$route.query.spotid;
+            this.SO.spotId = this.$route.query.requestId;
         },
         alertError(msg) {
             this.$buefy.dialog.alert({
