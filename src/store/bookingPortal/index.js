@@ -29,7 +29,6 @@ const state = {
     activeBookings: [],
     agents: {},
     bookingDetails: null,
-    bookingId : null,
     errorMessage: String,
     hasError: false,
     // State to preserve the original data before any updates or changes.
@@ -86,10 +85,6 @@ const mutations = {
     'set-updated-fields'(state, fields) {
         state.updatedFields = fields;
     },
-
-    'set-booking-id'(state, id){
-        state.bookingId = id;
-    }
 };
 
 const actions = {
@@ -98,8 +93,8 @@ const actions = {
     },
 
     async getBookingDetails({ commit, state }, bookingId) {
-        // Use bookingId if it's provided; otherwise, take it from state.bookingId
-        const bookingID = bookingId ? bookingId : state.bookingId
+        // Use bookingId if it's provided; otherwise, take it from state.searchText
+        const bookingID = bookingId ? bookingId : state.searchText
         commit('set-loading', true);
         const res = await mayaClient.get(
             '/booking/details?booking-id=' + bookingID,
@@ -173,8 +168,8 @@ const actions = {
     },
 
     // Update Search Text
-    updateSearchText({ commit, state }) {
-        commit('set-search-text', state.bookingId);
+    updateSearchText({ commit, }, bookingId) {
+        commit('set-search-text', bookingId);
     },
 
     // Reset booking details to null
@@ -185,11 +180,6 @@ const actions = {
     setUpdatedFields({ commit }, fields) {
         commit('set-updated-fields', fields);
     },
-
-    setBookingID({commit}, id){
-        const bookingID = id ? id : '';
-        commit('set-booking-id', bookingID);
-    }
 };
 
 export default {

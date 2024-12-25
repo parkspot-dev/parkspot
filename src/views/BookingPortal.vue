@@ -48,7 +48,6 @@ export default {
     async created() {
         if (this.$route.query['bookingId'] != undefined) {
             const bookingId = this.$route.query['bookingId'];
-            this.setBookingID(bookingId);
             this.updateSearchText(bookingId);
             this.getAgents();
             this.getBookingDetails(bookingId);
@@ -79,7 +78,6 @@ export default {
             'getAgents',
             'updateSearchText',
             'resetBookingDetails',
-            'setBookingID'
         ]),
         searchBooking(bookingId) {
             this.updateSearchText(bookingId);
@@ -94,7 +92,6 @@ export default {
         async onClearInput() {
             if (this.$route.query.bookingId) {
                 this.updateSearchText('');
-                this.setBookingID('')
                 this.resetBookingDetails();
                 // Navigate to the main booking portal route
                 this.$router.push({ name: 'booking-portal' });
