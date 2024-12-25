@@ -251,19 +251,19 @@ export function getActiveTabStatusLabel(activeTabStatus) {
 }
 
 export const ParkingSize = Object.freeze({
-    Bike: 0,
-    Compact: 1,
-    FullSize: 2,
-    Hatchback: 4,
-    Unspecified: 5,
+    Unspecified: 0,
+    HatchBack: 1,
+    Compact: 2,
+    FullSize: 3,
+    Bike: 4,
 });
 
 export const ParkingSizeLabels = [
-    'Bike',
+    'Unspecified',
+    'Hatchback',
     'Compact',
     'FullSize',
-    'Hatchback',
-    'Unspecified',
+    'Bike',
 ];
 
 /**
@@ -277,17 +277,17 @@ export function getParkingSizeLabel(parkingSize) {
 
 
 export const RentUnit = Object.freeze({
-    PerSqft: 0,
-    PerHour: 1,
-    PerDay: 2,
-    PerSqftMonth: 3,
+    PerHour: 0,
+    PerDay: 1,
+    PerMonth: 2,
+    PerSqFtPerMonth: 3,
 });
 
 export const RentUnitLabels = [
-    'PerSqft',
     'PerHour',
     'PerDay',
-    'PerSqftMonth',
+    'PerMonth',
+    'PerSqFtPerMonth',
 ];
 
 /**
@@ -300,17 +300,17 @@ export function getRentUnitLabel(rentUnit) {
 }
 
 export const SiteType = Object.freeze({
-    Book: 0,
-    ParkingYard: 1,
-    Register: 2,
-    SearchOnly: 3,
+    SearchOnly: 0,
+    Register: 1,
+    Book: 2,
+    ParkingYard: 3,
 });
 
 export const SiteTypeLabels = [
+    'SearchOnly',
+    'Register',
     'Book',
     'ParkingYard',
-    'Register',
-    'SearchOnly',
 ];
 
 /**

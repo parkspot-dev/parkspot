@@ -150,10 +150,10 @@
                     <div class="form-field">
                         <label for="rentUnit">Rent Unit:</label>
                         <select v-model="Rent.rentUnit">
-                            <option value="PerSqftMonth">Per Sqft</option>
+                            <option value="PerSqFtPerMonth">PerSqFtPerMonth</option>
                             <option value="PerHour">Per Hour</option>
                             <option value="PerDay">Per Day</option>
-                            <option value="PerSqftMonth">Per Sqft Month</option>
+                            <option value="PerMonth">Per Month</option>
                         </select>
                     </div>
                     <!-- Parking Size -->
@@ -231,11 +231,11 @@
                             <option value="Cancelled">Cancelled</option>
                             <option value="Denied">Denied</option>
                             <option value="Duplicate">Duplicate</option>
-                            <option value="NotSet">Not Set</option>
+                            <option value="Not Set">Not Set</option>
                             <option value="Processing">Processing</option>
                             <option value="Promoted">Promoted</option>
                             <option value="Registered">Registered</option>
-                            <option value="RequestedModification">
+                            <option value="Requested Modification">
                                 Requested Modification
                             </option>
                             <option value="Verified">Verified</option>
