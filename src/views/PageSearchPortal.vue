@@ -160,8 +160,7 @@ export default {
                 // Sanitize Mobile Number
                 const sanitizeMobileNumber = this.sanitizeMobile(voMobile);
 
-                if(!sanitizeMobileNumber){
-                    
+                if (!sanitizeMobileNumber) {
                 }
                 // Update Search Text with voMobile
                 this.updateMobileInput(voMobile);
@@ -250,13 +249,20 @@ export default {
 
         // Sanitize mobile number
         sanitizeMobile(input) {
-            console.log("Before sanitize", input);
-            const sanitized = input.replace(/[^\d]/g, '');
-            console.log("After sanitize", sanitized);
-            if (sanitized.length === 10 && /^[6-9]/.test(sanitized)) {
-                return `+91${sanitized}`;
+            console.log('Before sanitize:', input);
+
+            // filter all non-digints characters
+            let sanitized = input.replace(/[^\d]/g, '');
+            console.log('After filterd', sanitized);
+            // if this constains extra 91 (Country code)
+            if (sanitized.length > 10 && sanitized.startsWith('91')) {
+                sanitized = sanitized.slice(2);
+                console.log('After removing 91', sanitized);
             }
-            return null; // Invalid number
+
+            if (sanitized.length !== 10) {
+                return null;
+            }
         },
     },
     watch: {
