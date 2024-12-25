@@ -485,7 +485,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import {
     PaymentStatus,
     getPaymentStatusLabel,
@@ -513,11 +513,11 @@ export default {
 
     data() {
         return {
-            toolTipLabel: 'Copy payment url!',
-            editField: null,
-            currBookingDetails: null,
             bookingStatusLabels: BookingStatusLabels,
+            currBookingDetails: null,
+            editField: null,
             paymentPeriodicityLabels: PaymentPeriodicityLabels,
+            toolTipLabel: 'Copy payment url!',
         };
     },
     beforeMount() {
@@ -530,9 +530,11 @@ export default {
     },
     computed: {
         ...mapState('bookingPortal', [
-            'bookingDetails',
-            'paymentDetails',
             'agents',
+            'bookingDetails',
+            'initialActiveBookingDetails',
+            'paymentDetails',
+            'updatedFields',
         ]),
         sdpURL() {
             return this.$router.resolve({
@@ -559,6 +561,8 @@ export default {
     },
 
     methods: {
+        ...mapActions('bookingPortal', ['setUpdatedFields']),
+
         getPaymentStatusLabel(paymentStatus) {
             return getPaymentStatusLabel(paymentStatus);
         },
@@ -634,6 +638,24 @@ export default {
 
         saveField() {
             this.editField = null;
+
+            // Remove Payments field from currentBookingDetails.Booking object
+            delete this.currBookingDetails.Booking.Payments;
+
+            // Iterate through the loop to check for updated fields.
+            const updatedArray = [];
+            for (const key in this.initialActiveBookingDetails) {
+                if (
+                    !updatedArray.includes(key) &&
+                    !this.onCompare(
+                        this.initialActiveBookingDetails[key],
+                        this.currBookingDetails.Booking[key],
+                    )
+                ) {
+                    updatedArray.push(key);
+                }
+            }
+            this.setUpdatedFields(updatedArray);
             this.$emit(
                 'update-booking-details',
                 this.currBookingDetails.Booking,
@@ -651,6 +673,17 @@ export default {
 
         onEndDateUpdate(updatedEndDate) {
             this.currBookingDetails.Booking.EndTime = updatedEndDate;
+        },
+        // Function to compare initial value and current value
+        onCompare(initialValue, currentValue) {
+            if (Array.isArray(initialValue) && Array.isArray(currentValue)) {
+                return (
+                    JSON.stringify(initialValue) ===
+                    JSON.stringify(currentValue)
+                );
+            } else {
+                return initialValue === currentValue;
+            }
         },
     },
 };
