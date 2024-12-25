@@ -92,12 +92,10 @@ const actions = {
         commit('set-agent-list', await mayaClient.get('/auth/user/agents'));
     },
 
-    async getBookingDetails({ commit, state }, bookingId) {
-        // Use bookingId if it's provided; otherwise, take it from state.searchText
-        const bookingID = bookingId ? bookingId : state.searchText
+    async getBookingDetails({ commit }, bookingId) {
         commit('set-loading', true);
         const res = await mayaClient.get(
-            '/booking/details?booking-id=' + bookingID,
+            '/booking/details?booking-id=' + bookingId,
         );
         if (res.Booking) {
             commit('update-booking', res);
@@ -168,8 +166,8 @@ const actions = {
     },
 
     // Update Search Text
-    updateSearchText({ commit, }, bookingId) {
-        commit('set-search-text', bookingId);
+    updateSearchText({ commit }, text) {
+        commit('set-search-text', text);
     },
 
     // Reset booking details to null

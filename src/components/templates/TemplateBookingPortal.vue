@@ -640,7 +640,7 @@ export default {
             this.editField = null;
 
             // Remove Payments field from currentBookingDetails.Booking object
-            delete this.initialActiveBookingDetails.Payments;
+            delete this.currBookingDetails.Booking.Payments;
 
             // Iterate through the loop to check for updated fields.
             const updatedArray = [];
