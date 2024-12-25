@@ -185,7 +185,7 @@ const actions = {
     setUpdatedFields({ commit }, fields) {
         commit('set-updated-fields', fields);
     },
-
+  
     setBookingID({commit}, id){
         const bookingID = id ? id : '';
         commit('set-booking-id', bookingID);
