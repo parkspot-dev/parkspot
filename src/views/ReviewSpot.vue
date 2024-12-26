@@ -369,13 +369,13 @@ export default {
             if (action === 'Save') {
                 this.modalContent = {
                     action: 'Save',
-                    message: 'Are you sure you want to save the changes?',
+                    message: 'This will only save the details. Spot will NOT is shown to customers.',
                     title: 'Confirm Save',
                 };
             } else if (action === 'Publish') {
                 this.modalContent = {
                     action: 'Publish',
-                    message: 'Are you sure you want to publish this content?',
+                    message: 'This saves the details and start showing it to customers.',
                     title: 'Confirm Publish',
                 };
             }
