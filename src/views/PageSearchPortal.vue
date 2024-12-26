@@ -158,16 +158,27 @@ export default {
         async searchRequestWithMobile(voMobile) {
             if (voMobile != '') {
                 // Sanitize Mobile Number
-                const sanitizeMobileNumber = this.sanitizeMobile(voMobile);
-
+                const sanitizeMobileNumber = this.sanitizeMobile(
+                    voMobile.trim(),
+                );
                 if (!sanitizeMobileNumber) {
+                    this.$buefy.dialog.alert({
+                        title: 'Error',
+                        message: 'Invalid Mobile Number',
+                        type: 'is-danger',
+                        hasIcon: true,
+                        icon: 'alert-circle',
+                        ariaRole: 'alertdialog',
+                        ariaModal: true,
+                    });
+                } else {
+                    // Update Search Text with voMobile
+                    this.updateMobileInput(sanitizeMobileNumber);
+                    this.$router.push({
+                        path: this.$route.fullPath,
+                        query: { mobile: sanitizeMobileNumber },
+                    });
                 }
-                // Update Search Text with voMobile
-                this.updateMobileInput(voMobile);
-                this.$router.push({
-                    path: this.$route.fullPath,
-                    query: { mobile: voMobile },
-                });
             }
         },
         async searchRequestWithLatLng(latlng) {
@@ -249,20 +260,18 @@ export default {
 
         // Sanitize mobile number
         sanitizeMobile(input) {
-            console.log('Before sanitize:', input);
-
             // filter all non-digints characters
             let sanitized = input.replace(/[^\d]/g, '');
-            console.log('After filterd', sanitized);
             // if this constains extra 91 (Country code)
             if (sanitized.length > 10 && sanitized.startsWith('91')) {
                 sanitized = sanitized.slice(2);
-                console.log('After removing 91', sanitized);
             }
 
             if (sanitized.length !== 10) {
                 return null;
             }
+
+            return sanitized;
         },
     },
     watch: {
