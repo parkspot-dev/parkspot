@@ -158,9 +158,7 @@ export default {
         async searchRequestWithMobile(voMobile) {
             if (voMobile != '') {
                 // Sanitize Mobile Number
-                const sanitizeMobileNumber = this.sanitizeMobile(
-                    voMobile.trim(),
-                );
+                const sanitizeMobileNumber = this.sanitizeMobile(voMobile);
                 if (!sanitizeMobileNumber) {
                     this.$buefy.dialog.alert({
                         title: 'Error',
