@@ -42,55 +42,55 @@ export default {
     },
 
     mounted() {
-                this.getMapAccessToken().then(() => {
-                    if (this.accessToken) {
-                        mapboxgl.accessToken = this.accessToken;
+        this.getMapAccessToken().then(() => {
+            if (this.accessToken) {
+                mapboxgl.accessToken = this.accessToken;
 
-                        // Create map
-                        this.map = new mapboxgl.Map(this.mapConfig);
+                // Create map
+                this.map = new mapboxgl.Map(this.mapConfig);
 
-                        // Create popup
-                        const popup = new mapboxgl.Popup({ offset: 25 }).setText(
-                            'Your current location.',
-                        );
+                // Create popup
+                const popup = new mapboxgl.Popup({ offset: 25 }).setText(
+                    'Your current location.',
+                );
 
-                        // Create marker
-                        this.marker = new mapboxgl.Marker({
-                            draggable: this.drag,
-                        })
-                            .setLngLat(this.mapConfig.center)
+                // Create marker
+                this.marker = new mapboxgl.Marker({
+                    draggable: this.drag,
+                })
+                    .setLngLat(this.mapConfig.center)
+                    .setPopup(popup)
+                    .addTo(this.map);
+
+                if (this.drag) {
+                    this.map.on('click', (e) => {
+                        this.marker
                             .setPopup(popup)
+                            .setLngLat(e.lngLat)
                             .addTo(this.map);
+                        this.updateMapConfig(this.marker.getLngLat());
+                        this.$emit('location', this.marker.getLngLat());
+                    });
 
-                        if (this.drag) {
-                            this.map.on('click', (e) => {
-                                this.marker
-                                    .setPopup(popup)
-                                    .setLngLat(e.lngLat)
-                                    .addTo(this.map);
-                                this.updateMapConfig(this.marker.getLngLat());
-                                this.$emit('location', this.marker.getLngLat());
-                            });
+                    this.marker.on('dragend', () => {
+                        this.updateMapConfig(this.marker.getLngLat());
+                        this.$emit('location', this.marker.getLngLat());
+                    });
+                }
 
-                            this.marker.on('dragend', () => {
-                                this.updateMapConfig(this.marker.getLngLat());
-                                this.$emit('location', this.marker.getLngLat());
-                            });
-                        }
+                // Add parking site markers
+                for (const spot of this.spotsList) {
+                    const encodedSpotId = encodeURIComponent(spot.ID);
+                    const psMarker = document.createElement('div');
 
-                        // Add parking site markers
-                        for (const spot of this.spotsList) {
-                            const encodedSpotId = encodeURIComponent(spot.ID);
-                            const psMarker = document.createElement('div');
+                    psMarker.className = 'marker';
+                    psMarker.style.backgroundImage = 'url(' + this.img + ')';
+                    psMarker.style.width = '50px';
+                    psMarker.style.height = '50px';
+                    psMarker.style.backgroundSize = '110%';
 
-                            psMarker.className = 'marker';
-                            psMarker.style.backgroundImage = 'url(' + this.img + ')';
-                            psMarker.style.width = '50px';
-                            psMarker.style.height = '50px';
-                            psMarker.style.backgroundSize = '110%';
-
-                            const psPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-                                `
+                    const psPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+                        `
         <style>
             .name {
                 font-weight: bold;
@@ -149,15 +149,15 @@ export default {
           </button>
         </a>
         </div>`,
-                            );
+                    );
 
-                            new mapboxgl.Marker(psMarker)
-                                .setLngLat([spot.Long, spot.Lat])
-                                .setPopup(psPopup)
-                                .addTo(this.map);
-                        }
-                    }
-                });
+                    new mapboxgl.Marker(psMarker)
+                        .setLngLat([spot.Long, spot.Lat])
+                        .setPopup(psPopup)
+                        .addTo(this.map);
+                }
+            }
+        });
     },
 
     methods: {
@@ -186,7 +186,7 @@ export default {
                 const selectedKey = keys[randomIndex];
                 this.accessToken = selectedKey.token;
             } else {
-                console.error("Error while fetching map access token");
+                console.error('Error while fetching map access token');
             }
         },
     },
