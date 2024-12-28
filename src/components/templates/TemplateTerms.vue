@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <aside class="toc">
-      <div class="toc-sub">
-        <div id="vehicle-owner">
+        <div class="toc-heading">
           Vehicle Owner
         </div>
           <ul>
@@ -115,75 +114,73 @@
               </a>
             </li>
           </ul>
-          </div>
-          <div class="toc-sub">
-          <div id="spot-owner">
+          <div class="toc-heading">
           Spot Owner
-        </div>
+          </div>
         
-        <div>
-          <ul>
-            <li>
-              <a
-                href="#listing-creation"
-                :class="{ active: activeSection === 'listing-creation' }"
-                @click.prevent="scrollTo('listing-creation')"
-              >
-                Listing Creation
-              </a>
-            </li>
-          </ul>
-          <ul>
-            <li>
-              <a
-                href="#ownership-authentication"
-                :class="{ active: activeSection === 'ownership-authentication' }"
-                @click.prevent="scrollTo('ownership-authentication')"
-              >
-                Ownership Authentication
-              </a>
-            </li>
-          </ul>
-          <ul>
-            <li>
-              <a
-                href="#documentation-requirement"
-                :class="{ active: activeSection === 'documentation-requirement' }"
-                @click.prevent="scrollTo('documentation-requirement')"
-              >
-                Documentation Requirement
-              </a>
-            </li>
-          </ul>
-          <ul>
-            <li>
-              <a
-                href="#termination-services"
-                :class="{ active: activeSection === 'termination-services' }"
-                @click.prevent="scrollTo('termination-services')"
-              >
+          <div>
+            <ul>
+              <li>
+                <a
+                  href="#listing-creation"
+                  :class="{ active: activeSection === 'listing-creation' }"
+                  @click.prevent="scrollTo('listing-creation')"
+                >
+                  Listing Creation
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a
+                  href="#ownership-authentication"
+                  :class="{ active: activeSection === 'ownership-authentication' }"
+                  @click.prevent="scrollTo('ownership-authentication')"
+                >
+                  Ownership Authentication
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a
+                  href="#documentation-requirement"
+                  :class="{ active: activeSection === 'documentation-requirement' }"
+                  @click.prevent="scrollTo('documentation-requirement')"
+                >
+                  Documentation Requirement
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a
+                  href="#termination-services"
+                  :class="{ active: activeSection === 'termination-services' }"
+                  @click.prevent="scrollTo('termination-services')"
+                >
                 Termination of Services
-              </a>
-            </li>
-          </ul>
-          <ul>
-            <li>
-              <a
-                href="#customer-referral"
-                :class="{ active: activeSection === 'customer-referral' }"
-                @click.prevent="scrollTo('customer-referral')"
-              >
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a
+                  href="#customer-referral"
+                  :class="{ active: activeSection === 'customer-referral' }"
+                  @click.prevent="scrollTo('customer-referral')"
+                >
                 Customer Referral Restriction
-              </a>
-            </li>
-          </ul>
-          <ul>
-            <li>
-              <a
-                href="#monthly-service"
-                :class="{ active: activeSection === 'monthly-service' }"
-                @click.prevent="scrollTo('monthly-service')"
-              >
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a
+                  href="#monthly-service"
+                  :class="{ active: activeSection === 'monthly-service' }"
+                  @click.prevent="scrollTo('monthly-service')"
+                >
                 Monthly Service Fee
               </a>
             </li>
@@ -206,7 +203,7 @@
                 :class="{ active: activeSection === 'refund' }"
                 @click.prevent="scrollTo('refund')"
               >
-                Refund
+              Refund
               </a>
             </li>
           </ul>
@@ -216,8 +213,8 @@
                 href="#cancellation-policies"
                 :class="{ active: activeSection === 'cancellation-policies' }"
                 @click.prevent="scrollTo('cancellation-policies')"
-              >
-                Cancellation Policies
+              > 
+              Cancellation Policies
               </a>
             </li>
           </ul>
@@ -228,12 +225,11 @@
                 :class="{ active: activeSection === 'changes' }"
                 @click.prevent="scrollTo('changes')"
               >
-                Changes to These Terms and Conditions
+              Changes to These Terms and Conditions
               </a>
             </li>
           </ul>
-          </div>
-          </div>
+        </div>
     </aside>
 
     <main>
@@ -669,6 +665,14 @@ export default {
   width: 20%;
 }
 
+.toc-heading {
+  border-bottom: 2px solid var(--parkspot-black);
+  font-size: 1.2rem;
+  font-weight: var(--regular-font);
+  padding-bottom: 0.1rem;
+  text-transform: capitalize;
+}
+
 .toc ul li {
   position: relative;
   margin: 0.5rem 0.3rem;
@@ -704,24 +708,14 @@ main {
   margin-left: 22%;
   margin-right: 5%;
   transform: translateY(-26%);
-  top: 0;
-}
-
-#vehicle-owner,
-#spot-owner {
-  border-bottom: 2px solid var(--parkspot-black);
-  font-size: 1.2rem;
-  font-weight: var(--regular-font);
-  padding-bottom: 0.1rem;
-  text-transform: capitalize;
 }
 
 .vo {
   border-color: var(--secondary-color);
-  border-inline-start: 3px solid var(--secondary-color);
-  font-size: 1.5rem;
+  border-inline-start: 4px solid var(--secondary-color);
+  font-size: 1.8rem;
   font-weight: var(--semi-bold-font);
-  margin: 1rem 0;
+  margin: 1.5rem 0;
   padding: 1rem;
 }
 
