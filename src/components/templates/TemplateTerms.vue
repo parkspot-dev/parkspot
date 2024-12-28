@@ -4,7 +4,7 @@
       <h2>Table of Contents</h2>
       <div class="toc-sub">
         <div id="vehicle-owner">
-          Vehicle Owner: User who is seeking/finding a parking spot.
+          Vehicle Owner
         </div>
           <ul>
             <li>
@@ -119,7 +119,7 @@
           </div>
           <div class="toc-sub">
           <div id="spot-owner">
-          Spot Owner : User who is renting out his/her parking spot.
+          Spot Owner
         </div>
         
         <div>
@@ -621,37 +621,52 @@ export default {
     };
   },
   methods: {
-   scrollTo(id) {
-  const element = document.getElementById(id);
-  if (element) {
-    window.scrollTo({
-      top: element.offsetTop - 1, // Adjust offset as needed
-      behavior: 'smooth'
-    });
-    this.activeSection = id;
-  }
-},
+  scrollTo(id) {
+      const element = document.getElementById(id);
+      if (element) {
+        history.pushState(null, null, `#${id}`);
+        window.scrollTo({
+          top: element.offsetTop - 5, // Adjust offset as needed
+          behavior: 'smooth'
+        });
+        this.activeSection = id;
+      }
+    },
   },
+  mounted() {
+  const hash = window.location.hash.slice(1);
+  if (hash) {
+    const element = document.getElementById(hash);
+    if (element) {
+      const elementTop = element.offsetTop;
+      const windowHeight = window.innerHeight;
+      const offset = windowHeight * 0.10;
+      const scrollPosition = elementTop - offset;
+        window.scrollTo({
+        top: scrollPosition,
+        behavior: 'smooth',
+      });
+
+        this.activeSection = hash;
+      }
+    }
+  }
 };
 </script>
 
 <style scoped>
 
-main {
-  margin-left: 23%;
-  margin-top: -31%;
-}
-
-/* toc-table of contents */
+/* Table of Contents (TOC) */
 .toc {
   background: var(--parkspot-white);
   border-radius: var(--border-default);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
   height: fit-content;
-  max-height: 60vh;
+  max-height: 90vh;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
+  margin: 1rem 1rem; 
   position: sticky;
   top: 5rem;
   transition: box-shadow 0.3s ease, background-color 0.3s ease;
@@ -663,29 +678,31 @@ main {
   color: var(--parkspot-black);
   font-size: 1rem;
   font-weight: var(--bold-font);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   padding-bottom: 0.1rem;
   text-transform: uppercase;
 }
 
 .toc-sub {
-  margin: 2rem 0;
+  margin: 0.8rem 0;
 }
 
 .toc ul {
-  padding-left: 0;
+  padding-left: 1.5rem;
 }
 
 .toc ul li {
-  margin: 0.5rem 0;
+  position: relative;
+  margin: 0.5rem -1rem;
+  padding-left: 1rem; 
+  list-style: none;
 }
 
 .toc ul li a {
   color: var(--secondary-color);
   display: block;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: var(--regular-font);
-  padding-left: 1.2rem;
   text-decoration: none;
   transition: color 0.3s ease, text-decoration 0.3s ease;
 }
@@ -695,22 +712,72 @@ main {
   text-decoration: underline;
 }
 
+.toc ul li::before {
+  content: "•"; 
+  position: absolute;
+  left: 0; 
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem; 
+  color: var(--secondary-color);
+}
+
+main {
+  position: relative;
+  margin-left: 22%;
+  margin-right: 5%;
+  transform: translateY(-28%);
+  top: 0;
+}
+
 #vehicle-owner,
 #spot-owner {
   border-bottom: 2px solid var(--parkspot-black);
   font-size: 1.2rem;
   font-weight: var(--regular-font);
-  padding-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
   text-transform: capitalize;
 }
 
 .vo {
   border-color: var(--secondary-color);
   border-inline-start: 3px solid var(--secondary-color);
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: var(--semi-bold-font);
   margin: 1rem 0;
   padding: 1rem;
+}
+
+/* Mobile styles (screen width <= 768px) */
+@media screen and (max-width: 768px) {
+  .toc {
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 1rem;
+    position: static;
+    width: 100%; 
+  }
+  
+  main {
+    margin-left: 0;
+    margin-right: 0;
+    transform: translateY(0%);
+  }
+}
+
+/* Tablet styles (screen width between 769px and 1300px) */
+@media screen and (min-width: 769px) and (max-width: 1300px) {
+  .toc {
+    width: 28%;
+    margin: 0.8rem;
+  }
+  
+  main {
+    margin-left: 35%;
+    margin-right: 4%;
+    transform: translateY(-24%); 
+  }
 }
 
 </style>
