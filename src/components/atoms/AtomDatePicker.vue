@@ -1,11 +1,12 @@
 <template>
     <b-field>
         <b-datepicker
-            v-model="date"
-            placeholder="Click to select..."
             :date-formatter="istFormatter"
-            @input="onChange"
             :size="size"
+            @input="onChange"
+            class="date-picker"
+            placeholder="Click to select..."
+            v-model="date"
         >
         </b-datepicker>
     </b-field>
@@ -40,9 +41,29 @@ export default {
         istFormatter(date) {
             return new Intl.DateTimeFormat('en-US', {
                 timeZone: 'Asia/Kolkata',
-                dateStyle: 'medium'
+                dateStyle: 'medium',
             }).format(date);
         },
     },
 };
 </script>
+
+<style lang="scss" scoped>
+$datepicker-today-border: 1px solid gray;
+.date-picker {
+    border: $datepicker-today-border;
+    padding: 0;
+}
+
+.input {
+    border: none;
+    outline: none;
+
+    &:focus {
+        background-color: white !important;
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+}
+</style>

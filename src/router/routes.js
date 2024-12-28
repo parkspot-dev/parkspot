@@ -27,7 +27,7 @@ export const pages = {
     APP                     : "/app",
     PRIVACY                 : "/privacy",
     REGISTER_REQUEST        : "/internal/register-request",  
-    SPOT_REQUESTS           : "/internal/spot-requests"  
+    SPOT_REQUESTS           : "/internal/spot-requests"
 };
 
 export const routes = [
@@ -106,7 +106,7 @@ export const routes = [
     {
         path: pages.SPOT_REQUESTS,
         name: 'spotRequest',
-        component: () => import('@/views/PageSpotRequest.vue')
+        component: () => import('@/views/SpotRequest.vue')
     },
     {
         path: pages.PAYMENTGATEWAY,
