@@ -660,13 +660,14 @@ export default {
 .toc {
   background: var(--parkspot-white);
   border-radius: var(--border-default);
+  border: 10px solid var(--parkspot-white);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
   height: fit-content;
-  max-height: 90vh;
+  margin: 1rem 1rem; 
+  max-height: 85vh;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 1rem 1.5rem;
-  margin: 1rem 1rem; 
+  padding: 1rem 1rem;
   position: sticky;
   top: 5rem;
   transition: box-shadow 0.3s ease, background-color 0.3s ease;
@@ -726,7 +727,7 @@ main {
   position: relative;
   margin-left: 22%;
   margin-right: 5%;
-  transform: translateY(-28%);
+  transform: translateY(-26%);
   top: 0;
 }
 
@@ -768,15 +769,13 @@ main {
 
 /* Tablet styles (screen width between 769px and 1300px) */
 @media screen and (min-width: 769px) and (max-width: 1300px) {
-  .toc {
-    width: 28%;
-    margin: 0.8rem;
+  .toc{
+    width: 21%;
   }
-  
   main {
-    margin-left: 35%;
+    margin-left: 25%;
     margin-right: 4%;
-    transform: translateY(-24%); 
+    transform: translateY(-34%); 
   }
 }
 
