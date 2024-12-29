@@ -616,31 +616,32 @@ export default {
     };
   },
   methods: {
-  scrollTo(id) {
-  const element = document.getElementById(id);
-  if (element) {
-    history.pushState(null, null, `#${id}`);
-
-    // Calculate offset based on screen size
-    const isMobile = window.innerWidth <= 768;
-    const isIPad = window.innerWidth <= 1300;
-    let offset = isIPad ? -1000 : 10;
-    offset = isMobile ? -600 : 10; 
-
-    window.scrollTo({
-      top: element.offsetTop - offset,
-      behavior: 'smooth',
-    });
-
-    this.activeSection = id;
-  }
-  },
+    scrollTo(id) {
+      const element = document.getElementById(id);
+        if (element) {
+          history.pushState(null, null, `#${id}`);
+          // Calculate offset based on screen size
+          const isMobile = window.innerWidth <= 768;
+          const isIPad = window.innerWidth <= 1300;
+          let offset = isMobile ? -600 : 10; 
+          if (isIPad) { 
+          offset = -1000; 
+          }
+        window.scrollTo({
+          top: element.offsetTop - offset,
+          behavior: 'smooth',
+        });
+        this.activeSection = id;
+      }
+    },
   },
   mounted() {
-    const hash = window.location.hash.slice(1);
-    if (hash) {
-      this.scrollTo(hash);
-    }
+    setTimeout(() => {
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        this.scrollTo(hash);
+      }
+    }, 100);
   },
 };
 </script>
