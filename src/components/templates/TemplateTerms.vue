@@ -623,11 +623,9 @@ export default {
           // Calculate offset based on screen size
           const isMobile = window.innerWidth <= 768;
           const isIPad = window.innerWidth <= 1300;
-          let offset = isMobile ? -600 : 10; 
-          if (isIPad) { 
-          offset = -1000; 
-          }
-        window.scrollTo({
+          let offset = isIPad ? -2000 : 10;
+          offset = isMobile ? -600 : 10; 
+          scrollTo({
           top: element.offsetTop - offset,
           behavior: 'smooth',
         });
