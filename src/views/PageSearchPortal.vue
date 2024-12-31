@@ -41,7 +41,7 @@ import { PAGE_TITLE } from '@/constant/constant';
 import { mayaClient } from '@/services/api';
 import { mapActions, mapState } from 'vuex';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
-import { getActiveTabStatusLabel } from '../constant/enums'
+import { getActiveTabStatusLabel } from '../constant/enums';
 
 export default {
     name: 'PageSearchPortal',
@@ -152,17 +152,31 @@ export default {
                 // This will hamper interested VO section experience,
                 // because interested VO does not change the URL and
                 // reload the page will take to /search-portal
-                onConfirm: this.handleConfirm
+                onConfirm: this.handleConfirm,
             });
         },
         async searchRequestWithMobile(voMobile) {
             if (voMobile != '') {
-                // Update Search Text with voMobile
-                this.updateMobileInput(voMobile);
-                this.$router.push({
-                    path: this.$route.fullPath,
-                    query: { mobile: voMobile },
-                });
+                // Sanitize Mobile Number
+                const sanitizeMobileNumber = this.sanitizeMobile(voMobile);
+                if (!sanitizeMobileNumber) {
+                    this.$buefy.dialog.alert({
+                        title: 'Error',
+                        message: 'Invalid Mobile Number',
+                        type: 'is-danger',
+                        hasIcon: true,
+                        icon: 'alert-circle',
+                        ariaRole: 'alertdialog',
+                        ariaModal: true,
+                    });
+                } else {
+                    // Update Search Text with voMobile
+                    this.updateMobileInput(sanitizeMobileNumber);
+                    this.$router.push({
+                        path: this.$route.fullPath,
+                        query: { mobile: sanitizeMobileNumber },
+                    });
+                }
             }
         },
         async searchRequestWithLatLng(latlng) {
@@ -224,23 +238,39 @@ export default {
             });
             window.open(routeData.href, '_blank');
         },
-        handleConfirm(){
-                    // Make Mobile Input Empty
-                    if (this.searchMobile) {
-                        this.updateMobileInput('');
-                    }
-                    // Make LatLngInput to empty
-                    if (this.SOLatLngInput) {
-                        this.updateSOLatLngInput('');
-                    }
-                    // Reset Error
-                    this.resetError();
-                    // Push Back
-                    this.$router.push({
-                        name: 'SearchPortal',
-                        query: { tab: getActiveTabStatusLabel(this.activeTab) },
-                    });
-        }
+        handleConfirm() {
+            // Make Mobile Input Empty
+            if (this.searchMobile) {
+                this.updateMobileInput('');
+            }
+            // Make LatLngInput to empty
+            if (this.SOLatLngInput) {
+                this.updateSOLatLngInput('');
+            }
+            // Reset Error
+            this.resetError();
+            // Push Back
+            this.$router.push({
+                name: 'SearchPortal',
+                query: { tab: getActiveTabStatusLabel(this.activeTab) },
+            });
+        },
+
+        // Sanitize mobile number
+        sanitizeMobile(input) {
+            // filter all non-digints characters
+            let sanitized = input.replace(/[^\d]/g, '');
+            // if this constains extra 91 (Country code)
+            if (sanitized.length > 10 && sanitized.startsWith('91')) {
+                sanitized = sanitized.slice(2);
+            }
+
+            if (sanitized.length !== 10) {
+                return null;
+            }
+
+            return sanitized;
+        },
     },
     watch: {
         hasError(error) {

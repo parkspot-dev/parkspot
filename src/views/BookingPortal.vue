@@ -50,7 +50,7 @@ export default {
             const bookingId = this.$route.query['bookingId'];
             this.updateSearchText(bookingId);
             this.getAgents();
-            this.getBookingDetails(this.$route.query['bookingId']);
+            this.getBookingDetails(bookingId);
         } else {
             this.updateSearchText('');
             this.resetBookingDetails();

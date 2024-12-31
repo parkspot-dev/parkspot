@@ -1,13 +1,8 @@
 import { mayaClient } from '@/services/api';
 
 const state = {
-    bookingDetails: null,
-    hasError: false,
-    errorMessage: String,
-    paymentDetails: null,
-    isLoading: false,
-    searchText: '',
-    /*   [{
+    /* Example of a booking object structure:
+    [{
         "ID": 809,
         "CreatedAt": "2022-02-24T15:59:15.6168782Z",
         "UpdatedAt": "2023-11-26T10:31:41.4142083Z",
@@ -30,9 +25,19 @@ const state = {
         "PaymentPeriod": 2,
         "SecurityDeposit": 0,
         "Remark": "Booking remark"
-      }] */
+    }] */
     activeBookings: [],
     agents: {},
+    bookingDetails: null,
+    errorMessage: String,
+    hasError: false,
+    // State to preserve the original data before any updates or changes.
+    initialActiveBookingDetails: null,
+    isLoading: false,
+    paymentDetails: null,
+    searchText: '',
+    // State to preserve updated fields
+    updatedFields: [],
 };
 
 const getters = {};
@@ -71,6 +76,15 @@ const mutations = {
     'set-search-text'(state, text) {
         state.searchText = text;
     },
+    // Stores the initial state of active booking details
+    'set-initial-active-booking-details'(state, bookingDetails) {
+        state.initialActiveBookingDetails = bookingDetails;
+    },
+
+    // Stores the updated fields of active booking details
+    'set-updated-fields'(state, fields) {
+        state.updatedFields = fields;
+    },
 };
 
 const actions = {
@@ -85,6 +99,7 @@ const actions = {
         );
         if (res.Booking) {
             commit('update-booking', res);
+            commit('set-initial-active-booking-details', res.Booking);
         } else if (res.DisplayMsg) {
             commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
         }
@@ -122,11 +137,13 @@ const actions = {
         }
     },
 
-    async updateBookingDetails({ commit, dispatch }, reqBody) {
+    async updateBookingDetails({ commit, dispatch, state }, reqBody) {
         commit('set-loading', true);
+        reqBody = { Booking: reqBody, UpdatedFields : state.updatedFields }
         const res = await mayaClient.post('/booking/update', reqBody);
         if (res.Success) {
-            dispatch('getBookingDetails', reqBody.ID);
+            dispatch('getBookingDetails', reqBody.Booking.ID);
+            commit('set-updated-fields', []);
         } else if (res.DisplayMsg) {
             commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
         }
@@ -149,14 +166,18 @@ const actions = {
     },
 
     // Update Search Text
-    updateSearchText({ commit }, text) {
-        commit('set-search-text', text);
+    updateSearchText({ commit, }, bookingId) {
+        commit('set-search-text', bookingId);
     },
 
     // Reset booking details to null
-    resetBookingDetails({ commit }){
-        commit('update-booking', null)
-    }
+    resetBookingDetails({ commit }) {
+        commit('update-booking', null);
+    },
+
+    setUpdatedFields({ commit }, fields) {
+        commit('set-updated-fields', fields);
+    },
 };
 
 export default {
