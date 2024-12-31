@@ -200,31 +200,22 @@ export const JOINING_BENEFITS = [
 
 export const WHAT_NEXT = [
     {
-        description: 'Step 1. You will hear back',
+        description: 'Hear back from us within 24 hours.',
         icon: 'support_agent',
         title: 'Step 1',
     },
     {
-        title: 'arrow-icon',
-    },
-    {
-        description: 'Step 2. Schedule the visit to the spot after registration.',
+        description: '⁠Schedule spot visit after registration.',
         icon: 'how_to_reg',
         title: 'Step 2',
     },
     {
-        title: 'arrow-icon',
-    },
-    {
-        description: `Step 3. Pay and park`,
+        description: `⁠Pay the rent and start parking.`,
         icon: 'car_tag',
         title: 'Step 3',
     },
     {
-        title: 'arrow-icon',
-    },
-    {
-        description: 'Step 4. Relax',
+        description: 'Relax with ParkSpot, you parking companion!',
         icon: 'self_improvement',
         title: 'Step 4',
     },

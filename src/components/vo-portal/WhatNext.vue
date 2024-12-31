@@ -1,131 +1,125 @@
 <template>
-    <section class="what-next">
-        <div class="content">
-            <AtomHeading class="custom-subtitle" :level="'h3'"
-                >What Next?</AtomHeading
-            >
-            <p>
-                From quick responses to hassle-free parking, we make your
-                journey simple and stress-free.
-            </p>
-        </div>
-        <div class="benefits">
+    <div>
+        <AtomHeading :level="'h2'" class="heading">What's next?</AtomHeading>
+        <section class="features-section">
             <div
-                v-for="(item, index) in benefits"
+                v-for="(feature, index) in features"
                 :key="index"
-                class="benefit-card"
+                class="feature-wrapper"
             >
-                <div class="icon-wrapper">
-                    <span class="material-symbols-outlined">
-                        {{ item.icon }}
+                <div class="feature-card">
+                    <span class="material-symbols-outlined feature-icon">
+                        {{ feature.icon }}
                     </span>
+                    <h3 class="feature-title">{{ feature.description }}</h3>
                 </div>
-                <div class="text-content">
-                    <h3>{{ item.title }}</h3>
-                    <p v-if="item.description">{{ item.description }}</p>
+                <!-- Arrow Icon, only if not the last card -->
+                <div
+                    v-if="index < features.length - 1"
+                    class="material-symbols-outlined arrow-icon"
+                >
+                    double_arrow
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 </template>
 
 <script>
+import { WHAT_NEXT } from '../../constant/constant';
 import AtomHeading from '../atoms/AtomHeading.vue';
-
 export default {
+    name: 'WhatNext',
     components: {
         AtomHeading,
     },
     data() {
         return {
-            benefits: [
-                {
-                    description: 'You will hear back',
-                    icon: 'support_agent',
-                    title: 'Step 1',
-                },
-                {
-                    description:
-                        'Schedule the visit to the spot after registration.',
-                    icon: 'how_to_reg',
-                    title: 'Step 2',
-                },
-                {
-                    description: 'Pay and park',
-                    icon: 'car_tag',
-                    title: 'Step 3',
-                },
-                {
-                    description: 'Relax',
-                    icon: 'self_improvement',
-                    title: 'Step 4',
-                },
-            ],
+            //    WHAT_NEXT Payload
+            //    {
+            //      description : String,
+            //      icon : String,
+            //      title : String
+            //    }
+            features: WHAT_NEXT,
         };
     },
 };
 </script>
-
 <style scoped>
-.what-next {
-    display: flex;
-    justify-content: space-between;
+.heading {
+    text-transform: capitalize;
+    text-align: center;
+}
+
+.features-section {
     align-items: center;
+    display: flex;
+    gap: 2rem;
+    max-height: 700px;
     padding: 0 3rem 3rem 3rem;
+    text-align: center;
 }
 
-.content {
-    width: 50%;
-    padding: 2rem;
+.feature-wrapper {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem 0;
 }
 
-.custom-subtitle {
+.feature-card {
+    flex: 1 1 300px;
+    height: 150px;
+    padding: 1.5rem 2rem;
+}
+
+.feature-icon {
     color: var(--secondary-color);
-    font-weight: var(--semi-bold-font);
-    text-align: start;
+    font-size: 60px;
+    height: 50px;
 }
 
-.content p {
+.feature-title {
     color: var(--parkspot-black);
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-right: 4rem;
+    font-weight: var(--bold-font);
+    margin-bottom: 0.5rem;
 }
 
-.benefits {
+.arrow-icon {
+    align-items: center;
+    color: var(--secondary-color);
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    padding: 2rem;
-    width: 50%;
+    justify-content: center;
 }
 
-.benefit-card {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 1rem;
-}
+@media (max-width: 768px) {
+    .features-section {
+        flex-direction: column;
+        gap: 1rem;
+        max-height: max-content;
+        padding: 3rem 1.5rem;
+    }
 
-.benefit-card:last-child {
-    border-bottom: none;
-}
+    .feature-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0;
+    }
 
-.icon-wrapper span {
-    font-size: 3rem;
-    color: var(--secondary-color);
-}
-
-.text-content h3 {
-    margin: 0;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #333;
-}
-
-.text-content p {
-    margin: 0.5rem 0;
-    color: var(--parkspot-black);
+    .arrow-icon{
+        transform: rotate(90deg);
+    }
+    .feature-card {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        justify-content: center;
+        max-height: fit-content;
+        max-width: 100%;
+        padding: 0 0.5rem;
+    }
 }
 </style>
