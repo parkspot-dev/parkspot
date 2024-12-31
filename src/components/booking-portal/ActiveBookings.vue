@@ -59,6 +59,34 @@
 
             <b-table-column
                 cell-class="has-text-left"
+                field="SOContactDetails.FullName"
+                label="SO Name"
+                width="40"
+                v-slot="props"
+                sortable
+                searchable
+            >
+                <div>
+                    {{ props.row.SOContactDetails.FullName }}
+                </div>
+            </b-table-column>
+
+            <b-table-column
+                cell-class="has-text-left"
+                field="SOContactDetails.Mobile"
+                label="SO Mobile"
+                width="40"
+                v-slot="props"
+                sortable
+                searchable
+            >
+                <div>
+                    {{ props.row.SOContactDetails.Mobile }}
+                </div>
+            </b-table-column>
+
+            <b-table-column
+                cell-class="has-text-left"
                 field="SiteID"
                 label="SiteID"
                 width="40"
