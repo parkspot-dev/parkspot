@@ -175,6 +175,8 @@ export default {
                 }
             }
         },
+        
+        // Get map access token from cookies
         getMapAccessTokenFromCookie() {
             const cookies = document.cookie.split(';');
             for (const cookie of cookies) {
@@ -186,6 +188,16 @@ export default {
             }
             return null;
         },
+
+        // Set map access token in cookies
+        setMapAccessTokenInCookies(mapAccessToken){
+            const date = new Date();
+            date.setTime(date.getTime() + 15 * 24 * 60 * 60 * 1000);
+            const expires = `expires=${date.toUTCString()}`;
+            document.cookie = `mapAccessToken=${mapAccessToken}; ${expires}; path=/`;
+            this.accessToken = mapAccessToken;
+        },
+
         async getMapAccessToken() {
             let mapAccessToken = this.getMapAccessTokenFromCookie();
             if (mapAccessToken) {
@@ -202,12 +214,7 @@ export default {
                     const randomIndex = Math.floor(Math.random() * keys.length);
                     const selectedKey = keys[randomIndex];
                     mapAccessToken = selectedKey.token;
-                    // Set the mapAccessToken in cookie for next 15 days
-                    const date = new Date();
-                    date.setTime(date.getTime() + 15 * 24 * 60 * 60 * 1000);
-                    const expires = `expires=${date.toUTCString()}`;
-                    document.cookie = `mapAccessToken=${mapAccessToken}; ${expires}; path=/`;
-                    this.accessToken = mapAccessToken;
+                    setMapAccessTokenInCookies(mapAccessToken);
                 } else {
                     console.error('Error while fetching map access token');
                 }
