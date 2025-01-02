@@ -75,7 +75,7 @@ export default {
 
 .feature-icon {
     color: var(--secondary-color);
-    font-size: 60px;
+    font-size: 80px;
     height: 50px;
 }
 
