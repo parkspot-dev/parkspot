@@ -1,24 +1,24 @@
 <template>
     <div class="root">
         <b-table
-            :paginated="true"
-            :per-page="20"
-            :data="activeBookings"
             :bordered="true"
-            :hoverable="true"
+            :data="activeBookings"
             :focusable="true"
+            :hoverable="true"
             :mobile-cards="true"
             :narrowed="true"
+            :paginated="true"
+            :per-page="20"
             :sticky-header="true"
             height="500"
         >
             <b-table-column
                 field="ID"
                 label="ID"
-                width="40"
                 numeric
-                v-slot="props"
                 sortable
+                v-slot="props"
+                width="40"
             >
                 <div>
                     <a :href="bookingDetailsURL(props.row.ID)">
@@ -33,10 +33,10 @@
                 cell-class="has-text-left"
                 field="Name"
                 label="VO Name"
-                width="40"
-                v-slot="props"
-                sortable
                 searchable
+                sortable
+                v-slot="props"
+                width="40"
             >
                 <div>
                     {{ props.row.Name }}
@@ -47,10 +47,10 @@
                 cell-class="has-text-left"
                 field="Mobile"
                 label="VO Mobile"
-                width="40"
-                v-slot="props"
-                sortable
                 searchable
+                sortable
+                v-slot="props"
+                width="40"
             >
                 <div>
                     {{ props.row.Mobile }}
@@ -61,10 +61,10 @@
                 cell-class="has-text-left"
                 field="SOContactDetails.FullName"
                 label="SO Name"
-                width="40"
-                v-slot="props"
-                sortable
                 searchable
+                sortable
+                v-slot="props"
+                width="40"
             >
                 <div>
                     {{ props.row.SOContactDetails.FullName }}
@@ -75,10 +75,10 @@
                 cell-class="has-text-left"
                 field="SOContactDetails.Mobile"
                 label="SO Mobile"
-                width="40"
-                v-slot="props"
-                sortable
                 searchable
+                sortable
+                v-slot="props"
+                width="40"
             >
                 <div>
                     {{ props.row.SOContactDetails.Mobile }}
@@ -89,9 +89,9 @@
                 cell-class="has-text-left"
                 field="SiteID"
                 label="SiteID"
-                width="40"
-                v-slot="props"
                 sortable
+                v-slot="props"
+                width="40"
             >
                 <div>
                     <a :href="sdpURL(props.row.SiteID)" target="_blank">
@@ -106,9 +106,9 @@
                 cell-class="has-text-left"
                 field="Status"
                 label="Status"
-                width="40"
-                v-slot="props"
                 sortable
+                v-slot="props"
+                width="40"
             >
                 <div>
                     {{ getBookingStatusLabel(props.row.Status) }}
@@ -118,10 +118,10 @@
             <b-table-column
                 field="Rent"
                 label="Rent"
-                width="40"
                 numeric
-                v-slot="props"
                 sortable
+                v-slot="props"
+                width="40"
             >
                 <div>
                     {{ props.row.Rent }}
@@ -131,9 +131,9 @@
                 cell-class="has-text-left"
                 field="PaymentPeriod"
                 label="Periodicity"
-                width="40"
-                v-slot="props"
                 sortable
+                v-slot="props"
+                width="40"
             >
                 <div>
                     {{ getPaymentPeriodicityLabel(props.row.PaymentPeriod) }}
