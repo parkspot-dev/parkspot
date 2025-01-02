@@ -1,14 +1,247 @@
 <template>
-    <BodyWrapper>
+  <div id="app">
+    <aside class="toc">
+        <div class="toc-heading">
+          Vehicle Owner
+        </div>
+          <ul>
+            <li>
+              <a
+                href="#submission-documents"
+                :class="{ active: activeSection === 'submission-documents' }"
+                @click.prevent="scrollTo('submission-documents')"
+              >
+                Submission of Documents
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a
+                href="#accuracy-information"
+                :class="{ active: activeSection === 'accuracy-information' }"
+                @click.prevent="scrollTo('accuracy-information')"
+              >
+                Accuracy of Information
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a
+                href="#confidentiality"
+                :class="{ active: activeSection === 'confidentiality' }"
+                @click.prevent="scrollTo('confidentiality')"
+              >
+                Confidentiality
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a
+                href="#verification-process"
+                :class="{ active: activeSection === 'verification-process' }"
+                @click.prevent="scrollTo('verification-process')"
+              >
+                Verification Process
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a
+                href="#suspension-services"
+                :class="{ active: activeSection === 'suspension-services' }"
+                @click.prevent="scrollTo('suspension-services')"
+              >
+                Suspension of Services
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a
+                href="#digital-management"
+                :class="{ active: activeSection === 'digital-management' }"
+                @click.prevent="scrollTo('digital-management')"
+              >
+                Digital Management
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a
+                href="#subletting-assignment"
+                :class="{ active: activeSection === 'subletting-assignment' }"
+                @click.prevent="scrollTo('subletting-assignment')"
+              >
+                Subletting & Assignment
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a
+                href="#cancellation"
+                :class="{ active: activeSection === 'cancellation' }"
+                @click.prevent="scrollTo('cancellation')"
+              >
+                Cancellation
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a
+                href="#landlord-cooperation"
+                :class="{ active: activeSection === 'landlord-cooperation' }"
+                @click.prevent="scrollTo('landlord-cooperation')"
+              >
+                Landlord Cooperation in Unfortunate Events
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a
+                href="#prepaid-rent"
+                :class="{ active: activeSection === 'prepaid-rent' }"
+                @click.prevent="scrollTo('prepaid-rent')"
+              >
+                Prepaid Rent and Service Fee
+              </a>
+            </li>
+          </ul>
+          <div class="toc-heading">
+          Spot Owner
+          </div>
+        
+          <div>
+            <ul>
+              <li>
+                <a
+                  href="#listing-creation"
+                  :class="{ active: activeSection === 'listing-creation' }"
+                  @click.prevent="scrollTo('listing-creation')"
+                >
+                  Listing Creation
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a
+                  href="#ownership-authentication"
+                  :class="{ active: activeSection === 'ownership-authentication' }"
+                  @click.prevent="scrollTo('ownership-authentication')"
+                >
+                  Ownership Authentication
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a
+                  href="#documentation-requirement"
+                  :class="{ active: activeSection === 'documentation-requirement' }"
+                  @click.prevent="scrollTo('documentation-requirement')"
+                >
+                  Documentation Requirement
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a
+                  href="#termination-services"
+                  :class="{ active: activeSection === 'termination-services' }"
+                  @click.prevent="scrollTo('termination-services')"
+                >
+                Termination of Services
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a
+                  href="#customer-referral"
+                  :class="{ active: activeSection === 'customer-referral' }"
+                  @click.prevent="scrollTo('customer-referral')"
+                >
+                Customer Referral Restriction
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a
+                  href="#monthly-service"
+                  :class="{ active: activeSection === 'monthly-service' }"
+                  @click.prevent="scrollTo('monthly-service')"
+                >
+                Monthly Service Fee
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a
+                href="#rent-handling"
+                :class="{ active: activeSection === 'rent-handling' }"
+                @click.prevent="scrollTo('rent-handling')"
+              >
+                Rent Handling
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a
+                href="#refund"
+                :class="{ active: activeSection === 'refund' }"
+                @click.prevent="scrollTo('refund')"
+              >
+              Refund
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a
+                href="#cancellation-policies"
+                :class="{ active: activeSection === 'cancellation-policies' }"
+                @click.prevent="scrollTo('cancellation-policies')"
+              > 
+              Cancellation Policies
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a
+                href="#changes"
+                :class="{ active: activeSection === 'changes' }"
+                @click.prevent="scrollTo('changes')"
+              >
+              Changes to These Terms and Conditions
+              </a>
+            </li>
+          </ul>
+        </div>
+    </aside>
+
+    <main>
+      <BodyWrapper>
         <div class="terms-container">
             <AtomHeading class="mb-10"> Terms and Conditions </AtomHeading>
-
             <AtomParagraph class="vo">
                 Vehicle Owner : User who is seeking/finding a parking spot.
             </AtomParagraph>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="submission-documents">
                     Submission of Documents:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -29,7 +262,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="accuracy-information">
                     Accuracy of Information:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -44,7 +277,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="confidentiality">
                     Confidentiality:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -59,7 +292,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="verification-process">
                     Verification Process:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -74,7 +307,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="suspension-services">
                     Suspension of Services:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -100,7 +333,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="digital-management">
                     Digital Management:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -116,7 +349,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="subletting-assignment">
                     Subletting &  Assignment:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -133,7 +366,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="cancellation">
                     Cancellation:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -152,7 +385,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="landlord-cooperation">
                     Landlord Cooperation in Unfortunate Events:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -175,7 +408,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="prepaid-rent">
                     Prepaid Rent and Service Fee:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -195,12 +428,12 @@
                 </ul>
             </div>
 
-            <AtomParagraph class="so">
+            <AtomParagraph class="vo">
                 Spot Owner : User who is renting out his/her parking spot .
             </AtomParagraph>
             
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="listing-creation">
                     Listing Creation:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -215,7 +448,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="ownership-authentication">
                     Ownership Authentication:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -229,7 +462,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="documentation-requirement">
                     Documentation Requirement:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -244,7 +477,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="termination-services">
                     Termination of Services:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -259,7 +492,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="customer-referral">
                     Customer Referral Restriction:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -275,7 +508,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="monthly-service">
                     Monthly Service Fee:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -295,7 +528,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="rent-handling">
                     Rent Handling:
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -313,7 +546,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'"> 
+                <AtomParagraph :variation="'large'" id="refund"> 
                     Refund :
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -327,7 +560,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="cancellation-policies">
                     Cancellation Policies :
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -341,7 +574,7 @@
             </div>
 
             <div class="mb-3">
-                <AtomParagraph :variation="'large'">
+                <AtomParagraph :variation="'large'" id="changes">
                     Changes to These Terms and Conditions :
                 </AtomParagraph>
                 <ul class="pl-6" style="list-style-type:disc;">
@@ -361,48 +594,159 @@
             </div>
         </div>
     </BodyWrapper>
+    </main>
+  </div>
 </template>
 
 <script>
-import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
+import BodyWrapper from '../extras/BodyWrapper.vue';
+
 export default {
-    name: 'TemplateTerms',
-    components: {
-        BodyWrapper,
-        AtomHeading,
-        AtomParagraph,
+  name: 'TemplateTerms',
+  components: {
+    AtomHeading,
+    AtomParagraph,
+    BodyWrapper,
+  },
+  data() {
+    return {
+      activeSection: '',
+    };
+  },
+  methods: {
+    scrollTo(id) {
+      const element = document.getElementById(id);
+        if (element) {
+          history.pushState(null, null, `#${id}`);
+          // Calculate offset based on screen size
+          const isMobile = window.innerWidth <= 768;
+          const isIPad = window.innerWidth <= 1300;
+          let offset = isIPad ? -2000 : 10;
+          offset = isMobile ? -600 : 10; 
+          scrollTo({
+          top: element.offsetTop - offset,
+          behavior: 'smooth',
+        });
+        this.activeSection = id;
+      }
     },
+  },
+  mounted() {
+    setTimeout(() => {
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        this.scrollTo(hash);
+      }
+    }, 100);
+  },
 };
 </script>
 
 <style scoped>
-.terms-container {
-    margin: auto;
-    max-width: 960px;
+
+/* Table of Contents (TOC) */
+.toc {
+  background: var(--parkspot-white);
+  border-radius: var(--border-default);
+  border: 10px solid var(--parkspot-white);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  height: fit-content;
+  margin: 1rem 1rem; 
+  max-height: 85vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0.4rem 1rem;
+  position: sticky;
+  top: 5.4rem;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  width: 20%;
+}
+
+.toc-heading {
+  border-bottom: 2px solid var(--parkspot-black);
+  font-size: 1.2rem;
+  font-weight: var(--regular-font);
+  padding-bottom: 0.1rem;
+  text-transform: capitalize;
+}
+
+.toc ul li {
+  position: relative;
+  margin: 0.5rem 0.3rem;
+  padding-left: 0.7rem; 
+  list-style: none;
+}
+
+.toc ul li a {
+  color: var(--secondary-color);
+  display: block;
+  font-size: 0.9rem;
+  font-weight: var(--regular-font);
+  text-decoration: none;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.toc ul li a:hover {
+  color: var(--parkspot-black);
+  text-decoration: underline;
+}
+
+.toc ul li::before {
+  content: "•"; 
+  position: absolute;
+  left: 0; 
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-color);
+}
+
+main {
+  position: relative;
+  margin-left: 22%;
+  margin-right: 5%;
+  transform: translateY(-26%);
 }
 
 .vo {
-    margin: 3rem 0rem;
-    font-size: 1.8rem;
-    font-weight: var(--semi-bold-font);
-    border-inline-start-style: solid;
-    border-inline-start-width: var(--ricos-custom-quote-border-width,3px);
-    border-left-width: 5px;
-    padding:12px;
-    border-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  border-inline-start: 4px solid var(--secondary-color);
+  font-size: 1.8rem;
+  font-weight: var(--semi-bold-font);
+  margin: 1.5rem 0;
+  padding: 1rem;
 }
 
-.so {
-    margin: 3rem 0rem;
-    font-size: 1.8rem;
-    font-weight: var(--semi-bold-font);
-    border-inline-start-style: solid;
-    border-inline-start-width: var(--ricos-custom-quote-border-width,3px);
-    border-left-width: 5px;
-    padding:12px;
-    border-color: var(--secondary-color);
+/* Mobile styles (screen width <= 768px) */
+@media screen and (max-width: 768px) {
+  .toc {
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 1rem;
+    position: static;
+    width: 100%; 
+  }
+  
+  main {
+    margin-left: 0;
+    margin-right: 0;
+    transform: translateY(0%);
+  }
+}
+
+/* Tablet styles (screen width between 769px and 1300px) */
+@media screen and (min-width: 769px) and (max-width: 1300px) {
+  .toc{
+    max-height: 80vh;
+    width: 25%;
+  }
+  main {
+    margin-left: 28%;
+    margin-right: 4%;
+    transform: translateY(-20%); 
+  }
 }
 
 </style>
