@@ -1,5 +1,5 @@
 <template>
-    <div class="tac">
+    <div class="root">
         <aside class="toc">
             <div class="toc-heading">Vehicle Owner</div>
             <ul>
@@ -741,11 +741,11 @@ export default {
             }
         },
     },
-    mounted() {
+  mounted() {
         setTimeout(() => {
-            const hash = window.location.hash.slice(1);
-            if (hash) {
-                this.scrollTo(hash);
+            const scrollActiveSection = window.location.hash.slice(1);
+            if (scrollActiveSection) {
+                this.scrollTo(scrollActiveSection);
             }
         }, 100);
     },
@@ -754,8 +754,7 @@ export default {
 
 <style scoped>
 
-/* Terms and Condition (TAC) main container */
-.tac {
+.root {
     display: flex;
     gap: 2rem;
 }
@@ -764,17 +763,17 @@ export default {
 .toc {
     background: var(--parkspot-white);
     border-radius: var(--border-default);
-    border: 10px solid var(--parkspot-white);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    border: 8px solid var(--parkspot-white);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     height: fit-content;
     margin: 1rem 1rem;
-    max-height: 85vh;
+    max-height: 86vh;
     overflow-x: hidden;
     overflow-y: auto;
     padding: 0.4rem 1rem;
     position: sticky;
     top: 5.4rem;
-    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+    transition: box-shadow 0.4s ease, background-color 0.4s ease;
     width: 20%;
 }
 
@@ -799,7 +798,7 @@ export default {
     font-size: 0.9rem;
     font-weight: var(--regular-font);
     text-decoration: none;
-    transition: color 0.3s ease, text-decoration 0.3s ease;
+    transition: color 0.4s ease, text-decoration 0.4s ease;
 }
 
 .toc ul li a:hover {
@@ -827,7 +826,7 @@ export default {
 
 /* Mobile styles (screen width <= 768px) */
 @media screen and (max-width: 768px) {
-    .tac {
+    .root {
         flex-direction: column;
     }
     .toc {
