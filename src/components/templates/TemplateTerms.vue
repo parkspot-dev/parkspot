@@ -802,8 +802,7 @@ export default {
 }
 
 .toc ul li a:hover {
-    color: var(--parkspot-black);
-    text-decoration: underline;
+    font-weight: 500;
 }
 
 .toc ul li::before {
