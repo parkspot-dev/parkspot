@@ -42,7 +42,24 @@ export default {
     },
 
     mounted() {
-        this.getMapAccessToken().then(() => {
+        this.getMapAccessToken().then(() => this.renderMap());
+    },
+
+    methods: {
+        ...mapMutations({
+            updateMapConfig: 'map/update-map-config',
+        }),
+        recenterMap(center) {
+            if (!this.map) {
+                return;
+            }
+
+            this.map.flyTo({
+                center: center,
+            });
+            this.marker.setLngLat(center);
+        },
+        renderMap() {
             if (this.accessToken) {
                 mapboxgl.accessToken = this.accessToken;
 
@@ -157,36 +174,43 @@ export default {
                         .addTo(this.map);
                 }
             }
-        });
-    },
-
-    methods: {
-        ...mapMutations({
-            updateMapConfig: 'map/update-map-config',
-        }),
-        recenterMap(center) {
-            if (!this.map) {
-                return;
-            }
-
-            this.map.flyTo({
-                center: center,
-            });
-            this.marker.setLngLat(center);
         },
-
+        getMapAccessTokenFromCookie() {
+            const cookies = document.cookie.split(';');
+            for (const cookie of cookies) {
+                let [key, value] = cookie.split('=');
+                key = key.trim();
+                if (key === 'mapAccessToken') {
+                    return value;
+                }
+            }
+            return null;
+        },
         async getMapAccessToken() {
-            const keys = await getValueFromFirebase(
-                `/app-config/mapbox-access-data`,
-            );
-
-            // Check if we are getting keys from firebase
-            if (keys && keys.length > 0) {
-                const randomIndex = Math.floor(Math.random() * keys.length);
-                const selectedKey = keys[randomIndex];
-                this.accessToken = selectedKey.token;
+            let mapAccessToken = this.getMapAccessTokenFromCookie();
+            if (mapAccessToken) {
+                // If map access token is present in cookie
+                this.accessToken = mapAccessToken;
             } else {
-                console.error('Error while fetching map access token');
+                // If not present in cookie
+                const keys = await getValueFromFirebase(
+                    `/app-config/mapbox-access-data`,
+                );
+
+                // Check if we are getting keys from firebase
+                if (keys && keys.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * keys.length);
+                    const selectedKey = keys[randomIndex];
+                    mapAccessToken = selectedKey.token;
+                    // Set the mapAccessToken in cookie for next 15 days
+                    const date = new Date();
+                    date.setTime(date.getTime() + 15 * 24 * 60 * 60 * 1000);
+                    const expires = `expires=${date.toUTCString()}`;
+                    document.cookie = `mapAccessToken=${mapAccessToken}; ${expires}; path=/`;
+                    this.accessToken = mapAccessToken;
+                } else {
+                    console.error('Error while fetching map access token');
+                }
             }
         },
     },
