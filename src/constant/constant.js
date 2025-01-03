@@ -148,7 +148,7 @@ export const TOP_SEARCH_PLACES = [
         spots: 60,
         path: '/hyderabad/parking-near-hyderabad',
     },
-]
+];
 
 // Clients testimonials for VO Page
 export const VO_PAGE_TESTIMONIALS = [
@@ -173,7 +173,7 @@ export const VO_PAGE_TESTIMONIALS = [
         rate: 4.8,
         date: '17 Jan 2017',
     },
-]
+];
 
 export const JOINING_BENEFITS = [
     {
@@ -195,5 +195,28 @@ export const JOINING_BENEFITS = [
     {
         text: 'Multi-city presence with a wide network.',
         icon: 'location_city',
+    },
+];
+
+export const WHAT_NEXT = [
+    {
+        description: 'Hear back from us within 24 hours.',
+        icon: 'support_agent',
+        title: 'Step 1',
+    },
+    {
+        description: '⁠Schedule spot visit after registration.',
+        icon: 'how_to_reg',
+        title: 'Step 2',
+    },
+    {
+        description: `⁠Pay the rent and start parking.`,
+        icon: 'car_tag',
+        title: 'Step 3',
+    },
+    {
+        description: 'Relax with ParkSpot, you parking companion!',
+        icon: 'self_improvement',
+        title: 'Step 4',
     },
 ]

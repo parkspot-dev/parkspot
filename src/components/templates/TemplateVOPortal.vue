@@ -62,6 +62,7 @@
                 </div>
             </div>
         </BodyWrapper>
+        <WhatNext />
         <TestimonialSection />
     </div>
 </template>
@@ -73,7 +74,9 @@ import BodyWrapper from '../extras/BodyWrapper.vue';
 import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
 import SearchComponent from '../vo-portal/SearchComponent.vue';
 import TestimonialSection from '../global/TestimonialSection.vue';
+import WhatNext from '../vo-portal/WhatNext.vue';
 import { JOINING_BENEFITS } from '../../constant/constant';
+
 export default {
     name: 'TemplateVOPortal',
     components: {
@@ -83,6 +86,7 @@ export default {
         ParkingRequestForm,
         SearchComponent,
         TestimonialSection,
+        WhatNext,
     },
     emits: ['submit'],
     data() {
