@@ -19,6 +19,10 @@ export default {
         spotsList: {
             type: Array,
         },
+        center: {
+            type: Array,
+            default: null
+        }
     },
     emits: ['location'],
     data() {
@@ -37,11 +41,15 @@ export default {
     },
     watch: {
         mapCenter(newCenter) {
+            console.log("This is new center", newCenter);
             this.recenterMap(newCenter);
         },
     },
 
     mounted() {
+        if(this.center){
+            console.log("This is center from parenttt", this.center);
+        }
         this.getMapAccessToken().then(() => this.renderMap());
     },
 
@@ -64,22 +72,30 @@ export default {
                 return;
             }
             mapboxgl.accessToken = this.accessToken;
+            
+            if(this.center){
+                console.log("This is center from parent", this.center);
+                this.updateMapConfig(this.center)
+            }
 
             // Create map
             this.map = new mapboxgl.Map(this.mapConfig);
-
+             
             // Create popup
             const popup = new mapboxgl.Popup({ offset: 25 }).setText(
                 'Your current location.',
             );
-
+          
+            console.log("this  ", this.mapConfig.center);
             // Create marker
-            this.marker = new mapboxgl.Marker({
+                this.marker = new mapboxgl.Marker({
                 draggable: this.drag,
             })
                 .setLngLat(this.mapConfig.center)
                 .setPopup(popup)
                 .addTo(this.map);
+            
+            
 
             if (this.drag) {
                 this.map.on('click', (e) => {
