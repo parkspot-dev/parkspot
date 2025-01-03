@@ -115,7 +115,7 @@ export default {
         align-items: center;
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 2rem;
         justify-content: center;
         max-height: fit-content;
         max-width: 100%;
