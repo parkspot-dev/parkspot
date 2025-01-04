@@ -729,9 +729,9 @@ export default {
             if (element) {
               history.pushState(null, null, `#${id}`);
               // Calculate offset based on screen size
-              const Mobile = window.innerWidth <= 768;
-              const IPad = window.innerWidth <= 1300;
-              const offset = Mobile ? -600 : (IPad ? -10 : 10);
+              const isMobile = window.innerWidth <= 768;
+              const isIPad = window.innerWidth <= 1300;
+              const offset = isMobile ? -600 : (isIPad ? -10 : 10);
               scrollTo({ top: element.offsetTop - offset, behavior: 'smooth' });
               this.activeSection = id;
             }
