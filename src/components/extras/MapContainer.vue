@@ -153,7 +153,7 @@ export default {
                     const randomIndex = Math.floor(Math.random() * keys.length);
                     const selectedKey = keys[randomIndex];
                     mapAccessToken = selectedKey.token;
-                    setMapAccessTokenInCookies(mapAccessToken);
+                    this.setMapAccessTokenInCookies(mapAccessToken);
                 } else {
                     console.error('Error while fetching map access token');
                 }
