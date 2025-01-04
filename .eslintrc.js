@@ -3,9 +3,9 @@ module.exports = {
         browser: true,
         es6: true,
         node: true,
-        jest: true,
+        es2022: true,
     },
-    extends: ['plugin:vue/essential', 'google', 'prettier'],
+    extends: ['plugin:vue/vue3-recommended', 'google', 'prettier'],
     globals: {
         Atomics: 'readonly',
         SharedArrayBuffer: 'readonly',
@@ -13,11 +13,10 @@ module.exports = {
     parserOptions: {
         ecmaVersion: 2018,
         sourceType: 'module',
-        parser: 'babel-eslint',
     },
     plugins: ['vue'],
     rules: {
-        'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-        'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+        'no-console': import.meta.env.NODE_ENV === 'production' ? 'warn' : 'off',
+        'no-debugger': import.meta.env.NODE_ENV === 'production' ? 'warn' : 'off',
     },
 };
