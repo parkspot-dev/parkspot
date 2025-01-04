@@ -135,7 +135,8 @@ export default {
     }
 }
 
-@media (max-width: 768px) {
+/* Media query for mobile screen */
+@media (max-width: 1100px) {
     .form-section-wrapper {
         flex-direction: column-reverse;
         .join-benefites {
