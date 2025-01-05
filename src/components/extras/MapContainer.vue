@@ -101,9 +101,8 @@ export default {
             }
 
             // Add parking site markers
-                for (const spot of this.spotsList) {
-                    const encodedSpotId = encodeURIComponent(spot.ID);
-                    const psMarker = document.createElement('div');
+            for (const spot of this.spotsList) {
+                const psMarker = document.createElement('div');
 
                     psMarker.className = 'marker';
                     psMarker.style.backgroundImage = 'url(' + this.img + ')';
@@ -111,11 +110,11 @@ export default {
                     psMarker.style.height = '50px';
                     psMarker.style.backgroundSize = '110%';
 
-                    const psPopup = this.getPsPopup(spot, encodedSpotId);
-                    new mapboxgl.Marker(psMarker)
-                        .setLngLat([spot.Long, spot.Lat])
-                        .setPopup(psPopup)
-                        .addTo(this.map);
+                const psPopup = this.getPsPopup(spot);
+                new mapboxgl.Marker(psMarker)
+                    .setLngLat([spot.Long, spot.Lat])
+                    .setPopup(psPopup)
+                    .addTo(this.map);
             }
         },
 
@@ -164,7 +163,8 @@ export default {
             }
         },
 
-        getPsPopup(spot, encodedSpotId) {
+        getPsPopup(spot) {
+            const encodedSpotId = encodeURIComponent(spot.ID);
             const popupHTML = `
         <style>
             .name {
