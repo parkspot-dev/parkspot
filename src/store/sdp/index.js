@@ -25,7 +25,6 @@ const mutations = {
     },
 
     'update-selected-spot'(state, spot) {
-        console.log("This is selected spot", spot);
         state.selectedSpot = [];
         state.selectedSpot = [...state.selectedSpot, spot];
     },
@@ -77,7 +76,7 @@ const actions = {
                 Rate: res.Site.Rate,
                 Distance: 0, // res.Site.Distance
             };
-            commit('update-map-center', [spot.Lat, spot.Long])
+            commit('update-map-center', [spot.Long, spot.Lat])
             commit('update-selected-spot', spot);
             commit('update-is-available', res.Site['SlotsAvailable']);
             commit('update-loading', false);

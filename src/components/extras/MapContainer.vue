@@ -21,8 +21,8 @@ export default {
         },
         center: {
             type: Array,
-            default: null
-        }
+            default: null,
+        },
     },
     emits: ['location'],
     data() {
@@ -39,17 +39,8 @@ export default {
             mapCenter: 'map/getNewMapCenter',
         }),
     },
-    watch: {
-        mapCenter(newCenter) {
-            console.log("This is new center", newCenter);
-            this.recenterMap(newCenter);
-        },
-    },
 
     mounted() {
-        if(this.center){
-            console.log("This is center from parenttt", this.center);
-        }
         this.getMapAccessToken().then(() => this.renderMap());
     },
 
@@ -72,30 +63,26 @@ export default {
                 return;
             }
             mapboxgl.accessToken = this.accessToken;
-            
-            if(this.center){
-                console.log("This is center from parent", this.center);
-                this.updateMapConfig(this.center)
-            }
 
             // Create map
             this.map = new mapboxgl.Map(this.mapConfig);
-             
+
             // Create popup
             const popup = new mapboxgl.Popup({ offset: 25 }).setText(
                 'Your current location.',
             );
-          
-            console.log("this  ", this.mapConfig.center);
+
+            // assign center
+            const markerCenter = this.mapConfig.center;
+
+                console.log("This is marker", markerCenter);
             // Create marker
-                this.marker = new mapboxgl.Marker({
+            this.marker = new mapboxgl.Marker({
                 draggable: this.drag,
             })
-                .setLngLat(this.mapConfig.center)
+                .setLngLat(markerCenter)
                 .setPopup(popup)
                 .addTo(this.map);
-            
-            
 
             if (this.drag) {
                 this.map.on('click', (e) => {
@@ -114,21 +101,21 @@ export default {
             }
 
             // Add parking site markers
-            for (const spot of this.spotsList) {
-                const encodedSpotId = encodeURIComponent(spot.ID);
-                const psMarker = document.createElement('div');
+                for (const spot of this.spotsList) {
+                    const encodedSpotId = encodeURIComponent(spot.ID);
+                    const psMarker = document.createElement('div');
 
-                psMarker.className = 'marker';
-                psMarker.style.backgroundImage = 'url(' + this.img + ')';
-                psMarker.style.width = '50px';
-                psMarker.style.height = '50px';
-                psMarker.style.backgroundSize = '110%';
+                    psMarker.className = 'marker';
+                    psMarker.style.backgroundImage = 'url(' + this.img + ')';
+                    psMarker.style.width = '50px';
+                    psMarker.style.height = '50px';
+                    psMarker.style.backgroundSize = '110%';
 
-                const psPopup = this.getPsPopup(spot, encodedSpotId);
-                new mapboxgl.Marker(psMarker)
-                    .setLngLat([spot.Long, spot.Lat])
-                    .setPopup(psPopup)
-                    .addTo(this.map);
+                    const psPopup = this.getPsPopup(spot, encodedSpotId);
+                    new mapboxgl.Marker(psMarker)
+                        .setLngLat([spot.Long, spot.Lat])
+                        .setPopup(psPopup)
+                        .addTo(this.map);
             }
         },
 
@@ -170,7 +157,7 @@ export default {
                     const randomIndex = Math.floor(Math.random() * keys.length);
                     const selectedKey = keys[randomIndex];
                     mapAccessToken = selectedKey.token;
-                    setMapAccessTokenInCookies(mapAccessToken);
+                    this.setMapAccessTokenInCookies(mapAccessToken);
                 } else {
                     console.error('Error while fetching map access token');
                 }

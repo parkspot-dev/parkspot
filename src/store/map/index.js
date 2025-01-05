@@ -13,7 +13,7 @@ const state = {
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [77.5946, 12.9716], //  default bengaluru lat, lng.
-        zoom: 11,
+        zoom: 12,
     },
     center: null,
     totalPages: 1, // default page number
