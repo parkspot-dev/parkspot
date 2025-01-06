@@ -93,6 +93,19 @@ export default {
     justify-content: center;
 }
 
+/* Media query for tablet screen */
+
+@media screen and (min-width: 769px) and (max-width: 1200px) {
+    .feature-card {
+        height: 200px;
+        padding: 1rem 0;
+    }
+    .feature-icon {
+        font-size: 60px;
+    }
+}
+
+/* Media query for mobile screen */
 @media (max-width: 768px) {
     .features-section {
         flex-direction: column;
@@ -108,7 +121,7 @@ export default {
         padding: 0;
     }
 
-    .arrow-icon{
+    .arrow-icon {
         transform: rotate(90deg);
     }
     .feature-card {
