@@ -43,7 +43,7 @@
                 <h2>How to get here?</h2>
                 <MapContainer
                     :center="center"
-                    :spotsList="selectedSpot"
+                    :spotDetails="selectedSpot[0]"
                     class="sdp-map"
                 ></MapContainer>
             </div>

@@ -75,7 +75,7 @@ export default {
             'updateSOLatLngInput',
         ]),
         ...mapMutations('map', {
-            updateManConfig: 'update-map-config',
+            updateManConfig: 'update-user-location',
         }),
         getUserLocation() {
             const geolocation = navigator.geolocation;

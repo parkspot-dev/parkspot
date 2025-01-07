@@ -4,7 +4,7 @@
 
 <script>
 import mapboxgl from 'mapbox-gl';
-import { mapGetters, mapMutations } from 'vuex';
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 import { getValueFromFirebase } from '../../firebase';
 export default {
     name: 'MapContainer',
@@ -18,6 +18,11 @@ export default {
         },
         spotsList: {
             type: Array,
+            default: null,
+        },
+        spotDetails: {
+            type: Object,
+            default: null,
         },
         center: {
             type: Array,
@@ -37,17 +42,34 @@ export default {
         ...mapGetters({
             mapConfig: 'map/getMapConfig',
             mapCenter: 'map/getNewMapCenter',
+            userLocation: 'map/getUserLocation'
         }),
+        ...mapState('map', [
+            'userCurrentLocation'
+        ]),
     },
 
     mounted() {
+        if (this.spotDetails) {
+            this.mapConfig.zoom = 13;
+            this.updateMapConfig(this.center);
+        }
         this.getMapAccessToken().then(() => this.renderMap());
+    },
+
+    watch : {
+        userLocation() {
+            this.renderMap();
+        }
     },
 
     methods: {
         ...mapMutations({
             updateMapConfig: 'map/update-map-config',
         }),
+        ...mapActions('map', [
+            'updateUsersCurrentLocation'
+        ]),
         recenterMap(center) {
             if (!this.map) {
                 return;
@@ -72,17 +94,39 @@ export default {
                 'Your current location.',
             );
 
-            // assign center
-            const markerCenter = this.mapConfig.center;
-
-                console.log("This is marker", markerCenter);
             // Create marker
-            this.marker = new mapboxgl.Marker({
-                draggable: this.drag,
-            })
-                .setLngLat(markerCenter)
-                .setPopup(popup)
-                .addTo(this.map);
+            if (this.spotsList) {
+                this.marker = new mapboxgl.Marker({
+                    draggable: this.drag,
+                })
+                    .setLngLat(this.mapConfig.center)
+                    .setPopup(popup)
+                    .addTo(this.map);
+            }
+
+            // If spot details is center
+            if (this.spotDetails) {
+                const psMarker = document.createElement('div');
+
+                psMarker.className = 'marker';
+                psMarker.style.backgroundImage = 'url(' + this.img + ')';
+                psMarker.style.width = '50px';
+                psMarker.style.height = '50px';
+                psMarker.style.backgroundSize = '110%';
+                const psPopup = this.getPsPopup(this.spotDetails);
+                new mapboxgl.Marker(psMarker)
+                    .setLngLat(this.center)
+                    .setPopup(psPopup)
+                    .addTo(this.map);
+
+                // Create user current location marker
+                 new mapboxgl.Marker({
+                    draggable: this.drag,
+                })
+                    .setLngLat(this.userCurrentLocation)
+                    .setPopup(popup)
+                    .addTo(this.map);
+            }
 
             if (this.drag) {
                 this.map.on('click', (e) => {
@@ -101,8 +145,10 @@ export default {
             }
 
             // Add parking site markers
-            for (const spot of this.spotsList) {
-                const psMarker = document.createElement('div');
+            // Only run when we have spots list
+            if (this.spotsList) {
+                for (const spot of this.spotsList) {
+                    const psMarker = document.createElement('div');
 
                     psMarker.className = 'marker';
                     psMarker.style.backgroundImage = 'url(' + this.img + ')';
@@ -110,11 +156,12 @@ export default {
                     psMarker.style.height = '50px';
                     psMarker.style.backgroundSize = '110%';
 
-                const psPopup = this.getPsPopup(spot);
-                new mapboxgl.Marker(psMarker)
-                    .setLngLat([spot.Long, spot.Lat])
-                    .setPopup(psPopup)
-                    .addTo(this.map);
+                    const psPopup = this.getPsPopup(spot);
+                    new mapboxgl.Marker(psMarker)
+                        .setLngLat([spot.Long, spot.Lat])
+                        .setPopup(psPopup)
+                        .addTo(this.map);
+                }
             }
         },
 
