@@ -433,6 +433,7 @@
                     <div class="cell"><strong> CreatedAt </strong></div>
                     <div class="cell"><strong> ReceivedAt </strong></div>
                     <div class="cell"><strong> TransferredAt </strong></div>
+                    <div class="cell"><strong> Payment Type </strong></div>
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
                 </div>
@@ -451,6 +452,9 @@
                         </div>
                         <div class="cell">
                             {{ getFormattedDate(payment.TransferredAt) }}
+                        </div>
+                        <div class="cell">
+                            {{ getPaymentTypeLabel(payment.Type) }}
                         </div>
                         <div class="cell">
                             <div
@@ -493,6 +497,7 @@ import {
     getPaymentPeriodicityLabel,
     BookingStatusLabels,
     PaymentPeriodicityLabels,
+    getPaymentTypeLabel
 } from '@/constant/enums';
 import AtomButton from '../atoms/AtomButton.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
@@ -571,6 +576,9 @@ export default {
         },
         getBookingStatusLabel(bookingStatus) {
             return getBookingStatusLabel(bookingStatus);
+        },
+        getPaymentTypeLabel(paymentType) {
+           return getPaymentTypeLabel(paymentType);
         },
 
         getAgentName(agents, agentUserName) {
