@@ -29,10 +29,8 @@ const state = {
         },
     mobileError: '',
     latlongError: '',
-    hasError: false,
-    hasSuccess: false,
-    errorMessage: '',
-    successMessage: '',
+    status: 'none',   // none, error, success
+    statusMessage: '',
     isLoading: false,
 };
 
@@ -40,21 +38,17 @@ const mutations = {
     'set-error'(state, { field, message }) {
         state[field] = message;
     },
-    'set-global-error'(state, errorMessage) {
-        state.hasError = true;
-        state.errorMessage = errorMessage;
+    'set-error-msg'(state, errorMessage) {
+        state.status = 'error';
+        state.statusMessage = errorMessage;
     },
     'set-success-msg'(state, successMessage) {
-        state.hasSuccess = true;
-        state.successMessage = successMessage;
+        state.status= 'success';
+        state.statusMessage = successMessage;
     },
-    'reset-global-Error'(state) {
-        state.hasError = false;
-        state.errorMessage = '';
-    },
-    'reset-success'(state) {
-        state.hasSuccess = false;
-        state.successMessage = '';
+    'reset-global-status'(state) {
+        state.status = 'none';
+        state.statusMessage = '';
     },
     'set-loading'(state, isLoading) {
         state.isLoading = isLoading;
@@ -170,10 +164,10 @@ const actions = {
 
     // Validates form fields and checks for errors.
     async handleFormErrors({ dispatch, commit }) {
-        commit('reset-global-Error');
+        commit('reset-global-status');
         await dispatch('validateFormFields');
         if (await dispatch('hasErrors')) {
-            commit('set-global-error', 'Please fix the errors in the form before submitting.');
+            commit('set-error-msg', 'Please fix the errors in the form before submitting.');
             return false; 
         }
         return true; 
@@ -214,11 +208,10 @@ const actions = {
         if (!isValid) {
             return;
         }
-        commit('reset-success');
         const response = await dispatch('updateSpotRequest');
         if (response.DisplayMsg) {
             // Network issues or server errors could cause the API call to fail.
-            commit('set-global-error', response.DisplayMsg);
+            commit('set-error-msg', response.DisplayMsg);
         } else {
             commit('set-success-msg', 'Your request was saved successfully');
         }
@@ -231,11 +224,10 @@ const actions = {
         if (!isValid) {
             return;
         }
-        commit('reset-success');
         const response = await mayaClient.post(`/owner/spot-update?spot-id=${state.SO.spotId}`);
         if (response.DisplayMsg) {
             // Network issues or server errors could cause the API call to fail.
-            commit('set-global-error', response.DisplayMsg);
+            commit('set-error-msg', response.DisplayMsg);
         }
         else{
             commit('set-success-msg', 'Your request was submitted successfully');

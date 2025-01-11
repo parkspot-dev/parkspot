@@ -334,15 +334,13 @@ export default {
     computed: {
         ...mapState('reviewSpot', [
             'Booking',
-            'errorMessage',
-            'hasError',
-            'hasSuccess',
             'isLoading',
             'latlongError',
             'mobileError',
             'Rent',
             'SO',
-            'successMessage'
+            'status',
+            'statusMessage'
         ]),
         parkingSizeOptions() {
             return ParkingSize; 
@@ -430,14 +428,12 @@ export default {
         },
     },
     watch: {
-        hasError(error) {
-            if (error) {
-                this.alertError(this.errorMessage);
+        status(newStatus) {
+            if (newStatus === 'error') {
+                this.alertError(this.statusMessage);
             }
-        },
-        hasSuccess(success) {
-            if (success) {
-                this.alertSuccess(this.successMessage);
+            else if (newStatus === 'success') {
+                this.alertSuccess(this.statusMessage);
             }
         },
     },
