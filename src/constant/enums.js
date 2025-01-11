@@ -185,11 +185,11 @@ export const PaymentType = Object.freeze({
 });
 
 export const PaymentTypeLabels = [
-    'PaymentTypeNotSet',
-    'ConvenienceFee',
-    'MonthlyRentWithConvenienceFeeAndSecurityDeposit',
-    'MonthlyRentAndSecurityDeposit',
-    'MonthlyRent',
+    'Not Set',
+    'Conv Fee',
+    'Rent + Conv Fee + SD',
+    'Rent + SD',
+    'Rent',
 ];
 
 /**
