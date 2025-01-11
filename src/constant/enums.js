@@ -202,15 +202,15 @@ export function getPaymentTypeLabel(paymentType) {
 }
 
 export const SpotRequestStatus = Object.freeze({
-    SpotRequestStatusNotSet: 0,
-    SpotRequestStatusRegistered: 1,
-    SpotRequestStatusProcessing: 2,
-    SpotRequestStatusRequestedModification: 3,
-    SpotRequestStatusVerified: 4,
-    SpotRequestStatusPromoted: 5,
-    SpotRequestStatusDenied: 6,
-    SpotRequestStatusCancelled: 7,
-    SpotRequestStatusDuplicate: 8,
+    "Not Set": 0,
+    Registered: 1,
+    Processing: 2,
+    "Requested Modification": 3,
+    Verified: 4,
+    Promoted: 5,
+    Denied: 6,
+    Cancelled: 7,
+    Duplicate: 8,
 });
 const SpotRequestStatusLabels = [
     'Not Set',
@@ -252,9 +252,9 @@ export function getActiveTabStatusLabel(activeTabStatus) {
 
 export const ParkingSize = Object.freeze({
     Unspecified: 0,
-    HatchBack: 1,
-    Compact: 2,
-    FullSize: 3,
+    "HatchBack(Small)": 1,
+    "Compact(Medium)": 2,
+    "FullSize(Large)": 3,
     Bike: 4,
 });
 
