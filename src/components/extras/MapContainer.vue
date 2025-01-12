@@ -20,6 +20,16 @@ export default {
             type: Array,
             default: null,
         },
+        // Spot Details
+        // spotDetails = {
+        //     "ID": "Blr#Koramangala#Compound",
+        //     "Name": "Koramangala: Compound Parking",
+        //     "Address": "84, Industrial area, Koramangala 5th Block, 3rd cross",
+        //     "Lat": 12.932313,
+        //     "Long": 77.615359,
+        //     "Rate": 4000,
+        //     "Distance": 0
+        // }
         spotDetails: {
             type: Object,
             default: null,
@@ -27,6 +37,10 @@ export default {
         center: {
             type: Array,
             default: null,
+        },
+        zoom: {
+            type: Number,
+            default: 12,
         },
     },
     emits: ['location'],
@@ -42,34 +56,30 @@ export default {
         ...mapGetters({
             mapConfig: 'map/getMapConfig',
             mapCenter: 'map/getNewMapCenter',
-            userLocation: 'map/getUserLocation'
+            userLocation: 'map/getUserLocation',
         }),
-        ...mapState('map', [
-            'userCurrentLocation'
-        ]),
+        ...mapState('map', ['userCurrentLocation']),
     },
 
     mounted() {
         if (this.spotDetails) {
-            this.mapConfig.zoom = 13;
             this.updateMapConfig(this.center);
+            this.updateZoomValue(this.zoom);
         }
         this.getMapAccessToken().then(() => this.renderMap());
     },
 
-    watch : {
+    watch: {
         userLocation() {
             this.renderMap();
-        }
+        },
     },
 
     methods: {
         ...mapMutations({
             updateMapConfig: 'map/update-map-config',
         }),
-        ...mapActions('map', [
-            'updateUsersCurrentLocation'
-        ]),
+        ...mapActions('map', ['updateUsersCurrentLocation', 'updateZoomValue']),
         recenterMap(center) {
             if (!this.map) {
                 return;
@@ -104,7 +114,6 @@ export default {
                     .addTo(this.map);
             }
 
-            // If spot details is center
             if (this.spotDetails) {
                 const psMarker = document.createElement('div');
 
@@ -120,7 +129,7 @@ export default {
                     .addTo(this.map);
 
                 // Create user current location marker
-                 new mapboxgl.Marker({
+                new mapboxgl.Marker({
                     draggable: this.drag,
                 })
                     .setLngLat(this.userCurrentLocation)

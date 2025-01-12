@@ -44,6 +44,7 @@
                 <MapContainer
                     :center="center"
                     :spotDetails="selectedSpot[0]"
+                    :zoom="13"
                     class="sdp-map"
                 ></MapContainer>
             </div>

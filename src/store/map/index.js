@@ -146,6 +146,10 @@ const mutations = {
 
     'update-user-location'(state, center) {
         state.userCurrentLocation = center;
+    },
+
+    'update-map-zoom'(state, value) {
+        state.mapConfig.zoom = value;
     }
 };
 
@@ -216,6 +220,11 @@ const actions = {
 
     updateUsersCurrentLocation({commit}, center){
         commit('update-user-location', center)
+    },
+
+    // Update zoom value
+    updateZoomValue({commit}, zoomValue) {
+        commit('update-map-zoom', zoomValue);
     }
 };
 
