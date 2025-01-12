@@ -41,7 +41,7 @@ export default {
         // zoom value configuration for the map
         zoom: {
             type: Number,
-            default: 12,
+            default: 11,
         },
     },
     emits: ['location'],
