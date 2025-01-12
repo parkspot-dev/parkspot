@@ -39,7 +39,7 @@ import Swiper, { Navigation, Pagination, Autoplay } from 'swiper';
 import TestimonialCard from './TestimonialCard.vue';
 
 export default {
-    name: 'TestimonialsSection',
+    name: 'TestimonialSection',
     components: {
         AtomHeading,
         AtomParagraph,

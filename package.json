@@ -10,7 +10,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
     "format": "prettier .  --write"
   },
-  "dependencies": {
+  "dependencie": {
     "aos": "^2.3.4",
     "axios": "^1.7.9",
     "boxicons": "^2.1.4",
