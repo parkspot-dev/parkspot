@@ -5,7 +5,7 @@
             <h2>Please fill all the fields</h2>
         </div>
         <div class="kyc-form-main">
-            <ValidationObserver ref="observer" v-slot="{}">
+            <div ref="observer">
                 <div class="py-4">
                     <MoleculeRadioButton
                         :fieldName="'radio'"
@@ -39,13 +39,12 @@
                 <AtomButton class="is-pulled-right" @click.native="saveProfile">
                     Save Profile
                 </AtomButton>
-            </ValidationObserver>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import { ValidationObserver } from 'vee-validate';
 import MoleculeRadioButton from '../molecules/MoleculeRadioButton.vue';
 import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
 import MoleculeUpload from '../molecules/MoleculeUpload.vue';
@@ -55,7 +54,6 @@ import { KYC } from '../../constant/constant';
 export default {
     name: 'OrganismKycForm',
     components: {
-        ValidationObserver,
         MoleculeRadioButton,
         MoleculeSelectInput,
         MoleculeUpload,

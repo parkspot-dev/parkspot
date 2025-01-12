@@ -3,11 +3,11 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import Buefy from 'buefy';
-import './includes/VeeValidate';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import VueMeta from 'vue-meta';
 import * as VueGoogleMaps from 'vue2-google-maps';
+import 'buefy/dist/buefy.css';
 
 Vue.use(VueMeta);
 Vue.use(Buefy);

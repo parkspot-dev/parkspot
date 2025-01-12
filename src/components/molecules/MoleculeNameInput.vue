@@ -1,9 +1,5 @@
 <template>
-    <ValidationProvider
-        :name="fieldName"
-        :rules="rules"
-        v-slot="{ errors, valid }"
-    >
+    <div :name="fieldName">
         <AtomInput
             v-model="innerValue"
             :placeholder="placeholder"
@@ -14,16 +10,14 @@
             class="mb-1"
         >
         </AtomInput>
-    </ValidationProvider>
+    </div>
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
 import AtomInput from '../atoms/AtomInput.vue';
 export default {
     name: 'MoleculeNameInput',
     components: {
-        ValidationProvider,
         AtomInput,
     },
     props: {

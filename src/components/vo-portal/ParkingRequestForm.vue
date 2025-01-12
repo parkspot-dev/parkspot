@@ -1,5 +1,5 @@
 <template>
-    <ValidationObserver ref="observer" v-slot="{}">
+    <div ref="observer">
         <!-- Contact Form Fields -->
         <div class="form-container">
             <div class="form-row">
@@ -79,7 +79,7 @@
                 </span>
             </AtomButton>
         </div>
-    </ValidationObserver>
+    </div>
 </template>
 
 <script>
@@ -87,7 +87,6 @@ import AtomButton from '../atoms/AtomButton.vue';
 import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
 import { ADD_INFO, PREFERENCE, FORM } from '../../constant/constant';
 import { mapMutations } from 'vuex';
-import { ValidationObserver } from 'vee-validate';
 import AtomIcon from '../atoms/AtomIcon.vue';
 import AtomInput from '../atoms/AtomInput.vue';
 import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
@@ -102,7 +101,6 @@ export default {
         MoleculeCheckbox,
         MoleculeNameInput,
         MoleculeSelectInput,
-        ValidationObserver,
     },
     data() {
         return {
@@ -208,7 +206,7 @@ export default {
         margin-top: -20px !important;
     }
 
-    .parking-type-input{
+    .parking-type-input {
         margin-top: 4px;
     }
 }

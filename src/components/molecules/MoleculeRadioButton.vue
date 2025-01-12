@@ -3,30 +3,22 @@
         <div class="radio-label">
             <label class="label"><slot></slot></label>
         </div>
-        <div class="radio-option">
-            <ValidationProvider
-                ref="provider"
-                :name="fieldName"
-                :rules="rules"
-                v-slot="{ errors }"
-            >
-                <AtomRadioButton
-                    @change.native="handleChange"
-                    :values="values"
-                    :currentSelectedRadio="currentSelectedRadio"
-                ></AtomRadioButton>
-                <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
-            </ValidationProvider>
+        <div class="radio-option" ref="provider">
+            <AtomRadioButton
+                @change.native="handleChange"
+                :values="values"
+                :currentSelectedRadio="currentSelectedRadio"
+            ></AtomRadioButton>
+            <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
         </div>
     </div>
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
 import AtomRadioButton from '../atoms/AtomRadioButton.vue';
 export default {
     name: 'MoleculeRadioButton',
-    components: { ValidationProvider, AtomRadioButton },
+    components: { AtomRadioButton },
     props: {
         currentSelectedRadio: {
             type: String,

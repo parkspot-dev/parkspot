@@ -1,11 +1,5 @@
 <template>
-    <ValidationProvider
-        ref="provider"
-        :name="fieldName"
-        :rules="rules"
-        v-slot="{ errors }"
-        class="custom-wrapper"
-    >
+    <div ref="provider" :name="fieldName" :rules="rules" class="custom-wrapper">
         <label class="label"><slot></slot></label>
         <AtomCheckbox
             @change.native="handleChange"
@@ -17,16 +11,14 @@
             </template>
         </AtomCheckbox>
         <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
-    </ValidationProvider>
+    </div>
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
 import AtomCheckbox from '../atoms/AtomCheckbox.vue';
 export default {
     name: 'MoleculeCheckBox',
     components: {
-        ValidationProvider,
         AtomCheckbox,
     },
     props: {

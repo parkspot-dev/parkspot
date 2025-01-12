@@ -11,9 +11,10 @@ import bookingPortal from './bookingPortal';
 import registerRequest from './registerRequest';
 import spotRequests from './spotRequests';
 import reviewSpot from './reviewSpot';
+import { createStore } from 'vuex';
 
 Vue.use(Vuex);
-const store = new Vuex.Store({
+const store = createStore({
     modules: {
         device,
         blog,

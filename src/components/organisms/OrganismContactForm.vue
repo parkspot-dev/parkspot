@@ -1,5 +1,5 @@
 <template>
-    <ValidationObserver ref="observer" v-slot="{}">
+    <div ref="observer">
         <MoleculeNameInput
             :rules="validation.fullname"
             :fieldName="CONTACT_FORM.FULLNAME"
@@ -38,11 +38,10 @@
             v-model="model.msg"
             :label="'Message'"
         ></AtomTextarea>
-    </ValidationObserver>
+    </div>
 </template>
 
 <script>
-import { ValidationObserver } from 'vee-validate';
 import { FORM } from '../../constant/constant';
 import { mapMutations } from 'vuex';
 import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';

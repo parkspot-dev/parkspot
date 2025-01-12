@@ -5,7 +5,7 @@
             <h2>Please fill all the fields</h2>
         </div>
         <div class="general-info-form">
-            <ValidationObserver ref="observer" v-slot="{}">
+            <div ref="observer">
                 <div class="py-4">
                     <MoleculeNameInput
                         :fieldName="'Full Name'"
@@ -47,7 +47,7 @@
                 <AtomButton class="is-pulled-right" @click.native="saveProfile">
                     Save Profile
                 </AtomButton>
-            </ValidationObserver>
+            </div>
         </div>
     </div>
 </template>
@@ -56,7 +56,6 @@
 import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
 import MoleculeRadioButton from '../molecules/MoleculeRadioButton.vue';
 import AtomButton from '../atoms/AtomButton.vue';
-import { ValidationObserver } from 'vee-validate';
 import { mapActions, mapMutations, mapState } from 'vuex';
 
 export default {
@@ -65,7 +64,6 @@ export default {
         MoleculeNameInput,
         AtomButton,
         MoleculeRadioButton,
-        ValidationObserver,
     },
     data() {
         return {

@@ -1,22 +1,16 @@
 <template>
-    <ValidationProvider
-        ref="provider"
-        :name="fieldName"
-        :rules="rules"
-        v-slot="{ errors }"
-    >
+    <div ref="provider" :name="fieldName" :rules="rules">
         <AtomUpload @uploadFiles="handleUpload" class="mb-5"></AtomUpload>
         <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
-    </ValidationProvider>
+    </div>
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
 import AtomUpload from '../atoms/AtomUpload.vue';
 import { getConvertedImage } from '../../includes/ConvertImageToByte';
 export default {
     name: 'MoleculeUpload',
-    components: { ValidationProvider, AtomUpload },
+    components: { AtomUpload },
     props: {
         rules: {
             type: [Object, String],
