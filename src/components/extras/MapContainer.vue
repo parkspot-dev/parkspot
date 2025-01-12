@@ -38,6 +38,7 @@ export default {
             type: Array,
             default: null,
         },
+        // zoom value configuration for the map
         zoom: {
             type: Number,
             default: 12,
