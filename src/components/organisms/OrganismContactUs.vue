@@ -54,6 +54,14 @@
                     <AtomIcon :icon="'linkedin'" :size="'is-medium'">
                     </AtomIcon>
                 </a>
+                <a
+                    class="social-icon"
+                    href="https://www.youtube.com/@parkspot4468"
+                    target="_blank"
+                >
+                    <AtomIcon :icon="'youtube'" :size="'is-medium'">
+                    </AtomIcon>
+                </a>
             </div>
         </div>
     </div>

@@ -304,6 +304,14 @@
                             <AtomIcon :icon="'linkedin'" :size="'is-medium'">
                             </AtomIcon>
                         </a>
+                        <a
+                            class="social-icon"
+                            href="https://www.youtube.com/@parkspot4468"
+                            target="_blank"
+                        >
+                            <AtomIcon :icon="'youtube'" :size="'is-medium'">
+                            </AtomIcon>
+                        </a>
                     </div>
                 </section>
             </BodyWrapper>
@@ -416,7 +424,7 @@ export default {
 
 .social-icon {
     padding: 0.5rem;
-    color: var(--parkspot-black);
+    color: var(--parkspot-white);
 }
 
 .social-icon:hover {
