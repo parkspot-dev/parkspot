@@ -16,12 +16,17 @@
                     :size="'is-small'"
                 ></AtomRating>
             </div>
+            <a href="items.link" class="read-more-link">
+                <img :src="googleIcon" alt="Google Icon" class="google-icon" />
+                <span>View on google</span>
+            </a>
         </div>
     </div>
 </template>
 
 <script>
 import AtomRating from '../atoms/AtomRating.vue';
+import GoogleIcon from '../../assets/google-icon.svg';
 export default {
     name: 'MoleculeTestimonialCard',
     components: {
@@ -36,6 +41,7 @@ export default {
     data() {
         return {
             img: require('@/assets/quote.png'),
+            googleIcon: GoogleIcon,
         };
     },
 };
@@ -104,4 +110,29 @@ $g-background-color-dark: #18181b;
         }
     }
 }
+
+.google-icon {
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.2));
+    height: 1.15rem;
+    transition: transform 0.1s ease, opacity 0.1s ease, filter 0.1s ease;
+}
+
+.read-more-link {
+    align-items: center;
+    color: var(--secondary-color);
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 5%;
+    text-decoration: none;
+}
+
+.read-more-link:hover {
+    font-weight: 500;
+}
+
+.read-more-link:hover .google-icon {
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3));
+    transform: scale(1.1);
+}
+
 </style>

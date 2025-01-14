@@ -37,37 +37,33 @@ export default {
         return {
             items: [
                 {
-                    name: 'Bhumi Mehra',
+                    name: 'Hameemsha H',
                     image: require('@/assets/testimony1.webp'),
-                    quote: `I am new to Bangalore and It was very difficult for me to find parking.
-                        A friend suggested me this app and it really helped me finding nearby parking with real
-                        time feeds like parking availability, rates, etc.`,
-                    rate: 4.9,
-                    date: '29 Jul 2020',
-                    datetime: '2020-7-29',
+                    quote: `I was facing an issue for parking my car in the apartment where I am staying currently. The parking space is very small and hardly a small car can be parked. There comes the parkspot as a solution for my need. Preety from parkspot team helped me in finalizing the rental spot which was quite near to my apartment. She continuously supported and helped regarding the rental spot.
+                    Thank you so much parkspot`,
+                    rate: 5,
+                    date: '1 Nov 2024',
+                    datetime: '2024-11-1',
+                    link: 'https://g.co/kgs/6yZXFeB',
                 },
                 {
-                    name: 'Nagarjun Prasad',
+                    name: 'kiran kumar',
                     image: require('@/assets/testimony2.webp'),
-                    quote: `A highly essential app for anyone in a metropolitan city, 
-                        everyone knows the pains of finding a parking spot for your vehicle and 
-                        this app makes it easy. The app allowed me to easily find any parking 
-                        spots near me. The prices for the spots considering the duration was also
-                        very affordable. Would definitely recommend this to anyone who wants a 
-                        painless experience to park their vehicles or to someone who has free 
-                        spots to rent out and make some cash.`,
-                    rate: 4.7,
-                    date: '15 Feb 2021',
-                    datetime: '2021-2-15',
+                    quote: `I was very impressed with the customer support and the time in what they arranged me the parking slot. Very much satisfied. I was suggested about this app by one of my friends and I approach them and within a couple of days my problem was solved. Cars are safely parked and i am relaxed.
+                    Thank you team PARK SPOT.`,
+                    rate: 5,
+                    date: '30 Jan 2023',
+                    datetime: '2023-1-30',
+                    link: 'https://g.co/kgs/pJKtix9',
                 },
                 {
-                    name: 'Roshan Singh',
+                    name: 'Abishek Suresh',
                     image: require('@/assets/testimony3.webp'),
-                    quote: `Amazing app which solves all that hustle-bustle for 
-                        placement of your vehicle and ensures 100% security when you are not taking care of it.`,
-                    rate: 4.5,
-                    date: '7 jan 2022',
-                    datetime: '2022-1-7',
+                    quote: `Parkspot really helped me when I'm in desperate need for a parking spot in Bangalore. They just confirmed me a spot in 30 mins. I recommend them to anyone who is looking for a parking space.`,
+                    rate: 5,
+                    date: '7 april 2024',
+                    datetime: '2022-4-7',
+                    link: 'https://g.co/kgs/4zTimhw',
                 },
             ],
         };
