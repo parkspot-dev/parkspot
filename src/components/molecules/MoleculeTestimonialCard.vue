@@ -16,8 +16,8 @@
                     :size="'is-small'"
                 ></AtomRating>
             </div>
-            <a href="items.link" class="read-more-link">
-                <img :src="googleIcon" alt="Google Icon" class="google-icon" />
+            <a class="read-more-link" :href="items.link" target="_blank">
+                <img alt="Google Icon" class="google-icon" :src="googleIcon"/>
                 <span>View on google</span>
             </a>
         </div>
