@@ -112,7 +112,6 @@ $g-background-color-dark: #18181b;
 }
 
 .google-icon {
-    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.2));
     height: 1.15rem;
     transition: transform 0.1s ease, opacity 0.1s ease, filter 0.1s ease;
 }
@@ -131,7 +130,7 @@ $g-background-color-dark: #18181b;
 }
 
 .read-more-link:hover .google-icon {
-    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
     transform: scale(1.1);
 }
 
