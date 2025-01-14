@@ -54,6 +54,14 @@
                     <AtomIcon :icon="'linkedin'" :size="'is-medium'">
                     </AtomIcon>
                 </a>
+                <a
+                    class="social-icon"
+                    href="https://www.youtube.com/@parkspot4468"
+                    target="_blank"
+                >
+                    <AtomIcon :icon="'youtube'" style="font-size: 42px; padding: 1rem;">
+                    </AtomIcon>
+                </a>
             </div>
         </div>
     </div>
@@ -103,7 +111,6 @@ export default {
         padding: 2rem;
     }
 }
-
 .options {
     display: block;
     margin-bottom: 0.75rem;
@@ -138,7 +145,13 @@ export default {
 
 .social-groups {
     display: flex;
-    gap: 15%;
+    gap: 10%;
+}
+
+@media (max-width: 850px) {
+    .social-groups {
+        gap: 1rem;
+    }
 }
 
 .social-icon {
