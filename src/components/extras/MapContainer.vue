@@ -63,10 +63,8 @@ export default {
     },
 
     mounted() {
-        if (this.spotDetails) {
-            this.updateMapConfig(this.center);
-            this.updateZoomValue(this.zoom);
-        }
+        this.updateMapConfig(this.center);
+        this.updateZoomValue(this.zoom);
         this.getMapAccessToken().then(() => this.renderMap());
     },
 
