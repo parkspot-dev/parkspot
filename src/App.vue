@@ -4,8 +4,7 @@
             <Navbar></Navbar>
             <OrganismLogin :is-show="loginModal"></OrganismLogin>
             <main class="body-container">
-                <PageHome></PageHome>
-                <!-- <router-view :key="$route.fullPath" /> -->
+                <router-view :key="$route.fullPath" />
             </main>
             <TemplateFooter></TemplateFooter>
         </div>
@@ -20,7 +19,6 @@ import OrganismLogin from './components/organisms/OrganismLogin.vue';
 import AtomChat from './components/atoms/AtomChat.vue';
 import { PAGE_TITLE } from '@/constant/constant';
 import { mapActions, mapState } from 'vuex';
-import PageHome from './views/PageHome.vue';
 
 
 export default {
