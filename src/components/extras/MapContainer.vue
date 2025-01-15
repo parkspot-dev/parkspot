@@ -36,7 +36,7 @@ export default {
         },
         center: {
             type: Array,
-            default: null,
+            default: () => [12.968304, 77.588585],
         },
         // zoom value configuration for the map
         zoom: {

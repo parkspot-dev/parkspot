@@ -75,7 +75,7 @@ export default {
             'updateSOLatLngInput',
         ]),
         ...mapMutations('map', {
-            updateMapConfig: 'update-user-location',
+            updateUserLocation: 'update-user-location',
         }),
         getUserLocation() {
             const geolocation = navigator.geolocation;
@@ -92,7 +92,7 @@ export default {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
             const location = [lng, lat];
-            this.updateMapConfig(location);
+            this.updateUserLocation(location);
         },
         onGeoError(error) {
             let detailError;
