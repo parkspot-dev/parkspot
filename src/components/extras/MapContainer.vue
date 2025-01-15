@@ -24,7 +24,7 @@ export default {
     data() {
         return {
             accessToken: null,
-            img: require('@/assets/pstopmini.png'),
+            img: '/src/assets/pstopmini.png',
             map: null, // map for mapbox
             marker: null, // marker for location
         };

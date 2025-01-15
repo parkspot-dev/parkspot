@@ -1,8 +1,5 @@
-import Vue from 'vue';
-import VueRouter, { createRouter, createWebHistory } from 'vue-router';
 import { routes } from './routes.js';
-
-Vue.use(VueRouter);
+import { createRouter, createWebHistory } from 'vue-router'
 
 const scrollBehavior = (_to, _from, savedPosition) => {
     // initially "savedPosition" value will be null,

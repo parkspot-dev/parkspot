@@ -1,6 +1,4 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import device from './device';
+import device from './device'; 
 import blog from './blog';
 import user from './user';
 import map from './map';
@@ -13,7 +11,6 @@ import spotRequests from './spotRequests';
 import reviewSpot from './reviewSpot';
 import { createStore } from 'vuex';
 
-Vue.use(Vuex);
 const store = createStore({
     modules: {
         device,

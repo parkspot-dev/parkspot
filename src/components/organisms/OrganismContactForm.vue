@@ -51,7 +51,6 @@ import AtomInput from '../atoms/AtomInput.vue';
 export default {
     name: 'OrganismContactForm',
     components: {
-        ValidationObserver,
         MoleculeNameInput,
         AtomTextarea,
         AtomInput,

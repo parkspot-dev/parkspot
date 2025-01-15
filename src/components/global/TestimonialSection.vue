@@ -30,12 +30,10 @@
 </template>
 
 <script>
-import 'swiper/swiper-bundle.min.css';
-import 'swiper/swiper.min.css';
 import { VO_PAGE_TESTIMONIALS } from '../../constant/constant';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
-import Swiper, { Navigation, Pagination, Autoplay } from 'swiper';
+// import Swiper, { Navigation, Pagination, Autoplay } from 'swiper';
 import TestimonialCard from './TestimonialCard.vue';
 
 export default {
@@ -52,42 +50,42 @@ export default {
     },
 
     mounted() {
-        new Swiper(this.$refs.swiper, {
-            // configure Swiper to use modules
-            modules: [Navigation, Pagination, Autoplay],
-            // Optional parameters
-            direction: 'horizontal',
-            loop: true,
-            autoHeight: false,
-            centeredSlides: true,
-            slidesPerView: 1,
-            autoplay: {
-                delay: 2000,
-                disableOnInteraction: true,
-            },
-            // Responsive breakpoints
-            breakpoints: {
-                640: {
-                    slidesPerView: 2,
-                    spaceBetween: 40,
-                },
-                992: {
-                    slidesPerView: 3,
-                    spaceBetween: 40,
-                },
-            },
+        // new Swiper(this.$refs.swiper, {
+        //     // configure Swiper to use modules
+        //     modules: [Navigation, Pagination, Autoplay],
+        //     // Optional parameters
+        //     direction: 'horizontal',
+        //     loop: true,
+        //     autoHeight: false,
+        //     centeredSlides: true,
+        //     slidesPerView: 1,
+        //     autoplay: {
+        //         delay: 2000,
+        //         disableOnInteraction: true,
+        //     },
+        //     // Responsive breakpoints
+        //     breakpoints: {
+        //         640: {
+        //             slidesPerView: 2,
+        //             spaceBetween: 40,
+        //         },
+        //         992: {
+        //             slidesPerView: 3,
+        //             spaceBetween: 40,
+        //         },
+        //     },
 
-            // If we need pagination
-            pagination: {
-                el: '.swiper-pagination',
-            },
+        //     // If we need pagination
+        //     pagination: {
+        //         el: '.swiper-pagination',
+        //     },
 
-            // Navigation arrows
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-        });
+        //     // Navigation arrows
+        //     navigation: {
+        //         nextEl: '.swiper-button-next',
+        //         prevEl: '.swiper-button-prev',
+        //     },
+        // });
     },
 };
 </script>

@@ -35,7 +35,7 @@ export default {
     },
     data() {
         return {
-            img: require('@/assets/quote.png'),
+            img: '/src/assets/quote.png',
         };
     },
 };

@@ -47,7 +47,6 @@ export const routes = [
         component: () => import('@/views/PageFaq.vue'),
     },
 
-
     {
         path: pages.ABOUT,
         name: 't-about',
@@ -106,7 +105,7 @@ export const routes = [
     {
         path: pages.SPOT_REQUESTS,
         name: 'spotRequest',
-        component: () => import('@/views/SpotRequest.vue')
+        component: () => import('@/views/SpotRequest.vue'),
     },
     {
         path: pages.PAYMENTGATEWAY,
@@ -172,7 +171,12 @@ export const routes = [
         component: () => import('@/views/PageTemp.vue'),
     },
     {
-        path: '*',
+        // path: "*",
+        path: '/:catchAll(.*)',
+        name: 'NotFound',
+        meta: {
+            requiresAuth: false,
+        },
         component: Home,
         redirect: pages.HOME,
     },

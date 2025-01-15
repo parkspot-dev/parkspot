@@ -18,7 +18,8 @@
                             </router-link>
                         </div>
                         <AtomParagraph class="pl-4 mb-5 footer-para">
-                            We provide the cheap and best parking spot in India.<br/>
+                            We provide the cheap and best parking spot in
+                            India.<br />
                             You can't park cheaper!
                         </AtomParagraph>
                         <div class="app-links">
@@ -338,9 +339,9 @@ export default {
     },
     data() {
         return {
-            psfooterImg: require('@/assets/psfooterlogo.png'),
-            appLinkImg: require('@/assets/google-play-badge.svg'),
-            iosAppLinkImg: require('@/assets/apple-store.svg'),
+            psfooterImg: '/src/assets/psfooterlogo.png',
+            appLinkImg: '/src/assets/google-play-badge.svg',
+            iosAppLinkImg: '/src/assets/apple-store.svg',
         };
     },
 };

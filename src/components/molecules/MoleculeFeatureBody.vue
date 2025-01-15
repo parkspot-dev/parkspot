@@ -21,7 +21,7 @@ export default {
     },
     data() {
         return {
-            src: require('../../assets/features-tick.svg'),
+            src: '/src/assets/features-tick.svg',
             check: true,
         };
     },

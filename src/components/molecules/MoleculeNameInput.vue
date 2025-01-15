@@ -4,8 +4,6 @@
             v-model="innerValue"
             :placeholder="placeholder"
             :type="inputType"
-            :errorMessage="errors"
-            :errorType="{ 'is-danger': errors[0], 'is-success': valid }"
             :label="label"
             class="mb-1"
         >
@@ -23,7 +21,6 @@ export default {
     props: {
         value: {
             type: null,
-            required: true,
         },
         placeholder: {
             type: String,

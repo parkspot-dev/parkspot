@@ -46,7 +46,7 @@ export default {
     },
     data() {
         return {
-            src: require('../../assets/features.png'),
+            src: '/src/assets/features.png',
         };
     },
 };

@@ -1,6 +1,6 @@
 <template>
     <div class="map-location">
-        <div class="map-location-header">
+        <!-- <div class="map-location-header">
             <h1>Map Location</h1>
             <h2>Please fill all the fields</h2>
         </div>
@@ -21,47 +21,47 @@
             @click.native="saveProfile"
         >
             Save Profile
-        </AtomButton>
+        </AtomButton> -->
     </div>
 </template>
 
 <script>
-import AtomButton from '../atoms/AtomButton.vue';
-import { gmapApi } from 'vue2-google-maps';
-import { getUserLocation } from '../../includes/UserLocation';
+// import AtomButton from '../atoms/AtomButton.vue';
+// import { gmapApi } from 'vue2-google-maps';
+// import { getUserLocation } from '../../includes/UserLocation';
 
 export default {
     name: 'OrganismMapLocation',
-    components: {
-        AtomButton,
-    },
-    data() {
-        return {
-            markerPostion: { lat: 12.92442, lng: 77.580643 },
-            center: { lat: 12.92442, lng: 77.580643 },
-        };
-    },
-    computed: {
-        google: gmapApi,
-    },
-    mounted() {
-        getUserLocation((userLocation) => {
-            this.center = userLocation;
-            this.markerPostion = userLocation;
-        });
-        // At this point, the child GmapMap has been mounted, but
-        // its map has not been initialized.
-        // Therefore we need to write mapRef.$mapPromise.then(() => ...)
+    // components: {
+    //     AtomButton,
+    // },
+    // data() {
+    //     return {
+    //         markerPostion: { lat: 12.92442, lng: 77.580643 },
+    //         center: { lat: 12.92442, lng: 77.580643 },
+    //     };
+    // },
+    // computed: {
+    //     google: gmapApi,
+    // },
+    // mounted() {
+    //     getUserLocation((userLocation) => {
+    //         this.center = userLocation;
+    //         this.markerPostion = userLocation;
+    //     });
+    //     // At this point, the child GmapMap has been mounted, but
+    //     // its map has not been initialized.
+    //     // Therefore we need to write mapRef.$mapPromise.then(() => ...)
 
-        this.$refs.mapRef.$mapPromise.then((map) => {
-            map.panTo(this.center);
-        });
-    },
-    methods: {
-        onMapClick(mapsMouseEvent) {
-            this.markerPostion = mapsMouseEvent.latLng.toJSON();
-        },
-    },
+    //     this.$refs.mapRef.$mapPromise.then((map) => {
+    //         map.panTo(this.center);
+    //     });
+    // },
+    // methods: {
+    //     onMapClick(mapsMouseEvent) {
+    //         this.markerPostion = mapsMouseEvent.latLng.toJSON();
+    //     },
+    // },
 };
 </script>
 

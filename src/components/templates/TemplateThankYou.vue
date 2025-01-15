@@ -50,7 +50,7 @@ export default {
     },
     data() {
         return {
-            img: require('@/assets/thankyou.svg'),
+            img: '/src/assets/thankyou.svg',
             imgName: 'Thank You',
             imgRatio: '1by1',
         };
