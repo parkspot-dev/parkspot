@@ -42,8 +42,10 @@
             <div class="spot-detail-map">
                 <h2>How to get here?</h2>
                 <MapContainer
+                    :center="center"
+                    :spotDetails="selectedSpot[0]"
+                    :zoom="13"
                     class="sdp-map"
-                    :spotsList="selectedSpot"
                 ></MapContainer>
             </div>
 
@@ -184,6 +186,7 @@ export default {
             'ownerInfoDetails',
             'selectedSpot',
             'isAvailable',
+            'center'
         ]),
     },
     emits: ['goToSearchPortal', 'changeAvailability', 'changeLastCallDate'],
