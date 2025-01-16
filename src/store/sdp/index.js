@@ -2,14 +2,15 @@ import { mayaClient } from '@/services/api';
 
 const UPDATE_SITE_ENDPOINT = '/owner/update-site';
 const state = {
-    spotDetails: null,
-    ownerInfoDetails: null,
-    selectedSpot: [],
+    center : null,
+    images: [],
     isAvailable: false,
     loading: true,
-    title: '',
+    ownerInfoDetails: null,
+    selectedSpot: [],
+    spotDetails: null,
     thumbnail: [],
-    images: [],
+    title: '',
 };
 
 const getters = {};
@@ -53,6 +54,10 @@ const mutations = {
     'update-title'(state, title) {
         state.title = title;
     },
+
+    'update-map-center'(state, center) {
+        state.center = center
+    }
 };
 
 const actions = {
@@ -71,6 +76,7 @@ const actions = {
                 Rate: res.Site.Rate,
                 Distance: 0, // res.Site.Distance
             };
+            commit('update-map-center', [spot.Long, spot.Lat])
             commit('update-selected-spot', spot);
             commit('update-is-available', res.Site['SlotsAvailable']);
             commit('update-loading', false);
