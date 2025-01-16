@@ -436,6 +436,7 @@
                     <div class="cell"><strong> Payment Type </strong></div>
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
+                    <div class="cell"><strong> Action </strong></div>
                 </div>
                 <div v-if="currBookingDetails.Payments">
                     <div
@@ -453,7 +454,24 @@
                         <div class="cell">
                             {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
-                        <div class="cell">
+                            <div
+                            v-if="
+                                editField === 'Payment Type' &&
+                                editingPaymentID &&
+                                editingPaymentID === payment.PaymentID
+                            "
+                        >
+                            <select v-model="payment.Type">
+                                <option
+                                    v-for="(label, index) in paymentTypeLabels"
+                                    :key="label"
+                                    :value="index"
+                                >
+                                    {{ label }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="cell" v-else>
                             {{ getPaymentTypeLabel(payment.Type) }}
                         </div>
                         <div class="cell">
@@ -480,6 +498,28 @@
                             </div>
                         </div>
                         <div class="cell">₹ {{ payment.Amount }}</div>
+                        <div class="cell edit-payment">
+                            <!-- <AtomIcon :icon="'pencil'" class="icon" ></AtomIcon>  -->
+                            <AtomIcon
+                                v-if="
+                                    editField === 'Payment Type' &&
+                                    editingPaymentID &&
+                                    editingPaymentID === payment.PaymentID
+                                "
+                                @click.native="enableEdit('')"
+                                :icon="'content-save-outline'"
+                                size=""
+                            ></AtomIcon>
+
+                            <AtomIcon
+                                v-else
+                                @click.native="
+                                    enableEditPaymentRow(payment.PaymentID)
+                                "
+                                :icon="'pencil'"
+                                size=""
+                            ></AtomIcon>
+                        </div>
                     </div>
                 </div>
                 <div v-else>No payment history found.</div>
@@ -491,13 +531,14 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import {
-    PaymentStatus,
-    getPaymentStatusLabel,
+    BookingStatusLabels,
     getBookingStatusLabel,
     getPaymentPeriodicityLabel,
-    BookingStatusLabels,
+    getPaymentStatusLabel,
+    getPaymentTypeLabel,
     PaymentPeriodicityLabels,
-    getPaymentTypeLabel
+    PaymentStatus,
+    PaymentTypeLabels,
 } from '@/constant/enums';
 import AtomButton from '../atoms/AtomButton.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
@@ -523,6 +564,7 @@ export default {
             editField: null,
             paymentPeriodicityLabels: PaymentPeriodicityLabels,
             toolTipLabel: 'Copy payment url!',
+            paymentTypeLabels: PaymentTypeLabels,
         };
     },
     beforeMount() {
@@ -537,6 +579,7 @@ export default {
         ...mapState('bookingPortal', [
             'agents',
             'bookingDetails',
+            'editingPaymentID',
             'initialActiveBookingDetails',
             'paymentDetails',
             'updatedFields',
@@ -566,7 +609,10 @@ export default {
     },
 
     methods: {
-        ...mapActions('bookingPortal', ['setUpdatedFields']),
+        ...mapActions('bookingPortal', [
+            'setUpdatedFields',
+            'updateEditingPaymentID',
+        ]),
 
         getPaymentStatusLabel(paymentStatus) {
             return getPaymentStatusLabel(paymentStatus);
@@ -578,7 +624,7 @@ export default {
             return getBookingStatusLabel(bookingStatus);
         },
         getPaymentTypeLabel(paymentType) {
-           return getPaymentTypeLabel(paymentType);
+            return getPaymentTypeLabel(paymentType);
         },
 
         getAgentName(agents, agentUserName) {
@@ -692,6 +738,11 @@ export default {
             } else {
                 return initialValue === currentValue;
             }
+        },
+
+        enableEditPaymentRow(paymentID) {
+            this.updateEditingPaymentID(paymentID);
+            this.enableEdit('Payment Type');
         },
     },
 };
@@ -892,6 +943,17 @@ export default {
         .status-label {
             color: orange;
         }
+    }
+}
+
+.edit-payment {
+    display: flex;
+    justify-content: center;
+
+    .icon {
+        color: var(--secondary-color);
+        font-size: 20px;
+        cursor: pointer;
     }
 }
 </style>

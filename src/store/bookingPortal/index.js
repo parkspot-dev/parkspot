@@ -29,6 +29,7 @@ const state = {
     activeBookings: [],
     agents: {},
     bookingDetails: null,
+    editingPaymentID: null,
     errorMessage: String,
     hasError: false,
     // State to preserve the original data before any updates or changes.
@@ -85,6 +86,10 @@ const mutations = {
     'set-updated-fields'(state, fields) {
         state.updatedFields = fields;
     },
+
+    'set-editing-payment-ID'(state, paymentID) {
+        state.editingPaymentID = paymentID
+    }
 };
 
 const actions = {
@@ -178,6 +183,10 @@ const actions = {
     setUpdatedFields({ commit }, fields) {
         commit('set-updated-fields', fields);
     },
+
+    updateEditingPaymentID({commit}, paymentID) {
+        commit('set-editing-payment-ID', paymentID)
+    }
 };
 
 export default {
