@@ -20,15 +20,12 @@ import AtomChat from './components/atoms/AtomChat.vue';
 import { PAGE_TITLE } from '@/constant/constant';
 import { mapActions, mapState } from 'vuex';
 
-
 export default {
     components: {
         TemplateFooter,
         Navbar,
         OrganismLogin,
         AtomChat,
-        PageHome,
-
     },
     async created() {
         await this.getHelplineNumber();
