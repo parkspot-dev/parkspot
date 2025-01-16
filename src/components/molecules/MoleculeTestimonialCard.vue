@@ -18,7 +18,7 @@
             </div>
             <a class="read-more-link" :href="items.link" target="_blank">
                 <img alt="Google Icon" class="google-icon" :src="googleIcon"/>
-                <span>View on google</span>
+                <span>View review</span>
             </a>
         </div>
     </div>
