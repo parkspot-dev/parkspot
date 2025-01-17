@@ -8,7 +8,7 @@
                         <span class="tab-btn-text"> Find spot </span>
                     </div>
                 </template>
-                <template>
+                <template #default>
                     <div class="card-main-body">
                         <h2 class="title">Search parking spot in seconds</h2>
                         <SearchInput class="search-input"></SearchInput>
@@ -28,7 +28,7 @@
                         <span class="tab-btn-text"> Rent spot </span>
                     </div>
                 </template>
-                <template>
+                <template #default>
                     <div class="card-main-body">
                         <h2 class="title">
                             Make money by renting out your spot
