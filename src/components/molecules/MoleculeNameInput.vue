@@ -1,7 +1,8 @@
 <template>
     <div :name="fieldName">
         <AtomInput
-            v-model="innerValue"
+            :modelValue="innerValue"
+            @update:modelValue="innerValue = $event"
             :placeholder="placeholder"
             :type="inputType"
             :label="label"
@@ -19,7 +20,7 @@ export default {
         AtomInput,
     },
     props: {
-        value: {
+        modelValue: {
             type: null,
         },
         placeholder: {
@@ -53,16 +54,16 @@ export default {
     watch: {
         // Handles internal model changes.
         innerValue(newVal) {
-            this.$emit('input', newVal);
+            this.$emit('update:modelValue', newVal);
         },
         // Handles external model changes.
-        value(newVal) {
+        modelValue(newVal) {
             this.innerValue = newVal;
         },
     },
     created() {
-        if (this.value) {
-            this.innerValue = this.value;
+        if (this.modelValue) {
+            this.innerValue = this.modelValue;
         }
     },
 };

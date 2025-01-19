@@ -5,10 +5,9 @@
                 :id="id"
                 :disabled="disabled"
                 :type="type"
-                :value="value"
+                v-model="inputValue"
                 :placeholder="placeholder"
-                @input.native="onInput($event.target.value)"
-                @focus.native="onFocus($event.target.value)"
+                @focus="onFocus($event.target.value)"
                 @blur="onChange($event.target.value)"
                 :size="size"
             ></b-input>
@@ -70,9 +69,9 @@ export default {
         /**
          *  User input value in the input field
          */
-        value: {
+        modelValue: {
             type: [String, Number],
-            default: null,
+            default: '',
         },
 
         /**
@@ -87,7 +86,7 @@ export default {
          * @value is-danger, is-success
          */
         errorType: {
-            type: Object,
+            type: String,
             default: null,
         },
         /**
@@ -95,7 +94,7 @@ export default {
          * validation completed
          */
         errorMessage: {
-            type: Array,
+            type: [String, Array],
             default: null,
         },
 
@@ -108,16 +107,21 @@ export default {
             default: null,
         },
     },
-    emits: ['input', 'focus', 'changed'],
-    methods: {
-        onInput(value) {
-            this.$emit('input', value);
+    emits: ['update:modelValue', 'focus', 'changed'],
+    computed: {
+        inputValue: {
+            get() {
+                return this.modelValue;
+            },
+            set(value) {
+                this.$emit('update:modelValue', value);
+            },
         },
-
+    },
+    methods: {
         onFocus(value) {
             this.$emit('focus', value);
         },
-
         onChange(value) {
             this.$emit('changed', value);
         },
