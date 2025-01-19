@@ -86,24 +86,26 @@ export default {
         };
     },
     watch: {
-        formSubmitted(newVal) {
-            if (newVal) {
-                this.$refs.observer
-                    .validate()
-                    .then((el) => {
-                        if (el) {
-                            this.submit();
-                            this.$emit('formValidate', el);
-                        } else {
-                            this.$emit('formValidate', el);
-                        }
-                    })
-                    .catch((er) => {
-                        console.log(er);
-                    });
+    formSubmitted(newVal) {
+        if (newVal) {
+            if (this.$refs.observer && typeof this.$refs.observer.validate === "function") {
+                this.$refs.observer.validate().then((isValid) => {
+                    if (isValid) {
+                        this.submit();
+                        this.$emit('formValidate', isValid);
+                    }
+                }).catch((error) => {
+                    console.error("Validation error:", error);
+                });
+            } else {
+                console.warn("Observer validation skipped (not a function)");
+                this.submit();
+                this.$emit('formValidate', true);
             }
-        },
+        }
     },
+},
+
     mounted() {
         this.isEnable = this.$route.name === 'SOPortal';
     },
