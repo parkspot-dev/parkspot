@@ -4,9 +4,8 @@
             :maxlength="maxlength"
             type="textarea"
             :placeholder="placeholder"
-            :value="value"
+            v-model="inputValue"
             @blur="onChange($event.target.value)"
-            @input.native="onInput($event.target.value)"
             :size="size"
             :rows="rowNo"
         ></b-input>
@@ -35,7 +34,7 @@ export default {
         /**
          *  User input value in the input field
          */
-        value: {
+        modelValue: {
             type: String,
             default: null,
         },
@@ -56,11 +55,18 @@ export default {
             default: 5,
         },
     },
-    emits: ['input', 'changed'],
-    methods: {
-        onInput(value) {
-            this.$emit('input', value);
+    emits: ['update:modelValue', 'changed'],
+    computed: {
+        inputValue: {
+            get() {
+                return this.modelValue;
+            },
+            set(value) {
+                this.$emit('update:modelValue', value);
+            },
         },
+    },
+    methods: {
         onChange(value) {
             this.$emit('changed', value);
         },
