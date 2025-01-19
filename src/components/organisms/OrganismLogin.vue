@@ -1,6 +1,6 @@
 <template>
     <div>
-        <MoleculeModal :is-show="isShow" @cancel="onClose">
+        <b-modal v-model="showModal" @cancel="onClose">
             <div class="login-card">
                 <div class="logo-wrapper">
                     <img
@@ -32,33 +32,24 @@
                     </p>
                 </div>
             </div>
-        </MoleculeModal>
+        </b-modal>
     </div>
 </template>
 
 <script>
-import MoleculeModal from '../molecules/MoleculeModal.vue';
 import { mapMutations, mapActions } from 'vuex';
 
 export default {
     name: 'OrganismLogin',
-    components: {
-        MoleculeModal,
-    },
     props: {
         isShow: Boolean,
     },
-    data() {
-        return {};
-    },
-    mounted() {},
     methods: {
         ...mapMutations('user', {
             updateLoginModal: 'update-login-Modal',
         }),
         ...mapActions('user', {
             loginWithGoogle: 'loginWithGoogle',
-            loginWithPhone: 'loginWithPhone',
         }),
 
         onClose(isClose) {
@@ -67,6 +58,16 @@ export default {
 
         login() {
             this.loginWithGoogle();
+        },
+    },
+    computed: {
+        showModal: {
+            get() {
+                return this.$store.state.user.loginModal;
+            },
+            set(value) {
+                this.$store.commit('user/update-login-Modal', value);
+            },
         },
     },
 };
@@ -121,8 +122,10 @@ export default {
         border: none;
         cursor: pointer;
         background-color: var(--parkspot-white);
-        box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%),
-            0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+        box-shadow:
+            0 2px 2px 0 rgb(0 0 0 / 14%),
+            0 3px 1px -2px rgb(0 0 0 / 20%),
+            0 1px 5px 0 rgb(0 0 0 / 12%);
 
         .google-btn-icon-wrapper {
             width: 18px;
