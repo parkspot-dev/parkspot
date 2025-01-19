@@ -51,7 +51,6 @@ export default {
         },
         contactFormValidate(flag) {
             if (flag) {
-                console.log('template contact us');
                 this.$emit('contactUs');
             }
             this.formSubmitted = false;
