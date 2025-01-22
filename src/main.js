@@ -4,9 +4,14 @@ import 'buefy/dist/buefy.css';
 import { createApp } from 'vue';
 import router from './router';
 import store from './store';
+import { configure } from 'vee-validate';
 
 import 'buefy/dist/buefy.css';
 
+// Configure vee-validate globally
+configure({
+    validateOnInput : true
+})
 const app = createApp(App)
 
 app.use(Buefy);

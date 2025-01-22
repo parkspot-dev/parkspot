@@ -1,65 +1,66 @@
 <template>
-    <div ref="observer">
-        <MoleculeNameInput
-            :rules="validation.fullname"
-            :fieldName="CONTACT_FORM.FULLNAME"
-            v-model="model.fullname"
-            :placeholder="CONTACT_FORM.FULLNAME"
+    <Form @submit="submitForm" :validation-schema="contactFormSchema">
+        <FormInput
+            :fieldname="'fullname'"
             :label="CONTACT_FORM.FULLNAME"
-        >
-        </MoleculeNameInput>
-        <AtomInput
-            v-model="model.email"
-            :placeholder="CONTACT_FORM.EMAIL"
-            :type="'email'"
+            :placeholder="CONTACT_FORM.FULLNAME"
+            v-model="model.fullname"
+        />
+
+        <FormInput
+            :fieldname="'email'"
             :label="CONTACT_FORM.EMAIL"
-            class="mb-1"
-        >
-        </AtomInput>
-        <MoleculeNameInput
-            :rules="validation.cno"
-            :fieldName="CONTACT_FORM.CONTACT_NO"
-            v-model="model.cno"
-            :placeholder="CONTACT_FORM.CONTACT_NO"
+            :placeholder="CONTACT_FORM.EMAIL"
+            type="email"
+            v-model="model.email"
+        />
+
+        <FormInput
+            :fieldname="'cno'"
             :label="CONTACT_FORM.CONTACT_NO"
-        >
-        </MoleculeNameInput>
-        <MoleculeNameInput
-            v-if="isEnable"
-            :rules="validation.addr"
-            :fieldName="'Address'"
-            v-model="model.addr"
-            :placeholder="'Address'"
+            :placeholder="CONTACT_FORM.CONTACT_NO"
+            v-model="model.cno"
+        />
+
+        <FormInput
+            :fieldname="'addr'"
             :label="'Address'"
-        >
-        </MoleculeNameInput>
-        <AtomTextarea
-            v-if="textArea"
-            v-model="model.msg"
-            :label="'Message'"
-        ></AtomTextarea>
-    </div>
+            :placeholder="'Enter your address'"
+            v-if="isEnable"
+            v-model="model.addr"
+        />
+
+        <div v-if="textArea">
+            <AtomTextarea
+                :fieldname="'msg'"
+                :label="'Message'"
+                v-model="model.msg"
+            />
+        </div>
+        <button class="send-button" type="submit">
+            Submit <AtomIcon class="btn-icon" :icon="'send-outline'"></AtomIcon>
+        </button>
+    </Form>
 </template>
 
 <script>
+import { contactFormSchema } from '@/validationSchemas';
 import { FORM } from '../../constant/constant';
+import { Form } from 'vee-validate';
 import { mapMutations } from 'vuex';
-import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
-import AtomTextarea from '../atoms/AtomTextarea.vue';
-import AtomInput from '../atoms/AtomInput.vue';
+import AtomIcon from '@/components/atoms/AtomIcon.vue';
+import AtomTextarea from '@/components/atoms/AtomTextarea.vue';
+import FormInput from '@/components/global/FormInput.vue';
 
 export default {
     name: 'OrganismContactForm',
     components: {
-        MoleculeNameInput,
         AtomTextarea,
-        AtomInput,
+        Form,
+        FormInput,
+        AtomIcon,
     },
     props: {
-        formSubmitted: {
-            type: Boolean,
-            default: false,
-        },
         textArea: {
             type: Boolean,
             default: false,
@@ -68,64 +69,66 @@ export default {
     emits: ['formValidate'],
     data() {
         return {
-            model: {
-                fullname: '',
-                email: '',
-                cno: '',
-                msg: '',
-                addr: '',
-            },
-            validation: {
-                fullname: 'required',
-                email: '',
-                cno: 'required|integer|phone',
-                addr: 'required|address',
-            },
             CONTACT_FORM: FORM,
+            contactFormSchema,
             isEnable: false,
+            model: {
+                addr: '',
+                cno: '',
+                email: '',
+                fullname: '',
+                msg: '',
+            },
         };
     },
-    watch: {
-    formSubmitted(newVal) {
-        if (newVal) {
-            if (this.$refs.observer && typeof this.$refs.observer.validate === "function") {
-                this.$refs.observer.validate().then((isValid) => {
-                    if (isValid) {
-                        this.submit();
-                        this.$emit('formValidate', isValid);
-                    }
-                }).catch((error) => {
-                    console.error("Validation error:", error);
-                });
-            } else {
-                console.warn("Observer validation skipped (not a function)");
-                this.submit();
-                this.$emit('formValidate', true);
-            }
-        }
-    },
-},
-
     mounted() {
-        this.isEnable = this.$route.name === 'SOPortal';
+        this.isEnable = this.$route?.name === 'SOPortal';
     },
     methods: {
         ...mapMutations({
-            updateContact: 'user/update-contact',
+            updateContactForm: 'user/update-contact',
         }),
-        submit() {
-            this.updateContact(this.model);
+
+        submitForm() {
+            this.updateContactForm(this.model);
+            this.$emit('formValidate', true);
         },
+
         resetForm() {
             this.model.fullname = '';
             this.model.email = '';
             this.model.cno = '';
-            requestAnimationFrame(() => {
-                this.$refs.observer.reset();
-            });
+            this.model.msg = '';
         },
     },
 };
 </script>
 
-<style></style>
+<style>
+.error {
+    color: red;
+    font-size: 0.875em;
+}
+
+.send-button {
+    align-items: center;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    font-size: 16px;
+    font-weight: var(--semi-bold-font);
+    gap: 8px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    transition:
+        background 0.3s,
+        transform 0.2s;
+}
+
+.btn-icon {
+    font-size: 18px;
+    transform: rotate(316deg);
+}
+</style>
