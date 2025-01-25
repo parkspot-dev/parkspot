@@ -1,117 +1,97 @@
 <template>
-    <div ref="observer">
-        <!-- Contact Form Fields -->
-        <div class="form-container">
-            <div class="form-row">
-                <MoleculeNameInput
-                    :fieldName="CONTACT_FORM.FULLNAME"
-                    :label="CONTACT_FORM.FULLNAME"
-                    :placeholder="CONTACT_FORM.FULLNAME"
-                    :rules="validation.fullname"
-                    v-model="contactModel.fullname"
-                >
-                </MoleculeNameInput>
-                <MoleculeNameInput
-                    :fieldName="CONTACT_FORM.CONTACT_NO"
-                    :label="CONTACT_FORM.CONTACT_NO"
-                    :placeholder="CONTACT_FORM.CONTACT_NO"
-                    :rules="validation.cno"
-                    v-model="contactModel.cno"
-                >
-                </MoleculeNameInput>
-            </div>
-            <AtomInput
-                :label="CONTACT_FORM.EMAIL"
-                :placeholder="CONTACT_FORM.EMAIL"
-                :type="'email'"
-                v-model="contactModel.email"
-            ></AtomInput>
-            <div class="form-row">
-                <!-- Preference Form Fields -->
-                <MoleculeSelectInput
-                    :fieldName="PREFERENCE.PARKING_TYPE"
-                    :label="PREFERENCE.PARKING_TYPE"
-                    :list="parkingTypeData"
-                    :placeholder="'Type of Parking'"
-                    :rules="validation.parkingType"
-                    @input="updateType"
-                    class="parking-type-input"
-                ></MoleculeSelectInput>
-                <MoleculeSelectInput
-                    :fieldName="PREFERENCE.DURATION"
-                    :label="PREFERENCE.DURATION"
-                    :list="minDurData"
-                    :placeholder="'Minimum duration if any'"
-                    :rules="validation.minDur"
-                    @input="updateMinDur"
-                    class="min-duration-input"
-                ></MoleculeSelectInput>
-            </div>
-            <MoleculeNameInput
-                :fieldName="PREFERENCE.MODEL"
-                :label="PREFERENCE.MODEL"
-                :placeholder="PREFERENCE.MODEL"
-                :rules="validation.carModel"
-                class="car-modal-input"
-                v-model="preferenceModel.carModel"
-            ></MoleculeNameInput>
-            <MoleculeCheckbox
-                :fieldName="ADD_INFO.TERMS"
-                :rules="validation.terms"
-                :values="termData"
-                @data="updateTermsData"
-            >
-                <template v-slot:extra>
-                    <a
-                        href="https://www.parkspot.in/terms-and-conditions"
-                        target="_blank"
-                        >T&C</a
-                    >
-                </template>
-            </MoleculeCheckbox>
-            <AtomButton class="cta-btn" @click.native="submit">
-                <span class="btn-wrap">
-                    <span class="btn-text"> Send </span>
-                    <AtomIcon
-                        class="btn-icon"
-                        :icon="'send-outline'"
-                    ></AtomIcon>
-                </span>
-            </AtomButton>
+    <Form
+        :validation-schema="parkingRequestFormSchema"
+        @submit="submitForm"
+        class="form-container"
+    >
+        <div class="form-row">
+            <FormInput
+                :label="CONTACT_FORM.FULLNAME"
+                :placeholder="CONTACT_FORM.FULLNAME"
+                fieldname="fullname"
+                v-model="contactModel.fullname"
+            />
+
+            <FormInput
+                :label="CONTACT_FORM.CONTACT_NO"
+                :placeholder="CONTACT_FORM.CONTACT_NO"
+                fieldname="cno"
+                v-model="contactModel.cno"
+            />
         </div>
-    </div>
+        <FormInput
+            :label="CONTACT_FORM.EMAIL"
+            :placeholder="CONTACT_FORM.EMAIL"
+            fieldname="email"
+            type="email"
+            v-model="contactModel.email"
+        />
+        <div class="form-row">
+            <SelectInput
+                :label="PREFERENCE.PARKING_TYPE"
+                :list="parkingTypeData"
+                :placeholder="PREFERENCE.PARKING_TYPE"
+                @update:modelValue="updateType"
+                class="parking-type-input"
+                name="parkingType"
+                v-model="preferenceModel.spot"
+            />
+
+            <SelectInput
+                :label="PREFERENCE.DURATION"
+                :list="minDurData"
+                :placeholder="PREFERENCE.DURATION"
+                @update:modelValue="updateMinDur"
+                class="min-duration-input"
+                name="minDur"
+                v-model="preferenceModel.minDur"
+            />
+        </div>
+        <FormInput
+            :label="PREFERENCE.MODEL"
+            :placeholder="PREFERENCE.MODEL"
+            fieldname="carModel"
+            v-model="preferenceModel.carModel"
+        />
+        <button class="send-button" type="submit">
+            Submit <AtomIcon class="btn-icon" :icon="'send-outline'"></AtomIcon>
+        </button>
+    </Form>
 </template>
 
 <script>
-import AtomButton from '../atoms/AtomButton.vue';
-import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
 import { ADD_INFO, PREFERENCE, FORM } from '../../constant/constant';
+import { Form } from 'vee-validate';
 import { mapMutations } from 'vuex';
+import { parkingRequestFormSchema } from '@/validationSchemas';
 import AtomIcon from '../atoms/AtomIcon.vue';
 import AtomInput from '../atoms/AtomInput.vue';
-import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
-import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
+import FormInput from '@/components/global/FormInput.vue';
+import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
+import SelectInput from '@/components/global/SelectInput.vue';
 
 export default {
     name: 'ParkingRequestForm',
     components: {
-        AtomButton,
         AtomIcon,
         AtomInput,
+        Form,
+        FormInput,
         MoleculeCheckbox,
-        MoleculeNameInput,
-        MoleculeSelectInput,
+        SelectInput,
     },
     data() {
         return {
+            parkingRequestFormSchema,
             contactModel: {
-                fullname: '',
-                email: '',
                 cno: '',
+                email: '',
+                fullname: '',
             },
             preferenceModel: {
                 carModel: '',
                 minDur: '',
+                spot: '',
                 terms: '',
             },
             validation: {
@@ -138,25 +118,20 @@ export default {
             updateContact: 'user/update-contact',
             updatePreference: 'user/update-preference',
         }),
-        submit() {
-            this.$refs.observer
-                .validate()
-                .then((ele) => {
-                    if (ele) {
-                        this.updateContact(this.contactModel);
-                        this.updatePreference(this.preferenceModel);
-                        this.$emit('onSubmit');
-                    }
-                })
-                .catch((err) =>
-                    console.log('Error while submitting form', err),
-                );
+
+        submitForm(values) {
+            console.log('Submiting form', values);
+            console.log(this.contactModel, this.preferenceModel);
+            parkingRequestFormSchema.parse().then((val) => console.log(val));
+            // this.updateContact(this.contactModel);
+            // this.updatePreference(this.preferenceModel);
+            // this.$emit('onSubmit');
         },
         updateMinDur(val) {
-            this.preferenceModel.minDur = this.minDurData[val].name;
+            this.preferenceModel.minDur = val;
         },
         updateType(val) {
-            this.preferenceModel.spot = this.parkingTypeData[val].name;
+            this.preferenceModel.spot = val;
         },
         updateTermsData(data) {
             this.preferenceModel.terms = data;

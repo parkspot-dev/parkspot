@@ -72,6 +72,7 @@ export default {
     margin-top: 8px;
 }
 .input {
+    font-size: 16px;
     padding: 8px;
     width: 100%;
 }

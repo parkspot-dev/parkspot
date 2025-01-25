@@ -93,13 +93,6 @@ export default {
             this.updateContactForm(this.model);
             this.$emit('formValidate', true);
         },
-
-        resetForm() {
-            this.model.fullname = '';
-            this.model.email = '';
-            this.model.cno = '';
-            this.model.msg = '';
-        },
     },
 };
 </script>
