@@ -90,7 +90,9 @@ export default {
         }),
 
         submitForm() {
+            console.log("Submitting..");
             this.updateContactForm(this.model);
+            console.log("This is model", this.model);
             this.$emit('formValidate', true);
         },
 
@@ -120,7 +122,7 @@ export default {
     font-size: 16px;
     font-weight: var(--semi-bold-font);
     gap: 8px;
-    margin: 0 auto;
+    margin: 16px auto;
     padding: 10px 20px;
     transition:
         background 0.3s,
