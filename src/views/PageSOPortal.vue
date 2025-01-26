@@ -36,7 +36,6 @@ export default {
             contact: 'user/contact',
         }),
         async onFinalSubmit() {
-            console.log("Inside contact..");
             try {
                 this.isLoading = true;
                 this.contact();
