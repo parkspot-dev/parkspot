@@ -7,7 +7,7 @@
                     <OrganismContactForm
                         :textArea="true"
                         :formSubmitted="formSubmitted"
-                        @formValidate="contactFormValidate"
+                        @submitForm="submitForm"
                     ></OrganismContactForm>
                 </div>
             </div>
@@ -33,12 +33,9 @@ export default {
         };
     },
     methods: {
-        contactFormValidate(flag) {
-            if (flag) {
-                this.$emit('contactUs');
-            }
-            this.formSubmitted = false;
-        },
+        submitForm() {
+            this.$emit('contactUs')
+        }
     },
 };
 </script>

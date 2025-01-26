@@ -5,7 +5,7 @@
                 <div class="card card-padding">
                     <OrganismContactForm
                         :formSubmitted="formSubmitted"
-                        @formValidate="contactFormValidate"
+                        @submitForm="submitForm"
                     ></OrganismContactForm>
                 </div>
             </div>
@@ -23,19 +23,16 @@ export default {
         BodyWrapper,
         OrganismContactForm
     },
-    emits: ['contactUs'],
+    emits: ['finalSubmit'],
     data() {
         return {
             formSubmitted: false,
         };
     },
     methods: {
-        contactFormValidate(flag) {
-            if (flag) {
-                this.$emit('contactUs');
-            }
-            this.formSubmitted = false;
-        },
+        submitForm() {
+            this.$emit('finalSubmit')
+        }
     },
 };
 </script>

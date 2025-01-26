@@ -66,7 +66,7 @@ export default {
             default: false,
         },
     },
-    emits: ['formValidate'],
+    emits: ['submitForm'],
     data() {
         return {
             CONTACT_FORM: FORM,
@@ -90,10 +90,8 @@ export default {
         }),
 
         submitForm() {
-            console.log("Submitting..");
             this.updateContactForm(this.model);
-            console.log("This is model", this.model);
-            this.$emit('formValidate', true);
+            this.$emit('submitForm');
         },
 
         resetForm() {
