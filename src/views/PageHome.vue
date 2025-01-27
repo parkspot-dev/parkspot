@@ -4,7 +4,7 @@
         <TemplateFeatureHome></TemplateFeatureHome>
         <TemplateOurProducts @arrowBtn="onArrowBtn"></TemplateOurProducts>
         <PageAbout></PageAbout>
-        <!-- <TemplateTestimonial></TemplateTestimonial> -->
+        <TemplateTestimonial></TemplateTestimonial>
         <PageContactUs></PageContactUs>
     </div>
 </template>
