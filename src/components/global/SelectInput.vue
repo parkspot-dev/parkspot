@@ -2,9 +2,7 @@
     <div class="select-wrapper">
         <label :for="name" class="label">{{ label }}</label>
         <select v-model="value" :id="name" @change="emitUpdate">
-            <option value="Select an option" disabled selected>
-                Select an option
-            </option>
+            <option value="" disabled selected>{{ placeholder }}</option>
             <option
                 :key="option.id"
                 :value="option.name"
