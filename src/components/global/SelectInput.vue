@@ -1,9 +1,15 @@
 <template>
     <div class="select-wrapper">
-        <label :for="name" class="label" >{{ label }}</label>
+        <label :for="name" class="label">{{ label }}</label>
         <select v-model="value" :id="name" @change="emitUpdate">
-            <option value="Select an option"disabled selected >Select an option</option>
-            <option v-for="option in list" :key="option.id" :value="option.name">
+            <option value="Select an option" disabled selected>
+                Select an option
+            </option>
+            <option
+                :key="option.id"
+                :value="option.name"
+                v-for="option in list"
+            >
                 {{ option.name }}
             </option>
         </select>
