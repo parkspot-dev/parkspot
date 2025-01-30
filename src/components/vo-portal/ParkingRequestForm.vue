@@ -53,6 +53,20 @@
             fieldname="carModel"
             v-model="preferenceModel.carModel"
         />
+        <CheckBoxInput
+            :label="termData"
+            :termsLink="'https://www.parkspot.in/terms-and-conditions'"
+            @data="updateTermsData"
+            name="terms"
+        >
+            <template v-slot:extra>
+                <a
+                    href="https://www.parkspot.in/terms-and-conditions"
+                    target="_blank"
+                    >T&C</a
+                >
+            </template>
+        </CheckBoxInput>
         <button class="send-button" type="submit">
             Submit <AtomIcon class="btn-icon" :icon="'send-outline'"></AtomIcon>
         </button>
@@ -69,12 +83,13 @@ import AtomInput from '../atoms/AtomInput.vue';
 import FormInput from '@/components/global/FormInput.vue';
 import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
 import SelectInput from '@/components/global/SelectInput.vue';
-
+import CheckBoxInput from '../global/CheckBoxInput.vue';
 export default {
     name: 'ParkingRequestForm',
     components: {
         AtomIcon,
         AtomInput,
+        CheckBoxInput,
         Form,
         FormInput,
         MoleculeCheckbox,
@@ -94,15 +109,6 @@ export default {
                 spot: '',
                 terms: '',
             },
-            validation: {
-                fullname: 'required',
-                email: 'required|email',
-                cno: 'required|integer|phone',
-                carModel: 'required',
-                minDur: 'required',
-                terms: 'required',
-                parkingType: 'required',
-            },
             CONTACT_FORM: FORM,
             PREFERENCE,
             ADD_INFO,
@@ -119,13 +125,10 @@ export default {
             updatePreference: 'user/update-preference',
         }),
 
-        submitForm(values) {
-            console.log('Submiting form', values);
-            console.log(this.contactModel, this.preferenceModel);
-            parkingRequestFormSchema.parse().then((val) => console.log(val));
-            // this.updateContact(this.contactModel);
-            // this.updatePreference(this.preferenceModel);
-            // this.$emit('onSubmit');
+        submitForm() {
+            this.updateContact(this.contactModel);
+            this.updatePreference(this.preferenceModel);
+            this.$emit('onSubmit');
         },
         updateMinDur(val) {
             this.preferenceModel.minDur = val;
@@ -144,7 +147,7 @@ export default {
 .form-container {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem !important;
+    gap: 1rem;
 }
 
 .form-row {
@@ -159,8 +162,12 @@ export default {
 }
 
 @media (max-width: 768px) {
+    .form-container{
+        gap: 1rem;
+    }
     .form-row {
         flex-direction: column;
+        gap: 1rem;
     }
 
     .form-row > * {
@@ -168,27 +175,14 @@ export default {
     }
 }
 
-.car-modal-input {
-    margin-top: -20px !important;
-}
-
-.min-duration-input {
-    margin-top: 0px !important;
-}
-
-@media (max-width: 768px) {
-    .min-duration-input {
-        margin-top: -20px !important;
-    }
-
-    .parking-type-input {
-        margin-top: 4px;
-    }
+.car-modal-input,
+.min-duration-input,
+.parking-type-input {
+    margin-top: 0 !important; 
 }
 
 .cta-btn {
     background-color: var(--primary-color);
-    margin-top: -20px;
     width: 100%;
 }
 

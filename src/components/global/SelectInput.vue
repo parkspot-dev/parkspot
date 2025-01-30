@@ -2,7 +2,7 @@
     <div class="select-wrapper">
         <label :for="name" class="label" >{{ label }}</label>
         <select v-model="value" :id="name" @change="emitUpdate">
-            <option value="" disabled selected >{{ placeholder }}</option>
+            <option value="Select an option"disabled selected >Select an option</option>
             <option v-for="option in list" :key="option.id" :value="option.name">
                 {{ option.name }}
             </option>
@@ -48,7 +48,6 @@ select {
 .label {
     font-size: 14px !important;
     font-weight: 500 !important;
-    margin-top: 8px;
 }
 .error {
     color: red;

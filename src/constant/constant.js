@@ -31,7 +31,7 @@ export const PARKING_FACILITY = {
         ],
         DURATION: 'Duration',
         MINIMUM_DURATION_DATA: [
-            { id: 0, name: ' < 1 month' },
+            { id: 0, name: 'less than 1 month' },
             { id: 1, name: '2 - 3 months' },
             { id: 2, name: '3 - 5 months' },
             { id: 3, name: 'More than 6 months' },
@@ -85,7 +85,7 @@ export const ADD_INFO = {
         { id: 3, name: 'More than 6 months' },
     ],
     TERMS: 'Terms & Conditions',
-    TERMS_DATA: ['I agree to '],
+    TERMS_DATA: 'I agree to',
 };
 
 export const PREFERENCE = {

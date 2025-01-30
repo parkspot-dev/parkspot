@@ -10,8 +10,9 @@ const rules = {
         .min(3, 'Must be at least 3 characters.'),
     email: z
         .string()
-        .min(1, 'Email is required.')
-        .email('Invalid email address.'),
+        .email('Invalid email address.')
+        .optional()
+        .or(z.literal('')),
     password: z
         .string()
         .min(1, 'Password is required.')

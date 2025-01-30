@@ -69,7 +69,6 @@ export default {
 .label {
     font-size: 14px !important;
     font-weight: 500 !important;
-    margin-top: 8px;
 }
 .input {
     font-size: 16px;
