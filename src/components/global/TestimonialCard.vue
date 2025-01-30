@@ -8,7 +8,11 @@
             </div>
         </div>
         <div class="divider-line"></div>
-        <p class="testimonial-text" v-html="formattedQuote" ></p>
+        <p class="testimonial-text" v-html="formattedQuote"></p>
+        <a class="read-more-link" :href="item.link" target="_blank">
+            <img alt="Google Icon" class="google-icon" :src="googleIcon" />
+            <span>View review</span>
+        </a>
     </div>
 </template>
 
@@ -31,6 +35,11 @@ export default {
             required: true,
             type: Object,
         },
+    },
+    data() {
+        return {
+            googleIcon: 'https://cdn-icons-png.flaticon.com/128/300/300221.png',
+        };
     },
     computed: {
         // Formats the quote to replace newline characters with <br> tags.
@@ -95,5 +104,28 @@ export default {
     font-size: 14px;
     line-height: 1.6;
     margin-bottom: 16px;
+}
+
+.google-icon {
+    height: 1.15rem;
+    transition:
+        transform 0.1s ease,
+        opacity 0.1s ease,
+        filter 0.1s ease;
+}
+.read-more-link {
+    align-items: center;
+    color: var(--secondary-color);
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 5%;
+    text-decoration: none;
+}
+.read-more-link:hover {
+    font-weight: 500;
+}
+.read-more-link:hover .google-icon {
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
+    transform: scale(1.1);
 }
 </style>

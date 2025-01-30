@@ -153,25 +153,27 @@ export const TOP_SEARCH_PLACES = [
 // Clients testimonials for VO Page
 export const VO_PAGE_TESTIMONIALS = [
     {
-        name: 'Jay Ravi',
-        image: '/src/assets/vo-page-testimonial-2.png',
-        quote: `I recently had the pleasure of using the "ParkSpot" app to find a covered car parking spot in Bangalore, and I must say it exceeded my expectations. The app's user-friendly interface made it incredibly easy to locate available parking spaces in the bustling city. \nOne of the standout features of ParkSpot is its real-time availability updates, which helped me save time and frustration. I could see which parking spots were open and even reserve a spot in advance, Thanks to Preety.`,
-        rate: 4.9,
-        date: '6 Nov 2023',
+        name: 'Hameemsha H',
+        image: 'https://cdn-icons-png.flaticon.com/128/2202/2202112.png',
+        quote: `I was facing an issue for parking my car in the apartment where I am staying currently. The parking space is very small and hardly a small car can be parked. There comes the parkspot as a solution for my need. Preety from parkspot team helped me in finalizing the rental spot which was quite near to my apartment. She continuously supported and helped regarding the rental spot.
+        Thank you so much parkspot`,
+        rate: 5,
+        link: 'https://g.co/kgs/6yZXFeB',
     },
     {
-        name: 'Nagarjun Prasad',
-        image: '/src/assets/testimony2.webp',
-        quote: `A highly essential app for anyone in a metropolitan city, everyone knows the pains of finding a parking spot for your vehicle and this app makes it easy. The app allowed me to easily find any parking spots near me. The prices for the spots considering the duration was also very affordable. \nWould definitely recommend this to anyone who wants a painless experience to park their vehicles or to someone who has free spots to rent out and make some cash.`,
-        rate: 4.7,
-        date: '15 Feb 2021',
+        name: 'kiran kumar',
+        image: 'https://cdn-icons-png.flaticon.com/128/2202/2202112.png',
+        quote: `I was very impressed with the customer support and the time in what they arranged me the parking slot. Very much satisfied. I was suggested about this app by one of my friends and I approach them and within a couple of days my problem was solved. Cars are safely parked and i am relaxed.
+        Thank you team PARK SPOT.`,
+        rate: 5,
+        link: 'https://g.co/kgs/pJKtix9',
     },
     {
-        name: 'Ishwar Kumar',
-        image: '/src/assets/vo-page-testimonial-1.webp',
-        quote: `Had a great experience using ParkSpot. I needed a parking space for my vehicle for around 2 months. I searched in ParkSpot and it has numerous results. I chose one of the nearest parking space and prebook it online. \nThis app has also navigation feature which makes very easy for me to get the exact location of the parking space.`,
-        rate: 4.8,
-        date: '17 Jan 2017',
+        name: 'Abishek Suresh',
+        image: 'https://cdn-icons-png.flaticon.com/128/2202/2202112.png',
+        quote: `Parkspot really helped me when I'm in desperate need for a parking spot in Bangalore. They just confirmed me a spot in 30 mins. I recommend them to anyone who is looking for a parking space.`,
+        rate: 5,
+        link: 'https://g.co/kgs/4zTimhw',
     },
 ];
 
