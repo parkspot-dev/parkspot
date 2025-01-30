@@ -1,15 +1,15 @@
 <template>
     <div>
-        <label class="label" :for="fieldname">{{ label }}</label>
+        <label class="label" :for="name">{{ label }}</label>
         <Field
-            :name="fieldname"
+            :name="name"
             :placeholder="placeholder"
             :type="type"
             class="input"
             v-bind="$attrs"
             v-model="inputValue"
         />
-        <ErrorMessage :name="fieldname" class="error" />
+        <ErrorMessage :name="name" class="error" />
     </div>
 </template>
 
@@ -23,7 +23,7 @@ export default {
         ErrorMessage,
     },
     props: {
-        fieldname: {
+        name: {
             type: String,
             required: true,
         },
@@ -45,7 +45,7 @@ export default {
         },
     },
     setup(props) {
-        const { errorMessage, value } = useField(props.fieldname);
+        const { errorMessage, value } = useField(props.name);
         return { errorMessage, value };
     },
     computed: {

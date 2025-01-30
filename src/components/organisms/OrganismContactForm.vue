@@ -1,14 +1,14 @@
 <template>
     <Form @submit="submitForm" :validation-schema="contactFormSchema">
         <FormInput
-            :fieldname="'fullname'"
+            :name="'fullname'"
             :label="CONTACT_FORM.FULLNAME"
             :placeholder="CONTACT_FORM.FULLNAME"
             v-model="model.fullname"
         />
 
         <FormInput
-            :fieldname="'email'"
+            :name="'email'"
             :label="CONTACT_FORM.EMAIL"
             :placeholder="CONTACT_FORM.EMAIL"
             type="email"
@@ -16,14 +16,14 @@
         />
 
         <FormInput
-            :fieldname="'cno'"
+            :name="'cno'"
             :label="CONTACT_FORM.CONTACT_NO"
             :placeholder="CONTACT_FORM.CONTACT_NO"
             v-model="model.cno"
         />
 
         <FormInput
-            :fieldname="'addr'"
+            :name="'addr'"
             :label="'Address'"
             :placeholder="'Enter your address'"
             v-if="isEnable"
@@ -32,7 +32,7 @@
 
         <div v-if="textArea">
             <AtomTextarea
-                :fieldname="'msg'"
+                :name="'msg'"
                 :label="'Message'"
                 v-model="model.msg"
             />
