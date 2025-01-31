@@ -36,7 +36,7 @@ export default {
             items: [
                 {
                     name: 'Bhumi Mehra',
-                    image: '/src/assets/testimony1.webp',
+                    image: 'assets/testimony1.webp',
                     quote: `I am new to Bangalore and It was very difficult for me to find parking.
                         A friend suggested me this app and it really helped me finding nearby parking with real
                         time feeds like parking availability, rates, etc.`,
@@ -46,7 +46,7 @@ export default {
                 },
                 {
                     name: 'Nagarjun Prasad',
-                    image: '/src/assets/testimony2.webp',
+                    image: 'assets/testimony2.webp',
                     quote: `A highly essential app for anyone in a metropolitan city, 
                         everyone knows the pains of finding a parking spot for your vehicle and 
                         this app makes it easy. The app allowed me to easily find any parking 
@@ -60,7 +60,7 @@ export default {
                 },
                 {
                     name: 'Roshan Singh',
-                    image: '/src/assets/testimony3.webp',
+                    image: 'assets/testimony3.webp',
                     quote: `Amazing app which solves all that hustle-bustle for 
                         placement of your vehicle and ensures 100% security when you are not taking care of it.`,
                     rate: 4.5,

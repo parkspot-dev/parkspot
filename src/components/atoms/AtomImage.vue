@@ -1,5 +1,5 @@
 <template>
-    <b-image :src="src" :alt="alt" :ratio="ratio" lazy></b-image>
+    <b-image :src="src" :alt="alt" :ratio="ratio" lazy class="b-img"></b-image>
 </template>
 
 <script>
@@ -30,5 +30,3 @@ export default {
     },
 };
 </script>
-
-<style></style>
