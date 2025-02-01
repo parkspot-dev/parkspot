@@ -86,10 +86,11 @@ export default {
     border: 1px solid var(--parkspot-white);
     box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
     display: flex;
+    flex: 1;
     flex-direction: column;
     gap: 1rem;
     margin: 20px;
-    min-height: 240px;
+    min-height: 380px;
     padding: 16px;
 
     .divider-line {
@@ -101,6 +102,7 @@ export default {
 
 .testimonial-text {
     color: var(--parkspot-black);
+    flex-grow: 1;
     font-size: 14px;
     line-height: 1.6;
     margin-bottom: 16px;
@@ -115,6 +117,7 @@ export default {
 }
 .read-more-link {
     align-items: center;
+    align-self: flex-end;
     color: var(--secondary-color);
     display: flex;
     gap: 0.4rem;

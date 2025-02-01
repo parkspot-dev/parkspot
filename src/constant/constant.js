@@ -175,6 +175,22 @@ export const VO_PAGE_TESTIMONIALS = [
         rate: 5,
         link: 'https://g.co/kgs/4zTimhw',
     },
+    {
+        name: 'Reshma Geetha',
+        image: 'https://cdn-icons-png.flaticon.com/128/2202/2202112.png',
+        quote: `Parkspot is absolutely a genuine company. Preety coordinated well and made work easy.will definitely recommend parkspot to others and trustful`,
+        rate: 5,
+        link: 'https://g.co/kgs/r4d1awq',
+    },
+    {
+        name: 'Manish Tadhiyal',
+        image: 'https://cdn-icons-png.flaticon.com/128/2202/2202112.png',
+        quote: `Nice customer service, they help you with every step till you get your parking space.
+        Good App, nice support team.
+        Thanks for support Preety.😊`,
+        rate: 5,
+        link: 'https://g.co/kgs/A7T2jka',
+    },
 ];
 
 export const JOINING_BENEFITS = [
@@ -221,4 +237,4 @@ export const WHAT_NEXT = [
         icon: 'self_improvement',
         title: 'Step 4',
     },
-]
+];
