@@ -15,7 +15,6 @@ import { defineProps, defineEmits, ref, watch } from 'vue';
 const props = defineProps({
     name: { type: String, required: true },
     label: { type: String, default: 'I accept the Terms and Conditions' },
-    termsLink: { type: String, required: true },
 });
 
 const emit = defineEmits(['update:modelValue', 'data']);
@@ -25,7 +24,7 @@ const checked = ref(value.value || false);
 watch(checked, (newVal) => {
     emit('update:modelValue', newVal);
     value.value = newVal;
-    emit('data', newVal);
+    emit('updateTerms', newVal);
 });
 </script>
 

@@ -55,8 +55,7 @@
         />
         <CheckBoxInput
             :label="termData"
-            :termsLink="'https://www.parkspot.in/terms-and-conditions'"
-            @data="updateTermsData"
+            @updateTerms="updateTermsData"
             name="terms"
         >
             <template v-slot:extra>
