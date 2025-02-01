@@ -24,6 +24,7 @@
         "npm-check-updates": "^17.1.13",
         "swiper": "^11.2.0",
         "v-click-outside": "^3.2.0",
+        "vee-validate": "^4.15.0",
         "vue": "^3.5.13",
         "vue-loader": "^17.4.2",
         "vue-meta": "^2.4.0",
