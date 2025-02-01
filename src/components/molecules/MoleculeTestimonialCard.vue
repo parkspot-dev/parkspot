@@ -35,7 +35,7 @@ export default {
     },
     data() {
         return {
-            img: '/src/assets/quote.png',
+            img: 'assets/quote.png',
         };
     },
 };

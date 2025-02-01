@@ -6,14 +6,14 @@
                 <!-- company logo -->
                 <div class="company-logo">
                     <router-link :to="{ name: 'Home' }">
-                        <img
+                        <AtomImage
                             class="ps-icon"
-                            src="@/assets/pstopmini.png"
+                            src="assets/pstopmini.png"
                             alt="parkspot icon"
                         />
-                        <img
+                        <AtomImage
                             class="ps-text"
-                            src="@/assets/pstoptext.png"
+                            src="assets/pstoptext.png"
                             alt="parkspot text"
                         />
                     </router-link>
@@ -174,14 +174,14 @@
                             <div class="slide-header">
                                 <div class="company-logo">
                                     <router-link :to="{ name: 'Home' }">
-                                        <img
+                                        <AtomImage
                                             class="ps-icon"
-                                            src="@/assets/pstopmini.png"
+                                            src="assets/pstopmini.png"
                                             alt="parkspot icon"
                                         />
-                                        <img
+                                        <AtomImage
                                             class="ps-text"
-                                            src="@/assets/pstoptext.png"
+                                            src="assets/pstoptext.png"
                                             alt="parkspot text"
                                         />
                                     </router-link>
@@ -365,11 +365,13 @@
 <script>
 import AtomButton from '../atoms/AtomButton.vue';
 import { mapState, mapMutations, mapActions } from 'vuex';
+import AtomImage from '@/components/atoms/AtomImage.vue';
 
 export default {
     name: 'NavbarBody',
     components: {
         AtomButton,
+        AtomImage,
     },
     data() {
         return {
@@ -425,4 +427,27 @@ export default {
 .mobile-phone-link {
     margin-inline-end: 8px;
 }
+// .ps-icon {
+//     width: 36px;
+//     height: 36px;
+
+//     @media only screen and (max-width: 1024px) {
+//         width: 30px;
+//         height: 30px;
+//     }
+// }
+
+// .ps-text {
+//     width: auto;
+//     height: 36px;
+
+//     @media only screen and (max-width: 1024px) {
+//         width: auto;
+//         height: 30px;
+//     }
+
+//     @media only screen and (max-width: 680px) {
+//         display: none;
+//     }
+// }
 </style>

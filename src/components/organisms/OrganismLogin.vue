@@ -3,9 +3,9 @@
         <b-modal v-model="showModal" @cancel="onClose">
             <div class="login-card">
                 <div class="logo-wrapper">
-                    <img
+                    <AtomImage
                         class="login-logo"
-                        src="../../assets/pstopmini.png"
+                        src="assets/pstopmini.png"
                         alt="parkspot logo"
                     />
                 </div>
@@ -15,8 +15,8 @@
                 </p>
                 <button class="google-btn" @click="login">
                     <span class="google-btn-icon-wrapper">
-                        <img
-                            src="../../assets/googleicon.svg"
+                        <AtomImage
+                            src="assets/googleicon.svg"
                             alt="gmail icon"
                         />
                     </span>
@@ -38,9 +38,11 @@
 
 <script>
 import { mapMutations, mapActions } from 'vuex';
+import AtomImage from '../atoms/AtomImage.vue';
 
 export default {
     name: 'OrganismLogin',
+    components: { AtomImage },
     props: {
         isShow: Boolean,
     },

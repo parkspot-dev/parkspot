@@ -28,6 +28,8 @@ export default {
     data() {
         return {
             activeTab: 'VO',
+            carOwnerImage: 'assets/home-car-owner.jpg',
+            shapeUrl: `url('assets/home-car-owner.jpg')`,
         };
     },
     methods: {
@@ -40,7 +42,7 @@ export default {
 
 <style lang="scss" scoped>
 .image-spot-owner {
-    background-image: url('../../assets/home-spot-owner.jpg');
+    background-image: v-bind(shapeUrl);
     -webkit-transition: background-image 1s;
 
     @media only screen and (max-width: 1024px) {
@@ -49,7 +51,7 @@ export default {
     }
 }
 .image-car-owner {
-    background-image: url('../../assets/home-car-owner.jpg');
+    background-image: v-bind("`url('${carOwnerImage}')`");
     -webkit-transition: background-image 1s;
 
     @media only screen and (max-width: 1024px) {

@@ -4,14 +4,22 @@
             href="https://wa.me/917488239471?text=I'm%20interested%20in%20car%20parking."
             target="_blank"
         >
-            <img
-                src="../../assets/wa-icon.png"
+            <AtomImage
+                src="assets/wa-icon.png"
                 alt="chat-icon"
                 class="chat-icon"
             />
         </a>
     </div>
 </template>
+
+<script>
+import AtomImage from './AtomImage.vue';
+export default {
+    name: 'AtomChat',
+    components: { AtomImage },
+};
+</script>
 
 <style>
 .chat {
