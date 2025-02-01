@@ -8,21 +8,21 @@
             <FormInput
                 :label="CONTACT_FORM.FULLNAME"
                 :placeholder="CONTACT_FORM.FULLNAME"
-                fieldname="fullname"
+                :name="'fullname'"
                 v-model="contactModel.fullname"
             />
 
             <FormInput
                 :label="CONTACT_FORM.CONTACT_NO"
                 :placeholder="CONTACT_FORM.CONTACT_NO"
-                fieldname="cno"
+                :name="'cno'"
                 v-model="contactModel.cno"
             />
         </div>
         <FormInput
             :label="CONTACT_FORM.EMAIL"
             :placeholder="CONTACT_FORM.EMAIL"
-            fieldname="email"
+            :name="'email'"
             type="email"
             v-model="contactModel.email"
         />
@@ -50,7 +50,7 @@
         <FormInput
             :label="PREFERENCE.MODEL"
             :placeholder="PREFERENCE.MODEL"
-            fieldname="carModel"
+            :name="'carModel'"
             v-model="preferenceModel.carModel"
         />
         <CheckBoxInput
