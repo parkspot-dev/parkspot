@@ -79,7 +79,7 @@ export const ADD_INFO = {
         { id: 3, name: '3+' },
     ],
     MINIMUM_DURATION_DATA: [
-        { id: 0, name: 'less than 1 month' },
+        { id: 0, name: 'Less than 1 month' },
         { id: 1, name: '2 - 3 months' },
         { id: 2, name: '3 - 5 months' },
         { id: 3, name: 'More than 6 months' },
