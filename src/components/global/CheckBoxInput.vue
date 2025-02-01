@@ -22,7 +22,6 @@ const { value, errorMessage } = useField(props.name);
 const checked = ref(value.value || false);
 
 watch(checked, (newVal) => {
-    emit('update:modelValue', newVal);
     value.value = newVal;
     emit('updateTerms', newVal);
 });
