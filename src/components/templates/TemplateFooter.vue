@@ -339,9 +339,9 @@ export default {
     },
     data() {
         return {
-            psfooterImg: '/src/assets/psfooterlogo.png',
-            appLinkImg: '/src/assets/google-play-badge.svg',
-            iosAppLinkImg: '/src/assets/apple-store.svg',
+            psfooterImg: 'assets/psfooterlogo.png',
+            appLinkImg: 'assets/google-play-badge.svg',
+            iosAppLinkImg: 'assets/apple-store.svg',
         };
     },
 };

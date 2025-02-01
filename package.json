@@ -1,4 +1,5 @@
 {
+<<<<<<< .merge_file_xVSP9e
   "name": "parkspot",
   "version": "0.2.0",
   "private": true,
@@ -55,4 +56,60 @@
     "not OperaMini all",
     "not OperaMobile > 0"
   ]
+=======
+    "name": "parkspot",
+    "version": "0.2.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview",
+        "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+        "format": "prettier .  --write"
+    },
+    "dependencies": {
+        "axios": "^1.7.9",
+        "boxicons": "^2.1.4",
+        "buefy": "npm:@ntohq/buefy-next@^0.1.4",
+        "bulma": "^1.0.3",
+        "caniuse-lite": "^1.0.30001690",
+        "cashfree-dropjs": "^1.1.5",
+        "lightgallery.js": "^1.4.0",
+        "lodash": "^4.17.21",
+        "mapbox-gl": "^3.9.2",
+        "moment": "^2.30.1",
+        "npm-check-updates": "^17.1.13",
+        "swiper": "^11.2.0",
+        "v-click-outside": "^3.2.0",
+        "vue": "^3.5.13",
+        "vue-loader": "^17.4.2",
+        "vue-meta": "^2.4.0",
+        "vue-router": "^4.5.0",
+        "vuex": "^4.1.0"
+    },
+    "devDependencies": {
+        "@testing-library/vue": "^8.1.0",
+        "@vitejs/plugin-vue": "^5.2.1",
+        "eslint": "^9.17.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-vue": "^9.32.0",
+        "firebase": "^11.1.0",
+        "prettier": "3.4.2",
+        "sass": "^1.83.1",
+        "vite": "^6.0.7",
+        "vite-plugin-vue-devtools": "^7.7.0",
+        "vue-test-utils": "^0.5.0"
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not Explorer > 0",
+        "IE 11",
+        "not ExplorerMobile > 0",
+        "not BlackBerry > 0",
+        "not OperaMini all",
+        "not OperaMobile > 0"
+    ]
+>>>>>>> .merge_file_brlC9i
 }
