@@ -86,15 +86,11 @@ export default {
     },
     data() {
         return {
-            appLinkImg: '/src/assets/google-play-badge.svg',
-            aboutImg: '/src/assets/about.svg',
+            appLinkImg: 'assets/google-play-badge.svg',
+            aboutImg: 'assets/about.svg',
+            iosAppLinkImg: 'assets/apple-store.svg',
             APP_LINK,
         };
-    },
-    computed: {
-        iosAppLinkImg() {
-            return new URL('@/assets/apple-store.svg', import.meta.url).href;
-        },
     },
 };
 </script>

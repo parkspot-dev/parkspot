@@ -1,14 +1,19 @@
 <template>
     <div class="loader-container">
         <div class="loader">
-            <img src="../../assets/pstopmini.png" />
+            <AtomImage src="assets/pstopmini.png" alt="parkspot logo" />
         </div>
     </div>
 </template>
 
 <script>
+import AtomImage from '../atoms/AtomImage.vue';
+
 export default {
     name: 'LoaderModal',
+    components: {
+        AtomImage,
+    },
 };
 </script>
 
