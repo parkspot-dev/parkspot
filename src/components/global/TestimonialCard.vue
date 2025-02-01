@@ -4,7 +4,6 @@
             <img class="author-image" :alt="item.name" :src="item.image" />
             <div>
                 <h4 class="author-name">{{ item.name }}</h4>
-                <p class="author-details">{{ item.date }}</p>
             </div>
         </div>
         <div class="divider-line"></div>
@@ -90,7 +89,7 @@ export default {
     flex-direction: column;
     gap: 1rem;
     margin: 20px;
-    min-height: 380px;
+    min-height: 280px;
     padding: 16px;
 
     .divider-line {
