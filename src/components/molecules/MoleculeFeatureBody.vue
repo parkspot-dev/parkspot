@@ -21,7 +21,7 @@ export default {
     },
     data() {
         return {
-            src: '/src/assets/features-tick.svg',
+            src: 'assets/features-tick.svg',
             check: true,
         };
     },

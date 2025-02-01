@@ -2,7 +2,7 @@
     <div>
         <div id="app">
             <Navbar></Navbar>
-            <OrganismLogin :is-show="loginModal"></OrganismLogin>
+            <OrganismLogin></OrganismLogin>
             <main class="body-container">
                 <router-view :key="$route.fullPath" />
             </main>
@@ -18,7 +18,7 @@ import Navbar from './components/extras/NavbarBody.vue';
 import OrganismLogin from './components/organisms/OrganismLogin.vue';
 import AtomChat from './components/atoms/AtomChat.vue';
 import { PAGE_TITLE } from '@/constant/constant';
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
     components: {
@@ -34,11 +34,6 @@ export default {
         return {
             title: PAGE_TITLE.HOMEPAGE,
         };
-    },
-    computed: {
-        ...mapState('user', {
-            loginModal: (state) => state.loginModal,
-        }),
     },
     methods: {
         ...mapActions('config', ['getHelplineNumber']),
