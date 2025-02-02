@@ -11,6 +11,7 @@
         "format": "prettier .  --write"
     },
     "dependencies": {
+        "@vee-validate/zod": "^4.15.0",
         "axios": "^1.7.9",
         "boxicons": "^2.1.4",
         "buefy": "npm:@ntohq/buefy-next@^0.1.4",
@@ -29,7 +30,8 @@
         "vue-loader": "^17.4.2",
         "vue-meta": "^2.4.0",
         "vue-router": "^4.5.0",
-        "vuex": "^4.1.0"
+        "vuex": "^4.1.0",
+        "zod": "^3.24.1"
     },
     "devDependencies": {
         "@testing-library/vue": "^8.1.0",
