@@ -55,7 +55,7 @@
         />
         <CheckboxInput
             :label="termData"
-            @updateTerms="updateTermsData"
+            @update="updateTermsData"
             name="terms"
         >
             <template v-slot:extra>
