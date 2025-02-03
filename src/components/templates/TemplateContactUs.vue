@@ -7,17 +7,8 @@
                     <OrganismContactForm
                         :textArea="true"
                         :formSubmitted="formSubmitted"
-                        @formValidate="contactFormValidate"
+                        @submitForm="submitForm"
                     ></OrganismContactForm>
-                    <AtomButton class="cta-btn" @click.native="sendMsg">
-                        <span class="btn-wrap">
-                            <span class="btn-text"> Send </span>
-                            <AtomIcon
-                                class="btn-icon"
-                                :icon="'send-outline'"
-                            ></AtomIcon>
-                        </span>
-                    </AtomButton>
                 </div>
             </div>
         </div>
@@ -28,16 +19,12 @@
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import OrganismContactUs from '../organisms/OrganismContactUs.vue';
 import OrganismContactForm from '../organisms/OrganismContactForm.vue';
-import AtomButton from '../atoms/AtomButton.vue';
-import AtomIcon from '../atoms/AtomIcon.vue';
 export default {
     name: 'TemplateContactUs',
     components: {
         BodyWrapper,
         OrganismContactUs,
         OrganismContactForm,
-        AtomButton,
-        AtomIcon,
     },
     emits: ['contactUs'],
     data() {
@@ -46,15 +33,9 @@ export default {
         };
     },
     methods: {
-        sendMsg() {
-            this.formSubmitted = true;
-        },
-        contactFormValidate(flag) {
-            if (flag) {
-                this.$emit('contactUs');
-            }
-            this.formSubmitted = false;
-        },
+        submitForm() {
+            this.$emit('contactUs')
+        }
     },
 };
 </script>
@@ -68,30 +49,5 @@ export default {
     padding-right: 1.5rem !important;
     padding-bottom: 4rem !important;
     padding-left: 1.5rem !important;
-}
-
-.cta-btn {
-    position: absolute;
-    bottom: 6%;
-    left: 50%;
-    padding: 1.25rem 2rem;
-    transform: translate(-50%, 0);
-}
-
-.btn-wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.15rem;
-}
-
-.btn-text {
-    font-weight: var(--semi-bold-font);
-    letter-spacing: -1px;
-}
-
-.btn-icon {
-    font-size: 1.25rem;
-    transform: rotate(316deg);
 }
 </style>
