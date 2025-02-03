@@ -23,7 +23,7 @@ const checked = ref(value.value || false);
 
 watch(checked, (newVal) => {
     value.value = newVal;
-    emit('updateTerms', newVal);
+    emit('update', newVal);
 });
 </script>
 
