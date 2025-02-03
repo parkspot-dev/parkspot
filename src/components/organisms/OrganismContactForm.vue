@@ -120,7 +120,7 @@ export default {
     font-size: 16px;
     font-weight: var(--semi-bold-font);
     gap: 8px;
-    margin: 0 auto;
+    margin: 16px auto;
     padding: 10px 20px;
     transition:
         background 0.3s,
