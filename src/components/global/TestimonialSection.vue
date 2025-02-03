@@ -61,7 +61,7 @@ export default {
                 centeredSlides: true,
                 slidesPerView: 1,
                 autoplay: {
-                    delay: 2000,
+                    delay: 3000,
                     disableOnInteraction: false,
                 },
                 breakpoints: {
