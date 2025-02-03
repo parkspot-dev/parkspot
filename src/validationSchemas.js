@@ -20,6 +20,7 @@ const rules = {
     cno: z
         .string()
         .min(1, 'Contact number is required.')
+        .length(10, 'Contact number must be 10 digits.')
         .regex(/^\+?\d+$/, 'Must be a valid contact number.'),
     addr: z.string().optional(),
     msg: z.string().optional(),

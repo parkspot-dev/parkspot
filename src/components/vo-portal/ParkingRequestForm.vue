@@ -51,7 +51,7 @@
             :name="'carModel'"
             v-model="preferenceModel.carModel"
         />
-        <CheckBoxInput
+        <CheckboxInput
             :label="termData"
             @updateTerms="updateTermsData"
             name="terms"
@@ -63,7 +63,7 @@
                     >T&C</a
                 >
             </template>
-        </CheckBoxInput>
+        </CheckboxInput>
         <button class="send-button" type="submit">
             Submit <AtomIcon class="btn-icon" :icon="'send-outline'"></AtomIcon>
         </button>
@@ -75,21 +75,17 @@ import { ADD_INFO, PREFERENCE, FORM } from '../../constant/constant';
 import { Form } from 'vee-validate';
 import { mapMutations } from 'vuex';
 import { parkingRequestFormSchema } from '@/validationSchemas';
-import AtomIcon from '../atoms/AtomIcon.vue';
-import AtomInput from '../atoms/AtomInput.vue';
+import AtomIcon from '@/components/atoms/AtomIcon.vue';
+import CheckboxInput from '@/components/global/CheckBoxInput.vue';
 import FormInput from '@/components/global/FormInput.vue';
-import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
 import SelectInput from '@/components/global/SelectInput.vue';
-import CheckBoxInput from '../global/CheckBoxInput.vue';
 export default {
     name: 'ParkingRequestForm',
     components: {
         AtomIcon,
-        AtomInput,
-        CheckBoxInput,
+        CheckboxInput,
         Form,
         FormInput,
-        MoleculeCheckbox,
         SelectInput,
     },
     data() {
