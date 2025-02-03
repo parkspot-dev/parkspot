@@ -1,41 +1,35 @@
 <template>
     <b-rate
-        :value="rate"
-        :icon-pack="pack"
+        v-model="rate"
+        :icon-pack="iconPack"
         :icon="icon"
         :max="max"
         :size="size"
         :locale="locale"
         :spaced="isSpaced"
         :disabled="isDisabled"
-    >
-    </b-rate>
+    />
 </template>
-<script>
-export default {
-    name: 'AtomRating',
-    props: {
-        rate: {
-            type: Number,
-            default: 5,
-        },
-        /**
-         * size @value is-small, is-medium, is-large
-         */
-        size: {
-            type: String,
-            default: 'is-small',
-        },
+
+<script setup>
+import { defineProps, ref, computed } from 'vue';
+
+const props = defineProps({
+    rate: {
+        type: Number,
+        default: 5,
     },
-    data() {
-        return {
-            max: 5,
-            pack: 'mdi',
-            icon: 'star',
-            isSpaced: false,
-            isDisabled: true,
-            locale: undefined, // Browser locale
-        };
+    size: {
+        type: String,
+        default: 'is-small',
     },
-};
+});
+
+const rate = computed(() => props.rate);
+const max = ref(5);
+const iconPack = ref('mdi');
+const icon = ref('star');
+const isSpaced = ref(false);
+const isDisabled = ref(true);
+const locale = ref(undefined);
 </script>

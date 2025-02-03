@@ -4,6 +4,11 @@
             <img class="author-image" :alt="item.name" :src="item.image" />
             <div>
                 <h4 class="author-name">{{ item.name }}</h4>
+                <AtomRating
+                    :rate="item.rate"
+                    :size="'is-small'"
+                    class="rating"
+                />
             </div>
         </div>
         <div class="divider-line"></div>
@@ -16,8 +21,13 @@
 </template>
 
 <script>
+import AtomRating from '../atoms/AtomRating.vue';
+
 export default {
     name: 'TestimonialCard',
+    components: {
+        AtomRating,
+    },
     props: {
         /**
          * The item prop should be an object with the following structure:
