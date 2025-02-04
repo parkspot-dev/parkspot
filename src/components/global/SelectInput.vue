@@ -2,7 +2,6 @@
     <div class="select-wrapper">
         <label :for="name" class="label">{{ label }}</label>
         <select v-model="value" :id="name" @change="emitUpdate">
-            <option value="" disabled selected>{{ placeholder }}</option>
             <option
                 :key="option.id"
                 :value="option.name"
@@ -23,12 +22,15 @@ const props = defineProps({
     label: { type: String, required: true },
     list: { type: Array, required: true },
     name: { type: String, required: true },
-    placeholder: { type: String, default: 'Select an option' },
 });
 
 const emit = defineEmits(['update:modelValue']);
 
 const { value, errorMessage } = useField(props.name);
+
+// Set list first value as default select option
+const defaultValue = props.list.length ? props.list[0].name : ''
+value.value = defaultValue
 
 const emitUpdate = () => {
     emit('update:modelValue', value.value);

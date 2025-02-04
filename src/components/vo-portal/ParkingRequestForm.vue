@@ -30,7 +30,6 @@
             <SelectInput
                 :label="PREFERENCE.PARKING_TYPE"
                 :list="parkingTypeData"
-                :placeholder="PREFERENCE.PARKING_TYPE"
                 @update:modelValue="updateType"
                 class="parking-type-input"
                 name="parkingType"
@@ -40,7 +39,6 @@
             <SelectInput
                 :label="PREFERENCE.DURATION"
                 :list="minDurData"
-                :placeholder="PREFERENCE.DURATION"
                 @update:modelValue="updateMinDur"
                 class="min-duration-input"
                 name="minDur"
@@ -100,8 +98,12 @@ export default {
             },
             preferenceModel: {
                 carModel: '',
-                minDur: '',
-                spot: '',
+                minDur: ADD_INFO.MINIMUM_DURATION_DATA.length
+                    ? ADD_INFO.MINIMUM_DURATION_DATA[0].name
+                    : '',
+                spot: PREFERENCE.PARKING_TYPE_LIST.length
+                    ? PREFERENCE.PARKING_TYPE_LIST[0].name
+                    : '',
                 terms: '',
             },
             CONTACT_FORM: FORM,
@@ -157,9 +159,10 @@ export default {
 }
 
 @media (max-width: 768px) {
-    .form-container{
+    .form-container {
         gap: 1rem;
     }
+
     .form-row {
         flex-direction: column;
         gap: 1rem;
@@ -173,7 +176,7 @@ export default {
 .car-modal-input,
 .min-duration-input,
 .parking-type-input {
-    margin-top: 0 !important; 
+    margin-top: 0 !important;
 }
 
 .cta-btn {
