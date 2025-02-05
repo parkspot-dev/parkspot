@@ -30,7 +30,7 @@ export default {
         };
     },
     mounted() {
-        this.nearByLocation = this.$route.params.pathMatch.split('/')[0].trim();
+        this.nearByLocation = this.$route.params.location.trim();
         this.getPageData();
         this.title = this.nearByLocation;
     },
