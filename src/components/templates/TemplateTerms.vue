@@ -739,12 +739,14 @@ export default {
     },
   mounted() {
     if (window.location.hash) {
-      this.$nextTick(() => {
-        const scrollActiveSection = window.location.hash.slice(1);
-        if (scrollActiveSection) {
-          this.scrollTo(scrollActiveSection);
-        }
-      });
+        this.$nextTick(() => {
+            setTimeout(() => {
+                const scrollActiveSection = window.location.hash.slice(1);
+                if (scrollActiveSection) {
+                    this.scrollTo(scrollActiveSection);
+                }
+            }, 300);
+        });
     }
   },  
 };
