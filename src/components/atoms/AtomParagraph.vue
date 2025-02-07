@@ -34,7 +34,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .paragraph {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
