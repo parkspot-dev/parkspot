@@ -1,8 +1,7 @@
 <template>
     <div class="loader-container">
-        <div class="loader">
-            <AtomImage src="assets/pstopmini.png" alt="parkspot logo" />
-        </div>
+        <div class="loader"></div>
+        <AtomImage class="loader-image" src="assets/pstopmini.png" alt="parkspot logo" />
     </div>
 </template>
 
@@ -19,36 +18,35 @@ export default {
 
 <style lang="scss" scoped>
 .loader-container {
+    align-items: center;
+    background-color: rgba(0, 0, 0, 50%);
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
     position: fixed;
     top: 0;
-    left: 0;
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 50%);
+    z-index: 9999;
 }
 
 .loader {
-    width: 136px;
-    height: 136px;
+    align-items: center;
+    animation: spinloader 2s linear infinite;
+    border-radius: 50%;
     border: 8px solid #f3f3f3;
     border-top: 8px solid var(--primary-color);
-    border-radius: 50%;
-    animation: spinloader 2s linear infinite;
+    display: flex;
+    height: 136px;
+    justify-content: center;
+    position: relative;
+    width: 136px;
 }
 
-.loader img {
-    width: 120px;
-    height: 120px;
-    animation: spinlogo 2s linear infinite;
-}
-
-img {
-    overflow-clip-margin: content-box;
-    overflow: clip;
+.loader-image {
+    height: 100px;
+    position: absolute;
+    width: 100px;
 }
 
 @keyframes spinloader {
@@ -58,16 +56,6 @@ img {
 
     100% {
         transform: rotate(360deg);
-    }
-}
-
-@keyframes spinlogo {
-    0% {
-        transform: rotate(360deg);
-    }
-
-    100% {
-        transform: rotate(0deg);
     }
 }
 </style>
