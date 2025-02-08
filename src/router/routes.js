@@ -17,7 +17,7 @@ export const pages = {
     BLOG                    : '/blog',
     MAINBLOG                : '/blog/:id',
     SEARCH_PORTAL           : '/search-portal',
-    PAYMENTGATEWAY          : '/payment/:transactionId',
+    PAYMENTGATEWAY          : '/payment/:pathMatch(.*)*',
     NEARBY                  : '/bangalore/parking-near-:location',
     NEARBY_HYD              : '/hyderabad/parking-near-:location',
     TEMP                    : '/temp',
