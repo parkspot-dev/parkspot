@@ -727,33 +727,36 @@ export default {
         scrollTo(id) {
             const element = document.getElementById(id);
             if (element) {
-              history.pushState(null, null, `#${id}`);
-              // Calculate offset based on screen size
-              const isMobile = window.innerWidth <= 768;
-              const isIPad = window.innerWidth <= 1300;
-              const offset = isMobile ? -600 : (isIPad ? -10 : 10);
-              scrollTo({ top: element.offsetTop - offset, behavior: 'smooth' });
-              this.activeSection = id;
+                history.pushState(null, null, `#${id}`);
+                // Calculate offset based on screen size
+                const isMobile = window.innerWidth <= 768;
+                const isIPad = window.innerWidth <= 1300;
+                const offset = isMobile ? -600 : isIPad ? -10 : 10;
+                scrollTo({
+                    top: element.offsetTop - offset,
+                    behavior: 'smooth',
+                });
+                this.activeSection = id;
             }
         },
     },
-  mounted() {
-    if (window.location.hash) {
-        this.$nextTick(() => {
-            setTimeout(() => {
-                const scrollActiveSection = window.location.hash.slice(1);
-                if (scrollActiveSection) {
-                    this.scrollTo(scrollActiveSection);
-                }
-            }, 300);
-        });
-    }
-  },  
+    mounted() {
+        if (window.location.hash) {
+            this.$nextTick(() => {
+                // TODO: Use requestAnimationFrame for optimization instead of setTimeout
+                setTimeout(() => {
+                    const scrollActiveSection = window.location.hash.slice(1);
+                    if (scrollActiveSection) {
+                        this.scrollTo(scrollActiveSection);
+                    }
+                }, 300);
+            });
+        }
+    },
 };
 </script>
 
 <style scoped>
-
 .root {
     display: flex;
     gap: 2rem;
@@ -773,7 +776,9 @@ export default {
     padding: 0.4rem 1rem;
     position: sticky;
     top: 5.4rem;
-    transition: box-shadow 0.4s ease, background-color 0.4s ease;
+    transition:
+        box-shadow 0.4s ease,
+        background-color 0.4s ease;
     width: 20%;
 }
 
@@ -798,7 +803,9 @@ export default {
     font-size: 0.9rem;
     font-weight: var(--regular-font);
     text-decoration: none;
-    transition: color 0.4s ease, text-decoration 0.4s ease;
+    transition:
+        color 0.4s ease,
+        text-decoration 0.4s ease;
 }
 
 .toc ul li a:hover {
@@ -851,5 +858,4 @@ export default {
         width: 25%;
     }
 }
-
 </style>
