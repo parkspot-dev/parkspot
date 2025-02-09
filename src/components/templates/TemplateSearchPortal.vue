@@ -182,11 +182,12 @@
             >
                 <AtomTextarea
                     :size="'is-small'"
-                    :value="props.row.Comments"
+                    v-model="props.row.Comments"
                     class="comment-width"
                     :maxlength="1000"
                     :rowNo="8"
-                    @changed="onCommentUpdate(props.row, ...arguments)"
+                    @mousedown="storeOldComment(props.row)"
+                    @changed="onCommentUpdate(props.row, oldComments[props.row.id], $event)"
                 ></AtomTextarea>
             </b-table-column>
 
@@ -309,13 +310,8 @@
                         <p>LatLng:</p>
                         <AtomInput
                             :size="'is-small'"
-                            :value="
-                                getLatLng(
-                                    props.row.Latitude.toFixed(6),
-                                    props.row.Longitude.toFixed(6),
-                                )
-                            "
-                            @changed="updateLatLng(props.row, ...arguments)"
+                            :modelValue="`${props.row.Latitude.toFixed(6)}, ${props.row.Longitude.toFixed(6)}`"
+                            @change="updateLatLng(props.row, $event.target.value)"
                         >
                         </AtomInput>
                     </div>
@@ -410,6 +406,7 @@ export default {
                 ID: 0,
                 isShow: false,
             },
+            oldComments: {},
         };
     },
     watch: {
@@ -488,15 +485,23 @@ export default {
             spotData['NextCall'] = date.toJSON();
             this.$emit('updateRequest', spotData);
         },
+        
+        storeOldComment(row) {
+            if (!this.oldComments[row.id]) {
+                this.oldComments[row.id] = row.Comments || ""; // Ensure a default value
+            }
+        },
 
-        onCommentUpdate(spotData, comments) {
+        onCommentUpdate(row, oldComment, newComment) {
             const date = new Date();
             const dd = date.getDate();
             let mm = date.getMonth() + 1;
             if (mm < 10) mm = '0' + mm;
-            if (spotData['Comments'] !== comments) {
-                spotData['Comments'] = `${comments} [${dd}/${mm}]`;
-                this.$emit('updateRequest', spotData);
+            if (oldComment !== newComment) {
+                row.Comments = `${newComment} [${dd}/${mm}]`;
+                this.$emit("updateRequest", row);  
+                // Reset stored old comment
+                this.oldComments[row.id] = row.Comments;
             }
         },
 

@@ -136,15 +136,15 @@ export default {
 .blog-card .blog-content .blog-desc .btn-text {
     float: right; 
     font-family: 'Poppins', sans-serif;
-    color: var(--primary-text);
     border-radius: 50px;
     border-style: none;
     padding: 4px 10px;
     cursor: pointer;
-    background-color: #f7f8ff;
-
-    &:hover {
-                color: var(--secondary-color) ;
-            }
+    background-color: #e8faff;
+    color: #1f2e3b;
+        &:hover {
+            background-color: rgb(239, 245, 255);
+            color: var(--secondary-color) ;
+        }
 }
 </style>
