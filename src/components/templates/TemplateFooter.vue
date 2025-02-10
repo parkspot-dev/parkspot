@@ -159,9 +159,13 @@
                                     </AtomIcon>
                                 </a>
                             </span>
-                            <AtomParagraph :type="'span'">
+                            <a
+                                :href="helplineRef"
+                                class="top-search-link"
+                                style="margin-left: 7px"
+                            >
                                 {{ helplineNumber }}
-                            </AtomParagraph>
+                            </a>
                         </div>
                     </div>
 
@@ -310,7 +314,10 @@
                             href="https://www.youtube.com/@parkspot4468"
                             target="_blank"
                         >
-                            <AtomIcon :icon="'youtube'" style="font-size: 40px; padding: 1.2rem;">
+                            <AtomIcon
+                                :icon="'youtube'"
+                                style="font-size: 40px; padding: 1.2rem"
+                            >
                             </AtomIcon>
                         </a>
                     </div>
