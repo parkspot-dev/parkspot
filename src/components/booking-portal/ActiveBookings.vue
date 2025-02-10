@@ -18,7 +18,7 @@
                 numeric
                 sortable
                 v-slot="props"
-                width="40"
+                width="55"
             >
                 <div>
                     <a :href="bookingDetailsURL(props.row.ID)">
@@ -36,7 +36,7 @@
                 searchable
                 sortable
                 v-slot="props"
-                width="40"
+                width="170"
             >
                 <div>
                     {{ props.row.Name }}
@@ -50,7 +50,7 @@
                 searchable
                 sortable
                 v-slot="props"
-                width="40"
+                width="130"
             >
                 <div>
                     {{ props.row.Mobile }}
@@ -64,7 +64,7 @@
                 searchable
                 sortable
                 v-slot="props"
-                width="40"
+                width="110"
             >
                 <div>
                     {{ props.row.SOContactDetails.FullName }}
@@ -78,7 +78,7 @@
                 searchable
                 sortable
                 v-slot="props"
-                width="40"
+                width="130"
             >
                 <div>
                     {{ props.row.SOContactDetails.Mobile }}
@@ -91,7 +91,6 @@
                 label="SiteID"
                 sortable
                 v-slot="props"
-                width="40"
             >
                 <div>
                     <a :href="sdpURL(props.row.SiteID)" target="_blank">
@@ -108,7 +107,7 @@
                 label="Status"
                 sortable
                 v-slot="props"
-                width="40"
+                width="100"
             >
                 <div>
                     {{ getBookingStatusLabel(props.row.Status) }}
@@ -121,7 +120,7 @@
                 numeric
                 sortable
                 v-slot="props"
-                width="40"
+                width="60"
             >
                 <div>
                     {{ props.row.Rent }}
@@ -133,7 +132,7 @@
                 label="Periodicity"
                 sortable
                 v-slot="props"
-                width="40"
+                width="110"
             >
                 <div>
                     {{ getPaymentPeriodicityLabel(props.row.PaymentPeriod) }}
@@ -179,10 +178,16 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .root {
     padding: 16px;
 }
+
+a {
+  color: var(--secondary-color);
+  &:hover { color: var(--parkspot-black); }
+}
+
 .header-row {
     justify-content: center;
     text-align: center;
