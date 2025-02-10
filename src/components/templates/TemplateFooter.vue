@@ -159,9 +159,13 @@
                                     </AtomIcon>
                                 </a>
                             </span>
-                            <AtomParagraph :type="'span'">
+                            <a
+                                :href="helplineRef"
+                                class="top-search-link"
+                                style="margin-left: 7px"
+                            >
                                 {{ helplineNumber }}
-                            </AtomParagraph>
+                            </a>
                         </div>
                     </div>
 
