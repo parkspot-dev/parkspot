@@ -18,7 +18,7 @@
                 numeric
                 sortable
                 v-slot="props"
-                width="55"
+                width="56"
             >
                 <div>
                     <a :href="bookingDetailsURL(props.row.ID)">
@@ -36,7 +36,7 @@
                 searchable
                 sortable
                 v-slot="props"
-                width="170"
+                width="168"
             >
                 <div>
                     {{ props.row.Name }}
@@ -50,7 +50,7 @@
                 searchable
                 sortable
                 v-slot="props"
-                width="130"
+                width="132"
             >
                 <div>
                     {{ props.row.Mobile }}
@@ -64,7 +64,7 @@
                 searchable
                 sortable
                 v-slot="props"
-                width="110"
+                width="112"
             >
                 <div>
                     {{ props.row.SOContactDetails.FullName }}
@@ -78,7 +78,7 @@
                 searchable
                 sortable
                 v-slot="props"
-                width="130"
+                width="132"
             >
                 <div>
                     {{ props.row.SOContactDetails.Mobile }}
@@ -132,7 +132,7 @@
                 label="Periodicity"
                 sortable
                 v-slot="props"
-                width="110"
+                width="112"
             >
                 <div>
                     {{ getPaymentPeriodicityLabel(props.row.PaymentPeriod) }}
@@ -182,12 +182,6 @@ export default {
 .root {
     padding: 16px;
 }
-
-a {
-  color: var(--secondary-color);
-  &:hover { color: var(--parkspot-black); }
-}
-
 .header-row {
     justify-content: center;
     text-align: center;
