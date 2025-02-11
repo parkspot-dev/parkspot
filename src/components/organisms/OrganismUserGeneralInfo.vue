@@ -4,80 +4,64 @@
             <h1>General Info</h1>
             <h2>Please fill all the fields</h2>
         </div>
-        <div class="general-info-form">
-            <div ref="observer">
-                <div class="py-4">
-                    <MoleculeNameInput
-                        :fieldName="'Full Name'"
-                        :placeholder="'Full Name'"
-                        :rules="validation.FullName"
-                        v-model="userProfile.FullName"
-                        :label="'Full Name'"
-                    ></MoleculeNameInput>
-                </div>
-                <div class="py-4">
-                    <MoleculeNameInput
-                        :fieldName="'Email'"
-                        :placeholder="'Email'"
-                        :rules="validation.EmailID"
-                        v-model="userProfile.EmailID"
-                        :label="'Email'"
-                    ></MoleculeNameInput>
-                </div>
-                <div class="py-4">
-                    <MoleculeNameInput
-                        :fieldName="'Contact No.'"
-                        :placeholder="'Contact No.'"
-                        :rules="validation.Mobile"
-                        v-model="userProfile.Mobile"
-                        :label="'Contact No.'"
-                    ></MoleculeNameInput>
-                </div>
-                <div class="py-4">
-                    <MoleculeRadioButton
-                        :fieldName="'radio'"
-                        :rules="validation.userType"
-                        :values="userTypeData"
-                        :currentSelectedRadio="userType"
-                        @data="setUserType"
-                    >
-                        What is you are looking for?
-                    </MoleculeRadioButton>
-                </div>
-                <AtomButton class="is-pulled-right" @click.native="saveProfile">
-                    Save Profile
-                </AtomButton>
-            </div>
-        </div>
+        <Form
+            :validation-schema="editProfileFormSchema"
+            @submit="saveProfile"
+            class="form-container"
+        >
+            <FormInput
+                :label="'Full Name'"
+                :placeholder="'Full Name'"
+                :name="'fullname'"
+                v-model="userProfile.FullName"
+            />
+            <FormInput
+                :label="'Email'"
+                :placeholder="'Email'"
+                :name="'email'"
+                type="email"
+                v-model="userProfile.EmailID"
+            />
+            <FormInput
+                :label="'Contact No.'"
+                :placeholder="'Contact No.'"
+                :name="'cno'"
+                v-model="userProfile.Mobile"
+            />
+            <RadioInput
+                :values="userTypeData"
+                v-model="userType"
+                label="What is you are looking for?"
+                v-if="getUserType"
+            />
+
+            <button class="send-button" type="submit">Save Profile</button>
+        </Form>
     </div>
 </template>
 
 <script>
-import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
-import MoleculeRadioButton from '../molecules/MoleculeRadioButton.vue';
-import AtomButton from '../atoms/AtomButton.vue';
+import { editProfileFormSchema } from '@/validationSchemas';
+import { Form } from 'vee-validate';
 import { mapActions, mapMutations, mapState } from 'vuex';
-
+import FormInput from '../global/FormInput.vue';
+import RadioInput from '../global/RadioInput.vue';
 export default {
     name: 'OrganismUserGeneralInfo',
     components: {
-        MoleculeNameInput,
-        AtomButton,
-        MoleculeRadioButton,
+        Form,
+        FormInput,
+        RadioInput,
     },
     data() {
         return {
+            editProfileFormSchema,
             userTypeData: [
                 'I own a parking spot, want to rent it',
                 'I am a vehicle owner, looking for parking',
             ],
             userType: 'VO',
-            validation: {
-                FullName: 'required',
-                EmailID: 'required|email',
-                Mobile: 'required|integer|phone',
-                userType: '',
-            },
+            getUserType: false
         };
     },
     computed: {
@@ -96,6 +80,7 @@ export default {
         } else {
             this.userType = this.userTypeData[1];
         }
+        this.getUserType = true
     },
     methods: {
         ...mapMutations('user', {
@@ -114,29 +99,20 @@ export default {
             }
         },
         saveProfile() {
-            this.$refs.observer
-                .validate()
-                .then(async (sucess) => {
-                    if (sucess) {
-                        try {
-                            await this.updateUserInfo();
-                            this.$buefy.toast.open({
-                                message: 'Profile updated successfully!',
-                                type: 'is-success',
-                                duration: 2000,
-                            });
-                        } catch (error) {
-                            this.$buefy.toast.open({
-                                message: `Something went wrong!`,
-                                type: 'is-danger',
-                                duration: 2000,
-                            });
-                        }
-                    }
-                })
-                .catch((er) => {
-                    console.log(er);
+            try {
+                this.updateUserInfo();
+                this.$buefy.toast.open({
+                    message: 'Profile updated successfully!',
+                    type: 'is-success',
+                    duration: 2000,
                 });
+            } catch (error) {
+                this.$buefy.toast.open({
+                    message: `Something went wrong!`,
+                    type: 'is-danger',
+                    duration: 2000,
+                });
+            }
         },
     },
 };
