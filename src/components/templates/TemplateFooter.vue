@@ -159,7 +159,7 @@
                                     </AtomIcon>
                                     <span
                                         class="top-search-link"
-                                        style="margin-left: 7px"
+                                        style="margin-left: 8px"
                                         >{{ helplineNumber }}
                                     </span>
                                 </a>
