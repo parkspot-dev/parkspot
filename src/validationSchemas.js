@@ -7,6 +7,7 @@ const rules = {
     fullname: z
         .string()
         .min(1, 'Full name is required.')
+        .regex(/^[A-Za-z\s]+$/, `Full name cannot contain numbers.`)
         .min(3, 'Must be at least 3 characters.'),
     email: z
         .string()
@@ -20,8 +21,8 @@ const rules = {
     cno: z
         .string()
         .min(1, 'Contact number is required.')
-        .length(10, 'Contact number must be 10 digits.')
-        .regex(/^\+?\d+$/, 'Must be a valid contact number.'),
+        .regex(/^\+?\d+$/, 'Must be a valid contact number.')
+        .length(10, 'Contact number must be 10 digits.'),
     addr: z.string().optional(),
     msg: z.string().optional(),
     carModel: z.string().min(1, 'Car model is required'),
