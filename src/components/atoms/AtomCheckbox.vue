@@ -1,10 +1,10 @@
 <template>
     <div class="block">
         <b-checkbox
-            :key="value"
             v-for="value in values"
+            :key="value"
             v-model="checkboxGroup"
-            @input="handleCheckbox"
+            @change="handleCheckboxChange"
             :native-value="value"
             :size="size"
             type="box-color"
@@ -15,30 +15,23 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: 'AtomCheckbox',
-    props: {
-        /**
-         * list of checkbox items
-         * @values Array expecting
-         */
-        values: {
-            type: Array,
-            default: null,
-        },
-        size: String,
+<script setup>
+import { defineProps, defineEmits, ref } from 'vue';
+
+const props = defineProps({
+    values: {
+        type: Array,
+        default: () => [],
     },
-    data() {
-        return {
-            checkboxGroup: [],
-        };
-    },
-    methods: {
-        handleCheckbox() {
-            this.$emit('input', this.checkboxGroup);
-        },
-    },
+    size: String,
+});
+
+const emit = defineEmits(['input']);
+
+const checkboxGroup = ref([]);
+
+const handleCheckboxChange = () => {
+    emit('input', checkboxGroup.value);
 };
 </script>
 
