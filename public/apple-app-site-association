@@ -5,6 +5,8 @@
             {
                 "appID": "N9S4Z9WW9J.com.parkspot.mayanagri",
                 "paths": [
+                    "NOT /search-portal",
+                    "NOT /internal/*",
                     "*"
                 ]
             }

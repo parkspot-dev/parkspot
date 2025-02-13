@@ -5,8 +5,20 @@
             "namespace": "android_app",
             "package_name": "com.parkspot.maya_nagri",
             "sha256_cert_fingerprints": [
-                "FE:7F:71:47:CD:17:5C:C6:82:FD:0C:48:91:F7:EB:AB:53:4F:09:97:30:00:FD:4A:2B:3E:01:6C:E4:B3:9B:A7"
+                "FE:7F:71:47:CD:17:5C:C6:82:FD:0C:48:91:F7:EB:AB:53:4F:09:97:30:00:FD:4A:2B:3E:01:6C:E4:B3:9B:A7",
+"F2:A0:1E:85:9F:7D:B5:73:70:BD:35:B6:D8:03:D9:B3:8B:C7:AE:9A:36:15:4A:5C:29:55:81:78:27:92:DD:A2"
             ]
         }
+    },
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "web",
+            "site": "https://www.parkspot.in"
+        },
+        "exclude": [
+            "https://www.parkspot.in/internal/*",
+            "https://www.parkspot.in/search-portal"
+        ]
     }
 ]
