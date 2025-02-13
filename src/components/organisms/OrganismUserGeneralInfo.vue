@@ -29,10 +29,10 @@
                 v-model="userProfile.Mobile"
             />
             <RadioInput
-                :values="userTypeData"
-                v-model="userType"
-                label="What is you are looking for?"
                 v-if="getUserType"
+                :values="userTypeData"
+                label="What is you are looking for?"
+                v-model="userType"
             />
 
             <button class="send-button" type="submit">Save Profile</button>
