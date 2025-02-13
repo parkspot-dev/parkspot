@@ -194,7 +194,7 @@
             <b-table-column
                 field="Agent"
                 label="Agent"
-                width="100px"
+                width="76px"
                 sortable
                 searchable
             >
@@ -217,9 +217,8 @@
                             <AtomSelectInput
                                 :size="'is-small'"
                                 :list="agentList"
-                                @changed="
-                                    onAgentUpdate(props.row, ...arguments)
-                                "
+                                v-model="SelectAgent"
+                                @change="onAgentUpdate(props.row, $event)"
                                 label=""
                                 placeholder="Select Agent"
                             >
@@ -232,7 +231,7 @@
             <b-table-column
                 field="NextCall"
                 label="Status/Next Call"
-                width="90px"
+                width="80px"
                 sortable
                 searchable
             >
@@ -242,6 +241,7 @@
                         :list="statusList"
                         class="column-width"
                         v-model="props.filters['Status']"
+                        placeholder="Select Status"
                     >
                     </AtomSelectInput>
                 </template>
@@ -255,9 +255,8 @@
                                 :size="'is-small'"
                                 :list="statusList"
                                 class="column-width"
-                                @changed="
-                                    onStatusUpdate(props.row, ...arguments)
-                                "
+                                v-model="SelectStatus"
+                                @change="onAgentUpdate(props.row, $event)"
                             >
                             </AtomSelectInput>
                         </div>
