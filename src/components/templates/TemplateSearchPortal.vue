@@ -2,9 +2,6 @@
     <div class="search-portal-wrapper">
         <div class="summary" v-if="isSummary">
             <div class="so-btn">
-                <AtomButton class="filter-btn">
-                Clear Filter
-                </AtomButton>
                 <AtomButton @click.native="showSummary" v-show="!summary.show">
                     {{ summary.btn }} Summary
                 </AtomButton>
@@ -197,17 +194,17 @@
             <b-table-column
                 field="Agent"
                 label="Agent"
-                width="76px"
-                sortable
                 searchable
+                sortable
+                width="76px"
             >
                 <template #searchable="props">
                     <AtomSelectInput
-                        :size="'is-small'"
                         :list="agentList"
-                        v-model="props.filters['Agent']"
+                        :size="'is-small'"
                         label=""
                         placeholder="Agent"
+                        v-model="props.filters['Agent']"
                     >
                     </AtomSelectInput>
                 </template>
@@ -218,12 +215,12 @@
                                 {{ props.row.Agent }}
                             </span>
                             <AtomSelectInput
-                                :size="'is-small'"
                                 :list="agentList"
-                                v-model="filters.Agent"
+                                :size="'is-small'"
                                 @change="onAgentUpdate(props.row, $event)"
                                 label=""
                                 placeholder="Select Agent"
+                                v-model="filters.Agent"
                             >
                             </AtomSelectInput>
                         </div>
@@ -234,17 +231,17 @@
             <b-table-column
                 field="NextCall"
                 label="Status/Next Call"
-                width="80px"
-                sortable
                 searchable
+                sortable
+                width="80px"
             >
                 <template #searchable="props">
                     <AtomSelectInput
-                        :size="'is-small'"
                         :list="statusList"
+                        :size="'is-small'"
                         class="column-width"
-                        v-model="props.filters['Status']"
                         placeholder="Select Status"
+                        v-model="props.filters['Status']"
                     >
                     </AtomSelectInput>
                 </template>
@@ -255,10 +252,10 @@
                                 {{ statusList[props.row.Status].name }}
                             </span>
                             <AtomSelectInput
-                                :size="'is-small'"
                                 :list="statusList"
-                                class="column-width"
+                                :size="'is-small'"
                                 @change="onAgentUpdate(props.row, $event)"
+                                class="column-width"
                                 placeholder="Select Status"
                                 v-model="filters.Status"
                             >
@@ -559,18 +556,6 @@ $portal-font-size: 13px;
     }
 }
 
-.filter-btn {
-    display: none;
-}
-
-@media (min-width: 769px) {
-  .filter-btn {
-    margin-right: 4px;
-    align-items: right;
-    display: block;
-  }
-}
-
 .search-portal-wrapper .status-column .status-part .tag:not(body).my-status {
     background-color: var(--primary-color);
 }
@@ -614,8 +599,6 @@ $portal-font-size: 13px;
     .summary {
         .so-btn {
             text-align: right;
-            display: flex; 
-            justify-content: end;
         }
 
         .so-summary {

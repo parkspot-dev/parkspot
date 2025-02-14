@@ -2,9 +2,9 @@
     <b-field :label="label" :type="errorType" :message="errorMessage">
         <b-select
             :placeholder="placeholder"
-            v-model="innerValue"
             :size="size"
             expanded
+            v-model="innerValue"
         >
             <option value="" disabled>
                 {{ placeholder }}
