@@ -220,6 +220,7 @@
                             <AtomSelectInput
                                 :size="'is-small'"
                                 :list="agentList"
+                                v-model="filters.Agent"
                                 @change="onAgentUpdate(props.row, $event)"
                                 label=""
                                 placeholder="Select Agent"
@@ -259,6 +260,7 @@
                                 class="column-width"
                                 @change="onAgentUpdate(props.row, $event)"
                                 placeholder="Select Status"
+                                v-model="filters.Status"
                             >
                             </AtomSelectInput>
                         </div>
@@ -366,6 +368,11 @@ export default {
     },
     data() {
         return {
+            // filters were declared explicitly to use in v-model else they have no use
+            filters: {
+                Agent: '',
+                Status: '',
+            },
             isEmpty: false,
             isBordered: false,
             isStriped: false,
