@@ -65,3 +65,13 @@ export const parkingRequestFormSchema = toTypedSchema(
         minDur: rules.minDur,
     }),
 );
+
+// Edit Profile Form Schema
+
+export const editProfileFormSchema = toTypedSchema(
+    z.object({
+        fullname: rules.fullname,
+        email: rules.email,
+        cno: rules.cno,
+    }),
+);
