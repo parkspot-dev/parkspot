@@ -1,24 +1,24 @@
 <template>
     <div class="block">
-        <label class="label" >{{ label }}</label>
-            <div>
-                <b-radio
-                    v-for="option in values"
-                    :key="option"
-                    :native-value="option"
-                    v-model="selectedValue"
-                >
-                    {{ option }}
-                </b-radio>
-            </div>
+        <label class="label">{{ label }}</label>
+        <div>
+            <b-radio
+                v-for="option in values"
+                :key="option"
+                :native-value="option"
+                v-model="selectedValue"
+            >
+                {{ option }}
+            </b-radio>
+        </div>
     </div>
 </template>
 
 <script>
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch } from 'vue';
 
 export default defineComponent({
-    name: "RadioInput",
+    name: 'RadioInput',
     props: {
         modelValue: {
             type: String,
@@ -30,15 +30,15 @@ export default defineComponent({
         },
         label: {
             type: String,
-            default: "Select an option:",
+            default: 'Select an option:',
         },
     },
-    emits: ["update:modelValue"],
+    emits: ['update:modelValue'],
     setup(props, { emit }) {
         const selectedValue = ref(props.modelValue);
 
         watch(selectedValue, (newValue) => {
-            emit("update:modelValue", newValue);
+            emit('update:modelValue', newValue);
         });
 
         return { selectedValue };
@@ -47,7 +47,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.label{
-    margin-top: 8px;
+.label {
+    margin-top: 20px;
+}
+
+.b-radio {
+    display: flex;
+    margin-bottom: 8px;
 }
 </style>
