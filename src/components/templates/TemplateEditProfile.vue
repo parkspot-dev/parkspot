@@ -15,16 +15,7 @@
                     <h2>Set up your Parkspot account.</h2>
                 </div>
             </div>
-            <div class="edit-main">
-                <div class="secondary">
-                    General
-                </div>
-                <div class="primary">
-                    <keep-alive>
-                        <component :is="activeForm"></component>
-                    </keep-alive>
-                </div>
-            </div>
+            <component :is="activeForm"></component>
         </div>
     </BodyWrapper>
 </template>
@@ -102,32 +93,6 @@ export default {
             font-size: 14px;
             font-weight: normal;
             color: #6e6d7a;
-        }
-    }
-}
-
-.edit-main {
-    display: flex;
-    .primary {
-        flex: 1 1 70%;
-    }
-    .secondary {
-        flex: 1 1 30%;
-        font-size: 15px;
-
-        ul {
-            li {
-                padding: 7px 0;
-
-                a {
-                    color: #6e6d7a;
-                }
-
-                .link-active {
-                    font-weight: 600;
-                    color: var(--parkspot-black);
-                }
-            }
         }
     }
 }
