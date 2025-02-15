@@ -194,17 +194,18 @@
             <b-table-column
                 field="Agent"
                 label="Agent"
-                width="100px"
-                sortable
                 searchable
+                sortable
+                width="76px"
             >
                 <template #searchable="props">
+                <!-- TODO: Remove AtomSelectInput completely from all files. Use Global Select Input -->
                     <AtomSelectInput
-                        :size="'is-small'"
                         :list="agentList"
-                        v-model="props.filters['Agent']"
+                        :size="'is-small'"
                         label=""
                         placeholder="Agent"
+                        v-model="props.filters['Agent']"
                     >
                     </AtomSelectInput>
                 </template>
@@ -215,13 +216,12 @@
                                 {{ props.row.Agent }}
                             </span>
                             <AtomSelectInput
-                                :size="'is-small'"
                                 :list="agentList"
-                                @changed="
-                                    onAgentUpdate(props.row, ...arguments)
-                                "
+                                :size="'is-small'"
+                                @change="onAgentUpdate(props.row, $event)"
                                 label=""
                                 placeholder="Select Agent"
+                                v-model="filters.Agent"
                             >
                             </AtomSelectInput>
                         </div>
@@ -232,15 +232,16 @@
             <b-table-column
                 field="NextCall"
                 label="Status/Next Call"
-                width="90px"
-                sortable
                 searchable
+                sortable
+                width="80px"
             >
                 <template #searchable="props">
                     <AtomSelectInput
-                        :size="'is-small'"
                         :list="statusList"
+                        :size="'is-small'"
                         class="column-width"
+                        placeholder="Select Status"
                         v-model="props.filters['Status']"
                     >
                     </AtomSelectInput>
@@ -252,12 +253,12 @@
                                 {{ statusList[props.row.Status].name }}
                             </span>
                             <AtomSelectInput
-                                :size="'is-small'"
                                 :list="statusList"
+                                :size="'is-small'"
+                                @change="onAgentUpdate(props.row, $event)"
                                 class="column-width"
-                                @changed="
-                                    onStatusUpdate(props.row, ...arguments)
-                                "
+                                placeholder="Select Status"
+                                v-model="filters.Status"
                             >
                             </AtomSelectInput>
                         </div>
@@ -365,6 +366,11 @@ export default {
     },
     data() {
         return {
+            // filters were declared explicitly to use in v-model else they have no use
+            filters: {
+                Agent: '',
+                Status: '',
+            },
             isEmpty: false,
             isBordered: false,
             isStriped: false,
