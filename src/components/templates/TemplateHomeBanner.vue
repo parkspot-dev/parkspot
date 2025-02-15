@@ -18,6 +18,8 @@
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import OrganismHomeCard from '../organisms/OrganismHomeCard.vue';
+import carImage from '/assets/home-car-owner.jpg';
+import spotImage from '/assets/home-spot-owner.jpg';
 
 export default {
     name: 'TemplateHomeBanner',
@@ -28,8 +30,10 @@ export default {
     data() {
         return {
             activeTab: 'VO',
-            carOwnerImage: 'assets/home-car-owner.jpg',
-            shapeUrl: `url('assets/home-car-owner.jpg')`,
+            carOwnerImage: 'url(/assets/home-car-owner.jpg)',
+            spotOwnerImage: `url('/assets/home-spot-owner.jpg')`,
+            mCarOwnerImage: 'url(/assets/m-home-car-owner.jpg)',
+            mSpotOwnerImage: `url('/assets/m-home-spot-owner.jpg')`,
         };
     },
     methods: {
@@ -42,7 +46,7 @@ export default {
 
 <style lang="scss" scoped>
 .image-spot-owner {
-    background-image: v-bind(shapeUrl);
+    background-image: v-bind(spotOwnerImage);
     -webkit-transition: background-image 1s;
 
     @media only screen and (max-width: 1024px) {
@@ -51,7 +55,7 @@ export default {
     }
 }
 .image-car-owner {
-    background-image: v-bind("`url('${carOwnerImage}')`");
+    background-image: v-bind(carOwnerImage);
     -webkit-transition: background-image 1s;
 
     @media only screen and (max-width: 1024px) {
@@ -90,7 +94,7 @@ export default {
     .m-image-car-owner {
         display: none;
         height: 187px;
-        background-image: url('../../assets/m-home-car-owner.jpg');
+        background-image: v-bind(mCarOwnerImage);
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -104,7 +108,7 @@ export default {
     .m-image-spot-owner {
         display: none;
         height: 187px;
-        background-image: url('../../assets/m-home-spot-owner.jpg');
+        background-image: v-bind(mSpotOwnerImage);
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;

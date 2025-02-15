@@ -18,6 +18,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url)),
+            '/assets': '/public/assets',
         },
         // #TECH_DEBT
         // Add .vue extension to SFC imports

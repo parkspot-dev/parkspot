@@ -70,6 +70,7 @@ export default {
             LocDetails: 'map/getLocDetails',
         }),
     },
+    emits: ['changed'],
     methods: {
         flyToSrp() {
             const coordinate = getCoordinate(this.LocDetails.lnglat.toString())

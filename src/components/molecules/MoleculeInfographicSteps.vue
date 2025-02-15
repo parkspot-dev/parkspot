@@ -37,6 +37,11 @@ import AtomImage from '../atoms/AtomImage.vue';
 export default {
     name: 'InfographicSteps',
     components: { AtomImage },
+    data() {
+        return {
+            bgImage: `url('/assets/infographic-line.png')`,
+        };
+    },
 };
 </script>
 
@@ -58,7 +63,7 @@ $right-pos: 735px;
         position: relative;
         width: 100%;
         height: 1200px;
-        background-image: url('../../assets/infographic-line.png');
+        background-image: v-bind(bgImage);
         background-position: center;
         background-repeat: no-repeat;
 

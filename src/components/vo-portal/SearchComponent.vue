@@ -72,7 +72,7 @@ export default {
 <style scoped>
 .main-box {
     background: linear-gradient(rgba(0, 0, 0, 0.635), rgba(0, 0, 0, 0.635)),
-        url('../../assets/parking-background.png')
+        url('/assets/parking-background.png')
             no-repeat center/cover;
     color: var(--parkspot-white);
     display: flex;

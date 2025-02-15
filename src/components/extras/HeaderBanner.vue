@@ -13,6 +13,6 @@ export default {
 <style lang="scss" scoped>
 .custom-banner {
     min-height: 200px;
-    background: url('assets/discover-banner.svg');
+    background: url('/assets/discover-banner.svg');
 }
 </style>
