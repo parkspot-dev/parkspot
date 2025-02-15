@@ -489,6 +489,7 @@
 </template>
 
 <script>
+import { cloneDeep } from 'lodash';
 import { mapActions, mapState } from 'vuex';
 import {
     PaymentStatus,
@@ -526,11 +527,11 @@ export default {
         };
     },
     beforeMount() {
-        this.currBookingDetails = structuredClone(this.bookingDetails); // make a local copy of bookingDetails
+        this.currBookingDetails = cloneDeep(this.bookingDetails); // make a local copy of bookingDetails
     },
     watch: {
         '$store.state.bookingPortal.bookingDetails'(val) {
-            this.currBookingDetails = structuredClone(val); // make a local copy of bookingDetails
+            this.currBookingDetails = cloneDeep(val); // make a local copy of bookingDetails
         },
     },
     computed: {
@@ -672,7 +673,7 @@ export default {
 
         cancelField() {
             this.editField = null;
-            this.currBookingDetails = structuredClone(this.bookingDetails);
+            this.currBookingDetails = cloneDeep(this.bookingDetails);
         },
 
         onStartDateUpdate(updatedDate) {
