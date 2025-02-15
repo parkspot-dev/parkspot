@@ -199,7 +199,7 @@
                 width="76px"
             >
                 <template #searchable="props">
-                <!-- TODO: Remove AtomSelectInput completely from all files in the future -->
+                <!-- TODO: Remove AtomSelectInput completely from all files -->
                     <AtomSelectInput
                         :list="agentList"
                         :size="'is-small'"
