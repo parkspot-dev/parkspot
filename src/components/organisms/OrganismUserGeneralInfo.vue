@@ -57,8 +57,8 @@ export default {
         return {
             editProfileFormSchema,
             userTypeData: [
-                'I own a parking spot, want to rent it',
-                'I am a vehicle owner, looking for parking',
+                'I own a parking space and wish to rent it out.',
+                'I am a vehicle owner looking for a parking spot to rent',
             ],
             userType: 'VO',
             getUserType: false
