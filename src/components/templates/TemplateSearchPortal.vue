@@ -208,12 +208,19 @@
                         v-model="props.filters['Agent']"
                     >
                     </AtomSelectInput> -->
-                      <SelectInput
+                      <!-- <SelectInput
   :list="agentList"
-  :name="'agent'"
   v-model="props.filters['Agent']"
   :size="1"  :placeholder="'Select Agent'"  
-  />
+  /> -->
+  <SelectInput
+                :label="PREFERENCE.DURATION"
+                :list="agentList"
+                @update:modelValue="updateMinDur"
+                class="min-duration-input"
+                name="minDur"
+                v-model="preferenceModel.minDur"
+            />
 
                 </template>
                 <template v-slot="props">
@@ -234,8 +241,7 @@
                           <SelectInput
                           :list="agentList"
                           :size="1"
-                          :placeholder="'select agent'"
-                          :name="'agent'"
+                          :placeholder="'Select agent'"
                           v-model="filters.Agent"
                           @change="onAgentUpdate(props.row, $event)"
                           />

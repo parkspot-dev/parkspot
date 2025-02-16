@@ -2,7 +2,7 @@
     <div class="select-wrapper">
         <label :for="name" class="label">{{ label }}</label>
         <select v-model="value" :id="name" @change="emitUpdate" :size="size">
-              <option value="" disabled selected>{{ placeholder }}</option>
+            <option value="" disabled selected>{{ placeholder }}</option>
             <option
                 :key="option.id"
                 :value="option.name"
@@ -24,7 +24,7 @@ const props = defineProps({
     list: { type: Array, required: true },
     name: { type: String, required: true },
     size: { type: Number, default: 1 },
-    placeholder: {type: String, default: 'Select an option'},
+    placeholder: { type: String, default: 'Select an option' },
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -32,11 +32,11 @@ const emit = defineEmits(['update:modelValue']);
 const { value, errorMessage } = useField(props.name);
 
 // Set list first value as default select option
-const defaultValue = props.list.length ? props.list[0].name : ''
-value.value = defaultValue
+const defaultValue = props.list.length ? props.list[0].name : '';
+value.value = defaultValue;
 // Set placeholder as default if no value selected initially.
 if (!value.value) {
-  value.value = ""; // or null if you prefer
+    value.value = ''; // or null if you prefer
 }
 
 const emitUpdate = () => {
@@ -45,11 +45,11 @@ const emitUpdate = () => {
 </script>
 
 <style scoped>
-.select-wrapper { 
+.select-wrapper {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
- } 
+}
 select {
     border-color: gainsboro;
     border-radius: 1px;
@@ -61,7 +61,7 @@ select {
 .label {
     font-size: 14px !important;
     font-weight: 500 !important;
-} 
+}
 
 .error {
     color: red;
