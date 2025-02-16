@@ -3,29 +3,29 @@
         <div class="infographic-bg-img"></div>
         <div class="infographic-first steps-container">
             <div class="step-img"></div>
-            <img src="/assets/first.png" alt="find" />
+            <img src="/assets/first.png" alt="find" loading="lazy" />
             <p>Find a listing you like on ParkSpot.</p>
         </div>
         <div class="infographic-second steps-container">
-            <img src="/assets/second.png" alt="find" />
+            <img src="/assets/second.png" alt="find" loading="lazy" />
             <p>Complete your registration.</p>
         </div>
         <div class="infographic-third steps-container">
-            <img src="/assets/third.png" alt="find" />
+            <img src="/assets/third.png" alt="find" loading="lazy" />
             <p>Visit the parking and verify the facts.</p>
         </div>
         <div class="infographic-fourth steps-container">
-            <img src="/assets/fourth.png" alt="find" />
+            <img src="/assets/fourth.png" alt="find" loading="lazy" />
             <p>
                 If you like the parking, process the rent and security deposit.
             </p>
         </div>
         <div class="infographic-fifth steps-container">
-            <img src="/assets/fifth.png" alt="find" />
+            <img src="/assets/fifth.png" alt="find" loading="lazy" />
             <p>Start parking your vehicle.</p>
         </div>
         <div class="infographic-sixth steps-container">
-            <img src="/assets/sixth.png" alt="find" />
+            <img src="/assets/sixth.png" alt="find" loading="lazy" />
             <p>We will mark the parking as unavailable on ParkSpot.</p>
         </div>
     </div>
@@ -70,7 +70,7 @@ $right-pos: 735px;
         }
     }
 
-    img{
+    img {
         height: 120px;
         width: 120px;
     }
