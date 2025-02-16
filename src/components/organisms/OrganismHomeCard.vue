@@ -1,6 +1,6 @@
 <template>
     <div class="home-card">
-        <b-tabs @input="onChange">
+        <b-tabs @update:modelValue="onChange" v-model="activeTabValue">
             <b-tab-item value="VO">
                 <template #header>
                     <div class="header-tab-btn">
@@ -64,6 +64,11 @@ export default {
     components: {
         SearchInput,
         AtomButton,
+    },
+    data() {
+        return {
+            activeTabValue: 'VO',
+        };
     },
     computed: {
         ...mapGetters({
