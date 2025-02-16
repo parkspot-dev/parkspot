@@ -200,14 +200,21 @@
             >
                 <template #searchable="props">
                 <!-- TODO: Remove AtomSelectInput completely from all files. Use Global Select Input -->
-                    <AtomSelectInput
+                    <!-- <AtomSelectInput
                         :list="agentList"
                         :size="'is-small'"
                         label=""
                         placeholder="Agent"
                         v-model="props.filters['Agent']"
                     >
-                    </AtomSelectInput>
+                    </AtomSelectInput> -->
+                      <SelectInput
+  :list="agentList"
+  :name="'agent'"
+  v-model="props.filters['Agent']"
+  :size="1"  :placeholder="'Select Agent'"  
+  />
+
                 </template>
                 <template v-slot="props">
                     <div class="status-column">
@@ -215,7 +222,7 @@
                             <span class="tag my-status">
                                 {{ props.row.Agent }}
                             </span>
-                            <AtomSelectInput
+                            <!-- <AtomSelectInput
                                 :list="agentList"
                                 :size="'is-small'"
                                 @change="onAgentUpdate(props.row, $event)"
@@ -223,7 +230,22 @@
                                 placeholder="Select Agent"
                                 v-model="filters.Agent"
                             >
-                            </AtomSelectInput>
+                            </AtomSelectInput> -->
+                          <SelectInput
+                          :list="agentList"
+                          :size="1"
+                          :placeholder="'select agent'"
+                          :name="'agent'"
+                          v-model="filters.Agent"
+                          @change="onAgentUpdate(props.row, $event)"
+                          />
+                            <!-- <SelectInput
+  :list="agentList"
+  :name="'agent'"
+  @change="onAgentUpdate(props.row, $event)"
+   v-model="filters.Agent"
+  :size="1"  :placeholder="'Select Agent'"  
+  /> -->
                         </div>
                     </div>
                 </template>
@@ -237,14 +259,27 @@
                 width="80px"
             >
                 <template #searchable="props">
-                    <AtomSelectInput
+                    <!-- <AtomSelectInput
                         :list="statusList"
                         :size="'is-small'"
                         class="column-width"
                         placeholder="Select Status"
                         v-model="props.filters['Status']"
                     >
-                    </AtomSelectInput>
+
+                    </AtomSelectInput> -->
+                     <!-- <SelectInput
+  :list="statusList"
+  :name="'Status'"
+  v-model="props.filters['Status']"
+  :size="1"  :placeholder="'Select Status'"  
+  /> -->
+  <SelectInput
+  :list="statusList"
+  :name="'Status'"
+  v-model="props.filters['Status']"
+  :size="1"  :placeholder="'Select Status'"  
+  />
                 </template>
                 <template v-slot="props">
                     <div class="status-column">
@@ -252,7 +287,7 @@
                             <span class="tag my-status">
                                 {{ statusList[props.row.Status].name }}
                             </span>
-                            <AtomSelectInput
+                            <!-- <AtomSelectInput
                                 :list="statusList"
                                 :size="'is-small'"
                                 @change="onAgentUpdate(props.row, $event)"
@@ -260,7 +295,15 @@
                                 placeholder="Select Status"
                                 v-model="filters.Status"
                             >
-                            </AtomSelectInput>
+                            </AtomSelectInput>-->
+                          <SelectInput
+                          :list="statusList"
+                          :size="1"
+                          :placeholder="'select status'"
+                          :name="'Status'"
+                          v-model="filters.Status"
+                          @change="onStatusUpdate(props.row, $event)"
+                          />
                         </div>
                         <div class="next-call-part">
                             <span
@@ -337,6 +380,8 @@ import AtomInput from '../atoms/AtomInput.vue';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
 import AtomIcon from '../atoms/AtomIcon';
+import SelectInput from '../global/SelectInput.vue';
+import { filter } from 'lodash';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -347,6 +392,7 @@ export default {
         AtomDatePicker,
         AtomInput,
         AtomButton,
+        SelectInput,
     },
     props: {
         parkingRequests: {
@@ -547,7 +593,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $portal-font-size: 13px;
 
 @media only screen and (max-width: 1024px) {
@@ -703,4 +749,41 @@ $portal-font-size: 13px;
         }
     }
 }
+/* In your global CSS file (e.g., style.css) */
+select {
+//   width: 10px !important;
+//   margin-top: 0px;
+//   font-size: 1px !important;
+//   height: 10% !important;
+//   padding: 100rem !important;
+
+  /* ... other styles ... */
+  
+//   font-size: 1px;
+
+
+}
+
+// select::placeholder { /* Style the placeholder */
+//   font-size: 10px !important;
+//   color: #aaa;
+// }
+// /* ... other styles ... */
+
+.select-wrapper {
+    margin-top: -12%;
+  width: 68%;
+//   height: 10px;
+}
+
+// // .label {
+//     // font-size: 10px !important;
+//     // font-weight: 500;
+//     // color: #333;
+// // }
+
+// .label {
+//     font-size: 10% !important;
+//     font-weight: 500 !important;
+// }
 </style>
