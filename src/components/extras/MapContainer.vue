@@ -48,7 +48,7 @@ export default {
     data() {
         return {
             accessToken: null,
-            img: 'assets/pstopmini.png',
+            img: '/assets/pstopmini.png',
             map: null, // map for mapbox
             marker: null, // marker for location
         };
