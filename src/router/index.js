@@ -1,14 +1,14 @@
 import { routes } from './routes.js';
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 
 const scrollBehavior = (_to, _from, savedPosition) => {
     // initially "savedPosition" value will be null,
     // coming back from page2 to page1 it will contain
     // the last co-ordinate of page1.
     if (savedPosition) {
-        return { savedPosition, behavior: 'smooth' };
+      return savedPosition;
     } else {
-        return { x: 0, y: 0, behavior: 'smooth' };
+      return { top: 0, behavior: "smooth" };
     }
 };
 
