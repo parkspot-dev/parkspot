@@ -255,7 +255,7 @@
                             <AtomSelectInput
                                 :list="statusList"
                                 :size="'is-small'"
-                                @change="onAgentUpdate(props.row, $event)"
+                                @change="onStatusUpdate(props.row, $event)"
                                 class="column-width"
                                 placeholder="Select Status"
                                 v-model="filters.Status"
