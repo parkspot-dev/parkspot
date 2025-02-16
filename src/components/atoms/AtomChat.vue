@@ -5,7 +5,7 @@
             target="_blank"
         >
             <AtomImage
-                src="assets/wa-icon.png"
+                src="/assets/wa-icon.png"
                 alt="chat-icon"
                 class="chat-icon"
             />

@@ -5,7 +5,7 @@
                 <div class="logo-wrapper">
                     <AtomImage
                         class="login-logo"
-                        src="assets/pstopmini.png"
+                        src="/assets/pstopmini.png"
                         alt="parkspot logo"
                     />
                 </div>
@@ -16,7 +16,7 @@
                 <button class="google-btn" @click="login">
                     <span class="google-btn-icon-wrapper">
                         <AtomImage
-                            src="assets/googleicon.svg"
+                            src="/assets/googleicon.svg"
                             alt="gmail icon"
                         />
                     </span>

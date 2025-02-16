@@ -154,7 +154,7 @@ export const TOP_SEARCH_PLACES = [
 export const VO_PAGE_TESTIMONIALS = [
     {
         name: 'Mohamed Awaiz',
-        image: 'assets/Testimonial1.png',
+        image: '/assets/Testimonial1.png',
         quote: `Definitely a game changer in Bangalore now
 U can easily rent a parking spot near you.👍✌️😁`,
         rate: 5,
@@ -162,7 +162,7 @@ U can easily rent a parking spot near you.👍✌️😁`,
     },
     {
         name: 'Devaraj Kamkar',
-        image: 'assets/Testimonial2.png',
+        image: '/assets/Testimonial2.png',
         quote: `It's great app and the Parkspot team is very supportive and dedicated. Got a parking spot within day.
         Special thanks to Preeti.`,
         rate: 5,
@@ -170,7 +170,7 @@ U can easily rent a parking spot near you.👍✌️😁`,
     },
     {
         name: 'Abishek Suresh',
-        image: 'assets/Testimonial3.png',
+        image: '/assets/Testimonial3.png',
         quote: `Parkspot really helped me when I'm in desperate need for a parking spot in Bangalore. 
         They just confirmed me a spot in 30 mins. I recommend them to anyone who is looking for a parking space.`,
         rate: 5,
@@ -180,14 +180,14 @@ U can easily rent a parking spot near you.👍✌️😁`,
     // Swiper is not working correctly with three testimonials.
     {
         name: 'Reshma Geetha',
-        image: 'assets/Testimonial4.png',
+        image: '/assets/Testimonial4.png',
         quote: `Parkspot is absolutely a genuine company. Preety coordinated well and made work easy.will definitely recommend parkspot to others and trustful`,
         rate: 5,
         link: 'https://g.co/kgs/r4d1awq',
     },
     {
         name: 'Manish Tadhiyal',
-        image: 'assets/Testimonial5.png',
+        image: '/assets/Testimonial5.png',
         quote: `Nice customer service, they help you with every step till you get your parking space.
         Good App, nice support team.
         Thanks for support Preety.😊`,

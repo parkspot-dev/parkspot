@@ -46,7 +46,7 @@ export default {
     },
     data() {
         return {
-            src: 'assets/features.png',
+            src: '/assets/features.png',
         };
     },
 };

@@ -48,7 +48,7 @@ export default {
     emits: ['homeBtn'],
     data() {
         return {
-            img: 'assets/error.svg',
+            img: '/assets/error.svg',
             imgName: 'error',
             imgRatio: '1by1',
         };

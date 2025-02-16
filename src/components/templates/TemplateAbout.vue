@@ -86,9 +86,9 @@ export default {
     },
     data() {
         return {
-            appLinkImg: 'assets/google-play-badge.svg',
-            aboutImg: 'assets/about.svg',
-            iosAppLinkImg: 'assets/apple-store.svg',
+            appLinkImg: '/assets/google-play-badge.svg',
+            aboutImg: '/assets/about.svg',
+            iosAppLinkImg: '/assets/apple-store.svg',
             APP_LINK,
         };
     },
