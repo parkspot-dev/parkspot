@@ -13,8 +13,8 @@
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import OrganismHomeCard from '../organisms/OrganismHomeCard.vue';
-import homeCarOwner from '../../../dist/assets/home-car-owner.jpg';
-import homeSpotOwner from '../../../dist/assets/home-spot-owner.jpg';
+import homeCarOwner from '/assets/home-car-owner.jpg';
+import homeSpotOwner from '/assets/home-spot-owner.jpg';
 
 export default {
     name: 'TemplateHomeBanner',
