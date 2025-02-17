@@ -1,16 +1,11 @@
 <template>
-    <BodyWrapper
-        class="home-banner"
-        :class="activeTab === 'VO' ? 'image-car-owner' : 'image-spot-owner'"
-    >
-        <OrganismHomeCard
-            class="home-cta"
-            @changed="getActiveTab"
-        ></OrganismHomeCard>
+    <BodyWrapper class="home-banner" :style="backgroundImageStyle">
+        <OrganismHomeCard class="home-cta" @changed="getActiveTab" />
         <div
-            :class="
-                activeTab === 'VO' ? 'm-image-car-owner' : 'm-image-spot-owner'
-            "
+            :class="{
+                'm-image-car-owner': activeTab === 'VO',
+                'm-image-spot-owner': activeTab !== 'VO',
+            }"
         ></div>
     </BodyWrapper>
 </template>
@@ -18,8 +13,8 @@
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import OrganismHomeCard from '../organisms/OrganismHomeCard.vue';
-import carImage from '/assets/home-car-owner.jpg';
-import spotImage from '/assets/home-spot-owner.jpg';
+import homeCarOwner from '../../../dist/assets/home-car-owner.jpg';
+import homeSpotOwner from '../../../dist/assets/home-spot-owner.jpg';
 
 export default {
     name: 'TemplateHomeBanner',
@@ -30,11 +25,16 @@ export default {
     data() {
         return {
             activeTab: 'VO',
-            carOwnerImage: 'url(/assets/home-car-owner.jpg)',
-            spotOwnerImage: `url('/assets/home-spot-owner.jpg')`,
-            mCarOwnerImage: 'url(/assets/m-home-car-owner.jpg)',
-            mSpotOwnerImage: `url('/assets/m-home-spot-owner.jpg')`,
         };
+    },
+    computed: {
+        backgroundImageStyle() {
+            const image =
+                this.activeTab === 'VO' ? homeCarOwner : homeSpotOwner;
+            return {
+                backgroundImage: `url(${image})`,
+            };
+        },
     },
     methods: {
         getActiveTab(activeTab) {
@@ -45,24 +45,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.image-spot-owner {
-    background-image: v-bind(spotOwnerImage);
-    -webkit-transition: background-image 1s;
-
-    @media only screen and (max-width: 1024px) {
-        background-image: unset;
-        background-color: var(--parkspot-white);
-    }
-}
-.image-car-owner {
-    background-image: v-bind(carOwnerImage);
-    -webkit-transition: background-image 1s;
-
-    @media only screen and (max-width: 1024px) {
-        background-image: unset;
-        background-color: var(--parkspot-white);
-    }
-}
 .home-banner {
     position: relative;
     height: 629px;
@@ -91,29 +73,15 @@ export default {
         }
     }
 
-    .m-image-car-owner {
-        display: none;
-        height: 187px;
-        background-image: v-bind(mCarOwnerImage);
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        transform: scale(1.25);
-        -webkit-transition: background-image 1s;
-
-        @media only screen and (max-width: 1024px) {
-            display: block;
-        }
-    }
+    .m-image-car-owner,
     .m-image-spot-owner {
         display: none;
         height: 187px;
-        background-image: v-bind(mSpotOwnerImage);
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
         transform: scale(1.25);
-        -webkit-transition: background-image 1s;
+        transition: background-image 1s;
 
         @media only screen and (max-width: 1024px) {
             display: block;
