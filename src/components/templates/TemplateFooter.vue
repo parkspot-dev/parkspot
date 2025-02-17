@@ -449,6 +449,15 @@ export default {
     position: relative;
 }
 
+@media(max-width: 768px) {
+    .secondary-container{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        justify-content: center;
+    }
+}
+
 .footer-discovery-list ul li::before {
     position: absolute;
     top: -7px;
