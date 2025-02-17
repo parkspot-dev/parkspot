@@ -104,6 +104,12 @@ export default {
     @media (max-width: 1024px) {
         gap: 5px;
     }
+
+    @media (max-width: 450px) {
+       align-items: start;
+       display: flex;
+       flex-direction: column;
+    }
     .app-links {
         display: flex;
         gap: 8px;
@@ -130,6 +136,7 @@ export default {
 @media only screen and (max-width: 750px) {
     .about-container {
         flex-direction: column;
+        padding: 0 10px;
     }
 }
 
