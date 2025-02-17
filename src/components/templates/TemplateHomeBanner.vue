@@ -1,11 +1,16 @@
 <template>
-    <BodyWrapper class="home-banner" :style="backgroundImageStyle">
-        <OrganismHomeCard class="home-cta" @changed="getActiveTab" />
+    <BodyWrapper
+        class="home-banner"
+        :class="activeTab === 'VO' ? 'image-car-owner' : 'image-spot-owner'"
+    >
+        <OrganismHomeCard
+            class="home-cta"
+            @changed="getActiveTab"
+        ></OrganismHomeCard>
         <div
-            :class="{
-                'm-image-car-owner': activeTab === 'VO',
-                'm-image-spot-owner': activeTab !== 'VO',
-            }"
+            :class="
+                activeTab === 'VO' ? 'm-image-car-owner' : 'm-image-spot-owner'
+            "
         ></div>
     </BodyWrapper>
 </template>
@@ -13,8 +18,6 @@
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import OrganismHomeCard from '../organisms/OrganismHomeCard.vue';
-import homeCarOwner from '/assets/home-car-owner.jpg';
-import homeSpotOwner from '/assets/home-spot-owner.jpg';
 
 export default {
     name: 'TemplateHomeBanner',
@@ -27,15 +30,6 @@ export default {
             activeTab: 'VO',
         };
     },
-    computed: {
-        backgroundImageStyle() {
-            const image =
-                this.activeTab === 'VO' ? homeCarOwner : homeSpotOwner;
-            return {
-                backgroundImage: `url(${image})`,
-            };
-        },
-    },
     methods: {
         getActiveTab(activeTab) {
             this.activeTab = activeTab;
@@ -45,6 +39,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.image-spot-owner {
+    background-image: url('../../assets/home-spot-owner.jpg');
+    -webkit-transition: background-image 1s;
+
+    @media only screen and (max-width: 1024px) {
+        background-image: unset;
+        background-color: var(--parkspot-white);
+    }
+}
+.image-car-owner {
+    background-image: url('../../assets/home-car-owner.jpg');
+    -webkit-transition: background-image 1s;
+
+    @media only screen and (max-width: 1024px) {
+        background-image: unset;
+        background-color: var(--parkspot-white);
+    }
+}
 .home-banner {
     position: relative;
     height: 629px;
@@ -73,15 +85,29 @@ export default {
         }
     }
 
-    .m-image-car-owner,
-    .m-image-spot-owner {
+    .m-image-car-owner {
         display: none;
         height: 187px;
+        background-image: url('../../assets/m-home-car-owner.jpg');
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
         transform: scale(1.25);
-        transition: background-image 1s;
+        -webkit-transition: background-image 1s;
+
+        @media only screen and (max-width: 1024px) {
+            display: block;
+        }
+    }
+    .m-image-spot-owner {
+        display: none;
+        height: 187px;
+        background-image: url('../../assets/m-home-spot-owner.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        transform: scale(1.25);
+        -webkit-transition: background-image 1s;
 
         @media only screen and (max-width: 1024px) {
             display: block;
