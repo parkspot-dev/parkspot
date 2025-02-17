@@ -372,6 +372,10 @@ export default {
     color: var(--primary-color);
 }
 
+.image{
+    max-height: fit-content !important;
+}
+
 .primary-footer {
     background-color: #1f2e3b;
 }

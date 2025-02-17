@@ -1,32 +1,65 @@
 <template>
-    <b-image :src="src" :alt="alt" :ratio="ratio" lazy class="b-img"></b-image>
-</template>
-
-<script>
-export default {
-    name: 'AtomImage',
+    <b-image
+      :src="src"
+      :alt="alt"
+      :ratio="ratio"
+      lazy
+      class="b-img"
+      :style="imgStyle"
+    ></b-image>
+  </template>
+  
+  <script>
+  export default {
+    name: "AtomImage",
     props: {
-        /**
-         * path of the image
-         */
-        src: {
-            type: String,
-            required: true,
-        },
-        /**
-         * image name
-         */
-        alt: {
-            type: String,
-            required: true,
-        },
-        /**
-         * The space will be reserved.
-         * Prevent page jump when images are loading when using responsive
-         */
-        ratio: {
-            type: String,
-        },
+      /**
+       * path of the image
+       */
+      src: {
+        type: String,
+        required: true,
+      },
+      /**
+       * image name
+       */
+      alt: {
+        type: String,
+        required: true,
+      },
+      /**
+       * The space will be reserved.
+       * Prevent page jump when images are loading when using responsive
+       */
+      ratio: {
+        type: String,
+      },
+      /**
+       * Optional width for the image
+       */
+      width: {
+        type: String,
+        default: null,
+      },
+      /**
+       * Optional height for the image
+       */
+      height: {
+        type: String,
+        default: null,
+      },
     },
-};
-</script>
+    computed: {
+      imgStyle() {
+        const styles = {};
+        if (this.width) {
+          styles.width = this.width;
+        }
+        if (this.height) {
+          styles.height = this.height;
+        }
+        return styles;
+      },
+    },
+  };
+  </script>  
