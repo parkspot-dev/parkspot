@@ -1,11 +1,11 @@
 <template>
     <b-image
-      :src="src"
       :alt="alt"
       :ratio="ratio"
-      lazy
-      class="b-img"
+      :src="src"
       :style="imgStyle"
+      class="b-img"
+      lazy
     ></b-image>
   </template>
   
