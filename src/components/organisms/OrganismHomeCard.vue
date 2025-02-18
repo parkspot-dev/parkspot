@@ -1,6 +1,6 @@
 <template>
     <div class="home-card">
-        <b-tabs @input="onChange">
+        <b-tabs @update:modelValue="onChange" v-model="activeTabValue">
             <b-tab-item value="VO">
                 <template #header>
                     <div class="header-tab-btn">
@@ -8,7 +8,7 @@
                         <span class="tab-btn-text"> Find spot </span>
                     </div>
                 </template>
-                <template>
+                <template #default>
                     <div class="card-main-body">
                         <h2 class="title">Search parking spot in seconds</h2>
                         <SearchInput class="search-input"></SearchInput>
@@ -28,7 +28,7 @@
                         <span class="tab-btn-text"> Rent spot </span>
                     </div>
                 </template>
-                <template>
+                <template #default>
                     <div class="card-main-body">
                         <h2 class="title">
                             Make money by renting out your spot
@@ -61,6 +61,11 @@ import { mapGetters } from 'vuex';
 import { getCoordinate } from '../../includes/LatLng';
 export default {
     name: 'HomeCard',
+    data() {
+        return {
+            activeTabValue: 'VO',
+        };
+    },
     components: {
         SearchInput,
         AtomButton,

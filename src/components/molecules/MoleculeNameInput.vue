@@ -1,35 +1,27 @@
 <template>
-    <ValidationProvider
-        :name="fieldName"
-        :rules="rules"
-        v-slot="{ errors, valid }"
-    >
+    <div :name="fieldName">
         <AtomInput
-            v-model="innerValue"
+            :modelValue="innerValue"
+            @update:modelValue="innerValue = $event"
             :placeholder="placeholder"
             :type="inputType"
-            :errorMessage="errors"
-            :errorType="{ 'is-danger': errors[0], 'is-success': valid }"
             :label="label"
             class="mb-1"
         >
         </AtomInput>
-    </ValidationProvider>
+    </div>
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
 import AtomInput from '../atoms/AtomInput.vue';
 export default {
     name: 'MoleculeNameInput',
     components: {
-        ValidationProvider,
         AtomInput,
     },
     props: {
-        value: {
+        modelValue: {
             type: null,
-            required: true,
         },
         placeholder: {
             type: String,
@@ -62,16 +54,16 @@ export default {
     watch: {
         // Handles internal model changes.
         innerValue(newVal) {
-            this.$emit('input', newVal);
+            this.$emit('update:modelValue', newVal);
         },
         // Handles external model changes.
-        value(newVal) {
+        modelValue(newVal) {
             this.innerValue = newVal;
         },
     },
     created() {
-        if (this.value) {
-            this.innerValue = this.value;
+        if (this.modelValue) {
+            this.innerValue = this.modelValue;
         }
     },
 };

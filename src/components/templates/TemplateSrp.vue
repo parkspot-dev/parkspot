@@ -16,6 +16,7 @@
                         </b-button>
                         <div class="filter-dropdown" v-if="showFilterCheckbox">
                             <ul>
+                                <!-- TODO: Remove this component and use a single one for checkbox functionality -->
                                 <AtomCheckbox
                                     :values="filterOptions"
                                     :size="'is-small'"

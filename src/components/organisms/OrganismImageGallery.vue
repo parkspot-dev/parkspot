@@ -1,9 +1,8 @@
 <template>
     <div class="gallery-container">
         <div id="lightgallery">
-            <template v-for="(image, i) in spotImage">
+            <template v-for="(image, i) in spotImage" :key="i">
                 <a
-                    :key="i"
                     class="gallery-item"
                     :class="imageSize"
                     :href="image"

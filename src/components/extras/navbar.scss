@@ -35,12 +35,13 @@
             }
         }
 
+
         .ps-text {
-            width: auto;
+            width: 165px;
             height: 36px;
 
             @media only screen and (max-width: 1024px) {
-                width: auto;
+                width: 145;
                 height: 30px;
             }
 

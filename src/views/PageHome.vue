@@ -4,19 +4,18 @@
         <TemplateFeatureHome></TemplateFeatureHome>
         <TemplateOurProducts @arrowBtn="onArrowBtn"></TemplateOurProducts>
         <PageAbout></PageAbout>
-        <TemplateTestimonial></TemplateTestimonial>
+        <TestimonialSection></TestimonialSection>
         <PageContactUs></PageContactUs>
     </div>
 </template>
 <script>
-import TemplateFeatureHome from '../components/templates/TemplateFeatureHome.vue';
+import { PAGE_TITLE } from '@/constant/constant';
+import PageAbout from './PageAbout.vue';
 import PageContactUs from './PageContactUs.vue';
+import TemplateFeatureHome from '../components/templates/TemplateFeatureHome.vue';
 import TemplateHomeBanner from '../components/templates/TemplateHomeBanner.vue';
 import TemplateOurProducts from '../components/templates/TemplateOurProducts.vue';
-import TemplateTestimonial from '../components/templates/TemplateTestimonial.vue';
-import PageAbout from './PageAbout.vue';
-
-import { PAGE_TITLE } from '@/constant/constant';
+import TestimonialSection from '@/components/global/TestimonialSection.vue';
 export default {
     name: 'PageHome',
     components: {
@@ -24,8 +23,8 @@ export default {
         TemplateFeatureHome,
         PageContactUs,
         TemplateHomeBanner,
-        TemplateTestimonial,
         TemplateOurProducts,
+        TestimonialSection
     },
     metaInfo() {
         return {

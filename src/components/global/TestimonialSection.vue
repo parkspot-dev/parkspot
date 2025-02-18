@@ -1,93 +1,94 @@
 <template>
     <div class="component-wrapper">
-            <AtomParagraph class="custom-subtitle">
-                Testimonials
-            </AtomParagraph>
-            <AtomHeading class="custom-title" :level="'h2'">
-                What Our Customers Say
-            </AtomHeading>
-            <div ref="swiper" class="swiper">
-                <div class="swiper-wrapper">
-                    <!-- Slides -->
-                    <div
-                        class="swiper-slide"
-                        v-for="(item, i) in items"
-                        :key="i"
-                    >
-                        <TestimonialCard :item="item"></TestimonialCard>
-                    </div>
-                </div>
-
-                <!-- If we need pagination -->
-                <!-- If we need navigation buttons -->
-                <div class="swiper-nav-wrapper">
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-next"></div>
+        <AtomParagraph class="custom-subtitle">
+            Testimonials
+        </AtomParagraph>
+        <AtomHeading class="custom-title" :level="'h2'">
+            What Our Customers Say
+        </AtomHeading>
+        <div ref="swiperContainer" class="swiper">
+            <div class="swiper-wrapper">
+                <!-- Slides -->
+                <div
+                    class="swiper-slide"
+                    v-for="(item, i) in items"
+                    :key="i"
+                >
+                    <TestimonialCard :item="item"></TestimonialCard>
                 </div>
             </div>
+
+            <!-- Navigation & Pagination -->
+            <div class="swiper-nav-wrapper">
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import 'swiper/swiper-bundle.min.css';
-import 'swiper/swiper.min.css';
+import { ref, onMounted } from 'vue';
+import { Swiper } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { VO_PAGE_TESTIMONIALS } from '../../constant/constant';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
-import Swiper, { Navigation, Pagination, Autoplay } from 'swiper';
 import TestimonialCard from './TestimonialCard.vue';
 
 export default {
-    name: 'TestimonialsSection',
+    name: 'TestimonialSection',
     components: {
         AtomHeading,
         AtomParagraph,
         TestimonialCard,
     },
-    data() {
-        return {
-            items: VO_PAGE_TESTIMONIALS
-        };
-    },
+    setup() {
+        const swiperContainer = ref(null);
+        const items = ref(VO_PAGE_TESTIMONIALS);
 
-    mounted() {
-        new Swiper(this.$refs.swiper, {
-            // configure Swiper to use modules
-            modules: [Navigation, Pagination, Autoplay],
-            // Optional parameters
-            direction: 'horizontal',
-            loop: true,
-            autoHeight: false,
-            centeredSlides: true,
-            slidesPerView: 1,
-            autoplay: {
-                delay: 2000,
-                disableOnInteraction: true,
-            },
-            // Responsive breakpoints
-            breakpoints: {
-                640: {
-                    slidesPerView: 2,
-                    spaceBetween: 40,
+        onMounted(() => {
+            new Swiper(swiperContainer.value, {
+                modules: [Navigation, Pagination, Autoplay],
+                direction: 'horizontal',
+                loop: items.value.length > 1,
+                autoHeight: false,
+                centeredSlides: true,
+                slidesPerView: 1,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
                 },
-                992: {
-                    slidesPerView: 3,
-                    spaceBetween: 40,
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 40,
+                    },
+                    992: {
+                        slidesPerView: 3,
+                        spaceBetween: 40,
+                    },
                 },
-            },
-
-            // If we need pagination
-            pagination: {
-                el: '.swiper-pagination',
-            },
-
-            // Navigation arrows
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
         });
+
+        return {
+            swiperContainer,
+            items,
+        };
     },
 };
 </script>

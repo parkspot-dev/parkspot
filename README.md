@@ -18,10 +18,8 @@ npm run lint
 ```
 ### Requirements
 ```
-Node - 16.13.2
-npm - 8.1.2
-Vue - 2.6.12
-Vuex - 3.6.2
+Node - v22.11.0
+npm - 11.0.0
 ```
 ### Dev Dependencies 
 - [Vue ESLint](https://eslint.vuejs.org/user-guide/#installation) 

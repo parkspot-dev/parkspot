@@ -1,11 +1,5 @@
 <template>
-    <ValidationProvider
-        ref="provider"
-        :rules="rules"
-        :name="fieldName"
-        v-slot="{ errors, valid }"
-        class="custom-wrapper"
-    >
+    <div ref="provider" :rules="rules" :name="fieldName" class="custom-wrapper">
         <AtomTooltip v-if="tooltip" class="custom-tooltip" :label="tooltipMsg">
             <AtomIcon :icon="ICON.INFO" :size="'is-small'"></AtomIcon>
         </AtomTooltip>
@@ -18,11 +12,10 @@
             v-model="innerValue"
             class="mb-5"
         ></AtomSelectInput>
-    </ValidationProvider>
+    </div>
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
 import AtomTooltip from '../atoms/AtomTooltip.vue';
@@ -30,7 +23,6 @@ import { ICON } from '../../constant/constant';
 export default {
     name: 'MoleculeSelectInput',
     components: {
-        ValidationProvider,
         AtomSelectInput,
         AtomIcon,
         AtomTooltip,

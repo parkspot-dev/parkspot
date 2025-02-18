@@ -1,89 +1,60 @@
 {
-  "name": "parkspot",
-  "version": "0.2.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve --mode development",
-    "build": "vue-cli-service build && cp _redirects dist",
-    "lint": "vue-cli-service lint",
-    "lint:css": "stylelint **/*.vue",
-    "build-report": "vue-cli-service build --report",
-    "test": "jest --watch"
-  },
-  "dependencies": {
-    "aos": "^2.3.4",
-    "axios": "^0.26.1",
-    "babel-core": "^7.0.0-bridge.0",
-    "boxicons": "^2.0.7",
-    "buefy": "^0.9.21",
-    "bulma": "^0.9.3",
-    "caniuse-lite": "^1.0.30001676",
-    "cashfree-dropjs": "^1.1.4",
-    "lightgallery.js": "^1.4.0",
-    "lodash": "^4.17.21",
-    "mapbox-gl": "^1.13.2",
-    "moment": "^2.29.4",
-    "swiper": "^8.4.4",
-    "v-click-outside": "^3.2.0",
-    "vee-validate": "^3.4.14",
-    "vue": "^2.6.12",
-    "vue-cli-plugin-compression": "^1.1.5",
-    "vue-meta": "^2.4.0",
-    "vue-router": "^3.4.8",
-    "vue2-google-maps": "^0.10.7",
-    "vuex": "^3.6.2"
-  },
-  "devDependencies": {
-    "@testing-library/vue": "^5.8.3",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.9",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/eslint-config-prettier": "^6.0.0",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "^22.4.4",
-    "eslint": "^6.8.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-plugin-vue": "^9.3.0",
-    "firebase": "^10.7.1",
-    "jest": "^26.6.3",
-    "prerender-spa-plugin": "^3.4.0",
-    "prettier": "^2.2.1",
-    "sass": "^1.53.0",
-    "sass-loader": "^10.2.1",
-    "stylelint": "^14.10.0",
-    "stylelint-config-prettier": "^9.0.3",
-    "stylelint-config-sass-guidelines": "^9.0.1",
-    "stylelint-config-standard": "^27.0.0",
-    "stylelint-order": "^6.0.3",
-    "stylelint-prettier": "^2.0.0",
-    "stylelint-processor-html": "^1.0.0",
-    "stylelint-webpack-plugin": "^3.3.0",
-    "vue-jest": "^3.0.7",
-    "vue-template-compiler": "^2.6.11",
-    "vue-test-utils": "^1.0.0-beta.11"
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "^vue$": "vue/dist/vue.common.js"
+    "name": "parkspot",
+    "version": "0.2.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview",
+        "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+        "format": "prettier .  --write"
     },
-    "moduleFileExtensions": [
-      "js",
-      "vue"
-    ],
-    "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not Explorer > 0",
-    "IE 11",
-    "not ExplorerMobile > 0",
-    "not BlackBerry > 0",
-    "not OperaMini all",
-    "not OperaMobile > 0"
-  ]
+    "dependencies": {
+        "@vee-validate/zod": "^4.15.0",
+        "aos": "^2.3.4",
+        "axios": "^1.7.9",
+        "boxicons": "^2.1.4",
+        "buefy": "npm:@ntohq/buefy-next@^0.1.4",
+        "bulma": "^1.0.3",
+        "caniuse-lite": "^1.0.30001690",
+        "cashfree-dropjs": "^1.1.5",
+        "lightgallery.js": "^1.4.0",
+        "lodash": "^4.17.21",
+        "mapbox-gl": "^3.9.2",
+        "moment": "^2.30.1",
+        "npm-check-updates": "^17.1.13",
+        "swiper": "^11.2.0",
+        "v-click-outside": "^3.2.0",
+        "vee-validate": "^4.15.0",
+        "vue": "^3.5.13",
+        "vue-loader": "^17.4.2",
+        "vue-meta": "^2.4.0",
+        "vue-router": "^4.5.0",
+        "vuex": "^4.1.0",
+        "zod": "^3.24.1"
+    },
+    "devDependencies": {
+        "@testing-library/vue": "^8.1.0",
+        "@vitejs/plugin-vue": "^5.2.1",
+        "eslint": "^9.17.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-vue": "^9.32.0",
+        "firebase": "^11.1.0",
+        "prettier": "3.4.2",
+        "sass": "^1.83.1",
+        "vite": "^6.0.7",
+        "vite-plugin-vue-devtools": "^7.7.0",
+        "vue-test-utils": "^0.5.0"
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not Explorer > 0",
+        "IE 11",
+        "not ExplorerMobile > 0",
+        "not BlackBerry > 0",
+        "not OperaMini all",
+        "not OperaMobile > 0"
+    ]
 }

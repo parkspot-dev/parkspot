@@ -15,50 +15,7 @@
                     <h2>Set up your Parkspot account.</h2>
                 </div>
             </div>
-            <div class="edit-main">
-                <div class="secondary">
-                    <ul>
-                        <li>
-                            <a
-                                @click="updateActiveForm(1)"
-                                :class="isActive === 1 ? 'link-active' : ''"
-                            >
-                                General
-                            </a>
-                        </li>
-                        <!-- disabling below features not fully ready yet -->
-                        <!-- <li>
-                            <a
-                                @click="updateActiveForm(2)"
-                                :class="isActive === 2 ? 'link-active' : ''"
-                            >
-                                Parking Facility
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                @click="updateActiveForm(3)"
-                                :class="isActive === 3 ? 'link-active' : ''"
-                            >
-                                KYC Verification
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                @click="updateActiveForm(4)"
-                                :class="isActive === 4 ? 'link-active' : ''"
-                            >
-                                Map Location
-                            </a>
-                        </li> -->
-                    </ul>
-                </div>
-                <div class="primary">
-                    <keep-alive>
-                        <component :is="activeForm"></component>
-                    </keep-alive>
-                </div>
-            </div>
+            <component :is="activeForm"></component>
         </div>
     </BodyWrapper>
 </template>
@@ -66,9 +23,6 @@
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import OrganismUserGeneralInfo from '../organisms/OrganismUserGeneralInfo.vue';
-import OrganismParkingFacility from '../organisms/OrganismParkingFacility.vue';
-import OrganismKycForm from '../organisms/OrganismKycForm.vue';
-import OrganismMapLocation from '../organisms/OrganismMapLocation.vue';
 import LoaderModal from '../extras/LoaderModal.vue';
 import { mapState } from 'vuex';
 export default {
@@ -76,41 +30,17 @@ export default {
     components: {
         BodyWrapper,
         OrganismUserGeneralInfo,
-        OrganismParkingFacility,
-        OrganismKycForm,
         LoaderModal,
-        OrganismMapLocation,
     },
     data() {
         return {
             activeForm: 'OrganismUserGeneralInfo',
-            isActive: 1,
         };
     },
     computed: {
         ...mapState('user', {
             user: (state) => state.user,
         }),
-    },
-    methods: {
-        updateActiveForm(formNo) {
-            this.isActive = formNo;
-            switch (formNo) {
-                case 1:
-                    this.activeForm = 'OrganismUserGeneralInfo';
-                    break;
-
-                case 2:
-                    this.activeForm = 'OrganismParkingFacility';
-                    break;
-                case 3:
-                    this.activeForm = 'OrganismKycForm';
-                    break;
-                case 4:
-                    this.activeForm = 'OrganismMapLocation';
-                    break;
-            }
-        },
     },
 };
 </script>
@@ -163,32 +93,6 @@ export default {
             font-size: 14px;
             font-weight: normal;
             color: #6e6d7a;
-        }
-    }
-}
-
-.edit-main {
-    display: flex;
-    .primary {
-        flex: 1 1 70%;
-    }
-    .secondary {
-        flex: 1 1 30%;
-        font-size: 15px;
-
-        ul {
-            li {
-                padding: 7px 0;
-
-                a {
-                    color: #6e6d7a;
-                }
-
-                .link-active {
-                    font-weight: 600;
-                    color: var(--parkspot-black);
-                }
-            }
         }
     }
 }

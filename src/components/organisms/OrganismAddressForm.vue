@@ -1,18 +1,10 @@
 <template>
-    <ValidationObserver ref="observer" v-slot="{}">
-        <ValidationProvider
-            name="location"
-            rules="required"
-            v-slot="{ validate, errors }"
-        >
+    <div ref="observer">
+        <div name="location" rules="required">
             <SearchInput @change.native="validate" class="mb-4"></SearchInput>
             <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
-        </ValidationProvider>
-        <ValidationProvider
-            name="map"
-            rules="required"
-            v-slot="{ validate, errors }"
-        >
+        </div>
+        <div name="map" rules="required">
             <AtomParagraph>
                 Note: Drag the marker to pin the exact location.
             </AtomParagraph>
@@ -22,15 +14,14 @@
                 @location="validate"
             ></MapContainer>
             <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
-        </ValidationProvider>
-    </ValidationObserver>
+        </div>
+    </div>
 </template>
 
 <script>
 import SearchInput from '../extras/SearchInput.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
-import { ValidationProvider, ValidationObserver } from 'vee-validate';
 import { mapGetters, mapMutations } from 'vuex';
 export default {
     name: 'OrganismAddressForm',
@@ -38,8 +29,6 @@ export default {
         SearchInput,
         MapContainer,
         AtomParagraph,
-        ValidationProvider,
-        ValidationObserver,
     },
     props: {
         formSubmitted: {

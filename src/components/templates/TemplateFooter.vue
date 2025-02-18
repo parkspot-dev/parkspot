@@ -18,7 +18,8 @@
                             </router-link>
                         </div>
                         <AtomParagraph class="pl-4 mb-5 footer-para">
-                            We provide the cheap and best parking spot in India.<br/>
+                            We provide the cheap and best parking spot in
+                            India.<br />
                             You can't park cheaper!
                         </AtomParagraph>
                         <div class="app-links">
@@ -156,11 +157,13 @@
                                         :size="'is-medium'"
                                     >
                                     </AtomIcon>
+                                    <span
+                                        class="top-search-link"
+                                        style="margin-left: 8px"
+                                        >{{ helplineNumber }}
+                                    </span>
                                 </a>
                             </span>
-                            <AtomParagraph :type="'span'">
-                                {{ helplineNumber }}
-                            </AtomParagraph>
                         </div>
                     </div>
 
@@ -309,7 +312,10 @@
                             href="https://www.youtube.com/@parkspot4468"
                             target="_blank"
                         >
-                            <AtomIcon :icon="'youtube'" style="font-size: 40px; padding: 1.2rem;">
+                            <AtomIcon
+                                :icon="'youtube'"
+                                style="font-size: 40px; padding: 1.2rem"
+                            >
                             </AtomIcon>
                         </a>
                     </div>
@@ -338,9 +344,9 @@ export default {
     },
     data() {
         return {
-            psfooterImg: require('@/assets/psfooterlogo.png'),
-            appLinkImg: require('@/assets/google-play-badge.svg'),
-            iosAppLinkImg: require('@/assets/apple-store.svg'),
+            psfooterImg: '/assets/psfooterlogo.png',
+            appLinkImg: '/assets/google-play-badge.svg',
+            iosAppLinkImg: '/assets/apple-store.svg',
         };
     },
 };
@@ -364,6 +370,10 @@ export default {
 
 .top-search-link:hover {
     color: var(--primary-color);
+}
+
+.image{
+    max-height: fit-content !important;
 }
 
 .primary-footer {
@@ -437,6 +447,15 @@ export default {
 
 .footer-discovery-list li {
     position: relative;
+}
+
+@media(max-width: 768px) {
+    .secondary-container{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        justify-content: center;
+    }
 }
 
 .footer-discovery-list ul li::before {
