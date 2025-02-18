@@ -16,8 +16,8 @@
             "namespace": "web",
             "site": "https://www.parkspot.in"
         },
-        "include": [
-            "https://www.parkspot.in/spot-details/*"
+        "path": [
+            "/spot-details/*"  
         ]
     }
 ]
