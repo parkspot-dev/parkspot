@@ -372,6 +372,10 @@ export default {
     color: var(--primary-color);
 }
 
+.image{
+    max-height: fit-content !important;
+}
+
 .primary-footer {
     background-color: #1f2e3b;
 }
@@ -443,6 +447,15 @@ export default {
 
 .footer-discovery-list li {
     position: relative;
+}
+
+@media(max-width: 768px) {
+    .secondary-container{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        justify-content: center;
+    }
 }
 
 .footer-discovery-list ul li::before {
