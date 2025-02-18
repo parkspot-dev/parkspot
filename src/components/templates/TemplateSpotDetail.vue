@@ -116,6 +116,10 @@
                                     />
                                 </td>
                             </tr>
+                            <tr v-if="paymentDetails">
+                                <td>Account</td>
+                                <td>{{ paymentDetails }}</td>
+                            </tr>
                         </table>
                     </div>
                     <div class="goto-btn">
@@ -184,6 +188,7 @@ export default {
         ...mapState('sdp', [
             'spotDetails',
             'ownerInfoDetails',
+            'paymentDetails',
             'selectedSpot',
             'isAvailable',
             'center'

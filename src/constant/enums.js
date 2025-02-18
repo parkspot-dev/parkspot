@@ -321,3 +321,24 @@ export const SiteTypeLabels = [
 export function getSiteTypeLabel(siteType) {
     return getEnumLabel(SiteTypeLabels, siteType);
 }
+
+export const PaymentAppType = Object.freeze({
+    NotSet: 0,
+    PhonePe: 1,
+    Gpay: 2,
+});
+
+export const PaymentAppTypeLabels = [
+    'Not Set',
+    'PhonePe',
+    'Gpay',
+];
+
+/**
+ *
+ * @param {int} PaymentAppType
+ * @return {string}: label for site type
+ */
+export function getPaymentAppTypeLabel(PaymentAppType) {
+    return getEnumLabel(PaymentAppTypeLabels, PaymentAppType);
+}
