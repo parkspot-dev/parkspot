@@ -1,12 +1,14 @@
 import { mayaClient } from '@/services/api';
+import { getPaymentAppTypeLabel } from '../../constant/enums';
 
 const UPDATE_SITE_ENDPOINT = '/owner/update-site';
 const state = {
-    center : null,
+    center: null,
     images: [],
     isAvailable: false,
     loading: true,
     ownerInfoDetails: null,
+    paymentDetails: '',
     selectedSpot: [],
     spotDetails: null,
     thumbnail: [],
@@ -56,8 +58,12 @@ const mutations = {
     },
 
     'update-map-center'(state, center) {
-        state.center = center
-    }
+        state.center = center;
+    },
+
+    'update-payment-info'(state, paymentDetails) {
+        state.paymentDetails = paymentDetails;
+    },
 };
 
 const actions = {
@@ -67,6 +73,25 @@ const actions = {
         if (res.Site) {
             commit('update-spot-details', res.Site);
             commit('update-owner-info-details', res.User);
+            // Extract account information
+            let AccountDetails = res.Account;
+            if (AccountDetails) {
+                let paymentdetails = '';
+                const paymentApp = getPaymentAppTypeLabel(
+                    AccountDetails.PaymentApp,
+                );
+                if (
+                    AccountDetails.account_number != '' &&
+                    AccountDetails.ifsc_code != ''
+                ) {
+                    paymentdetails = `${AccountDetails.account_number}/${AccountDetails.ifsc_code}`;
+                } else if (AccountDetails.UpiID != '') {
+                    paymentdetails = `${AccountDetails.UpiID}/${paymentApp}`;
+                } else if (AccountDetails.Mobile != '') {
+                    paymentdetails = `${AccountDetails.Mobile}/${paymentApp}`;
+                }
+                commit('update-payment-info', paymentdetails);
+            }
             const spot = {
                 ID: res.Site.SiteID,
                 Name: res.Site.Name,
@@ -76,7 +101,7 @@ const actions = {
                 Rate: res.Site.Rate,
                 Distance: 0, // res.Site.Distance
             };
-            commit('update-map-center', [spot.Long, spot.Lat])
+            commit('update-map-center', [spot.Long, spot.Lat]);
             commit('update-selected-spot', spot);
             commit('update-is-available', res.Site['SlotsAvailable']);
             commit('update-loading', false);
