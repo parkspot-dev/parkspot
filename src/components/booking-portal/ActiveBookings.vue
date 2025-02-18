@@ -105,9 +105,9 @@
                 cell-class="has-text-left"
                 field="Status"
                 label="Status"
-                width="40"
-                v-slot="props"
                 sortable
+                v-slot="props"
+                width="100"
             >
                 <div>
                     {{ getBookingStatusLabel(props.row.Status) }}
