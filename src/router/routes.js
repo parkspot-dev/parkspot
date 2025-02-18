@@ -17,9 +17,9 @@ export const pages = {
     BLOG                    : '/blog',
     MAINBLOG                : '/blog/:id',
     SEARCH_PORTAL           : '/search-portal',
-    PAYMENTGATEWAY          : '/payment/*',
-    NEARBY                  : '/bangalore/parking-near-*',
-    NEARBY_HYD              : '/hyderabad/parking-near-*',
+    PAYMENTGATEWAY          : '/payment/:pathMatch(.*)*',
+    NEARBY                  : '/bangalore/parking-near-:location',
+    NEARBY_HYD              : '/hyderabad/parking-near-:location',
     TEMP                    : '/temp',
     THANK_YOU               : '/thank-you',
     ERROR                   : '/error',
@@ -46,7 +46,6 @@ export const routes = [
         name: 'Faq',
         component: () => import('@/views/PageFaq.vue'),
     },
-
 
     {
         path: pages.ABOUT,
@@ -106,7 +105,7 @@ export const routes = [
     {
         path: pages.SPOT_REQUESTS,
         name: 'spotRequest',
-        component: () => import('@/views/SpotRequest.vue')
+        component: () => import('@/views/SpotRequest.vue'),
     },
     {
         path: pages.PAYMENTGATEWAY,
@@ -172,7 +171,12 @@ export const routes = [
         component: () => import('@/views/PageTemp.vue'),
     },
     {
-        path: '*',
+        // path: "*",
+        path: '/:catchAll(.*)',
+        name: 'NotFound',
+        meta: {
+            requiresAuth: false,
+        },
         component: Home,
         redirect: pages.HOME,
     },

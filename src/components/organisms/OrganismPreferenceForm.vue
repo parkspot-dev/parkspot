@@ -1,5 +1,5 @@
 <template>
-    <ValidationObserver ref="observer" v-slot="{}">
+    <div ref="observer">
         <MoleculeSelectInput
             :fieldName="PREFERENCE.PARKING_TYPE"
             :list="parkingTypeData"
@@ -37,11 +37,10 @@
                 </a>
             </template>
         </MoleculeCheckbox>
-    </ValidationObserver>
+    </div>
 </template>
 
 <script>
-import { ValidationObserver } from 'vee-validate';
 import MoleculeCheckbox from '../molecules/MoleculeCheckbox.vue';
 import MoleculeSelectInput from '../molecules/MoleculeSelectInput.vue';
 import MoleculeNameInput from '../molecules/MoleculeNameInput.vue';
@@ -50,7 +49,6 @@ import { mapMutations } from 'vuex';
 export default {
     name: 'OrganismPreferenceForm',
     components: {
-        ValidationObserver,
         MoleculeCheckbox,
         MoleculeSelectInput,
         MoleculeNameInput,

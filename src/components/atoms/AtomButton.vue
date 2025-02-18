@@ -1,6 +1,6 @@
 <template>
-    <b-button 
-        :class="{'btn-border-radius': withSearch}"
+    <b-button
+        :class="{ 'btn-border-radius': withSearch }"
         :expanded="expanded"
         :icon-left="left"
         :icon-right="right"
@@ -33,11 +33,11 @@ export default {
          */
         left: {
             type: String,
-            default: ""
+            default: '',
         },
         right: {
             type: String,
-            default: ""
+            default: '',
         },
         outlined: {
             type: Boolean,
@@ -53,8 +53,8 @@ export default {
         },
         withSearch: {
             type: Boolean,
-            default: false
-        }
+            default: false,
+        },
     },
     emits: ['btnClick'],
     methods: {
@@ -70,7 +70,7 @@ export default {
     background-color: var(--primary-color);
 }
 
-.btn-wrapper.btn-border-radius{
+.btn-wrapper.btn-border-radius {
     border-radius: 0 4px 4px 0;
 }
 </style>

@@ -22,6 +22,7 @@ const state = {
     recentSearch: [],
     recentID: 0,
     filteredSrpResults: [],
+    userCurrentLocation : [77.5946, 12.9716] //  default bengaluru lat, lng.
 };
 
 const getters = {
@@ -55,6 +56,10 @@ const getters = {
     getTotalPages() {
         return state.totalPages;
     },
+
+    getUserLocation(){
+        return state.userCurrentLocation;
+    }
 };
 
 const mutations = {
@@ -138,6 +143,14 @@ const mutations = {
     'update-filtered-srp-results'(state, srpResults) {
         state.filteredSrpResults = srpResults;
     },
+
+    'update-user-location'(state, center) {
+        state.userCurrentLocation = center;
+    },
+
+    'update-map-zoom'(state, value) {
+        state.mapConfig.zoom = value;
+    }
 };
 
 const actions = {
@@ -204,6 +217,15 @@ const actions = {
 
         commit('update-filtered-srp-results', filteredSrpResults);
     },
+
+    updateUsersCurrentLocation({commit}, center){
+        commit('update-user-location', center)
+    },
+
+    // Update zoom value
+    updateZoomValue({commit}, zoomValue) {
+        commit('update-map-zoom', zoomValue);
+    }
 };
 
 export default {

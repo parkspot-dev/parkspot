@@ -15,7 +15,7 @@
                 :open-on-focus="true"
                 @click.native="addRecentSearches()"
             >
-                <template slot-scope="props">
+                <template #default="props">
                     <div class="media">
                         <!-- fromLS should be renamed -->
                         <div

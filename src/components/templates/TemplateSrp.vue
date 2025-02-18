@@ -16,6 +16,7 @@
                         </b-button>
                         <div class="filter-dropdown" v-if="showFilterCheckbox">
                             <ul>
+                                <!-- TODO: Remove this component and use a single one for checkbox functionality -->
                                 <AtomCheckbox
                                     :values="filterOptions"
                                     :size="'is-small'"
@@ -48,9 +49,10 @@
         </div>
         <div class="srp-map">
             <MapContainer
-                class="map-container"
-                :spotsList="spots"
+                :center="this.center"
                 :key="reRender"
+                :spotsList="spots"
+                class="map-container"
             ></MapContainer>
         </div>
     </div>
@@ -94,12 +96,19 @@ export default {
     },
     data() {
         return {
+            center: null,
             filterOptions: ['Available', 'Rented out'],
             showFilterCheckbox: false,
         };
     },
     computed: {
         ...mapState('map', ['selectedLocation']),
+    },
+    mounted() {
+        const latlang = this.$route.query['latlng'];
+        if (latlang) {
+            this.center = latlang.split(',').map(Number).reverse();
+        }
     },
     methods: {
         onPageChange(page) {

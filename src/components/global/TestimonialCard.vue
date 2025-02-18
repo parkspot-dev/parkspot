@@ -4,17 +4,30 @@
             <img class="author-image" :alt="item.name" :src="item.image" />
             <div>
                 <h4 class="author-name">{{ item.name }}</h4>
-                <p class="author-details">{{ item.date }}</p>
+                <AtomRating
+                    :rate="item.rate"
+                    :size="'is-small'"
+                    class="rating"
+                />
             </div>
         </div>
         <div class="divider-line"></div>
-        <p class="testimonial-text" v-html="formattedQuote" ></p>
+        <p class="testimonial-text" v-html="formattedQuote"></p>
+        <a class="read-more-link" :href="item.link" target="_blank">
+            <img alt="Google Icon" class="google-icon" :src="googleIcon" />
+            <span>View review</span>
+        </a>
     </div>
 </template>
 
 <script>
+import AtomRating from '../atoms/AtomRating.vue';
+
 export default {
     name: 'TestimonialCard',
+    components: {
+        AtomRating,
+    },
     props: {
         /**
          * The item prop should be an object with the following structure:
@@ -31,6 +44,11 @@ export default {
             required: true,
             type: Object,
         },
+    },
+    data() {
+        return {
+            googleIcon: 'https://cdn-icons-png.flaticon.com/128/300/300221.png',
+        };
     },
     computed: {
         // Formats the quote to replace newline characters with <br> tags.
@@ -77,10 +95,11 @@ export default {
     border: 1px solid var(--parkspot-white);
     box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
     display: flex;
+    flex: 1;
     flex-direction: column;
     gap: 1rem;
     margin: 20px;
-    min-height: 240px;
+    min-height: 280px;
     padding: 16px;
 
     .divider-line {
@@ -92,8 +111,33 @@ export default {
 
 .testimonial-text {
     color: var(--parkspot-black);
+    flex-grow: 1;
     font-size: 14px;
     line-height: 1.6;
     margin-bottom: 16px;
+}
+
+.google-icon {
+    height: 1.15rem;
+    transition:
+        transform 0.1s ease,
+        opacity 0.1s ease,
+        filter 0.1s ease;
+}
+.read-more-link {
+    align-items: center;
+    align-self: flex-end;
+    color: var(--secondary-color);
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 5%;
+    text-decoration: none;
+}
+.read-more-link:hover {
+    font-weight: 500;
+}
+.read-more-link:hover .google-icon {
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
+    transform: scale(1.1);
 }
 </style>

@@ -36,22 +36,22 @@ export default {
             items: [
                 {
                     title: 'ParkSpot for Owners',
-                    image: require('@/assets/Parkspot-owners.jpg'),
+                    image: '/assets/Parkspot-owners.jpg',
                     desc: `Want to monetize your idle parking spots?`,
                 },
                 {
                     title: 'ParkSpot for Societies',
-                    image: require('@/assets/Parkspot-societies.jpg'),
+                    image: '/assets/Parkspot-societies.jpg',
                     desc: `Secure your society and enable seamless entry/exit for residents.`,
                 },
                 {
                     title: 'ParkSpot for Corporates',
-                    image: require('@/assets/Parkspot-corporates.jpg'),
+                    image: '/assets/Parkspot-corporates.jpg',
                     desc: `Give your employees the gift of easy parking.`,
                 },
                 {
                     title: 'ParkSpot for Malls',
-                    image: require('@/assets/Parkspot-malls.jpg'),
+                    image: '/assets/Parkspot-malls.jpg',
                     desc: `Digitized parkspot for better monetization and seamless
                 customer experience.`,
                 },
