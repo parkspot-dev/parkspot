@@ -109,8 +109,8 @@ export default {
             CONTACT_FORM: FORM,
             PREFERENCE,
             ADD_INFO,
-            parkingTypeData: PREFERENCE.PARKING_TYPE_LIST,
-            minDurData: ADD_INFO.MINIMUM_DURATION_DATA,
+            parkingTypeData: PREFERENCE.PARKING_TYPE_LIST.map((item) => item.name),
+            minDurData: ADD_INFO.MINIMUM_DURATION_DATA.map((item) => item.name),
             termData: ADD_INFO.TERMS_DATA,
             isEnable: false,
         };
