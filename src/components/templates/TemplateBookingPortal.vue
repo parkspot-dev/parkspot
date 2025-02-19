@@ -436,7 +436,6 @@
                     <div class="cell"><strong> Payment Type </strong></div>
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
-                    <div class="cell"><strong> Action </strong></div>
                 </div>
                 <div v-if="currBookingDetails.Payments">
                     <div
@@ -454,14 +453,8 @@
                         <div class="cell">
                             {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
-                            <div
-                            v-if="
-                                editField === 'Payment Type' &&
-                                editingPaymentID &&
-                                editingPaymentID === payment.PaymentID
-                            "
-                        >
-                            <select v-model="payment.Type">
+                        <div v-if="this.userProfile">
+                            <!-- <select v-model="payment.Type">
                                 <option
                                     v-for="(label, index) in paymentTypeLabels"
                                     :key="label"
@@ -469,7 +462,13 @@
                                 >
                                     {{ label }}
                                 </option>
-                            </select>
+                            </select> -->
+                            <SelectInput
+                                :list="paymentTypeLabels"
+                                @update:modelValue="updatePaymentType"
+                                v-model="payment.Type"
+                                :defaultValue=" getPaymentTypeLabel(payment.Type)"
+                            />
                         </div>
                         <div class="cell" v-else>
                             {{ getPaymentTypeLabel(payment.Type) }}
@@ -498,28 +497,6 @@
                             </div>
                         </div>
                         <div class="cell">₹ {{ payment.Amount }}</div>
-                        <div class="cell edit-payment">
-                            <!-- <AtomIcon :icon="'pencil'" class="icon" ></AtomIcon>  -->
-                            <AtomIcon
-                                v-if="
-                                    editField === 'Payment Type' &&
-                                    editingPaymentID &&
-                                    editingPaymentID === payment.PaymentID
-                                "
-                                @click.native="enableEdit('')"
-                                :icon="'content-save-outline'"
-                                size=""
-                            ></AtomIcon>
-
-                            <AtomIcon
-                                v-else
-                                @click.native="
-                                    enableEditPaymentRow(payment.PaymentID)
-                                "
-                                :icon="'pencil'"
-                                size=""
-                            ></AtomIcon>
-                        </div>
                     </div>
                 </div>
                 <div v-else>No payment history found.</div>
@@ -547,6 +524,7 @@ import AtomTooltip from '../atoms/AtomTooltip.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import AtomInput from '../atoms/AtomInput.vue';
 import moment from 'moment';
+import SelectInput from '../global/SelectInput.vue';
 
 export default {
     name: 'TemplateBookingPortal',
@@ -556,6 +534,7 @@ export default {
         AtomTooltip,
         AtomDatePicker,
         AtomInput,
+        SelectInput,
     },
 
     data() {
@@ -585,6 +564,7 @@ export default {
             'paymentDetails',
             'updatedFields',
         ]),
+        ...mapState('user', ['userProfile']),
         sdpURL() {
             return this.$router.resolve({
                 name: 'spot-detail',
@@ -608,12 +588,16 @@ export default {
             },
         },
     },
-
+    mounted() {
+        this.getUserProfile();
+        console.log('This is user profile', this.userProfile);
+    },
     methods: {
         ...mapActions('bookingPortal', [
             'setUpdatedFields',
             'updateEditingPaymentID',
         ]),
+        ...mapActions('user', ['getUserProfile']),
 
         getPaymentStatusLabel(paymentStatus) {
             return getPaymentStatusLabel(paymentStatus);
@@ -744,6 +728,10 @@ export default {
         enableEditPaymentRow(paymentID) {
             this.updateEditingPaymentID(paymentID);
             this.enableEdit('Payment Type');
+        },
+
+        updatePaymentType(value) {
+            console.log("Updating payment type", value);
         },
     },
 };
