@@ -1,6 +1,9 @@
 import { toTypedSchema } from '@vee-validate/zod';
 import { z } from 'zod';
+<<<<<<< HEAD
 import { PARKING_FACILITY } from '@/constant/constant';
+=======
+>>>>>>> select-input/enhancement
 
 // field validation rules
 const rules = {
@@ -26,6 +29,7 @@ const rules = {
     addr: z.string().optional(),
     msg: z.string().optional(),
     carModel: z.string().min(1, 'Car model is required'),
+<<<<<<< HEAD
     parkingType: z.enum(
         PARKING_FACILITY.VO.PARKING_TYPE_LIST.map((item) => item.name),
         {
@@ -41,6 +45,11 @@ const rules = {
             errorMap: () => ({ message: 'Duration is required.' }),
         },
     ),
+=======
+    terms: z.boolean().refine((val) => val === true, {
+        message: 'You must accept the terms',
+    }),
+>>>>>>> select-input/enhancement
 };
 
 // Contact Form Schema
@@ -60,15 +69,22 @@ export const parkingRequestFormSchema = toTypedSchema(
         fullname: rules.fullname,
         email: rules.email,
         cno: rules.cno,
+<<<<<<< HEAD
         carModel: rules.carModel,
         parkingType: rules.parkingType,
         terms: rules.terms,
         minDur: rules.minDur,
+=======
+        terms: rules.terms,
+>>>>>>> select-input/enhancement
     }),
 );
 
 // Edit Profile Form Schema
+<<<<<<< HEAD
 
+=======
+>>>>>>> select-input/enhancement
 export const editProfileFormSchema = toTypedSchema(
     z.object({
         fullname: rules.fullname,

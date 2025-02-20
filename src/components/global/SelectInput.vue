@@ -1,39 +1,37 @@
 <template>
     <div class="select-wrapper">
-        <label :for="name" class="label">{{ label }}</label>
-        <select v-model="value" :id="name" @change="emitUpdate">
-            <option
-                :key="option.id"
-                :value="option.name"
-                v-for="option in list"
-            >
-                {{ option.name }}
+        <label v-if="label" :for="name" class="label">{{ label }}</label>
+        <select v-model="selectedValue" :id="name" @change="emitUpdate">
+            <option v-for="option in list" :key="option" :value="option">
+                {{ option }}
             </option>
         </select>
-        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     </div>
 </template>
 
 <script setup>
-import { useField } from 'vee-validate';
-import { defineProps, defineEmits } from 'vue';
+import { ref, defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
-    label: { type: String, required: true },
+    label: { type: String, required: false },
     list: { type: Array, required: true },
     name: { type: String, required: true },
+    modelValue: { type: [String, Number], required: false },
+    defaultValue: { type: [String, Number], required: false },
+    updateID: { type: Number, default: 0 }, // Index or ID to track which option is updated
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update']);
 
-const { value, errorMessage } = useField(props.name);
+const selectedValue = ref(
+    props.modelValue ||
+        props.defaultValue ||
+        (props.list.length ? props.list[0] : ''),
+);
 
-// Set list first value as default select option
-const defaultValue = props.list.length ? props.list[0].name : ''
-value.value = defaultValue
-
+// Emit the updated value along with its index when selection changes
 const emitUpdate = () => {
-    emit('update:modelValue', value.value);
+    emit('update', selectedValue.value, props.updateID);
 };
 </script>
 
@@ -50,13 +48,8 @@ select {
     outline: none;
     padding: 0.5rem;
 }
-
 .label {
     font-size: 14px !important;
     font-weight: 500 !important;
-}
-.error {
-    color: red;
-    font-size: 0.875rem;
 }
 </style>
