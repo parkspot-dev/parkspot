@@ -173,8 +173,11 @@ export default {
                     // Update Search Text with voMobile
                     this.updateMobileInput(sanitizeMobileNumber);
                     this.$router.push({
-                        path: this.$route.fullPath,
-                        query: { mobile: sanitizeMobileNumber },
+                        path: this.$route.path,
+                        query: {
+                            mobile: sanitizeMobileNumber,
+                            tab: getActiveTabStatusLabel(this.activeTab)
+                        },
                     });
                 }
             }
