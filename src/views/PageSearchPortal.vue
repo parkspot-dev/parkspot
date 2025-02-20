@@ -182,8 +182,11 @@ export default {
         async searchRequestWithLatLng(latlng) {
             this.updateSOLatLngInput(latlng);
             this.$router.push({
-                path: this.$route.fullPath,
-                query: { latlng: latlng },
+                path: this.$route.path,
+                query: { 
+                latlng: latlng,
+                tab: getActiveTabStatusLabel(this.activeTab)
+                },
             });
         },
         // Clear Mobile Input
