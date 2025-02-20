@@ -437,9 +437,9 @@
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
                 </div>
-                <div v-if="currBookingDetails.Payments">
+                <div v-if="paymentDetails.length > 0 ">
                     <div
-                        v-for="payment in currBookingDetails.Payments"
+                        v-for="payment in paymentDetails"
                         :key="payment.PaymentID"
                         class="row"
                     >
@@ -453,12 +453,13 @@
                         <div class="cell">
                             {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
-                        <div v-if=" this.userProfile && getUserTypeLabel(this.userProfile.Type) === 'Agent'">
+                        <div v-if="getUserTypeLabel(this.userProfile.Type) === 'Agent'">
                             <SelectInput
-                                :defaultValue=" getPaymentTypeLabel(payment.Type)"
+                                :defaultValue="getPaymentTypeLabel(payment.Type)"
                                 :list="paymentTypeLabels"
-                                :updateIndex="payment.paymentID"
+                                :updateID="payment.PaymentID"
                                 @update="updatePaymentType"
+                                name="updatePayment"
                             />
                         </div>
                         <div class="cell" v-else>
@@ -546,7 +547,10 @@ export default {
         '$store.state.bookingPortal.bookingDetails'(val) {
             this.currBookingDetails = cloneDeep(val); // make a local copy of bookingDetails
         },
-    },
+        paymentDetails(newVal) {
+        console.log('Updated payment details:', newVal);
+    }
+},
     computed: {
         ...mapState('bookingPortal', [
             'agents',
@@ -582,7 +586,6 @@ export default {
     },
     mounted() {
         this.getUserProfile();
-        console.log('This is user profile', this.userProfile);
     },
     methods: {
         ...mapActions('bookingPortal', [

@@ -56,6 +56,7 @@ const mutations = {
 
     'set-payment-details'(state, paymentDetails) {
         state.paymentDetails = paymentDetails;
+        console.log("These are payment details", state.paymentDetails);
     },
 
     'set-loading'(state, isLoading) {
@@ -102,7 +103,8 @@ const actions = {
         const res = await mayaClient.get(
             '/booking/details?booking-id=' + bookingId,
         );
-        if (res.Booking) {
+        if (res.Booking && res.Payments) {
+            commit('set-payment-details', res.Payments);
             commit('update-booking', res);
             commit('set-initial-active-booking-details', res.Booking);
         } else if (res.DisplayMsg) {
