@@ -183,7 +183,7 @@ class MapBoxApiService extends BaseApiService {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         };
-        super(mapBoxDomain, baseHeaderMap, 10000, false);
+        super(mapBoxDomain, baseHeaderMap, 5000, false);
     }
 }
 
