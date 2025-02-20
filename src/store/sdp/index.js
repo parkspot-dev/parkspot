@@ -67,31 +67,14 @@ const mutations = {
 };
 
 const actions = {
-    async getSpotDetails({ commit }, { spotId }) {
+    async getSpotDetails({ commit, dispatch }, { spotId }) {
         commit('update-loading', true);
         const res = await mayaClient.get(`/site?site-id=${spotId}`);
         if (res.Site) {
             commit('update-spot-details', res.Site);
             commit('update-owner-info-details', res.User);
-            // Extract account information
-            let AccountDetails = res.Account;
-            if (AccountDetails) {
-                let paymentdetails = '';
-                const paymentApp = getPaymentAppTypeLabel(
-                    AccountDetails.PaymentApp,
-                );
-                if (
-                    AccountDetails.account_number != '' &&
-                    AccountDetails.ifsc_code != ''
-                ) {
-                    paymentdetails = `${AccountDetails.account_number}/${AccountDetails.ifsc_code}`;
-                } else if (AccountDetails.UpiID != '') {
-                    paymentdetails = `${AccountDetails.UpiID}/${paymentApp}`;
-                } else if (AccountDetails.Mobile != '') {
-                    paymentdetails = `${AccountDetails.Mobile}/${paymentApp}`;
-                }
-                commit('update-payment-info', paymentdetails);
-            }
+            await dispatch('setPaymentDetails', res.Account);
+
             const spot = {
                 ID: res.Site.SiteID,
                 Name: res.Site.Name,
@@ -110,6 +93,25 @@ const actions = {
             commit('update-title', res.Site['Name']);
         } else {
             throw res.DisplayMsg;
+        }
+    },
+
+    // function to handle account details extraction and commit
+    async setPaymentDetails({ commit }, accountdetails) {
+        if (accountdetails) {
+            let paymentdetails = '';
+            const paymentApp = getPaymentAppTypeLabel(
+                accountdetails.PaymentApp,
+            );
+            if (accountdetails.account_number && accountdetails.ifsc_code) {
+                paymentdetails = `${accountdetails.account_number}/${accountdetails.ifsc_code}`;
+            } else if (accountdetails.UpiID) {
+                paymentdetails = `${accountdetails.UpiID}/${paymentApp}`;
+            } else if (accountdetails.Mobile) {
+                paymentdetails = `${accountdetails.Mobile}/${paymentApp}`;
+            }
+
+            commit('update-payment-info', paymentdetails);
         }
     },
 
