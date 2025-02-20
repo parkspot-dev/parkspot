@@ -56,7 +56,6 @@ const mutations = {
 
     'set-payment-details'(state, paymentDetails) {
         state.paymentDetails = paymentDetails;
-        console.log("These are payment details", state.paymentDetails);
     },
 
     'set-loading'(state, isLoading) {
@@ -89,8 +88,8 @@ const mutations = {
     },
 
     'set-editing-payment-ID'(state, paymentID) {
-        state.editingPaymentID = paymentID
-    }
+        state.editingPaymentID = paymentID;
+    },
 };
 
 const actions = {
@@ -146,7 +145,7 @@ const actions = {
 
     async updateBookingDetails({ commit, dispatch, state }, reqBody) {
         commit('set-loading', true);
-        reqBody = { Booking: reqBody, UpdatedFields : state.updatedFields }
+        reqBody = { Booking: reqBody, UpdatedFields: state.updatedFields };
         const res = await mayaClient.post('/booking/update', reqBody);
         if (res.Success) {
             dispatch('getBookingDetails', reqBody.Booking.ID);
@@ -173,7 +172,7 @@ const actions = {
     },
 
     // Update Search Text
-    updateSearchText({ commit, }, bookingId) {
+    updateSearchText({ commit }, bookingId) {
         commit('set-search-text', bookingId);
     },
 
@@ -186,9 +185,21 @@ const actions = {
         commit('set-updated-fields', fields);
     },
 
-    updateEditingPaymentID({commit}, paymentID) {
-        commit('set-editing-payment-ID', paymentID)
-    }
+    updateEditingPaymentID({ commit }, paymentID) {
+        commit('set-editing-payment-ID', paymentID);
+    },
+
+    async changePaymentType({commit}, {paymentID, paymentType}) {
+        const reqBody = { type: paymentType };
+        const res = await mayaClient.patch(
+            `/payment/update-type/${paymentID}`,
+            reqBody,
+        );
+
+        if (res?.DisplayMsg) {
+            commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
+        }
+    },
 };
 
 export default {

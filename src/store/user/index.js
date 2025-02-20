@@ -233,7 +233,6 @@ const actions = {
     async getUserProfile({ commit, dispatch, state }) {
         try {
             const userProfile = await mayaClient.get('/auth/user');
-            console.log("This is user profile", userProfile);
             commit('update-user-profile', userProfile);
         } catch (err) {
             // todo write proper exception case

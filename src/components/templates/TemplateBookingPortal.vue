@@ -437,7 +437,7 @@
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
                 </div>
-                <div v-if="paymentDetails.length > 0 ">
+                <div v-if="paymentDetails.length > 0">
                     <div
                         v-for="payment in paymentDetails"
                         :key="payment.PaymentID"
@@ -453,7 +453,7 @@
                         <div class="cell">
                             {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
-                        <div v-if="getUserTypeLabel(this.userProfile.Type) === 'Agent'">
+                        <div v-if="getUserTypeLabel(this.userProfile.Type) === 'Agent'" class="update-payment" >
                             <SelectInput
                                 :defaultValue="getPaymentTypeLabel(payment.Type)"
                                 :list="paymentTypeLabels"
@@ -591,6 +591,7 @@ export default {
         ...mapActions('bookingPortal', [
             'setUpdatedFields',
             'updateEditingPaymentID',
+            'changePaymentType',
         ]),
         ...mapActions('user', ['getUserProfile']),
 
@@ -728,7 +729,8 @@ export default {
         },
 
         updatePaymentType(value, paymentId) {
-            console.log("Updating payment type", value, paymentId);
+            const paymentType = this.paymentTypeLabels.indexOf(value);
+            this.changePaymentType({ paymentID : paymentId, paymentType})
         },
     },
 };
@@ -932,14 +934,9 @@ export default {
     }
 }
 
-.edit-payment {
+.update-payment{
     display: flex;
+    flex-direction: column;
     justify-content: center;
-
-    .icon {
-        color: var(--secondary-color);
-        font-size: 20px;
-        cursor: pointer;
-    }
 }
 </style>
