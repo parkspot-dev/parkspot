@@ -18,7 +18,7 @@ const props = defineProps({
     name: { type: String, required: true },
     modelValue: { type: [String, Number], required: false },
     defaultValue: { type: [String, Number], required: false },
-    updateID: { type: String }, // Index or ID to track which option is updated
+    updateID: { type: Number, default: 0 }, // Index or ID to track which option is updated
 });
 
 const emit = defineEmits(['update']);
