@@ -18,15 +18,20 @@ const props = defineProps({
     name: { type: String, required: true },
     modelValue: { type: [String, Number], required: false },
     defaultValue: { type: [String, Number], required: false },
-    updateId: { type: Number, required: true } // Payment ID
+    updateIndex: { type: Number, default: 0 }, // Index or ID to track which option is updated
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update']);
 
-const selectedValue = ref(props.modelValue || props.defaultValue || (props.list.length ? props.list[0] : ''));
+const selectedValue = ref(
+    props.modelValue ||
+        props.defaultValue ||
+        (props.list.length ? props.list[0] : ''),
+);
 
+// Emit the updated value along with its index when selection changes
 const emitUpdate = () => {
-    emit('update:modelValue', selectedValue.value, props.updateId);
+    emit('update', selectedValue.value, props.updateIndex);
 };
 </script>
 

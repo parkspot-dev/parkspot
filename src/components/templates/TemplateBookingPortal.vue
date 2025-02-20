@@ -453,12 +453,12 @@
                         <div class="cell">
                             {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
-                        <div v-if="getUserTypeLabel(this.userProfile.Type) === 'Agent'">
+                        <div v-if=" this.userProfile && getUserTypeLabel(this.userProfile.Type) === 'Agent'">
                             <SelectInput
                                 :defaultValue=" getPaymentTypeLabel(payment.Type)"
                                 :list="paymentTypeLabels"
-                                :updateId="payment.paymentID"
-                                @update:modelValue="updatePaymentType"
+                                :updateIndex="payment.paymentID"
+                                @update="updatePaymentType"
                             />
                         </div>
                         <div class="cell" v-else>
