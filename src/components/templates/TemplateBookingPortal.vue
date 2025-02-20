@@ -453,21 +453,12 @@
                         <div class="cell">
                             {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
-                        <div v-if="this.userProfile">
-                            <!-- <select v-model="payment.Type">
-                                <option
-                                    v-for="(label, index) in paymentTypeLabels"
-                                    :key="label"
-                                    :value="index"
-                                >
-                                    {{ label }}
-                                </option>
-                            </select> -->
+                        <div v-if="getUserTypeLabel(this.userProfile.Type) === 'Agent'">
                             <SelectInput
-                                :list="paymentTypeLabels"
-                                @update:modelValue="updatePaymentType"
-                                v-model="payment.Type"
                                 :defaultValue=" getPaymentTypeLabel(payment.Type)"
+                                :list="paymentTypeLabels"
+                                :updateId="payment.paymentID"
+                                @update:modelValue="updatePaymentType"
                             />
                         </div>
                         <div class="cell" v-else>
@@ -514,6 +505,7 @@ import {
     getPaymentPeriodicityLabel,
     getPaymentStatusLabel,
     getPaymentTypeLabel,
+    getUserTypeLabel,
     PaymentPeriodicityLabels,
     PaymentStatus,
     PaymentTypeLabels,
@@ -611,7 +603,9 @@ export default {
         getPaymentTypeLabel(paymentType) {
             return getPaymentTypeLabel(paymentType);
         },
-
+        getUserTypeLabel(userType) {
+            return getUserTypeLabel(userType);
+        },
         getAgentName(agents, agentUserName) {
             if (agentUserName === '') {
                 return '';
@@ -730,8 +724,8 @@ export default {
             this.enableEdit('Payment Type');
         },
 
-        updatePaymentType(value) {
-            console.log("Updating payment type", value);
+        updatePaymentType(value, paymentId) {
+            console.log("Updating payment type", value, paymentId);
         },
     },
 };
