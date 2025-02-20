@@ -39,6 +39,7 @@
             <SelectInput
                 :label="PREFERENCE.DURATION"
                 :list="minDurData"
+                :updateID="'2'"
                 @update="updateMinDur"
                 class="min-duration-input"
                 name="minDur"
