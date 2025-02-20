@@ -437,9 +437,9 @@
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
                 </div>
-                <div v-if="paymentDetails.length > 0">
+                <div v-if="currBookingDetails.Payments">
                     <div
-                        v-for="payment in paymentDetails"
+                        v-for="payment in currBookingDetails.Payments"
                         :key="payment.PaymentID"
                         class="row"
                     >
@@ -547,9 +547,6 @@ export default {
         '$store.state.bookingPortal.bookingDetails'(val) {
             this.currBookingDetails = cloneDeep(val); // make a local copy of bookingDetails
         },
-        paymentDetails(newVal) {
-        console.log('Updated payment details:', newVal);
-    }
 },
     computed: {
         ...mapState('bookingPortal', [

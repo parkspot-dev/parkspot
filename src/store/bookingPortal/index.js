@@ -103,7 +103,6 @@ const actions = {
             '/booking/details?booking-id=' + bookingId,
         );
         if (res.Booking && res.Payments) {
-            commit('set-payment-details', res.Payments);
             commit('update-booking', res);
             commit('set-initial-active-booking-details', res.Booking);
         } else if (res.DisplayMsg) {
