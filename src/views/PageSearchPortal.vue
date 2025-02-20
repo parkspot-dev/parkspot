@@ -175,8 +175,8 @@ export default {
                     this.$router.push({
                         path: this.$route.path,
                         query: {
-                            mobile: sanitizeMobileNumber,
-                            tab: getActiveTabStatusLabel(this.activeTab)
+                            tab: getActiveTabStatusLabel(this.activeTab),
+                            mobile: sanitizeMobileNumber
                         },
                     });
                 }
