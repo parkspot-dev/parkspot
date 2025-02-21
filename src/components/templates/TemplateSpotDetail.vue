@@ -116,6 +116,10 @@
                                     />
                                 </td>
                             </tr>
+                            <tr v-if="paymentDetails">
+                                <td>Account</td>
+                                <td>{{ paymentDetails }}</td>
+                            </tr>
                         </table>
                     </div>
                     <div class="goto-btn">
@@ -182,11 +186,12 @@ export default {
     },
     computed: {
         ...mapState('sdp', [
-            'spotDetails',
-            'ownerInfoDetails',
-            'selectedSpot',
+            'center',
             'isAvailable',
-            'center'
+            'ownerInfoDetails',
+            'paymentDetails',
+            'selectedSpot',
+            'spotDetails'
         ]),
     },
     emits: ['goToSearchPortal', 'changeAvailability', 'changeLastCallDate'],
