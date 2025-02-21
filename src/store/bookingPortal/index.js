@@ -191,7 +191,7 @@ const actions = {
     async changePaymentType({commit}, {paymentID, paymentType}) {
         const reqBody = { type: paymentType };
         const res = await mayaClient.patch(
-            `/payment/update-type/${paymentID}`,
+            `/payment/${paymentID}/type`,
             reqBody,
         );
 
