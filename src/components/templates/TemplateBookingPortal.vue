@@ -453,7 +453,7 @@
                         <div class="cell">
                             {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
-                        <div v-if="getUserTypeLabel(this.userProfile.Type) === 'Agent'" class="update-payment" >
+                        <div v-if="getUserTypeLabel(this.userProfile.Type) === 'Admin'" class="update-payment" >
                             <SelectInput
                                 :defaultValue="getPaymentTypeLabel(payment.Type)"
                                 :list="paymentTypeLabels"
