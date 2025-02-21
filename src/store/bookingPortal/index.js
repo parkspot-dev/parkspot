@@ -29,7 +29,6 @@ const state = {
     activeBookings: [],
     agents: {},
     bookingDetails: null,
-    editingPaymentID: null,
     errorMessage: String,
     hasError: false,
     // State to preserve the original data before any updates or changes.
@@ -87,9 +86,6 @@ const mutations = {
         state.updatedFields = fields;
     },
 
-    'set-editing-payment-ID'(state, paymentID) {
-        state.editingPaymentID = paymentID;
-    },
 };
 
 const actions = {
@@ -102,7 +98,7 @@ const actions = {
         const res = await mayaClient.get(
             '/booking/details?booking-id=' + bookingId,
         );
-        if (res.Booking && res.Payments) {
+        if (res.Booking) {
             commit('update-booking', res);
             commit('set-initial-active-booking-details', res.Booking);
         } else if (res.DisplayMsg) {
@@ -182,10 +178,6 @@ const actions = {
 
     setUpdatedFields({ commit }, fields) {
         commit('set-updated-fields', fields);
-    },
-
-    updateEditingPaymentID({ commit }, paymentID) {
-        commit('set-editing-payment-ID', paymentID);
     },
 
     async changePaymentType({commit}, {paymentID, paymentType}) {
