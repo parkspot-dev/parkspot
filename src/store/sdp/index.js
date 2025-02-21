@@ -96,23 +96,22 @@ const actions = {
         }
     },
 
-    // function to handle account details extraction and commit
-    async setPaymentDetails({ commit }, accountdetails) {
-        if (accountdetails) {
+    // function to handle account Details extraction and commit
+    async setPaymentDetails({ commit }, accountDetails) {
+        if (!accountDetails) return;
             let paymentdetails = '';
             const paymentApp = getPaymentAppTypeLabel(
-                accountdetails.PaymentApp,
+                accountDetails.PaymentApp,
             );
-            if (accountdetails.account_number && accountdetails.ifsc_code) {
-                paymentdetails = `${accountdetails.account_number}/${accountdetails.ifsc_code}`;
-            } else if (accountdetails.UpiID) {
-                paymentdetails = `${accountdetails.UpiID}/${paymentApp}`;
-            } else if (accountdetails.Mobile) {
-                paymentdetails = `${accountdetails.Mobile}/${paymentApp}`;
+            if (accountDetails.account_number && accountDetails.ifsc_code) {
+                paymentdetails = `${accountDetails.account_number}/${accountDetails.ifsc_code}`;
+            } else if (accountDetails.UpiID) {
+                paymentdetails = `${accountDetails.UpiID}/${paymentApp}`;
+            } else if (accountDetails.Mobile) {
+                paymentdetails = `${accountDetails.Mobile}/${paymentApp}`;
             }
 
             commit('update-payment-info', paymentdetails);
-        }
     },
 
     async updateAvailability({ state }, availableCount) {
