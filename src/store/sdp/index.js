@@ -1,12 +1,14 @@
 import { mayaClient } from '@/services/api';
+import { getPaymentAppTypeLabel } from '@/constant/enums';
 
 const UPDATE_SITE_ENDPOINT = '/owner/update-site';
 const state = {
-    center : null,
+    center: null,
     images: [],
     isAvailable: false,
     loading: true,
     ownerInfoDetails: null,
+    paymentDetails: '',
     selectedSpot: [],
     spotDetails: null,
     thumbnail: [],
@@ -56,17 +58,23 @@ const mutations = {
     },
 
     'update-map-center'(state, center) {
-        state.center = center
-    }
+        state.center = center;
+    },
+
+    'update-payment-info'(state, paymentDetails) {
+        state.paymentDetails = paymentDetails;
+    },
 };
 
 const actions = {
-    async getSpotDetails({ commit }, { spotId }) {
+    async getSpotDetails({ commit, dispatch }, { spotId }) {
         commit('update-loading', true);
         const res = await mayaClient.get(`/site?site-id=${spotId}`);
         if (res.Site) {
             commit('update-spot-details', res.Site);
             commit('update-owner-info-details', res.User);
+            await dispatch('setPaymentDetails', res.Account);
+
             const spot = {
                 ID: res.Site.SiteID,
                 Name: res.Site.Name,
@@ -76,7 +84,7 @@ const actions = {
                 Rate: res.Site.Rate,
                 Distance: 0, // res.Site.Distance
             };
-            commit('update-map-center', [spot.Long, spot.Lat])
+            commit('update-map-center', [spot.Long, spot.Lat]);
             commit('update-selected-spot', spot);
             commit('update-is-available', res.Site['SlotsAvailable']);
             commit('update-loading', false);
@@ -86,6 +94,22 @@ const actions = {
         } else {
             throw res.DisplayMsg;
         }
+    },
+
+    // function to handle account Details extraction and commit
+    async setPaymentDetails({ commit }, accountDetails) {
+        if (!accountDetails) return;
+        let paymentdetails = '';
+        const paymentApp = getPaymentAppTypeLabel(accountDetails.PaymentApp);
+        if (accountDetails.account_number && accountDetails.ifsc_code) {
+            paymentdetails = `${accountDetails.account_number}/${accountDetails.ifsc_code}`;
+        } else if (accountDetails.UpiID) {
+            paymentdetails = `${accountDetails.UpiID}/${paymentApp}`;
+        } else if (accountDetails.Mobile) {
+            paymentdetails = `${accountDetails.Mobile}/${paymentApp}`;
+        }
+
+        commit('update-payment-info', paymentdetails);
     },
 
     async updateAvailability({ state }, availableCount) {
