@@ -33,9 +33,11 @@ const state = {
     hasError: false,
     // State to preserve the original data before any updates or changes.
     initialActiveBookingDetails: null,
+    isFieldUpdated: false,
     isLoading: false,
     paymentDetails: null,
     searchText: '',
+    successMessage: '',
     // State to preserve updated fields
     updatedFields: [],
 };
@@ -85,6 +87,12 @@ const mutations = {
     'set-updated-fields'(state, fields) {
         state.updatedFields = fields;
     },
+
+    'set-isField-updated'(state, text = '') {
+        state.isFieldUpdated = !state.isFieldUpdated;
+        state.successMessage = text;
+    }
+
 };
 
 const actions = {
@@ -139,7 +147,7 @@ const actions = {
 
     async updateBookingDetails({ commit, dispatch, state }, reqBody) {
         commit('set-loading', true);
-        reqBody = { Booking: reqBody, UpdatedFields : state.updatedFields }
+        reqBody = { Booking: reqBody, UpdatedFields: state.updatedFields };
         const res = await mayaClient.post('/booking/update', reqBody);
         if (res.Success) {
             dispatch('getBookingDetails', reqBody.Booking.ID);
@@ -166,7 +174,7 @@ const actions = {
     },
 
     // Update Search Text
-    updateSearchText({ commit, }, bookingId) {
+    updateSearchText({ commit }, bookingId) {
         commit('set-search-text', bookingId);
     },
 
@@ -177,6 +185,20 @@ const actions = {
 
     setUpdatedFields({ commit }, fields) {
         commit('set-updated-fields', fields);
+    },
+
+    async changePaymentType({commit}, {paymentID, paymentType}) {
+        const reqBody = { type: paymentType };
+        const res = await mayaClient.patch(
+            `/payment/${paymentID}/type`,
+            reqBody,
+        );
+
+        if (res?.DisplayMsg) {
+            commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
+        } else if(res?.Success) {
+            commit('set-isField-updated', 'Payment type update successfully!')
+        }
     },
 };
 
