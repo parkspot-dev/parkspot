@@ -453,9 +453,17 @@
                         <div class="cell">
                             {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
-                        <div v-if="getUserTypeLabel(this.userProfile.Type) === 'Admin'" class="update-payment" >
+                        <div
+                            v-if="
+                                getUserTypeLabel(this.userProfile.Type) ===
+                                'Admin'
+                            "
+                            class="update-payment"
+                        >
                             <SelectInput
-                                :defaultValue="getPaymentTypeLabel(payment.Type)"
+                                :defaultValue="
+                                    getPaymentTypeLabel(payment.Type)
+                                "
                                 :list="paymentTypeLabels"
                                 :updateID="payment.PaymentID"
                                 @update="updatePaymentType"
@@ -547,7 +555,15 @@ export default {
         '$store.state.bookingPortal.bookingDetails'(val) {
             this.currBookingDetails = cloneDeep(val); // make a local copy of bookingDetails
         },
-},
+        '$store.state.bookingPortal.successMessage'(newValue) {
+            if (newValue) {
+                this.showSuccessMessage();
+                setTimeout(() => {
+                    this.$store.commit('bookingPortal/set-isField-updated', '');
+                }, 2000);
+            }
+        },
+    },
     computed: {
         ...mapState('bookingPortal', [
             'agents',
@@ -555,6 +571,8 @@ export default {
             'initialActiveBookingDetails',
             'paymentDetails',
             'updatedFields',
+            'isFieldUpdated',
+            'successMessage',
         ]),
         ...mapState('user', ['userProfile']),
         sdpURL() {
@@ -720,7 +738,15 @@ export default {
 
         updatePaymentType(value, paymentId) {
             const paymentType = this.paymentTypeLabels.indexOf(value);
-            this.changePaymentType({ paymentID : paymentId, paymentType})
+            this.changePaymentType({ paymentID: paymentId, paymentType });
+        },
+
+        showSuccessMessage() {
+            this.$buefy.toast.open({
+                message: this.successMessage,
+                type: 'is-success',
+                duration: 2000,
+            });
         },
     },
 };
@@ -924,7 +950,7 @@ export default {
     }
 }
 
-.update-payment{
+.update-payment {
     display: flex;
     flex-direction: column;
     justify-content: center;
