@@ -329,3 +329,29 @@ export const PaymentAppTypeLabels = ['Not Set', 'PhonePe', 'Gpay'];
 export function getPaymentAppTypeLabel(PaymentAppType) {
     return getEnumLabel(PaymentAppTypeLabels, PaymentAppType);
 }
+
+export const UserType = Object.freeze({
+    Regular: 0,
+    SO: 1,
+    Gaurd: 2,
+    VO: 3,
+    Agent: 4,
+    Admin: 5
+});
+
+export const UserTypeLabels = [
+    'Regular',
+    'SO',
+    'Gaurd',
+    'VO',
+    'Agent',
+    'Admin'
+];
+
+/**
+ * @param {int} userType
+ * @return {string}: label for user type
+ */
+export function getUserTypeLabel(userType) {
+    return getEnumLabel(UserTypeLabels, userType);
+}
