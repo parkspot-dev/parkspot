@@ -173,8 +173,11 @@ export default {
                     // Update Search Text with voMobile
                     this.updateMobileInput(sanitizeMobileNumber);
                     this.$router.push({
-                        path: this.$route.fullPath,
-                        query: { mobile: sanitizeMobileNumber },
+                        path: this.$route.path,
+                        query: {
+                            tab: getActiveTabStatusLabel(this.activeTab),
+                            mobile: sanitizeMobileNumber
+                        },
                     });
                 }
             }
@@ -182,8 +185,11 @@ export default {
         async searchRequestWithLatLng(latlng) {
             this.updateSOLatLngInput(latlng);
             this.$router.push({
-                path: this.$route.fullPath,
-                query: { latlng: latlng },
+                path: this.$route.path,
+                query: { 
+                latlng: latlng,
+                tab: getActiveTabStatusLabel(this.activeTab)
+                },
             });
         },
         // Clear Mobile Input

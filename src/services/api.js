@@ -128,7 +128,7 @@ class MayaApiService extends BaseApiService {
             'Accept': 'application/json',
             'Flavour': flavour,
         };
-        super(mayaDomain, baseHeaderMap, 5000, true);
+        super(mayaDomain, baseHeaderMap, 10000, true);
         this.client.interceptors.request.use(
             async (config) => {
                 await auth.authStateReady();

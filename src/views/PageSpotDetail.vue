@@ -16,6 +16,7 @@ import TemplateSpotDetail from '../components/templates/TemplateSpotDetail.vue';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import { mapState, mapActions, mapMutations } from 'vuex';
 import { PAGE_TITLE } from '@/constant/constant';
+import { getActiveTabStatusLabel } from '../constant/enums';
 
 export default {
     name: 'PageSpotDetail',
@@ -71,6 +72,7 @@ export default {
             'updateRemark',
         ]),
         ...mapActions('searchPortal', [
+            'activeTab',
             'updateActiveTab',
             'updateSOLatLngInput',
         ]),
@@ -112,7 +114,13 @@ export default {
         goToSearchPortal(latLng) {
             this.updateActiveTab(1);
             this.updateSOLatLngInput(latLng.join(','));
-            this.$router.push({ name: 'SearchPortal' });
+            this.$router.push({
+                name: 'SearchPortal',
+                query: { 
+                latlng: latLng.join(','),
+                tab: getActiveTabStatusLabel(this.$store.state.searchPortal.activeTab)
+                },
+            });
         },
         async changeAvailability(availableCount) {
             await this.updateAvailability(availableCount);

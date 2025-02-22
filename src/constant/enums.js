@@ -202,15 +202,15 @@ export function getPaymentTypeLabel(paymentType) {
 }
 
 export const SpotRequestStatus = Object.freeze({
-    "Not Set": 0,
-    Registered: 1,
-    Processing: 2,
-    "Requested Modification": 3,
-    Verified: 4,
-    Promoted: 5,
-    Denied: 6,
-    Cancelled: 7,
-    Duplicate: 8,
+    'Not Set': 0,
+    'Registered': 1,
+    'Processing': 2,
+    'Requested Modification': 3,
+    'Verified': 4,
+    'Promoted': 5,
+    'Denied': 6,
+    'Cancelled': 7,
+    'Duplicate': 8,
 });
 const SpotRequestStatusLabels = [
     'Not Set',
@@ -236,10 +236,7 @@ export const ActiveTabStatus = Object.freeze({
     InterestedRequest: 1,
 });
 
-export const ActiveTabStatusLabels = [
-    'parking-request',
-    'interested-request'
-];
+export const ActiveTabStatusLabels = ['parking-request', 'interested-request'];
 
 /**
  *
@@ -251,11 +248,11 @@ export function getActiveTabStatusLabel(activeTabStatus) {
 }
 
 export const ParkingSize = Object.freeze({
-    Unspecified: 0,
-    "HatchBack(Small)": 1,
-    "Compact(Medium)": 2,
-    "FullSize(Large)": 3,
-    Bike: 4,
+    'Unspecified': 0,
+    'HatchBack(Small)': 1,
+    'Compact(Medium)': 2,
+    'FullSize(Large)': 3,
+    'Bike': 4,
 });
 
 export const ParkingSizeLabels = [
@@ -274,7 +271,6 @@ export const ParkingSizeLabels = [
 export function getParkingSizeLabel(parkingSize) {
     return getEnumLabel(ParkingSizeLabels, parkingSize);
 }
-
 
 export const RentUnit = Object.freeze({
     PerHour: 0,
@@ -306,12 +302,7 @@ export const SiteType = Object.freeze({
     ParkingYard: 3,
 });
 
-export const SiteTypeLabels = [
-    'SearchOnly',
-    'Register',
-    'Book',
-    'ParkingYard',
-];
+export const SiteTypeLabels = ['SearchOnly', 'Register', 'Book', 'ParkingYard'];
 
 /**
  *
@@ -346,4 +337,20 @@ export const UserTypeLabels = [
  */
 export function getUserTypeLabel(userType) {
     return getEnumLabel(UserTypeLabels, userType);
+}
+export const PaymentAppType = Object.freeze({
+    NotSet: 0,
+    PhonePe: 1,
+    Gpay: 2,
+});
+
+export const PaymentAppTypeLabels = ['Not Set', 'PhonePe', 'Gpay'];
+
+/**
+ *
+ * @param {int} PaymentAppType
+ * @return {string}: label for site type
+ */
+export function getPaymentAppTypeLabel(PaymentAppType) {
+    return getEnumLabel(PaymentAppTypeLabels, PaymentAppType);
 }
