@@ -18,7 +18,6 @@ const props = defineProps({
     name: { type: String, required: true },
     modelValue: { type: [String, Number], required: false },
     defaultValue: { type: [String, Number], required: false },
-    updateID: { type: Number, default: 0 }, // Index or ID to track which option is updated
 });
 
 const emit = defineEmits(['update']);
@@ -31,7 +30,7 @@ const selectedValue = ref(
 
 // Emit the updated value along with its index when selection changes
 const emitUpdate = () => {
-    emit('update', selectedValue.value, props.updateID);
+    emit('update');
 };
 </script>
 
