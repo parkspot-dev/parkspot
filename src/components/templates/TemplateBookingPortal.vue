@@ -465,8 +465,7 @@
                                     getPaymentTypeLabel(payment.Type)
                                 "
                                 :list="paymentTypeLabels"
-                                :updateID="payment.PaymentID"
-                                @update="updatePaymentType(payment.Type, payment.PaymentID)"
+                                @change="updatePaymentType($event.target.value, payment.PaymentID)"
                                 name="updatePayment"
                             />
                         </div>
@@ -736,7 +735,8 @@ export default {
             }
         },
 
-        updatePaymentType(paymentType, paymentId) {
+        updatePaymentType(value, paymentId) {
+            const paymentType = this.paymentTypeLabels.indexOf(value);
             this.changePaymentType({ paymentID: paymentId, paymentType });
         },
 
