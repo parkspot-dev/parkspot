@@ -466,7 +466,7 @@
                                 "
                                 :list="paymentTypeLabels"
                                 :updateID="payment.PaymentID"
-                                @update="updatePaymentType"
+                                @update="updatePaymentType(payment.Type, payment.PaymentID)"
                                 name="updatePayment"
                             />
                         </div>
@@ -736,8 +736,7 @@ export default {
             }
         },
 
-        updatePaymentType(value, paymentId) {
-            const paymentType = this.paymentTypeLabels.indexOf(value);
+        updatePaymentType(paymentType, paymentId) {
             this.changePaymentType({ paymentID: paymentId, paymentType });
         },
 
