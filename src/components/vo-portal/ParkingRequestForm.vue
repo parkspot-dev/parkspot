@@ -30,7 +30,7 @@
             <SelectInput
                 :label="PREFERENCE.PARKING_TYPE"
                 :list="parkingTypeData"
-                @update="updateType"
+                @change="updateType"
                 class="parking-type-input"
                 name="parkingType"
                 v-model="preferenceModel.spot"
@@ -39,7 +39,7 @@
             <SelectInput
                 :label="PREFERENCE.DURATION"
                 :list="minDurData"
-                @update="updateMinDur"
+                @change="updateMinDur"
                 class="min-duration-input"
                 name="minDur"
                 v-model="preferenceModel.minDur"
