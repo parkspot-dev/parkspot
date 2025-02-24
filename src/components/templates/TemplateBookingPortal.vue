@@ -455,8 +455,7 @@
                         </div>
                         <div
                             v-if="
-                                getUserTypeLabel(this.userProfile.Type) ===
-                                'Admin'
+                                this.userProfile.Type === 5
                             "
                             class="update-payment"
                         >
@@ -554,8 +553,8 @@ export default {
         '$store.state.bookingPortal.bookingDetails'(val) {
             this.currBookingDetails = cloneDeep(val); // make a local copy of bookingDetails
         },
-        '$store.state.bookingPortal.successMessage'(newValue) {
-            if (newValue) {
+        '$store.state.bookingPortal.successMessage'(message) {
+            if (message) {
                 this.showSuccessMessage();
                 setTimeout(() => {
                     this.$store.commit('bookingPortal/set-isField-updated', '');
