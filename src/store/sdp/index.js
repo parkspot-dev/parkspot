@@ -10,6 +10,7 @@ const state = {
     ownerInfoDetails: null,
     paymentDetails: '',
     selectedSpot: [],
+    spotActiveBookings: [],
     spotDetails: null,
     thumbnail: [],
     title: '',
@@ -19,6 +20,7 @@ const getters = {};
 
 const mutations = {
     'update-spot-details'(state, spotDetails) {
+        console.log("Spot Details", spotDetails);
         state.spotDetails = spotDetails;
     },
 
@@ -64,6 +66,9 @@ const mutations = {
     'update-payment-info'(state, paymentDetails) {
         state.paymentDetails = paymentDetails;
     },
+    'set-spot-active-bookings'(state, bookings) {
+        state.spotActiveBookings = bookings;
+    }
 };
 
 const actions = {
@@ -128,6 +133,10 @@ const actions = {
         state.spotDetails.Remark = remark;
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
+
+    setSpotActiveBookings({ commit }, bookings) {
+        commit('set-spot-active-bookings', bookings)
+    }
 };
 
 export default {
