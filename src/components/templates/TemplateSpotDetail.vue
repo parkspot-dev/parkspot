@@ -122,27 +122,29 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="goto-btn">
-                        <AtomButton
-                            @click.native="
-                                goToInterestedVO([
-                                    spotDetails.Lat,
-                                    spotDetails.Long,
-                                ])
-                            "
-                        >
-                            Interested VO's
-                        </AtomButton>
-                    </div>
-                    <div class="goto-btn" v-if="isAvailable">
-                        <AtomButton @click.native="changeAvailability(-1)">
-                            Mark Rented
-                        </AtomButton>
-                    </div>
-                    <div class="goto-btn" v-if="!isAvailable">
-                        <AtomButton @click.native="changeAvailability(1)">
-                            Mark Available
-                        </AtomButton>
+                    <div class="btn-group">
+                        <div class="goto-btn">
+                            <AtomButton
+                                @click.native="
+                                    goToInterestedVO([
+                                        spotDetails.Lat,
+                                        spotDetails.Long,
+                                    ])
+                                "
+                            >
+                                Interested VO's
+                            </AtomButton>
+                        </div>
+                        <div class="goto-btn" v-if="isAvailable">
+                            <AtomButton @click.native="changeAvailability(-1)">
+                                Mark Rented
+                            </AtomButton>
+                        </div>
+                        <div class="goto-btn" v-if="!isAvailable">
+                            <AtomButton @click.native="changeAvailability(1)">
+                                Mark Available
+                            </AtomButton>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -191,7 +193,7 @@ export default {
             'ownerInfoDetails',
             'paymentDetails',
             'selectedSpot',
-            'spotDetails'
+            'spotDetails',
         ]),
     },
     emits: ['goToSearchPortal', 'changeAvailability', 'changeLastCallDate'],
@@ -374,11 +376,17 @@ hr {
 
     .spot-detail-owner-body {
         display: flex;
+        flex-direction: column;
         gap: 10px;
     }
 
-    .goto-btn {
-        margin-top: 10px;
+    .btn-group {
+        display: flex;
+        justify-content: flex-start;
+        gap: 20px;
+        .goto-btn {
+            margin-top: 10px;
+        }
     }
 
     table,
