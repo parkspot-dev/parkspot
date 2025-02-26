@@ -570,7 +570,7 @@ export default {
             'isFieldUpdated',
             'successMessage',
         ]),
-        ...mapState('user', ['userProfile', 'isAdmin']),
+        ...mapState('user', ['isAdmin']),
         sdpURL() {
             return this.$router.resolve({
                 name: 'spot-detail',
