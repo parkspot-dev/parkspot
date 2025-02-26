@@ -137,7 +137,7 @@
                             Name:
                             <strong>{{ props.row.Name }}</strong>
                         </p>
-                        <p v-if="props.row.Agent !== 'NA' || (userProfile.Type === UserType.Admin)">
+                        <p v-if="props.row.Agent !== 'NA' || isAdmin">
                             Mobile:
                             <a :href="`tel:+91${props.row.Mobile}`">
                                 <strong>{{ props.row.Mobile }}</strong>
@@ -337,7 +337,6 @@ import AtomInput from '../atoms/AtomInput.vue';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
 import AtomIcon from '../atoms/AtomIcon';
-import { UserType } from '@/constant/enums';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -364,7 +363,7 @@ export default {
     emits: ['updateRequest', 'toSrp'],
     computed: {
         ...mapState('searchPortal', ['agentList']),
-        ...mapState('user', ['userProfile'])
+        ...mapState('user', ['userProfile', 'isAdmin'])
     },
     mounted() {
       this.getUserProfile();
@@ -417,7 +416,6 @@ export default {
                 ID: 0,
                 isShow: false,
             },
-            UserType: UserType
         };
     },
     watch: {
