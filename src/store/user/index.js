@@ -7,6 +7,7 @@ import {
     signOut,
     onAuthStateChanged,
 } from 'firebase/auth';
+import { UserType } from '@/constant/enums';
 
 const state = {
     user: null,
@@ -16,6 +17,7 @@ const state = {
         Mobile: '',
         Type: 'VO',
     },
+    isAdmin: false,
     isAuthReady: false,
     loginModal: false,
     contactForm: {},
@@ -41,6 +43,9 @@ const mutations = {
     'update-user-profile'(state, userProfile) {
         userProfile['UserName'] = '';
         state.userProfile = userProfile;
+        if(state.userProfile.Type === UserType.Admin) {
+            state.isAdmin = true;
+        }
     },
 
     'update-login-Modal'(state, loginModal) {

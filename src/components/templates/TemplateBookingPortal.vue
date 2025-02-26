@@ -454,9 +454,7 @@
                             {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
                         <div
-                            v-if="
-                                this.userProfile.Type === 5
-                            "
+                            v-if="isAdmin"
                             class="update-payment"
                         >
                             <SelectInput
@@ -572,7 +570,7 @@ export default {
             'isFieldUpdated',
             'successMessage',
         ]),
-        ...mapState('user', ['userProfile']),
+        ...mapState('user', ['userProfile', 'isAdmin']),
         sdpURL() {
             return this.$router.resolve({
                 name: 'spot-detail',

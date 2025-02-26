@@ -137,7 +137,7 @@
                             Name:
                             <strong>{{ props.row.Name }}</strong>
                         </p>
-                        <p>
+                        <p v-if="props.row.Agent !== 'NA' || isAdmin">
                             Mobile:
                             <a :href="`tel:+91${props.row.Mobile}`">
                                 <strong>{{ props.row.Mobile }}</strong>
@@ -327,7 +327,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import moment from 'moment';
 
 import { getCoordinate } from '../../includes/LatLng';
@@ -363,6 +363,10 @@ export default {
     emits: ['updateRequest', 'toSrp'],
     computed: {
         ...mapState('searchPortal', ['agentList']),
+        ...mapState('user', ['userProfile', 'isAdmin'])
+    },
+    mounted() {
+      this.getUserProfile();
     },
     data() {
         return {
@@ -412,7 +416,6 @@ export default {
                 ID: 0,
                 isShow: false,
             },
-            oldComments: {},
         };
     },
     watch: {
@@ -455,6 +458,7 @@ export default {
         },
     },
     methods: {
+        ...mapActions('user', ['getUserProfile']),
         getPriority(val) {
             switch (val) {
                 case 1:
