@@ -1,5 +1,6 @@
 import { mayaClient } from '@/services/api';
 import { getPaymentAppTypeLabel } from '@/constant/enums';
+import { inProgressBookings } from '@/constant/constant';
 
 const UPDATE_SITE_ENDPOINT = '/owner/update-site';
 const state = {
@@ -10,7 +11,7 @@ const state = {
     ownerInfoDetails: null,
     paymentDetails: '',
     selectedSpot: [],
-    spotActiveBookings: [],
+    spotInProgressBookings: inProgressBookings,
     spotDetails: null,
     thumbnail: [],
     title: '',
@@ -20,7 +21,6 @@ const getters = {};
 
 const mutations = {
     'update-spot-details'(state, spotDetails) {
-        console.log("Spot Details", spotDetails);
         state.spotDetails = spotDetails;
     },
 
@@ -66,8 +66,8 @@ const mutations = {
     'update-payment-info'(state, paymentDetails) {
         state.paymentDetails = paymentDetails;
     },
-    'set-spot-active-bookings'(state, bookings) {
-        state.spotActiveBookings = bookings;
+    'set-in-progress-bookings'(state, bookings) {
+        state.spotInProgressBookings = bookings;
     }
 };
 
@@ -78,6 +78,8 @@ const actions = {
         if (res.Site) {
             commit('update-spot-details', res.Site);
             commit('update-owner-info-details', res.User);
+            // TODO : uncomment when fetch from maya
+            // commit('set-in-progress-bookings', res.Bookings)
             await dispatch('setPaymentDetails', res.Account);
 
             const spot = {
@@ -133,10 +135,6 @@ const actions = {
         state.spotDetails.Remark = remark;
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
-
-    setSpotActiveBookings({ commit }, bookings) {
-        commit('set-spot-active-bookings', bookings)
-    }
 };
 
 export default {
