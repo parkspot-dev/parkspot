@@ -453,7 +453,20 @@
                         <div class="cell">
                             {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
-                        <div class="cell">
+                        <div
+                            v-if="isAdmin"
+                            class="update-payment"
+                        >
+                            <SelectInput
+                                :defaultValue="
+                                    getPaymentTypeLabel(payment.Type)
+                                "
+                                :list="paymentTypeLabels"
+                                @change="updatePaymentType($event.target.value, payment.PaymentID)"
+                                name="updatePayment"
+                            />
+                        </div>
+                        <div class="cell" v-else>
                             {{ getPaymentTypeLabel(payment.Type) }}
                         </div>
                         <div class="cell">
@@ -492,13 +505,15 @@
 import { cloneDeep } from 'lodash';
 import { mapActions, mapState } from 'vuex';
 import {
-    PaymentStatus,
-    getPaymentStatusLabel,
+    BookingStatusLabels,
     getBookingStatusLabel,
     getPaymentPeriodicityLabel,
-    BookingStatusLabels,
+    getPaymentStatusLabel,
+    getPaymentTypeLabel,
+    getUserTypeLabel,
     PaymentPeriodicityLabels,
-    getPaymentTypeLabel
+    PaymentStatus,
+    PaymentTypeLabels,
 } from '@/constant/enums';
 import AtomButton from '../atoms/AtomButton.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
@@ -506,6 +521,7 @@ import AtomTooltip from '../atoms/AtomTooltip.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import AtomInput from '../atoms/AtomInput.vue';
 import moment from 'moment';
+import SelectInput from '../global/SelectInput.vue';
 
 export default {
     name: 'TemplateBookingPortal',
@@ -515,6 +531,7 @@ export default {
         AtomTooltip,
         AtomDatePicker,
         AtomInput,
+        SelectInput,
     },
 
     data() {
@@ -524,6 +541,7 @@ export default {
             editField: null,
             paymentPeriodicityLabels: PaymentPeriodicityLabels,
             toolTipLabel: 'Copy payment url!',
+            paymentTypeLabels: PaymentTypeLabels,
         };
     },
     beforeMount() {
@@ -533,6 +551,14 @@ export default {
         '$store.state.bookingPortal.bookingDetails'(val) {
             this.currBookingDetails = cloneDeep(val); // make a local copy of bookingDetails
         },
+        '$store.state.bookingPortal.successMessage'(message) {
+            if (message) {
+                this.showSuccessMessage();
+                setTimeout(() => {
+                    this.$store.commit('bookingPortal/set-isField-updated', '');
+                }, 2000);
+            }
+        },
     },
     computed: {
         ...mapState('bookingPortal', [
@@ -541,7 +567,10 @@ export default {
             'initialActiveBookingDetails',
             'paymentDetails',
             'updatedFields',
+            'isFieldUpdated',
+            'successMessage',
         ]),
+        ...mapState('user', ['isAdmin']),
         sdpURL() {
             return this.$router.resolve({
                 name: 'spot-detail',
@@ -565,9 +594,15 @@ export default {
             },
         },
     },
-
+    mounted() {
+        this.getUserProfile();
+    },
     methods: {
-        ...mapActions('bookingPortal', ['setUpdatedFields']),
+        ...mapActions('bookingPortal', [
+            'setUpdatedFields',
+            'changePaymentType',
+        ]),
+        ...mapActions('user', ['getUserProfile']),
 
         getPaymentStatusLabel(paymentStatus) {
             return getPaymentStatusLabel(paymentStatus);
@@ -579,9 +614,11 @@ export default {
             return getBookingStatusLabel(bookingStatus);
         },
         getPaymentTypeLabel(paymentType) {
-           return getPaymentTypeLabel(paymentType);
+            return getPaymentTypeLabel(paymentType);
         },
-
+        getUserTypeLabel(userType) {
+            return getUserTypeLabel(userType);
+        },
         getAgentName(agents, agentUserName) {
             if (agentUserName === '') {
                 return '';
@@ -693,6 +730,19 @@ export default {
             } else {
                 return initialValue === currentValue;
             }
+        },
+
+        updatePaymentType(value, paymentId) {
+            const paymentType = this.paymentTypeLabels.indexOf(value);
+            this.changePaymentType({ paymentID: paymentId, paymentType });
+        },
+
+        showSuccessMessage() {
+            this.$buefy.toast.open({
+                message: this.successMessage,
+                type: 'is-success',
+                duration: 2000,
+            });
         },
     },
 };
@@ -894,5 +944,11 @@ export default {
             color: orange;
         }
     }
+}
+
+.update-payment {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 </style>

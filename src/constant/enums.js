@@ -338,3 +338,20 @@ export const UserType = Object.freeze({
     Agent: 4,
     Admin: 5
 });
+
+export const UserTypeLabels = [
+    'Regular',
+    'SO',
+    'Gaurd',
+    'VO',
+    'Agent',
+    'Admin'
+];
+
+/**
+ * @param {int} userType
+ * @return {string}: label for user type
+ */
+export function getUserTypeLabel(userType) {
+    return getEnumLabel(UserTypeLabels, userType);
+}
