@@ -179,10 +179,11 @@
                                     <td>
                                         <a
                                             :href="
-                                                this.BookingDetailURL(
+                                                this.getBookingDetailUR(
                                                     booking.ID,
                                                 )
                                             "
+                                            target="_blank"
                                         >
                                             {{ booking.ID }}
                                         </a>
@@ -191,12 +192,12 @@
                                         <span
                                             :class="{
                                                 active:
-                                                    booking.Status === 1 ||
-                                                    booking.Status === 9,
+                                                    booking.Status === BookingStatus.BookingConfirmed ||
+                                                    booking.Status === BookingStatus.BookingRentDue,
                                                 visit:
-                                                    booking.Status === 6 ||
-                                                    booking.Status === 7 ||
-                                                    booking.Status === 8,
+                                                    booking.Status === BookingStatus.BookingPaymentPending ||
+                                                    booking.Status === BookingStatus.BookingVisiting ||
+                                                    booking.Status === BookingStatus.BookingScheduleVisit,
                                             }"
                                         >
                                             {{
@@ -230,7 +231,7 @@ import ImageGallery from '../organisms/OrganismImageGallery.vue';
 import InfographicSteps from '../molecules/MoleculeInfographicSteps.vue';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
-import { getBookingStatusLabel, getKYCStatusLabel } from '@/constant/enums';
+import { BookingStatus, getBookingStatusLabel, getKYCStatusLabel } from '@/constant/enums';
 import { mapState } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
 
@@ -245,6 +246,11 @@ export default {
         AtomButton,
         AtomDatePicker,
         AtomTextarea,
+    },
+    data() {
+        return {
+           BookingStatus : BookingStatus
+        }
     },
     props: {
         isAdmin: {
@@ -280,7 +286,7 @@ export default {
         getKYCStatus(kycStatus) {
             return getKYCStatusLabel(kycStatus);
         },
-        BookingDetailURL(bookingID) {
+        getBookingDetailUR(bookingID) {
             return `${window.location.origin}/internal/booking-portal?bookingId=${bookingID}`;
         },
         getBookingStatusLabel(bookingStatus) {

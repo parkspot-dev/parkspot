@@ -69,7 +69,7 @@ export default {
             'getSpotDetails',
             'updateAvailability',
             'updateLastCallDate',
-            'updateRemark',,
+            'updateRemark',
         ]),
         ...mapActions('searchPortal', [
             'activeTab',
