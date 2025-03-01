@@ -436,6 +436,9 @@
                     <div class="cell"><strong> Payment Type </strong></div>
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
+                    <div class="cell" v-if="isAdmin">
+                        <strong> Refund </strong>
+                    </div>
                 </div>
                 <div v-if="currBookingDetails.Payments">
                     <div
@@ -453,16 +456,18 @@
                         <div class="cell">
                             {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
-                        <div
-                            v-if="isAdmin"
-                            class="update-payment"
-                        >
+                        <div v-if="isAdmin" class="update-payment">
                             <SelectInput
                                 :defaultValue="
                                     getPaymentTypeLabel(payment.Type)
                                 "
                                 :list="paymentTypeLabels"
-                                @change="updatePaymentType($event.target.value, payment.PaymentID)"
+                                @change="
+                                    updatePaymentType(
+                                        $event.target.value,
+                                        payment.PaymentID,
+                                    )
+                                "
                                 name="updatePayment"
                             />
                         </div>
@@ -493,6 +498,30 @@
                             </div>
                         </div>
                         <div class="cell">₹ {{ payment.Amount }}</div>
+                        <div class="cell" v-if="isAdmin">
+                            <div class="icon-cell">
+                                <AtomIcon
+                                    :icon="'cash-refund'"
+                                    @click.native="
+                                        openRefundDialog(payment.PaymentID)
+                                    "
+                                    type="primary"
+                                    size="20px"
+                                    v-if="
+                                        getPaymentClass(payment.Status) ===
+                                        'payment-success'
+                                    "
+                                >
+                                </AtomIcon>
+                            </div>
+                        </div>
+                        <RefundDialog
+                            :paymentAmount="payment.Amount"
+                            :visible="refundDialogVisible"
+                            @cancel="closeRefundDialog"
+                            @confirm="handleRefundConfirm"
+                            v-if="refundDialogVisible"
+                        />
                     </div>
                 </div>
                 <div v-else>No payment history found.</div>
@@ -521,6 +550,7 @@ import AtomTooltip from '../atoms/AtomTooltip.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import AtomInput from '../atoms/AtomInput.vue';
 import moment from 'moment';
+import RefundDialog from '../global/RefundDialog.vue';
 import SelectInput from '../global/SelectInput.vue';
 
 export default {
@@ -531,6 +561,7 @@ export default {
         AtomTooltip,
         AtomDatePicker,
         AtomInput,
+        RefundDialog,
         SelectInput,
     },
 
@@ -541,6 +572,8 @@ export default {
             editField: null,
             paymentPeriodicityLabels: PaymentPeriodicityLabels,
             toolTipLabel: 'Copy payment url!',
+            refundDialogVisible: false,
+            paymentID: null,
             paymentTypeLabels: PaymentTypeLabels,
         };
     },
@@ -566,6 +599,8 @@ export default {
             'bookingDetails',
             'initialActiveBookingDetails',
             'paymentDetails',
+            'status',
+            'statusMessage',
             'updatedFields',
             'isFieldUpdated',
             'successMessage',
@@ -599,6 +634,7 @@ export default {
     },
     methods: {
         ...mapActions('bookingPortal', [
+            'createRefund',
             'setUpdatedFields',
             'changePaymentType',
         ]),
@@ -743,6 +779,57 @@ export default {
                 type: 'is-success',
                 duration: 2000,
             });
+        },
+        openRefundDialog(paymentID) {
+            this.paymentID = paymentID;
+            this.refundDialogVisible = true;
+        },
+        closeRefundDialog() {
+            this.refundDialogVisible = false;
+        },
+        handleRefundConfirm(refundData) {
+            this.refundDialogVisible = false;
+            const refundRequest = {
+                PaymentID: this.paymentID,
+                Amount: parseFloat(refundData.refundAmount),
+                IsRefundingSecurity: refundData.securityDeposit,
+            };
+            this.createRefund(refundRequest);
+        },
+        updatePaymentType(value, paymentId) {
+            const paymentType = this.paymentTypeLabels.indexOf(value);
+            this.changePaymentType({ paymentID: paymentId, paymentType });
+        },
+        alertError(msg) {
+            this.$buefy.dialog.alert({
+                ariaModal: true,
+                ariaRole: 'alertdialog',
+                hasIcon: true,
+                icon: 'alert-circle',
+                message: msg,
+                title: 'Error',
+                type: 'is-danger',
+            });
+        },
+        alertSuccess(msg) {
+            this.$buefy.dialog.alert({
+                ariaModal: true,
+                ariaRole: 'alertdialog',
+                hasIcon: true,
+                icon: 'check-circle',
+                message: msg,
+                title: 'Success',
+                type: 'is-success',
+            });
+        },
+    },
+    watch: {
+        status(newStatus) {
+            if (newStatus === 'error') {
+                this.alertError(this.statusMessage);
+            } else if (newStatus === 'success') {
+                this.alertSuccess(this.statusMessage);
+            }
         },
     },
 };
