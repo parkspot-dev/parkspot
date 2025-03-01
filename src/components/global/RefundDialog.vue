@@ -2,7 +2,7 @@
     <div v-if="visible" class="dialog-overlay">
         <div class="dialog-content">
             <div class="refund-row">
-                <label for="refundAmountInput">Refund Amount</label>
+                <label for="refundAmountInput">Refund Amount:</label>
                 <b-input
                     :max="paymentAmount"
                     id="refundAmountInput"
@@ -13,16 +13,18 @@
 
             <div class="security-deposit-row">
                 <b-field>
-                    <b-checkbox v-model="securityDeposit"
-                        >Security Deposit</b-checkbox
-                    >
+                    <b-checkbox v-model="securityDeposit">
+                        isSecurity Deposit
+                    </b-checkbox>
                 </b-field>
             </div>
+
             <div class="error-message-container">
                 <p v-if="refundAmount > paymentAmount" class="error">
                     Refund amount cannot exceed payment amount.
                 </p>
             </div>
+
             <div class="buttons">
                 <b-button @click="cancel">Cancel</b-button>
                 <b-button
@@ -38,27 +40,42 @@
 </template>
 
 <script>
+import { ref, watch } from 'vue';
+
 export default {
     props: {
         visible: Boolean,
         paymentAmount: Number,
     },
-    data() {
-        return {
-            refundAmount: null,
-            securityDeposit: false,
+    setup(props, { emit }) {
+        const refundAmount = ref(props.paymentAmount);
+        const securityDeposit = ref(false);
+        watch(
+            () => props.visible,
+            (newValue) => {
+                if (newValue) {
+                    refundAmount.value = props.paymentAmount;
+                }
+            },
+        );
+
+        const cancel = () => {
+            emit('cancel');
         };
-    },
-    methods: {
-        cancel() {
-            this.$emit('cancel');
-        },
-        confirm() {
-            this.$emit('confirm', {
-                refundAmount: this.refundAmount,
-                securityDeposit: this.securityDeposit,
+
+        const confirm = () => {
+            emit('confirm', {
+                refundAmount: refundAmount.value,
+                securityDeposit: securityDeposit.value,
             });
-        },
+        };
+
+        return {
+            refundAmount,
+            securityDeposit,
+            cancel,
+            confirm,
+        };
     },
 };
 </script>
@@ -67,7 +84,6 @@ export default {
 .buttons {
     display: flex;
     justify-content: flex-end;
-    margin-top: 40px;
 }
 
 .dialog-overlay {
@@ -91,7 +107,7 @@ export default {
 }
 
 .error-message-container {
-    margin-top: 12px;
+    margin: 8px 0px;
     min-height: 20px;
 }
 
@@ -99,7 +115,6 @@ export default {
     align-items: center;
     display: flex;
     justify-content: flex-start;
-    margin-bottom: 4%;
 }
 
 .refund-row label {

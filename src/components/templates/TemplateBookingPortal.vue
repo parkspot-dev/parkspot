@@ -500,23 +500,25 @@
                         <div class="cell">₹ {{ payment.Amount }}</div>
                         <div class="cell" v-if="isAdmin">
                             <div class="icon-cell">
-                                <AtomIcon
-                                    :icon="'cash-refund'"
-                                    @click.native="
-                                        openRefundDialog(payment.PaymentID)
+                                <img
+                                    :src="RefundIcon"
+                                    @click="
+                                        openRefundDialog(
+                                            payment.PaymentID,
+                                            payment.Amount,
+                                        )
                                     "
-                                    type="primary"
-                                    size="20px"
+                                    class="refund-icon"
+                                    alt="Refund Icon"
                                     v-if="
                                         getPaymentClass(payment.Status) ===
                                         'payment-success'
                                     "
-                                >
-                                </AtomIcon>
+                                />
                             </div>
                         </div>
                         <RefundDialog
-                            :paymentAmount="payment.Amount"
+                            :paymentAmount="selectedPaymentAmount"
                             :visible="refundDialogVisible"
                             @cancel="closeRefundDialog"
                             @confirm="handleRefundConfirm"
@@ -533,6 +535,7 @@
 <script>
 import { cloneDeep } from 'lodash';
 import { mapActions, mapState } from 'vuex';
+import RefundIcon from '../../../public/assets/refund.png';
 import {
     BookingStatusLabels,
     getBookingStatusLabel,
@@ -564,7 +567,9 @@ export default {
         RefundDialog,
         SelectInput,
     },
-
+    setup() {
+        return { RefundIcon };
+    },
     data() {
         return {
             bookingStatusLabels: BookingStatusLabels,
@@ -575,6 +580,7 @@ export default {
             refundDialogVisible: false,
             paymentID: null,
             paymentTypeLabels: PaymentTypeLabels,
+            selectedPaymentAmount: null,
         };
     },
     beforeMount() {
@@ -780,7 +786,8 @@ export default {
                 duration: 2000,
             });
         },
-        openRefundDialog(paymentID) {
+        openRefundDialog(paymentID, paymentAmount) {
+            this.selectedPaymentAmount = paymentAmount;
             this.paymentID = paymentID;
             this.refundDialogVisible = true;
         },
@@ -1031,6 +1038,12 @@ export default {
             color: orange;
         }
     }
+}
+
+.refund-icon {
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
 }
 
 .update-payment {
