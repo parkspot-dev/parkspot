@@ -179,8 +179,8 @@
                                     <td>
                                         <a
                                             :href="
-                                                this.getBookingDetailUR(
-                                                    booking.ID,
+                                                this.getBookingDetailURL(
+                                                    booking.ID
                                                 )
                                             "
                                             target="_blank"
@@ -286,7 +286,7 @@ export default {
         getKYCStatus(kycStatus) {
             return getKYCStatusLabel(kycStatus);
         },
-        getBookingDetailUR(bookingID) {
+        getBookingDetailURL(bookingID) {
             return `${window.location.origin}/internal/booking-portal?bookingId=${bookingID}`;
         },
         getBookingStatusLabel(bookingStatus) {
