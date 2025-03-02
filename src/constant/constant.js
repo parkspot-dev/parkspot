@@ -241,27 +241,3 @@ export const WHAT_NEXT = [
         title: 'Step 4',
     },
 ];
-
-// TODO : Remove when get in-progress bookings from maya
-export const inProgressBookings = [
-    {
-        ID : 1996,
-        Status : 1,
-        AgentFullName : "Preety"
-    },
-    {
-        ID : 6344,
-        Status : 6,
-        AgentFullName : "Santosh"
-    },
-    {
-        ID : 1122,
-        Status : 7,
-        AgentFullName : "Sudhanshu"
-    },
-    {
-        ID : 6411,
-        Status : 8,
-        AgentFullName : "Preety"
-    },
-]
