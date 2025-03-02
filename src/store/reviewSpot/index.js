@@ -11,6 +11,7 @@ const state = {
         city: '',
         area: '',
         latlong: '',
+        thumbnailImage: ''
       },
       Rent: {
         totalSlots: null,
@@ -125,6 +126,7 @@ const actions = {
                 mobile: spotInfo.Mobile,
                 address: spotInfo.Address,
                 email: spotInfo.EmailID,
+                thumbnailImage: spotInfo.SpotImageURI
             },
             Rent: {
                 totalSlots: spotInfo.TotalSlots,
@@ -198,6 +200,7 @@ const actions = {
             TotalSlots: state.Rent.totalSlots !== null ? parseInt(state.Rent.totalSlots) : 0,
             Type: state.Rent.siteType,
             UserName: state.SO.userName,
+            SpotImageURI: state.SO.thumbnailImage
         };
         return await mayaClient.patch('/owner/spot-request', spotRequest);
     },
