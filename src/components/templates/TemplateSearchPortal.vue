@@ -416,6 +416,7 @@ export default {
                 ID: 0,
                 isShow: false,
             },
+            oldComments: {},
         };
     },
     watch: {
