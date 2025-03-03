@@ -283,7 +283,14 @@
                 >
                     Save
                 </AtomButton>
-                <AtomButton @click.native="openModal('Publish')" class="btn">
+                <AtomButton
+                    @click.native="openModal('Publish')"
+                    class="btn"
+                    :disabled="
+                        Booking.spotrequestStatus !==
+                        spotRequestStatusOptions.Verified
+                    "
+                >
                     Publish
                 </AtomButton>
             </div>
