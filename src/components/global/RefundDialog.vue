@@ -1,5 +1,5 @@
 <template>
-    <div v-if="visible" class="dialog-overlay">
+    <div class="dialog-overlay" v-if="visible">
         <div class="dialog-content">
             <div class="refund-row">
                 <label for="refundAmountInput">Refund Amount:</label>
@@ -13,14 +13,14 @@
 
             <div class="security-deposit-row">
                 <b-field>
-                    <b-checkbox v-model="securityDeposit">
+                    <b-checkbox v-model="isSecurityDeposit">
                         isSecurity Deposit
                     </b-checkbox>
                 </b-field>
             </div>
 
             <div class="error-message-container">
-                <p v-if="refundAmount > paymentAmount" class="error">
+                <p class="error" v-if="refundAmount > paymentAmount">
                     Refund amount cannot exceed payment amount.
                 </p>
             </div>
@@ -44,16 +44,16 @@ import { ref, watch } from 'vue';
 
 export default {
     props: {
-        visible: Boolean,
         paymentAmount: Number,
+        visible: Boolean,
     },
     setup(props, { emit }) {
+        const isSecurityDeposit = ref(false);
         const refundAmount = ref(props.paymentAmount);
-        const securityDeposit = ref(false);
         watch(
             () => props.visible,
-            (newValue) => {
-                if (newValue) {
+            (isVisible) => {
+                if (isVisible) {
                     refundAmount.value = props.paymentAmount;
                 }
             },
@@ -65,16 +65,16 @@ export default {
 
         const confirm = () => {
             emit('confirm', {
+                isSecurityDeposit: isSecurityDeposit.value,
                 refundAmount: refundAmount.value,
-                securityDeposit: securityDeposit.value,
             });
         };
 
         return {
-            refundAmount,
-            securityDeposit,
             cancel,
             confirm,
+            isSecurityDeposit,
+            refundAmount,
         };
     },
 };

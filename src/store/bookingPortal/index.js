@@ -221,7 +221,6 @@ const actions = {
     async createRefund({ commit }, refundData) {
         commit('reset-global-status');
         commit('set-loading', true);
-        refundData.PaymentID = 10001;
         const res = await mayaClient.post('/payment/refund', refundData);
         if (res.DisplayMsg) {
             commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');

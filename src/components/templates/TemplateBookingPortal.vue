@@ -501,6 +501,8 @@
                         <div class="cell" v-if="isAdmin">
                             <div class="icon-cell">
                                 <img
+                                    alt="Refund Icon"
+                                    class="refund-icon"
                                     :src="RefundIcon"
                                     @click="
                                         openRefundDialog(
@@ -508,8 +510,6 @@
                                             payment.Amount,
                                         )
                                     "
-                                    class="refund-icon"
-                                    alt="Refund Icon"
                                     v-if="
                                         getPaymentClass(payment.Status) ===
                                         'payment-success'
@@ -535,7 +535,7 @@
 <script>
 import { cloneDeep } from 'lodash';
 import { mapActions, mapState } from 'vuex';
-import RefundIcon from '../../../public/assets/refund.png';
+import RefundIcon from '/assets/refund.png';
 import {
     BookingStatusLabels,
     getBookingStatusLabel,
@@ -575,12 +575,12 @@ export default {
             bookingStatusLabels: BookingStatusLabels,
             currBookingDetails: null,
             editField: null,
-            paymentPeriodicityLabels: PaymentPeriodicityLabels,
-            toolTipLabel: 'Copy payment url!',
-            refundDialogVisible: false,
             paymentID: null,
+            paymentPeriodicityLabels: PaymentPeriodicityLabels,
             paymentTypeLabels: PaymentTypeLabels,
+            refundDialogVisible: false,
             selectedPaymentAmount: null,
+            toolTipLabel: 'Copy payment url!',
         };
     },
     beforeMount() {
@@ -604,12 +604,12 @@ export default {
             'agents',
             'bookingDetails',
             'initialActiveBookingDetails',
+            'isFieldUpdated',
             'paymentDetails',
             'status',
             'statusMessage',
-            'updatedFields',
-            'isFieldUpdated',
             'successMessage',
+            'updatedFields',
         ]),
         ...mapState('user', ['isAdmin']),
         sdpURL() {
@@ -799,7 +799,7 @@ export default {
             const refundRequest = {
                 PaymentID: this.paymentID,
                 Amount: parseFloat(refundData.refundAmount),
-                IsRefundingSecurity: refundData.securityDeposit,
+                IsRefundingSecurity: refundData.isSecurityDeposit,
             };
             this.createRefund(refundRequest);
         },
