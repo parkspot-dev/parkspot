@@ -456,7 +456,7 @@
                         <div class="cell">
                             {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
-                        <div v-if="isAdmin" class="update-payment">
+                        <div class="update-payment" v-if="isAdmin">
                             <SelectInput
                                 :defaultValue="
                                     getPaymentTypeLabel(payment.Type)
@@ -1042,8 +1042,8 @@ export default {
 
 .refund-icon {
     cursor: pointer;
-    width: 28px;
     height: 28px;
+    width: 28px;
 }
 
 .update-payment {
