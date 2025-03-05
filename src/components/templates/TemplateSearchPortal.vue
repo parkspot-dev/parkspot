@@ -139,9 +139,12 @@
                         </p>
                         <p v-if="props.row.Agent !== 'NA' || isAdmin">
                             Mobile:
-                            <a :href="`tel:+91${props.row.Mobile}`">
-                                <strong>{{ props.row.Mobile }}</strong>
-                            </a>
+                            <button
+                                class="btn"
+                                @click="onMobileClick(props.row)"
+                            >
+                              Connect
+                            </button>
                         </p>
                         <p>
                             Email:
@@ -187,7 +190,13 @@
                     :maxlength="1000"
                     :rowNo="8"
                     @mousedown="storeOldComment(props.row)"
-                    @changed="onCommentUpdate(props.row, oldComments[props.row.id], $event)"
+                    @changed="
+                        onCommentUpdate(
+                            props.row,
+                            oldComments[props.row.id],
+                            $event,
+                        )
+                    "
                 ></AtomTextarea>
             </b-table-column>
 
@@ -199,7 +208,7 @@
                 width="76px"
             >
                 <template #searchable="props">
-                <!-- TODO: Remove AtomSelectInput completely from all files. Use Global Select Input -->
+                    <!-- TODO: Remove AtomSelectInput completely from all files. Use Global Select Input -->
                     <AtomSelectInput
                         :list="agentList"
                         :size="'is-small'"
@@ -224,6 +233,17 @@
                                 v-model="filters.Agent"
                             >
                             </AtomSelectInput>
+                            <!-- <SelectInput
+                                :defaultValue="props.row.Agent"
+                                :list="agentList.map((agent) => agent.name)"
+                                @change="
+                                    onAgentUpdate(
+                                        props.row,
+                                        $event.target.value,
+                                    )
+                                "
+                                name="updateAgent"
+                            /> -->
                         </div>
                     </div>
                 </template>
@@ -312,7 +332,9 @@
                         <AtomInput
                             :size="'is-small'"
                             :modelValue="`${props.row.Latitude.toFixed(6)}, ${props.row.Longitude.toFixed(6)}`"
-                            @change="updateLatLng(props.row, $event.target.value)"
+                            @change="
+                                updateLatLng(props.row, $event.target.value)
+                            "
                         >
                         </AtomInput>
                     </div>
@@ -323,6 +345,40 @@
                 <div class="has-text-centered">No records</div>
             </template>
         </b-table>
+    </div>
+
+    <!-- Mobile Number popup -->
+    <div v-if="this.isOpen" class="popup-container">
+        <div class="popup">
+            <h2>
+                <span class="material-symbols-outlined"> call </span>
+                {{ this.selectedRow.Mobile }}
+            </h2>
+            <div>Select Agent</div>
+            <SelectInput
+                :defaultValue="this.selectedRow.Agent"
+                :list="agentList.map((agent) => agent.name)"
+                @change="onAgentUpdate(selectedRow, $event.target.value)"
+                name="updateAgent"
+            />
+            <div>Add Note</div>
+            <AtomTextarea
+                :size="'is-small'"
+                v-model="selectedRow.Comments"
+                class="comment-width"
+                :maxlength="1000"
+                :rowNo="8"
+                @mousedown="storeOldComment(selectedRow)"
+                @changed="
+                    onCommentUpdate(
+                        selectedRow,
+                        oldComments[selectedRow.id],
+                        $event,
+                    )
+                "
+            ></AtomTextarea>
+            <!-- <button @click="onMobileClick()" class="btn">Close</button> -->
+        </div>
     </div>
 </template>
 
@@ -337,6 +393,7 @@ import AtomInput from '../atoms/AtomInput.vue';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
 import AtomIcon from '../atoms/AtomIcon';
+import SelectInput from '../global/SelectInput.vue';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -347,6 +404,7 @@ export default {
         AtomDatePicker,
         AtomInput,
         AtomButton,
+        SelectInput,
     },
     props: {
         parkingRequests: {
@@ -363,10 +421,10 @@ export default {
     emits: ['updateRequest', 'toSrp'],
     computed: {
         ...mapState('searchPortal', ['agentList']),
-        ...mapState('user', ['userProfile', 'isAdmin'])
+        ...mapState('user', ['userProfile', 'isAdmin']),
     },
     mounted() {
-      this.getUserProfile();
+        this.getUserProfile();
     },
     data() {
         return {
@@ -417,6 +475,8 @@ export default {
                 isShow: false,
             },
             oldComments: {},
+            isOpen: false,
+            selectedRow: {},
         };
     },
     watch: {
@@ -471,12 +531,14 @@ export default {
             }
         },
 
-        onAgentUpdate(spotData, agentid) {
-            this.agentList.forEach((agent) => {
-                if (agent.id === agentid) {
-                    spotData['Agent'] = agent.name;
-                }
-            });
+        onAgentUpdate(spotData, agentName) {
+            console.log(spotData, agentName);
+            //     this.agentList.forEach((agent) => {
+            //     if (agent.id === agentid) {
+            //         spotData['Agent'] = agent.name;
+            //     }
+            // });
+            spotData['Agent'] = agentName;
             this.$emit('updateRequest', spotData);
         },
 
@@ -496,10 +558,10 @@ export default {
             spotData['NextCall'] = date.toJSON();
             this.$emit('updateRequest', spotData);
         },
-        
+
         storeOldComment(row) {
             if (!this.oldComments[row.id]) {
-                this.oldComments[row.id] = row.Comments || ""; // Ensure a default value
+                this.oldComments[row.id] = row.Comments || ''; // Ensure a default value
             }
         },
 
@@ -510,7 +572,7 @@ export default {
             if (mm < 10) mm = '0' + mm;
             if (oldComment !== newComment) {
                 row.Comments = `${newComment} [${dd}/${mm}]`;
-                this.$emit("updateRequest", row);  
+                this.$emit('updateRequest', row);
                 // Reset stored old comment
                 this.oldComments[row.id] = row.Comments;
             }
@@ -547,6 +609,12 @@ export default {
         },
         getFormattedDate(date) {
             return moment(date).format('DD MMM YY, hh:mm A');
+        },
+
+        onMobileClick(selectedRow = {}) {
+            console.log(selectedRow);
+            this.selectedRow = selectedRow;
+            this.isOpen = !this.isOpen;
         },
     },
 };
@@ -707,5 +775,40 @@ $portal-font-size: 13px;
             gap: 10px;
         }
     }
+}
+
+// Mobile Popup CSS
+.popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.popup {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 20px;
+    width: 30%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn {
+    background: var(--primary-color);
+    color: var(--parkspot-black);
+    border: none;
+    padding: 4px 6px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: fit-content;
 }
 </style>
