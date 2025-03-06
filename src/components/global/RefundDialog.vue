@@ -14,7 +14,7 @@
             <div class="security-deposit-row">
                 <b-field>
                     <b-checkbox v-model="isSecurityDeposit">
-                        isSecurity Deposit
+                        Security Deposit
                     </b-checkbox>
                 </b-field>
             </div>
