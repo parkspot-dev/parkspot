@@ -547,14 +547,14 @@ import {
     PaymentStatus,
     PaymentTypeLabels,
 } from '@/constant/enums';
-import AtomButton from '../atoms/AtomButton.vue';
-import AtomIcon from '../atoms/AtomIcon.vue';
-import AtomTooltip from '../atoms/AtomTooltip.vue';
-import AtomDatePicker from '../atoms/AtomDatePicker.vue';
-import AtomInput from '../atoms/AtomInput.vue';
+import AtomButton from '@/components/atoms/AtomButton.vue';
+import AtomIcon from '@/components/atoms/AtomIcon.vue';
+import AtomTooltip from '@/components/atoms/AtomTooltip.vue';
+import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
+import AtomInput from '@/components/atoms/AtomInput.vue';
 import moment from 'moment';
-import RefundDialog from '../global/RefundDialog.vue';
-import SelectInput from '../global/SelectInput.vue';
+import RefundDialog from '@/components/global/RefundDialog.vue';
+import SelectInput from '@/components/global/SelectInput.vue';
 
 export default {
     name: 'TemplateBookingPortal',
