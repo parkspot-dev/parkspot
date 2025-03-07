@@ -227,6 +227,7 @@ const actions = {
     },
 
     async updateUserInfo({ commit, state }) {
+        state.userProfile.Type = 4
         try {
             await mayaClient.post('/auth/update-fields', state.userProfile);
         } catch (err) {

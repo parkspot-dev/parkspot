@@ -1,5 +1,5 @@
 <template>
-    <b-tabs v-model="activeTabView">
+    <b-tabs v-if="userProfile.FullName" v-model="activeTabView">
         <b-tab-item label="Parking Request (VO/SO)">
             <div class="request-search-control">
                 <MoleculeSearchBox
@@ -75,6 +75,7 @@ export default {
             'errorMessage',
             'hasError',
         ]),
+        ...mapState('user', ['isAdmin', 'userProfile']),
         activeTabView: {
             get() {
                 return this.activeTab;
@@ -130,7 +131,6 @@ export default {
             });
             this.getParkingRequests();
         }
-        this.getAgents();
     },
     methods: {
         ...mapActions('searchPortal', [
@@ -288,6 +288,11 @@ export default {
                 this.alertError(this.errorMessage);
             }
         },
+        isAdmin(admin) {
+            if(admin){
+                this.getAgents();
+            }
+        }
     },
 };
 </script>

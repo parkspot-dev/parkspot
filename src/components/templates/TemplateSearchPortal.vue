@@ -187,7 +187,13 @@
                     :maxlength="1000"
                     :rowNo="8"
                     @mousedown="storeOldComment(props.row)"
-                    @changed="onCommentUpdate(props.row, oldComments[props.row.id], $event)"
+                    @changed="
+                        onCommentUpdate(
+                            props.row,
+                            oldComments[props.row.id],
+                            $event,
+                        )
+                    "
                 ></AtomTextarea>
             </b-table-column>
 
@@ -199,7 +205,7 @@
                 width="76px"
             >
                 <template #searchable="props">
-                <!-- TODO: Remove AtomSelectInput completely from all files. Use Global Select Input -->
+                    <!-- TODO: Remove AtomSelectInput completely from all files. Use Global Select Input -->
                     <AtomSelectInput
                         :list="agentList"
                         :size="'is-small'"
@@ -216,6 +222,17 @@
                                 {{ props.row.Agent }}
                             </span>
                             <AtomSelectInput
+                                v-if="isAdmin"
+                                :list="agentList"
+                                :size="'is-small'"
+                                @change="onAgentUpdate(props.row, $event)"
+                                label=""
+                                placeholder="Select Agent"
+                                v-model="filters.Agent"
+                            >
+                            </AtomSelectInput>
+                            <AtomSelectInput
+                                v-else
                                 :list="agentList"
                                 :size="'is-small'"
                                 @change="onAgentUpdate(props.row, $event)"
@@ -312,7 +329,9 @@
                         <AtomInput
                             :size="'is-small'"
                             :modelValue="`${props.row.Latitude.toFixed(6)}, ${props.row.Longitude.toFixed(6)}`"
-                            @change="updateLatLng(props.row, $event.target.value)"
+                            @change="
+                                updateLatLng(props.row, $event.target.value)
+                            "
                         >
                         </AtomInput>
                     </div>
@@ -327,7 +346,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import moment from 'moment';
 
 import { getCoordinate } from '../../includes/LatLng';
@@ -363,7 +382,16 @@ export default {
     emits: ['updateRequest', 'toSrp'],
     computed: {
         ...mapState('searchPortal', ['agentList']),
-        ...mapState('user', ['userProfile', 'isAdmin'])
+        ...mapState('user', ['userProfile', 'isAdmin']),
+    },
+    mounted() {
+        if(this.userProfile && !this.isAdmin){
+            // If not an admin then agentList will only contain 'NA' and user Fullname
+            const agents = [ 
+                { id : 0, FullName : this.userProfile?.FullName }
+             ];
+             this.setAgents(agents);
+        }
     },
     data() {
         return {
@@ -456,6 +484,7 @@ export default {
         },
     },
     methods: {
+        ...mapActions('searchPortal', ['getAgents', 'setAgents']),
         getPriority(val) {
             switch (val) {
                 case 1:
@@ -492,10 +521,10 @@ export default {
             spotData['NextCall'] = date.toJSON();
             this.$emit('updateRequest', spotData);
         },
-        
+
         storeOldComment(row) {
             if (!this.oldComments[row.id]) {
-                this.oldComments[row.id] = row.Comments || ""; // Ensure a default value
+                this.oldComments[row.id] = row.Comments || ''; // Ensure a default value
             }
         },
 
@@ -506,7 +535,7 @@ export default {
             if (mm < 10) mm = '0' + mm;
             if (oldComment !== newComment) {
                 row.Comments = `${newComment} [${dd}/${mm}]`;
-                this.$emit("updateRequest", row);  
+                this.$emit('updateRequest', row);
                 // Reset stored old comment
                 this.oldComments[row.id] = row.Comments;
             }
