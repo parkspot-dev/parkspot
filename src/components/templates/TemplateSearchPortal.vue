@@ -327,7 +327,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import moment from 'moment';
 
 import { getCoordinate } from '../../includes/LatLng';
@@ -364,9 +364,6 @@ export default {
     computed: {
         ...mapState('searchPortal', ['agentList']),
         ...mapState('user', ['userProfile', 'isAdmin'])
-    },
-    mounted() {
-      this.getUserProfile();
     },
     data() {
         return {
@@ -459,7 +456,6 @@ export default {
         },
     },
     methods: {
-        ...mapActions('user', ['getUserProfile']),
         getPriority(val) {
             switch (val) {
                 case 1:

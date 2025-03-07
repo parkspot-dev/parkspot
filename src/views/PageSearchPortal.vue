@@ -55,6 +55,9 @@ export default {
             titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
         };
     },
+    mounted() {
+        this.getUserProfile();
+    },
     data() {
         return {
             isLoading: false,
@@ -139,6 +142,7 @@ export default {
             'resetError',
             'getInterestedVO',
         ]),
+        ...mapActions('user', ['getUserProfile']),
         alertError(msg) {
             this.$buefy.dialog.alert({
                 title: 'Error',
@@ -176,7 +180,7 @@ export default {
                         path: this.$route.path,
                         query: {
                             tab: getActiveTabStatusLabel(this.activeTab),
-                            mobile: sanitizeMobileNumber
+                            mobile: sanitizeMobileNumber,
                         },
                     });
                 }
@@ -186,9 +190,9 @@ export default {
             this.updateSOLatLngInput(latlng);
             this.$router.push({
                 path: this.$route.path,
-                query: { 
-                latlng: latlng,
-                tab: getActiveTabStatusLabel(this.activeTab)
+                query: {
+                    latlng: latlng,
+                    tab: getActiveTabStatusLabel(this.activeTab),
                 },
             });
         },
