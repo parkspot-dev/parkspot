@@ -77,7 +77,7 @@ const actions = {
         if (res.Site) {
             commit('update-spot-details', res.Site);
             commit('update-owner-info-details', res.User);
-            commit('set-in-progress-bookings', res.Bookings)
+            commit('set-in-progress-bookings', res.Booking)
             await dispatch('setPaymentDetails', res.Account);
 
             const spot = {

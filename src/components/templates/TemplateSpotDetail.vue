@@ -61,7 +61,7 @@
             </div>
 
             <!-- only to admin -->
-            <div class="only-to-agent-admin">
+            <div class="only-to-agent">
                 <div class="spot-detail-owner" v-if="ownerInfoDetails.UserName">
                     <hr style="width: 100%" />
                     <h2>Owner Info Details</h2>
@@ -180,7 +180,7 @@
                                         <a
                                             :href="
                                                 this.getBookingDetailURL(
-                                                    booking.ID
+                                                    booking.ID,
                                                 )
                                             "
                                             target="_blank"
@@ -192,12 +192,17 @@
                                         <span
                                             :class="{
                                                 active:
-                                                    booking.Status === BookingStatus.BookingConfirmed ||
-                                                    booking.Status === BookingStatus.BookingRentDue,
+                                                    booking.Status ===
+                                                        BookingStatus.BookingConfirmed ||
+                                                    booking.Status ===
+                                                        BookingStatus.BookingRentDue,
                                                 visit:
-                                                    booking.Status === BookingStatus.BookingPaymentPending ||
-                                                    booking.Status === BookingStatus.BookingVisiting ||
-                                                    booking.Status === BookingStatus.BookingScheduleVisit,
+                                                    booking.Status ===
+                                                        BookingStatus.BookingPaymentPending ||
+                                                    booking.Status ===
+                                                        BookingStatus.BookingVisiting ||
+                                                    booking.Status ===
+                                                        BookingStatus.BookingScheduleVisit,
                                             }"
                                         >
                                             {{
@@ -231,7 +236,11 @@ import ImageGallery from '../organisms/OrganismImageGallery.vue';
 import InfographicSteps from '../molecules/MoleculeInfographicSteps.vue';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
-import { BookingStatus, getBookingStatusLabel, getKYCStatusLabel } from '@/constant/enums';
+import {
+    BookingStatus,
+    getBookingStatusLabel,
+    getKYCStatusLabel,
+} from '@/constant/enums';
 import { mapState } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
 
@@ -249,8 +258,8 @@ export default {
     },
     data() {
         return {
-           BookingStatus : BookingStatus
-        }
+            BookingStatus: BookingStatus,
+        };
     },
     props: {
         isAdmin: {
@@ -439,16 +448,16 @@ hr {
     }
 }
 
-.only-to-agent-admin {
+.only-to-agent {
     display: flex;
     flex-direction: row;
+    gap: 80px;
     justify-content: space-between;
     padding: 60px 0;
-    gap: 80px;
 }
 
 @media (max-width: 768px) {
-    .only-to-agent-admin {
+    .only-to-agent {
         flex-direction: column;
         gap: 40px;
     }
@@ -459,10 +468,10 @@ hr {
     flex-direction: column;
     margin-left: 20px;
     h2 {
+        color: black;
         font-size: 24px;
         font-weight: 500;
         margin-bottom: 26px;
-        color: black;
     }
 
     p {
@@ -508,9 +517,8 @@ hr {
     }
 }
 .table-container {
-    align-items: center;
-    display: flex;
-    justify-content: center;
+    height: 340px;
+    overflow-y: scroll;
     width: 100%;
 }
 
