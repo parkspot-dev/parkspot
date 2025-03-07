@@ -117,9 +117,9 @@
                                     <td>Remark</td>
                                     <td>
                                         <AtomTextarea
-                                            v-model="spotDetails.Remark"
                                             :rowNo="2"
                                             @changed="changeRemark"
+                                            v-model="spotDetails.Remark"
                                         />
                                     </td>
                                 </tr>
