@@ -140,10 +140,10 @@
                         <p v-if="props.row.Agent !== 'NA' || isAdmin">
                             Mobile:
                             <button
-                                class="btn"
-                                @click="onMobileClick(props.row)"
+                                @click="onConnect(props.row)"
+                                class="connect-btn"
                             >
-                              Connect
+                                Connect
                             </button>
                         </p>
                         <p>
@@ -273,6 +273,7 @@
                                 {{ statusList[props.row.Status].name }}
                             </span>
                             <AtomSelectInput
+                                :key="props.row.ID || `fallback-${index}`"
                                 :list="statusList"
                                 :size="'is-small'"
                                 @change="onStatusUpdate(props.row, $event)"
@@ -350,34 +351,42 @@
     <!-- Mobile Number popup -->
     <div v-if="this.isOpen" class="popup-container">
         <div class="popup">
-            <h2>
-                <span class="material-symbols-outlined"> call </span>
-                {{ this.selectedRow.Mobile }}
-            </h2>
-            <div>Select Agent</div>
+            <div class="mobile">
+                Contact With {{ this.selectedRow.Name }} on
+                <span>{{ this.selectedRow.Mobile }}</span>
+            </div>
+            <div>Change Status</div>
             <SelectInput
-                :defaultValue="this.selectedRow.Agent"
-                :list="agentList.map((agent) => agent.name)"
-                @change="onAgentUpdate(selectedRow, $event.target.value)"
-                name="updateAgent"
+                :key="selectedRow.id"
+                :defaultValue="this.defaultStatus"
+                :list="statusList.map((status) => status.name)"
+                @change="onStatusUpdate(selectedRow, $event.target.value)"
+                name="updateStatus"
             />
             <div>Add Note</div>
-            <AtomTextarea
-                :size="'is-small'"
-                v-model="selectedRow.Comments"
-                class="comment-width"
-                :maxlength="1000"
-                :rowNo="8"
+            <AtomInput
+                :placeholder="'Type here...'"
                 @mousedown="storeOldComment(selectedRow)"
-                @changed="
+                v-model="this.newComment"
+            >
+            </AtomInput>
+            <div v-if="newComment.length < 3" class="error">
+                Note is required
+            </div>
+
+            <button
+                :disabled="!newComment || newComment.length < 3"
+                @click="
                     onCommentUpdate(
                         selectedRow,
                         oldComments[selectedRow.id],
-                        $event,
+                        `${oldComments[selectedRow.id]}\n${newComment}`,
                     )
                 "
-            ></AtomTextarea>
-            <!-- <button @click="onMobileClick()" class="btn">Close</button> -->
+                class="btn"
+            >
+                Update
+            </button>
         </div>
     </div>
 </template>
@@ -394,6 +403,7 @@ import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
 import AtomIcon from '../atoms/AtomIcon';
 import SelectInput from '../global/SelectInput.vue';
+import { getParkingRequestStatus } from '@/constant/enums';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -477,6 +487,8 @@ export default {
             oldComments: {},
             isOpen: false,
             selectedRow: {},
+            newComment: '',
+            defaultStatus: '',
         };
     },
     watch: {
@@ -531,14 +543,12 @@ export default {
             }
         },
 
-        onAgentUpdate(spotData, agentName) {
-            console.log(spotData, agentName);
-            //     this.agentList.forEach((agent) => {
-            //     if (agent.id === agentid) {
-            //         spotData['Agent'] = agent.name;
-            //     }
-            // });
-            spotData['Agent'] = agentName;
+        onAgentUpdate(spotData, agentid) {
+            this.agentList.forEach((agent) => {
+                if (agent.id === agentid) {
+                    spotData['Agent'] = agent.name;
+                }
+            });
             this.$emit('updateRequest', spotData);
         },
 
@@ -576,9 +586,16 @@ export default {
                 // Reset stored old comment
                 this.oldComments[row.id] = row.Comments;
             }
+            (this.isOpen = false), (this.newComment = '');
         },
 
         onStatusUpdate(spotData, status) {
+            if (typeof status === 'string') {
+                const foundStatus = this.statusList.find(
+                    (item) => item.name === status,
+                );
+                status = foundStatus.id;
+            }
             spotData['Status'] = status;
             this.$emit('updateRequest', spotData);
         },
@@ -611,10 +628,12 @@ export default {
             return moment(date).format('DD MMM YY, hh:mm A');
         },
 
-        onMobileClick(selectedRow = {}) {
-            console.log(selectedRow);
+        onConnect(selectedRow = {}) {
             this.selectedRow = selectedRow;
             this.isOpen = !this.isOpen;
+            this.defaultStatus = getParkingRequestStatus(
+                this.selectedRow.Status,
+            );
         },
     },
 };
@@ -793,22 +812,56 @@ $portal-font-size: 13px;
 
 .popup {
     background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    padding: 20px;
+    overflow: hidden;
+    padding: 52px 20px 20px 20px;
+    position: relative;
     width: 30%;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+    .mobile {
+        font-weight: var(--bold-font);
+        left: 0;
+        padding: 20px 0;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        top: 0;
+        width: 100%;
+
+        span {
+            text-decoration: underline;
+            color: var(--secondary-color);
+        }
+    }
 }
 
 .btn {
     background: var(--primary-color);
-    color: var(--parkspot-black);
-    border: none;
-    padding: 4px 6px;
-    cursor: pointer;
     border-radius: 5px;
-    width: fit-content;
+    border: none;
+    color: var(--parkspot-black);
+    cursor: pointer;
+    padding: 4px 6px;
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+}
+
+.connect-btn {
+    background-color: var(--secondary-color);
+    border-radius: 20px;
+    border: none;
+    color: var(--parkspot-white);
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+.error {
+    color: red;
 }
 </style>
