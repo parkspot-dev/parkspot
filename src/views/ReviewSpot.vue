@@ -160,35 +160,38 @@
                     <div class="form-field">
                         <label for="rentUnit">Rent Unit:</label>
                         <select v-model="Rent.rentUnit">
-                            <option 
-                            v-for="(value, label) in rentUnitOptions" 
-                            :key="value" 
-                            :value="value">
-                            {{ label}}
-                        </option>
+                            <option
+                                v-for="(value, label) in rentUnitOptions"
+                                :key="value"
+                                :value="value"
+                            >
+                                {{ label }}
+                            </option>
                         </select>
                     </div>
                     <!-- Parking Size -->
                     <div class="form-field">
                         <label for="parkingSize">Parking Size:</label>
                         <select v-model="Rent.parkingSize">
-                        <option 
-                            v-for="(value, label) in parkingSizeOptions" 
-                            :key="value" 
-                            :value="value">
-                            {{ label }}
-                        </option>
+                            <option
+                                v-for="(value, label) in parkingSizeOptions"
+                                :key="value"
+                                :value="value"
+                            >
+                                {{ label }}
+                            </option>
                         </select>
                     </div>
                     <!-- Site Type -->
                     <div class="form-field">
                         <label for="siteType">Site Type:</label>
                         <select v-model="Rent.siteType">
-                            <option 
-                            v-for="(value, label) in siteTypeOptions" 
-                            :key="value" 
-                            :value="value">
-                            {{ label}}
+                            <option
+                                v-for="(value, label) in siteTypeOptions"
+                                :key="value"
+                                :value="value"
+                            >
+                                {{ label }}
                             </option>
                         </select>
                     </div>
@@ -246,11 +249,14 @@
                     <div class="form-field">
                         <label for="spotrequestStatus">Status:</label>
                         <select v-model="Booking.spotrequestStatus">
-                            <option 
-                            v-for="(value, label) in spotRequestStatusOptions" 
-                            :key="value" 
-                            :value="value">
-                            {{ label }}
+                            <option
+                                v-for="(
+                                    value, label
+                                ) in spotRequestStatusOptions"
+                                :key="value"
+                                :value="value"
+                            >
+                                {{ label }}
                             </option>
                         </select>
                     </div>
@@ -280,10 +286,21 @@
 
             <!-- Update -->
             <div class="button-container">
-                <AtomButton @click.native="openModal('Save')" class="btn">
+                <AtomButton
+                    @click.native="openModal('Save')"
+                    class="btn"
+                    :disabled="!isFormModified"
+                >
                     Save
                 </AtomButton>
-                <AtomButton @click.native="openModal('Publish')" class="btn">
+                <AtomButton
+                    @click.native="openModal('Publish')"
+                    class="btn"
+                    :disabled="
+                        Booking.spotrequestStatus !==
+                        spotRequestStatusOptions.Verified
+                    "
+                >
                     Publish
                 </AtomButton>
             </div>
@@ -317,7 +334,7 @@ import AtomButton from '../components/atoms/AtomButton.vue';
 import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
-import { ParkingSize } from "../constant/enums";
+import { ParkingSize } from '../constant/enums';
 import { SiteType } from '../constant/enums';
 import { SpotRequestStatus } from '../constant/enums';
 import { RentUnit } from '../constant/enums';
@@ -339,6 +356,7 @@ export default {
                 message: '',
                 title: '',
             },
+            initialFormData: {},
         };
     },
     computed: {
@@ -350,19 +368,29 @@ export default {
             'Rent',
             'SO',
             'status',
-            'statusMessage'
+            'statusMessage',
         ]),
         parkingSizeOptions() {
-            return ParkingSize; 
+            return ParkingSize;
         },
         rentUnitOptions() {
-            return RentUnit; 
+            return RentUnit;
         },
         spotRequestStatusOptions() {
-            return SpotRequestStatus; 
+            return SpotRequestStatus;
         },
         siteTypeOptions() {
-            return SiteType; 
+            return SiteType;
+        },
+        isFormModified() {
+            return (
+                JSON.stringify(this.initialFormData) !==
+                JSON.stringify({
+                    SO: this.SO,
+                    Rent: this.Rent,
+                    Booking: this.Booking,
+                })
+            );
         },
     },
     methods: {
@@ -393,7 +421,7 @@ export default {
                 ariaModal: true,
                 ariaRole: 'alertdialog',
                 hasIcon: true,
-                icon:'check-circle',
+                icon: 'check-circle',
                 message: msg,
                 title: 'Success',
                 type: 'is-success',
@@ -424,32 +452,52 @@ export default {
             this.isModalOpen = false;
         },
         confirmAction() {
-            this.clickedButton === 'Save' ? this.saveForm() : this.submitForm();
+            if (this.clickedButton === 'Save') {
+                this.confirmSave();
+            } else {
+                if (this.isFormModified) this.confirmSave();
+                this.submitForm();
+            }
             this.closeModal();
         },
+        confirmSave() {
+            this.saveForm().then(() => {
+                this.updateInitialFormState();
+            });
+        },
         onLastCallDateUpdate(updatedDate) {
-            this.Booking.lastCallDate= updatedDate.toISOString();;
+            this.Booking.lastCallDate = updatedDate.toISOString();
         },
         onStartDateUpdate(updatedDate) {
-            this.Booking.startDate= updatedDate.toISOString();;
+            this.Booking.startDate = updatedDate.toISOString();
         },
         onEndDateUpdate(updatedDate) {
-            this.Booking.endDate= updatedDate.toISOString();;
+            this.Booking.endDate = updatedDate.toISOString();
+        },
+        updateInitialFormState() {
+            this.initialFormData = JSON.parse(
+                JSON.stringify({
+                    SO: this.SO,
+                    Rent: this.Rent,
+                    Booking: this.Booking,
+                }),
+            );
         },
     },
     watch: {
         status(newStatus) {
             if (newStatus === 'error') {
                 this.alertError(this.statusMessage);
-            }
-            else if (newStatus === 'success') {
+            } else if (newStatus === 'success') {
                 this.alertSuccess(this.statusMessage);
             }
         },
     },
     mounted() {
         this.setSpotId();
-        this.fetchSpotDetails();
+        this.fetchSpotDetails().then(() => {
+            this.updateInitialFormState();
+        });
     },
 };
 </script>
