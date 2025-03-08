@@ -10,6 +10,7 @@ const state = {
     ownerInfoDetails: null,
     paymentDetails: '',
     selectedSpot: [],
+    spotInProgressBookings: [],
     spotDetails: null,
     thumbnail: [],
     title: '',
@@ -64,6 +65,9 @@ const mutations = {
     'update-payment-info'(state, paymentDetails) {
         state.paymentDetails = paymentDetails;
     },
+    'set-in-progress-bookings'(state, bookings) {
+        state.spotInProgressBookings = bookings;
+    }
 };
 
 const actions = {
@@ -73,6 +77,7 @@ const actions = {
         if (res.Site) {
             commit('update-spot-details', res.Site);
             commit('update-owner-info-details', res.User);
+            commit('set-in-progress-bookings', res.Booking)
             await dispatch('setPaymentDetails', res.Account);
 
             const spot = {

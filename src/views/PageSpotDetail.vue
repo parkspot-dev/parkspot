@@ -116,9 +116,11 @@ export default {
             this.updateSOLatLngInput(latLng.join(','));
             this.$router.push({
                 name: 'SearchPortal',
-                query: { 
-                latlng: latLng.join(','),
-                tab: getActiveTabStatusLabel(this.$store.state.searchPortal.activeTab)
+                query: {
+                    latlng: latLng.join(','),
+                    tab: getActiveTabStatusLabel(
+                        this.$store.state.searchPortal.activeTab,
+                    ),
                 },
             });
         },
