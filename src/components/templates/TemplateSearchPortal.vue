@@ -231,16 +231,14 @@
                                 v-model="filters.Agent"
                             >
                             </AtomSelectInput>
-                            <AtomSelectInput
+                            <button
                                 v-else
-                                :list="agentList"
-                                :size="'is-small'"
-                                @change="onAgentUpdate(props.row, $event)"
-                                label=""
-                                placeholder="Select Agent"
-                                v-model="filters.Agent"
+                                @click="onAgentUpdate(props.row, agentList[0].id)
+                                "
+                                class="btn"
                             >
-                            </AtomSelectInput>
+                                Assign to me
+                            </button>
                         </div>
                     </div>
                 </template>
@@ -385,12 +383,10 @@ export default {
         ...mapState('user', ['userProfile', 'isAdmin']),
     },
     mounted() {
-        if(this.userProfile && !this.isAdmin){
+        if (this.userProfile && !this.isAdmin) {
             // If not an admin then agentList will only contain 'NA' and user Fullname
-            const agents = [ 
-                { id : 0, FullName : this.userProfile?.FullName }
-             ];
-             this.setAgents(agents);
+            const agents = [{ id: 0, FullName: this.userProfile?.FullName }];
+            this.setAgents(agents);
         }
     },
     data() {
@@ -588,11 +584,15 @@ $portal-font-size: 13px;
 }
 
 .search-portal-wrapper .status-column .status-part .tag:not(body).my-status {
-    background-color: var(--primary-color);
+    background-color: #ffe08a66;
+    border-radius: 16px;
+    color: black;
 }
 
 .tag:not(body) {
-    background-color: var(--primary-color);
+    background-color: #ffe08a66;
+    border-radius: 16px;
+    color: black;
 }
 
 .search-portal-wrapper {
@@ -732,5 +732,18 @@ $portal-font-size: 13px;
             gap: 10px;
         }
     }
+}
+
+.btn {
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    border: none;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2), 
+                -1px -1px 1px rgba(255, 255, 255, 0.5), 
+                0px 0px 2px rgba(0, 0, 0, 0.1);
+    color: black;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px 0;
 }
 </style>
