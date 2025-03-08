@@ -289,10 +289,10 @@ export default {
             }
         },
         isAdmin(admin) {
-            if(admin){
+            if (admin) {
                 this.getAgents();
             }
-        }
+        },
     },
 };
 </script>
