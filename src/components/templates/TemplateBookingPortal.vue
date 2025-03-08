@@ -436,6 +436,9 @@
                     <div class="cell"><strong> Payment Type </strong></div>
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
+                    <div class="cell" v-if="isAdmin">
+                        <strong> Refund </strong>
+                    </div>
                 </div>
                 <div v-if="currBookingDetails.Payments">
                     <div
@@ -453,16 +456,18 @@
                         <div class="cell">
                             {{ getFormattedDate(payment.TransferredAt) }}
                         </div>
-                        <div
-                            v-if="isAdmin"
-                            class="update-payment"
-                        >
+                        <div class="update-payment" v-if="isAdmin">
                             <SelectInput
                                 :defaultValue="
                                     getPaymentTypeLabel(payment.Type)
                                 "
                                 :list="paymentTypeLabels"
-                                @change="updatePaymentType($event.target.value, payment.PaymentID)"
+                                @change="
+                                    updatePaymentType(
+                                        $event.target.value,
+                                        payment.PaymentID,
+                                    )
+                                "
                                 name="updatePayment"
                             />
                         </div>
@@ -493,6 +498,32 @@
                             </div>
                         </div>
                         <div class="cell">₹ {{ payment.Amount }}</div>
+                        <div class="cell" v-if="isAdmin">
+                            <div class="icon-cell">
+                                <img
+                                    alt="Refund Icon"
+                                    class="refund-icon"
+                                    :src="RefundIcon"
+                                    @click="
+                                        openRefundDialog(
+                                            payment.PaymentID,
+                                            payment.Amount,
+                                        )
+                                    "
+                                    v-if="
+                                        getPaymentClass(payment.Status) ===
+                                        'payment-success'
+                                    "
+                                />
+                            </div>
+                        </div>
+                        <RefundDialog
+                            :paymentAmount="selectedPaymentAmount"
+                            :visible="refundDialogVisible"
+                            @cancel="closeRefundDialog"
+                            @confirm="handleRefundConfirm"
+                            v-if="refundDialogVisible"
+                        />
                     </div>
                 </div>
                 <div v-else>No payment history found.</div>
@@ -504,6 +535,7 @@
 <script>
 import { cloneDeep } from 'lodash';
 import { mapActions, mapState } from 'vuex';
+import RefundIcon from '/assets/refund.png';
 import {
     BookingStatusLabels,
     getBookingStatusLabel,
@@ -515,13 +547,14 @@ import {
     PaymentStatus,
     PaymentTypeLabels,
 } from '@/constant/enums';
-import AtomButton from '../atoms/AtomButton.vue';
-import AtomIcon from '../atoms/AtomIcon.vue';
-import AtomTooltip from '../atoms/AtomTooltip.vue';
-import AtomDatePicker from '../atoms/AtomDatePicker.vue';
-import AtomInput from '../atoms/AtomInput.vue';
+import AtomButton from '@/components/atoms/AtomButton.vue';
+import AtomIcon from '@/components/atoms/AtomIcon.vue';
+import AtomTooltip from '@/components/atoms/AtomTooltip.vue';
+import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
+import AtomInput from '@/components/atoms/AtomInput.vue';
 import moment from 'moment';
-import SelectInput from '../global/SelectInput.vue';
+import RefundDialog from '@/components/global/RefundDialog.vue';
+import SelectInput from '@/components/global/SelectInput.vue';
 
 export default {
     name: 'TemplateBookingPortal',
@@ -531,17 +564,23 @@ export default {
         AtomTooltip,
         AtomDatePicker,
         AtomInput,
+        RefundDialog,
         SelectInput,
     },
-
+    setup() {
+        return { RefundIcon };
+    },
     data() {
         return {
             bookingStatusLabels: BookingStatusLabels,
             currBookingDetails: null,
             editField: null,
+            paymentID: null,
             paymentPeriodicityLabels: PaymentPeriodicityLabels,
-            toolTipLabel: 'Copy payment url!',
             paymentTypeLabels: PaymentTypeLabels,
+            refundDialogVisible: false,
+            selectedPaymentAmount: null,
+            toolTipLabel: 'Copy payment url!',
         };
     },
     beforeMount() {
@@ -565,10 +604,12 @@ export default {
             'agents',
             'bookingDetails',
             'initialActiveBookingDetails',
-            'paymentDetails',
-            'updatedFields',
             'isFieldUpdated',
+            'paymentDetails',
+            'status',
+            'statusMessage',
             'successMessage',
+            'updatedFields',
         ]),
         ...mapState('user', ['isAdmin']),
         sdpURL() {
@@ -599,6 +640,7 @@ export default {
     },
     methods: {
         ...mapActions('bookingPortal', [
+            'createRefund',
             'setUpdatedFields',
             'changePaymentType',
         ]),
@@ -743,6 +785,58 @@ export default {
                 type: 'is-success',
                 duration: 2000,
             });
+        },
+        openRefundDialog(paymentID, paymentAmount) {
+            this.selectedPaymentAmount = paymentAmount;
+            this.paymentID = paymentID;
+            this.refundDialogVisible = true;
+        },
+        closeRefundDialog() {
+            this.refundDialogVisible = false;
+        },
+        handleRefundConfirm(refundData) {
+            this.refundDialogVisible = false;
+            const refundRequest = {
+                PaymentID: this.paymentID,
+                Amount: parseFloat(refundData.refundAmount),
+                IsRefundingSecurity: refundData.isSecurityDeposit,
+            };
+            this.createRefund(refundRequest);
+        },
+        updatePaymentType(value, paymentId) {
+            const paymentType = this.paymentTypeLabels.indexOf(value);
+            this.changePaymentType({ paymentID: paymentId, paymentType });
+        },
+        alertError(msg) {
+            this.$buefy.dialog.alert({
+                ariaModal: true,
+                ariaRole: 'alertdialog',
+                hasIcon: true,
+                icon: 'alert-circle',
+                message: msg,
+                title: 'Error',
+                type: 'is-danger',
+            });
+        },
+        alertSuccess(msg) {
+            this.$buefy.dialog.alert({
+                ariaModal: true,
+                ariaRole: 'alertdialog',
+                hasIcon: true,
+                icon: 'check-circle',
+                message: msg,
+                title: 'Success',
+                type: 'is-success',
+            });
+        },
+    },
+    watch: {
+        status(newStatus) {
+            if (newStatus === 'error') {
+                this.alertError(this.statusMessage);
+            } else if (newStatus === 'success') {
+                this.alertSuccess(this.statusMessage);
+            }
         },
     },
 };
@@ -944,6 +1038,12 @@ export default {
             color: orange;
         }
     }
+}
+
+.refund-icon {
+    cursor: pointer;
+    height: 28px;
+    width: 28px;
 }
 
 .update-payment {
