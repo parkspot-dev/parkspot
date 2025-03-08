@@ -288,9 +288,9 @@ export default {
                 this.alertError(this.errorMessage);
             }
         },
-        // if user is admin then call getAgents
-        isAdmin(admin) {
-            if (admin) {
+        // if user is admin then call getAgents()
+        isAdmin(newValue) {
+            if (newValue) {
                 this.getAgents();
             }
         },
