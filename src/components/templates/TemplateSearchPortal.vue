@@ -391,18 +391,17 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
-import moment from 'moment';
-
 import { getCoordinate } from '../../includes/LatLng';
+import { getParkingRequestStatus } from '@/constant/enums';
+import { mapActions, mapState } from 'vuex';
 import AtomButton from '../atoms/AtomButton.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
+import AtomIcon from '../atoms/AtomIcon';
 import AtomInput from '../atoms/AtomInput.vue';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
-import AtomIcon from '../atoms/AtomIcon';
+import moment from 'moment';
 import SelectInput from '../global/SelectInput.vue';
-import { getParkingRequestStatus } from '@/constant/enums';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -593,6 +592,7 @@ export default {
         },
 
         onStatusUpdate(spotData, status) {
+            // Get the status id from name 
             if (typeof status === 'string') {
                 const foundStatus = this.statusList.find(
                     (item) => item.name === status,
