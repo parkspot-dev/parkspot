@@ -16,7 +16,7 @@ export const pages = {
     TERMS                   : '/terms-and-conditions',
     BLOG                    : '/blog',
     MAINBLOG                : '/blog/:id',
-    SEARCH_PORTAL           : '/search-portal',
+    SEARCH_PORTAL           : '/internal/search-portal',
     PAYMENTGATEWAY          : '/payment/:pathMatch(.*)*',
     NEARBY                  : '/bangalore/parking-near-:location',
     NEARBY_HYD              : '/hyderabad/parking-near-:location',
@@ -163,6 +163,13 @@ export const routes = [
             }
             next();
         },
+    },
+    // BEGIN TEMPORARY REDIRECT - TO BE REMOVED IN THE FUTURE
+    {
+        path: '/search-portal',
+        redirect: '/internal/search-portal',
+        // This route is a temporary redirect to ensure that the old URL
+        // continues to work.
     },
     // Todo Delete below code before deployment
     {

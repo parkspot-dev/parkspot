@@ -117,6 +117,10 @@ const actions = {
     updateSOLatLngInput({ commit }, text) {
         commit('update-SO-Lat-Lng-Input', text);
     },
+    // setAgents
+    setAgents({commit}, list) {
+        commit('set-agent-list', list)
+    }
 };
 
 export default {

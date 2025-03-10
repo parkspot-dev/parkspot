@@ -141,7 +141,7 @@
                             Mobile:
                             <button
                                 @click="onConnect(props.row)"
-                                class="connect-btn"
+                                class="btn px-2"
                             >
                                 Connect
                             </button>
@@ -225,6 +225,7 @@
                                 {{ props.row.Agent }}
                             </span>
                             <AtomSelectInput
+                                v-if="isAdmin"
                                 :list="agentList"
                                 :size="'is-small'"
                                 @change="onAgentUpdate(props.row, $event)"
@@ -233,17 +234,15 @@
                                 v-model="filters.Agent"
                             >
                             </AtomSelectInput>
-                            <!-- <SelectInput
-                                :defaultValue="props.row.Agent"
-                                :list="agentList.map((agent) => agent.name)"
-                                @change="
-                                    onAgentUpdate(
-                                        props.row,
-                                        $event.target.value,
-                                    )
+                            <button
+                                v-else
+                                @click="
+                                    onAgentUpdate(props.row, agentList[0].id)
                                 "
-                                name="updateAgent"
-                            /> -->
+                                class="btn"
+                            >
+                                Assign to me
+                            </button>
                         </div>
                     </div>
                 </template>
@@ -434,7 +433,11 @@ export default {
         ...mapState('user', ['userProfile', 'isAdmin']),
     },
     mounted() {
-        this.getUserProfile();
+        if (this.userProfile && !this.isAdmin) {
+            // If not an admin then agentList will only contain 'NA' and user Fullname
+            const agents = [{ id: 0, FullName: this.userProfile?.FullName }];
+            this.setAgents(agents);
+        }
     },
     data() {
         return {
@@ -531,7 +534,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions('user', ['getUserProfile']),
+        ...mapActions('searchPortal', ['getAgents', 'setAgents']),
         getPriority(val) {
             switch (val) {
                 case 1:
@@ -650,11 +653,15 @@ $portal-font-size: 13px;
 }
 
 .search-portal-wrapper .status-column .status-part .tag:not(body).my-status {
-    background-color: var(--primary-color);
+    background-color: #ffe08a66;
+    border-radius: 16px;
+    color: black;
 }
 
 .tag:not(body) {
-    background-color: var(--primary-color);
+    background-color: #ffe08a66;
+    border-radius: 16px;
+    color: black;
 }
 
 .search-portal-wrapper {
@@ -833,35 +840,31 @@ $portal-font-size: 13px;
         width: 100%;
 
         span {
-            text-decoration: underline;
             color: var(--secondary-color);
+            text-decoration: underline;
         }
     }
 }
 
+.error {
+    color: red;
+}
+
 .btn {
-    background: var(--primary-color);
+    background-color: var(--primary-color);
     border-radius: 5px;
     border: none;
-    color: var(--parkspot-black);
+    box-shadow:
+        1px 1px 2px rgba(0, 0, 0, 0.2),
+        -1px -1px 1px rgba(255, 255, 255, 0.5),
+        0px 0px 2px rgba(0, 0, 0, 0.1);
+    color: black;
     cursor: pointer;
-    padding: 4px 6px;
+    font-size: 12px;
+    padding: 4px 0;
 }
 
 .btn:disabled {
     cursor: not-allowed;
-}
-
-.connect-btn {
-    background-color: var(--secondary-color);
-    border-radius: 20px;
-    border: none;
-    color: var(--parkspot-white);
-    cursor: pointer;
-    padding: 4px 8px;
-}
-
-.error {
-    color: red;
 }
 </style>
