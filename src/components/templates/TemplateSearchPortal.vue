@@ -362,15 +362,26 @@
                 @change="onStatusUpdate(selectedRow, $event.target.value)"
                 name="updateStatus"
             />
-            <div>Add Note</div>
-            <AtomInput
-                :placeholder="'Type here...'"
-                @mousedown="storeOldComment(selectedRow)"
-                v-model="this.newComment"
-            >
-            </AtomInput>
-            <div v-if="newComment.length < 3" class="error">
-                Note is required
+            <div>Previous Comments</div>
+            <AtomTextarea
+                :maxlength="1000"
+                :rowNo="8"
+                :size="'is-small'"
+                class="comment-width"
+                readonly
+                v-model="selectedRow.Comments"
+            ></AtomTextarea>
+            <div class="note">
+                <div>Add Note</div>
+                <AtomInput
+                    :placeholder="'Type here...'"
+                    @mousedown="storeOldComment(selectedRow)"
+                    v-model="this.newComment"
+                >
+                </AtomInput>
+                <div v-if="newComment.length < 3" class="error">
+                    Note is required
+                </div>
             </div>
 
             <button
@@ -592,7 +603,7 @@ export default {
         },
 
         onStatusUpdate(spotData, status) {
-            // Get the status id from name 
+            // Get the status id from name
             if (typeof status === 'string') {
                 const foundStatus = this.statusList.find(
                     (item) => item.name === status,
@@ -828,6 +839,13 @@ $portal-font-size: 13px;
     padding: 52px 20px 20px 20px;
     position: relative;
     width: 30%;
+
+    .note {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: -32px;
+    }
 
     .mobile {
         font-weight: var(--bold-font);
