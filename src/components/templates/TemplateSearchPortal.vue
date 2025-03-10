@@ -365,10 +365,10 @@
             <div>Previous Comments</div>
             <AtomTextarea
                 :maxlength="1000"
+                :readOnly="true"
                 :rowNo="8"
                 :size="'is-small'"
                 class="comment-width"
-                readonly
                 v-model="selectedRow.Comments"
             ></AtomTextarea>
             <div class="note">
