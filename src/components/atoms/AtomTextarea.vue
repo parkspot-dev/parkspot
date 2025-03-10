@@ -2,12 +2,13 @@
     <b-field :label="label">
         <b-input
             :maxlength="maxlength"
-            type="textarea"
             :placeholder="placeholder"
-            v-model="inputValue"
-            @blur="onChange($event.target.value)"
-            :size="size"
+            :readonly="readOnly"
             :rows="rowNo"
+            :size="size"
+            @blur="onChange($event.target.value)"
+            type="textarea"
+            v-model="inputValue"
         ></b-input>
     </b-field>
 </template>
@@ -53,6 +54,13 @@ export default {
         rowNo: {
             type: Number,
             default: 5,
+        },
+        /**
+         * readOnly check is input field readOnly or not
+         */
+        readOnly: {
+            type: Boolean,
+            default: false,
         },
     },
     emits: ['update:modelValue', 'changed'],
