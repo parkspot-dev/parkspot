@@ -1,5 +1,5 @@
 <template>
-    <b-tabs v-model="activeTabView">
+    <b-tabs v-if="userProfile.FullName" v-model="activeTabView">
         <b-tab-item label="Parking Request (VO/SO)">
             <div class="request-search-control">
                 <MoleculeSearchBox
@@ -55,6 +55,9 @@ export default {
             titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
         };
     },
+    mounted() {
+        this.getUserProfile();
+    },
     data() {
         return {
             isLoading: false,
@@ -72,6 +75,7 @@ export default {
             'errorMessage',
             'hasError',
         ]),
+        ...mapState('user', ['isAdmin', 'userProfile']),
         activeTabView: {
             get() {
                 return this.activeTab;
@@ -127,7 +131,6 @@ export default {
             });
             this.getParkingRequests();
         }
-        this.getAgents();
     },
     methods: {
         ...mapActions('searchPortal', [
@@ -139,6 +142,7 @@ export default {
             'resetError',
             'getInterestedVO',
         ]),
+        ...mapActions('user', ['getUserProfile']),
         alertError(msg) {
             this.$buefy.dialog.alert({
                 title: 'Error',
@@ -176,7 +180,7 @@ export default {
                         path: this.$route.path,
                         query: {
                             tab: getActiveTabStatusLabel(this.activeTab),
-                            mobile: sanitizeMobileNumber
+                            mobile: sanitizeMobileNumber,
                         },
                     });
                 }
@@ -186,9 +190,9 @@ export default {
             this.updateSOLatLngInput(latlng);
             this.$router.push({
                 path: this.$route.path,
-                query: { 
-                latlng: latlng,
-                tab: getActiveTabStatusLabel(this.activeTab)
+                query: {
+                    latlng: latlng,
+                    tab: getActiveTabStatusLabel(this.activeTab),
                 },
             });
         },
@@ -282,6 +286,12 @@ export default {
         hasError(error) {
             if (error) {
                 this.alertError(this.errorMessage);
+            }
+        },
+        // if user is admin then call getAgents()
+        isAdmin(newValue) {
+            if (newValue) {
+                this.getAgents();
             }
         },
     },
