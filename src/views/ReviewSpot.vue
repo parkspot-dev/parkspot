@@ -112,6 +112,16 @@
                             v-model="SO.address"
                         ></textarea>
                     </div>
+
+                    <!-- Thumbnail image -->
+                    <div class=" form-field thumbnail-image">
+                        <label for="thumbnailImage">Thumbnail Image:</label>
+                        <input
+                            placeholder="Enter image url"
+                            type="text"
+                            v-model="SO.thumbnailImage"
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -682,5 +692,13 @@ export default {
     .btn {
         width: 25%;
     }
+}
+
+.thumbnail-image{
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: start !important;
+    margin: 0% 9%;
 }
 </style>
