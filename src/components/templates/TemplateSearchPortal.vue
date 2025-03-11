@@ -589,6 +589,10 @@ export default {
         },
 
         onCommentUpdate(row, oldComment, newComment) {
+            if (oldComment === newComment) {
+                // Return if there is no change in the comment
+                return;
+            }
             const date = new Date();
             const dd = date.getDate();
             let mm = date.getMonth() + 1;
