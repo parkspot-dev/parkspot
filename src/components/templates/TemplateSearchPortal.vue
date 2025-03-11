@@ -348,7 +348,7 @@
     </div>
 
     <!-- Mobile Number popup -->
-    <div v-if="this.isOpen" class="popup-container">
+    <div v-if="isOpen" class="popup-container">
         <div class="popup">
             <div class="mobile">
                 Contact With {{ this.selectedRow.Name }} on
@@ -357,7 +357,7 @@
             <div>Change Status</div>
             <SelectInput
                 :key="selectedRow.id"
-                :defaultValue="this.defaultStatus"
+                :defaultValue="defaultStatus"
                 :list="statusList.map((status) => status.name)"
                 @change="onStatusUpdate(selectedRow, $event.target.value)"
                 name="updateStatus"
@@ -382,6 +382,22 @@
                 <div v-if="newComment.length < 3" class="error">
                     Note is required
                 </div>
+                <div class="cicks">
+                    <span
+                        v-for="(tag, index) in CONNECT_POPUP_CLICKS"
+                        :key="index"
+                        @click="
+                            onCommentUpdate(
+                                selectedRow,
+                                selectedRow.Comments,
+                                `${selectedRow.Comments}\n${tag}`,
+                            )
+                        "
+                        class="tag"
+                    >
+                        {{ tag }}
+                    </span>
+                </div>
             </div>
 
             <button
@@ -402,8 +418,8 @@
 </template>
 
 <script>
+import { CONNECT_POPUP_CLICKS } from '@/constant/constant';
 import { getCoordinate } from '../../includes/LatLng';
-import { getParkingRequestStatus } from '@/constant/enums';
 import { mapActions, mapState } from 'vuex';
 import AtomButton from '../atoms/AtomButton.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
@@ -502,6 +518,7 @@ export default {
             selectedRow: {},
             newComment: '',
             defaultStatus: '',
+            CONNECT_POPUP_CLICKS: CONNECT_POPUP_CLICKS,
         };
     },
     watch: {
@@ -649,9 +666,8 @@ export default {
         onConnect(selectedRow = {}) {
             this.selectedRow = selectedRow;
             this.isOpen = !this.isOpen;
-            this.defaultStatus = getParkingRequestStatus(
-                this.selectedRow.Status,
-            );
+            const selectedStatus = this.statusList.find(row => row.id === this.selectedRow.Status)
+            this.defaultStatus = selectedStatus.name;
         },
     },
 };
@@ -888,5 +904,17 @@ $portal-font-size: 13px;
 
 .btn:disabled {
     cursor: not-allowed;
+}
+
+.cicks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    span {
+        border: 1px dashed black;
+        cursor: pointer;
+        padding: 12px 16px;
+    }
 }
 </style>

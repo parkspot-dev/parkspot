@@ -241,3 +241,10 @@ export const WHAT_NEXT = [
         title: 'Step 4',
     },
 ];
+
+
+export const CONNECT_POPUP_CLICKS = [
+    "Not Answering",
+    "Busy",
+    "Only view", 
+]
