@@ -80,6 +80,7 @@ export default {
             'resetBookingDetails',
         ]),
         searchBooking(bookingId) {
+            this.resetBookingDetails();
             this.updateSearchText(bookingId);
 
             this.$router.push({
