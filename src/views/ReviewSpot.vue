@@ -114,7 +114,7 @@
                     </div>
 
                     <!-- Thumbnail image -->
-                    <div class=" form-field thumbnail-image">
+                    <div class="form-field thumbnail-image">
                         <label for="thumbnailImage">Thumbnail Image:</label>
                         <input
                             placeholder="Enter image url"
@@ -398,6 +398,7 @@ export default {
             'validateLatLong',
             'validateMobile',
             'initState',
+            'setUpdatedFields',
             'submitForm',
             'saveForm',
             'fetchSpotDetails',
@@ -461,6 +462,23 @@ export default {
             this.closeModal();
         },
         confirmSave() {
+            const updatedArray = []
+            for (const key in this.SO) {
+                if (this.SO[key] !== this.initialFormData.SO[key]) {
+                    updatedArray.push(key);
+                }
+            }
+            for (const key in this.Rent) {
+                if (this.Rent[key] !== this.initialFormData.Rent[key]) {
+                    updatedArray.push(key);
+                }
+            }
+            for (const key in this.Booking) {
+                if (this.Booking[key] !== this.initialFormData.Booking[key]) {
+                    updatedArray.push(key);
+                }
+            }
+            this.setUpdatedFields(updatedArray);
             this.saveForm().then(() => {
                 this.updateInitialFormState();
             });
@@ -694,7 +712,7 @@ export default {
     }
 }
 
-.thumbnail-image{
+.thumbnail-image {
     align-items: flex-start;
     display: flex;
     flex-direction: column;
