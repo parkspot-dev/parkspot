@@ -193,7 +193,7 @@
                     @changed="
                         onCommentUpdate(
                             props.row,
-                            oldComments[props.row.id],
+                            oldComments,
                             $event,
                         )
                     "
@@ -347,7 +347,7 @@
         </b-table>
     </div>
 
-    <!-- Mobile Number popup -->
+    <!-- Connect popup -->
     <div v-if="isOpen" class="popup-container">
         <div class="popup">
             <div class="mobile">
@@ -376,7 +376,7 @@
                 <AtomInput
                     :placeholder="'Type here...'"
                     @mousedown="storeOldComment(selectedRow)"
-                    v-model="this.newComment"
+                    v-model="newComment"
                 >
                 </AtomInput>
                 <div v-if="newComment.length < 3" class="error">
@@ -405,8 +405,8 @@
                 @click="
                     onCommentUpdate(
                         selectedRow,
-                        oldComments[selectedRow.id],
-                        `${oldComments[selectedRow.id]}\n${newComment}`,
+                        selectedRow.Comments,
+                        `${selectedRow.Comments}\n${newComment}`,
                     )
                 "
                 class="btn"
@@ -513,7 +513,7 @@ export default {
                 ID: 0,
                 isShow: false,
             },
-            oldComments: {},
+            oldComments: '',
             isOpen: false,
             selectedRow: {},
             newComment: '',
@@ -600,16 +600,10 @@ export default {
         },
 
         storeOldComment(row) {
-            if (!this.oldComments[row.id]) {
-                this.oldComments[row.id] = row.Comments || ''; // Ensure a default value
-            }
+                this.oldComments = row.Comments || ''; // Ensure a default valu
         },
 
         onCommentUpdate(row, oldComment, newComment) {
-            if (oldComment === newComment) {
-                // Return if there is no change in the comment
-                return;
-            }
             const date = new Date();
             const dd = date.getDate();
             let mm = date.getMonth() + 1;
@@ -618,9 +612,11 @@ export default {
                 row.Comments = `${newComment} [${dd}/${mm}]`;
                 this.$emit('updateRequest', row);
                 // Reset stored old comment
-                this.oldComments[row.id] = row.Comments;
+                this.oldComments = row.Comments;
             }
-            (this.isOpen = false), (this.newComment = '');
+            this.isOpen = false;
+            this.newComment = '';
+            this.oldComments = ''
         },
 
         onStatusUpdate(spotData, status) {
@@ -666,7 +662,9 @@ export default {
         onConnect(selectedRow = {}) {
             this.selectedRow = selectedRow;
             this.isOpen = !this.isOpen;
-            const selectedStatus = this.statusList.find(row => row.id === this.selectedRow.Status)
+            const selectedStatus = this.statusList.find(
+                (row) => row.id === this.selectedRow.Status,
+            );
             this.defaultStatus = selectedStatus.name;
         },
     },

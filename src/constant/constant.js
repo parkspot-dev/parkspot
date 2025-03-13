@@ -247,4 +247,5 @@ export const CONNECT_POPUP_CLICKS = [
     "Not Answering",
     "Busy",
     "Only view", 
+    "Requested Location"
 ]
