@@ -600,7 +600,7 @@ export default {
         },
 
         storeOldComment(row) {
-                this.oldComments = row.Comments || ''; // Ensure a default valu
+                this.oldComments = row.Comments || ''; // Ensure a default value
         },
 
         onCommentUpdate(row, oldComment, newComment) {
