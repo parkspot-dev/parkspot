@@ -11,6 +11,7 @@ const state = {
         city: '',
         area: '',
         latlong: '',
+        spotImagesList: ['jndnsjdjs d js'],
         thumbnailImage: '',
     },
     Rent: {
@@ -28,11 +29,11 @@ const state = {
         spotrequestStatus: '',
         remark: '',
     },
-    mobileError: '',
+    isLoading: false,
     latlongError: '',
+    mobileError: '',
     status: 'none', // none, error, success
     statusMessage: '',
-    isLoading: false,
     updatedFields: [],
 };
 
@@ -129,6 +130,7 @@ const actions = {
         const spotInfo = await mayaClient.get(
             `/owner/spot-request?spot-id=${state.SO.spotId}`,
         );
+        const spotImages = spotInfo.SpotImages ? spotInfo.SpotImages.split(',').map(image => image.trim()) : [];
         const formData = {
             SO: {
                 spotId: spotInfo.ID,
@@ -140,6 +142,7 @@ const actions = {
                 mobile: spotInfo.Mobile,
                 address: spotInfo.Address,
                 email: spotInfo.EmailID,
+                spotImagesList: spotImages,
                 thumbnailImage: spotInfo.SpotImageURI,
             },
             Rent: {
@@ -190,10 +193,11 @@ const actions = {
     },
 
     // Updates the spot request details
-    async updateSpotRequest({ state }) {
+    async updateSpotRequest({ dispatch, state }) {
         const [latitude, longitude] = state.SO.latlong
             .split(',')
             .map(parseFloat);
+        const trimmedSpotImages = state.SO.spotImagesList.map(image => image.trim());
         const spotRequest = {
             Address: state.SO.address,
             Area: state.SO.area,
@@ -222,9 +226,16 @@ const actions = {
                     : 0,
             Type: state.Rent.siteType,
             UserName: state.SO.userName,
+            SpotImages: trimmedSpotImages,
             SpotImageURI: state.SO.thumbnailImage,
+            FieldMask: await dispatch('mapFieldMask'),
         };
-        const updatedFields = state.updatedFields.map((field) => {
+        return await mayaClient.patch('/owner/spot-request', spotRequest);
+    },
+
+    // Maps updated fields to their API equivalents
+    mapFieldMask({ state }) {
+        const fieldMask = state.updatedFields.map((field) => {
             switch (field) {
                 case 'address':
                     return 'Address';
@@ -264,14 +275,15 @@ const actions = {
                     return 'UserName';
                 case 'thumbnailImage':
                     return 'SpotImageURI';
+                case 'spotImagesList':
+                    return 'SpotImages';
             }
         });
-        updatedFields.push('ID', 'UserName');
-        if(state.updatedFields.includes('latlong')) {
-            updatedFields.push('Latitude', 'Longitude');
+        fieldMask.push('ID', 'UserName');
+        if (state.updatedFields.includes('latlong')) {
+            fieldMask.push('Latitude', 'Longitude');
         }
-        console.log(updatedFields);
-        return await mayaClient.patch('/owner/spot-request', spotRequest);
+        return fieldMask;
     },
 
     // saveForm validates form data for errors and updates the spot request data on the backend (for temporary saving or drafts)
