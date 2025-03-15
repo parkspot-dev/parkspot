@@ -678,7 +678,7 @@ export default {
 }
 
 .so-form-section {
-    padding-bottom: 8%;
+    padding-bottom: 6%;
 }
 
 .sub-heading {
@@ -716,12 +716,12 @@ export default {
     margin-top: 15px;
 }
 
-@media (max-width: 400px) {
-    .form-field {
-        padding: 0 10px;
-    }
-    .form-group {
-        padding-bottom: 15%;
+.url-entry {
+    margin-bottom: 8px;
+}
+@media (max-width: 900px) {
+    .so-form-section {
+        padding-bottom: 12%;
     }
 }
 @media (max-width: 768px) {
@@ -757,8 +757,15 @@ export default {
         width: 25%;
     }
 }
-
-.url-entry {
-    margin-bottom: 8px;
+@media (max-width: 400px) {
+    .form-field {
+        padding: 0 10px;
+    }
+    .form-group {
+        padding-bottom: 15%;
+    }
+    .so-form-section {
+        padding-bottom: 12%;
+    }
 }
 </style>
