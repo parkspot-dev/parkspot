@@ -193,7 +193,7 @@
                     @changed="
                         onCommentUpdate(
                             props.row,
-                            oldComments[props.row.id],
+                            oldComments,
                             $event,
                         )
                     "
@@ -347,8 +347,8 @@
         </b-table>
     </div>
 
-    <!-- Mobile Number popup -->
-    <div v-if="this.isOpen" class="popup-container">
+    <!-- Connect popup -->
+    <div v-if="isOpen" class="popup-container">
         <div class="popup">
             <div class="mobile">
                 Contact With {{ this.selectedRow.Name }} on
@@ -357,7 +357,7 @@
             <div>Change Status</div>
             <SelectInput
                 :key="selectedRow.id"
-                :defaultValue="this.defaultStatus"
+                :defaultValue="defaultStatus"
                 :list="statusList.map((status) => status.name)"
                 @change="onStatusUpdate(selectedRow, $event.target.value)"
                 name="updateStatus"
@@ -376,11 +376,27 @@
                 <AtomInput
                     :placeholder="'Type here...'"
                     @mousedown="storeOldComment(selectedRow)"
-                    v-model="this.newComment"
+                    v-model="newComment"
                 >
                 </AtomInput>
                 <div v-if="newComment.length < 3" class="error">
                     Note is required
+                </div>
+                <div class="frequent-comments">
+                    <span
+                        v-for="(tag, index) in FREQUENT_COMMENTS"
+                        :key="index"
+                        @click="
+                            onCommentUpdate(
+                                selectedRow,
+                                selectedRow.Comments,
+                                `${selectedRow.Comments}\n${tag}`,
+                            )
+                        "
+                        class="tag"
+                    >
+                        {{ tag }}
+                    </span>
                 </div>
             </div>
 
@@ -389,8 +405,8 @@
                 @click="
                     onCommentUpdate(
                         selectedRow,
-                        oldComments[selectedRow.id],
-                        `${oldComments[selectedRow.id]}\n${newComment}`,
+                        selectedRow.Comments,
+                        `${selectedRow.Comments}\n${newComment}`,
                     )
                 "
                 class="btn"
@@ -402,8 +418,8 @@
 </template>
 
 <script>
+import { FREQUENT_COMMENTS } from '@/constant/constant';
 import { getCoordinate } from '../../includes/LatLng';
-import { getParkingRequestStatus } from '@/constant/enums';
 import { mapActions, mapState } from 'vuex';
 import AtomButton from '../atoms/AtomButton.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
@@ -497,11 +513,12 @@ export default {
                 ID: 0,
                 isShow: false,
             },
-            oldComments: {},
+            oldComments: '',
             isOpen: false,
             selectedRow: {},
             newComment: '',
             defaultStatus: '',
+            FREQUENT_COMMENTS: FREQUENT_COMMENTS,
         };
     },
     watch: {
@@ -583,9 +600,7 @@ export default {
         },
 
         storeOldComment(row) {
-            if (!this.oldComments[row.id]) {
-                this.oldComments[row.id] = row.Comments || ''; // Ensure a default value
-            }
+                this.oldComments = row.Comments || ''; // Ensure a default value
         },
 
         onCommentUpdate(row, oldComment, newComment) {
@@ -597,9 +612,11 @@ export default {
                 row.Comments = `${newComment} [${dd}/${mm}]`;
                 this.$emit('updateRequest', row);
                 // Reset stored old comment
-                this.oldComments[row.id] = row.Comments;
+                this.oldComments = row.Comments;
             }
-            (this.isOpen = false), (this.newComment = '');
+            this.isOpen = false;
+            this.newComment = '';
+            this.oldComments = ''
         },
 
         onStatusUpdate(spotData, status) {
@@ -645,9 +662,10 @@ export default {
         onConnect(selectedRow = {}) {
             this.selectedRow = selectedRow;
             this.isOpen = !this.isOpen;
-            this.defaultStatus = getParkingRequestStatus(
-                this.selectedRow.Status,
+            const selectedStatus = this.statusList.find(
+                (row) => row.id === this.selectedRow.Status,
             );
+            this.defaultStatus = selectedStatus.name;
         },
     },
 };
@@ -884,5 +902,17 @@ $portal-font-size: 13px;
 
 .btn:disabled {
     cursor: not-allowed;
+}
+
+.frequent-comments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    span {
+        border: 1px dashed black;
+        cursor: pointer;
+        padding: 12px 16px;
+    }
 }
 </style>

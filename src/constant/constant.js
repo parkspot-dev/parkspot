@@ -241,3 +241,11 @@ export const WHAT_NEXT = [
         title: 'Step 4',
     },
 ];
+
+
+export const FREQUENT_COMMENTS = [
+    "Not Answering",
+    "Busy",
+    "Only view", 
+    "Requested Location"
+]
