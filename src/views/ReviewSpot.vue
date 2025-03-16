@@ -131,12 +131,24 @@
                         <div
                             :key="index"
                             class="url-entry"
-                            v-for="(url, index) in SO.spotImagesList"
+                            v-for="(_, index) in SO.spotImagesList"
                         >
-                            <InputURL
-                                placeholder="Enter spot Image URL"
-                                v-model="SO.spotImagesList[index]"
-                            />
+                            <div style="display: flex; gap: 8px">
+                                <InputURL
+                                    placeholder="Enter spot Image URL"
+                                    v-model="SO.spotImagesList[index]"
+                                    @blur="validateSpotImageUrl(index)"
+                                />
+                                <AtomIcon
+                                    :icon="'delete'"
+                                    @click="removeUrlField(index)"
+                                    class="remove-url-btn"
+                                >
+                                </AtomIcon>
+                            </div>
+                            <span class="error" v-if="spotImagesError[index]">
+                                {{ spotImagesError[index] }}
+                            </span>
                         </div>
                         <!-- Add a new URL -->
                         <button @click="addNewUrlField" class="add-new-url-btn">
@@ -354,8 +366,9 @@ import { mapState, mapActions } from 'vuex';
 import AtomButton from '../components/atoms/AtomButton.vue';
 import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
-import LoaderModal from '@/components/extras/LoaderModal.vue';
+import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import InputURL from '@/components/global/InputURL.vue';
+import LoaderModal from '@/components/extras/LoaderModal.vue';
 import { ParkingSize } from '../constant/enums';
 import { SiteType } from '../constant/enums';
 import { SpotRequestStatus } from '../constant/enums';
@@ -367,6 +380,7 @@ export default {
         AtomButton,
         AtomDatePicker,
         AtomHeading,
+        AtomIcon,
         InputURL,
         LoaderModal,
     },
@@ -389,8 +403,8 @@ export default {
             'latlongError',
             'mobileError',
             'Rent',
-            'SO',
             'spotImagesError',
+            'SO',
             'status',
             'statusMessage',
         ]),
@@ -423,10 +437,11 @@ export default {
             'initState',
             'saveForm',
             'setUpdatedFields',
+            'setSpotImageError',
             'submitForm',
             'validateLatLong',
             'validateMobile',
-            'validateSpotImages',
+            'validateSpotImageUrl',
         ]),
         setSpotId() {
             this.SO.spotId = this.$route.query.requestId;
@@ -528,6 +543,14 @@ export default {
         },
         addNewUrlField() {
             this.SO.spotImagesList.push('');
+            this.setSpotImageError({
+                index: this.SO.spotImagesList.length - 1,
+                message: '',
+            });
+        },
+        removeUrlField(index) {
+            this.SO.spotImagesList.splice(index, 1);
+            this.spotImagesError.splice(index, 1);
         },
     },
     watch: {
@@ -716,14 +739,23 @@ export default {
     margin-top: 15px;
 }
 
+.remove-url-btn {
+    margin-top: 8px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #ff4d4f;
+}
+
 .url-entry {
     margin-bottom: 8px;
 }
-@media (max-width: 900px) {
+
+@media (max-width: 1024px) {
     .so-form-section {
         padding-bottom: 12%;
     }
 }
+
 @media (max-width: 768px) {
     .form-field {
         font-size: 1rem;
@@ -757,7 +789,8 @@ export default {
         width: 25%;
     }
 }
-@media (max-width: 400px) {
+
+@media (max-width: 450px) {
     .form-field {
         padding: 0 10px;
     }
@@ -765,7 +798,7 @@ export default {
         padding-bottom: 15%;
     }
     .so-form-section {
-        padding-bottom: 12%;
+        padding-bottom: 16%;
     }
 }
 </style>

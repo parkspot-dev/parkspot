@@ -32,14 +32,19 @@ const state = {
     isLoading: false,
     latlongError: '',
     mobileError: '',
+    spotImagesError: [],
     status: 'none', // none, error, success
     statusMessage: '',
     updatedFields: [],
 };
 
 const mutations = {
-    'set-error'(state, { field, message }) {
-        state[field] = message;
+    'set-error'(state, { field, message, messageObject }) {
+        if (Array.isArray(state[field]) && messageObject) {
+            state[field] = messageObject;
+        } else {
+            state[field] = message;
+        }
     },
     'set-error-msg'(state, errorMessage) {
         state.status = 'error';
@@ -63,6 +68,9 @@ const mutations = {
     },
     'set-updated-fields'(state, fields) {
         state.updatedFields = fields;
+    },
+    'setSpotImageError'(state, { index, message }) {
+        state.spotImagesError[index] = message;
     },
 };
 
@@ -124,12 +132,39 @@ const actions = {
         commit('set-error', { field: 'mobileError', message: '' });
     },
 
+    validateSpotImageUrl({ commit, state }, index) {
+        const url = state.SO.spotImagesList[index].trim();
+        const currentErrors = [...state.spotImagesError];
+        if (url === '') {
+            currentErrors[index] = 'URL cannot be empty';
+        } else {
+            const urlPattern = new RegExp(
+                '^(https?:\\/\\/)?' +
+                '((([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.)+[a-zA-Z]{2,}|' +
+                '((\\d{1,3}\\.){3}\\d{1,3}))' +
+                '(\\:\\d+)?(\\/[-a-zA-Z\\d%_.~+]*)*' +
+                '(\\?[;&a-zA-Z\\d%_.~+=-]*)?' +
+                '(\\#[-a-zA-Z\\d_]*)?$',
+                'i'
+            );
+            if (!urlPattern.test(url)) {
+                currentErrors[index] = 'Invalid URL format';
+            } else {
+                currentErrors[index] = '';
+            }
+        }
+        console.log(currentErrors[index]);
+        commit('set-error', { field: 'spotImagesError', messageObject: currentErrors });
+    },
+
+
     // Fetch spotdata [using spotId fetched from url] when the webpage is mounted
-    async fetchSpotDetails({ commit, state }) {
+    async fetchSpotDetails({ commit, state, dispatch }) {
         commit('set-loading', true);
         const spotInfo = await mayaClient.get(
             `/owner/spot-request?spot-id=${state.SO.spotId}`,
         );
+        spotInfo.SpotImages = ["www.gfg.com", "www.gfg.com"];
         const spotImages = (spotInfo.SpotImages || []).map(image => image.trim());
         const formData = {
             SO: {
@@ -162,7 +197,14 @@ const actions = {
             },
         };
         commit('set-form-data', formData);
+        dispatch('initializeSpotImagesError');
         commit('set-loading', false);
+    },
+    // Initialize spotImagesError as empty array of same length
+    initializeSpotImagesError({ commit, state }) {
+        const spotImages = state.SO.spotImagesList || [];
+        const spotImagesErrorInit = Array(spotImages.length).fill('');
+        commit('set-error', { field: 'spotImagesError', messageObject: spotImagesErrorInit });
     },
 
     // Validate all the Errors
@@ -170,12 +212,22 @@ const actions = {
         await Promise.all([
             dispatch('validateMobile'),
             dispatch('validateLatLong'),
+            dispatch('validateSpotImagesErrors'),
         ]);
+    },
+
+    // Validate all spot image URLs
+    async validateSpotImagesErrors({ state, dispatch }) {
+        const validations = state.SO.spotImagesList.map((_, index) =>
+            dispatch('validateSpotImageUrl', index)
+        );
+        await Promise.all(validations);
     },
 
     // Check for errors in the state
     hasErrors({ state }) {
-        return state.mobileError || state.latlongError;
+        const spotImageErrors = state.spotImagesError.some(err => err && err !== '');
+        return state.mobileError || state.latlongError || spotImageErrors;
     },
 
     // Validates form fields and checks for errors.
@@ -325,6 +377,15 @@ const actions = {
 
     setUpdatedFields({ commit }, fields) {
         commit('set-updated-fields', fields);
+    },
+
+    setSpotImageError({ commit }, { index, message }) {
+        const updatedErrors = [...state.spotImagesError];
+        updatedErrors[index] = message;
+        commit('set-error', {
+            field: 'spotImagesError',
+            message: updatedErrors,
+        });
     },
 };
 
