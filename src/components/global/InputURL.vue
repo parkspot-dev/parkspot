@@ -12,10 +12,10 @@
 <script>
 export default {
     props: {
+        disabled: Boolean,
+        label: String,
         modelValue: String,
         placeholder: String,
-        label: String,
-        disabled: Boolean,
     },
     computed: {
         inputValue: {

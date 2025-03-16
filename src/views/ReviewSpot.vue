@@ -557,7 +557,7 @@ export default {
     color: var(--parkspot-black);
     cursor: pointer;
     display: flex;
-    font-size: 12px;
+    font-size: 14px;
     padding: 4px 8px;
 }
 .body {
