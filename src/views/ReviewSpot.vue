@@ -583,6 +583,12 @@ export default {
     font-size: 14px;
     padding: 4px 8px;
 }
+.btn {
+    border-radius: var(--border-default);
+    font-weight: 700;
+    margin: 4px;
+    width: 15%;
+}
 .body {
     background: #f5f5fb;
     padding: 16px;
@@ -617,7 +623,74 @@ export default {
     justify-content: center;
     margin: 0% 9%;
 }
-
+.form-field label {
+    font-weight: 700;
+    vertical-align: middle;
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+    background-color: var(--primary-color);
+    border-color: var(--parkspot-black);
+    border-color: white;
+    outline: none;
+}
+.form-field > input,
+.form-field > select,
+.form-section textarea {
+    box-sizing: border-box;
+    margin-top: 5px;
+    padding: 8px;
+    width: 100%;
+}
+.form-group {
+    display: grid;
+    gap: 3%;
+    grid-auto-rows: min-content;
+    grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
+    padding-bottom: 2%;
+}
+.form-section {
+    background-color: var(--parkspot-white);
+    border-radius: 5px;
+    border: 1px solid #cccccc;
+    height: auto;
+    margin: 1% auto;
+    padding: 1%;
+}
+.heading {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+.modal-content {
+    background: var(--parkspot-white);
+    border-radius: var(--border-default);
+    left: 50%;
+    padding: 20px;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+}
+.modal-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 998;
+}
+.modal-actions {
+    margin-top: 15px;
+}
+.noborder {
+    background-color: var(--parkspot-white);
+    border: none;
+    font-weight: 600;
+}
 .readonly-field {
     align-items: flex-start;
     display: flex;
@@ -639,50 +712,11 @@ export default {
         text-align: start;
     }
 }
-.form-field label {
-    font-weight: 700;
-    vertical-align: middle;
-}
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus {
-    background-color: var(--primary-color);
-    border-color: var(--parkspot-black);
-    border: none;
-    outline: none;
-}
-.form-field > input,
-.form-field > select,
-.form-section textarea {
-    box-sizing: border-box;
-    margin-top: 5px;
-    padding: 8px;
-    width: 100%;
-}
-.form-group {
-    display: grid;
-    gap: 3%;
-    grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
-    padding-bottom: 2%;
-    grid-auto-rows: min-content;
-}
-.form-section {
-    background-color: var(--parkspot-white);
-    border-radius: 5px;
-    border: 1px solid #cccccc;
-    margin: 1% auto;
-    padding: 1%;
-    height: auto;
-}
-.heading {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-.noborder {
-    background-color: var(--parkspot-white);
-    border: none;
-    font-weight: 600;
+.remove-url-btn {
+    margin-top: 8px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #ff4d4f;
 }
 .root {
     margin: 1% 8%;
@@ -692,18 +726,9 @@ export default {
     max-height: 600px;
     overflow-y: auto;
 }
-
-.btn {
-    border-radius: var(--border-default);
-    font-weight: 700;
-    margin: 4px;
-    width: 15%;
-}
-
 .so-form-section {
     padding-bottom: 6%;
 }
-
 .sub-heading {
     color: var(--secondary-color);
     font-size: 1.4rem;
@@ -711,41 +736,6 @@ export default {
     letter-spacing: normal;
     margin-bottom: 10px;
 }
-
-/* Modal Styling */
-.modal-content {
-    background: var(--parkspot-white);
-    border-radius: var(--border-default);
-    padding: 20px;
-    text-align: center;
-    z-index: 999;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 998;
-}
-
-.modal-actions {
-    margin-top: 15px;
-}
-
-.remove-url-btn {
-    margin-top: 8px;
-    font-size: 28px;
-    cursor: pointer;
-    color: #ff4d4f;
-}
-
 .url-entry {
     margin-bottom: 8px;
 }

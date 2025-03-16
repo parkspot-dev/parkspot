@@ -69,9 +69,6 @@ const mutations = {
     'set-updated-fields'(state, fields) {
         state.updatedFields = fields;
     },
-    'setSpotImageError'(state, { index, message }) {
-        state.spotImagesError[index] = message;
-    },
 };
 
 const actions = {
@@ -139,12 +136,11 @@ const actions = {
             currentErrors[index] = 'URL cannot be empty';
         } else {
             const urlPattern = new RegExp(
-                '^(https?:\\/\\/)?' +
-                '((([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.)+[a-zA-Z]{2,}|' +
-                '((\\d{1,3}\\.){3}\\d{1,3}))' +
-                '(\\:\\d+)?(\\/[-a-zA-Z\\d%_.~+]*)*' +
-                '(\\?[;&a-zA-Z\\d%_.~+=-]*)?' +
-                '(\\#[-a-zA-Z\\d_]*)?$',
+                '^(https?:\\/\\/)?' + // protocol
+                '((([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.)+[a-zA-Z]{2,}|' + // domain name
+                '(\\:\\d+)?(\\/[-a-zA-Z\\d%_.~+]*)*' + // port and path
+                '(\\?[;&a-zA-Z\\d%_.~+=-]*)?' + // query string
+                '(\\#[-a-zA-Z\\d_]*)?$', // fragment locator
                 'i'
             );
             if (!urlPattern.test(url)) {
@@ -153,10 +149,8 @@ const actions = {
                 currentErrors[index] = '';
             }
         }
-        console.log(currentErrors[index]);
         commit('set-error', { field: 'spotImagesError', messageObject: currentErrors });
     },
-
 
     // Fetch spotdata [using spotId fetched from url] when the webpage is mounted
     async fetchSpotDetails({ commit, state, dispatch }) {
@@ -164,7 +158,6 @@ const actions = {
         const spotInfo = await mayaClient.get(
             `/owner/spot-request?spot-id=${state.SO.spotId}`,
         );
-        spotInfo.SpotImages = ["www.gfg.com", "www.gfg.com"];
         const spotImages = (spotInfo.SpotImages || []).map(image => image.trim());
         const formData = {
             SO: {
@@ -200,6 +193,7 @@ const actions = {
         dispatch('initializeSpotImagesError');
         commit('set-loading', false);
     },
+
     // Initialize spotImagesError as empty array of same length
     initializeSpotImagesError({ commit, state }) {
         const spotImages = state.SO.spotImagesList || [];
