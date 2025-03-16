@@ -382,9 +382,9 @@
                 <div v-if="newComment.length < 3" class="error">
                     Note is required
                 </div>
-                <div class="cicks">
+                <div class="comments">
                     <span
-                        v-for="(tag, index) in CONNECT_POPUP_CLICKS"
+                        v-for="(tag, index) in FREQUENT_COMMENTS"
                         :key="index"
                         @click="
                             onCommentUpdate(
@@ -418,7 +418,7 @@
 </template>
 
 <script>
-import { CONNECT_POPUP_CLICKS } from '@/constant/constant';
+import { FREQUENT_COMMENTS } from '@/constant/constant';
 import { getCoordinate } from '../../includes/LatLng';
 import { mapActions, mapState } from 'vuex';
 import AtomButton from '../atoms/AtomButton.vue';
@@ -518,7 +518,7 @@ export default {
             selectedRow: {},
             newComment: '',
             defaultStatus: '',
-            CONNECT_POPUP_CLICKS: CONNECT_POPUP_CLICKS,
+            FREQUENT_COMMENTS: FREQUENT_COMMENTS,
         };
     },
     watch: {
@@ -904,7 +904,7 @@ $portal-font-size: 13px;
     cursor: not-allowed;
 }
 
-.cicks {
+.comments {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;

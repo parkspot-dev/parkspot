@@ -243,7 +243,7 @@ export const WHAT_NEXT = [
 ];
 
 
-export const CONNECT_POPUP_CLICKS = [
+export const FREQUENT_COMMENTS = [
     "Not Answering",
     "Busy",
     "Only view", 
