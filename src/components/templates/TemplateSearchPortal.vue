@@ -382,7 +382,7 @@
                 <div v-if="newComment.length < 3" class="error">
                     Note is required
                 </div>
-                <div class="comments">
+                <div class="frequent-comments">
                     <span
                         v-for="(tag, index) in FREQUENT_COMMENTS"
                         :key="index"
@@ -904,7 +904,7 @@ $portal-font-size: 13px;
     cursor: not-allowed;
 }
 
-.comments {
+.frequent-comments {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
