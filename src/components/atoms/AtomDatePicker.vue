@@ -1,18 +1,21 @@
 <template>
     <b-field>
-        <b-datepicker
-            :date-formatter="istFormatter"
-            :size="size"
-            @input="onChange"
+        <!-- Replaced b-datepicker with VueDatePicker
+        Reason: b-datepicker was causing an error related to aria-hidden -->
+        <VueDatePicker
+            :model-value="date"
+            @update:model-value="onChange"
+            :enable-time-picker="false"
             class="date-picker"
             placeholder="Click to select..."
-            v-model="date"
-        >
-        </b-datepicker>
+        />
     </b-field>
 </template>
 
 <script>
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 export default {
     name: 'AtomDatePicker',
     props: {
@@ -28,21 +31,16 @@ export default {
     emits: ['changed'],
     data() {
         return {
-            date:
-                this.assignedDate != ''
-                    ? new Date(this.assignedDate)
-                    : new Date(),
+            date: this.assignedDate ? new Date(this.assignedDate) : new Date(),
         };
     },
     methods: {
         onChange(val) {
-            this.$emit('changed', val);
-        },
-        istFormatter(date) {
-            return new Intl.DateTimeFormat('en-US', {
-                timeZone: 'Asia/Kolkata',
-                dateStyle: 'medium',
-            }).format(date);
+            if (val) {
+                this.date = val;
+                const formattedDate = new Date(val).toISOString();
+                this.$emit('changed', formattedDate);
+            }
         },
     },
 };

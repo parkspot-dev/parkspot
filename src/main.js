@@ -9,12 +9,17 @@ import Buefy from 'buefy';
 import router from './router';
 import store from './store';
 
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
 // Configure vee-validate globally
 configure({
     validateOnInput: true
 });
 
 const app = createApp(App);
+
+app.component('VueDatePicker', VueDatePicker);
 
 app.use(Buefy);
 app.use(router);

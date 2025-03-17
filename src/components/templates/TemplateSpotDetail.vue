@@ -108,7 +108,7 @@
                                                 spotDetails.LastCallDate
                                             "
                                             :size="'is-small'"
-                                            @changed="changeLastCallDate"
+                                            @changed="(date) => changeLastCallDate(date)"
                                         >
                                         </AtomDatePicker>
                                     </td>
@@ -212,7 +212,7 @@
                                             }}
                                         </span>
                                     </td>
-
+                                    
                                     <td>{{ booking.AgentFullName }}</td>
                                 </tr>
                             </tbody>

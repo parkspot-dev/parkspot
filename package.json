@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "@vee-validate/zod": "^4.15.0",
+        "@vuepic/vue-datepicker": "^11.0.2",
         "aos": "^2.3.4",
         "axios": "^1.7.9",
         "boxicons": "^2.1.4",

@@ -302,7 +302,7 @@
                             <AtomDatePicker
                                 :size="'is-small'"
                                 class="column-width"
-                                @changed="onDateUpdate(props.row, ...arguments)"
+                                @changed="(date) => onDateUpdate(props.row, date)"
                             >
                             </AtomDatePicker>
                         </div>
@@ -595,7 +595,7 @@ export default {
         },
 
         onDateUpdate(spotData, date) {
-            spotData['NextCall'] = date.toJSON();
+            spotData['NextCall'] = date;
             this.$emit('updateRequest', spotData);
         },
 
