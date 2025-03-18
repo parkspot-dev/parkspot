@@ -2,6 +2,12 @@
     <div class="body">
         <LoaderModal v-if="isLoading"></LoaderModal>
         <div class="root">
+            <!-- Spot Images -->
+            <ImageGallery
+                :images="spotImages"
+                :thumbnails="thumbnailImage"
+            ></ImageGallery>
+
             <!-- SO Details Section -->
             <div class="form-section so-form-section">
                 <div class="heading">
@@ -370,6 +376,7 @@ import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
+import ImageGallery from '@/components/organisms/OrganismImageGallery.vue';
 import { ParkingSize } from '../constant/enums';
 import { SiteType } from '../constant/enums';
 import { SpotRequestStatus } from '../constant/enums';
@@ -383,6 +390,7 @@ export default {
         AtomHeading,
         AtomIcon,
         LoaderModal,
+        ImageGallery,
     },
     data() {
         return {
@@ -429,6 +437,17 @@ export default {
                     Booking: this.Booking,
                 })
             );
+        },
+        spotImages() {
+            return this.SO?.spotImagesList || [];
+        },
+        thumbnailImage() {
+            const thumbnail = this.SO?.thumbnailImage;
+            return Array.isArray(thumbnail)
+                ? thumbnail
+                : thumbnail
+                  ? [thumbnail]
+                  : [];
         },
     },
     methods: {

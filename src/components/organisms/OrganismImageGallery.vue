@@ -1,16 +1,18 @@
 <template>
-    <div class="gallery-container">
-        <div id="lightgallery">
-            <template v-for="(image, i) in spotImage" :key="i">
-                <a
-                    class="gallery-item"
-                    :class="imageSize"
-                    :href="image"
-                    :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in' >Parkspot </a></h4><p> Location - ${locationName}</p>`"
-                >
-                    <img class="img-responsive" :src="image" />
-                </a>
-            </template>
+    <div class="gallery-wrapper">
+        <div class="gallery-container">
+            <div id="lightgallery">
+                <template v-for="(image, i) in displayImages" :key="i">
+                    <a
+                        class="gallery-item"
+                        :class="imageSize"
+                        :href="image"
+                        :data-sub-html="`<h4>Photo by - <a :href='https://www.parkspot.in'>Parkspot</a></h4><p>Location - ${locationName}</p>`"
+                    >
+                        <img class="img-responsive" :src="image" />
+                    </a>
+                </template>
+            </div>
         </div>
     </div>
 </template>
@@ -18,27 +20,28 @@
 <script>
 import 'lightgallery.js';
 import 'lightgallery.js/dist/css/lightgallery.css';
-import { mapState } from 'vuex';
 
 export default {
     name: 'ImageGallery',
+    props: {
+        images: {
+            type: Array,
+            default: () => [],
+        },
+        thumbnails: {
+            type: Array,
+            default: () => [],
+        },
+        locationName: {
+            type: String,
+            default: '',
+        },
+    },
     data() {
         return {
             imageSize: '',
-            spotImage: [
-                'https://parkspot.blob.core.windows.net/assets/default.png',
-            ],
+            displayImages: [],
         };
-    },
-    computed: {
-        ...mapState('sdp', {
-            images: (state) => state.images,
-            thumbnail: (state) => state.thumbnail,
-            selectedSpot: (state) => state.selectedSpot,
-        }),
-        locationName() {
-            return this.selectedSpot[0]['Name'];
-        },
     },
     mounted() {
         const el = document.getElementById('lightgallery');
@@ -46,28 +49,34 @@ export default {
             thumbnail: true,
         });
 
-        if (this.images.length > 0) {
-            this.spotImage = this.images;
-        } else {
-            this.spotImage = this.thumbnail;
-        }
-
-        this.setImageSize();
+        this.updateImages();
     },
     watch: {
-        images() {
+        images: 'updateImages',
+        thumbnails: 'updateImages',
+    },
+    methods: {
+        updateImages() {
             if (this.images.length > 0) {
-                this.spotImage = this.images;
+                this.displayImages = this.images;
             } else {
-                this.spotImage = this.thumbnail;
+                this.displayImages = this.thumbnails;
             }
             this.setImageSize();
+            this.$nextTick(() => {
+                const el = document.getElementById('lightgallery');
+                if (el) {
+                    if (window.lgData && window.lgData[el]) {
+                        window.lgData[el].destroy(true);
+                    }
+                    window.lightGallery(el, {
+                        thumbnail: true,
+                    });
+                }
+            });
         },
-    },
-
-    methods: {
         setImageSize() {
-            switch (this.spotImage.length) {
+            switch (this.displayImages.length) {
                 case 1:
                     this.imageSize = 'image-one';
                     break;
@@ -89,6 +98,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.gallery-wrapper {
+    width: 100%;
+    height: 400px;
+    margin-bottom: 48px;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-default);
+    overflow: hidden;
+    @media (max-width: 1024px) {
+        flex-direction: column;
+        height: auto;
+        margin-left: 0%;
+        padding: 16px;
+    }
+}
+
 .gallery-container {
     position: relative;
     overflow: hidden;
@@ -103,6 +130,9 @@ export default {
         border: 1px solid var(--parkspot-black);
         background: rgb(87, 86, 86);
         opacity: 1;
+        @media (max-width: 1024px) {
+            margin-top: 4px;
+        }
 
         .img-responsive {
             width: auto;
@@ -225,6 +255,16 @@ export default {
         // it will apply to all the child from 6 includes itself
         &:nth-child(n + 6) {
             display: none;
+        }
+    }
+    // === Tablet & Mobile Styles ===
+    @media (max-width: 1024px) {
+        .gallery-item {
+            border-radius: var(--border-default);
+            max-width: 100%;
+            overflow: hidden;
+            position: static;
+            width: 100%;
         }
     }
 }

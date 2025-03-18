@@ -2,9 +2,11 @@
     <BodyWrapper>
         <div>
             <!-- image gallery -->
-            <div class="spot-image-container">
-                <ImageGallery></ImageGallery>
-            </div>
+            <ImageGallery
+                :images="images"
+                :thumbnails="thumbnail"
+                :locationName="locationName"
+            ></ImageGallery>
 
             <!-- Rate Card Organism -->
             <div class="rate-card-container">
@@ -269,6 +271,8 @@ export default {
     },
     computed: {
         ...mapState('sdp', [
+            'images',
+            'thumbnail',
             'center',
             'isAvailable',
             'ownerInfoDetails',
@@ -277,6 +281,11 @@ export default {
             'spotDetails',
             'spotInProgressBookings',
         ]),
+        locationName() {
+            return this.selectedSpot.length > 0
+                ? this.selectedSpot[0].Name
+                : '';
+        },
     },
     emits: ['goToSearchPortal', 'changeAvailability', 'changeLastCallDate'],
     methods: {
