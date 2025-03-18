@@ -4,6 +4,10 @@
         <div class="root">
             <!-- Spot Images -->
             <ImageGallery
+                v-if="
+                    (spotImages && spotImages.length > 0) ||
+                    (thumbnailImage && thumbnailImage.length > 0)
+                "
                 :images="spotImages"
                 :thumbnails="thumbnailImage"
             ></ImageGallery>

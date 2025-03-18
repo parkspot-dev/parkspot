@@ -3,6 +3,10 @@
         <div>
             <!-- image gallery -->
             <ImageGallery
+                v-if="
+                    (images && images.length > 0) ||
+                    (thumbnail && thumbnail.length > 0)
+                "
                 :images="images"
                 :thumbnails="thumbnail"
                 :locationName="locationName"
