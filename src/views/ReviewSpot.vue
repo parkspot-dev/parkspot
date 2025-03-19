@@ -134,10 +134,12 @@
                             v-for="(_, index) in SO.spotImagesList"
                         >
                             <div style="display: flex; gap: 8px">
-                                <InputURL
-                                    placeholder="Enter spot Image URL"
+                                <input
+                                    type="text"
+                                    :placeholder="'Enter spot Image URL'"
                                     v-model="SO.spotImagesList[index]"
                                     @blur="validateSpotImageUrl(index)"
+                                    class="full-width-input"
                                 />
                                 <AtomIcon
                                     :icon="'delete'"
@@ -367,7 +369,6 @@ import AtomButton from '../components/atoms/AtomButton.vue';
 import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
-import InputURL from '@/components/global/InputURL.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
 import { ParkingSize } from '../constant/enums';
 import { SiteType } from '../constant/enums';
@@ -381,7 +382,6 @@ export default {
         AtomDatePicker,
         AtomHeading,
         AtomIcon,
-        InputURL,
         LoaderModal,
     },
     data() {
@@ -502,23 +502,23 @@ export default {
             this.closeModal();
         },
         confirmSave() {
-            const updatedArray = [];
+            const updatedFields = [];
             for (const key in this.SO) {
                 if (this.SO[key] !== this.initialFormData.SO[key]) {
-                    updatedArray.push(key);
+                    updatedFields.push(key);
                 }
             }
             for (const key in this.Rent) {
                 if (this.Rent[key] !== this.initialFormData.Rent[key]) {
-                    updatedArray.push(key);
+                    updatedFields.push(key);
                 }
             }
             for (const key in this.Booking) {
                 if (this.Booking[key] !== this.initialFormData.Booking[key]) {
-                    updatedArray.push(key);
+                    updatedFields.push(key);
                 }
             }
-            this.setUpdatedFields(updatedArray);
+            this.setUpdatedFields(updatedFields);
             this.saveForm().then(() => {
                 this.updateInitialFormState();
             });
@@ -658,6 +658,12 @@ export default {
     margin: 1% auto;
     padding: 1%;
 }
+.full-width-input {
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    min-width: 260%;
+    padding: 8px 12px;
+}
 .heading {
     align-items: center;
     display: flex;
@@ -744,8 +750,10 @@ export default {
     .so-form-section {
         padding-bottom: 12%;
     }
+    .full-width-input {
+        min-width: 160%;
+    }
 }
-
 @media (max-width: 768px) {
     .form-field {
         font-size: 1rem;
@@ -765,6 +773,9 @@ export default {
         margin-bottom: 2%;
         margin: 1% 1%;
     }
+    .full-width-input {
+        min-width: 300%;
+    }
     .root {
         margin: 1% 1%;
     }
@@ -779,7 +790,11 @@ export default {
         width: 25%;
     }
 }
-
+@media (max-width: 600px) {
+    .full-width-input {
+        min-width: 200%;
+    }
+}
 @media (max-width: 450px) {
     .form-field {
         padding: 0 10px;
@@ -789,6 +804,9 @@ export default {
     }
     .so-form-section {
         padding-bottom: 16%;
+    }
+    .full-width-input {
+        min-width: 120%;
     }
 }
 </style>
