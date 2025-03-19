@@ -3,15 +3,9 @@
         <div>
             <!-- image gallery -->
             <ImageGallery
-                v-if="
-                    (images && images.length > 0) ||
-                    (thumbnail && thumbnail.length > 0)
-                "
-                :images="images"
-                :thumbnails="thumbnail"
+                :images="displayImages"
                 :locationName="locationName"
             ></ImageGallery>
-
             <!-- Rate Card Organism -->
             <div class="rate-card-container">
                 <SpotRateCard class="card-position"></SpotRateCard>
@@ -289,6 +283,15 @@ export default {
             return this.selectedSpot.length > 0
                 ? this.selectedSpot[0].Name
                 : '';
+        },
+        displayImages() {
+            if (this.images && this.images.length) {
+                return this.images;
+            } else if (this.thumbnail && this.thumbnail.length) {
+                return this.thumbnail;
+            } else {
+                return [];
+            }
         },
     },
     emits: ['goToSearchPortal', 'changeAvailability', 'changeLastCallDate'],

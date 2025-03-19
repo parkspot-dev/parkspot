@@ -2,12 +2,12 @@
     <div class="gallery-wrapper">
         <div class="gallery-container">
             <div id="lightgallery">
-                <template v-for="(image, i) in displayImages" :key="i">
+                <template v-for="(image, index) in displayImages" :key="index">
                     <a
                         class="gallery-item"
                         :class="imageSize"
                         :href="image"
-                        :data-sub-html="`<h4>Photo by - <a :href='https://www.parkspot.in'>Parkspot</a></h4><p>Location - ${locationName}</p>`"
+                        :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in'>Parkspot</a></h4><p>Location - ${locationName}</p>`"
                     >
                         <img class="img-responsive" :src="image" />
                     </a>
@@ -20,15 +20,13 @@
 <script>
 import 'lightgallery.js';
 import 'lightgallery.js/dist/css/lightgallery.css';
+const DEFAULT_IMAGE =
+    'https://parkspot.blob.core.windows.net/assets/default.png';
 
 export default {
     name: 'ImageGallery',
     props: {
         images: {
-            type: Array,
-            default: () => [],
-        },
-        thumbnails: {
             type: Array,
             default: () => [],
         },
@@ -40,28 +38,19 @@ export default {
     data() {
         return {
             imageSize: '',
-            displayImages: [],
+            displayImages: [DEFAULT_IMAGE],
         };
     },
     mounted() {
-        const el = document.getElementById('lightgallery');
-        window.lightGallery(el, {
-            thumbnail: true,
-        });
-
         this.updateImages();
     },
     watch: {
         images: 'updateImages',
-        thumbnails: 'updateImages',
     },
     methods: {
         updateImages() {
-            if (this.images.length > 0) {
-                this.displayImages = this.images;
-            } else {
-                this.displayImages = this.thumbnails;
-            }
+            this.displayImages =
+                this.images.length > 0 ? this.images : [DEFAULT_IMAGE];
             this.setImageSize();
             this.$nextTick(() => {
                 const el = document.getElementById('lightgallery');
@@ -99,15 +88,15 @@ export default {
 
 <style lang="scss" scoped>
 .gallery-wrapper {
-    width: 100%;
+    align-items: center;
+    border-radius: var(--border-default);
+    display: flex;
     height: 400px;
+    justify-content: center;
     margin-bottom: 48px;
     margin-left: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--border-default);
     overflow: hidden;
+    width: 100%;
     @media (max-width: 1024px) {
         flex-direction: column;
         height: auto;

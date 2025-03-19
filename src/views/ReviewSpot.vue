@@ -4,14 +4,9 @@
         <div class="root">
             <!-- Spot Images -->
             <ImageGallery
-                v-if="
-                    (spotImages && spotImages.length > 0) ||
-                    (thumbnailImage && thumbnailImage.length > 0)
-                "
                 :images="spotImages"
-                :thumbnails="thumbnailImage"
+                :locationName="SO.area"
             ></ImageGallery>
-
             <!-- SO Details Section -->
             <div class="form-section so-form-section">
                 <div class="heading">
@@ -443,15 +438,15 @@ export default {
             );
         },
         spotImages() {
-            return this.SO?.spotImagesList || [];
-        },
-        thumbnailImage() {
-            const thumbnail = this.SO?.thumbnailImage;
-            return Array.isArray(thumbnail)
-                ? thumbnail
-                : thumbnail
-                  ? [thumbnail]
-                  : [];
+            if (this.SO?.spotImagesList && this.SO.spotImagesList.length > 0) {
+                return this.SO.spotImagesList;
+            } else if (this.SO?.thumbnailImage) {
+                return Array.isArray(this.SO.thumbnailImage)
+                    ? this.SO.thumbnailImage
+                    : [this.SO.thumbnailImage];
+            } else {
+                return [];
+            }
         },
     },
     methods: {
