@@ -96,7 +96,6 @@
                             (date) => (filters.UpdatedAt = formatDate(date))
                         "
                         placeholder="Filter by Updated Date"
-                       
                     />
                 </template>
 
@@ -297,12 +296,12 @@
                                 </b>
                             </span>
                             <AtomDatePicker
+                                :assignedDate="props.row.NextCall"
                                 :size="'is-small'"
                                 @changed="
                                     (date) => onDateUpdate(props.row, date)
                                 "
                                 class="column-width"
-                                
                             >
                             </AtomDatePicker>
                         </div>
@@ -668,7 +667,7 @@ export default {
             );
             this.defaultStatus = selectedStatus.name;
         },
-        
+
         // formatDate to formate the date in 'YYYY-MM-DD' ex: "2024-08-12"
         formatDate(date) {
             if (!date) return '';
