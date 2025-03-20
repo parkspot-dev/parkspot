@@ -260,7 +260,7 @@
                 <section class="secondary-container">
                     <div>
                         <AtomParagraph>
-                            © 2023 NeoSpot Technologies Pvt Ltd.- ALL RIGHTS
+                            © 2025 NeoSpot Technologies Pvt Ltd.- ALL RIGHTS
                             RESERVED
                         </AtomParagraph>
                         <AtomParagraph>
