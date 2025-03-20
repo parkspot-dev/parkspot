@@ -92,10 +92,11 @@
                 <template #searchable="{ filters }">
                     <AtomDatePicker
                         :assignedDate="filters.UpdatedAt"
-                        placeholder="Filter by Updated Date"
                         @changed="
                             (date) => (filters.UpdatedAt = formatDate(date))
                         "
+                        placeholder="Filter by Updated Date"
+                       
                     />
                 </template>
 
@@ -297,10 +298,11 @@
                             </span>
                             <AtomDatePicker
                                 :size="'is-small'"
-                                class="column-width"
                                 @changed="
                                     (date) => onDateUpdate(props.row, date)
                                 "
+                                class="column-width"
+                                
                             >
                             </AtomDatePicker>
                         </div>
