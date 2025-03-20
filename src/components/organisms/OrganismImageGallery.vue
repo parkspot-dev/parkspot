@@ -2,6 +2,7 @@
     <div class="gallery-wrapper">
         <div class="gallery-container">
             <div id="lightgallery">
+                <!-- Loop through displayImages and create image gallery items -->
                 <template v-for="(image, index) in displayImages" :key="index">
                     <a
                         class="gallery-item"
@@ -27,10 +28,23 @@ export default {
     name: 'ImageGallery',
     props: {
         images: {
+            /**
+             * images: Array of image URLs to display in the gallery.
+             * Sample value:
+             * [
+             *   "https://example.com/image1.jpg",
+             *   "https://example.com/image2.jpg",
+             *   "https://example.com/image3.jpg"
+             * ]
+             */
             type: Array,
             default: () => [],
         },
         locationName: {
+            /**
+             * locationName: Name of the location to display below the image.
+             * Sample value: "New York City"
+             */
             type: String,
             default: '',
         },
