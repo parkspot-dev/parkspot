@@ -85,27 +85,29 @@
             <b-table-column
                 field="UpdatedAt"
                 label="Date"
+                searchable
                 centered
-                v-slot="props"
                 sortable
             >
-                <div class="date-column">
-                    <div>
+                <template #searchable="{ filters }">
+                    <AtomDatePicker
+                        :assignedDate="filters.UpdatedAt"
+                        placeholder="Filter by Updated Date"
+                        @changed="
+                            (date) => (filters.UpdatedAt = formatDate(date))
+                        "
+                    />
+                </template>
+
+                <template v-slot="{ row }">
+                    <div class="date-column">
                         <p class="tag">UpdatedAt:</p>
-                        <br />
-                        <strong>
-                            {{ getFormattedDate(props.row.UpdatedAt) }}
-                        </strong>
-                    </div>
-                    <br />
-                    <div>
+                        <strong>{{ getFormattedDate(row.UpdatedAt) }}</strong>
+
                         <p class="tag">CreatedAt:</p>
-                        <br />
-                        <strong>
-                            {{ getFormattedDate(props.row.CreatedAt) }}
-                        </strong>
+                        <strong>{{ getFormattedDate(row.CreatedAt) }}</strong>
                     </div>
-                </div>
+                </template>
             </b-table-column>
 
             <b-table-column
@@ -467,6 +469,7 @@ export default {
             filters: {
                 Agent: '',
                 Status: '',
+                UpdatedAt: null,
             },
             isEmpty: false,
             isBordered: false,
@@ -662,6 +665,12 @@ export default {
                 (row) => row.id === this.selectedRow.Status,
             );
             this.defaultStatus = selectedStatus.name;
+        },
+        
+        // formatDate to formate the date in 'YYYY-MM-DD' ex: "2024-08-12"
+        formatDate(date) {
+            if (!date) return '';
+            return moment(date).format('YYYY-MM-DD');
         },
     },
 };
