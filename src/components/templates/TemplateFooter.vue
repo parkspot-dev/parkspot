@@ -260,8 +260,8 @@
                 <section class="secondary-container">
                     <div>
                         <AtomParagraph>
-                            © 2023 NeoSpot Technologies Pvt Ltd.- ALL RIGHTS
-                            RESERVED
+                            © {{ new Date().getFullYear() }} NeoSpot
+                            Technologies Pvt Ltd.- ALL RIGHTS RESERVED
                         </AtomParagraph>
                         <AtomParagraph>
                             <a
@@ -372,7 +372,7 @@ export default {
     color: var(--primary-color);
 }
 
-.image{
+.image {
     max-height: fit-content !important;
 }
 
@@ -449,8 +449,8 @@ export default {
     position: relative;
 }
 
-@media(max-width: 768px) {
-    .secondary-container{
+@media (max-width: 768px) {
+    .secondary-container {
         display: flex;
         flex-direction: column;
         gap: 1rem;
