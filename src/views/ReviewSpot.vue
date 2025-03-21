@@ -438,15 +438,18 @@ export default {
             );
         },
         spotImages() {
+            let spotImages = [];
             if (this.SO?.spotImagesList && this.SO.spotImagesList.length > 0) {
-                return this.SO.spotImagesList;
+                spotImages = this.SO.spotImagesList;
             } else if (this.SO?.thumbnailImage) {
-                return Array.isArray(this.SO.thumbnailImage)
+                spotImages = Array.isArray(this.SO.thumbnailImage)
                     ? this.SO.thumbnailImage
                     : [this.SO.thumbnailImage];
-            } else {
-                return [];
             }
+            // Filter out empty or falsy strings (empty, null, undefined, whitespace-only)
+            return spotImages.filter(
+                (img) => typeof img === 'string' && img.trim() !== '',
+            );
         },
     },
     methods: {
