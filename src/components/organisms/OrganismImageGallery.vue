@@ -3,7 +3,7 @@
         <div class="gallery-container">
             <div id="lightgallery">
                 <!-- Loop through displayImages and create image gallery items -->
-                <template v-for="(image, index) in displayImages" :key="index">
+                <template v-for="(image, _) in displayImages" :key="image">
                     <a
                         class="gallery-item"
                         :class="imageSize"
@@ -21,8 +21,7 @@
 <script>
 import 'lightgallery.js';
 import 'lightgallery.js/dist/css/lightgallery.css';
-const DEFAULT_IMAGE =
-    'https://parkspot.blob.core.windows.net/assets/default.png';
+import { IMAGES } from '@/constant/constant';
 
 export default {
     name: 'ImageGallery',
@@ -52,7 +51,7 @@ export default {
     data() {
         return {
             imageSize: '',
-            displayImages: [DEFAULT_IMAGE],
+            displayImages: [IMAGES.DEFAULT_IMAGE],
         };
     },
     mounted() {
@@ -64,7 +63,7 @@ export default {
     methods: {
         updateImages() {
             this.displayImages =
-                this.images.length > 0 ? this.images : [DEFAULT_IMAGE];
+                this.images.length > 0 ? this.images : [IMAGES.DEFAULT_IMAGE];
             this.setImageSize();
             this.$nextTick(() => {
                 const el = document.getElementById('lightgallery');
