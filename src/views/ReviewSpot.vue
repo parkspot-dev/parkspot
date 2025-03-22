@@ -2,6 +2,11 @@
     <div class="body">
         <LoaderModal v-if="isLoading"></LoaderModal>
         <div class="root">
+            <!-- Spot Images -->
+            <ImageGallery
+                :images="spotImages"
+                :locationName="SO.area"
+            ></ImageGallery>
             <!-- SO Details Section -->
             <div class="form-section so-form-section">
                 <div class="heading">
@@ -370,6 +375,7 @@ import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
+import ImageGallery from '@/components/organisms/OrganismImageGallery.vue';
 import { ParkingSize } from '../constant/enums';
 import { SiteType } from '../constant/enums';
 import { SpotRequestStatus } from '../constant/enums';
@@ -383,6 +389,7 @@ export default {
         AtomHeading,
         AtomIcon,
         LoaderModal,
+        ImageGallery,
     },
     data() {
         return {
@@ -428,6 +435,20 @@ export default {
                     Rent: this.Rent,
                     Booking: this.Booking,
                 })
+            );
+        },
+        spotImages() {
+            let spotImages = [];
+            if (this.SO?.spotImagesList && this.SO.spotImagesList.length > 0) {
+                spotImages = this.SO.spotImagesList;
+            } else if (this.SO?.thumbnailImage) {
+                spotImages = Array.isArray(this.SO.thumbnailImage)
+                    ? this.SO.thumbnailImage
+                    : [this.SO.thumbnailImage];
+            }
+            // Filter out empty or falsy strings (empty, null, undefined, whitespace-only)
+            return spotImages.filter(
+                (img) => typeof img === 'string' && img.trim() !== '',
             );
         },
     },
