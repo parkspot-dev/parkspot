@@ -241,7 +241,3 @@ export const WHAT_NEXT = [
         title: 'Step 4',
     },
 ];
-
-export const IMAGES = {
-    DEFAULT_IMAGE: 'https://parkspot.blob.core.windows.net/assets/default.png'
-};

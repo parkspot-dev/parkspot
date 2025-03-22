@@ -21,7 +21,7 @@
 <script>
 import 'lightgallery.js';
 import 'lightgallery.js/dist/css/lightgallery.css';
-import { IMAGES } from '@/constant/constant';
+import Parkspot_Image from '../../../public/assets/Parkspot_default.png';
 
 export default {
     name: 'ImageGallery',
@@ -51,7 +51,7 @@ export default {
     data() {
         return {
             imageSize: '',
-            displayImages: [IMAGES.DEFAULT_IMAGE],
+            displayImages: [Parkspot_Image],
         };
     },
     mounted() {
@@ -63,7 +63,7 @@ export default {
     methods: {
         updateImages() {
             this.displayImages =
-                this.images.length > 0 ? this.images : [IMAGES.DEFAULT_IMAGE];
+                this.images.length > 0 ? this.images : [Parkspot_Image];
             this.setImageSize();
             this.$nextTick(() => {
                 const el = document.getElementById('lightgallery');
