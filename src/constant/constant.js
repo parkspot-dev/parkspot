@@ -242,10 +242,9 @@ export const WHAT_NEXT = [
     },
 ];
 
-
 export const FREQUENT_COMMENTS = [
     "Not Answering",
     "Busy",
-    "Only view", 
+    "Only view",
     "Requested Location"
 ]

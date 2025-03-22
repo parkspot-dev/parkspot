@@ -2,8 +2,13 @@
     <div class="body">
         <LoaderModal v-if="isLoading"></LoaderModal>
         <div class="root">
+            <!-- Spot Images -->
+            <ImageGallery
+                :images="spotImages"
+                :locationName="SO.area"
+            ></ImageGallery>
             <!-- SO Details Section -->
-            <div class="form-section">
+            <div class="form-section so-form-section">
                 <div class="heading">
                     <h3 class="sub-heading">SO Details</h3>
                 </div>
@@ -108,19 +113,54 @@
                             id="address"
                             placeholder="Enter SO address"
                             rows="2"
-                            style="margin-bottom: 36px"
                             v-model="SO.address"
                         ></textarea>
                     </div>
 
                     <!-- Thumbnail image -->
-                    <div class=" form-field thumbnail-image">
+                    <div class="form-field">
                         <label for="thumbnailImage">Thumbnail Image:</label>
                         <input
+                            id="thumbnailImage"
                             placeholder="Enter image url"
                             type="text"
                             v-model="SO.thumbnailImage"
                         />
+                    </div>
+
+                    <!-- Spot Images URLs -->
+                    <div class="form-field">
+                        <label for="spotImages" style="margin-bottom: 4px"
+                            >Spot Images:</label
+                        >
+                        <div
+                            :key="index"
+                            class="url-entry"
+                            v-for="(_, index) in SO.spotImagesList"
+                        >
+                            <div style="display: flex; gap: 8px">
+                                <input
+                                    type="text"
+                                    :placeholder="'Enter spot Image URL'"
+                                    v-model="SO.spotImagesList[index]"
+                                    @blur="validateSpotImageUrl(index)"
+                                    class="full-width-input"
+                                />
+                                <AtomIcon
+                                    :icon="'delete'"
+                                    @click="removeUrlField(index)"
+                                    class="remove-url-btn"
+                                >
+                                </AtomIcon>
+                            </div>
+                            <span class="error" v-if="spotImagesError[index]">
+                                {{ spotImagesError[index] }}
+                            </span>
+                        </div>
+                        <!-- Add a new URL -->
+                        <button @click="addNewUrlField" class="add-new-url-btn">
+                            Add New URL
+                        </button>
                     </div>
                 </div>
             </div>
@@ -333,7 +373,9 @@ import { mapState, mapActions } from 'vuex';
 import AtomButton from '../components/atoms/AtomButton.vue';
 import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
+import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
+import ImageGallery from '@/components/organisms/OrganismImageGallery.vue';
 import { ParkingSize } from '../constant/enums';
 import { SiteType } from '../constant/enums';
 import { SpotRequestStatus } from '../constant/enums';
@@ -345,7 +387,9 @@ export default {
         AtomButton,
         AtomDatePicker,
         AtomHeading,
+        AtomIcon,
         LoaderModal,
+        ImageGallery,
     },
     data() {
         return {
@@ -366,6 +410,7 @@ export default {
             'latlongError',
             'mobileError',
             'Rent',
+            'spotImagesError',
             'SO',
             'status',
             'statusMessage',
@@ -392,15 +437,32 @@ export default {
                 })
             );
         },
+        spotImages() {
+            let spotImages = [];
+            if (this.SO?.spotImagesList && this.SO.spotImagesList.length > 0) {
+                spotImages = this.SO.spotImagesList;
+            } else if (this.SO?.thumbnailImage) {
+                spotImages = Array.isArray(this.SO.thumbnailImage)
+                    ? this.SO.thumbnailImage
+                    : [this.SO.thumbnailImage];
+            }
+            // Filter out empty or falsy strings (empty, null, undefined, whitespace-only)
+            return spotImages.filter(
+                (img) => typeof img === 'string' && img.trim() !== '',
+            );
+        },
     },
     methods: {
         ...mapActions('reviewSpot', [
+            'fetchSpotDetails',
+            'initState',
+            'saveForm',
+            'setUpdatedFields',
+            'setSpotImageError',
+            'submitForm',
             'validateLatLong',
             'validateMobile',
-            'initState',
-            'submitForm',
-            'saveForm',
-            'fetchSpotDetails',
+            'validateSpotImageUrl',
         ]),
         setSpotId() {
             this.SO.spotId = this.$route.query.requestId;
@@ -461,6 +523,23 @@ export default {
             this.closeModal();
         },
         confirmSave() {
+            const updatedFields = [];
+            for (const key in this.SO) {
+                if (this.SO[key] !== this.initialFormData.SO[key]) {
+                    updatedFields.push(key);
+                }
+            }
+            for (const key in this.Rent) {
+                if (this.Rent[key] !== this.initialFormData.Rent[key]) {
+                    updatedFields.push(key);
+                }
+            }
+            for (const key in this.Booking) {
+                if (this.Booking[key] !== this.initialFormData.Booking[key]) {
+                    updatedFields.push(key);
+                }
+            }
+            this.setUpdatedFields(updatedFields);
             this.saveForm().then(() => {
                 this.updateInitialFormState();
             });
@@ -483,6 +562,17 @@ export default {
                 }),
             );
         },
+        addNewUrlField() {
+            this.SO.spotImagesList.push('');
+            this.setSpotImageError({
+                index: this.SO.spotImagesList.length - 1,
+                message: '',
+            });
+        },
+        removeUrlField(index) {
+            this.SO.spotImagesList.splice(index, 1);
+            this.spotImagesError.splice(index, 1);
+        },
     },
     watch: {
         status(newStatus) {
@@ -503,6 +593,23 @@ export default {
 </script>
 
 <style>
+.add-new-url-btn {
+    align-items: center;
+    background-color: var(--primary-color);
+    border-radius: 4px;
+    border: none;
+    color: var(--parkspot-black);
+    cursor: pointer;
+    display: flex;
+    font-size: 14px;
+    padding: 4px 8px;
+}
+.btn {
+    border-radius: var(--border-default);
+    font-weight: 700;
+    margin: 4px;
+    width: 15%;
+}
 .body {
     background: #f5f5fb;
     padding: 16px;
@@ -537,7 +644,80 @@ export default {
     justify-content: center;
     margin: 0% 9%;
 }
-
+.form-field label {
+    font-weight: 700;
+    vertical-align: middle;
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+    background-color: var(--primary-color);
+    border-color: var(--parkspot-black);
+    border-color: white;
+    outline: none;
+}
+.form-field > input,
+.form-field > select,
+.form-section textarea {
+    box-sizing: border-box;
+    margin-top: 5px;
+    padding: 8px;
+    width: 100%;
+}
+.form-group {
+    display: grid;
+    gap: 3%;
+    grid-auto-rows: min-content;
+    grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
+    padding-bottom: 2%;
+}
+.form-section {
+    background-color: var(--parkspot-white);
+    border-radius: 5px;
+    border: 1px solid #cccccc;
+    height: auto;
+    margin: 1% auto;
+    padding: 1%;
+}
+.full-width-input {
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    min-width: 260%;
+    padding: 8px 12px;
+}
+.heading {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+.modal-content {
+    background: var(--parkspot-white);
+    border-radius: var(--border-default);
+    left: 50%;
+    padding: 20px;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+}
+.modal-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 998;
+}
+.modal-actions {
+    margin-top: 15px;
+}
+.noborder {
+    background-color: var(--parkspot-white);
+    border: none;
+    font-weight: 600;
+}
 .readonly-field {
     align-items: flex-start;
     display: flex;
@@ -559,48 +739,11 @@ export default {
         text-align: start;
     }
 }
-.form-field label {
-    font-weight: 700;
-    vertical-align: middle;
-}
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus {
-    background-color: var(--primary-color);
-    border-color: var(--parkspot-black);
-    border: none;
-    outline: none;
-}
-.form-field > input,
-.form-field > select,
-.form-section textarea {
-    box-sizing: border-box;
-    margin-top: 5px;
-    padding: 8px;
-    width: 100%;
-}
-.form-group {
-    display: grid;
-    gap: 3%;
-    grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
-    padding-bottom: 2%;
-}
-.form-section {
-    background-color: var(--parkspot-white);
-    border-radius: 5px;
-    border: 1px solid #cccccc;
-    margin: 1% auto;
-    padding: 1%;
-}
-.heading {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-.noborder {
-    background-color: var(--parkspot-white);
-    border: none;
-    font-weight: 600;
+.remove-url-btn {
+    margin-top: 8px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #ff4d4f;
 }
 .root {
     margin: 1% 8%;
@@ -610,12 +753,8 @@ export default {
     max-height: 600px;
     overflow-y: auto;
 }
-
-.btn {
-    border-radius: var(--border-default);
-    font-weight: 700;
-    margin: 4px;
-    width: 15%;
+.so-form-section {
+    padding-bottom: 6%;
 }
 .sub-heading {
     color: var(--secondary-color);
@@ -624,40 +763,16 @@ export default {
     letter-spacing: normal;
     margin-bottom: 10px;
 }
-
-/* Modal Styling */
-.modal-content {
-    background: var(--parkspot-white);
-    border-radius: var(--border-default);
-    padding: 20px;
-    text-align: center;
-    z-index: 999;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.url-entry {
+    margin-bottom: 8px;
 }
 
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 998;
-}
-
-.modal-actions {
-    margin-top: 15px;
-}
-
-@media (max-width: 400px) {
-    .form-field {
-        padding: 0 10px;
+@media (max-width: 1024px) {
+    .so-form-section {
+        padding-bottom: 12%;
     }
-    .form-group {
-        padding-bottom: 15%;
+    .full-width-input {
+        min-width: 160%;
     }
 }
 @media (max-width: 768px) {
@@ -679,6 +794,9 @@ export default {
         margin-bottom: 2%;
         margin: 1% 1%;
     }
+    .full-width-input {
+        min-width: 300%;
+    }
     .root {
         margin: 1% 1%;
     }
@@ -693,12 +811,23 @@ export default {
         width: 25%;
     }
 }
-
-.thumbnail-image{
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    justify-content: start !important;
-    margin: 0% 9%;
+@media (max-width: 600px) {
+    .full-width-input {
+        min-width: 200%;
+    }
+}
+@media (max-width: 450px) {
+    .form-field {
+        padding: 0 10px;
+    }
+    .form-group {
+        padding-bottom: 15%;
+    }
+    .so-form-section {
+        padding-bottom: 16%;
+    }
+    .full-width-input {
+        min-width: 120%;
+    }
 }
 </style>

@@ -11,40 +11,47 @@ const state = {
         city: '',
         area: '',
         latlong: '',
-        thumbnailImage: ''
-      },
-      Rent: {
+        spotImagesList: [],
+        thumbnailImage: '',
+    },
+    Rent: {
         totalSlots: null,
         baseAmount: null,
         rentUnit: '',
         parkingSize: '',
         siteType: '',
-      },
-      Booking: {
+    },
+    Booking: {
         startDate: '',
         endDate: '',
         lastCallDate: '',
         duration: '',
         spotrequestStatus: '',
         remark: '',
-        },
-    mobileError: '',
-    latlongError: '',
-    status: 'none',   // none, error, success
-    statusMessage: '',
+    },
     isLoading: false,
+    latlongError: '',
+    mobileError: '',
+    spotImagesError: [],
+    status: 'none', // none, error, success
+    statusMessage: '',
+    updatedFields: [],
 };
 
 const mutations = {
-    'set-error'(state, { field, message }) {
-        state[field] = message;
+    'set-error'(state, { field, message, messageObject }) {
+        if (Array.isArray(state[field]) && messageObject) {
+            state[field] = messageObject;
+        } else {
+            state[field] = message;
+        }
     },
     'set-error-msg'(state, errorMessage) {
         state.status = 'error';
         state.statusMessage = errorMessage;
     },
     'set-success-msg'(state, successMessage) {
-        state.status= 'success';
+        state.status = 'success';
         state.statusMessage = successMessage;
     },
     'reset-global-status'(state) {
@@ -58,7 +65,10 @@ const mutations = {
         state.SO = { ...state.SO, ...formData.SO };
         state.Rent = { ...state.Rent, ...formData.Rent };
         state.Booking = { ...state.Booking, ...formData.Booking };
-    }
+    },
+    'set-updated-fields'(state, fields) {
+        state.updatedFields = fields;
+    },
 };
 
 const actions = {
@@ -69,17 +79,25 @@ const actions = {
         if (!input || typeof input !== 'string') {
             commit('set-error', {
                 field: 'latlongError',
-                message: 'Latitude and longitude are required and must be a non-empty string.',
+                message:
+                    'Latitude and longitude are required and must be a non-empty string.',
             });
             return;
         }
         // Split input into latitude and longitude
-        const [latitudeString, longitudeString] = input.split(",").map((str) => str.trim());
+        const [latitudeString, longitudeString] = input
+            .split(',')
+            .map((str) => str.trim());
         // Check if input has exactly one comma and valid components
-        if (!latitudeString || !longitudeString || input.split(",").length !== 2) {
+        if (
+            !latitudeString ||
+            !longitudeString ||
+            input.split(',').length !== 2
+        ) {
             commit('set-error', {
                 field: 'latlongError',
-                message: 'Latitude and longitude must be separated by exactly one comma. Eg. 10.00, 12.00',
+                message:
+                    'Latitude and longitude must be separated by exactly one comma. Eg. 10.00, 12.00',
             });
             return;
         }
@@ -90,7 +108,8 @@ const actions = {
         if (isNaN(latitude) || isNaN(longitude)) {
             commit('set-error', {
                 field: 'latlongError',
-                message: 'Latitude and longitude must be valid floats separated by a comma. Eg. 10.00, 12.00',
+                message:
+                    'Latitude and longitude must be valid floats separated by a comma. Eg. 10.00, 12.00',
             });
             return;
         }
@@ -110,11 +129,36 @@ const actions = {
         commit('set-error', { field: 'mobileError', message: '' });
     },
 
+    validateSpotImageUrl({ commit, state }, index) {
+        const url = state.SO.spotImagesList[index].trim();
+        const currentErrors = [...state.spotImagesError];
+        if (url === '') {
+            currentErrors[index] = 'URL cannot be empty';
+        } else {
+            const urlPattern = new RegExp(
+                '^(https?:\\/\\/)?' + // protocol
+                '((([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.)+[a-zA-Z]{2,})' + // domain name only
+                '(\\/[-a-zA-Z\\d%_.~+]*)*' + // path
+                '(\\?[;&a-zA-Z\\d%_.~+=-]*)?' + // query string
+                '(\\#[-a-zA-Z\\d_]*)?$', // fragment locator
+                'i'
+            );
+            if (!urlPattern.test(url)) {
+                currentErrors[index] = 'Invalid URL format';
+            } else {
+                currentErrors[index] = '';
+            }
+        }
+        commit('set-error', { field: 'spotImagesError', messageObject: currentErrors });
+    },
+
     // Fetch spotdata [using spotId fetched from url] when the webpage is mounted
-    async fetchSpotDetails({ commit, state }) {
+    async fetchSpotDetails({ commit, state, dispatch }) {
         commit('set-loading', true);
-        const spotInfo = await mayaClient.get
-            (`/owner/spot-request?spot-id=${state.SO.spotId}`);
+        const spotInfo = await mayaClient.get(
+            `/owner/spot-request?spot-id=${state.SO.spotId}`,
+        );
+        const spotImages = (spotInfo.SpotImages || []).map(image => image.trim());
         const formData = {
             SO: {
                 spotId: spotInfo.ID,
@@ -126,14 +170,15 @@ const actions = {
                 mobile: spotInfo.Mobile,
                 address: spotInfo.Address,
                 email: spotInfo.EmailID,
-                thumbnailImage: spotInfo.SpotImageURI
+                spotImagesList: spotImages,
+                thumbnailImage: spotInfo.SpotImageURI,
             },
             Rent: {
                 totalSlots: spotInfo.TotalSlots,
-                baseAmount: spotInfo.BaseAmount, 
+                baseAmount: spotInfo.BaseAmount,
                 rentUnit: spotInfo.RentUnit,
                 parkingSize: spotInfo.Size,
-                siteType: spotInfo.Type
+                siteType: spotInfo.Type,
             },
             Booking: {
                 duration: spotInfo.MinDuration,
@@ -145,7 +190,15 @@ const actions = {
             },
         };
         commit('set-form-data', formData);
-        commit('set-loading', false); 
+        dispatch('initializeSpotImagesError');
+        commit('set-loading', false);
+    },
+
+    // Initialize spotImagesError as empty array of same length
+    initializeSpotImagesError({ commit, state }) {
+        const spotImages = state.SO.spotImagesList || [];
+        const spotImagesErrorInit = Array(spotImages.length).fill('');
+        commit('set-error', { field: 'spotImagesError', messageObject: spotImagesErrorInit });
     },
 
     // Validate all the Errors
@@ -153,15 +206,22 @@ const actions = {
         await Promise.all([
             dispatch('validateMobile'),
             dispatch('validateLatLong'),
+            dispatch('validateSpotImagesErrors'),
         ]);
+    },
+
+    // Validate all spot image URLs
+    async validateSpotImagesErrors({ state, dispatch }) {
+        const validations = state.SO.spotImagesList.map((_, index) =>
+            dispatch('validateSpotImageUrl', index)
+        );
+        await Promise.all(validations);
     },
 
     // Check for errors in the state
     hasErrors({ state }) {
-        return (
-            state.mobileError ||
-            state.latlongError
-        );
+        const spotImageErrors = state.spotImagesError.some(err => err && err !== '');
+        return state.mobileError || state.latlongError || spotImageErrors;
     },
 
     // Validates form fields and checks for errors.
@@ -169,19 +229,28 @@ const actions = {
         commit('reset-global-status');
         await dispatch('validateFormFields');
         if (await dispatch('hasErrors')) {
-            commit('set-error-msg', 'Please fix the errors in the form before submitting.');
-            return false; 
+            commit(
+                'set-error-msg',
+                'Please fix the errors in the form before submitting.',
+            );
+            return false;
         }
-        return true; 
+        return true;
     },
 
     // Updates the spot request details
-    async updateSpotRequest({ state }) {
-        const [latitude, longitude] = state.SO.latlong.split(',').map(parseFloat);
+    async updateSpotRequest({ dispatch, state }) {
+        const [latitude, longitude] = state.SO.latlong
+            .split(',')
+            .map(parseFloat);
+        const trimmedSpotImages = state.SO.spotImagesList.map(image => image.trim());
         const spotRequest = {
             Address: state.SO.address,
             Area: state.SO.area,
-            BaseAmount: state.Rent.baseAmount !== null ? parseFloat(state.Rent.baseAmount) : 0.0,
+            BaseAmount:
+                state.Rent.baseAmount !== null
+                    ? parseFloat(state.Rent.baseAmount)
+                    : 0.0,
             City: state.SO.city,
             Email: state.SO.email,
             EndDate: state.Booking.endDate,
@@ -197,12 +266,70 @@ const actions = {
             Size: state.Rent.parkingSize,
             StartDate: state.Booking.startDate,
             Status: state.Booking.spotrequestStatus,
-            TotalSlots: state.Rent.totalSlots !== null ? parseInt(state.Rent.totalSlots) : 0,
+            TotalSlots:
+                state.Rent.totalSlots !== null
+                    ? parseInt(state.Rent.totalSlots)
+                    : 0,
             Type: state.Rent.siteType,
             UserName: state.SO.userName,
-            SpotImageURI: state.SO.thumbnailImage
+            SpotImages: trimmedSpotImages,
+            SpotImageURI: state.SO.thumbnailImage,
+            FieldMask: await dispatch('mapFieldMask'),
         };
         return await mayaClient.patch('/owner/spot-request', spotRequest);
+    },
+
+    // Maps updated fields to their API equivalents
+    mapFieldMask({ state }) {
+        const fieldMask = state.updatedFields.map((field) => {
+            switch (field) {
+                case 'address':
+                    return 'Address';
+                case 'area':
+                    return 'Area';
+                case 'baseAmount':
+                    return 'BaseAmount';
+                case 'city':
+                    return 'City';
+                case 'email':
+                    return 'EmailID';
+                case 'endDate':
+                    return 'EndDate';
+                case 'fullName':
+                    return 'FullName';
+                case 'lastCallDate':
+                    return 'LastCallDate';
+                case 'duration':
+                    return 'MinDuration';
+                case 'mobile':
+                    return 'Mobile';
+                case 'remark':
+                    return 'Remark';
+                case 'rentUnit':
+                    return 'RentUnit';
+                case 'parkingSize':
+                    return 'Size';
+                case 'startDate':
+                    return 'StartDate';
+                case 'spotrequestStatus':
+                    return 'Status';
+                case 'totalSlots':
+                    return 'TotalSlots';
+                case 'siteType':
+                    return 'Type';
+                case 'userName':
+                    return 'UserName';
+                case 'thumbnailImage':
+                    return 'SpotImageURI';
+                case 'spotImagesList':
+                    return 'SpotImages';
+            }
+        });
+        fieldMask.push('ID', 'UserName');
+        if (state.updatedFields.includes('latlong')) {
+            fieldMask.push('Latitude', 'Longitude');
+        }
+        return fieldMask;
     },
 
     // saveForm validates form data for errors and updates the spot request data on the backend (for temporary saving or drafts)
@@ -227,16 +354,33 @@ const actions = {
         if (!isValid) {
             return;
         }
-        const response = await mayaClient.post(`/owner/spot-update?spot-id=${state.SO.spotId}`);
+        const response = await mayaClient.post(
+            `/owner/spot-update?spot-id=${state.SO.spotId}`,
+        );
         if (response.DisplayMsg) {
             // Network issues or server errors could cause the API call to fail.
             commit('set-error-msg', response.DisplayMsg);
-        }
-        else{
-            commit('set-success-msg', 'Your request was submitted successfully');
+        } else {
+            commit(
+                'set-success-msg',
+                'Your request was submitted successfully',
+            );
         }
         return response;
-    }
+    },
+
+    setUpdatedFields({ commit }, fields) {
+        commit('set-updated-fields', fields);
+    },
+
+    setSpotImageError({ commit }, { index, message }) {
+        const updatedErrors = [...state.spotImagesError];
+        updatedErrors[index] = message;
+        commit('set-error', {
+            field: 'spotImagesError',
+            message: updatedErrors,
+        });
+    },
 };
 
 export default {
