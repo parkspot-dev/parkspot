@@ -1,4 +1,14 @@
 <template>
+    <div class="srp-filters">
+        <div class="filter-wrapper">
+            <div class="search">
+                <SearchInput @changed="onChange"></SearchInput>
+            </div>
+            <div class="filters" >
+             
+            </div>
+        </div>
+    </div>
     <div class="srp-container">
         <div class="srp-lists">
             <div class="srp-control">
@@ -134,6 +144,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.srp-filters {
+    padding: 40px;
+}
+
+.filter-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+
+    .search {
+        width: 40% !important;
+    }
+}
+
 .srp-container {
     display: flex;
     gap: 2rem;
@@ -232,7 +256,9 @@ export default {
 
         /* Position the content gradient in the top left, and the
       scroll gradient in the top right */
-        mask-position: 0 0, 100% 0;
+        mask-position:
+            0 0,
+            100% 0;
 
         /* We don't repeat our mask images */
         mask-repeat: no-repeat, no-repeat;

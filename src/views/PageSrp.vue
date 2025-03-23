@@ -137,7 +137,7 @@ export default {
                 },
             });
             window.open(route.href);
-        },
+        },   
         onFilter(filterOption) {
             this.updateSrpResults(filterOption);
         },
