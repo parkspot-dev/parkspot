@@ -125,7 +125,7 @@ const actions = {
     },
 
     async updateLastCallDate({ state }, lastCallDate) {
-        state.spotDetails.LastCallDate = lastCallDate.toISOString();
+        state.spotDetails.LastCallDate = lastCallDate;
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 

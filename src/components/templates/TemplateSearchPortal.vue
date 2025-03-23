@@ -190,13 +190,7 @@
                     :maxlength="1000"
                     :rowNo="8"
                     @mousedown="storeOldComment(props.row)"
-                    @changed="
-                        onCommentUpdate(
-                            props.row,
-                            oldComments,
-                            $event,
-                        )
-                    "
+                    @changed="onCommentUpdate(props.row, oldComments, $event)"
                 ></AtomTextarea>
             </b-table-column>
 
@@ -302,7 +296,9 @@
                             <AtomDatePicker
                                 :size="'is-small'"
                                 class="column-width"
-                                @changed="onDateUpdate(props.row, ...arguments)"
+                                @changed="
+                                    (date) => onDateUpdate(props.row, date)
+                                "
                             >
                             </AtomDatePicker>
                         </div>
@@ -595,12 +591,12 @@ export default {
         },
 
         onDateUpdate(spotData, date) {
-            spotData['NextCall'] = date.toJSON();
+            spotData['NextCall'] = date;
             this.$emit('updateRequest', spotData);
         },
 
         storeOldComment(row) {
-                this.oldComments = row.Comments || ''; // Ensure a default value
+            this.oldComments = row.Comments || ''; // Ensure a default value
         },
 
         onCommentUpdate(row, oldComment, newComment) {
@@ -616,7 +612,7 @@ export default {
             }
             this.isOpen = false;
             this.newComment = '';
-            this.oldComments = ''
+            this.oldComments = '';
         },
 
         onStatusUpdate(spotData, status) {
