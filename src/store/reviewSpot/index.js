@@ -13,6 +13,7 @@ const state = {
         latlong: '',
         spotImagesList: [],
         thumbnailImage: '',
+        uploadImages: [],
     },
     Rent: {
         totalSlots: null,
@@ -240,17 +241,54 @@ const actions = {
 
     // Updates the spot request details
     async updateSpotRequest({ dispatch, state }) {
-        const [latitude, longitude] = state.SO.latlong
-            .split(',')
-            .map(parseFloat);
-        const trimmedSpotImages = state.SO.spotImagesList.map(image => image.trim());
-        const spotRequest = {
+        // Extract latitude and longitude
+        const [latitude, longitude] = state.SO.latlong.split(',').map(parseFloat);
+
+        // Handles the upload Images to azure
+        let uploadedImageUrls = [];
+        if (state.updatedFields.includes('uploadImages') && state.SO.uploadImages.length > 0) {
+            const sasResponse = await dispatch('getSaSUrl');
+            if (sasResponse.DisplayMsg) return sasResponse;
+            // Handle image uploads and get uploaded URLs
+            uploadedImageUrls = await dispatch('uploadSpotImages', sasResponse);
+            if (!Array.isArray(uploadedImageUrls)) return uploadedImageUrls;
+        }
+
+        // Prepare the spot request payload
+        const spotRequest = await dispatch('prepareSpotRequest', {
+            state,
+            latitude,
+            longitude,
+            uploadedImageUrls,
+        });
+        // Send the update request
+        return await mayaClient.patch('/owner/spot-request', spotRequest);
+    },
+
+    // Handles image upload and returns uploaded URLs or an error message
+    async uploadSpotImages({ dispatch }, sas_url) {
+        const uploadResults = await dispatch('handleUploadImages', sas_url);
+        const failedUploads = uploadResults.filter(result => result.status === 'failed');
+        if (failedUploads.length > 0) {
+            return {
+                DisplayMsg: `Some images failed to upload. Please retry.`,
+                failedUploads,
+            };
+        }
+
+        return uploadResults.map(result => result.url);
+    },
+
+    // Prepares the payload for the spot request update
+    async prepareSpotRequest({ state, dispatch, latitude, longitude, uploadedImageUrls }) {
+        let trimmedSpotImages = [...(state.SO.spotImagesList || []).map(image => image.trim())];
+        if (Array.isArray(uploadedImageUrls) && uploadedImageUrls.length > 0) {
+            trimmedSpotImages = [...trimmedSpotImages, ...uploadedImageUrls];
+        }
+        return {
             Address: state.SO.address,
             Area: state.SO.area,
-            BaseAmount:
-                state.Rent.baseAmount !== null
-                    ? parseFloat(state.Rent.baseAmount)
-                    : 0.0,
+            BaseAmount: state.Rent.baseAmount ? parseFloat(state.Rent.baseAmount) : 0.0,
             City: state.SO.city,
             Email: state.SO.email,
             EndDate: state.Booking.endDate,
@@ -266,17 +304,77 @@ const actions = {
             Size: state.Rent.parkingSize,
             StartDate: state.Booking.startDate,
             Status: state.Booking.spotrequestStatus,
-            TotalSlots:
-                state.Rent.totalSlots !== null
-                    ? parseInt(state.Rent.totalSlots)
-                    : 0,
+            TotalSlots: state.Rent.totalSlots ? parseInt(state.Rent.totalSlots) : 0,
             Type: state.Rent.siteType,
             UserName: state.SO.userName,
-            SpotImages: trimmedSpotImages,
+            SpotImageURLs: trimmedSpotImages,
             SpotImageURI: state.SO.thumbnailImage,
             FieldMask: await dispatch('mapFieldMask'),
         };
-        return await mayaClient.patch('/owner/spot-request', spotRequest);
+    },
+
+    // Fetches a SAS URL from the Maya API for secure resource access.
+    async getSaSUrl() {
+        return mayaClient.get('sas-url');
+    },
+
+    // Uploads images to the SAS URL with a unique filename format (`SpotRequestId:epochTime.extension`), using parallel PUT requests and returning upload statuses.  
+    async handleUploadImages({ state }, sas_url) {
+        const spotRequestId = state.SO.spotId;
+        const uploadPromises = state.SO.uploadImages.map(async (img) => {
+            const [baseUrl, queryParams] = sas_url.split('?');
+            const epochTime = Date.now();
+
+            // Determine extension based on file type
+            let extension = '';
+            if (img.file.type === "image/png") {
+                extension = '.png';
+            } else if (img.file.type === "image/jpeg") {
+                extension = '.jpg';
+            }
+            // File path format: SpotRequestId:epochTime.extension
+            const modifiedBase = `${baseUrl}/${spotRequestId}:${epochTime}${extension}`;
+            const finalUrl = `${modifiedBase}?${queryParams}`;
+
+            // Return fetch promise for each file
+            return fetch(finalUrl, {
+                method: 'PUT',
+                headers: {
+                    'x-ms-blob-type': 'BlockBlob',
+                    'Content-Type': img.file.type || 'application/octet-stream',
+                },
+                body: img.file,
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        return {
+                            fileName: img.file.name,
+                            url: modifiedBase,
+                            status: 'success',
+                        };
+                    } else {
+                        return response.text().then((errorText) => {
+                            return {
+                                fileName: img.file.name,
+                                url: modifiedBase,
+                                status: 'failed',
+                                error: errorText,
+                            };
+                        });
+                    }
+                })
+                .catch((err) => {
+                    return {
+                        fileName: img.file.name,
+                        url: modifiedBase,
+                        status: 'failed',
+                        error: err.message,
+                    };
+                });
+        });
+        // Wait for all uploads to complete in parallel
+        const uploadResults = await Promise.all(uploadPromises);
+        return uploadResults;
     },
 
     // Maps updated fields to their API equivalents
@@ -321,13 +419,14 @@ const actions = {
                     return 'UserName';
                 case 'thumbnailImage':
                     return 'SpotImageURI';
-                case 'spotImagesList':
-                    return 'SpotImages';
             }
         });
         fieldMask.push('ID', 'UserName');
         if (state.updatedFields.includes('latlong')) {
             fieldMask.push('Latitude', 'Longitude');
+        }
+        if (state.updatedFields.includes('spotImagesList') || state.updatedFields.includes('uploadImages')) {
+            fieldMask.push('SpotImageURLs');
         }
         return fieldMask;
     },
@@ -338,6 +437,7 @@ const actions = {
         if (!isValid) {
             return;
         }
+        commit('set-loading', true);
         const response = await dispatch('updateSpotRequest');
         if (response.DisplayMsg) {
             // Network issues or server errors could cause the API call to fail.
@@ -345,6 +445,7 @@ const actions = {
         } else {
             commit('set-success-msg', 'Your request was saved successfully');
         }
+        commit('set-loading', false);
         return response;
     },
 
@@ -354,6 +455,7 @@ const actions = {
         if (!isValid) {
             return;
         }
+        commit('set-loading', true);
         const response = await mayaClient.post(
             `/owner/spot-update?spot-id=${state.SO.spotId}`,
         );
@@ -366,6 +468,7 @@ const actions = {
                 'Your request was submitted successfully',
             );
         }
+        commit('set-loading', false);
         return response;
     },
 
