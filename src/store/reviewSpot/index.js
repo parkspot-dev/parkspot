@@ -241,9 +241,6 @@ const actions = {
 
     // Updates the spot request details
     async updateSpotRequest({ dispatch, state }) {
-        // Extract latitude and longitude
-        const [latitude, longitude] = state.SO.latlong.split(',').map(parseFloat);
-
         // Handles the upload Images to azure
         let uploadedImageUrls = [];
         if (state.updatedFields.includes('uploadImages') && state.SO.uploadImages.length > 0) {
@@ -255,12 +252,7 @@ const actions = {
         }
 
         // Prepare the spot request payload
-        const spotRequest = await dispatch('prepareSpotRequest', {
-            state,
-            latitude,
-            longitude,
-            uploadedImageUrls,
-        });
+        const spotRequest = await dispatch('prepareSpotRequest', uploadedImageUrls);
         // Send the update request
         return await mayaClient.patch('/owner/spot-request', spotRequest);
     },
@@ -280,7 +272,9 @@ const actions = {
     },
 
     // Prepares the payload for the spot request update
-    async prepareSpotRequest({ state, dispatch, latitude, longitude, uploadedImageUrls }) {
+    async prepareSpotRequest({ state, dispatch }, uploadedImageUrls) {
+        // Extract latitude and longitude
+        const [latitude, longitude] = state.SO.latlong.split(',').map(parseFloat);
         let trimmedSpotImages = [...(state.SO.spotImagesList || []).map(image => image.trim())];
         if (Array.isArray(uploadedImageUrls) && uploadedImageUrls.length > 0) {
             trimmedSpotImages = [...trimmedSpotImages, ...uploadedImageUrls];
@@ -419,8 +413,9 @@ const actions = {
                     return 'UserName';
                 case 'thumbnailImage':
                     return 'SpotImageURI';
+                default: return null;
             }
-        });
+        }).filter(Boolean); // Remove null or undefined values
         fieldMask.push('ID', 'UserName');
         if (state.updatedFields.includes('latlong')) {
             fieldMask.push('Latitude', 'Longitude');
