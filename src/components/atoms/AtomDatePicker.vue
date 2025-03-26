@@ -3,9 +3,10 @@
         <!-- Replaced b-datepicker with VueDatePicker
         Reason: b-datepicker was causing an error related to aria-hidden -->
         <VueDatePicker
+            :enable-time-picker="false"
+            :format="format"
             :model-value="date"
             @update:model-value="onChange"
-            :enable-time-picker="false"
             class="date-picker"
             placeholder="Click to select..."
         />
@@ -41,6 +42,13 @@ export default {
                 const formattedDate = new Date(val).toISOString();
                 this.$emit('changed', formattedDate);
             }
+        },
+        format() {
+            const day = this.date.getDate();
+            const month = this.date.getMonth() + 1;
+            const year = this.date.getFullYear();
+
+            return `${day}/${month}/${year}`;
         },
     },
 };
