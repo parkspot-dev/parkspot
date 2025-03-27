@@ -36,10 +36,10 @@
                 </template>
             </b-table-column>
 
-
             <b-table-column
                 field="Name"
                 label="Name"
+                searchable
                 sortable
                 cell-class="has-text-left"
             >
@@ -50,6 +50,19 @@
                 </template>
             </b-table-column>
 
+            <b-table-column
+                field="Mobile"
+                label="Mobile"
+                searchable
+                sortable
+                cell-class="has-text-left"
+            >
+                <template v-slot="props">
+                    <div>
+                        {{ props.row.Mobile }}
+                    </div>
+                </template>
+            </b-table-column>
 
             <b-table-column
                 field="Address"
@@ -63,7 +76,6 @@
                     </div>
                 </template>
             </b-table-column>
-
 
             <!-- Status Column -->
             <b-table-column
@@ -105,7 +117,6 @@
                 </template>
             </b-table-column>
 
-
             <b-table-column
                 field="Remark"
                 label="Remark"
@@ -119,7 +130,6 @@
                 </template>
             </b-table-column>
 
-
             <b-table-column
                 field="LastCallDate"
                 label="Last Call Date"
@@ -128,14 +138,17 @@
             >
                 <template v-slot="props">
                     <div>
-                        {{ props.row.LastCallDate ? formatDate(props.row.LastCallDate) : 'N/A' }}
+                        {{
+                            props.row.LastCallDate
+                                ? formatDate(props.row.LastCallDate)
+                                : 'N/A'
+                        }}
                     </div>
                 </template>
             </b-table-column>
         </b-table>
     </div>
 </template>
-
 
 <script>
 import { mapState, mapActions } from 'vuex';
@@ -144,7 +157,6 @@ import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
 import { getSpotRequestStatusLabel } from '../constant/enums';
 import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
 
-
 export default {
     name: 'SpotRequestsPage',
     components: {
@@ -152,7 +164,6 @@ export default {
         LoaderModal,
         MoleculeSearchBox,
     },
-
 
     data() {
         return {
@@ -175,13 +186,11 @@ export default {
         ]),
     },
 
-
     mounted() {
         this.fetchSpotRequests();
     },
     methods: {
         ...mapActions('spotRequests', ['fetchSpotRequests']),
-
 
         // Search by Request ID with validation for numeric input
         searchSpotRequest(requestId) {
@@ -196,12 +205,10 @@ export default {
             });
         },
 
-
         // Generate detail URL for a specific Request ID
         RequestDetailURL(requestId) {
             return `${this.$route.path}/?requestId=${requestId}`;
         },
-
 
         // Format date strings to locale-specific format
         formatDate(dateString) {
@@ -209,12 +216,10 @@ export default {
             return date.toLocaleString();
         },
 
-
         // Get label for status based on the enum value
         getSpotRequestStatusLabel(spotRequestStatus) {
             return getSpotRequestStatusLabel(spotRequestStatus);
         },
-
 
         alertError(msg) {
             this.$buefy.dialog.alert({
@@ -238,21 +243,17 @@ export default {
 };
 </script>
 
-
 <style lang="scss">
 $portal-font-size: 13px;
-
 
 .column-padding {
     padding: 10px 20px;
 }
 
-
 .spot-requests-root {
     background: #f5f5fb;
     padding: 16px;
     text-align: center;
-
 
     h1 {
         font-size: 24px;
@@ -260,10 +261,8 @@ $portal-font-size: 13px;
     }
 }
 
-
 .status-column {
     font-size: $portal-font-size;
-
 
     .status-part {
         display: flex;
@@ -272,7 +271,6 @@ $portal-font-size: 13px;
         margin-bottom: 20px;
     }
 
-
     .next-call-part {
         display: flex;
         flex-direction: column;
@@ -280,11 +278,9 @@ $portal-font-size: 13px;
     }
 }
 
-
 .table {
     margin-top: 20px;
 }
-
 
 .tag:not(body) {
     background-color: var(--primary-color);
