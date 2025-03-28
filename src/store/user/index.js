@@ -1,13 +1,13 @@
 import { mayaClient } from '@/services/api';
 import { auth } from '../../firebase';
 import store from '../../store';
+import { UserType } from '@/constant/enums';
 import {
     signInWithPopup,
     GoogleAuthProvider,
     signOut,
     onAuthStateChanged,
 } from 'firebase/auth';
-import { UserType } from '@/constant/enums';
 
 const state = {
     user: null,
@@ -44,13 +44,6 @@ const mutations = {
     'update-user-profile'(state, userProfile) {
         userProfile['UserName'] = '';
         state.userProfile = userProfile;
-        if (state.userProfile.Type === UserType.Agent) {
-            state.isAgent = true;
-        }
-        if (state.userProfile.Type === UserType.Admin) {
-            state.isAdmin = true;
-            state.isAgent = true;
-        }
     },
 
     'update-login-Modal'(state, loginModal) {
@@ -83,6 +76,19 @@ const mutations = {
     'update-preference'(state, data = {}) {
         state.preference = data;
     },
+    'set-user-type'(state, userType) {
+        if (userType == UserType.Admin) {
+            state.isAdmin = true;
+            state.isAgent = true;
+        } else if (userType == UserType.Agent) {
+            state.isAgent = true;
+            state.isAdmin = false;
+        } else {
+            state.isAdmin = false;
+            state.isAgent = false;
+        }
+        localStorage.setItem('UserType', userType);
+    },
 };
 
 const actions = {
@@ -111,6 +117,7 @@ const actions = {
         try {
             await signOut(auth);
             commit('update-user', null);
+            localStorage.removeItem('UserType');
         } catch (err) {
             // todo write proper exception case
             throw new Error(err);
@@ -241,9 +248,15 @@ const actions = {
     },
 
     async getUserProfile({ commit, dispatch, state }) {
+        let userType = localStorage.getItem('UserType');
+        if (userType == UserType.Admin || userType == UserType.Agent) {
+            commit('set-user-type', userType);
+            return;
+        }
         try {
             const userProfile = await mayaClient.get('/auth/user');
             commit('update-user-profile', userProfile);
+            commit('set-user-type', userProfile.Type);
         } catch (err) {
             // todo write proper exception case
             throw new Error(err);

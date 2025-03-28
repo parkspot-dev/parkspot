@@ -50,7 +50,7 @@
                             </div>
                         </li>
                         <li class="menu-item" v-if="isAgent">
-                            <span class="menu-title">Internal</span>
+                            <span class="menu-title">Agent Portal</span>
                             <!-- menu dropdown -->
                             <div class="menu-item-dropdown">
                                 <ul>
@@ -58,21 +58,30 @@
                                         <router-link
                                             :to="{ name: 'SearchPortal' }"
                                         >
-                                            Search-Portal
+                                            Search Portal
                                         </router-link>
                                     </li>
                                     <li>
                                         <router-link
                                             :to="{ name: 'booking-portal' }"
                                         >
-                                            Booking
+                                            Bookings
                                         </router-link>
                                     </li>
                                     <li>
                                         <router-link
                                             :to="{ name: 'spotRequest' }"
                                         >
-                                            Spot-requests
+                                            Spot Requests
+                                        </router-link>
+                                    </li>
+                                    <li>
+                                        <router-link
+                                            :to="{
+                                                name: 'vehicle-owner-registration',
+                                            }"
+                                        >
+                                            Register Request
                                         </router-link>
                                     </li>
                                 </ul>
