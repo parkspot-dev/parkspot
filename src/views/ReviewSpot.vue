@@ -169,6 +169,9 @@
                         <ImageUpload
                             v-model:images="SO.uploadImages"
                             :max-image-count="4"
+                            :ID="SO.spotId"
+                            v-model:startUpload="uploadImages"
+                            @UploadImageURLs="uploadedImageURLS"
                         ></ImageUpload>
                     </div>
                 </div>
@@ -412,6 +415,7 @@ export default {
                 title: '',
             },
             initialFormData: {},
+            uploadImages: false,
         };
     },
     computed: {
@@ -549,6 +553,7 @@ export default {
                     }
                 }
             });
+            this.uploadImages = true;
             this.setUpdatedFields(Array.from(updatedFields));
             this.saveForm().then((response) => {
                 if (!response.DisplayMsg) this.updateInitialFormState();

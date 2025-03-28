@@ -257,20 +257,6 @@ const actions = {
         return await mayaClient.patch('/owner/spot-request', spotRequest);
     },
 
-    // Handles image upload and returns uploaded URLs or an error message
-    async uploadSpotImages({ dispatch }, sas_url) {
-        const uploadResults = await dispatch('handleUploadImages', sas_url);
-        const failedUploads = uploadResults.filter(result => result.status === 'failed');
-        if (failedUploads.length > 0) {
-            return {
-                DisplayMsg: `Some images failed to upload. Please retry.`,
-                failedUploads,
-            };
-        }
-
-        return uploadResults.map(result => result.url);
-    },
-
     // Prepares the payload for the spot request update
     async prepareSpotRequest({ state, dispatch }, uploadedImageUrls) {
         // Extract latitude and longitude
@@ -305,70 +291,6 @@ const actions = {
             SpotImageURI: state.SO.thumbnailImage,
             FieldMask: await dispatch('mapFieldMask'),
         };
-    },
-
-    // Fetches a SAS URL from the Maya API for secure resource access.
-    async getSaSUrl() {
-        return mayaClient.get('sas-url');
-    },
-
-    // Uploads images to the SAS URL with a unique filename format (`SpotRequestId:epochTime.extension`), using parallel PUT requests and returning upload statuses.  
-    async handleUploadImages({ state }, sas_url) {
-        const spotRequestId = state.SO.spotId;
-        const uploadPromises = state.SO.uploadImages.map(async (img) => {
-            const [baseUrl, queryParams] = sas_url.split('?');
-            const epochTime = Date.now();
-
-            // Determine extension based on file type
-            let extension = '';
-            if (img.file.type === "image/png") {
-                extension = '.png';
-            } else if (img.file.type === "image/jpeg") {
-                extension = '.jpg';
-            }
-            // File path format: SpotRequestId:epochTime.extension
-            const modifiedBase = `${baseUrl}/${spotRequestId}:${epochTime}${extension}`;
-            const finalUrl = `${modifiedBase}?${queryParams}`;
-
-            // Return fetch promise for each file
-            return fetch(finalUrl, {
-                method: 'PUT',
-                headers: {
-                    'x-ms-blob-type': 'BlockBlob',
-                    'Content-Type': img.file.type || 'application/octet-stream',
-                },
-                body: img.file,
-            })
-                .then((response) => {
-                    if (response.ok) {
-                        return {
-                            fileName: img.file.name,
-                            url: modifiedBase,
-                            status: 'success',
-                        };
-                    } else {
-                        return response.text().then((errorText) => {
-                            return {
-                                fileName: img.file.name,
-                                url: modifiedBase,
-                                status: 'failed',
-                                error: errorText,
-                            };
-                        });
-                    }
-                })
-                .catch((err) => {
-                    return {
-                        fileName: img.file.name,
-                        url: modifiedBase,
-                        status: 'failed',
-                        error: err.message,
-                    };
-                });
-        });
-        // Wait for all uploads to complete in parallel
-        const uploadResults = await Promise.all(uploadPromises);
-        return uploadResults;
     },
 
     // Maps updated fields to their API equivalents
