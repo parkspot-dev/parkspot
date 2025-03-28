@@ -1,4 +1,5 @@
 import { mayaClient } from '@/services/api';
+import ImageUploadService from '@/services/imageUploadService';
 
 const state = {
     SO: {
@@ -240,17 +241,7 @@ const actions = {
     },
 
     // Updates the spot request details
-    async updateSpotRequest({ dispatch, state }) {
-        // Handles the upload Images to azure
-        let uploadedImageUrls = [];
-        if (state.updatedFields.includes('uploadImages') && state.SO.uploadImages.length > 0) {
-            const sasResponse = await dispatch('getSaSUrl');
-            if (sasResponse.DisplayMsg) return sasResponse;
-            // Handle image uploads and get uploaded URLs
-            uploadedImageUrls = await dispatch('uploadSpotImages', sasResponse);
-            if (!Array.isArray(uploadedImageUrls)) return uploadedImageUrls;
-        }
-
+    async updateSpotRequest({ dispatch, state }, uploadedImageUrls) {
         // Prepare the spot request payload
         const spotRequest = await dispatch('prepareSpotRequest', uploadedImageUrls);
         // Send the update request
@@ -355,12 +346,18 @@ const actions = {
             return;
         }
         commit('set-loading', true);
-        const response = await dispatch('updateSpotRequest');
-        if (response.DisplayMsg) {
-            // Network issues or server errors could cause the API call to fail.
-            commit('set-error-msg', response.DisplayMsg);
-        } else {
-            commit('set-success-msg', 'Your request was saved successfully');
+        const uploadedImageURLs = await ImageUploadService.methods.uploadImages(state.SO.uploadImages, state.SO.spotId);
+        if (uploadedImageURLs['success'] === false) {
+            commit('set-error-msg', uploadedImageURLs['DisplayMsg']);
+        }
+        else {
+            const response = await dispatch('updateSpotRequest', uploadedImageURLs['urls']);
+            if (response.DisplayMsg) {
+                // Network issues or server errors could cause the API call to fail.
+                commit('set-error-msg', response.DisplayMsg);
+            } else {
+                commit('set-success-msg', 'Your request was saved successfully');
+            }
         }
         commit('set-loading', false);
         return response;
