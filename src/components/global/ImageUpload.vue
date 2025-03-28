@@ -51,12 +51,7 @@ export default {
         },
         maxImageCount: {
             type: Number,
-            default: 2,
-        },
-        ID: { type: String, default: undefined },
-        startUpload: {
-            type: Boolean,
-            default: false,
+            default: 4,
         },
     },
     data() {
@@ -70,13 +65,6 @@ export default {
             uploadImages: [],
             isDragging: false,
         };
-    },
-    watch: {
-        startUpload(liftoff) {
-            if (liftoff) {
-                this.submitUpload();
-            }
-        },
     },
     methods: {
         triggerFileInput() {
@@ -213,6 +201,7 @@ export default {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     this.uploadImages.push({ file, preview: e.target.result });
+                    this.$emit('update:images', this.uploadImages);
                 };
                 reader.readAsDataURL(file);
             });
@@ -220,100 +209,8 @@ export default {
 
         deleteImage(index) {
             this.uploadImages.splice(index, 1);
+            this.$emit('update:images', this.uploadImages);
         },
-
-        // Gets sas-url to upload Images
-        async getSasUrl() {
-            return mayaClient.get('sas-url');
-        },
-
-        // Uploads images to the SAS URL with a unique filename format (`SpotRequestId:epochTime.extension`),
-        // using parallel PUT requests and returning upload statuses.
-        async uploadImages() {
-            this.$emit('update:startUpload', false);
-            const sas_url = await this.getSasUrl();
-            if (sas_url.ErrorCode) {
-                this.$emit('UploadImageURLs', {
-                    success: false,
-                    DisplayMsg: `Failed to fetch Sas URL`,
-                });
-                return;
-            }
-            const [baseUrl, queryParams] = sas_url.split('?');
-            const uploadPromises = this.uploadImages.map(async (img) => {
-                const epochTime = Date.now();
-                let extension = '';
-                if (img.file.type === 'image/png') {
-                    extension = '.png';
-                } else if (img.file.type === 'image/jpeg') {
-                    extension = '.jpg';
-                }
-
-                const modifiedBase = `:${epochTime}${extension}`;
-                if (this.ID !== undefined) {
-                    modifiedBase = `${this.ID}${modifiedBase}`;
-                }
-                // Use this.spotId here
-                // const modifiedBase = `${baseUrl}/${this.spotId}:${epochTime}${extension}`;
-                const finalUrl = `${baseUrl}/${modifiedBase}?${queryParams}`;
-                // Return fetch promise for each file
-                return fetch(finalUrl, {
-                    method: 'PUT',
-                    headers: {
-                        'x-ms-blob-type': 'BlockBlob',
-                        'Content-Type':
-                            img.file.type || 'application/octet-stream',
-                    },
-                    body: img.file,
-                })
-                    .then((response) => {
-                        if (response.ok) {
-                            return {
-                                fileName: img.file.name,
-                                url: modifiedBase,
-                                status: 'success',
-                            };
-                        } else {
-                            return response.text().then((errorText) => {
-                                return {
-                                    fileName: img.file.name,
-                                    url: modifiedBase,
-                                    status: 'failed',
-                                    error: errorText,
-                                };
-                            });
-                        }
-                    })
-                    .catch((err) => {
-                        return {
-                            fileName: img.file.name,
-                            url: modifiedBase,
-                            status: 'failed',
-                            error: err.message,
-                        };
-                    });
-            });
-            const uploadResults = await Promise.all(uploadPromises);
-
-            // Check for failed uploads
-            const failedUploads = uploadResults.filter(
-                (result) => result.status === 'failed',
-            );
-            if (failedUploads.length > 0) {
-                this.$emit('UploadImageURLs', {
-                    success: false,
-                    DisplayMsg: `Some images failed to upload. Please retry.`,
-                    failedUploads,
-                });
-                return;
-            }
-            // Return the array of URLs if all uploads were successful
-            this.$emit('UploadImageURLs', {
-                success: true,
-                urls: uploadResults.map((result) => result.url),
-            });
-        },
-
         showDangerToast(message) {
             this.$buefy.toast.open({
                 message,
