@@ -249,7 +249,7 @@ const actions = {
 
     async getUserProfile({ commit, dispatch, state }) {
         let userType = localStorage.getItem('UserType');
-        if (userType == UserType.Admin || userType == UserType.Agent) {
+        if (userType !== "undefined" && userType !== "null") {
             commit('set-user-type', userType);
             return;
         }
