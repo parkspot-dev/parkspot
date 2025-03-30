@@ -22,7 +22,9 @@ const state = {
     recentSearch: [],
     recentID: 0,
     filteredSrpResults: [],
-    userCurrentLocation : [77.5946, 12.9716] //  default bengaluru lat, lng.
+    userCurrentLocation: [77.5946, 12.9716], //  default bengaluru lat, lng.
+    filters: [],
+    initialResults: [],
 };
 
 const getters = {
@@ -57,9 +59,9 @@ const getters = {
         return state.totalPages;
     },
 
-    getUserLocation(){
+    getUserLocation() {
         return state.userCurrentLocation;
-    }
+    },
 };
 
 const mutations = {
@@ -121,6 +123,7 @@ const mutations = {
 
     'update-srp-results'(state, srpResults) {
         state.srpResults = srpResults;
+        state.initialResults = srpResults;
     },
 
     'update-map-center'(state, data) {
@@ -150,7 +153,12 @@ const mutations = {
 
     'update-map-zoom'(state, value) {
         state.mapConfig.zoom = value;
-    }
+    },
+
+    'update-filter-array'(state, filter) {
+        state.filters.push(filter);
+        console.log('Filter obj', state.filters);
+    },
 };
 
 const actions = {
@@ -218,14 +226,67 @@ const actions = {
         commit('update-filtered-srp-results', filteredSrpResults);
     },
 
-    updateUsersCurrentLocation({commit}, center){
-        commit('update-user-location', center)
+    applyFilters({ commit, state }) {
+        let filteredSrpResults = [...state.srpResults];
+
+        for (let filter of state.filters) {
+            // let filterValue = null
+            // if(typeof filter.value === 'string') {
+            //      filterValue = parseInt(filter.value);
+            // }
+            if (filter.name === 'Distance') {
+                filteredSrpResults = filteredSrpResults.filter(
+                    (srpResult) => srpResult.Distance < filter.value,
+                );
+            }
+            else if (filter.name === 'Rate') {
+                filteredSrpResults = filteredSrpResults.filter(
+                    (srpResult) => srpResult.Rate < filter.value,
+                );
+            }
+            else if(filter.name === 'Status') {
+                 if(filter.value === 0) {
+                    filteredSrpResults = filteredSrpResults.filter(
+                        (srpResult) => srpResult.SlotsAvailable > 0,
+                    );
+                 } else {
+                    filteredSrpResults = filteredSrpResults.filter(
+                        (srpResult) => srpResult.SlotsAvailable === 0,
+                    );
+                 }
+            }
+        }
+
+        commit('update-filtered-srp-results', filteredSrpResults);
+    },
+
+    updateUsersCurrentLocation({ commit }, center) {
+        commit('update-user-location', center);
     },
 
     // Update zoom value
-    updateZoomValue({commit}, zoomValue) {
+    updateZoomValue({ commit }, zoomValue) {
         commit('update-map-zoom', zoomValue);
-    }
+    },
+
+    //Update filter Array
+    updateFilter({ commit }, { name, value }) {
+        // Filter object will contains two things
+        // 1. name of the filter
+        // 2. value of the filter
+        const filterObj = {
+            name: name,
+            value: value,
+        };
+
+        commit('update-filter-array', filterObj);
+    },
+
+    removeFilterByName({ state }, filterName) {
+        state.filters = state.filters.filter(
+            (filter) => filter.name !== filterName,
+        );
+    },
 };
 
 export default {

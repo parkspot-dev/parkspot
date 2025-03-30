@@ -1,14 +1,4 @@
 <template>
-    <div class="srp-filters">
-        <div class="filter-wrapper">
-            <div class="search">
-                <SearchInput @changed="onChange"></SearchInput>
-            </div>
-            <div class="filters" >
-             
-            </div>
-        </div>
-    </div>
     <div class="srp-container">
         <div class="srp-lists">
             <div class="srp-control">
@@ -16,26 +6,33 @@
                     class="map-search"
                     @changed="onChange"
                 ></SearchInput>
-                <div class="filter-component">
-                    <div v-click-outside="onOutsideFilter">
-                        <b-button
-                            icon-left="tune-variant"
-                            @click="activateFilter"
-                        >
-                            Filters
-                        </b-button>
-                        <div class="filter-dropdown" v-if="showFilterCheckbox">
-                            <ul>
-                                <!-- TODO: Remove this component and use a single one for checkbox functionality -->
-                                <AtomCheckbox
-                                    :values="filterOptions"
-                                    :size="'is-small'"
-                                    @input="handleFilter"
-                                ></AtomCheckbox>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <!-- Filters -->
+            <div class="filters">
+                <h3>Filters</h3>
+                <FilterDropdown
+                    :options="['2 KM', '3 KM', '4 KM', '5 KM']"
+                    :searchable="false"
+                    @remove="removeFilter('Distance')"
+                    @update="addFilter('Distance', $event)"
+                    label="Search Within"
+                />
+
+                <FilterDropdown
+                    :options="['3000', '4000', '5000']"
+                    :searchable="false"
+                    @remove="removeFilter('Rate')"
+                    @update="addFilter('Rate', $event)"
+                    label="Rant Range"
+                />
+
+                <FilterDropdown
+                    :options="statusFilterOptions"
+                    :searchable="false"
+                    @remove="removeFilter('Status')"
+                    @update="handleStatusFilter($event)"
+                    label="Availability"
+                />
             </div>
             <div class="srp-results-heading">
                 <p>
@@ -75,8 +72,9 @@ import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
 import AtomCheckbox from '../atoms/AtomCheckbox.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import SearchInput from '../extras/SearchInput.vue';
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import vClickOutside from 'v-click-outside';
+import FilterDropdown from '../global/FilterDropdown.vue';
 export default {
     name: 'TemplateSrp',
     directives: {
@@ -88,6 +86,7 @@ export default {
         MapContainer,
         SearchInput,
         AtomCheckbox,
+        FilterDropdown,
     },
     emits: ['changed', 'flyToSrp', 'details'],
     props: {
@@ -107,20 +106,30 @@ export default {
     data() {
         return {
             center: null,
-            filterOptions: ['Available', 'Rented out'],
+            statusFilterOptions: ['Available', 'Rented out'],
             showFilterCheckbox: false,
+            rateFilterValue: null,
+            distanceFilterValue: null,
+            statusFilterValue: null,
         };
     },
     computed: {
-        ...mapState('map', ['selectedLocation']),
+        ...mapState('map', ['selectedLocation', 'filters']),
     },
     mounted() {
+        // this.getInitialFilterValue();
+        // this.applyFilters();
         const latlang = this.$route.query['latlng'];
         if (latlang) {
             this.center = latlang.split(',').map(Number).reverse();
         }
     },
     methods: {
+        ...mapActions('map', [
+            'applyFilters',
+            'updateFilter',
+            'removeFilterByName',
+        ]),
         onPageChange(page) {
             this.$emit('changed', page);
         },
@@ -136,28 +145,79 @@ export default {
         onOutsideFilter() {
             this.showFilterCheckbox = false;
         },
-        handleFilter(filterOptions) {
-            this.$emit('filter', filterOptions);
+        handleStatusFilter(value) {
+            // Value will come as string
+            // get the index first
+            for (let i = 0; i < this.statusFilterOptions.length; i++) {
+                if (this.statusFilterOptions[i] === value) {
+                    value = i;
+                }
+            }
+            this.updateFilter({ name: 'Status', value: value });
+            this.applyFilters();
+        },
+
+        addFilter(filterName, value) {
+            let intValue = parseInt(value);
+            // this.$router.push({
+            //     query: { ...this.$route.query, [filterName]: value },
+            // });
+            this.updateFilter({ name: filterName, value: intValue });
+            this.applyFilters();
+        },
+
+        removeFilter(filterName) {
+            this.removeFilterByName(filterName);
+            // const updatedQuery = { ...this.$route.query };
+            // delete updatedQuery[filterName];
+            // this.$router.push({ query: updatedQuery });
+
+            this.applyFilters();
+        },
+
+        // Get filter value
+        // getInitialFilterValue() {
+        //     const querires = this.$route.query;
+        //     for (let i = 0; i < this.filters.length; i++) {
+        //         const currFilter = this.filters[i];
+        //         if (currFilter.name === 'Distance') {
+        //             this.distanceFilterValue = currFilter.value;
+        //         } else if (currFilter.name === 'Rate') {
+        //             this.rateFilterValue = currFilter.value;
+        //         } else if (currFilter.name === 'Status') {
+        //             if (currFilter.value === 0) {
+        //                 statusFilterValue = this.statusFilterOptions[0];
+        //             } else {
+        //                 statusFilterValue = this.statusFilterOptions[1];
+        //             }
+        //         }
+        //     }
+        // },
+
+        getInitialFilterValue() {
+            const queries = this.$route.query;
+
+            if (queries.Distance) {
+                this.distanceFilterValue = queries.Distance;
+            }
+
+            if (queries.Rate) {
+                this.rateFilterValue = queries.Rate;
+            }
+
+            if (queries.Status) {
+                const statusValue = parseInt(queries.Status);
+                this.statusFilterValue =
+                    statusValue === 0
+                        ? this.statusFilterOptions[0]
+                        : this.statusFilterOptions[1];
+            }
         },
     },
 };
 </script>
 
 <style lang="scss" scoped>
-.srp-filters {
-    padding: 40px;
-}
-
-.filter-wrapper {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-
-    .search {
-        width: 40% !important;
-    }
-}
-
 .srp-container {
     display: flex;
     gap: 2rem;
@@ -193,11 +253,25 @@ export default {
         }
     }
 
+    .filters {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+
+        gap: 30px;
+
+        h3 {
+            align-self: center;
+            vertical-align: middle;
+        }
+    }
+
     .srp-lists {
         flex: 20%;
         padding-bottom: 2rem;
 
         .srp-results-heading {
+            margin-top: 40px;
             span {
                 color: rgb(151, 149, 149);
             }
