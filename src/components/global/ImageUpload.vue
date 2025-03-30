@@ -26,7 +26,7 @@
                 <AtomIcon icon="image-plus" class="image-icon" />
                 <input
                     @change="handleFileChange"
-                    accept="image/png,image/jpeg"
+                    accept="image/png,image/jpeg,image/heic"
                     aria-label="Upload images"
                     hidden
                     multiple
