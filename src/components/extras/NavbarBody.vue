@@ -75,15 +75,6 @@
                                             Spot Requests
                                         </router-link>
                                     </li>
-                                    <li>
-                                        <router-link
-                                            :to="{
-                                                name: 'vehicle-owner-registration',
-                                            }"
-                                        >
-                                            Register Request
-                                        </router-link>
-                                    </li>
                                 </ul>
                             </div>
                         </li>

@@ -44,6 +44,7 @@ const mutations = {
     'update-user-profile'(state, userProfile) {
         userProfile['UserName'] = '';
         state.userProfile = userProfile;
+        localStorage.setItem('UserType', userProfile.Type);
     },
 
     'update-login-Modal'(state, loginModal) {
@@ -77,17 +78,8 @@ const mutations = {
         state.preference = data;
     },
     'set-user-type'(state, userType) {
-        if (userType == UserType.Admin) {
-            state.isAdmin = true;
-            state.isAgent = true;
-        } else if (userType == UserType.Agent) {
-            state.isAgent = true;
-            state.isAdmin = false;
-        } else {
-            state.isAdmin = false;
-            state.isAgent = false;
-        }
-        localStorage.setItem('UserType', userType);
+        state.isAdmin = userType == UserType.Admin;
+        state.isAgent = userType == UserType.Agent || state.isAdmin;
     },
 };
 
@@ -247,12 +239,9 @@ const actions = {
         }
     },
 
-    async getUserProfile({ commit, dispatch, state }) {
+    async getUserProfile({ commit }) {
         let userType = localStorage.getItem('UserType');
-        if (userType !== "undefined" && userType !== "null") {
-            commit('set-user-type', userType);
-            return;
-        }
+        if (userType !== null && !isNaN(Number(userType))) return commit('set-user-type', userType);
         try {
             const userProfile = await mayaClient.get('/auth/user');
             commit('update-user-profile', userProfile);
