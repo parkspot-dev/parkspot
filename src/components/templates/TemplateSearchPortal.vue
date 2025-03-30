@@ -227,7 +227,7 @@
                                 @change="onAgentUpdate(props.row, $event)"
                                 label=""
                                 placeholder="Select Agent"
-                                v-model="filters.Agent"
+                                v-model="props.row.Agent"
                             >
                             </AtomSelectInput>
                             <button
@@ -268,13 +268,13 @@
                                 {{ statusList[props.row.Status].name }}
                             </span>
                             <AtomSelectInput
-                                :key="props.row.ID || `fallback-${index}`"
+                                :key="props.row.ID"
                                 :list="statusList"
                                 :size="'is-small'"
                                 @change="onStatusUpdate(props.row, $event)"
                                 class="column-width"
                                 placeholder="Select Status"
-                                v-model="filters.Status"
+                                v-model="props.row.Status"
                             >
                             </AtomSelectInput>
                         </div>
