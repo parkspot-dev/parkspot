@@ -1,5 +1,5 @@
 import { mayaClient } from '@/services/api';
-import ImageUploadService from '@/services/imageUploadService';
+import { uploadImages } from '@/services/ImageUploadService'
 
 const state = {
     SO: {
@@ -346,14 +346,13 @@ const actions = {
             return;
         }
         commit('set-loading', true);
-        const uploadedImageURLs = await ImageUploadService.methods.uploadImages(state.SO.uploadImages, state.SO.spotId);
-        if (uploadedImageURLs['success'] === false) {
+        const uploadedImageURLs = await uploadImages(state.SO.uploadImages, state.SO.spotId);
+        if (!uploadedImageURLs['success']) {
             commit('set-error-msg', uploadedImageURLs['DisplayMsg']);
         }
         else {
             const response = await dispatch('updateSpotRequest', uploadedImageURLs['urls']);
             if (response.DisplayMsg) {
-                // Network issues or server errors could cause the API call to fail.
                 commit('set-error-msg', response.DisplayMsg);
             } else {
                 commit('set-success-msg', 'Your request was saved successfully');
