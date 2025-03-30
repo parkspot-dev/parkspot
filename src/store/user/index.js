@@ -38,6 +38,7 @@ const mutations = {
             localStorage.setItem('PSAuthKey', user.accessToken);
         } else {
             localStorage.setItem('PSAuthKey', null);
+            localStorage.removeItem('UserType');
         }
     },
 
@@ -109,7 +110,6 @@ const actions = {
         try {
             await signOut(auth);
             commit('update-user', null);
-            localStorage.removeItem('UserType');
         } catch (err) {
             // todo write proper exception case
             throw new Error(err);
