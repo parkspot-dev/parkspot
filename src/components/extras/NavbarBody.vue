@@ -49,6 +49,35 @@
                                 </ul>
                             </div>
                         </li>
+                        <li class="menu-item" v-if="isAgent">
+                            <span class="menu-title">Agent Portal</span>
+                            <!-- menu dropdown -->
+                            <div class="menu-item-dropdown">
+                                <ul>
+                                    <li>
+                                        <router-link
+                                            :to="{ name: 'SearchPortal' }"
+                                        >
+                                            Search Portal
+                                        </router-link>
+                                    </li>
+                                    <li>
+                                        <router-link
+                                            :to="{ name: 'booking-portal' }"
+                                        >
+                                            Bookings
+                                        </router-link>
+                                    </li>
+                                    <li>
+                                        <router-link
+                                            :to="{ name: 'spotRequest' }"
+                                        >
+                                            Spot Requests
+                                        </router-link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="menu-item">
                             <router-link
                                 class="menu-link"
@@ -379,11 +408,11 @@ export default {
             activeSlide: 0,
         };
     },
-
     computed: {
         ...mapState('user', {
             user: (state) => state.user,
             isAuthReady: (state) => state.isAuthReady,
+            isAgent: (state) => state.isAgent,
         }),
         ...mapState('config', ['helplineNumber', 'helplineRef']),
     },
@@ -391,9 +420,7 @@ export default {
         ...mapMutations('user', {
             updateLoginModal: 'update-login-Modal',
         }),
-        ...mapActions('user', {
-            logOut: 'logOut',
-        }),
+        ...mapActions('user', ['logOut', 'getUserProfile']),
 
         logInBtn() {
             this.updateLoginModal(true);
@@ -419,6 +446,9 @@ export default {
         backToMainScroll() {
             this.activeSlide = 0; // making main slide active
         },
+    },
+    mounted() {
+        this.getUserProfile();
     },
 };
 </script>
