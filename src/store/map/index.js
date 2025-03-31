@@ -159,7 +159,6 @@ const mutations = {
 
     'update-filter-array'(state, filter) {
         state.filters.push(filter);
-        console.log('Filter obj', state.filters);
     },
 };
 
