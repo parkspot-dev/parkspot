@@ -8,10 +8,10 @@
                 ></SearchInput>
             </div>
             <!-- Filters -->
+            <h3>Filters</h3>
             <div class="filters">
-                <h3>Filters</h3>
                 <FilterDropdown
-                    :options="['2 KM', '3 KM', '4 KM', '5 KM']"
+                    :options="distanceFilterOptions"
                     :searchable="false"
                     @remove="removeFilter('Distance')"
                     @update="addFilter('Distance', $event)"
@@ -19,11 +19,11 @@
                 />
 
                 <FilterDropdown
-                    :options="['3000', '4000', '5000']"
+                    :options="rentFilerOptios"
                     :searchable="false"
                     @remove="removeFilter('Rate')"
                     @update="addFilter('Rate', $event)"
-                    label="Rant Range"
+                    label="Rent Range"
                 />
 
                 <FilterDropdown
@@ -107,6 +107,19 @@ export default {
         return {
             center: null,
             statusFilterOptions: ['Available', 'Rented out'],
+            distanceFilterOptions: [
+                'Less than 2 KM',
+                '2 to 3 KM',
+                '3 to 4 KM',
+                '4 to 5 KM',
+                'Above 5 KM',
+            ],
+            rentFilerOptios: [
+                'Less than ₹3000',
+                '₹3000 - ₹4000',
+                '₹4000 - ₹5000',
+                'More than ₹5000',
+            ],
             showFilterCheckbox: false,
             rateFilterValue: null,
             distanceFilterValue: null,
@@ -117,8 +130,6 @@ export default {
         ...mapState('map', ['selectedLocation', 'filters']),
     },
     mounted() {
-        // this.getInitialFilterValue();
-        // this.applyFilters();
         const latlang = this.$route.query['latlng'];
         if (latlang) {
             this.center = latlang.split(',').map(Number).reverse();
@@ -145,73 +156,34 @@ export default {
         onOutsideFilter() {
             this.showFilterCheckbox = false;
         },
+
         handleStatusFilter(value) {
-            // Value will come as string
-            // get the index first
-            for (let i = 0; i < this.statusFilterOptions.length; i++) {
-                if (this.statusFilterOptions[i] === value) {
-                    value = i;
-                }
-            }
-            this.updateFilter({ name: 'Status', value: value });
+            const valueObj = {
+                min: value === 'Available' ? 1 : 0,
+                max: value === 'Available' ? 1 : 0,
+            };
+
+            this.updateFilter({ name: 'Status', value: valueObj });
             this.applyFilters();
         },
 
         addFilter(filterName, value) {
-            let intValue = parseInt(value);
-            // this.$router.push({
-            //     query: { ...this.$route.query, [filterName]: value },
-            // });
-            this.updateFilter({ name: filterName, value: intValue });
+            const extractMinMax = (filter) => {
+                const numbers = filter.match(/\d+/g)?.map(Number) || [];
+                return numbers.length === 1
+                    ? filter.includes('Less')
+                        ? { min: 0, max: numbers[0] }
+                        : { min: numbers[0], max: Infinity }
+                    : { min: numbers[0], max: numbers[1] };
+            };
+            const minMaxValue = extractMinMax(value);
+            this.updateFilter({ name: filterName, value: minMaxValue });
             this.applyFilters();
         },
 
         removeFilter(filterName) {
             this.removeFilterByName(filterName);
-            // const updatedQuery = { ...this.$route.query };
-            // delete updatedQuery[filterName];
-            // this.$router.push({ query: updatedQuery });
-
             this.applyFilters();
-        },
-
-        // Get filter value
-        // getInitialFilterValue() {
-        //     const querires = this.$route.query;
-        //     for (let i = 0; i < this.filters.length; i++) {
-        //         const currFilter = this.filters[i];
-        //         if (currFilter.name === 'Distance') {
-        //             this.distanceFilterValue = currFilter.value;
-        //         } else if (currFilter.name === 'Rate') {
-        //             this.rateFilterValue = currFilter.value;
-        //         } else if (currFilter.name === 'Status') {
-        //             if (currFilter.value === 0) {
-        //                 statusFilterValue = this.statusFilterOptions[0];
-        //             } else {
-        //                 statusFilterValue = this.statusFilterOptions[1];
-        //             }
-        //         }
-        //     }
-        // },
-
-        getInitialFilterValue() {
-            const queries = this.$route.query;
-
-            if (queries.Distance) {
-                this.distanceFilterValue = queries.Distance;
-            }
-
-            if (queries.Rate) {
-                this.rateFilterValue = queries.Rate;
-            }
-
-            if (queries.Status) {
-                const statusValue = parseInt(queries.Status);
-                this.statusFilterValue =
-                    statusValue === 0
-                        ? this.statusFilterOptions[0]
-                        : this.statusFilterOptions[1];
-            }
         },
     },
 };
@@ -238,13 +210,13 @@ export default {
             position: relative;
 
             .filter-dropdown {
-                position: absolute;
-                z-index: 999;
-                padding: 12px 5px 5px 12px;
-                width: 120px;
-                border: 1px solid var(--parkspot-black);
-                border-radius: 4px;
                 background-color: var(--parkspot-white);
+                border-radius: 4px;
+                border: 1px solid var(--parkspot-black);
+                padding: 12px 5px 5px 12px;
+                position: absolute;
+                width: 120px;
+                z-index: 999;
 
                 ul {
                     font-size: 16px;
@@ -257,8 +229,7 @@ export default {
         position: relative;
         display: flex;
         flex-wrap: wrap;
-
-        gap: 30px;
+        gap: 16px;
 
         h3 {
             align-self: center;
@@ -271,7 +242,7 @@ export default {
         padding-bottom: 2rem;
 
         .srp-results-heading {
-            margin-top: 40px;
+            margin-top: 20px;
             span {
                 color: rgb(151, 149, 149);
             }

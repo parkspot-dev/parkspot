@@ -6,27 +6,23 @@
                 v-if="selectedItem"
                 class="material-symbols-outlined"
                 @click.stop="removeSelectedItem"
-            >close</span>
+                >close</span
+            >
             <span
                 v-else
                 class="material-symbols-outlined"
-                :class="{ 'rotate': isOpen }"
-            >keyboard_arrow_down</span>
+                :class="{ rotate: isOpen }"
+                >keyboard_arrow_down</span
+            >
         </div>
 
-        <div v-if="isOpen" class="menu">
+        <div v-if="isOpen" ref="dropdown" class="menu">
             <div
                 v-for="(option, index) in filteredOptions"
                 :key="index"
+                @click="updateSelectedOptions(option)"
                 class="dropdown-item"
             >
-                <input
-                    :id="`option-${index}`"
-                    :value="option"
-                    type="radio"
-                    v-model="selectedItem"
-                    @input="updateSelectedOptions(option)"
-                />
                 <label :for="`option-${index}`">{{ option }}</label>
             </div>
         </div>
@@ -67,17 +63,39 @@ export default {
     },
     methods: {
         ...mapActions('map', ['srpCall']),
+
         toggleDropdown() {
             this.isOpen = !this.isOpen;
         },
+
         removeSelectedItem() {
-            this.selectedItem = ''
+            this.selectedItem = '';
             this.$emit('remove', null);
         },
+
         updateSelectedOptions(value) {
             this.isOpen = false;
+            this.selectedItem = value;
             this.$emit('update', value);
         },
+
+        handleClickOutside(event) {
+            if (
+                this.$refs.dropdown &&
+                !this.$refs.dropdown.contains(event.target) &&
+                !this.$el.contains(event.target)
+            ) {
+                this.isOpen = false;
+            }
+        },
+    },
+
+    mounted() {
+        document.addEventListener('click', this.handleClickOutside);
+    },
+
+    beforeUnmount() {
+        document.removeEventListener('click', this.handleClickOutside);
     },
 };
 </script>
@@ -91,27 +109,43 @@ export default {
     font-size: 12px !important;
     font-weight: 400 !important;
     gap: 8px;
-    justify-content: center;
+    justify-content: space-between;
     padding: 4px 8px;
-    width: fit-content;
+    width: 150px;
 }
+
 .label:hover {
     background-color: rgba(128, 128, 128, 0.074);
 }
+
 .material-symbols-outlined {
     font-size: 20px !important;
 }
 
 .menu {
     background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 2px 6px rgba(128, 128, 128, 0.61) !important;
     display: flex;
-    flex-direction: row;
-    gap: 20px;
-    left: 0;
+    flex-direction: column;
     padding: 0;
     position: absolute;
     transition: 1s;
-    width: 100% !important;
+    width: 150px;
+    z-index: 999;
+}
+
+.menu::before {
+    border-bottom: 8px solid var(--primary-color);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    content: '';
+    height: 0;
+    left: 50%;
+    position: absolute;
+    top: -8px;
+    width: 0;
+    z-index: 1000;
 }
 
 .rotate {
@@ -121,8 +155,13 @@ export default {
 
 .dropdown-item {
     align-items: center;
+    cursor: pointer;
     display: flex;
     gap: 8px;
     margin-bottom: 5px;
+}
+
+.dropdown-item:hover {
+    background-color: gainsboro;
 }
 </style>
