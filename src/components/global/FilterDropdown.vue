@@ -23,7 +23,7 @@
                 @click="updateSelectedOptions(option)"
                 class="dropdown-item"
             >
-                <label :for="`option-${index}`">{{ option }}</label>
+                <div>{{ option }}</div>
             </div>
         </div>
     </div>
@@ -128,7 +128,6 @@ export default {
     box-shadow: 0px 2px 6px rgba(128, 128, 128, 0.61) !important;
     display: flex;
     flex-direction: column;
-    padding: 0;
     position: absolute;
     transition: 1s;
     width: 150px;
@@ -136,7 +135,7 @@ export default {
 }
 
 .menu::before {
-    border-bottom: 8px solid var(--primary-color);
+    border-bottom: 8px solid gray;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
     content: '';
@@ -159,6 +158,11 @@ export default {
     display: flex;
     gap: 8px;
     margin-bottom: 5px;
+
+    div {
+        cursor: pointer !important;
+        font-size: 12px !important;
+    }
 }
 
 .dropdown-item:hover {

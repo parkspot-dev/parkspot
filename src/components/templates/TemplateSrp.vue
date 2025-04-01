@@ -205,31 +205,14 @@ export default {
         .map-search {
             width: 100%;
         }
-
-        .filter-component {
-            position: relative;
-
-            .filter-dropdown {
-                background-color: var(--parkspot-white);
-                border-radius: 4px;
-                border: 1px solid var(--parkspot-black);
-                padding: 12px 5px 5px 12px;
-                position: absolute;
-                width: 120px;
-                z-index: 999;
-
-                ul {
-                    font-size: 16px;
-                }
-            }
-        }
     }
 
     .filters {
-        position: relative;
         display: flex;
         flex-wrap: wrap;
         gap: 16px;
+        min-height: 44px;
+        position: relative;
 
         h3 {
             align-self: center;
