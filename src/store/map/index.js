@@ -229,36 +229,38 @@ const actions = {
 
     applyFilters({ commit, state }) {
         let filteredSrpResults = [...state.srpResults];
-    
+
         for (let filter of state.filters) {
             if (filter.name === 'Distance') {
                 filteredSrpResults = filteredSrpResults.filter(
-                    (srpResult) => srpResult.Distance >= filter.minValue && srpResult.Distance <= filter.maxValue
+                    (srpResult) =>
+                        srpResult.Distance >= filter.minValue &&
+                        srpResult.Distance <= filter.maxValue,
                 );
-            } 
-            else if (filter.name === 'Rate') {
+            } else if (filter.name === 'Rate') {
                 filteredSrpResults = filteredSrpResults.filter(
-                    (srpResult) => srpResult.Rate >= filter.minValue && srpResult.Rate <= filter.maxValue
+                    (srpResult) =>
+                        srpResult.Rate >= filter.minValue &&
+                        srpResult.Rate <= filter.maxValue,
                 );
-            } 
-            else if (filter.name === 'Status') {
+            } else if (filter.name === 'Status') {
                 if (filter.minValue > 0) {
                     // Slots Available
                     filteredSrpResults = filteredSrpResults.filter(
-                        (srpResult) => srpResult.SlotsAvailable > 0
+                        (srpResult) => srpResult.SlotsAvailable > 0,
                     );
                 } else {
                     // No Slots Available
                     filteredSrpResults = filteredSrpResults.filter(
-                        (srpResult) => srpResult.SlotsAvailable === 0
+                        (srpResult) => srpResult.SlotsAvailable === 0,
                     );
                 }
             }
         }
-    
+
         commit('update-filtered-srp-results', filteredSrpResults);
     },
-    
+
     updateUsersCurrentLocation({ commit }, center) {
         commit('update-user-location', center);
     },
@@ -271,16 +273,16 @@ const actions = {
     //Update filter Array
     updateFilter({ commit }, { name, value }) {
         if (!name || !value || typeof value !== 'object') {
-            console.error("Invalid filter data", { name, value });
+            console.error('Invalid filter data', { name, value });
             return;
         }
 
         const filterObj = {
             name: name,
-            minValue: value.min ?? 0, 
-            maxValue: value.max ?? Infinity 
+            minValue: value.min ?? 0,
+            maxValue: value.max ?? Infinity,
         };
-    
+
         commit('update-filter-array', filterObj);
     },
 
