@@ -38,14 +38,14 @@ const mutations = {
             localStorage.setItem('PSAuthKey', user.accessToken);
         } else {
             localStorage.setItem('PSAuthKey', null);
-            localStorage.removeItem('UserType');
+            localStorage.removeItem('UserProfile');
         }
     },
 
     'update-user-profile'(state, userProfile) {
         userProfile['UserName'] = '';
         state.userProfile = userProfile;
-        localStorage.setItem('UserType', userProfile.Type);
+        localStorage.setItem('UserProfile', JSON.stringify(userProfile));
     },
 
     'update-login-Modal'(state, loginModal) {
@@ -240,10 +240,15 @@ const actions = {
     },
 
     async getUserProfile({ commit }) {
-        let userType = localStorage.getItem('UserType');
-        if (userType !== null && !isNaN(Number(userType))) return commit('set-user-type', userType);
+        let userProfile = JSON.parse(localStorage.getItem('UserProfile') || '{}');
+        if (Object.keys(userProfile).length !== 0) {
+            commit('update-user-profile', userProfile);
+            commit('set-user-type', userProfile.Type);
+            return;
+        }
         try {
             const userProfile = await mayaClient.get('/auth/user');
+            console.log("this is fetched from api", userProfile);
             commit('update-user-profile', userProfile);
             commit('set-user-type', userProfile.Type);
         } catch (err) {
