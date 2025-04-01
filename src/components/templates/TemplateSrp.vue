@@ -109,9 +109,9 @@ export default {
             statusFilterOptions: ['Available', 'Rented out'],
             distanceFilterOptions: [
                 'Less than 2 KM',
-                '2 to 3 KM',
-                '3 to 4 KM',
-                '4 to 5 KM',
+                '2 KM to 3 KM',
+                '3 KM to 4 KM',
+                '4 KM to 5 KM',
                 'Above 5 KM',
             ],
             rentFilerOptios: [

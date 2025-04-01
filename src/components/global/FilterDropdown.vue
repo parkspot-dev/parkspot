@@ -108,7 +108,7 @@ export default {
     font-weight: 400 !important;
     gap: 8px;
     justify-content: space-between;
-    padding: 4px 8px;
+    padding: 4px 8px 4px 12px;
     width: 150px;
 }
 
