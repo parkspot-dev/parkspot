@@ -550,7 +550,7 @@ export default {
             });
             this.setUpdatedFields(Array.from(updatedFields));
             this.saveForm().then((response) => {
-                if (!response.DisplayMsg) this.updateInitialFormState();
+                if (!response.ErrorCode) this.updateInitialFormState();
             });
         },
         onLastCallDateUpdate(updatedDate) {
