@@ -57,6 +57,9 @@ export default {
     },
     mounted() {
         this.getUserProfile();
+        if (this.isAdmin) {
+            this.getAgents();
+        }
     },
     data() {
         return {
@@ -286,12 +289,6 @@ export default {
         hasError(error) {
             if (error) {
                 this.alertError(this.errorMessage);
-            }
-        },
-        // if user is admin then call getAgents()
-        isAdmin(newValue) {
-            if (newValue) {
-                this.getAgents();
             }
         },
     },
