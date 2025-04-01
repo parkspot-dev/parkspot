@@ -352,7 +352,7 @@ const actions = {
         }
         else {
             const response = await dispatch('updateSpotRequest', uploadedImageURLs['urls']);
-            if (response.DisplayMsg) {
+            if (response.ErrorCode) {
                 commit('set-error-msg', response.DisplayMsg);
             } else {
                 commit('set-success-msg', 'Your request was saved successfully');
@@ -372,7 +372,7 @@ const actions = {
         const response = await mayaClient.post(
             `/owner/spot-update?spot-id=${state.SO.spotId}`,
         );
-        if (response.DisplayMsg) {
+        if (response.ErrorCode) {
             // Network issues or server errors could cause the API call to fail.
             commit('set-error-msg', response.DisplayMsg);
         } else {
