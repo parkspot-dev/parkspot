@@ -62,8 +62,6 @@ export default {
         },
     },
     methods: {
-        ...mapActions('map', ['srpCall']),
-
         toggleDropdown() {
             this.isOpen = !this.isOpen;
         },

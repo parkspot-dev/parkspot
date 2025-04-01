@@ -121,9 +121,6 @@ export default {
                 'More than ₹5000',
             ],
             showFilterCheckbox: false,
-            rateFilterValue: null,
-            distanceFilterValue: null,
-            statusFilterValue: null,
         };
     },
     computed: {
