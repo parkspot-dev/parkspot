@@ -248,7 +248,6 @@ const actions = {
         }
         try {
             const userProfile = await mayaClient.get('/auth/user');
-            console.log("this is fetched from api", userProfile);
             commit('update-user-profile', userProfile);
             commit('set-user-type', userProfile.Type);
         } catch (err) {
