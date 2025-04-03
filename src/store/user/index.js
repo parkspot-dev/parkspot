@@ -45,7 +45,9 @@ const mutations = {
     'update-user-profile'(state, userProfile) {
         userProfile['UserName'] = '';
         state.userProfile = userProfile;
-        localStorage.setItem('UserProfile', JSON.stringify(userProfile));
+        if (userProfile && !userProfile.hasOwnProperty('ErrorCode')) {
+            localStorage.setItem('UserProfile', JSON.stringify(userProfile));
+        }
     },
 
     'update-login-Modal'(state, loginModal) {
