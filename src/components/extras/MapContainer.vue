@@ -159,21 +159,6 @@ export default {
             // Add parking site markers
             // Only run when we have spots list
             if (this.spotsList) {
-                // for (const spot of this.filteredSrpResults) {
-                //     const psMarker = document.createElement('div');
-
-                //     psMarker.className = 'marker';
-                //     psMarker.style.backgroundImage = 'url(' + this.img + ')';
-                //     psMarker.style.width = '50px';
-                //     psMarker.style.height = '50px';
-                //     psMarker.style.backgroundSize = '110%';
-
-                //     const psPopup = this.getPsPopup(spot);
-                //     new mapboxgl.Marker(psMarker)
-                //         .setLngLat([spot.Long, spot.Lat])
-                //         .setPopup(psPopup)
-                //         .addTo(this.map);
-                // }
                 this.updateMarkers();
             }
         },
