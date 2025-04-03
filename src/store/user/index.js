@@ -1,13 +1,13 @@
 import { mayaClient } from '@/services/api';
 import { auth } from '../../firebase';
 import store from '../../store';
+import { UserType } from '@/constant/enums';
 import {
     signInWithPopup,
     GoogleAuthProvider,
     signOut,
     onAuthStateChanged,
 } from 'firebase/auth';
-import { UserType } from '@/constant/enums';
 
 const state = {
     user: null,
@@ -18,6 +18,7 @@ const state = {
         Type: 'VO',
     },
     isAdmin: false,
+    isAgent: false,
     isAuthReady: false,
     loginModal: false,
     contactForm: {},
@@ -37,15 +38,14 @@ const mutations = {
             localStorage.setItem('PSAuthKey', user.accessToken);
         } else {
             localStorage.setItem('PSAuthKey', null);
+            localStorage.removeItem('UserProfile');
         }
     },
 
     'update-user-profile'(state, userProfile) {
         userProfile['UserName'] = '';
         state.userProfile = userProfile;
-        if(state.userProfile.Type === UserType.Admin) {
-            state.isAdmin = true;
-        }
+        localStorage.setItem('UserProfile', JSON.stringify(userProfile));
     },
 
     'update-login-Modal'(state, loginModal) {
@@ -77,6 +77,10 @@ const mutations = {
 
     'update-preference'(state, data = {}) {
         state.preference = data;
+    },
+    'set-user-type'(state, userType) {
+        state.isAdmin = userType == UserType.Admin;
+        state.isAgent = userType == UserType.Agent || state.isAdmin;
     },
 };
 
@@ -115,11 +119,11 @@ const actions = {
     register({ commit, state }) {
         // prettier-ignore
         const req = {
-            UserName    : 'dummy_' + state.contactForm.fullname + '_' + Date.now(),
-            Password    : 'dummy@123',
-            FullName    : state.contactForm.fullname,
-            City        : state.locationDetails.locDetails.locName,
-            EmailID     : state.contactForm.email,
+            UserName: 'dummy_' + state.contactForm.fullname + '_' + Date.now(),
+            Password: 'dummy@123',
+            FullName: state.contactForm.fullname,
+            City: state.locationDetails.locDetails.locName,
+            EmailID: state.contactForm.email,
         };
 
         const loginReq = {
@@ -138,16 +142,16 @@ const actions = {
     kyc({ state }) {
         // prettier-ignore
         const req = {
-            ContactNo               : state.contactForm.cno,
-            UserName                : state.login.Username,
-            Owner                   : state.kycForm.owner,
-            OwnerName               : 'none',
-            OwnerContactNo          : 'none',
-            Relationship            : 'none',
-            OwnershipDocument       : state.kycForm.documentData,
-            IdentityDocument        : state.kycForm.documentData,
-            OwnershipDocumentImage  : state.kycForm.imgData,
-            IdentityDocumentImage   : state.kycForm.imgData,
+            ContactNo: state.contactForm.cno,
+            UserName: state.login.Username,
+            Owner: state.kycForm.owner,
+            OwnerName: 'none',
+            OwnerContactNo: 'none',
+            Relationship: 'none',
+            OwnershipDocument: state.kycForm.documentData,
+            IdentityDocument: state.kycForm.documentData,
+            OwnershipDocumentImage: state.kycForm.imgData,
+            IdentityDocumentImage: state.kycForm.imgData,
         };
 
         mayaClient.patch('/kyc', req);
@@ -161,21 +165,21 @@ const actions = {
         // prettier-ignore
         const req = {
             User: {
-                UserName    : state.login.Username ? state.login.Username : state.contactForm.fullname, //  only for logged in user
-                FullName    : state.contactForm.fullname,
-                City        : state.locationDetails.locDetails ? state.locationDetails.locDetails.locName : '',
-                EmailID     : state.contactForm.email,
-                Mobile      : state.contactForm.cno,
+                UserName: state.login.Username ? state.login.Username : state.contactForm.fullname, //  only for logged in user
+                FullName: state.contactForm.fullname,
+                City: state.locationDetails.locDetails ? state.locationDetails.locDetails.locName : '',
+                EmailID: state.contactForm.email,
+                Mobile: state.contactForm.cno,
             },
-            Comments        : 'Spot Registered',
+            Comments: 'Spot Registered',
             RentDetails: {
-                VehicleType         : '',
-                Rate                : state.additionalInfo.rent ? state.additionalInfo.rent : '',
-                MinBookingDuration  : state.additionalInfo.minDur ? state.additionalInfo.minDur : '',
-                Availability        : '',
-                SpecialService      : convertedAmenities, //  None/Camera/Security
-                TnC                 : 'I Agree',
-                Address             : state.locationDetails.locDetails ? state.locationDetails.locDetails.locName : state.contactForm.addr,
+                VehicleType: '',
+                Rate: state.additionalInfo.rent ? state.additionalInfo.rent : '',
+                MinBookingDuration: state.additionalInfo.minDur ? state.additionalInfo.minDur : '',
+                Availability: '',
+                SpecialService: convertedAmenities, //  None/Camera/Security
+                TnC: 'I Agree',
+                Address: state.locationDetails.locDetails ? state.locationDetails.locDetails.locName : state.contactForm.addr,
 
             },
         };
@@ -188,11 +192,11 @@ const actions = {
         // prettier-ignore
         const req = {
             User: {
-                FullName    : state.contactForm.fullname,
-                EmailID     : state.contactForm.email,
-                Mobile      : state.contactForm.cno,
+                FullName: state.contactForm.fullname,
+                EmailID: state.contactForm.email,
+                Mobile: state.contactForm.cno,
             },
-            Comments        : comments,
+            Comments: comments,
         };
 
         mayaClient.post('/contact', req);
@@ -201,11 +205,11 @@ const actions = {
     async requestSpot({ state }) {
         // prettier-ignore
         const req = {
-            Name        : state.contactForm.fullname,
-            Mobile      : state.contactForm.cno,
-            EmailID     : state.contactForm.email,
-            CarModel    : state.preference.carModel,
-            Duration    : state.preference.minDur,
+            Name: state.contactForm.fullname,
+            Mobile: state.contactForm.cno,
+            EmailID: state.contactForm.email,
+            CarModel: state.preference.carModel,
+            Duration: state.preference.minDur,
             // Country     : state.locationDetails.locDetails.country,
             // State       : state.locationDetails.locDetails.state,
             // City        : state.locationDetails.locDetails.city,
@@ -235,10 +239,17 @@ const actions = {
         }
     },
 
-    async getUserProfile({ commit, dispatch, state }) {
+    async getUserProfile({ commit }) {
+        let userProfile = JSON.parse(localStorage.getItem('UserProfile') || '{}');
+        if (Object.keys(userProfile).length !== 0) {
+            commit('update-user-profile', userProfile);
+            commit('set-user-type', userProfile.Type);
+            return;
+        }
         try {
             const userProfile = await mayaClient.get('/auth/user');
             commit('update-user-profile', userProfile);
+            commit('set-user-type', userProfile.Type);
         } catch (err) {
             // todo write proper exception case
             throw new Error(err);
