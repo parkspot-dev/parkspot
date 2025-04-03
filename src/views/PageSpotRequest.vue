@@ -40,6 +40,7 @@
             <b-table-column
                 field="Name"
                 label="Name"
+                searchable
                 sortable
                 cell-class="has-text-left"
             >
@@ -110,6 +111,7 @@
                 field="Remark"
                 label="Remark"
                 sortable
+                searchable
                 cell-class="has-text-left"
             >
                 <template v-slot="props">
