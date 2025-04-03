@@ -241,7 +241,7 @@ const actions = {
 
     async getUserProfile({ commit }) {
         let userProfile = JSON.parse(localStorage.getItem('UserProfile') || '{}');
-        if (Object.keys(userProfile).length !== 0) {
+        if (Object.keys(userProfile).length !== 0 && !userProfile.hasOwnProperty('ErrorCode')) {
             commit('update-user-profile', userProfile);
             commit('set-user-type', userProfile.Type);
             return;
