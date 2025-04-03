@@ -26,7 +26,7 @@
                 <AtomIcon icon="image-plus" class="image-icon" />
                 <input
                     @change="handleFileChange"
-                    accept="image/png,image/jpeg"
+                    accept="image/png,image/jpeg,.heic"
                     aria-label="Upload images"
                     hidden
                     multiple
@@ -35,15 +35,21 @@
                 />
             </div>
         </div>
+        <LoaderModal v-if="isLoading"></LoaderModal>
     </div>
 </template>
 
 <script>
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
-const ALLOWED_TYPES = ['image/png', 'image/jpeg'];
+import ImageUploadService from '@/services/ImageUploadService';
+import LoaderModal from '@/components/extras/LoaderModal.vue';
+const ALLOWED_TYPES = ['image/png', 'image/jpeg', '.heic'];
 export default {
     name: 'ImageUpload',
-    components: { AtomIcon },
+    components: {
+        AtomIcon,
+        LoaderModal,
+    },
     props: {
         maxImageSize: {
             type: Number,
@@ -64,6 +70,7 @@ export default {
             // }
             uploadImages: [],
             isDragging: false,
+            isLoading: false,
         };
     },
     methods: {
@@ -96,7 +103,7 @@ export default {
             this.validateFileUpload(Array.from(e.target.files));
             e.target.value = ''; // Reset input
         },
-        validateFileUpload(files) {
+        async validateFileUpload(files) {
             if (!this.canAddMoreFiles()) return;
 
             const {
@@ -104,7 +111,7 @@ export default {
                 invalidFileFound,
                 largeFileFound,
                 duplicateFound,
-            } = this.validateFiles(files);
+            } = await this.validateFiles(files);
 
             this.handleValidationErrors(
                 invalidFileFound,
@@ -126,27 +133,39 @@ export default {
             return true;
         },
 
-        validateFiles(files) {
+        async validateFiles(files) {
             let validFiles = [];
             let invalidFileFound = false;
             let largeFileFound = false;
             let duplicateFound = false;
 
-            files.forEach((file) => {
-                if (!this.isFileTypeValid(file)) {
-                    invalidFileFound = true;
-                    return;
-                }
-                if (!this.isFileSizeValid(file)) {
-                    largeFileFound = true;
-                    return;
+            for (let file of files) {
+                if (file.type === 'image/heic' || file.name.endsWith('.heic')) {
+                    this.isLoading = true;
+                    try {
+                        file = await ImageUploadService.convertHEICtoJPEG(file);
+                    } catch (error) {
+                        this.showDangerToast(
+                            'Error converting HEIC file. Please try again.',
+                        );
+                    } finally {
+                        this.isLoading = false;
+                    }
                 }
                 if (this.isDuplicateFile(file)) {
                     duplicateFound = true;
-                    return;
+                    continue;
+                }
+                if (!this.isFileTypeValid(file)) {
+                    invalidFileFound = true;
+                    continue;
+                }
+                if (!this.isFileSizeValid(file)) {
+                    largeFileFound = true;
+                    continue;
                 }
                 validFiles.push(file);
-            });
+            }
 
             return {
                 validFiles,
@@ -167,9 +186,7 @@ export default {
         isDuplicateFile(file) {
             return this.uploadImages.some(
                 (img) =>
-                    img.file.name === file.name &&
-                    img.file.size === file.size &&
-                    img.file.lastModified === file.lastModified,
+                    img.file.name === file.name && img.file.size === file.size,
             );
         },
 
@@ -180,7 +197,7 @@ export default {
         ) {
             if (invalidFileFound) {
                 this.showDangerToast(
-                    `Only ${ALLOWED_TYPES.map((t) => t.split('/')[1].toUpperCase()).join(' or ')} images are allowed.`,
+                    `Only ${ALLOWED_TYPES.map((t) => t.replace('image/', '').toUpperCase()).join(' or ')} images are allowed.`,
                 );
             }
             if (largeFileFound) {

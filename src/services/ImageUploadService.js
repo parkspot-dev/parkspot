@@ -7,7 +7,7 @@ async function getSasUrl() {
 
 // Uploads images to the SAS URL using a unique filename format (`namePrefix:epochTime.extension`).
 // The `namePrefix` parameter should be the `SpotRequestId` to ensure uniqueness across different requests.
-export async function uploadImages(Images, namePrefix) {
+async function uploadImages(Images, namePrefix) {
     if (!namePrefix) {
         throw new Error("Error: namePrefix is required and must be a non-empty string.");
     }
@@ -88,3 +88,21 @@ export async function uploadImages(Images, namePrefix) {
         urls: uploadResults.map((result) => result.url),
     };
 }
+async function convertHEICtoJPEG(file) {
+    try {
+        const heic2any = await import(
+            'https://cdn.jsdelivr.net/npm/heic2any@0.0.3/+esm'
+        );
+        const blob = await heic2any.default({
+            blob: file,
+            toType: 'image/jpeg',
+        });
+        return new File([blob], file.name.replace('.heic', '.jpg'), {
+            type: 'image/jpeg',
+        });
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+export default { uploadImages, convertHEICtoJPEG };
