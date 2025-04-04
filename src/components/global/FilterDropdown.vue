@@ -100,7 +100,7 @@ export default {
 
 <style scoped>
 .label {
-    border-radius: 15px;
+    border-radius: 16px;
     border: 1px solid rgba(128, 128, 128, 0.263) !important;
     cursor: pointer;
     display: flex;
@@ -155,7 +155,7 @@ export default {
     cursor: pointer;
     display: flex;
     gap: 8px;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 
     div {
         cursor: pointer !important;

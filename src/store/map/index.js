@@ -25,8 +25,8 @@ const state = {
     userCurrentLocation: [77.5946, 12.9716], //  default bengaluru lat, lng.
     // Filters array contains objects with:
     // - name: Filter type (e.g., 'Rent')
-    // - minValue: Minimum range value
-    // - maxValue: Maximum range value
+    // - minValue: Minimum range value (inclusive)
+    // - maxValue: Maximum range value (inclusive)
     filters: [],
 };
 
