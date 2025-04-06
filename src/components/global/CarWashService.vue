@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import { CAR_WASH_SERVICES } from '@/constant/constant';
 import { contactFormSchema } from '@/validationSchemas';
 import { Form } from 'vee-validate';
 import { mapActions, mapMutations } from 'vuex';
@@ -71,14 +72,7 @@ export default {
     },
     data() {
         return {
-            carWashServices: [
-                'Car Body Cleaning',
-                'Windshield & Windows',
-                'Wheels & Alloy',
-                'Shine & Protects with Carnauba Wax',
-                'Imported Biodegradable Cleaning Solutions',
-                'Professional Services',
-            ],
+            carWashServices: CAR_WASH_SERVICES,
             model: {
                 fullname: '',
                 cno: '',
