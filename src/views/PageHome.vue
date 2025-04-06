@@ -2,6 +2,7 @@
     <div id="Home">
         <TemplateHomeBanner></TemplateHomeBanner>
         <TemplateFeatureHome></TemplateFeatureHome>
+        <CarWashService></CarWashService>
         <TemplateOurProducts @arrowBtn="onArrowBtn"></TemplateOurProducts>
         <PageAbout></PageAbout>
         <TestimonialSection></TestimonialSection>
@@ -16,6 +17,7 @@ import TemplateFeatureHome from '../components/templates/TemplateFeatureHome.vue
 import TemplateHomeBanner from '../components/templates/TemplateHomeBanner.vue';
 import TemplateOurProducts from '../components/templates/TemplateOurProducts.vue';
 import TestimonialSection from '@/components/global/TestimonialSection.vue';
+import CarWashService from '@/components/global/CarWashService.vue';
 export default {
     name: 'PageHome',
     components: {
@@ -24,7 +26,8 @@ export default {
         PageContactUs,
         TemplateHomeBanner,
         TemplateOurProducts,
-        TestimonialSection
+        TestimonialSection,
+        CarWashService
     },
     metaInfo() {
         return {
