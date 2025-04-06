@@ -11,23 +11,23 @@
 </template>
 <script>
 import { PAGE_TITLE } from '@/constant/constant';
+import CarWashService from '@/components/global/CarWashService.vue';
 import PageAbout from './PageAbout.vue';
 import PageContactUs from './PageContactUs.vue';
 import TemplateFeatureHome from '../components/templates/TemplateFeatureHome.vue';
 import TemplateHomeBanner from '../components/templates/TemplateHomeBanner.vue';
 import TemplateOurProducts from '../components/templates/TemplateOurProducts.vue';
 import TestimonialSection from '@/components/global/TestimonialSection.vue';
-import CarWashService from '@/components/global/CarWashService.vue';
 export default {
     name: 'PageHome',
     components: {
+        CarWashService,
         PageAbout,
         TemplateFeatureHome,
         PageContactUs,
         TemplateHomeBanner,
         TemplateOurProducts,
         TestimonialSection,
-        CarWashService
     },
     metaInfo() {
         return {

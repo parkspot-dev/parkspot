@@ -60,8 +60,8 @@
 <script>
 import { contactFormSchema } from '@/validationSchemas';
 import { Form } from 'vee-validate';
-import FormInput from '@/components/global/FormInput.vue';
 import { mapActions, mapMutations } from 'vuex';
+import FormInput from '@/components/global/FormInput.vue';
 
 export default {
     name: 'CarWashService',
