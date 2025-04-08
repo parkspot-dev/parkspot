@@ -6,26 +6,33 @@
                     class="map-search"
                     @changed="onChange"
                 ></SearchInput>
-                <div class="filter-component">
-                    <div v-click-outside="onOutsideFilter">
-                        <b-button
-                            icon-left="tune-variant"
-                            @click="activateFilter"
-                        >
-                            Filters
-                        </b-button>
-                        <div class="filter-dropdown" v-if="showFilterCheckbox">
-                            <ul>
-                                <!-- TODO: Remove this component and use a single one for checkbox functionality -->
-                                <AtomCheckbox
-                                    :values="filterOptions"
-                                    :size="'is-small'"
-                                    @input="handleFilter"
-                                ></AtomCheckbox>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <!-- Filters -->
+            <h3>Filters</h3>
+            <div class="filters">
+                <FilterDropdown
+                    :options="distanceFilterOptions"
+                    :searchable="false"
+                    @remove="removeFilter('Distance')"
+                    @update="addFilter('Distance', $event)"
+                    label="Search Within"
+                />
+
+                <FilterDropdown
+                    :options="rentFilerOptios"
+                    :searchable="false"
+                    @remove="removeFilter('Rate')"
+                    @update="addFilter('Rate', $event)"
+                    label="Rent Range"
+                />
+
+                <FilterDropdown
+                    :options="statusFilterOptions"
+                    :searchable="false"
+                    @remove="removeFilter('Status')"
+                    @update="handleStatusFilter($event)"
+                    label="Availability"
+                />
             </div>
             <div class="srp-results-heading">
                 <p>
@@ -65,8 +72,9 @@ import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
 import AtomCheckbox from '../atoms/AtomCheckbox.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import SearchInput from '../extras/SearchInput.vue';
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import vClickOutside from 'v-click-outside';
+import FilterDropdown from '../global/FilterDropdown.vue';
 export default {
     name: 'TemplateSrp',
     directives: {
@@ -78,6 +86,7 @@ export default {
         MapContainer,
         SearchInput,
         AtomCheckbox,
+        FilterDropdown,
     },
     emits: ['changed', 'flyToSrp', 'details'],
     props: {
@@ -97,12 +106,25 @@ export default {
     data() {
         return {
             center: null,
-            filterOptions: ['Available', 'Rented out'],
+            statusFilterOptions: ['Available', 'Rented out'],
+            distanceFilterOptions: [
+                'Less than 2 KM',
+                '2 KM to 3 KM',
+                '3 KM to 4 KM',
+                '4 KM to 5 KM',
+                'Above 5 KM',
+            ],
+            rentFilerOptios: [
+                'Less than ₹3000',
+                '₹3000 - ₹4000',
+                '₹4000 - ₹5000',
+                'More than ₹5000',
+            ],
             showFilterCheckbox: false,
         };
     },
     computed: {
-        ...mapState('map', ['selectedLocation']),
+        ...mapState('map', ['selectedLocation', 'filters']),
     },
     mounted() {
         const latlang = this.$route.query['latlng'];
@@ -111,6 +133,11 @@ export default {
         }
     },
     methods: {
+        ...mapActions('map', [
+            'applyFilters',
+            'updateFilter',
+            'removeFilterByName',
+        ]),
         onPageChange(page) {
             this.$emit('changed', page);
         },
@@ -126,8 +153,34 @@ export default {
         onOutsideFilter() {
             this.showFilterCheckbox = false;
         },
-        handleFilter(filterOptions) {
-            this.$emit('filter', filterOptions);
+
+        handleStatusFilter(value) {
+            const valueObj = {
+                min: value === 'Available' ? 1 : 0,
+                max: value === 'Available' ? 1 : 0,
+            };
+
+            this.updateFilter({ name: 'Status', value: valueObj });
+            this.applyFilters();
+        },
+
+        addFilter(filterName, value) {
+            const extractMinMax = (filter) => {
+                const numbers = filter.match(/\d+/g)?.map(Number) || [];
+                return numbers.length === 1
+                    ? filter.includes('Less')
+                        ? { min: 0, max: numbers[0] }
+                        : { min: numbers[0], max: Infinity }
+                    : { min: numbers[0], max: numbers[1] };
+            };
+            const minMaxValue = extractMinMax(value);
+            this.updateFilter({ name: filterName, value: minMaxValue });
+            this.applyFilters();
+        },
+
+        removeFilter(filterName) {
+            this.removeFilterByName(filterName);
+            this.applyFilters();
         },
     },
 };
@@ -149,23 +202,18 @@ export default {
         .map-search {
             width: 100%;
         }
+    }
 
-        .filter-component {
-            position: relative;
+    .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        min-height: 44px;
+        position: relative;
 
-            .filter-dropdown {
-                position: absolute;
-                z-index: 999;
-                padding: 12px 5px 5px 12px;
-                width: 120px;
-                border: 1px solid var(--parkspot-black);
-                border-radius: 4px;
-                background-color: var(--parkspot-white);
-
-                ul {
-                    font-size: 16px;
-                }
-            }
+        h3 {
+            align-self: center;
+            vertical-align: middle;
         }
     }
 
@@ -174,6 +222,7 @@ export default {
         padding-bottom: 2rem;
 
         .srp-results-heading {
+            margin-top: 20px;
             span {
                 color: rgb(151, 149, 149);
             }
@@ -232,7 +281,9 @@ export default {
 
         /* Position the content gradient in the top left, and the
       scroll gradient in the top right */
-        mask-position: 0 0, 100% 0;
+        mask-position:
+            0 0,
+            100% 0;
 
         /* We don't repeat our mask images */
         mask-repeat: no-repeat, no-repeat;

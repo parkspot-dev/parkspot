@@ -22,7 +22,12 @@ const state = {
     recentSearch: [],
     recentID: 0,
     filteredSrpResults: [],
-    userCurrentLocation : [77.5946, 12.9716] //  default bengaluru lat, lng.
+    userCurrentLocation: [77.5946, 12.9716], //  default bengaluru lat, lng.
+    // Filters array contains objects with:
+    // - name: Filter type (e.g., 'Rent')
+    // - minValue: Minimum range value (inclusive)
+    // - maxValue: Maximum range value (inclusive)
+    filters: [],
 };
 
 const getters = {
@@ -57,9 +62,9 @@ const getters = {
         return state.totalPages;
     },
 
-    getUserLocation(){
+    getUserLocation() {
         return state.userCurrentLocation;
-    }
+    },
 };
 
 const mutations = {
@@ -150,7 +155,11 @@ const mutations = {
 
     'update-map-zoom'(state, value) {
         state.mapConfig.zoom = value;
-    }
+    },
+
+    'update-filter-array'(state, filter) {
+        state.filters.push(filter);
+    },
 };
 
 const actions = {
@@ -218,14 +227,70 @@ const actions = {
         commit('update-filtered-srp-results', filteredSrpResults);
     },
 
-    updateUsersCurrentLocation({commit}, center){
-        commit('update-user-location', center)
+    applyFilters({ commit, state }) {
+        let filteredSrpResults = [...state.srpResults];
+
+        for (let filter of state.filters) {
+            if (filter.name === 'Distance') {
+                filteredSrpResults = filteredSrpResults.filter(
+                    (srpResult) =>
+                        srpResult.Distance >= filter.minValue &&
+                        srpResult.Distance <= filter.maxValue,
+                );
+            } else if (filter.name === 'Rate') {
+                filteredSrpResults = filteredSrpResults.filter(
+                    (srpResult) =>
+                        srpResult.Rate >= filter.minValue &&
+                        srpResult.Rate <= filter.maxValue,
+                );
+            } else if (filter.name === 'Status') {
+                if (filter.minValue > 0) {
+                    // Slots Available
+                    filteredSrpResults = filteredSrpResults.filter(
+                        (srpResult) => srpResult.SlotsAvailable > 0,
+                    );
+                } else {
+                    // No Slots Available
+                    filteredSrpResults = filteredSrpResults.filter(
+                        (srpResult) => srpResult.SlotsAvailable === 0,
+                    );
+                }
+            }
+        }
+
+        commit('update-filtered-srp-results', filteredSrpResults);
+    },
+
+    updateUsersCurrentLocation({ commit }, center) {
+        commit('update-user-location', center);
     },
 
     // Update zoom value
-    updateZoomValue({commit}, zoomValue) {
+    updateZoomValue({ commit }, zoomValue) {
         commit('update-map-zoom', zoomValue);
-    }
+    },
+
+    //Update filter Array
+    updateFilter({ commit }, { name, value }) {
+        if (!name || !value || typeof value !== 'object') {
+            console.error('Invalid filter data', { name, value });
+            return;
+        }
+
+        const filterObj = {
+            name: name,
+            minValue: value.min ?? 0,
+            maxValue: value.max ?? Infinity,
+        };
+
+        commit('update-filter-array', filterObj);
+    },
+
+    removeFilterByName({ state }, filterName) {
+        state.filters = state.filters.filter(
+            (filter) => filter.name !== filterName,
+        );
+    },
 };
 
 export default {
