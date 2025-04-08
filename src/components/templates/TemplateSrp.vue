@@ -131,6 +131,10 @@ export default {
         if (latlang) {
             this.center = latlang.split(',').map(Number).reverse();
         }
+
+        this.loadFiltersFromQuery();
+
+        this.applyFilters();
     },
     methods: {
         ...mapActions('map', [
@@ -161,6 +165,7 @@ export default {
             };
 
             this.updateFilter({ name: 'Status', value: valueObj });
+            this.updateQueryParams('Status', value);
             this.applyFilters();
         },
 
@@ -175,12 +180,78 @@ export default {
             };
             const minMaxValue = extractMinMax(value);
             this.updateFilter({ name: filterName, value: minMaxValue });
+
+            this.updateQueryParams(filterName, minMaxValue);
             this.applyFilters();
         },
 
         removeFilter(filterName) {
             this.removeFilterByName(filterName);
+            this.removeQueryParams(filterName);
             this.applyFilters();
+        },
+
+        updateQueryParams(filterName, value) {
+            const url = new URL(window.location.href);
+
+            // If need to filter between range
+            if (typeof value === 'object') {
+                url.searchParams.set(`${filterName}Min`, value.min);
+                url.searchParams.set(`${filterName}Max`, value.max);
+            } else {
+                url.searchParams.set(`${filterName}`, value);
+            }
+            // Change the URL without reloading
+            window.history.pushState({}, '', url.toString());
+
+            return;
+        },
+
+        removeQueryParams(filterName) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete(`${filterName}Min`);
+            url.searchParams.delete(`${filterName}Max`);
+            url.searchParams.delete(`${filterName}`);
+
+            window.history.pushState({}, '', url.toString());
+        },
+
+        loadFiltersFromQuery() {
+            const query = this.$route.query;
+
+            if (query.DistanceMin && query.DistanceMax) {
+                this.updateFilter({
+                    name: 'Distance',
+                    value: {
+                        min: Number(query.DistanceMin),
+                        max: Number(query.DistanceMax),
+                    },
+                });
+            }
+
+            if (query.RateMin && query.RateMax) {
+                this.updateFilter({
+                    name: 'Rate',
+                    value: {
+                        min: Number(query.RateMin),
+                        max: Number(query.RateMax),
+                    },
+                });
+            }
+
+            if (query.Status) {
+                const statusValue = query.Status;
+
+                const valueObj = {
+                    min: statusValue === 'Available' ? 1 : 0,
+                    max: statusValue === 'Available' ? 1 : 0,
+                };
+
+                this.updateFilter({
+                    name: 'Status',
+                    value: valueObj,
+                });
+            }
         },
     },
 };
