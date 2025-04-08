@@ -32,13 +32,14 @@ const selectedValue = ref(
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    margin-top: -4px;
 }
 select {
     border-color: gainsboro;
     border-radius: 4px;
     font-size: 16px;
     outline: none;
-    padding: 0.5rem;
+    padding: 0.4rem;
 }
 .label {
     font-size: 14px !important;

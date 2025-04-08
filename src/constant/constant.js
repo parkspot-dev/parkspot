@@ -6,7 +6,10 @@ export const FORM = {
     FIRSTNAME: 'First Name',
     LASTNAME: 'Last Name',
     EMAIL: 'Email',
-    CONTACT_NO: 'Contact No.',
+    CONTACT_NO: 'Mobile No.',
+    ADDRESS: 'Address',
+    APARTMENT: 'Apartment Name',
+    BASEAMOUNT: 'Expected Rent',
 };
 
 export const PARKING_FACILITY = {
