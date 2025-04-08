@@ -3,7 +3,7 @@
         <TemplateHomeBanner></TemplateHomeBanner>
         <TemplateFeatureHome></TemplateFeatureHome>
         <!-- Car Wash Section -->
-        <div class="carwash-section">
+        <div id="car-wash" class="carwash-section">
             <div class="container">
                 <div class="text">
                     <h2>
