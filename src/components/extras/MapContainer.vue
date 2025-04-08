@@ -59,7 +59,7 @@ export default {
             mapCenter: 'map/getNewMapCenter',
             userLocation: 'map/getUserLocation',
         }),
-        ...mapState('map', ['userCurrentLocation']),
+        ...mapState('map', ['userCurrentLocation', 'filteredSpots']),
     },
 
     mounted() {
@@ -71,6 +71,10 @@ export default {
     watch: {
         userLocation() {
             this.renderMap();
+        },
+
+        filteredSpots(newSpots) {
+            this.updateMarkers(newSpots);
         },
     },
 
@@ -104,7 +108,7 @@ export default {
             );
 
             // Create marker
-            if (this.spotsList) {
+            if (this.filteredSpots) {
                 this.marker = new mapboxgl.Marker({
                     draggable: this.drag,
                 })
@@ -154,22 +158,8 @@ export default {
 
             // Add parking site markers
             // Only run when we have spots list
-            if (this.spotsList) {
-                for (const spot of this.spotsList) {
-                    const psMarker = document.createElement('div');
-
-                    psMarker.className = 'marker';
-                    psMarker.style.backgroundImage = 'url(' + this.img + ')';
-                    psMarker.style.width = '50px';
-                    psMarker.style.height = '50px';
-                    psMarker.style.backgroundSize = '110%';
-
-                    const psPopup = this.getPsPopup(spot);
-                    new mapboxgl.Marker(psMarker)
-                        .setLngLat([spot.Long, spot.Lat])
-                        .setPopup(psPopup)
-                        .addTo(this.map);
-                }
+            if (this.filteredSpots) {
+                this.updateMarkers();
             }
         },
 
@@ -281,6 +271,33 @@ export default {
         </div>`;
 
             return new mapboxgl.Popup({ offset: 25 }).setHTML(popupHTML);
+        },
+
+        updateMarkers() {
+            if (!this.map) return;
+
+            // Remove existing markers
+            if (this.markers) {
+                this.markers.forEach((marker) => marker.remove());
+            }
+            this.markers = [];
+
+            this.filteredSpots.forEach((spot) => {
+                const psMarker = document.createElement('div');
+                psMarker.className = 'marker';
+                psMarker.style.backgroundImage = `url(${this.img})`;
+                psMarker.style.width = '50px';
+                psMarker.style.height = '50px';
+                psMarker.style.backgroundSize = '110%';
+
+                const psPopup = this.getPsPopup(spot);
+                const marker = new mapboxgl.Marker(psMarker)
+                    .setLngLat([spot.Long, spot.Lat])
+                    .setPopup(psPopup)
+                    .addTo(this.map);
+
+                this.markers.push(marker);
+            });
         },
     },
 };

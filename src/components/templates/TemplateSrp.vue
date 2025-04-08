@@ -39,7 +39,7 @@
                     Spots found:
                     <strong>
                         <b-tag type="is-light">
-                            {{ spots.length }}
+                            {{ filteredSpots.length }}
                         </b-tag>
                     </strong>
                 </p>
@@ -47,7 +47,7 @@
             <hr />
             <div class="srp-list-items">
                 <MoleculeSRPCard
-                    v-for="spot in spots"
+                    v-for="spot in filteredSpots"
                     :key="spot.ID"
                     :spot="spot"
                     @on-details="details"
@@ -124,7 +124,7 @@ export default {
         };
     },
     computed: {
-        ...mapState('map', ['selectedLocation', 'filters']),
+        ...mapState('map', ['selectedLocation', 'filters', 'filteredSpots']),
     },
     mounted() {
         const latlang = this.$route.query['latlng'];
