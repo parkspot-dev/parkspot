@@ -140,7 +140,7 @@ export default {
             let duplicateFound = false;
 
             for (let file of files) {
-                if (file.type === 'image/heic' || file.name.endsWith('.heic')) {
+                if (file.name.endsWith('.heic')) {
                     this.isLoading = true;
                     try {
                         file = await ImageUploadService.convertHEICtoJPEG(file);
