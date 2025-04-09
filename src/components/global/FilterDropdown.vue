@@ -46,13 +46,7 @@ export default {
     data() {
         return {
             isOpen: false,
-            selectedItem: '',
         };
-    },
-    watch: {
-        selectedValue(newValue) {
-            this.selectedItem = newValue;
-        },
     },
     computed: {
         filteredOptions() {
@@ -65,13 +59,11 @@ export default {
         },
 
         removeSelectedItem() {
-            this.selectedItem = '';
             this.$emit('remove', null);
         },
 
         updateSelectedOptions(value) {
             this.isOpen = false;
-            this.selectedItem = value;
             this.$emit('update', value);
         },
 

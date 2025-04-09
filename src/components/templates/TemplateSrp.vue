@@ -159,6 +159,7 @@ export default {
         },
 
         handleStatusFilter(value) {
+            this.filterSelectedValues['Status'] = value;
             const valueObj = {
                 min: value === 'Available' ? 1 : 0,
                 max: value === 'Available' ? 1 : 0,
@@ -169,6 +170,7 @@ export default {
         },
 
         addFilter(filterName, value) {
+            this.filterSelectedValues[filterName] = value;
             const minMaxValue = this.extractMinMax(value);
             this.updateFilter({ name: filterName, value: minMaxValue });
             this.updateQueryParams(filterName, value);
