@@ -71,6 +71,8 @@ export default {
             uploadImages: [],
             isDragging: false,
             isLoading: false,
+            // Array to store HEIC format images before conversion
+            heicFormatImages: [],
         };
     },
     methods: {
@@ -105,6 +107,19 @@ export default {
         },
         async validateFileUpload(files) {
             if (!this.canAddMoreFiles()) return;
+            files = files.filter((file) => {
+                if (file.name.endsWith('.heic')) {
+                    if (this.checkDuplicateforHeicFormat(file)) {
+                        this.showDangerToast(
+                            'Duplicate files are not allowed.',
+                        );
+                        return false;
+                    } else {
+                        this.heicFormatImages.push(file);
+                    }
+                }
+                return true;
+            });
 
             const {
                 validFiles,
@@ -146,7 +161,7 @@ export default {
                         file = await ImageUploadService.convertHEICtoJPEG(file);
                     } catch (error) {
                         this.showDangerToast(
-                            'Error converting HEIC file. Please try again.',
+                            'Unable to upload file. Please try again',
                         );
                     } finally {
                         this.isLoading = false;
@@ -187,6 +202,12 @@ export default {
             return this.uploadImages.some(
                 (img) =>
                     img.file.name === file.name && img.file.size === file.size,
+            );
+        },
+
+        checkDuplicateforHeicFormat(file) {
+            return this.heicFormatImages.some(
+                (img) => img.name === file.name && img.size === file.size,
             );
         },
 
