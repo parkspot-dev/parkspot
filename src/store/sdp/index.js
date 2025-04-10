@@ -131,6 +131,7 @@ const actions = {
 
     async updateRemark({ state }, remark) {
         state.spotDetails.Remark = remark;
+        state.spotDetails.LastCallDate = new Date().toISOString();
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 };
