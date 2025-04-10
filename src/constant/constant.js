@@ -243,8 +243,17 @@ export const WHAT_NEXT = [
 ];
 
 export const FREQUENT_COMMENTS = [
-    "Not Answering",
-    "Busy",
-    "Only view",
-    "Requested Location"
-]
+    'Not Answering',
+    'Busy',
+    'Only view',
+    'Requested Location',
+];
+
+export const CAR_WASH_SERVICES = [
+    'Car Body Cleaning',
+    'Windshield & Windows',
+    'Wheels & Alloy',
+    'Shine & Protects with Carnauba Wax',
+    'Imported Biodegradable Cleaning Solutions',
+    'Professional Services',
+];
