@@ -155,18 +155,6 @@ export default {
             let duplicateFound = false;
 
             for (let file of files) {
-                if (file.name.endsWith('.heic')) {
-                    this.isLoading = true;
-                    try {
-                        file = await ImageUploadService.convertHEICtoJPEG(file);
-                    } catch (error) {
-                        this.showDangerToast(
-                            'Unable to upload file. Please try again',
-                        );
-                    } finally {
-                        this.isLoading = false;
-                    }
-                }
                 if (this.isDuplicateFile(file)) {
                     duplicateFound = true;
                     continue;
@@ -178,6 +166,18 @@ export default {
                 if (!this.isFileSizeValid(file)) {
                     largeFileFound = true;
                     continue;
+                }
+                if (file.name.endsWith('.heic')) {
+                    this.isLoading = true;
+                    try {
+                        file = await ImageUploadService.convertHEICtoJPEG(file);
+                    } catch (error) {
+                        this.showDangerToast(
+                            'Unable to upload file. Please try again',
+                        );
+                    } finally {
+                        this.isLoading = false;
+                    }
                 }
                 validFiles.push(file);
             }
@@ -191,7 +191,10 @@ export default {
         },
 
         isFileTypeValid(file) {
-            return ALLOWED_TYPES.includes(file.type);
+            // heic format images file type is nil for some browsers
+            // so we check the file extension as well
+            const extension = file.name.split('.').pop().toLowerCase();
+            return ALLOWED_TYPES.includes(file.type) || extension === 'heic';
         },
 
         isFileSizeValid(file) {
