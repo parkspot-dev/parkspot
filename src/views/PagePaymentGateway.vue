@@ -49,7 +49,7 @@ export default {
             const h = this.$route.query.h;
             try {
                 const response = await fetch(
-                    `https://maya.parkspot.in/payment/validate?p=${p}&h=${h}`,
+                    `https://maya-in.parkspot.in/payment/validate?p=${p}&h=${h}`,
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export default {
         async getStatus() {
             const o = this.$route.query.order_id;
             const response = await fetch(
-                `https://maya.parkspot.in/payment/status?order_id=${o}`,
+                `https://maya-in.parkspot.in/payment/status?order_id=${o}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',

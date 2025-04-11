@@ -122,7 +122,7 @@ class MayaApiService extends BaseApiService {
      *  @param { function } flavour - getFlavour function.
      */
     constructor(flavour) {
-        const mayaDomain = 'https://maya.parkspot.in'; //   TODO: we can pick from .env files.
+        const mayaDomain = 'https://maya-in.parkspot.in'; //   TODO: we can pick from .env files.
         const baseHeaderMap = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
