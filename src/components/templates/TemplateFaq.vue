@@ -94,8 +94,7 @@ export default {
                         parking sites. We've used state of the art technologies to solve all \
                         your problems regarding the parking site question. We have built the \
                         entire platform while pushing security and transparency to the \
-                        limit. You can monitor your vehicle at realtime for the peace of \
-                        your mind.`,
+                        limit.`,
             },
 
             {
