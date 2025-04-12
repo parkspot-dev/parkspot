@@ -307,17 +307,17 @@ export const JOINING_BENEFITS_SO = [
 
 export const WHAT_NEXT_SO = [
     {
-        description: 'list Your Parking Spot with ParkSpot',
+        description: 'List your parking spot with ParkSpot',
         icon: 'location_on',
         title: 'Step 1',
     },
     {
-        description: 'Get Discovered by Drivers',
+        description: 'Get discovered by drivers',
         icon: 'travel_explore',
         title: 'Step 2',
     },
     {
-        description: `⁠Earn Securely`,
+        description: `⁠Earn securely`,
         icon: 'attach_money',
         title: 'Step 3',
     },

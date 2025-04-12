@@ -116,15 +116,13 @@ export default {
 .benefits-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     list-style: none;
-    padding: 0;
 
     li {
         align-items: center;
         color: var(--parkspot-black);
         display: flex;
-        font-size: 1rem;
         font-weight: var(--semi-bold-font);
         gap: 1rem;
     }
@@ -170,8 +168,6 @@ export default {
 }
 .form-section-wrapper {
     display: flex;
-    gap: 2rem;
-    justify-content: space-between;
     padding: 0 6rem;
 }
 .heading-container {
@@ -180,20 +176,18 @@ export default {
 .page-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 60px;
+    gap: 3rem;
 }
 .section-title {
-    font-size: 1.75rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    text-align: left;
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
 }
 .register-card {
-    background: var(--parkspot-white);
     box-shadow:
         0 4px 8px rgba(0, 0, 0, 0.2),
         0 2px 4px rgba(0, 0, 0, 0.15);
-    padding: 1.5rem;
+    padding: 1.4rem;
 }
 .sub-heading {
     color: var(--secondary-color);
@@ -203,27 +197,23 @@ export default {
 }
 .whatsapp-cta {
     text-align: center;
-
-    p {
-        color: var(--parkspot-black);
-
-        a {
-            color: var(--parkspot-green);
-            text-decoration: none;
-
-            &:hover {
-                text-decoration: underline;
-            }
-        }
+    a {
+        color: var(--parkspot-green);
     }
 }
 
 @media (max-width: 1100px) {
+    .benefits-section {
+        margin-top: 2rem;
+    }
     .form-section-wrapper {
         flex-direction: column-reverse;
         padding: 0 1rem;
     }
-
+    .page-wrapper {
+        margin-top: 2rem;
+        gap: 1.6rem;
+    }
     .section-title {
         text-align: center;
     }
@@ -231,11 +221,11 @@ export default {
 
 @media (max-width: 768px) {
     .benefits-list {
-        gap: 12px;
+        gap: 16px;
     }
 
     .section-title {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
 }
 </style>
