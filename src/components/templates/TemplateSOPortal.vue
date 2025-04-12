@@ -64,8 +64,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import RegisterRequestForm from '@/components/so-portal/RegisterRequestForm.vue';
