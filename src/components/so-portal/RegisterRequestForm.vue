@@ -92,7 +92,7 @@
             </div>
         </div>
 
-        <CheckboxInput :label="termData" v-model="terms" name="terms" required>
+        <CheckboxInput :label="termData" name="terms" required v-model="terms">
             <template #extra>
                 <a
                     href="https://www.parkspot.in/terms-and-conditions"
