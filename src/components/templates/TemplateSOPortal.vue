@@ -165,8 +165,14 @@ export default {
     flex: 1;
 }
 .form-section-wrapper {
+    align-items: flex-start;
     display: flex;
+    display: flex;
+    gap: 4rem;
+    justify-content: center;
+    margin: 0 auto;
     padding: 0 6rem;
+    width: 100%;
 }
 .heading-container {
     text-align: center;
@@ -199,6 +205,12 @@ export default {
         color: var(--parkspot-green);
     }
 }
+@media (min-width: 1600px) {
+    .form-section-wrapper {
+        max-width: 2800px;
+        padding: 0 20rem;
+    }
+}
 
 @media (max-width: 1100px) {
     .benefits-section {
@@ -206,7 +218,7 @@ export default {
     }
     .form-section-wrapper {
         flex-direction: column-reverse;
-        padding: 0 1rem;
+        align-items: center;
     }
     .page-wrapper {
         margin-top: 2rem;
@@ -221,7 +233,12 @@ export default {
     .benefits-list {
         gap: 16px;
     }
-
+    .form-section-wrapper {
+        padding: 0 1rem;
+    }
+    .heading-container {
+        padding: 0 4rem;
+    }
     .section-title {
         font-size: 2rem;
     }
