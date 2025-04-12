@@ -1,14 +1,10 @@
 <template>
-    <section class="custom-bg">
-        <div class="bg-decor"></div>
-        <TemplateSOPortal @finalSubmit="onFinalSubmit"></TemplateSOPortal>
-        <LoaderModal v-if="isLoading"></LoaderModal>
-    </section>
+    <TemplateSOPortal @finalSubmit="onFinalSubmit"></TemplateSOPortal>
+    <LoaderModal v-if="isLoading"></LoaderModal>
 </template>
-
 <script>
 import TemplateSOPortal from '../components/templates/TemplateSOPortal.vue';
-import LoaderModal from '../components/extras/LoaderModal.vue';
+import LoaderModal from '@/components/extras/LoaderModal.vue';
 import { mapActions } from 'vuex';
 import { PAGE_TITLE } from '@/constant/constant';
 export default {
@@ -62,19 +58,4 @@ export default {
     },
 };
 </script>
-
-<style lang="scss" scoped>
-.custom-bg {
-    background-color: var(--bg-color-tertiary);
-}
-
-.bg-decor {
-    position: absolute;
-    top: calc(0% - 7px);
-    left: 0;
-    clip-path: polygon(-54% 0, 184% 0, 50% 100%);
-    width: 100%;
-    height: 526px;
-    background-color: var(--parkspot-white);
-}
-</style>
+<style lang="scss" scoped></style>

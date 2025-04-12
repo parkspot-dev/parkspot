@@ -136,7 +136,7 @@ onBeforeUnmount(() =>
 .options-list {
     background-color: white;
     border: 1px solid gainsboro;
-    font-size: 14px;
+    font-size: 12px;
     list-style: none;
     margin: 0;
     max-height: 20%;
@@ -147,7 +147,7 @@ onBeforeUnmount(() =>
 }
 .options-list li {
     cursor: pointer;
-    padding: 8px;
+    padding: 6px;
     transition: background-color 0.2s ease;
 }
 
@@ -156,9 +156,8 @@ onBeforeUnmount(() =>
 }
 
 .options-list li.selected {
-    background-color: var(--secondary-color);
-    color: white;
-    opacity: 0.8;
+    color: var(--secondary-color);
+    font-weight: 600;
 }
 .select-wrapper {
     display: flex;
@@ -177,7 +176,8 @@ onBeforeUnmount(() =>
 }
 .selected-items input[type='text'] {
     border: none;
-    flex: 1;
+    flex: 1 1 120px;
+    min-width: 120px;
     font-size: 14px;
     outline: none;
 }
@@ -188,18 +188,18 @@ onBeforeUnmount(() =>
     align-items: center;
     background-color: var(--secondary-color);
     border-radius: 4px;
-    color: white;
+    color: var(--parkspot-white);
     display: flex;
-    font-size: 13px;
+    font-size: 12px;
     opacity: 0.8;
-    padding: 2px 8px;
+    padding: -4px 0px;
 }
 .tag button {
     background: none;
     border: none;
-    color: white;
+    color: var(--parkspot-white);
     cursor: pointer;
     font-size: 14px;
-    margin-left: 4px;
+    margin-left: 2px;
 }
 </style>
