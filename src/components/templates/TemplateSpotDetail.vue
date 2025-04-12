@@ -25,6 +25,12 @@
                     <p>
                         {{ spotDetails.City }}
                     </p>
+                    <p class="warning">
+                        <span class="material-symbols-outlined"> warning </span>
+                        The provided address is for reference only. For the
+                        exact location, book the spot now and our team will
+                        share the precise address with you!
+                    </p>
                 </div>
             </div>
             <hr />
@@ -245,6 +251,7 @@ import {
 } from '@/constant/enums';
 import { mapState } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
+import AtomIcon from '../atoms/AtomIcon.vue';
 
 export default {
     name: 'TemplateSpotDetail',
@@ -257,6 +264,7 @@ export default {
         AtomButton,
         AtomDatePicker,
         AtomTextarea,
+        AtomIcon,
     },
     data() {
         return {
@@ -576,5 +584,11 @@ hr {
 .visit {
     background-color: hsla(141, 53%, 53%, 0.256);
     color: hsl(141, 93%, 30%);
+}
+
+.warning {
+    color: red;
+    display: flex;
+    font-size: 16px !important;
 }
 </style>
