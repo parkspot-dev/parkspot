@@ -2,7 +2,6 @@
     <Form
         :validation-schema="registerSpotRequestFormSchema"
         @submit="submitForm"
-        class="form-container"
     >
         <div class="form-row">
             <FormInput
@@ -205,13 +204,9 @@ export default {
     margin-top: 1rem;
 }
 @media (max-width: 768px) {
-    .form-container {
-        gap: 1rem;
-    }
-
     .form-row {
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.4rem;
     }
 
     .form-row > * {

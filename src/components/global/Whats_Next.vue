@@ -1,9 +1,9 @@
 <template>
     <div>
-        <AtomHeading :level="'h2'" class="heading">What's next?</AtomHeading>
+        <AtomHeading :level="'h2'" class="heading">{{ heading }}</AtomHeading>
         <section class="features-section">
             <div
-                v-for="(feature, index) in features"
+                v-for="(feature, index) in steps"
                 :key="index"
                 class="feature-wrapper"
             >
@@ -13,9 +13,8 @@
                     </span>
                     <h3 class="feature-title">{{ feature.description }}</h3>
                 </div>
-                <!-- Arrow Icon, only if not the last card -->
                 <div
-                    v-if="index < features.length - 1"
+                    v-if="index < steps.length - 1"
                     class="material-symbols-outlined arrow-icon"
                 >
                     double_arrow
@@ -26,23 +25,23 @@
 </template>
 
 <script>
-import { WHAT_NEXT } from '../../constant/constant';
 import AtomHeading from '../atoms/AtomHeading.vue';
+
 export default {
-    name: 'WhatNext',
+    name: 'Whats_Next',
     components: {
         AtomHeading,
     },
-    data() {
-        return {
-            //    WHAT_NEXT Payload
-            //    {
-            //      description : String,
-            //      icon : String,
-            //      title : String
-            //    }
-            features: WHAT_NEXT,
-        };
+    props: {
+        heading: {
+            type: String,
+            default: 'What’s next?',
+        },
+        steps: {
+            type: Array,
+            required: true,
+            // expected format: [{ description: '', icon: '', title: '' }]
+        },
     },
 };
 </script>

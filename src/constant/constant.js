@@ -200,7 +200,7 @@ U can easily rent a parking spot near you.👍✌️😁`,
     },
 ];
 
-export const JOINING_BENEFITS = [
+export const JOINING_BENEFITS_VO = [
     {
         text: '5000+ happy customers across various platforms.',
         icon: 'group',
@@ -223,7 +223,7 @@ export const JOINING_BENEFITS = [
     },
 ];
 
-export const WHAT_NEXT = [
+export const WHAT_NEXT_VO = [
     {
         description: 'Hear back from us within 24 hours.',
         icon: 'support_agent',
@@ -240,7 +240,7 @@ export const WHAT_NEXT = [
         title: 'Step 3',
     },
     {
-        description: 'Relax with ParkSpot, you parking companion!',
+        description: 'Relax with ParkSpot, your parking companion!',
         icon: 'self_improvement',
         title: 'Step 4',
     },
@@ -277,3 +277,53 @@ export const ParkingSizeDisplayMap = Object.freeze({
     'FullSize [like XUV700]': ParkingSize['FullSize(Large)'],
     'Bike': ParkingSize.Bike,
 });
+
+export const JOINING_BENEFITS_SO = [
+    {
+        text: 'Trusted by 1000+ Happy Spot Owners across India.',
+        icon: 'emoji_people',
+    },
+    {
+        text: 'Safe and Verified Renters',
+        icon: 'verified_user',
+    },
+    {
+        text: 'Hassle-free payments.',
+        icon: 'account_balance_wallet',
+    },
+    {
+        text: 'Dedicated Support - Always on Call.',
+        icon: 'headset_mic',
+    },
+    {
+        text: 'Zero Listing Fees, Maximum Earnings.',
+        icon: 'trending_up',
+    },
+    {
+        text: 'Earn Daily, Weekly, or Monthly - You Choose.',
+        icon: 'schedule',
+    },
+];
+
+export const WHAT_NEXT_SO = [
+    {
+        description: 'list Your Parking Spot with ParkSpot',
+        icon: 'location_on',
+        title: 'Step 1',
+    },
+    {
+        description: 'Get Discovered by Drivers',
+        icon: 'travel_explore',
+        title: 'Step 2',
+    },
+    {
+        description: `⁠Earn Securely`,
+        icon: 'attach_money',
+        title: 'Step 3',
+    },
+    {
+        description: 'Relax with ParkSpot, your parking companion!',
+        icon: 'spa',
+        title: 'Step 4',
+    },
+];
