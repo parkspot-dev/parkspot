@@ -1,3 +1,4 @@
+import { ParkingSize } from '@/constant/enums';
 // Todo: Remove Form constants not needed
 export const FORM = {
     USERNAME: 'Username',
@@ -260,3 +261,19 @@ export const CAR_WASH_SERVICES = [
     'Imported Biodegradable Cleaning Solutions',
     'Professional Services',
 ];
+
+export const ParkingSizeLabels = Object.freeze([
+    'Unspecified',
+    'Hatchback [like Swift]',
+    'Compact SUV [like Nexon]',
+    'FullSize [like XUV700]',
+    'Bike',
+]);
+
+export const ParkingSizeDisplayMap = Object.freeze({
+    'Unspecified': ParkingSize.Unspecified,
+    'Hatchback [like Swift]': ParkingSize['HatchBack(Small)'],
+    'Compact SUV [like Nexon]': ParkingSize['Compact(Medium)'],
+    'FullSize [like XUV700]': ParkingSize['FullSize(Large)'],
+    'Bike': ParkingSize.Bike,
+});

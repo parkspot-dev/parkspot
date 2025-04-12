@@ -113,17 +113,17 @@
 </template>
 
 <script>
-import { ADD_INFO, FORM, PARKING_FACILITY } from '../../constant/constant';
-import MultiSelectInput from '../global/MultiSelectInput.vue';
-import { Form } from 'vee-validate';
+import { ADD_INFO, FORM, PARKING_FACILITY } from '@/constant/constant';
+import MultiSelectInput from '@/components/global/MultiSelectInput.vue';
 import ImageUpload from '@/components/global/ImageUpload.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import CheckboxInput from '@/components/global/CheckBoxInput.vue';
 import FormInput from '@/components/global/FormInput.vue';
 import SelectInput from '@/components/global/SelectInput.vue';
 import { registerSpotRequestFormSchema } from '@/validationSchemas';
-import { ParkingSize } from '@/constant/enums';
 import { mapMutations } from 'vuex';
+import { ParkingSizeDisplayMap, ParkingSizeLabels } from '@/constant/constant';
+import { Form } from 'vee-validate';
 
 export default {
     name: 'RegisterRequestForm',
@@ -141,13 +141,7 @@ export default {
             registerSpotRequestFormSchema,
             terms: false,
             parkingSizeLabel: '',
-            parkingSizeLabels: [
-                'Unspecified',
-                'Hatchback [like Swift]',
-                'Compact SUV [like Nexon]',
-                'FullSize [like XUV700]',
-                'Bike',
-            ],
+            parkingSizeLabels: ParkingSizeLabels,
             facilityOptions: [...PARKING_FACILITY.SO.FACILITIES_DATA],
             contactModel: {
                 fullname: '',
@@ -155,7 +149,7 @@ export default {
                 email: '',
                 address: '',
                 apartment: '',
-                parkingSize: null,
+                parkingSize: 0, // Initally Undefined
                 expectedRent: '',
                 facilities: [],
                 mapsLink: '',
@@ -171,15 +165,10 @@ export default {
         ...mapMutations({
             updateContact: 'user/update-contact',
         }),
-        updateParkingSizeLabel(newVal) {
-            const sizeMap = {
-                'Unspecified': ParkingSize['Unspecified'],
-                'Hatchback [like Swift]': ParkingSize['HatchBack(Small)'],
-                'Compact SUV [like Nexon]': ParkingSize['Compact(Medium)'],
-                'FullSize [like XUV700]': ParkingSize['FullSize(Large)'],
-                'Bike': ParkingSize['Bike'],
-            };
-            this.contactModel.parkingSize = sizeMap[newVal] || '';
+        updateParkingSizeLabel(event) {
+            const newVal = event?.target?.value;
+            this.contactModel.parkingSize =
+                ParkingSizeDisplayMap[newVal] ?? null;
         },
 
         submitForm() {
