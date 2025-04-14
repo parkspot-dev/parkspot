@@ -39,7 +39,7 @@
                         <p>
                             Chat with us directly on
                             <a
-                                href="https://api.whatsapp.com/send/?phone=917488239471&text=I%27m+interested+in+car+parking.&type=phone_number&app_absent=0"
+                                href="https://api.whatsapp.com/send/?phone=917488239471&text=Hello%2C+I'm+interested+in+renting+out+my+parking+space.&type=phone_number&app_absent=0"
                                 target="_blank"
                             >
                                 <AtomIcon :icon="'whatsapp'" />

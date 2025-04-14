@@ -61,7 +61,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .error {
     color: red;
     font-size: 12px !important;

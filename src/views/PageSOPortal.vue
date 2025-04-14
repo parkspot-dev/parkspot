@@ -1,6 +1,9 @@
 <template>
-    <TemplateSOPortal @finalSubmit="onFinalSubmit"></TemplateSOPortal>
-    <LoaderModal v-if="isLoading"></LoaderModal>
+    <section class="custom-bg">
+        <div class="bg-decor"></div>
+        <TemplateSOPortal @finalSubmit="onFinalSubmit"></TemplateSOPortal>
+        <LoaderModal v-if="isLoading"></LoaderModal>
+    </section>
 </template>
 <script>
 import TemplateSOPortal from '../components/templates/TemplateSOPortal.vue';
@@ -58,4 +61,20 @@ export default {
     },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.custom-bg {
+    padding: 20px;
+}
+
+.bg-decor {
+    background-color: var(--secondary-color);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 60%, 0 100%);
+    height: 120px;
+    left: 0;
+    opacity: 0.8;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+</style>

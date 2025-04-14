@@ -45,7 +45,7 @@ export default {
     },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .arrow-icon {
     align-items: center;
     color: var(--secondary-color);

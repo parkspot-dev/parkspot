@@ -132,7 +132,7 @@ onBeforeUnmount(() =>
 );
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .options-list {
     background-color: white;
     border: 1px solid gainsboro;
