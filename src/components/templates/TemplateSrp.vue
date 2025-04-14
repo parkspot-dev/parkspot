@@ -13,22 +13,25 @@
                 <FilterDropdown
                     :options="distanceFilterOptions"
                     :searchable="false"
+                    :selectedValue="this.filterSelectedValues.Distance"
                     @remove="removeFilter('Distance')"
                     @update="addFilter('Distance', $event)"
                     label="Search Within"
                 />
 
                 <FilterDropdown
-                    :options="rentFilerOptios"
+                    :options="ratetFilerOptios"
                     :searchable="false"
+                    :selectedValue="filterSelectedValues.Rate"
                     @remove="removeFilter('Rate')"
                     @update="addFilter('Rate', $event)"
-                    label="Rent Range"
+                    label="Rate Range"
                 />
 
                 <FilterDropdown
                     :options="statusFilterOptions"
                     :searchable="false"
+                    :selectedValue="filterSelectedValues.Status"
                     @remove="removeFilter('Status')"
                     @update="handleStatusFilter($event)"
                     label="Availability"
@@ -75,13 +78,17 @@ import SearchInput from '../extras/SearchInput.vue';
 import { mapActions, mapState } from 'vuex';
 import vClickOutside from 'v-click-outside';
 import FilterDropdown from '../global/FilterDropdown.vue';
+import {
+    DISTANCE_FILTER_OPTIONS,
+    RATE_FILTER_OPTIONS,
+    STATUS_FILTER_OPTIONS,
+} from '@/constant/constant';
 export default {
     name: 'TemplateSrp',
     directives: {
         clickOutside: vClickOutside.directive,
     },
     components: {
-        // PaginationBody,
         MoleculeSRPCard,
         MapContainer,
         SearchInput,
@@ -106,21 +113,15 @@ export default {
     data() {
         return {
             center: null,
-            statusFilterOptions: ['Available', 'Rented out'],
-            distanceFilterOptions: [
-                'Less than 2 KM',
-                '2 KM to 3 KM',
-                '3 KM to 4 KM',
-                '4 KM to 5 KM',
-                'Above 5 KM',
-            ],
-            rentFilerOptios: [
-                'Less than ₹3000',
-                '₹3000 - ₹4000',
-                '₹4000 - ₹5000',
-                'More than ₹5000',
-            ],
+            statusFilterOptions: STATUS_FILTER_OPTIONS,
+            distanceFilterOptions: DISTANCE_FILTER_OPTIONS,
+            ratetFilerOptios: RATE_FILTER_OPTIONS,
             showFilterCheckbox: false,
+            filterSelectedValues: {
+                Rate: '',
+                Distance: '',
+                Status: '',
+            },
         };
     },
     computed: {
@@ -131,9 +132,8 @@ export default {
         if (latlang) {
             this.center = latlang.split(',').map(Number).reverse();
         }
-
+        // Load and apply filter values from the query parameters
         this.loadFiltersFromQuery();
-
         this.applyFilters();
     },
     methods: {
@@ -163,29 +163,20 @@ export default {
                 min: value === 'Available' ? 1 : 0,
                 max: value === 'Available' ? 1 : 0,
             };
-
             this.updateFilter({ name: 'Status', value: valueObj });
             this.updateQueryParams('Status', value);
             this.applyFilters();
         },
 
         addFilter(filterName, value) {
-            const extractMinMax = (filter) => {
-                const numbers = filter.match(/\d+/g)?.map(Number) || [];
-                return numbers.length === 1
-                    ? filter.includes('Less')
-                        ? { min: 0, max: numbers[0] }
-                        : { min: numbers[0], max: Infinity }
-                    : { min: numbers[0], max: numbers[1] };
-            };
-            const minMaxValue = extractMinMax(value);
+            const minMaxValue = this.extractMinMax(value);
             this.updateFilter({ name: filterName, value: minMaxValue });
-
-            this.updateQueryParams(filterName, minMaxValue);
+            this.updateQueryParams(filterName, value);
             this.applyFilters();
         },
 
         removeFilter(filterName) {
+            this.filterSelectedValues[filterName] = '';
             this.removeFilterByName(filterName);
             this.removeQueryParams(filterName);
             this.applyFilters();
@@ -193,53 +184,40 @@ export default {
 
         updateQueryParams(filterName, value) {
             const url = new URL(window.location.href);
-
-            // If need to filter between range
-            if (typeof value === 'object') {
-                url.searchParams.set(`${filterName}Min`, value.min);
-                url.searchParams.set(`${filterName}Max`, value.max);
-            } else {
-                url.searchParams.set(`${filterName}`, value);
-            }
-            // Change the URL without reloading
+            url.searchParams.set(`${filterName}`, value);
             window.history.pushState({}, '', url.toString());
-
             return;
         },
 
         removeQueryParams(filterName) {
             const url = new URL(window.location.href);
-            url.searchParams.delete(`${filterName}Min`);
-            url.searchParams.delete(`${filterName}Max`);
             url.searchParams.delete(`${filterName}`);
-
             window.history.pushState({}, '', url.toString());
         },
 
         loadFiltersFromQuery() {
             const query = this.$route.query;
 
-            if (query.DistanceMin && query.DistanceMax) {
+            if (query.Distance) {
+                this.filterSelectedValues.Distance = query.Distance;
+                const minMaxValue = this.extractMinMax(query.Distance);
                 this.updateFilter({
                     name: 'Distance',
-                    value: {
-                        min: Number(query.DistanceMin),
-                        max: Number(query.DistanceMax),
-                    },
+                    value: minMaxValue,
                 });
             }
 
-            if (query.RateMin && query.RateMax) {
+            if (query.Rate) {
+                this.filterSelectedValues.Rate = query.Rate;
+                const minMaxValue = this.extractMinMax(query.Rate);
                 this.updateFilter({
                     name: 'Rate',
-                    value: {
-                        min: Number(query.RateMin),
-                        max: Number(query.RateMax),
-                    },
+                    value: minMaxValue,
                 });
             }
 
             if (query.Status) {
+                this.filterSelectedValues.Status = query.Status;
                 const statusValue = query.Status;
 
                 const valueObj = {
@@ -252,6 +230,15 @@ export default {
                     value: valueObj,
                 });
             }
+        },
+
+        extractMinMax(filter) {
+            const numbers = filter.match(/\d+/g)?.map(Number) || [];
+            return numbers.length === 1
+                ? filter.includes('Less')
+                    ? { min: 0, max: numbers[0] }
+                    : { min: numbers[0], max: Infinity }
+                : { min: numbers[0], max: numbers[1] };
         },
     },
 };

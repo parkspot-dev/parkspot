@@ -125,6 +125,7 @@ const mutations = {
     },
 
     'update-srp-results'(state, srpResults) {
+        console.log("updatng srp result");
         state.srpResults = srpResults;
     },
 
@@ -159,6 +160,7 @@ const mutations = {
 
     'update-filter-array'(state, filter) {
         state.filters.push(filter);
+        console.log("updated array", state.filters);
     },
 };
 
