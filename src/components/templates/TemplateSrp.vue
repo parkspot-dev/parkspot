@@ -20,7 +20,7 @@
                 />
 
                 <FilterDropdown
-                    :options="ratetFilerOptios"
+                    :options="ratetFilerOptinos"
                     :searchable="false"
                     :selectedValue="filterSelectedValues.Rate"
                     @remove="removeFilter('Rate')"
@@ -115,7 +115,7 @@ export default {
             center: null,
             statusFilterOptions: STATUS_FILTER_OPTIONS,
             distanceFilterOptions: DISTANCE_FILTER_OPTIONS,
-            ratetFilerOptios: RATE_FILTER_OPTIONS,
+            ratetFilerOptinos: RATE_FILTER_OPTIONS,
             showFilterCheckbox: false,
             filterSelectedValues: {
                 Rate: '',

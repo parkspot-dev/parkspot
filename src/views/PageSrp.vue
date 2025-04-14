@@ -2,7 +2,7 @@
     <section>
         <LoaderModal v-if="isLoading"></LoaderModal>
         <TemplateSrp
-           v-if="srpResults && srpResults.length > 0"
+            v-if="srpResults && srpResults.length > 0"
             :spots="filteredSrpResults"
             :totals="totalPages"
             :currentPage="currentPage"
@@ -12,7 +12,6 @@
             @details="spotDetails"
             @filter="onFilter"
         ></TemplateSrp>
-        
     </section>
 </template>
 <script>
@@ -65,7 +64,6 @@ export default {
         try {
             this.isLoading = true;
             await this.updateMapConfig(this.getLatLng()); // map center takes [lng, lat]
-            console.log("page rendering..");
             await this.srpCall();
             this.reRender++;
             this.isLoading = false;
@@ -136,7 +134,7 @@ export default {
                 },
             });
             window.open(route.href);
-        },   
+        },
         onFilter(filterOption) {
             this.updateSrpResults(filterOption);
         },
