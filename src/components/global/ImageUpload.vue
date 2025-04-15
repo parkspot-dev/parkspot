@@ -26,7 +26,7 @@
                 <AtomIcon icon="image-plus" class="image-icon" />
                 <input
                     @change="handleFileChange"
-                    accept="image/png,image/jpeg"
+                    accept="image/png,image/jpeg,.heic"
                     aria-label="Upload images"
                     hidden
                     multiple
@@ -35,15 +35,21 @@
                 />
             </div>
         </div>
+        <LoaderModal v-if="isLoading"></LoaderModal>
     </div>
 </template>
 
 <script>
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
-const ALLOWED_TYPES = ['image/png', 'image/jpeg'];
+import ImageUploadService from '@/services/ImageUploadService';
+import LoaderModal from '@/components/extras/LoaderModal.vue';
+const ALLOWED_TYPES = ['image/png', 'image/jpeg', '.heic'];
 export default {
     name: 'ImageUpload',
-    components: { AtomIcon },
+    components: {
+        AtomIcon,
+        LoaderModal,
+    },
     props: {
         maxImageSize: {
             type: Number,
@@ -64,6 +70,9 @@ export default {
             // }
             uploadImages: [],
             isDragging: false,
+            isLoading: false,
+            // Array to store HEIC format images before conversion
+            heicFormatImages: [],
         };
     },
     methods: {
@@ -96,15 +105,28 @@ export default {
             this.validateFileUpload(Array.from(e.target.files));
             e.target.value = ''; // Reset input
         },
-        validateFileUpload(files) {
+        async validateFileUpload(files) {
             if (!this.canAddMoreFiles()) return;
+            files = files.filter((file) => {
+                if (file.name.endsWith('.heic')) {
+                    if (this.checkDuplicateforHeicFormat(file)) {
+                        this.showDangerToast(
+                            'Duplicate files are not allowed.',
+                        );
+                        return false;
+                    } else {
+                        this.heicFormatImages.push(file);
+                    }
+                }
+                return true;
+            });
 
             const {
                 validFiles,
                 invalidFileFound,
                 largeFileFound,
                 duplicateFound,
-            } = this.validateFiles(files);
+            } = await this.validateFiles(files);
 
             this.handleValidationErrors(
                 invalidFileFound,
@@ -126,27 +148,39 @@ export default {
             return true;
         },
 
-        validateFiles(files) {
+        async validateFiles(files) {
             let validFiles = [];
             let invalidFileFound = false;
             let largeFileFound = false;
             let duplicateFound = false;
 
-            files.forEach((file) => {
+            for (let file of files) {
+                if (this.isDuplicateFile(file)) {
+                    duplicateFound = true;
+                    continue;
+                }
                 if (!this.isFileTypeValid(file)) {
                     invalidFileFound = true;
-                    return;
+                    continue;
                 }
                 if (!this.isFileSizeValid(file)) {
                     largeFileFound = true;
-                    return;
+                    continue;
                 }
-                if (this.isDuplicateFile(file)) {
-                    duplicateFound = true;
-                    return;
+                if (file.name.endsWith('.heic')) {
+                    this.isLoading = true;
+                    try {
+                        file = await ImageUploadService.convertHEICtoJPEG(file);
+                    } catch (error) {
+                        this.showDangerToast(
+                            'Unable to upload file. Please try again',
+                        );
+                    } finally {
+                        this.isLoading = false;
+                    }
                 }
                 validFiles.push(file);
-            });
+            }
 
             return {
                 validFiles,
@@ -157,7 +191,10 @@ export default {
         },
 
         isFileTypeValid(file) {
-            return ALLOWED_TYPES.includes(file.type);
+            // heic format images file type is nil for some browsers
+            // so we check the file extension as well
+            const extension = file.name.split('.').pop().toLowerCase();
+            return ALLOWED_TYPES.includes(file.type) || extension === 'heic';
         },
 
         isFileSizeValid(file) {
@@ -167,9 +204,13 @@ export default {
         isDuplicateFile(file) {
             return this.uploadImages.some(
                 (img) =>
-                    img.file.name === file.name &&
-                    img.file.size === file.size &&
-                    img.file.lastModified === file.lastModified,
+                    img.file.name === file.name && img.file.size === file.size,
+            );
+        },
+
+        checkDuplicateforHeicFormat(file) {
+            return this.heicFormatImages.some(
+                (img) => img.name === file.name && img.size === file.size,
             );
         },
 
@@ -180,7 +221,7 @@ export default {
         ) {
             if (invalidFileFound) {
                 this.showDangerToast(
-                    `Only ${ALLOWED_TYPES.map((t) => t.split('/')[1].toUpperCase()).join(' or ')} images are allowed.`,
+                    `Only ${ALLOWED_TYPES.map((t) => t.replace('image/', '').toUpperCase()).join(' or ')} images are allowed.`,
                 );
             }
             if (largeFileFound) {

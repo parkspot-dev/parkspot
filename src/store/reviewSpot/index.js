@@ -1,5 +1,5 @@
 import { mayaClient } from '@/services/api';
-import { uploadImages } from '@/services/ImageUploadService'
+import ImageUploadService from '@/services/ImageUploadService';
 
 const state = {
     SO: {
@@ -347,7 +347,7 @@ const actions = {
             return;
         }
         commit('set-loading', true);
-        const uploadedImageURLs = await uploadImages(state.SO.uploadImages, state.SO.spotId);
+        const uploadedImageURLs = await ImageUploadService.uploadImages(state.SO.uploadImages, state.SO.spotId);
         if (!uploadedImageURLs['success']) {
             commit('set-error-msg', uploadedImageURLs['DisplayMsg']);
         }
