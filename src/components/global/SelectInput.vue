@@ -44,5 +44,6 @@ select {
 .label {
     font-size: 14px !important;
     font-weight: 500 !important;
+    padding-top: 12px;
 }
 </style>

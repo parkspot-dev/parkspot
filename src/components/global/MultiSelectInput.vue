@@ -133,6 +133,11 @@ onBeforeUnmount(() =>
 </script>
 
 <style lang="scss" scoped>
+.label{
+    font-size: 0.9rem;
+    font-weight: 440;
+    padding-top: 10px;
+}
 .options-list {
     background-color: white;
     border: 1px solid gainsboro;
