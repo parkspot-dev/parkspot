@@ -251,7 +251,6 @@ import {
 } from '@/constant/enums';
 import { mapState } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
-import AtomIcon from '../atoms/AtomIcon.vue';
 
 export default {
     name: 'TemplateSpotDetail',
@@ -264,7 +263,6 @@ export default {
         AtomButton,
         AtomDatePicker,
         AtomTextarea,
-        AtomIcon,
     },
     data() {
         return {
