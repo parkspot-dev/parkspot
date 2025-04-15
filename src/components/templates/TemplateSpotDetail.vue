@@ -41,6 +41,12 @@
 
             <div class="spot-detail-map">
                 <h2>How to get here?</h2>
+                <div class="warning">
+                        <span class="material-symbols-outlined"> warning </span>
+                        The provided address is for reference only. For the
+                        exact location, book the spot now and our team will
+                        share the precise address with you!
+                    </div>
                 <MapContainer
                     :center="center"
                     :spotDetails="selectedSpot[0]"
@@ -576,5 +582,14 @@ hr {
 .visit {
     background-color: hsla(141, 53%, 53%, 0.256);
     color: hsl(141, 93%, 30%);
+}
+
+.warning {
+    display: flex;
+    margin-bottom: 20px;
+    margin-top: -20px;
+    span{
+        color: red;
+    }
 }
 </style>
