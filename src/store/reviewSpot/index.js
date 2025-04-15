@@ -160,7 +160,8 @@ const actions = {
         const spotInfo = await mayaClient.get(
             `/owner/spot-request?spot-id=${state.SO.spotId}`,
         );
-        const spotImages = (spotInfo.SpotImages || []).map(image => image.trim());
+        const spotImages = (spotInfo.SpotImageURLs
+            || []).map(image => image.trim());
         const formData = {
             SO: {
                 spotId: spotInfo.ID,
