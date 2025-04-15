@@ -231,19 +231,19 @@ const actions = {
         let filteredSpots = [...state.srpResults];
 
         for (let filter of state.filters) {
-            if (filter.name === 'Distance') {
+            if (filter.name === 'distance') {
                 filteredSpots = filteredSpots.filter(
                     (srpResult) =>
                         srpResult.Distance >= filter.minValue &&
                         srpResult.Distance <= filter.maxValue,
                 );
-            } else if (filter.name === 'Rate') {
+            } else if (filter.name === 'rate') {
                 filteredSpots = filteredSpots.filter(
                     (srpResult) =>
                         srpResult.Rate >= filter.minValue &&
                         srpResult.Rate <= filter.maxValue,
                 );
-            } else if (filter.name === 'Status') {
+            } else if (filter.name === 'status') {
                 if (filter.minValue > 0) {
                     // Slots Available
                     filteredSpots = filteredSpots.filter(

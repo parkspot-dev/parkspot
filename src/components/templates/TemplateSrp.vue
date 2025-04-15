@@ -13,26 +13,26 @@
                 <FilterDropdown
                     :options="distanceFilterOptions"
                     :searchable="false"
-                    :selectedValue="this.filterSelectedValues.Distance"
-                    @remove="removeFilter('Distance')"
-                    @update="addFilter('Distance', $event)"
+                    :selectedValue="this.filterSelectedValues.distance"
+                    @remove="removeFilter('distance')"
+                    @update="addFilter('distance', $event)"
                     label="Search Within"
                 />
 
                 <FilterDropdown
                     :options="ratetFilerOptinos"
                     :searchable="false"
-                    :selectedValue="filterSelectedValues.Rate"
-                    @remove="removeFilter('Rate')"
-                    @update="addFilter('Rate', $event)"
+                    :selectedValue="filterSelectedValues.rate"
+                    @remove="removeFilter('rate')"
+                    @update="addFilter('rate', $event)"
                     label="Rate Range"
                 />
 
                 <FilterDropdown
                     :options="statusFilterOptions"
                     :searchable="false"
-                    :selectedValue="filterSelectedValues.Status"
-                    @remove="removeFilter('Status')"
+                    :selectedValue="filterSelectedValues.status"
+                    @remove="removeFilter('status')"
                     @update="handleStatusFilter($event)"
                     label="Availability"
                 />
@@ -118,9 +118,9 @@ export default {
             ratetFilerOptinos: RATE_FILTER_OPTIONS,
             showFilterCheckbox: false,
             filterSelectedValues: {
-                Rate: '',
-                Distance: '',
-                Status: '',
+                rate: '',
+                distance: '',
+                status: '',
             },
         };
     },
@@ -159,13 +159,13 @@ export default {
         },
 
         handleStatusFilter(value) {
-            this.filterSelectedValues['Status'] = value;
+            this.filterSelectedValues['status'] = value;
             const valueObj = {
                 min: value === 'Available' ? 1 : 0,
                 max: value === 'Available' ? 1 : 0,
             };
-            this.updateFilter({ name: 'Status', value: valueObj });
-            this.updateQueryParams('Status', value);
+            this.updateFilter({ name: 'status', value: valueObj });
+            this.updateQueryParams('status', value);
             this.applyFilters();
         },
 
@@ -200,27 +200,27 @@ export default {
         loadFiltersFromQuery() {
             const query = this.$route.query;
 
-            if (query.Distance) {
-                this.filterSelectedValues.Distance = query.Distance;
-                const minMaxValue = this.extractMinMax(query.Distance);
+            if (query.distance) {
+                this.filterSelectedValues.distance = query.distance;
+                const minMaxValue = this.extractMinMax(query.distance);
                 this.updateFilter({
-                    name: 'Distance',
+                    name: 'distance',
                     value: minMaxValue,
                 });
             }
 
-            if (query.Rate) {
-                this.filterSelectedValues.Rate = query.Rate;
-                const minMaxValue = this.extractMinMax(query.Rate);
+            if (query.rate) {
+                this.filterSelectedValues.rate = query.rate;
+                const minMaxValue = this.extractMinMax(query.rate);
                 this.updateFilter({
-                    name: 'Rate',
+                    name: 'rate',
                     value: minMaxValue,
                 });
             }
 
-            if (query.Status) {
-                this.filterSelectedValues.Status = query.Status;
-                const statusValue = query.Status;
+            if (query.status) {
+                this.filterSelectedValues.status = query.status;
+                const statusValue = query.status;
 
                 const valueObj = {
                     min: statusValue === 'Available' ? 1 : 0,
@@ -228,7 +228,7 @@ export default {
                 };
 
                 this.updateFilter({
-                    name: 'Status',
+                    name: 'status',
                     value: valueObj,
                 });
             }
