@@ -265,7 +265,7 @@ export const DISTANCE_FILTER_OPTIONS = [
     'Above 5 KM',
 ];
 
-export const RATE_FILTER_OPTIONS = [
+export const RENT_FILTER_OPTIONS = [
     'Less than ₹3000',
     '₹3000 - ₹4000',
     '₹4000 - ₹5000',

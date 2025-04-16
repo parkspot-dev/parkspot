@@ -237,7 +237,7 @@ const actions = {
                         srpResult.Distance >= filter.minValue &&
                         srpResult.Distance <= filter.maxValue,
                 );
-            } else if (filter.name === 'rate') {
+            } else if (filter.name === 'rent') {
                 filteredSpots = filteredSpots.filter(
                     (srpResult) =>
                         srpResult.Rate >= filter.minValue &&

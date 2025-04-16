@@ -20,12 +20,12 @@
                 />
 
                 <FilterDropdown
-                    :options="ratetFilerOptinos"
+                    :options="rentFilerOptions"
                     :searchable="false"
-                    :selectedValue="filterSelectedValues.rate"
-                    @remove="removeFilter('rate')"
-                    @update="addFilter('rate', $event)"
-                    label="Rate Range"
+                    :selectedValue="filterSelectedValues.rent"
+                    @remove="removeFilter('rent')"
+                    @update="addFilter('rent', $event)"
+                    label="Rent Range"
                 />
 
                 <FilterDropdown
@@ -80,7 +80,7 @@ import vClickOutside from 'v-click-outside';
 import FilterDropdown from '../global/FilterDropdown.vue';
 import {
     DISTANCE_FILTER_OPTIONS,
-    RATE_FILTER_OPTIONS,
+    RENT_FILTER_OPTIONS,
     STATUS_FILTER_OPTIONS,
 } from '@/constant/constant';
 export default {
@@ -115,10 +115,10 @@ export default {
             center: null,
             statusFilterOptions: STATUS_FILTER_OPTIONS,
             distanceFilterOptions: DISTANCE_FILTER_OPTIONS,
-            ratetFilerOptinos: RATE_FILTER_OPTIONS,
+            rentFilerOptions: RENT_FILTER_OPTIONS,
             showFilterCheckbox: false,
             filterSelectedValues: {
-                rate: '',
+                rent: '',
                 distance: '',
                 status: '',
             },
@@ -209,11 +209,11 @@ export default {
                 });
             }
 
-            if (query.rate) {
-                this.filterSelectedValues.rate = query.rate;
-                const minMaxValue = this.extractMinMax(query.rate);
+            if (query.rent) {
+                this.filterSelectedValues.rent = query.rent;
+                const minMaxValue = this.extractMinMax(query.rent);
                 this.updateFilter({
-                    name: 'rate',
+                    name: 'rent',
                     value: minMaxValue,
                 });
             }
