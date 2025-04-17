@@ -5,9 +5,10 @@
         <LoaderModal v-if="isLoading"></LoaderModal>
     </section>
 </template>
+
 <script>
 import TemplateSOPortal from '../components/templates/TemplateSOPortal.vue';
-import LoaderModal from '@/components/extras/LoaderModal.vue';
+import LoaderModal from '../components/extras/LoaderModal.vue';
 import { mapActions } from 'vuex';
 import { PAGE_TITLE } from '@/constant/constant';
 export default {
@@ -61,20 +62,19 @@ export default {
     },
 };
 </script>
+
 <style lang="scss" scoped>
 .custom-bg {
-    padding: 20px;
+    background-color: var(--bg-color-tertiary);
 }
 
 .bg-decor {
-    background-color: var(--secondary-color);
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 60%, 0 100%);
-    height: 120px;
-    left: 0;
-    opacity: 0.8;
     position: absolute;
-    top: 0;
+    top: calc(0% - 7px);
+    left: 0;
+    clip-path: polygon(-54% 0, 184% 0, 50% 100%);
     width: 100%;
-    z-index: 10;
+    height: 526px;
+    background-color: var(--parkspot-white);
 }
 </style>

@@ -601,7 +601,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style>
 .add-new-url-btn {
     align-items: center;
     background-color: var(--primary-color);
