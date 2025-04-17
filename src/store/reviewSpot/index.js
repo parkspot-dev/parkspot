@@ -262,7 +262,7 @@ const actions = {
             Area: state.SO.area,
             BaseAmount: state.Rent.baseAmount ? parseFloat(state.Rent.baseAmount) : 0.0,
             City: state.SO.city,
-            Email: state.SO.email,
+            EmailID: state.SO.email,
             EndDate: state.Booking.endDate,
             FullName: state.SO.fullName,
             ID: state.SO.spotId,
@@ -346,19 +346,31 @@ const actions = {
         if (!isValid) {
             return;
         }
+        let response;
         commit('set-loading', true);
-        const uploadedImageURLs = await ImageUploadService.uploadImages(state.SO.uploadImages, state.SO.spotId);
-        if (!uploadedImageURLs['success']) {
-            commit('set-error-msg', uploadedImageURLs['DisplayMsg']);
+        if (state.updatedFields.includes('spotImagesList') || state.updatedFields.includes('uploadImages')) {
+            const uploadedImageURLs = await ImageUploadService.uploadImages(state.SO.uploadImages, state.SO.spotId);
+            if (!uploadedImageURLs['success']) {
+                commit('set-error-msg', uploadedImageURLs['DisplayMsg']);
+            }
+            else {
+                response = await dispatch('updateSpotRequest', uploadedImageURLs['urls']);
+                if (response.ErrorCode) {
+                    commit('set-error-msg', response.DisplayMsg);
+                } else {
+                    commit('set-success-msg', 'Your request was saved successfully');
+                }
+            }
         }
         else {
-            const response = await dispatch('updateSpotRequest', uploadedImageURLs['urls']);
+            response = await dispatch('updateSpotRequest', []);
             if (response.ErrorCode) {
                 commit('set-error-msg', response.DisplayMsg);
             } else {
                 commit('set-success-msg', 'Your request was saved successfully');
             }
         }
+
         commit('set-loading', false);
         return response;
     },
