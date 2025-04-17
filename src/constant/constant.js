@@ -1,3 +1,4 @@
+import { ParkingSize } from '@/constant/enums';
 // Todo: Remove Form constants not needed
 export const FORM = {
     USERNAME: 'Username',
@@ -6,7 +7,10 @@ export const FORM = {
     FIRSTNAME: 'First Name',
     LASTNAME: 'Last Name',
     EMAIL: 'Email',
-    CONTACT_NO: 'Contact No.',
+    CONTACT_NO: 'Mobile No.',
+    ADDRESS: 'Address',
+    APARTMENT: 'Apartment Name',
+    BASEAMOUNT: 'Expected Rent',
 };
 
 export const PARKING_FACILITY = {
@@ -196,7 +200,7 @@ U can easily rent a parking spot near you.👍✌️😁`,
     },
 ];
 
-export const JOINING_BENEFITS = [
+export const JOINING_BENEFITS_VO = [
     {
         text: '5000+ happy customers across various platforms.',
         icon: 'group',
@@ -219,7 +223,7 @@ export const JOINING_BENEFITS = [
     },
 ];
 
-export const WHAT_NEXT = [
+export const WHAT_NEXT_VO = [
     {
         description: 'Hear back from us within 24 hours.',
         icon: 'support_agent',
@@ -236,7 +240,7 @@ export const WHAT_NEXT = [
         title: 'Step 3',
     },
     {
-        description: 'Relax with ParkSpot, you parking companion!',
+        description: 'Relax with ParkSpot, your parking companion!',
         icon: 'self_improvement',
         title: 'Step 4',
     },
@@ -256,4 +260,70 @@ export const CAR_WASH_SERVICES = [
     'Shine & Protects with Carnauba Wax',
     'Imported Biodegradable Cleaning Solutions',
     'Professional Services',
+];
+
+export const ParkingSizeLabels = Object.freeze([
+    'Unspecified',
+    'Hatchback [like Swift]',
+    'Compact SUV [like Nexon]',
+    'FullSize [like XUV700]',
+    'Bike',
+]);
+
+export const ParkingSizeDisplayMap = Object.freeze({
+    'Unspecified': ParkingSize.Unspecified,
+    'Hatchback [like Swift]': ParkingSize['HatchBack(Small)'],
+    'Compact SUV [like Nexon]': ParkingSize['Compact(Medium)'],
+    'FullSize [like XUV700]': ParkingSize['FullSize(Large)'],
+    'Bike': ParkingSize.Bike,
+});
+
+export const JOINING_BENEFITS_SO = [
+    {
+        text: 'Trusted by 1000+ Happy Spot Owners across India.',
+        icon: 'emoji_people',
+    },
+    {
+        text: 'Safe and Verified Renters',
+        icon: 'verified_user',
+    },
+    {
+        text: 'Hassle-free payments.',
+        icon: 'account_balance_wallet',
+    },
+    {
+        text: 'Dedicated Support - Always on Call.',
+        icon: 'headset_mic',
+    },
+    {
+        text: 'Zero Listing Fees, Maximum Earnings.',
+        icon: 'trending_up',
+    },
+    {
+        text: 'Earn Daily, Weekly, or Monthly - You Choose.',
+        icon: 'schedule',
+    },
+];
+
+export const WHAT_NEXT_SO = [
+    {
+        description: 'List your parking spot with ParkSpot',
+        icon: 'location_on',
+        title: 'Step 1',
+    },
+    {
+        description: 'Get discovered by drivers',
+        icon: 'travel_explore',
+        title: 'Step 2',
+    },
+    {
+        description: `⁠Earn securely`,
+        icon: 'attach_money',
+        title: 'Step 3',
+    },
+    {
+        description: 'Relax with ParkSpot, your parking companion!',
+        icon: 'spa',
+        title: 'Step 4',
+    },
 ];

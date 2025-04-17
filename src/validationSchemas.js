@@ -26,7 +26,7 @@ const rules = {
     msg: z.string().optional(),
     carModel: z.string().min(1, 'Car model is required'),
     terms: z.boolean().refine((val) => val === true, {
-        message: 'You must accept the terms',
+        message: 'You must accept the terms and conditions.',
     }),
 };
 
@@ -57,5 +57,16 @@ export const editProfileFormSchema = toTypedSchema(
         fullname: rules.fullname,
         email: rules.email,
         cno: rules.cno,
+    }),
+);
+
+export const registerSpotRequestFormSchema = toTypedSchema(
+    z.object({
+        fullname: rules.fullname,
+        email: rules.email,
+        cno: rules.cno,
+        addr: rules.addr,
+        aprt: rules.addr,
+        terms: rules.terms,
     }),
 );
