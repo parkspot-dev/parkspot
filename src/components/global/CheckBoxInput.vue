@@ -17,7 +17,7 @@ const props = defineProps({
     label: { type: String, default: 'I accept the Terms and Conditions' },
 });
 
-const emit = defineEmits(['update:modelValue', 'data', 'update']);
+const emit = defineEmits(['update:modelValue', 'data']);
 const { value, errorMessage } = useField(props.name);
 const checked = ref(value.value || false);
 
@@ -28,6 +28,7 @@ watch(checked, (newVal) => {
 </script>
 
 <style scoped>
+
 .block .b-checkbox.checkbox input[type='checkbox']:checked + .check.box-color {
     background: var(--primary-color)
         url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Cpath d='M.04.627L.146.52.43.804.323.91zm.177.177L.854.167.96.273.323.91z' fill='rgba(0,0,0,.7)'/%3E%3C/svg%3E");

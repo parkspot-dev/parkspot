@@ -40,7 +40,7 @@ export default {
             default: '',
         },
         modelValue: {
-            type: [String, Number],
+            type: String,
             default: '',
         },
     },
@@ -61,7 +61,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style>
 .error {
     color: red;
     font-size: 12px !important;
