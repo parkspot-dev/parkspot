@@ -59,7 +59,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .author-details {
     color: var(--parkspot-muted-black);
     font-size: 14px;
