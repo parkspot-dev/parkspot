@@ -1,4 +1,5 @@
 import { mayaClient } from '@/services/api';
+import ImageUploadService from '@/services/ImageUploadService';
 
 const state = {
     SO: {
@@ -13,6 +14,7 @@ const state = {
         latlong: '',
         spotImagesList: [],
         thumbnailImage: '',
+        uploadImages: [],
     },
     Rent: {
         totalSlots: null,
@@ -158,7 +160,8 @@ const actions = {
         const spotInfo = await mayaClient.get(
             `/owner/spot-request?spot-id=${state.SO.spotId}`,
         );
-        const spotImages = (spotInfo.SpotImages || []).map(image => image.trim());
+        const spotImages = (spotInfo.SpotImageURLs
+            || []).map(image => image.trim());
         const formData = {
             SO: {
                 spotId: spotInfo.ID,
@@ -239,18 +242,25 @@ const actions = {
     },
 
     // Updates the spot request details
-    async updateSpotRequest({ dispatch, state }) {
-        const [latitude, longitude] = state.SO.latlong
-            .split(',')
-            .map(parseFloat);
-        const trimmedSpotImages = state.SO.spotImagesList.map(image => image.trim());
-        const spotRequest = {
+    async updateSpotRequest({ dispatch, state }, uploadedImageUrls) {
+        // Prepare the spot request payload
+        const spotRequest = await dispatch('prepareSpotRequest', uploadedImageUrls);
+        // Send the update request
+        return await mayaClient.patch('/owner/spot-request', spotRequest);
+    },
+
+    // Prepares the payload for the spot request update
+    async prepareSpotRequest({ state, dispatch }, uploadedImageUrls) {
+        // Extract latitude and longitude
+        const [latitude, longitude] = state.SO.latlong.split(',').map(parseFloat);
+        let trimmedSpotImages = [...(state.SO.spotImagesList || []).map(image => image.trim())];
+        if (Array.isArray(uploadedImageUrls) && uploadedImageUrls.length > 0) {
+            trimmedSpotImages = [...trimmedSpotImages, ...uploadedImageUrls];
+        }
+        return {
             Address: state.SO.address,
             Area: state.SO.area,
-            BaseAmount:
-                state.Rent.baseAmount !== null
-                    ? parseFloat(state.Rent.baseAmount)
-                    : 0.0,
+            BaseAmount: state.Rent.baseAmount ? parseFloat(state.Rent.baseAmount) : 0.0,
             City: state.SO.city,
             Email: state.SO.email,
             EndDate: state.Booking.endDate,
@@ -266,17 +276,13 @@ const actions = {
             Size: state.Rent.parkingSize,
             StartDate: state.Booking.startDate,
             Status: state.Booking.spotrequestStatus,
-            TotalSlots:
-                state.Rent.totalSlots !== null
-                    ? parseInt(state.Rent.totalSlots)
-                    : 0,
+            TotalSlots: state.Rent.totalSlots ? parseInt(state.Rent.totalSlots) : 0,
             Type: state.Rent.siteType,
             UserName: state.SO.userName,
-            SpotImages: trimmedSpotImages,
+            SpotImageURLs: trimmedSpotImages,
             SpotImageURI: state.SO.thumbnailImage,
             FieldMask: await dispatch('mapFieldMask'),
         };
-        return await mayaClient.patch('/owner/spot-request', spotRequest);
     },
 
     // Maps updated fields to their API equivalents
@@ -321,13 +327,15 @@ const actions = {
                     return 'UserName';
                 case 'thumbnailImage':
                     return 'SpotImageURI';
-                case 'spotImagesList':
-                    return 'SpotImages';
+                default: return null;
             }
-        });
+        }).filter(Boolean); // Remove null or undefined values
         fieldMask.push('ID', 'UserName');
         if (state.updatedFields.includes('latlong')) {
             fieldMask.push('Latitude', 'Longitude');
+        }
+        if (state.updatedFields.includes('spotImagesList') || state.updatedFields.includes('uploadImages')) {
+            fieldMask.push('SpotImageURLs');
         }
         return fieldMask;
     },
@@ -338,13 +346,20 @@ const actions = {
         if (!isValid) {
             return;
         }
-        const response = await dispatch('updateSpotRequest');
-        if (response.DisplayMsg) {
-            // Network issues or server errors could cause the API call to fail.
-            commit('set-error-msg', response.DisplayMsg);
-        } else {
-            commit('set-success-msg', 'Your request was saved successfully');
+        commit('set-loading', true);
+        const uploadedImageURLs = await ImageUploadService.uploadImages(state.SO.uploadImages, state.SO.spotId);
+        if (!uploadedImageURLs['success']) {
+            commit('set-error-msg', uploadedImageURLs['DisplayMsg']);
         }
+        else {
+            const response = await dispatch('updateSpotRequest', uploadedImageURLs['urls']);
+            if (response.ErrorCode) {
+                commit('set-error-msg', response.DisplayMsg);
+            } else {
+                commit('set-success-msg', 'Your request was saved successfully');
+            }
+        }
+        commit('set-loading', false);
         return response;
     },
 
@@ -354,10 +369,11 @@ const actions = {
         if (!isValid) {
             return;
         }
+        commit('set-loading', true);
         const response = await mayaClient.post(
             `/owner/spot-update?spot-id=${state.SO.spotId}`,
         );
-        if (response.DisplayMsg) {
+        if (response.ErrorCode) {
             // Network issues or server errors could cause the API call to fail.
             commit('set-error-msg', response.DisplayMsg);
         } else {
@@ -366,6 +382,7 @@ const actions = {
                 'Your request was submitted successfully',
             );
         }
+        commit('set-loading', false);
         return response;
     },
 

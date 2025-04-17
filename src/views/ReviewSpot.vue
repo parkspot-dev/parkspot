@@ -162,6 +162,14 @@
                             Add New URL
                         </button>
                     </div>
+
+                    <!-- Upload Images -->
+                    <div class="form-field">
+                        <label for="uploadImages">Upload Images:</label>
+                        <ImageUpload
+                            v-model:images="SO.uploadImages"
+                        ></ImageUpload>
+                    </div>
                 </div>
             </div>
 
@@ -376,6 +384,7 @@ import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
 import ImageGallery from '@/components/organisms/OrganismImageGallery.vue';
+import ImageUpload from '@/components/global/ImageUpload.vue';
 import { ParkingSize } from '../constant/enums';
 import { SiteType } from '../constant/enums';
 import { SpotRequestStatus } from '../constant/enums';
@@ -388,8 +397,9 @@ export default {
         AtomDatePicker,
         AtomHeading,
         AtomIcon,
-        LoaderModal,
         ImageGallery,
+        ImageUpload,
+        LoaderModal,
     },
     data() {
         return {
@@ -523,25 +533,24 @@ export default {
             this.closeModal();
         },
         confirmSave() {
-            const updatedFields = [];
-            for (const key in this.SO) {
-                if (this.SO[key] !== this.initialFormData.SO[key]) {
-                    updatedFields.push(key);
+            const updatedFields = new Set();
+
+            ['SO', 'Rent', 'Booking'].forEach((section) => {
+                for (const key in this[section]) {
+                    const currentValue = this[section][key];
+                    const initialValue = this.initialFormData[section][key];
+                    // Convert to JSON strings for deep comparison
+                    if (
+                        JSON.stringify(currentValue) !==
+                        JSON.stringify(initialValue)
+                    ) {
+                        updatedFields.add(key);
+                    }
                 }
-            }
-            for (const key in this.Rent) {
-                if (this.Rent[key] !== this.initialFormData.Rent[key]) {
-                    updatedFields.push(key);
-                }
-            }
-            for (const key in this.Booking) {
-                if (this.Booking[key] !== this.initialFormData.Booking[key]) {
-                    updatedFields.push(key);
-                }
-            }
-            this.setUpdatedFields(updatedFields);
-            this.saveForm().then(() => {
-                this.updateInitialFormState();
+            });
+            this.setUpdatedFields(Array.from(updatedFields));
+            this.saveForm().then((response) => {
+                if (!response.ErrorCode) this.updateInitialFormState();
             });
         },
         onLastCallDateUpdate(updatedDate) {
