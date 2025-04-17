@@ -1,6 +1,8 @@
 <template>
     <section>
+        <LoaderModal v-if="isLoading"></LoaderModal>
         <TemplateSrp
+            v-if="srpResults && srpResults.length > 0"
             :spots="filteredSrpResults"
             :totals="totalPages"
             :currentPage="currentPage"
@@ -10,7 +12,6 @@
             @details="spotDetails"
             @filter="onFilter"
         ></TemplateSrp>
-        <LoaderModal v-if="isLoading"></LoaderModal>
     </section>
 </template>
 <script>
@@ -133,7 +134,7 @@ export default {
                 },
             });
             window.open(route.href);
-        },   
+        },
         onFilter(filterOption) {
             this.updateSrpResults(filterOption);
         },

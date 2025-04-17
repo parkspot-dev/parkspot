@@ -13,23 +13,26 @@
                 <FilterDropdown
                     :options="distanceFilterOptions"
                     :searchable="false"
-                    @remove="removeFilter('Distance')"
-                    @update="addFilter('Distance', $event)"
+                    :selectedValue="this.filterSelectedValues.distance"
+                    @remove="removeFilter('distance')"
+                    @update="addFilter('distance', $event)"
                     label="Search Within"
                 />
 
                 <FilterDropdown
-                    :options="rentFilerOptios"
+                    :options="rentFilerOptions"
                     :searchable="false"
-                    @remove="removeFilter('Rate')"
-                    @update="addFilter('Rate', $event)"
+                    :selectedValue="filterSelectedValues.rent"
+                    @remove="removeFilter('rent')"
+                    @update="addFilter('rent', $event)"
                     label="Rent Range"
                 />
 
                 <FilterDropdown
                     :options="statusFilterOptions"
                     :searchable="false"
-                    @remove="removeFilter('Status')"
+                    :selectedValue="filterSelectedValues.status"
+                    @remove="removeFilter('status')"
                     @update="handleStatusFilter($event)"
                     label="Availability"
                 />
@@ -75,13 +78,17 @@ import SearchInput from '../extras/SearchInput.vue';
 import { mapActions, mapState } from 'vuex';
 import vClickOutside from 'v-click-outside';
 import FilterDropdown from '../global/FilterDropdown.vue';
+import {
+    DISTANCE_FILTER_OPTIONS,
+    RENT_FILTER_OPTIONS,
+    STATUS_FILTER_OPTIONS,
+} from '@/constant/constant';
 export default {
     name: 'TemplateSrp',
     directives: {
         clickOutside: vClickOutside.directive,
     },
     components: {
-        // PaginationBody,
         MoleculeSRPCard,
         MapContainer,
         SearchInput,
@@ -106,21 +113,15 @@ export default {
     data() {
         return {
             center: null,
-            statusFilterOptions: ['Available', 'Rented out'],
-            distanceFilterOptions: [
-                'Less than 2 KM',
-                '2 KM to 3 KM',
-                '3 KM to 4 KM',
-                '4 KM to 5 KM',
-                'Above 5 KM',
-            ],
-            rentFilerOptios: [
-                'Less than ₹3000',
-                '₹3000 - ₹4000',
-                '₹4000 - ₹5000',
-                'More than ₹5000',
-            ],
+            statusFilterOptions: STATUS_FILTER_OPTIONS,
+            distanceFilterOptions: DISTANCE_FILTER_OPTIONS,
+            rentFilerOptions: RENT_FILTER_OPTIONS,
             showFilterCheckbox: false,
+            filterSelectedValues: {
+                rent: '',
+                distance: '',
+                status: '',
+            },
         };
     },
     computed: {
@@ -131,6 +132,9 @@ export default {
         if (latlang) {
             this.center = latlang.split(',').map(Number).reverse();
         }
+        // Load and apply filter values from the query parameters
+        this.loadFiltersFromQuery();
+        this.applyFilters();
     },
     methods: {
         ...mapActions('map', [
@@ -155,32 +159,88 @@ export default {
         },
 
         handleStatusFilter(value) {
+            this.filterSelectedValues['status'] = value;
             const valueObj = {
                 min: value === 'Available' ? 1 : 0,
                 max: value === 'Available' ? 1 : 0,
             };
-
-            this.updateFilter({ name: 'Status', value: valueObj });
+            this.updateFilter({ name: 'status', value: valueObj });
+            this.updateQueryParams('status', value);
             this.applyFilters();
         },
 
         addFilter(filterName, value) {
-            const extractMinMax = (filter) => {
-                const numbers = filter.match(/\d+/g)?.map(Number) || [];
-                return numbers.length === 1
-                    ? filter.includes('Less')
-                        ? { min: 0, max: numbers[0] }
-                        : { min: numbers[0], max: Infinity }
-                    : { min: numbers[0], max: numbers[1] };
-            };
-            const minMaxValue = extractMinMax(value);
+            this.filterSelectedValues[filterName] = value;
+            const minMaxValue = this.extractMinMax(value);
             this.updateFilter({ name: filterName, value: minMaxValue });
+            this.updateQueryParams(filterName, value);
             this.applyFilters();
         },
 
         removeFilter(filterName) {
+            this.filterSelectedValues[filterName] = '';
             this.removeFilterByName(filterName);
+            this.removeQueryParams(filterName);
             this.applyFilters();
+        },
+
+        updateQueryParams(filterName, value) {
+            const url = new URL(window.location.href);
+            url.searchParams.set(`${filterName}`, value);
+            window.history.pushState({}, '', url.toString());
+            return;
+        },
+
+        removeQueryParams(filterName) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete(`${filterName}`);
+            window.history.pushState({}, '', url.toString());
+        },
+
+        loadFiltersFromQuery() {
+            const query = this.$route.query;
+
+            if (query.distance) {
+                this.filterSelectedValues.distance = query.distance;
+                const minMaxValue = this.extractMinMax(query.distance);
+                this.updateFilter({
+                    name: 'distance',
+                    value: minMaxValue,
+                });
+            }
+
+            if (query.rent) {
+                this.filterSelectedValues.rent = query.rent;
+                const minMaxValue = this.extractMinMax(query.rent);
+                this.updateFilter({
+                    name: 'rent',
+                    value: minMaxValue,
+                });
+            }
+
+            if (query.status) {
+                this.filterSelectedValues.status = query.status;
+                const statusValue = query.status;
+
+                const valueObj = {
+                    min: statusValue === 'Available' ? 1 : 0,
+                    max: statusValue === 'Available' ? 1 : 0,
+                };
+
+                this.updateFilter({
+                    name: 'status',
+                    value: valueObj,
+                });
+            }
+        },
+
+        extractMinMax(filter) {
+            const numbers = filter.match(/\d+/g)?.map(Number) || [];
+            return numbers.length === 1
+                ? filter.includes('Less')
+                    ? { min: 0, max: numbers[0] }
+                    : { min: numbers[0], max: Infinity }
+                : { min: numbers[0], max: numbers[1] };
         },
     },
 };

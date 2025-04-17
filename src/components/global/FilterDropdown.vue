@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="label" @click="toggleDropdown">
-            {{ selectedItem || label }}
+            {{ selectedValue || label }}
             <span
-                v-if="selectedItem"
+                v-if="selectedValue"
                 class="material-symbols-outlined"
                 @click.stop="removeSelectedItem"
                 >close</span
@@ -30,8 +30,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-
 export default {
     name: 'FilterDropdown',
     props: {
@@ -48,13 +46,7 @@ export default {
     data() {
         return {
             isOpen: false,
-            selectedItem: '',
         };
-    },
-    watch: {
-        selectedValue(newValue) {
-            this.selectedItem = newValue;
-        },
     },
     computed: {
         filteredOptions() {
@@ -67,13 +59,11 @@ export default {
         },
 
         removeSelectedItem() {
-            this.selectedItem = '';
             this.$emit('remove', null);
         },
 
         updateSelectedOptions(value) {
             this.isOpen = false;
-            this.selectedItem = value;
             this.$emit('update', value);
         },
 
