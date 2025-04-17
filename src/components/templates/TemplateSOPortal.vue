@@ -69,7 +69,6 @@ import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import RegisterRequestForm from '@/components/so-portal/RegisterRequestForm.vue';
 import Whats_Next from '@/components/global/Whats_Next.vue';
 import TestimonialSection from '@/components/global/TestimonialSection.vue';
-
 import {
     PAGE_TITLE,
     JOINING_BENEFITS_SO,
@@ -141,8 +140,10 @@ export default {
 }
 .benefits-section {
     color: var(--secondary-color);
-    flex: 1;
-    padding-top: 2%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%;
 }
 .divider {
     border-bottom: 1px solid var(--secondary-color);
@@ -163,16 +164,21 @@ export default {
 }
 .form-section {
     flex: 1;
+    padding: 0rem 0;
+    width: 50%;
 }
 .form-section-wrapper {
-    align-items: flex-start;
     display: flex;
-    display: flex;
-    gap: 4rem;
+    flex-direction: row;
     justify-content: center;
     margin: 0 auto;
     padding: 0 6rem;
     width: 100%;
+    width: 100%;
+
+    .form-section {
+        width: 50%;
+    }
 }
 .heading-container {
     text-align: center;
@@ -213,34 +219,21 @@ export default {
 }
 
 @media (max-width: 1100px) {
-    .benefits-section {
-        margin-top: 2rem;
-    }
     .form-section-wrapper {
         flex-direction: column-reverse;
-        align-items: center;
+        padding: 0 1rem;
+        .benefits-section {
+            padding: 4rem 0 0 0;
+            width: 120%;
+        }
+
+        .form-section {
+            padding: 1rem 0 0 0;
+            width: 100%;
+        }
     }
     .page-wrapper {
-        margin-top: 2rem;
-        gap: 1.6rem;
-    }
-    .section-title {
-        text-align: center;
-    }
-}
-
-@media (max-width: 768px) {
-    .benefits-list {
-        gap: 16px;
-    }
-    .form-section-wrapper {
-        padding: 0 1rem;
-    }
-    .heading-container {
-        padding: 0 4rem;
-    }
-    .section-title {
-        font-size: 2rem;
+        margin-top: 1rem;
     }
 }
 </style>

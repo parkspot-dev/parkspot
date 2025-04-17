@@ -106,17 +106,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card-wrapper {
-    margin: 0 auto;
-    max-width: 600px;
-    padding: 2rem 1rem;
-}
-
-.footer-buttons {
-    display: flex;
-    justify-content: space-between;
-}
-
 .form-section-wrapper {
     display: flex;
     flex-direction: row;
