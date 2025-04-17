@@ -151,11 +151,6 @@ export default {
         this.loadFiltersFromQuery();
     },
     methods: {
-        ...mapActions('map', [
-            'applyFilters',
-            'updateFilter',
-            'removeFilterByName',
-        ]),
         onPageChange(page) {
             this.$emit('changed', page);
         },
