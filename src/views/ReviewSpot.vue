@@ -192,7 +192,7 @@
                     <!-- Base Amount -->
                     <div class="form-field">
                         <label for="baseAmount"
-                            >Charges(<span>&#8377;</span>):<span
+                            >SO Rent(<span>&#8377;</span>):<span
                                 style="color: red"
                                 >*</span
                             ></label
