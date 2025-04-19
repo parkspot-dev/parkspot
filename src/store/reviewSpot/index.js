@@ -154,7 +154,7 @@ const actions = {
             const urlPattern = new RegExp(
                 '^(https?:\\/\\/)?' + // protocol
                 '((([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.)+[a-zA-Z]{2,})' + // domain name only
-                '(\\/[-a-zA-Z\\d%_.~+]*)*' + // path
+                '(\\/[-a-zA-Z\\d%_.~+:]*)*' + // path
                 '(\\?[;&a-zA-Z\\d%_.~+=-]*)?' + // query string
                 '(\\#[-a-zA-Z\\d_]*)?$', // fragment locator
                 'i'
