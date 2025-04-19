@@ -46,6 +46,17 @@
                         </b-tag>
                     </strong>
                 </p>
+                <div class="sort">
+                    <FilterDropdown
+                        :options="sortFilterOptions"
+                        :searchable="false"
+                        :selectedValue="selectedSort.name"
+                        :removable="false"
+                        @remove="removeFilter('rent')"
+                        @update="sortFilteredResults($event, 'asc')"
+                        label="Sort by"
+                    />
+                </div>
             </div>
             <hr />
             <div class="srp-list-items">
@@ -75,15 +86,17 @@ import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
 import AtomCheckbox from '../atoms/AtomCheckbox.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import SearchInput from '../extras/SearchInput.vue';
-import { mapActions, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import vClickOutside from 'v-click-outside';
 import FilterDropdown from '../global/FilterDropdown.vue';
 import {
     DISTANCE_FILTER_OPTIONS,
     RENT_FILTER_OPTIONS,
+    SORT_FILTER_OPTIONS,
     STATUS_FILTER_OPTIONS,
 } from '@/constant/constant';
 import FilterManager from '@/modules/filter';
+import SelectInput from '../global/SelectInput.vue';
 export default {
     name: 'TemplateSrp',
     directives: {
@@ -95,6 +108,7 @@ export default {
         SearchInput,
         AtomCheckbox,
         FilterDropdown,
+        SelectInput,
     },
     emits: ['changed', 'flyToSrp', 'details'],
     props: {
@@ -117,6 +131,7 @@ export default {
             statusFilterOptions: STATUS_FILTER_OPTIONS,
             distanceFilterOptions: DISTANCE_FILTER_OPTIONS,
             rentFilerOptions: RENT_FILTER_OPTIONS,
+            sortFilterOptions: SORT_FILTER_OPTIONS,
             filterSelectedValues: {
                 rent: '',
                 distance: '',
@@ -126,7 +141,12 @@ export default {
         };
     },
     computed: {
-        ...mapState('map', ['selectedLocation', 'filters', 'filteredSpots']),
+        ...mapState('map', [
+            'selectedLocation',
+            'filters',
+            'filteredSpots',
+            'selectedSort',
+        ]),
     },
     created() {
         this.filterManager = new FilterManager(this.$store, this);
@@ -136,6 +156,7 @@ export default {
             'removeFilter',
             'handleStatusFilter',
             'loadFiltersFromQuery',
+            'sortFilteredResults',
         ];
 
         methodsToBind.forEach((method) => {
@@ -200,9 +221,19 @@ export default {
         padding-bottom: 2rem;
 
         .srp-results-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-top: 20px;
+
             span {
                 color: rgb(151, 149, 149);
+            }
+
+            .sort {
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
         }
 

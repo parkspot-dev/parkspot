@@ -17,7 +17,7 @@ export default class FilterManager {
         });
 
         this.updateQueryParams(filterName, value);
-        this.store.dispatch('map/applyFilters');
+        this.applyFilters(); // ✅ changed from dispatch to method
     }
 
     handleStatusFilter(filterName, value) {
@@ -35,14 +35,14 @@ export default class FilterManager {
         });
 
         this.updateQueryParams(filterName, value);
-        this.store.dispatch('map/applyFilters');
+        this.applyFilters(); // ✅ changed from dispatch to method
     }
 
     removeFilter(filterName) {
         this.vm.filterSelectedValues[filterName] = '';
         this.store.dispatch('map/removeFilterByName', filterName);
         this.removeQueryParams(filterName);
-        this.store.dispatch('map/applyFilters');
+        this.applyFilters(); // ✅ changed from dispatch to method
     }
 
     applyFilterFromQuery(filterName, transform = this.extractMinMax) {
@@ -64,7 +64,15 @@ export default class FilterManager {
             min: val === 'Available' ? 1 : 0,
             max: val === 'Available' ? 1 : 0,
         }));
-        this.store.dispatch('map/applyFilters');
+
+        // check for sort
+        if(this.vm.$route.query['sort']){
+            this.store.dispatch('map/updateSort', {
+                name: this.vm.$route.query['sort'],
+            });
+        }
+
+        this.applyFilters();
     }
 
     extractMinMax(filter) {
@@ -89,5 +97,63 @@ export default class FilterManager {
         const url = new URL(window.location.href);
         url.searchParams.delete(filterName);
         window.history.pushState({}, '', url.toString());
+    }
+
+    applyFilters() {
+        let filteredSpots = [...this.store.state.map.srpResults];
+
+        for (let filter of this.store.state.map.filters) {
+            if (filter.name === 'distance') {
+                filteredSpots = filteredSpots.filter(
+                    (srpResult) =>
+                        srpResult.Distance >= filter.minValue &&
+                        srpResult.Distance <= filter.maxValue,
+                );
+            } else if (filter.name === 'rent') {
+                filteredSpots = filteredSpots.filter(
+                    (srpResult) =>
+                        srpResult.Rate >= filter.minValue &&
+                        srpResult.Rate <= filter.maxValue,
+                );
+            } else if (filter.name === 'status') {
+                if (filter.minValue > 0) {
+                    filteredSpots = filteredSpots.filter(
+                        (srpResult) => srpResult.SlotsAvailable > 0,
+                    );
+                } else {
+                    filteredSpots = filteredSpots.filter(
+                        (srpResult) => srpResult.SlotsAvailable === 0,
+                    );
+                }
+            }
+        }
+
+        this.store.commit('map/update-filtered-srp-results', filteredSpots);
+        if (this.vm.selectedSort) {
+            this.sortFilteredResults(
+                this.vm.selectedSort.name,
+                this.vm.selectedSort.order,
+            );
+        }
+    }
+
+    sortFilteredResults(field, order = 'asc') {
+        if (!field) return;
+
+        this.store.dispatch('map/updateSort', {
+            name: field,
+            order,
+        });
+
+        const sortedResults = [...this.vm.filteredSpots];
+
+        sortedResults.sort((a, b) => {
+            let valueA = field === 'Rent' ? a.Rate : a.Distance;
+            let valueB = field === 'Rent' ? b.Rate : b.Distance;
+            return order === 'asc' ? valueA - valueB : valueB - valueA;
+        });
+
+        this.updateQueryParams('sort', field);
+        this.store.commit('map/update-filtered-srp-results', sortedResults);
     }
 }
