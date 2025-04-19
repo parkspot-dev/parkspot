@@ -1,6 +1,5 @@
 import { mayaClient } from '@/services/api';
 import ImageUploadService from '@/services/ImageUploadService';
-import { SpotRequestStatus } from '@/constant/enums';
 const state = {
     SO: {
         userName: '',
