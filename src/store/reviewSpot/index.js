@@ -8,7 +8,7 @@ const state = {
         mobile: '',
         email: '',
         address: '',
-        aprName: '',
+        apartmentName: '',
         city: '',
         area: '',
         latlong: '',
@@ -183,7 +183,7 @@ const actions = {
                 city: spotInfo.City,
                 area: spotInfo.Area,
                 fullName: spotInfo.FullName,
-                aprName: spotInfo.Name,
+                apartmentName: spotInfo.Name,
                 mobile: spotInfo.Mobile,
                 address: spotInfo.Address,
                 email: spotInfo.EmailID,
@@ -280,7 +280,7 @@ const actions = {
             EmailID: state.SO.email,
             EndDate: state.Booking.endDate,
             FullName: state.SO.fullName,
-            Name: state.SO.aprName,
+            Name: state.SO.apartmentName,
             ID: state.SO.spotId,
             LastCallDate: state.Booking.lastCallDate,
             Latitude: latitude,
@@ -319,7 +319,7 @@ const actions = {
                     return 'EndDate';
                 case 'fullName':
                     return 'FullName';
-                case 'aprName':
+                case 'apartmentName':
                     return 'Name';
                 case 'lastCallDate':
                     return 'LastCallDate';

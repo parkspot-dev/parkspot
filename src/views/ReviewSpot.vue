@@ -78,7 +78,7 @@
                         <input
                             placeholder="Enter apartment name"
                             type="text"
-                            v-model="SO.aprName"
+                            v-model="SO.apartmentName"
                         />
                     </div>
 
