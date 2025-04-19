@@ -408,7 +408,6 @@ const actions = {
             // Network issues or server errors could cause the API call to fail.
             commit('set-error-msg', response.DisplayMsg);
         } else {
-            state.Booking.spotrequestStatus = SpotRequestStatus.Promoted;
             commit(
                 'set-success-msg',
                 'Your request was submitted successfully',
