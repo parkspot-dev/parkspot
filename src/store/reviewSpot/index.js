@@ -320,7 +320,7 @@ const actions = {
                     return 'EndDate';
                 case 'fullName':
                     return 'FullName';
-                case 'apartmentName':
+                case 'aprName':
                     return 'Name';
                 case 'lastCallDate':
                     return 'LastCallDate';
