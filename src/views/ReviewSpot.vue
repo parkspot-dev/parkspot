@@ -85,12 +85,15 @@
                     <!-- City -->
                     <div class="form-field">
                         <label for="city">City:</label>
-                        <select v-model="SO.city">
+                        <select v-model="SO.city" @change="validateCity">
                             <option value="Bengaluru">Bengaluru</option>
                             <option value="Chennai">Chennai</option>
                             <option value="Hyderabad">Hyderabad</option>
                             <option value="Kolkata">Kolkata</option>
                         </select>
+                        <span class="error" v-if="cityError">{{
+                            cityError
+                        }}</span>
                     </div>
                     <!-- Area -->
                     <div class="form-field">
@@ -435,12 +438,13 @@ export default {
     computed: {
         ...mapState('reviewSpot', [
             'Booking',
+            'cityError',
             'isLoading',
             'latlongError',
             'mobileError',
             'Rent',
-            'spotImagesError',
             'SO',
+            'spotImagesError',
             'status',
             'statusMessage',
         ]),
@@ -486,9 +490,10 @@ export default {
             'fetchSpotDetails',
             'initState',
             'saveForm',
-            'setUpdatedFields',
             'setSpotImageError',
+            'setUpdatedFields',
             'submitForm',
+            'validateCity',
             'validateLatLong',
             'validateMobile',
             'validateSpotImageUrl',
@@ -620,7 +625,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .add-new-url-btn {
     align-items: center;
     background-color: var(--primary-color);

@@ -35,6 +35,7 @@ const state = {
     isLoading: false,
     latlongError: '',
     mobileError: '',
+    cityError: '',
     spotImagesError: [],
     status: 'none', // none, error, success
     statusMessage: '',
@@ -132,6 +133,18 @@ const actions = {
         commit('set-error', { field: 'mobileError', message: '' });
     },
 
+    // Validate City 
+    validateCity({ commit, state }) {
+        if (state.SO.city === '') {
+            commit('set-error', {
+                field: 'cityError',
+                message: 'City cannot be empty.',
+            });
+            return;
+        }
+        commit('set-error', { field: 'cityError', message: '' });
+    },
+
     validateSpotImageUrl({ commit, state }, index) {
         const url = state.SO.spotImagesList[index].trim();
         const currentErrors = [...state.spotImagesError];
@@ -210,6 +223,7 @@ const actions = {
     async validateFormFields({ dispatch }) {
         await Promise.all([
             dispatch('validateMobile'),
+            dispatch('validateCity'),
             dispatch('validateLatLong'),
             dispatch('validateSpotImagesErrors'),
         ]);
@@ -226,7 +240,7 @@ const actions = {
     // Check for errors in the state
     hasErrors({ state }) {
         const spotImageErrors = state.spotImagesError.some(err => err && err !== '');
-        return state.mobileError || state.latlongError || spotImageErrors;
+        return state.mobileError || state.latlongError || spotImageErrors || state.cityError;
     },
 
     // Validates form fields and checks for errors.
