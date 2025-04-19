@@ -15,7 +15,7 @@
                 <!-- SO Details -->
                 <div class="form-group">
                     <!-- Spot Id(This field is Not allowed to edit) -->
-                    <div class="readonly-field">
+                    <div class="readonly-field form-field">
                         <label for="spotId">SpotId:</label>
                         <input
                             class="noborder"
@@ -25,7 +25,7 @@
                         />
                     </div>
                     <!-- user Name(This field is Not allowed to edit) -->
-                    <div class="readonly-field">
+                    <div class="readonly-field form-field">
                         <label for="userName">UserName:</label>
                         <input
                             class="noborder"
@@ -71,6 +71,17 @@
                             v-model="SO.email"
                         />
                     </div>
+
+                    <!-- Apartment Name -->
+                    <div class="form-field">
+                        <label for="apartmentName">Apartment Name:</label>
+                        <input
+                            placeholder="Enter apartment name"
+                            type="text"
+                            v-model="SO.aprName"
+                        />
+                    </div>
+
                     <!-- City -->
                     <div class="form-field">
                         <label for="city">City:</label>
@@ -117,50 +128,58 @@
                         ></textarea>
                     </div>
 
-                    <!-- Thumbnail image -->
-                    <div class="form-field">
-                        <label for="thumbnailImage">Thumbnail Image:</label>
-                        <input
-                            id="thumbnailImage"
-                            placeholder="Enter image url"
-                            type="text"
-                            v-model="SO.thumbnailImage"
-                        />
-                    </div>
-
-                    <!-- Spot Images URLs -->
-                    <div class="form-field">
-                        <label for="spotImages" style="margin-bottom: 4px"
-                            >Spot Images:</label
-                        >
-                        <div
-                            :key="index"
-                            class="url-entry"
-                            v-for="(_, index) in SO.spotImagesList"
-                        >
-                            <div style="display: flex; gap: 8px">
-                                <input
-                                    type="text"
-                                    :placeholder="'Enter spot Image URL'"
-                                    v-model="SO.spotImagesList[index]"
-                                    @blur="validateSpotImageUrl(index)"
-                                    class="full-width-input"
-                                />
-                                <AtomIcon
-                                    :icon="'delete'"
-                                    @click="removeUrlField(index)"
-                                    class="remove-url-btn"
-                                >
-                                </AtomIcon>
-                            </div>
-                            <span class="error" v-if="spotImagesError[index]">
-                                {{ spotImagesError[index] }}
-                            </span>
+                    <div class="form-field-column">
+                        <!-- Thumbnail image -->
+                        <div class="form-field">
+                            <label for="thumbnailImage">Thumbnail Image:</label>
+                            <input
+                                id="thumbnailImage"
+                                placeholder="Enter image url"
+                                type="text"
+                                v-model="SO.thumbnailImage"
+                            />
                         </div>
-                        <!-- Add a new URL -->
-                        <button @click="addNewUrlField" class="add-new-url-btn">
-                            Add New URL
-                        </button>
+
+                        <!-- Spot Images URLs -->
+                        <div class="form-field">
+                            <label for="spotImages" style="margin-bottom: 4px"
+                                >Spot Images:</label
+                            >
+                            <div
+                                :key="index"
+                                class="url-entry"
+                                v-for="(_, index) in SO.spotImagesList"
+                            >
+                                <div style="display: flex; gap: 8px">
+                                    <input
+                                        type="text"
+                                        :placeholder="'Enter spot Image URL'"
+                                        v-model="SO.spotImagesList[index]"
+                                        @blur="validateSpotImageUrl(index)"
+                                        class="full-width-input"
+                                    />
+                                    <AtomIcon
+                                        :icon="'delete'"
+                                        @click="removeUrlField(index)"
+                                        class="remove-url-btn"
+                                    >
+                                    </AtomIcon>
+                                </div>
+                                <span
+                                    class="error"
+                                    v-if="spotImagesError[index]"
+                                >
+                                    {{ spotImagesError[index] }}
+                                </span>
+                            </div>
+                            <!-- Add a new URL -->
+                            <button
+                                @click="addNewUrlField"
+                                class="add-new-url-btn"
+                            >
+                                Add New URL
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Upload Images -->
@@ -192,7 +211,7 @@
                     <!-- Base Amount -->
                     <div class="form-field">
                         <label for="baseAmount"
-                            >Charges(<span>&#8377;</span>):<span
+                            >SO Rent(<span>&#8377;</span>):<span
                                 style="color: red"
                                 >*</span
                             ></label
@@ -653,6 +672,11 @@ export default {
     justify-content: center;
     margin: 0% 9%;
 }
+.form-field-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
 .form-field label {
     font-weight: 700;
     vertical-align: middle;
@@ -732,7 +756,6 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: start;
-    padding: 0 9%;
 
     label {
         font-weight: 700;

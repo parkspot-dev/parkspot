@@ -29,8 +29,8 @@ async function uploadImages(Images, namePrefix) {
         const epochTime = Date.now();
         const extension = extensionMap[img.file.type];
 
-        let modifiedBase = `${namePrefix}:${epochTime}${extension}`;
-        const uploadUrl = `${baseUrl}/${modifiedBase}?${queryParams}`;
+        let modifiedBase = `${baseUrl}/${namePrefix}:${epochTime}${extension}`;
+        const uploadUrl = `${modifiedBase}?${queryParams}`;
 
         // Return fetch promise for each file
         return fetch(uploadUrl, {
