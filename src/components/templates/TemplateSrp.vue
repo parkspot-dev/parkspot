@@ -8,9 +8,15 @@
                 ></SearchInput>
             </div>
             <!-- Filters -->
-            <button class="filter-button" @click="showFilters">
-                {{ isFilterContainerOpen ? 'Hide' : 'Show' }} Filters
-            </button>
+            <div class="filter-dropdown" @click="showFilters">
+                <div>Filters</div>
+                <div
+                    class="material-symbols-outlined"
+                    :class="{ rotate: isFilterContainerOpen }"
+                >
+                    keyboard_arrow_down
+                </div>
+            </div>
             <div v-if="isFilterContainerOpen" class="filters">
                 <FilterDropdown
                     :options="distanceFilterOptions"
@@ -210,25 +216,37 @@ export default {
         }
     }
 
-    .filter-button {
-        background-color: var(--primary-color);
-        border-radius: 4px;
-        border: none;
+    .filter-dropdown {
+        background: white;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.631);
         color: var(--parkspot-black);
         cursor: pointer;
-        font-size: 14px;
-        font-weight: 600;
-        padding: 8px 16px;
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 8px;
+        text-align: left;
+        width: 100%;
     }
 
     .filters {
+        animation: fadeInTop 0.5s ease-in-out;
         display: flex;
         flex-wrap: wrap;
         gap: 16px;
-        justify-content: space-between;
         margin-top: 12px;
         min-height: 44px;
         position: relative;
+    }
+
+    @keyframes fadeInTop {
+        0% {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .srp-lists {
@@ -341,6 +359,11 @@ export default {
         position: relative;
         height: 100%;
     }
+}
+
+.rotate {
+    transform: rotate(180deg);
+    transition: 1s;
 }
 
 @media only screen and (max-width: 1024px) {
