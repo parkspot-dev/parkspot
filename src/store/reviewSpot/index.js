@@ -1,6 +1,5 @@
 import { mayaClient } from '@/services/api';
 import ImageUploadService from '@/services/ImageUploadService';
-
 const state = {
     SO: {
         userName: '',
@@ -9,6 +8,7 @@ const state = {
         mobile: '',
         email: '',
         address: '',
+        apartmentName: '',
         city: '',
         area: '',
         latlong: '',
@@ -34,6 +34,7 @@ const state = {
     isLoading: false,
     latlongError: '',
     mobileError: '',
+    cityError: '',
     spotImagesError: [],
     status: 'none', // none, error, success
     statusMessage: '',
@@ -131,6 +132,18 @@ const actions = {
         commit('set-error', { field: 'mobileError', message: '' });
     },
 
+    // Validate City 
+    validateCity({ commit, state }) {
+        if (state.SO.city === '') {
+            commit('set-error', {
+                field: 'cityError',
+                message: 'City cannot be empty.',
+            });
+            return;
+        }
+        commit('set-error', { field: 'cityError', message: '' });
+    },
+
     validateSpotImageUrl({ commit, state }, index) {
         const url = state.SO.spotImagesList[index].trim();
         const currentErrors = [...state.spotImagesError];
@@ -140,7 +153,7 @@ const actions = {
             const urlPattern = new RegExp(
                 '^(https?:\\/\\/)?' + // protocol
                 '((([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.)+[a-zA-Z]{2,})' + // domain name only
-                '(\\/[-a-zA-Z\\d%_.~+]*)*' + // path
+                '(\\/[-a-zA-Z\\d%_.~+:]*)*' + // path
                 '(\\?[;&a-zA-Z\\d%_.~+=-]*)?' + // query string
                 '(\\#[-a-zA-Z\\d_]*)?$', // fragment locator
                 'i'
@@ -170,6 +183,7 @@ const actions = {
                 city: spotInfo.City,
                 area: spotInfo.Area,
                 fullName: spotInfo.FullName,
+                apartmentName: spotInfo.Name,
                 mobile: spotInfo.Mobile,
                 address: spotInfo.Address,
                 email: spotInfo.EmailID,
@@ -208,6 +222,7 @@ const actions = {
     async validateFormFields({ dispatch }) {
         await Promise.all([
             dispatch('validateMobile'),
+            dispatch('validateCity'),
             dispatch('validateLatLong'),
             dispatch('validateSpotImagesErrors'),
         ]);
@@ -224,7 +239,7 @@ const actions = {
     // Check for errors in the state
     hasErrors({ state }) {
         const spotImageErrors = state.spotImagesError.some(err => err && err !== '');
-        return state.mobileError || state.latlongError || spotImageErrors;
+        return state.mobileError || state.latlongError || spotImageErrors || state.cityError;
     },
 
     // Validates form fields and checks for errors.
@@ -262,9 +277,10 @@ const actions = {
             Area: state.SO.area,
             BaseAmount: state.Rent.baseAmount ? parseFloat(state.Rent.baseAmount) : 0.0,
             City: state.SO.city,
-            Email: state.SO.email,
+            EmailID: state.SO.email,
             EndDate: state.Booking.endDate,
             FullName: state.SO.fullName,
+            Name: state.SO.apartmentName,
             ID: state.SO.spotId,
             LastCallDate: state.Booking.lastCallDate,
             Latitude: latitude,
@@ -303,6 +319,8 @@ const actions = {
                     return 'EndDate';
                 case 'fullName':
                     return 'FullName';
+                case 'apartmentName':
+                    return 'Name';
                 case 'lastCallDate':
                     return 'LastCallDate';
                 case 'duration':
@@ -346,19 +364,31 @@ const actions = {
         if (!isValid) {
             return;
         }
+        let response;
         commit('set-loading', true);
-        const uploadedImageURLs = await ImageUploadService.uploadImages(state.SO.uploadImages, state.SO.spotId);
-        if (!uploadedImageURLs['success']) {
-            commit('set-error-msg', uploadedImageURLs['DisplayMsg']);
+        if (state.updatedFields.includes('spotImagesList') || state.updatedFields.includes('uploadImages')) {
+            const uploadedImageURLs = await ImageUploadService.uploadImages(state.SO.uploadImages, state.SO.spotId);
+            if (!uploadedImageURLs['success']) {
+                commit('set-error-msg', uploadedImageURLs['DisplayMsg']);
+            }
+            else {
+                response = await dispatch('updateSpotRequest', uploadedImageURLs['urls']);
+                if (response.ErrorCode) {
+                    commit('set-error-msg', response.DisplayMsg);
+                } else {
+                    commit('set-success-msg', 'Your request was saved successfully');
+                }
+            }
         }
         else {
-            const response = await dispatch('updateSpotRequest', uploadedImageURLs['urls']);
+            response = await dispatch('updateSpotRequest', []);
             if (response.ErrorCode) {
                 commit('set-error-msg', response.DisplayMsg);
             } else {
                 commit('set-success-msg', 'Your request was saved successfully');
             }
         }
+
         commit('set-loading', false);
         return response;
     },
