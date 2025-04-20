@@ -62,7 +62,7 @@
                 </div>
             </div>
         </BodyWrapper>
-        <Whats_Next :steps="WHAT_NEXT" />
+        <Whats_Next :steps="What_Next" />
         <TestimonialSection />
     </div>
 </template>
@@ -94,7 +94,7 @@ export default {
         return {
             headingLevel: 'h6',
             JOINING_BENEFITS: JOINING_BENEFITS_VO,
-            WHAT_NEXT: WHAT_NEXT_VO,
+            What_Next: WHAT_NEXT_VO,
         };
     },
     methods: {

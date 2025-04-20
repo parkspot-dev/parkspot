@@ -92,7 +92,7 @@
             </div>
         </div>
 
-        <CheckboxInput :label="termData" name="terms" required v-model="terms">
+        <CheckboxInput :label="termData" name="isTermsAccepted" required v-model="isTermsAccepted">
             <template #extra>
                 <a
                     href="https://www.parkspot.in/terms-and-conditions"
@@ -138,7 +138,7 @@ export default {
     data() {
         return {
             registerSpotRequestFormSchema,
-            terms: false,
+            isTermsAccepted: false,
             parkingSizeLabel: '',
             parkingSizeLabels: ParkingSizeLabels,
             facilityOptions: [...PARKING_FACILITY.SO.FACILITIES_DATA],

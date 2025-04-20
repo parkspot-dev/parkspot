@@ -296,6 +296,10 @@ export const JOINING_BENEFITS_SO = [
         icon: 'headset_mic',
     },
     {
+        text: 'Complete Control Over Your Parking Space.',
+        icon: 'tune',
+    },
+    {
         text: 'Zero Listing Fees, Maximum Earnings.',
         icon: 'trending_up',
     },
