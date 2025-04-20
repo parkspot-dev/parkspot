@@ -26,6 +26,7 @@ async function uploadImages(Images, namePrefix) {
     };
     const [baseUrl, queryParams] = sasUrl.split('?');
     const uploadPromises = Images.map(async (img, index) => {
+        // TODO: See other way to handle epoch time for unique filename
         const epochTime = Date.now() + index; // Using index to make the timestamp unique
         const extension = extensionMap[img.file.type];
 
