@@ -29,7 +29,7 @@ const state = {
     // - maxValue: Maximum range value (inclusive)
     filters: [],
     selectedSort : {
-        name : '',
+        name : 'Recommended',
         order : ''
     }
 };

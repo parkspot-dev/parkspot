@@ -8,8 +8,10 @@
                 ></SearchInput>
             </div>
             <!-- Filters -->
-            <h4>Filters</h4>
-            <div class="filters">
+            <button class="filter-button" @click="showFilters">
+                {{ isFilterContainerOpen ? 'Hide' : 'Show' }} Filters
+            </button>
+            <div v-if="isFilterContainerOpen" class="filters">
                 <FilterDropdown
                     :options="distanceFilterOptions"
                     :searchable="false"
@@ -47,7 +49,7 @@
                     </strong>
                 </p>
                 <div class="sort">
-                    Short by:
+                    Sort by:
                     <FilterDropdown
                         :options="sortFilterOptions"
                         :searchable="false"
@@ -139,6 +141,7 @@ export default {
                 status: '',
             },
             filterManager: null,
+            isFilterContainerOpen: false,
         };
     },
     computed: {
@@ -182,6 +185,9 @@ export default {
         onChange() {
             this.$emit('flyToSrp');
         },
+        showFilters() {
+            this.isFilterContainerOpen = !this.isFilterContainerOpen;
+        },
     },
 };
 </script>
@@ -204,6 +210,17 @@ export default {
         }
     }
 
+    .filter-button {
+        background-color: var(--primary-color);
+        border-radius: 4px;
+        border: none;
+        color: var(--parkspot-black);
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 8px 16px;
+    }
+
     .filters {
         display: flex;
         flex-wrap: wrap;
@@ -211,11 +228,6 @@ export default {
         justify-content: space-between;
         min-height: 44px;
         position: relative;
-
-        h3 {
-            align-self: center;
-            vertical-align: middle;
-        }
     }
 
     .srp-lists {
