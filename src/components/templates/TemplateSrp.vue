@@ -8,7 +8,7 @@
                 ></SearchInput>
             </div>
             <!-- Filters -->
-            <h3>Filters</h3>
+            <h4>Filters</h4>
             <div class="filters">
                 <FilterDropdown
                     :options="distanceFilterOptions"
@@ -47,6 +47,7 @@
                     </strong>
                 </p>
                 <div class="sort">
+                    Short by:
                     <FilterDropdown
                         :options="sortFilterOptions"
                         :searchable="false"
@@ -54,7 +55,7 @@
                         :removable="false"
                         @remove="removeFilter('rent')"
                         @update="sortFilteredResults($event, 'asc')"
-                        label="Sort by"
+                        label="Select"
                     />
                 </div>
             </div>
@@ -207,6 +208,7 @@ export default {
         display: flex;
         flex-wrap: wrap;
         gap: 16px;
+        justify-content: space-between;
         min-height: 44px;
         position: relative;
 
@@ -221,9 +223,9 @@ export default {
         padding-bottom: 2rem;
 
         .srp-results-heading {
+            align-items: center;
             display: flex;
             justify-content: space-between;
-            align-items: center;
             margin-top: 20px;
 
             span {
@@ -231,9 +233,10 @@ export default {
             }
 
             .sort {
-                display: flex;
-                justify-content: center;
                 align-items: center;
+                display: flex;
+                gap: 8px;
+                justify-content: center;
             }
         }
 

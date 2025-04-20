@@ -17,7 +17,7 @@ export default class FilterManager {
         });
 
         this.updateQueryParams(filterName, value);
-        this.applyFilters(); // ✅ changed from dispatch to method
+        this.applyFilters();
     }
 
     handleStatusFilter(filterName, value) {
@@ -35,14 +35,14 @@ export default class FilterManager {
         });
 
         this.updateQueryParams(filterName, value);
-        this.applyFilters(); // ✅ changed from dispatch to method
+        this.applyFilters();
     }
 
     removeFilter(filterName) {
         this.vm.filterSelectedValues[filterName] = '';
         this.store.dispatch('map/removeFilterByName', filterName);
         this.removeQueryParams(filterName);
-        this.applyFilters(); // ✅ changed from dispatch to method
+        this.applyFilters();
     }
 
     applyFilterFromQuery(filterName, transform = this.extractMinMax) {
@@ -66,7 +66,7 @@ export default class FilterManager {
         }));
 
         // check for sort
-        if(this.vm.$route.query['sort']){
+        if(this.vm.$route.query['sort']) {
             this.store.dispatch('map/updateSort', {
                 name: this.vm.$route.query['sort'],
             });
@@ -129,7 +129,7 @@ export default class FilterManager {
         }
 
         this.store.commit('map/update-filtered-srp-results', filteredSpots);
-        if (this.vm.selectedSort) {
+        if (this.vm.selectedSort && this.vm.selectedSort.name !== 'Recommended') {
             this.sortFilteredResults(
                 this.vm.selectedSort.name,
                 this.vm.selectedSort.order,
@@ -147,13 +147,20 @@ export default class FilterManager {
 
         const sortedResults = [...this.vm.filteredSpots];
 
-        sortedResults.sort((a, b) => {
-            let valueA = field === 'Rent' ? a.Rate : a.Distance;
-            let valueB = field === 'Rent' ? b.Rate : b.Distance;
-            return order === 'asc' ? valueA - valueB : valueB - valueA;
-        });
+        if(field !== 'Recommended') {
+            sortedResults.sort((a, b) => {
+                let valueA = field === 'Rent' ? a.Rate : a.Distance;
+                let valueB = field === 'Rent' ? b.Rate : b.Distance;
+                return order === 'asc' ? valueA - valueB : valueB - valueA;
+            });
+        }
 
         this.updateQueryParams('sort', field);
-        this.store.commit('map/update-filtered-srp-results', sortedResults);
+
+        if(field === 'Recommended') {
+            this.applyFilters();
+        } else {
+            this.store.commit('map/update-filtered-srp-results', sortedResults);
+        }
     }
 }
