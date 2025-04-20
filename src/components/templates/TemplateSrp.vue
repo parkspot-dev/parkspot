@@ -226,6 +226,7 @@ export default {
         flex-wrap: wrap;
         gap: 16px;
         justify-content: space-between;
+        margin-top: 12px;
         min-height: 44px;
         position: relative;
     }
