@@ -210,20 +210,18 @@ export default {
         gap: 10px;
         margin-top: 10px;
         margin-bottom: 24px;
-
         .map-search {
             width: 100%;
         }
     }
 
     .filter-dropdown {
-        background: white;
-        border-bottom: 1px solid rgba(128, 128, 128, 0.631);
+        border-bottom: 3px solid #f5f5f5;
         color: var(--parkspot-black);
         cursor: pointer;
         display: flex;
         justify-content: space-between;
-        padding-bottom: 8px;
+        padding-bottom: 4px;
         text-align: left;
         width: 100%;
     }
@@ -257,8 +255,7 @@ export default {
             align-items: center;
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
-
+            min-height: 45px;
             span {
                 color: rgb(151, 149, 149);
             }
@@ -391,6 +388,14 @@ export default {
 @media only screen and (max-width: 700px) {
     .srp-lists {
         padding: 2rem 4rem;
+    }
+
+    .sort{
+        align-items: left;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                justify-content: left;
     }
 }
 
