@@ -390,12 +390,12 @@ export default {
         padding: 2rem 4rem;
     }
 
-    .sort{
+    .sort {
         align-items: left;
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-                justify-content: left;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        justify-content: left;
     }
 }
 
