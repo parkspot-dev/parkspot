@@ -331,3 +331,23 @@ export const WHAT_NEXT_SO = [
         title: 'Step 4',
     },
 ];
+
+export const DISTANCE_FILTER_OPTIONS = [
+    'Less than 2 KM',
+    '2 KM to 3 KM',
+    '3 KM to 4 KM',
+    '4 KM to 5 KM',
+    'Above 5 KM',
+];
+
+export const RENT_FILTER_OPTIONS = [
+    'Less than ₹3000',
+    '₹3000 - ₹4000',
+    '₹4000 - ₹5000',
+    'More than ₹5000',
+];
+
+export const STATUS_FILTER_OPTIONS = ['Available', 'Rented out'];
+
+export const SORT_FILTER_OPTIONS = [ 'Recommended', 'Rent', 'Distance',];
+
