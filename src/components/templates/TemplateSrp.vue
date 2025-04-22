@@ -55,7 +55,7 @@
                     </strong>
                 </p>
                 <div class="sort">
-                    Sort by:
+                    <div class="text" >Sort By:</div>
                     <FilterDropdown
                         :options="sortFilterOptions"
                         :searchable="false"
@@ -255,21 +255,29 @@ export default {
             align-items: center;
             display: flex;
             justify-content: space-between;
-            min-height: 45px;
+            min-height: 44px;
+            padding-bottom: 8px 0;
             span {
                 color: rgb(151, 149, 149);
             }
 
             .sort {
-                align-items: center;
                 display: flex;
-                gap: 8px;
-                justify-content: center;
+                flex-wrap: wrap;
+                gap: 16px;
+                min-height: 44px;
+                position: relative;
+
+                .text {
+                    align-items: center;
+                    display: flex;
+                    justify-content: center;
+                }
             }
         }
 
         hr {
-            margin-top: 8px;
+            margin-top: 0px;
         }
     }
 
@@ -389,15 +397,32 @@ export default {
     .srp-lists {
         padding: 2rem 4rem;
     }
+}
+
+@media (max-width: 600px) {
+    .srp-results-heading {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+
+      p{
+        align-self: flex-start;
+        margin-top: 12px;
+       }
+    }
 
     .sort {
-        align-items: left;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        justify-content: left;
+      width: 100%;
+      justify-content: flex-start;
+      gap: 8px;
     }
-}
+
+    .text {
+      justify-content: flex-start;
+    }
+  }
+
+
 
 @media only screen and (max-width: 500px) {
     .srp-lists {
