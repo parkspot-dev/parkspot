@@ -134,7 +134,6 @@ export default {
     data() {
         return {
             registerSpotRequestFormSchema,
-            isTermsAccepted: false,
             parkingSizeLabel: '',
             parkingSizeLabels: ParkingSizeLabels,
             facilityOptions: [...PARKING_FACILITY.SO.FACILITIES_DATA],
@@ -149,7 +148,7 @@ export default {
                 facilities: [],
                 mapsLink: '',
                 images: [],
-                terms: false
+                isTermsAccepted: false,
             },
             CONTACT_FORM: FORM,
             ADD_INFO,
@@ -168,7 +167,7 @@ export default {
         },
 
         updateTermsData(val) {
-            this.contactModel.terms = val;
+            this.contactModel.isTermsAccepted = val;
         },
 
         submitForm() {
