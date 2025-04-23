@@ -68,5 +68,6 @@ export const registerSpotRequestFormSchema = toTypedSchema(
         addr: rules.addr,
         aprt: rules.addr,
         terms: rules.terms,
-    }),
+        terms: rules.terms,
+  }),
 );

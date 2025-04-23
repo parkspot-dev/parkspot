@@ -204,6 +204,27 @@ const actions = {
         mayaClient.post('/contact', req);
     },
 
+    async registerSpot({ state}) {
+        const req = {
+            FullName: state.contactForm.fullname,
+            BuildingName: state.contactForm.aprt,
+            Latitude    : state.locationDetails.lnglat.lat,
+            Longitude   : state.locationDetails.lnglat.lng,
+            MonthlyRent: state.contactForm.expectedRent,
+            Mobile: state.contactForm.cno,
+            Address: state.contactForm.addr,
+            ParkingSize: state.contactForm.parkingSize, // "Hatchback","Compact SUV", "SUV"
+            ServicesAvailable: state.contactForm.facilities, // "CCTV", "Security Gaurd", "Covered", "24Hrs Access", "Parking Stickers"
+            BookingDuration: '', // "Monthly", "Weekly", "Daily"
+            Remark: '',
+            MapLink: state.contactForm.mapLink,
+        }
+        
+
+      const res = await  mayaClient.post('/owner/parking-request', req);
+      console.log("This is res", res);
+    },
+
     async requestSpot({ state }) {
         // prettier-ignore
         const req = {

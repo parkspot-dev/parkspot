@@ -45,14 +45,14 @@
                 :label="CONTACT_FORM.APARTMENT"
                 :placeholder="CONTACT_FORM.APARTMENT"
                 name="apartment"
-                v-model="contactModel.apartment"
+                v-model="contactModel.aprt"
             />
             <FormInput
                 :label="CONTACT_FORM.ADDRESS"
                 :placeholder="CONTACT_FORM.ADDRESS"
                 name="address"
                 required
-                v-model="contactModel.address"
+                v-model="contactModel.addr"
             />
         </div>
 
@@ -91,19 +91,15 @@
                 <ImageUpload v-model:images="contactModel.images" />
             </div>
         </div>
-
-        <CheckboxInput :label="termData" name="isTermsAccepted" required v-model="isTermsAccepted">
-            <template #extra>
+        <CheckboxInput :label="termData" @update="updateTermsData" name="terms">
+            <template v-slot:extra>
                 <a
                     href="https://www.parkspot.in/terms-and-conditions"
-                    rel="noopener noreferrer"
                     target="_blank"
+                    >Terms and Conditions</a
                 >
-                    Terms and Conditions
-                </a>
             </template>
         </CheckboxInput>
-
         <button class="send-button" type="submit">
             Submit
             <AtomIcon class="btn-icon" icon="send-outline" />
@@ -146,13 +142,14 @@ export default {
                 fullname: '',
                 cno: '',
                 email: '',
-                address: '',
-                apartment: '',
+                addr: '',
+                aprt: '',
                 parkingSize: 0, // Initally Undefined
                 expectedRent: '',
                 facilities: [],
                 mapsLink: '',
                 images: [],
+                terms: ''
             },
             CONTACT_FORM: FORM,
             ADD_INFO,
@@ -168,6 +165,10 @@ export default {
             const newVal = event?.target?.value;
             this.contactModel.parkingSize =
                 ParkingSizeDisplayMap[newVal] ?? null;
+        },
+
+        updateTermsData(val) {
+            this.contactModel.terms = val;
         },
 
         submitForm() {
