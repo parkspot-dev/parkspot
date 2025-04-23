@@ -45,14 +45,14 @@
                 :label="CONTACT_FORM.APARTMENT"
                 :placeholder="CONTACT_FORM.APARTMENT"
                 name="apartment"
-                v-model="contactModel.aprt"
+                v-model="contactModel.apartment"
             />
             <FormInput
                 :label="CONTACT_FORM.ADDRESS"
                 :placeholder="CONTACT_FORM.ADDRESS"
                 name="address"
                 required
-                v-model="contactModel.addr"
+                v-model="contactModel.address"
             />
         </div>
 
@@ -142,14 +142,14 @@ export default {
                 fullname: '',
                 cno: '',
                 email: '',
-                addr: '',
-                aprt: '',
+                address: '',
+                apartment: '',
                 parkingSize: 0, // Initally Undefined
                 expectedRent: '',
                 facilities: [],
                 mapsLink: '',
                 images: [],
-                terms: ''
+                terms: false
             },
             CONTACT_FORM: FORM,
             ADD_INFO,

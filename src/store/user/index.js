@@ -204,22 +204,21 @@ const actions = {
         mayaClient.post('/contact', req);
     },
 
-    async registerSpot({ state}) {
+    async registerSpot({ state }) {
         const req = {
             FullName: state.contactForm.fullname,
-            BuildingName: state.contactForm.aprt,
+            BuildingName: state.contactForm.apartment,
             MonthlyRent: state.contactForm.expectedRent,
             Mobile: state.contactForm.cno,
-            Address: state.contactForm.addr,
+            Address: state.contactForm.address,
             ParkingSize: state.contactForm.parkingSize, // "Hatchback","Compact SUV", "SUV"
             ServicesAvailable: state.contactForm.facilities, // "CCTV", "Security Gaurd", "Covered", "24Hrs Access", "Parking Stickers"
             BookingDuration: '', // "Monthly", "Weekly", "Daily"
             Remark: '',
             MapLink: state.contactForm.mapLink,
-        }
-        
-      const res = await  mayaClient.post('/owner/spot-request', req);
-      console.log("This is res", res);
+        };
+
+        await mayaClient.post('/owner/spot-request', req);
     },
 
     async requestSpot({ state }) {
@@ -260,7 +259,9 @@ const actions = {
     },
 
     async getUserProfile({ commit }) {
-        let userProfile = JSON.parse(localStorage.getItem('UserProfile') || '{}');
+        let userProfile = JSON.parse(
+            localStorage.getItem('UserProfile') || '{}',
+        );
         if (Object.keys(userProfile).length !== 0) {
             commit('update-user-profile', userProfile);
             commit('set-user-type', userProfile.Type);

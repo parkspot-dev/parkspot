@@ -22,7 +22,7 @@ const rules = {
         .min(1, 'Contact number is required.')
         .regex(/^\+?\d+$/, 'Must be a valid contact number.')
         .length(10, 'Contact number must be 10 digits.'),
-    addr: z.string().optional(),
+    address: z.string().optional(),
     msg: z.string().optional(),
     carModel: z.string().min(1, 'Car model is required'),
     terms: z.boolean().refine((val) => val === true, {
@@ -65,9 +65,8 @@ export const registerSpotRequestFormSchema = toTypedSchema(
         fullname: rules.fullname,
         email: rules.email,
         cno: rules.cno,
-        addr: rules.addr,
-        aprt: rules.addr,
-        terms: rules.terms,
+        address: rules.address,
+        apartment: rules.address,
         terms: rules.terms,
   }),
 );
