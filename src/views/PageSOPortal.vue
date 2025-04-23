@@ -33,11 +33,12 @@ export default {
             login: 'user/login',
             kyc: 'user/kyc',
             contact: 'user/contact',
+            registerSpot: 'user/registerSpot',
         }),
         async onFinalSubmit() {
             try {
                 this.isLoading = true;
-                this.contact();
+                this.registerSpot();
                 this.isLoading = false;
                 this.$buefy.toast.open({
                     message: 'ParkSpot registered successfully!',

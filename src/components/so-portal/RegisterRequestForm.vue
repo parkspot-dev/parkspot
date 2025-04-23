@@ -91,19 +91,15 @@
                 <ImageUpload v-model:images="contactModel.images" />
             </div>
         </div>
-
-        <CheckboxInput :label="termData" name="isTermsAccepted" required v-model="isTermsAccepted">
-            <template #extra>
+        <CheckboxInput :label="termData" @update="updateTermsData" name="terms">
+            <template v-slot:extra>
                 <a
                     href="https://www.parkspot.in/terms-and-conditions"
-                    rel="noopener noreferrer"
                     target="_blank"
+                    >Terms and Conditions</a
                 >
-                    Terms and Conditions
-                </a>
             </template>
         </CheckboxInput>
-
         <button class="send-button" type="submit">
             Submit
             <AtomIcon class="btn-icon" icon="send-outline" />
@@ -138,7 +134,6 @@ export default {
     data() {
         return {
             registerSpotRequestFormSchema,
-            isTermsAccepted: false,
             parkingSizeLabel: '',
             parkingSizeLabels: ParkingSizeLabels,
             facilityOptions: [...PARKING_FACILITY.SO.FACILITIES_DATA],
@@ -153,6 +148,7 @@ export default {
                 facilities: [],
                 mapsLink: '',
                 images: [],
+                isTermsAccepted: false,
             },
             CONTACT_FORM: FORM,
             ADD_INFO,
@@ -168,6 +164,10 @@ export default {
             const newVal = event?.target?.value;
             this.contactModel.parkingSize =
                 ParkingSizeDisplayMap[newVal] ?? null;
+        },
+
+        updateTermsData(val) {
+            this.contactModel.isTermsAccepted = val;
         },
 
         submitForm() {
