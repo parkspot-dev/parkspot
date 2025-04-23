@@ -205,12 +205,9 @@ const actions = {
     },
 
     async registerSpot({ state}) {
-        console.log("This is state", state.contactForm);
         const req = {
             FullName: state.contactForm.fullname,
             BuildingName: state.contactForm.aprt,
-            Latitude    : 43.88923,
-            Longitude   : 33.4244,
             MonthlyRent: state.contactForm.expectedRent,
             Mobile: state.contactForm.cno,
             Address: state.contactForm.addr,
