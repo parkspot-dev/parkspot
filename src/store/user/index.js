@@ -205,11 +205,12 @@ const actions = {
     },
 
     async registerSpot({ state}) {
+        console.log("This is state", state.contactForm);
         const req = {
             FullName: state.contactForm.fullname,
             BuildingName: state.contactForm.aprt,
-            Latitude    : state.locationDetails.lnglat.lat,
-            Longitude   : state.locationDetails.lnglat.lng,
+            Latitude    : 43.88923,
+            Longitude   : 33.4244,
             MonthlyRent: state.contactForm.expectedRent,
             Mobile: state.contactForm.cno,
             Address: state.contactForm.addr,
@@ -220,8 +221,7 @@ const actions = {
             MapLink: state.contactForm.mapLink,
         }
         
-
-      const res = await  mayaClient.post('/owner/parking-request', req);
+      const res = await  mayaClient.post('/owner/spot-request', req);
       console.log("This is res", res);
     },
 
