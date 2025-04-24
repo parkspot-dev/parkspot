@@ -36,7 +36,7 @@ export const contactFormSchema = toTypedSchema(
         fullname: rules.fullname,
         email: rules.email,
         cno: rules.cno,
-        addr: rules.addr,
+        address: rules.address,
         msg: rules.msg,
     }),
 );
