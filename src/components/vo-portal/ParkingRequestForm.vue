@@ -125,11 +125,11 @@ export default {
             this.updatePreference(this.preferenceModel);
             this.$emit('onSubmit');
         },
-        updateMinDur(val) {
-            this.preferenceModel.minDur = val;
+        updateMinDur(event) {
+            this.preferenceModel.minDur = event?.target?.value;
         },
-        updateType(val) {
-            this.preferenceModel.spot = val;
+        updateType(event) {
+            this.preferenceModel.spot = event?.target?.value;;
         },
         updateTermsData(data) {
             this.preferenceModel.terms = data;
