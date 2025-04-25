@@ -8,8 +8,9 @@
 <script>
 import TemplateSOPortal from '../components/templates/TemplateSOPortal.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { PAGE_TITLE } from '@/constant/constant';
+import imageUploadService from '@/services/ImageUploadService';
 export default {
     name: 'PageSOPortal',
     components: {
@@ -27,6 +28,9 @@ export default {
             isLoading: false,
         };
     },
+    computed: {
+        ...mapState('user', ['contactForm']),
+    },
     methods: {
         ...mapActions({
             register: 'user/register',
@@ -38,7 +42,16 @@ export default {
         async onFinalSubmit() {
             try {
                 this.isLoading = true;
-                this.registerSpot();
+                console.log('this is contact form', this.contactForm);
+                imageUploadService
+                    .uploadImages(this.contactForm.images, this.contactForm.cno)
+                    .then((res) => {
+                        console.log('this is image upload response', res);
+                        this.contactForm.images = res;
+                        if(res.success) {
+                            // this.registerSpot();
+                        }
+                    });
                 this.isLoading = false;
                 this.$buefy.toast.open({
                     message: 'ParkSpot registered successfully!',
