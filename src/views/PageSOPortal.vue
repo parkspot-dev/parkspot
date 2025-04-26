@@ -38,18 +38,17 @@ export default {
             kyc: 'user/kyc',
             contact: 'user/contact',
             registerSpot: 'user/registerSpot',
+            updateImages: 'user/updateImages',
         }),
         async onFinalSubmit() {
             try {
                 this.isLoading = true;
-                console.log('this is contact form', this.contactForm);
                 imageUploadService
                     .uploadImages(this.contactForm.images, this.contactForm.cno)
                     .then((res) => {
-                        console.log('this is image upload response', res);
-                        this.contactForm.images = res;
-                        if(res.success) {
-                            // this.registerSpot();
+                        if (res.success) {
+                            this.updateImages(res?.urls);
+                            this.registerSpot();
                         }
                     });
                 this.isLoading = false;

@@ -84,6 +84,9 @@ const mutations = {
         state.isAdmin = userType == UserType.Admin;
         state.isAgent = userType == UserType.Agent || state.isAdmin;
     },
+    'update-images'(state, images = {}) {
+        state.contactForm.images = images
+    }
 };
 
 const actions = {
@@ -256,6 +259,10 @@ const actions = {
             // todo write proper exception case
             throw new Error(err);
         }
+    },
+
+    updateImages({commit}, images) {
+        commit('update-images', images);
     },
 
     async getUserProfile({ commit }) {
