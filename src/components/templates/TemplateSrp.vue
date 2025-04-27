@@ -55,16 +55,18 @@
                     </strong>
                 </p>
                 <div class="sort">
-                    <div class="text" >Sort By:</div>
-                    <FilterDropdown
-                        :options="sortFilterOptions"
-                        :searchable="false"
-                        :selectedValue="selectedSort.name"
-                        :removable="false"
-                        @remove="removeFilter('rent')"
-                        @update="sortFilteredResults($event, 'asc')"
-                        label="Select"
-                    />
+                    <div class="text">Sort By:</div>
+                    <div class="sort-dropdown">
+                        <FilterDropdown
+                            :options="sortFilterOptions"
+                            :searchable="false"
+                            :selectedValue="selectedSort.name"
+                            :removable="false"
+                            @remove="removeFilter('rent')"
+                            @update="sortFilteredResults($event, 'asc')"
+                            label="Select"
+                        />
+                    </div>
                 </div>
             </div>
             <hr />
@@ -268,6 +270,12 @@ export default {
                 min-height: 44px;
                 position: relative;
 
+                .sort-dropdown {
+                    align-items: center;
+                    display: flex;
+                    justify-content: center;
+                }
+
                 .text {
                     align-items: center;
                     display: flex;
@@ -401,28 +409,26 @@ export default {
 
 @media (max-width: 600px) {
     .srp-results-heading {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
 
-      p{
-        align-self: flex-start;
-        margin-top: 12px;
-       }
+        p {
+            align-self: flex-start;
+            margin-top: 12px;
+        }
     }
 
     .sort {
-      width: 100%;
-      justify-content: flex-start;
-      gap: 8px;
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
     }
 
     .text {
-      justify-content: flex-start;
+        justify-content: flex-start;
     }
-  }
-
-
+}
 
 @media only screen and (max-width: 500px) {
     .srp-lists {
