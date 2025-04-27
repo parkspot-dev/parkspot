@@ -274,6 +274,7 @@ export default {
                     align-items: center;
                     display: flex;
                     justify-content: center;
+                    padding: 8px 0;
                 }
 
                 .text {
