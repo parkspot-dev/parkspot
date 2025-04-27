@@ -216,59 +216,6 @@ const actions = {
         return state.recentSearch;
     },
 
-    updateSrpResults({ commit }, filterOptions) {
-        let filteredSpots = [];
-        if (filterOptions.length === 1) {
-            if (filterOptions[0] === 'Available') {
-                filteredSpots = state.srpResults.filter(
-                    (srpResult) => srpResult.SlotsAvailable > 0,
-                );
-            } else if (filterOptions[0] === 'Rented out') {
-                filteredSpots = state.srpResults.filter(
-                    (srpResult) => srpResult.SlotsAvailable === 0,
-                );
-            }
-        } else {
-            filteredSpots = state.srpResults;
-        }
-
-        commit('update-filtered-srp-results', filteredSpots);
-    },
-
-    applyFilters({ commit, state }) {
-        let filteredSpots = [...state.srpResults];
-
-        for (let filter of state.filters) {
-            if (filter.name === 'distance') {
-                filteredSpots = filteredSpots.filter(
-                    (srpResult) =>
-                        srpResult.Distance >= filter.minValue &&
-                        srpResult.Distance <= filter.maxValue,
-                );
-            } else if (filter.name === 'rent') {
-                filteredSpots = filteredSpots.filter(
-                    (srpResult) =>
-                        srpResult.Rate >= filter.minValue &&
-                        srpResult.Rate <= filter.maxValue,
-                );
-            } else if (filter.name === 'status') {
-                if (filter.minValue > 0) {
-                    // Slots Available
-                    filteredSpots = filteredSpots.filter(
-                        (srpResult) => srpResult.SlotsAvailable > 0,
-                    );
-                } else {
-                    // No Slots Available
-                    filteredSpots = filteredSpots.filter(
-                        (srpResult) => srpResult.SlotsAvailable === 0,
-                    );
-                }
-            }
-        }
-
-        commit('update-filtered-srp-results', filteredSpots);
-    },
-
     updateUsersCurrentLocation({ commit }, center) {
         commit('update-user-location', center);
     },
@@ -293,13 +240,15 @@ const actions = {
 
         commit('update-filter-array', filterObj);
     },
-
+    
+    // removeFilterByName action to remove a filter by its name
     removeFilterByName({ state }, filterName) {
         state.filters = state.filters.filter(
             (filter) => filter.name !== filterName,
         );
     },
-
+    
+    // updateSort action to track selected sort option
     updateSort({ commit }, { name, order }) {
          commit('update-sort', {name, order});
     }

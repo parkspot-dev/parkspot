@@ -1,13 +1,13 @@
 export default class FilterManager {
-    constructor(store, vm) {
+    constructor(store, viewModel) {
         this.store = store;
-        this.vm = vm;
+        this.viewModel = viewModel;
     }
 
     addFilter(filterName, value) {
         if (!value) return;
 
-        this.vm.filterSelectedValues[filterName] = value;
+        this.viewModel.filterSelectedValues[filterName] = value;
         const minMaxValue = this.extractMinMax(value);
         if (!minMaxValue) return;
 
@@ -23,7 +23,7 @@ export default class FilterManager {
     handleStatusFilter(filterName, value) {
         if (!value) return;
 
-        this.vm.filterSelectedValues[filterName] = value;
+        this.viewModel.filterSelectedValues[filterName] = value;
         const valueObj = {
             min: value === 'Available' ? 1 : 0,
             max: value === 'Available' ? 1 : 0,
@@ -39,16 +39,16 @@ export default class FilterManager {
     }
 
     removeFilter(filterName) {
-        this.vm.filterSelectedValues[filterName] = '';
+        this.viewModel.filterSelectedValues[filterName] = '';
         this.store.dispatch('map/removeFilterByName', filterName);
         this.removeQueryParams(filterName);
         this.applyFilters();
     }
 
     applyFilterFromQuery(filterName, transform = this.extractMinMax) {
-        const value = this.vm.$route.query[filterName];
+        const value = this.viewModel.$route.query[filterName];
         if (value) {
-            this.vm.filterSelectedValues[filterName] = value;
+            this.viewModel.filterSelectedValues[filterName] = value;
             const formattedValue = transform.call(this, value);
             this.store.dispatch('map/updateFilter', {
                 name: filterName,
@@ -66,9 +66,9 @@ export default class FilterManager {
         }));
 
         // check for sort
-        if(this.vm.$route.query['sort']) {
+        if(this.viewModel.$route.query['sort']) {
             this.store.dispatch('map/updateSort', {
-                name: this.vm.$route.query['sort'],
+                name: this.viewModel.$route.query['sort'],
             });
         }
 
@@ -129,10 +129,10 @@ export default class FilterManager {
         }
 
         this.store.commit('map/update-filtered-srp-results', filteredSpots);
-        if (this.vm.selectedSort && this.vm.selectedSort.name !== 'Recommended') {
+        if (this.viewModel.selectedSort && this.viewModel.selectedSort.name !== 'Recommended') {
             this.sortFilteredResults(
-                this.vm.selectedSort.name,
-                this.vm.selectedSort.order,
+                this.viewModel.selectedSort.name,
+                this.viewModel.selectedSort.order,
             );
         }
     }
@@ -145,7 +145,7 @@ export default class FilterManager {
             order,
         });
 
-        const sortedResults = [...this.vm.filteredSpots];
+        const sortedResults = [...this.viewModel.filteredSpots];
 
         if(field !== 'Recommended') {
             sortedResults.sort((a, b) => {
