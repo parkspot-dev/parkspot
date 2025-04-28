@@ -62,7 +62,7 @@
                 </div>
             </div>
         </BodyWrapper>
-        <WhatNext />
+        <Whats_Next :steps="What_Next" />
         <TestimonialSection />
     </div>
 </template>
@@ -74,8 +74,9 @@ import BodyWrapper from '../extras/BodyWrapper.vue';
 import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
 import SearchComponent from '../vo-portal/SearchComponent.vue';
 import TestimonialSection from '../global/TestimonialSection.vue';
-import WhatNext from '../vo-portal/WhatNext.vue';
-import { JOINING_BENEFITS } from '../../constant/constant';
+import Whats_Next from '../global/Whats_Next.vue';
+import { WHAT_NEXT_VO } from '../../constant/constant';
+import { JOINING_BENEFITS_VO } from '../../constant/constant';
 
 export default {
     name: 'TemplateVOPortal',
@@ -86,13 +87,14 @@ export default {
         ParkingRequestForm,
         SearchComponent,
         TestimonialSection,
-        WhatNext,
+        Whats_Next,
     },
     emits: ['submit'],
     data() {
         return {
             headingLevel: 'h6',
-            JOINING_BENEFITS: JOINING_BENEFITS,
+            JOINING_BENEFITS: JOINING_BENEFITS_VO,
+            What_Next: WHAT_NEXT_VO,
         };
     },
     methods: {
@@ -104,17 +106,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card-wrapper {
-    margin: 0 auto;
-    max-width: 600px;
-    padding: 2rem 1rem;
-}
-
-.footer-buttons {
-    display: flex;
-    justify-content: space-between;
-}
-
 .form-section-wrapper {
     display: flex;
     flex-direction: row;
@@ -153,7 +144,9 @@ export default {
 
 .request-form {
     border-radius: var(--border-default);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        0 2px 4px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -276,7 +269,9 @@ export default {
             justify-content: center;
             min-height: 50px;
             min-width: 50px;
-            transition: transform 0.2s, background-color 0.2s;
+            transition:
+                transform 0.2s,
+                background-color 0.2s;
         }
     }
 }

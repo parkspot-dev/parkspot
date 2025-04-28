@@ -49,7 +49,7 @@
                             name="addr"
                             label="Address"
                             placeholder="Enter Your Address"
-                            v-model="model.addr"
+                            v-model="model.address"
                         />
 
                         <div class="btn-wrapper">
@@ -103,7 +103,7 @@ export default {
             model: {
                 fullname: '',
                 cno: '',
-                addr: '',
+                address: '',
                 msg: '[Car Wash Request]',
             },
             contactFormSchema,

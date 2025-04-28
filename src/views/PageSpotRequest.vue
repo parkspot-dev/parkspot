@@ -13,18 +13,18 @@
         <b-table
             :data="spotRequests"
             :paginated="true"
-            :per-page="10"
+            :per-page="16"
             :bordered="true"
             :hoverable="true"
             :focusable="true"
             :mobile-cards="true"
             :narrowed="true"
             :sticky-header="true"
-            height="500"
+            height="700"
         >
             <b-table-column
                 field="ID"
-                label="Request ID"
+                label="ID"
                 sortable
                 cell-class="has-text-left"
                 width="20"
@@ -241,7 +241,7 @@ export default {
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 $portal-font-size: 13px;
 
 

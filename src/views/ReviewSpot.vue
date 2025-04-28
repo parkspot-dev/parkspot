@@ -15,7 +15,7 @@
                 <!-- SO Details -->
                 <div class="form-group">
                     <!-- Spot Id(This field is Not allowed to edit) -->
-                    <div class="readonly-field">
+                    <div class="readonly-field form-field">
                         <label for="spotId">SpotId:</label>
                         <input
                             class="noborder"
@@ -25,7 +25,7 @@
                         />
                     </div>
                     <!-- user Name(This field is Not allowed to edit) -->
-                    <div class="readonly-field">
+                    <div class="readonly-field form-field">
                         <label for="userName">UserName:</label>
                         <input
                             class="noborder"
@@ -71,15 +71,29 @@
                             v-model="SO.email"
                         />
                     </div>
+
+                    <!-- Apartment Name -->
+                    <div class="form-field">
+                        <label for="apartmentName">Apartment Name:</label>
+                        <input
+                            placeholder="Enter apartment name"
+                            type="text"
+                            v-model="SO.apartmentName"
+                        />
+                    </div>
+
                     <!-- City -->
                     <div class="form-field">
                         <label for="city">City:</label>
-                        <select v-model="SO.city">
+                        <select v-model="SO.city" @change="validateCity">
                             <option value="Bengaluru">Bengaluru</option>
                             <option value="Chennai">Chennai</option>
                             <option value="Hyderabad">Hyderabad</option>
                             <option value="Kolkata">Kolkata</option>
                         </select>
+                        <span class="error" v-if="cityError">{{
+                            cityError
+                        }}</span>
                     </div>
                     <!-- Area -->
                     <div class="form-field">
@@ -117,50 +131,66 @@
                         ></textarea>
                     </div>
 
-                    <!-- Thumbnail image -->
-                    <div class="form-field">
-                        <label for="thumbnailImage">Thumbnail Image:</label>
-                        <input
-                            id="thumbnailImage"
-                            placeholder="Enter image url"
-                            type="text"
-                            v-model="SO.thumbnailImage"
-                        />
+                    <div class="form-field-column">
+                        <!-- Thumbnail image -->
+                        <div class="form-field">
+                            <label for="thumbnailImage">Thumbnail Image:</label>
+                            <input
+                                id="thumbnailImage"
+                                placeholder="Enter image url"
+                                type="text"
+                                v-model="SO.thumbnailImage"
+                            />
+                        </div>
+
+                        <!-- Spot Images URLs -->
+                        <div class="form-field">
+                            <label for="spotImages" style="margin-bottom: 4px"
+                                >Spot Images:</label
+                            >
+                            <div
+                                :key="index"
+                                class="url-entry"
+                                v-for="(_, index) in SO.spotImagesList"
+                            >
+                                <div style="display: flex; gap: 8px">
+                                    <input
+                                        type="text"
+                                        :placeholder="'Enter spot Image URL'"
+                                        v-model="SO.spotImagesList[index]"
+                                        @blur="validateSpotImageUrl(index)"
+                                        class="full-width-input"
+                                    />
+                                    <AtomIcon
+                                        :icon="'delete'"
+                                        @click="removeUrlField(index)"
+                                        class="remove-url-btn"
+                                    >
+                                    </AtomIcon>
+                                </div>
+                                <span
+                                    class="error"
+                                    v-if="spotImagesError[index]"
+                                >
+                                    {{ spotImagesError[index] }}
+                                </span>
+                            </div>
+                            <!-- Add a new URL -->
+                            <button
+                                @click="addNewUrlField"
+                                class="add-new-url-btn"
+                            >
+                                Add New URL
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Spot Images URLs -->
+                    <!-- Upload Images -->
                     <div class="form-field">
-                        <label for="spotImages" style="margin-bottom: 4px"
-                            >Spot Images:</label
-                        >
-                        <div
-                            :key="index"
-                            class="url-entry"
-                            v-for="(_, index) in SO.spotImagesList"
-                        >
-                            <div style="display: flex; gap: 8px">
-                                <input
-                                    type="text"
-                                    :placeholder="'Enter spot Image URL'"
-                                    v-model="SO.spotImagesList[index]"
-                                    @blur="validateSpotImageUrl(index)"
-                                    class="full-width-input"
-                                />
-                                <AtomIcon
-                                    :icon="'delete'"
-                                    @click="removeUrlField(index)"
-                                    class="remove-url-btn"
-                                >
-                                </AtomIcon>
-                            </div>
-                            <span class="error" v-if="spotImagesError[index]">
-                                {{ spotImagesError[index] }}
-                            </span>
-                        </div>
-                        <!-- Add a new URL -->
-                        <button @click="addNewUrlField" class="add-new-url-btn">
-                            Add New URL
-                        </button>
+                        <label for="uploadImages">Upload Images:</label>
+                        <ImageUpload
+                            v-model:images="SO.uploadImages"
+                        ></ImageUpload>
                     </div>
                 </div>
             </div>
@@ -184,7 +214,7 @@
                     <!-- Base Amount -->
                     <div class="form-field">
                         <label for="baseAmount"
-                            >Charges(<span>&#8377;</span>):<span
+                            >SO Rent(<span>&#8377;</span>):<span
                                 style="color: red"
                                 >*</span
                             ></label
@@ -376,6 +406,7 @@ import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
 import ImageGallery from '@/components/organisms/OrganismImageGallery.vue';
+import ImageUpload from '@/components/global/ImageUpload.vue';
 import { ParkingSize } from '../constant/enums';
 import { SiteType } from '../constant/enums';
 import { SpotRequestStatus } from '../constant/enums';
@@ -388,8 +419,9 @@ export default {
         AtomDatePicker,
         AtomHeading,
         AtomIcon,
-        LoaderModal,
         ImageGallery,
+        ImageUpload,
+        LoaderModal,
     },
     data() {
         return {
@@ -406,12 +438,13 @@ export default {
     computed: {
         ...mapState('reviewSpot', [
             'Booking',
+            'cityError',
             'isLoading',
             'latlongError',
             'mobileError',
             'Rent',
-            'spotImagesError',
             'SO',
+            'spotImagesError',
             'status',
             'statusMessage',
         ]),
@@ -457,9 +490,10 @@ export default {
             'fetchSpotDetails',
             'initState',
             'saveForm',
-            'setUpdatedFields',
             'setSpotImageError',
+            'setUpdatedFields',
             'submitForm',
+            'validateCity',
             'validateLatLong',
             'validateMobile',
             'validateSpotImageUrl',
@@ -523,25 +557,24 @@ export default {
             this.closeModal();
         },
         confirmSave() {
-            const updatedFields = [];
-            for (const key in this.SO) {
-                if (this.SO[key] !== this.initialFormData.SO[key]) {
-                    updatedFields.push(key);
+            const updatedFields = new Set();
+
+            ['SO', 'Rent', 'Booking'].forEach((section) => {
+                for (const key in this[section]) {
+                    const currentValue = this[section][key];
+                    const initialValue = this.initialFormData[section][key];
+                    // Convert to JSON strings for deep comparison
+                    if (
+                        JSON.stringify(currentValue) !==
+                        JSON.stringify(initialValue)
+                    ) {
+                        updatedFields.add(key);
+                    }
                 }
-            }
-            for (const key in this.Rent) {
-                if (this.Rent[key] !== this.initialFormData.Rent[key]) {
-                    updatedFields.push(key);
-                }
-            }
-            for (const key in this.Booking) {
-                if (this.Booking[key] !== this.initialFormData.Booking[key]) {
-                    updatedFields.push(key);
-                }
-            }
-            this.setUpdatedFields(updatedFields);
-            this.saveForm().then(() => {
-                this.updateInitialFormState();
+            });
+            this.setUpdatedFields(Array.from(updatedFields));
+            this.saveForm().then((response) => {
+                if (!response.ErrorCode) this.updateInitialFormState();
             });
         },
         onLastCallDateUpdate(updatedDate) {
@@ -592,7 +625,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .add-new-url-btn {
     align-items: center;
     background-color: var(--primary-color);
@@ -643,6 +676,11 @@ export default {
     flex-direction: column;
     justify-content: center;
     margin: 0% 9%;
+}
+.form-field-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 .form-field label {
     font-weight: 700;
@@ -723,7 +761,6 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: start;
-    padding: 0 9%;
 
     label {
         font-weight: 700;

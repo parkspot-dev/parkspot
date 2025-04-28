@@ -31,17 +31,18 @@ const selectedValue = ref(
 .select-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    margin-top: -4px;
 }
 select {
     border-color: gainsboro;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 14px;
     outline: none;
     padding: 0.5rem;
 }
 .label {
     font-size: 14px !important;
     font-weight: 500 !important;
+    padding-top: 14px;
 }
 </style>

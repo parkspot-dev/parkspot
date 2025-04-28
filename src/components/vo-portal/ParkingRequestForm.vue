@@ -51,16 +51,12 @@
             :name="'carModel'"
             v-model="preferenceModel.carModel"
         />
-        <CheckboxInput
-            :label="termData"
-            @update="updateTermsData"
-            name="terms"
-        >
+        <CheckboxInput :label="termData" @update="updateTermsData" name="terms">
             <template v-slot:extra>
                 <a
                     href="https://www.parkspot.in/terms-and-conditions"
                     target="_blank"
-                    >T&C</a
+                    >Terms and Conditions</a
                 >
             </template>
         </CheckboxInput>
@@ -109,7 +105,9 @@ export default {
             CONTACT_FORM: FORM,
             PREFERENCE,
             ADD_INFO,
-            parkingTypeData: PREFERENCE.PARKING_TYPE_LIST.map((item) => item.name),
+            parkingTypeData: PREFERENCE.PARKING_TYPE_LIST.map(
+                (item) => item.name,
+            ),
             minDurData: ADD_INFO.MINIMUM_DURATION_DATA.map((item) => item.name),
             termData: ADD_INFO.TERMS_DATA,
             isEnable: false,
@@ -127,11 +125,11 @@ export default {
             this.updatePreference(this.preferenceModel);
             this.$emit('onSubmit');
         },
-        updateMinDur(val) {
-            this.preferenceModel.minDur = val;
+        updateMinDur(event) {
+            this.preferenceModel.minDur = event?.target?.value;
         },
-        updateType(val) {
-            this.preferenceModel.spot = val;
+        updateType(event) {
+            this.preferenceModel.spot = event?.target?.value;;
         },
         updateTermsData(data) {
             this.preferenceModel.terms = data;
