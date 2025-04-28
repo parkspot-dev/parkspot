@@ -43,32 +43,37 @@ export default {
         async onFinalSubmit() {
             try {
                 this.isLoading = true;
-                imageUploadService
-                    .uploadImages(this.contactForm.images, this.contactForm.cno)
-                    .then((res) => {
-                        if (res.success) {
-                            this.updateImages(res?.urls);
-                            this.registerSpot();
-                        }
+
+                const res = await imageUploadService.uploadImages(
+                    this.contactForm.images,
+                    this.contactForm.cno,
+                );
+
+                if (res.success) {
+                    this.updateImages(res?.urls);
+                    await this.registerSpot();
+                    this.$buefy.toast.open({
+                        message: 'ParkSpot registered successfully!',
+                        type: 'is-success',
+                        duration: 2000,
                     });
-                this.isLoading = false;
-                this.$buefy.toast.open({
-                    message: 'ParkSpot registered successfully!',
-                    type: 'is-success',
-                    duration: 2000,
-                });
-                this.$router.push({ name: 'thankYou' });
+                    this.$router.push({ name: 'thankYou' });
+                } else {
+                    this.$buefy.toast.open({
+                        message: 'Image upload failed!',
+                        type: 'is-danger',
+                        duration: 2000,
+                    });
+                }
             } catch (error) {
                 console.error({ error });
                 this.$buefy.toast.open({
-                    message: `Something went wrong!`,
+                    message: 'Something went wrong!',
                     type: 'is-danger',
                     duration: 2000,
                 });
-                this.$router.push({
-                    name: 'error',
-                    params: { msg: error.DisplayMsg },
-                });
+            } finally {
+                this.isLoading = false;
             }
         },
     },
