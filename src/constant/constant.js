@@ -350,4 +350,3 @@ export const RENT_FILTER_OPTIONS = [
 export const STATUS_FILTER_OPTIONS = ['Available', 'Rented out'];
 
 export const SORT_FILTER_OPTIONS = [ 'Recommended', 'Rent', 'Distance',];
-

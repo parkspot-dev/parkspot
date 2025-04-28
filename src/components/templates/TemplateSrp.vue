@@ -8,8 +8,16 @@
                 ></SearchInput>
             </div>
             <!-- Filters -->
-            <h3>Filters</h3>
-            <div class="filters">
+            <div class="filter-dropdown" @click="showFilters">
+                <div>Filters</div>
+                <div
+                    class="material-symbols-outlined"
+                    :class="{ rotate: isFilterContainerOpen }"
+                >
+                    keyboard_arrow_down
+                </div>
+            </div>
+            <div v-if="isFilterContainerOpen" class="filters">
                 <FilterDropdown
                     :options="distanceFilterOptions"
                     :searchable="false"
@@ -33,7 +41,7 @@
                     :searchable="false"
                     :selectedValue="filterSelectedValues.status"
                     @remove="removeFilter('status')"
-                    @update="handleStatusFilter($event)"
+                    @update="handleStatusFilter('status', $event)"
                     label="Availability"
                 />
             </div>
@@ -46,6 +54,20 @@
                         </b-tag>
                     </strong>
                 </p>
+                <div class="sort">
+                    <div class="text">Sort By:</div>
+                    <div class="sort-dropdown">
+                        <FilterDropdown
+                            :options="sortFilterOptions"
+                            :searchable="false"
+                            :selectedValue="selectedSort.name"
+                            :removable="false"
+                            @remove="removeFilter('rent')"
+                            @update="sortFilteredResults($event, 'asc')"
+                            label="Select"
+                        />
+                    </div>
+                </div>
             </div>
             <hr />
             <div class="srp-list-items">
@@ -75,14 +97,17 @@ import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
 import AtomCheckbox from '../atoms/AtomCheckbox.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import SearchInput from '../extras/SearchInput.vue';
-import { mapActions, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import vClickOutside from 'v-click-outside';
 import FilterDropdown from '../global/FilterDropdown.vue';
 import {
     DISTANCE_FILTER_OPTIONS,
     RENT_FILTER_OPTIONS,
+    SORT_FILTER_OPTIONS,
     STATUS_FILTER_OPTIONS,
 } from '@/constant/constant';
+import FilterManager from '@/modules/filter';
+import SelectInput from '../global/SelectInput.vue';
 export default {
     name: 'TemplateSrp',
     directives: {
@@ -94,6 +119,7 @@ export default {
         SearchInput,
         AtomCheckbox,
         FilterDropdown,
+        SelectInput,
     },
     emits: ['changed', 'flyToSrp', 'details'],
     props: {
@@ -116,16 +142,38 @@ export default {
             statusFilterOptions: STATUS_FILTER_OPTIONS,
             distanceFilterOptions: DISTANCE_FILTER_OPTIONS,
             rentFilerOptions: RENT_FILTER_OPTIONS,
-            showFilterCheckbox: false,
+            sortFilterOptions: SORT_FILTER_OPTIONS,
             filterSelectedValues: {
                 rent: '',
                 distance: '',
                 status: '',
             },
+            filterManager: null,
+            isFilterContainerOpen: false,
         };
     },
     computed: {
-        ...mapState('map', ['selectedLocation', 'filters', 'filteredSpots']),
+        ...mapState('map', [
+            'selectedLocation',
+            'filters',
+            'filteredSpots',
+            'selectedSort',
+        ]),
+    },
+    created() {
+        this.filterManager = new FilterManager(this.$store, this);
+
+        const methodsToBind = [
+            'addFilter',
+            'removeFilter',
+            'handleStatusFilter',
+            'loadFiltersFromQuery',
+            'sortFilteredResults',
+        ];
+
+        methodsToBind.forEach((method) => {
+            this[method] = (...args) => this.filterManager[method](...args);
+        });
     },
     mounted() {
         const latlang = this.$route.query['latlng'];
@@ -134,14 +182,8 @@ export default {
         }
         // Load and apply filter values from the query parameters
         this.loadFiltersFromQuery();
-        this.applyFilters();
     },
     methods: {
-        ...mapActions('map', [
-            'applyFilters',
-            'updateFilter',
-            'removeFilterByName',
-        ]),
         onPageChange(page) {
             this.$emit('changed', page);
         },
@@ -151,96 +193,8 @@ export default {
         onChange() {
             this.$emit('flyToSrp');
         },
-        activateFilter() {
-            this.showFilterCheckbox = !this.showFilterCheckbox;
-        },
-        onOutsideFilter() {
-            this.showFilterCheckbox = false;
-        },
-
-        handleStatusFilter(value) {
-            this.filterSelectedValues['status'] = value;
-            const valueObj = {
-                min: value === 'Available' ? 1 : 0,
-                max: value === 'Available' ? 1 : 0,
-            };
-            this.updateFilter({ name: 'status', value: valueObj });
-            this.updateQueryParams('status', value);
-            this.applyFilters();
-        },
-
-        addFilter(filterName, value) {
-            this.filterSelectedValues[filterName] = value;
-            const minMaxValue = this.extractMinMax(value);
-            this.updateFilter({ name: filterName, value: minMaxValue });
-            this.updateQueryParams(filterName, value);
-            this.applyFilters();
-        },
-
-        removeFilter(filterName) {
-            this.filterSelectedValues[filterName] = '';
-            this.removeFilterByName(filterName);
-            this.removeQueryParams(filterName);
-            this.applyFilters();
-        },
-
-        updateQueryParams(filterName, value) {
-            const url = new URL(window.location.href);
-            url.searchParams.set(`${filterName}`, value);
-            window.history.pushState({}, '', url.toString());
-            return;
-        },
-
-        removeQueryParams(filterName) {
-            const url = new URL(window.location.href);
-            url.searchParams.delete(`${filterName}`);
-            window.history.pushState({}, '', url.toString());
-        },
-
-        loadFiltersFromQuery() {
-            const query = this.$route.query;
-
-            if (query.distance) {
-                this.filterSelectedValues.distance = query.distance;
-                const minMaxValue = this.extractMinMax(query.distance);
-                this.updateFilter({
-                    name: 'distance',
-                    value: minMaxValue,
-                });
-            }
-
-            if (query.rent) {
-                this.filterSelectedValues.rent = query.rent;
-                const minMaxValue = this.extractMinMax(query.rent);
-                this.updateFilter({
-                    name: 'rent',
-                    value: minMaxValue,
-                });
-            }
-
-            if (query.status) {
-                this.filterSelectedValues.status = query.status;
-                const statusValue = query.status;
-
-                const valueObj = {
-                    min: statusValue === 'Available' ? 1 : 0,
-                    max: statusValue === 'Available' ? 1 : 0,
-                };
-
-                this.updateFilter({
-                    name: 'status',
-                    value: valueObj,
-                });
-            }
-        },
-
-        extractMinMax(filter) {
-            const numbers = filter.match(/\d+/g)?.map(Number) || [];
-            return numbers.length === 1
-                ? filter.includes('Less')
-                    ? { min: 0, max: numbers[0] }
-                    : { min: numbers[0], max: Infinity }
-                : { min: numbers[0], max: numbers[1] };
+        showFilters() {
+            this.isFilterContainerOpen = !this.isFilterContainerOpen;
         },
     },
 };
@@ -258,22 +212,40 @@ export default {
         gap: 10px;
         margin-top: 10px;
         margin-bottom: 24px;
-
         .map-search {
             width: 100%;
         }
     }
 
+    .filter-dropdown {
+        border-bottom: 3px solid #f5f5f5;
+        color: var(--parkspot-black);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 4px;
+        text-align: left;
+        width: 100%;
+    }
+
     .filters {
+        animation: fadeInTop 0.5s ease-in-out;
         display: flex;
         flex-wrap: wrap;
         gap: 16px;
+        margin-top: 12px;
         min-height: 44px;
         position: relative;
+    }
 
-        h3 {
-            align-self: center;
-            vertical-align: middle;
+    @keyframes fadeInTop {
+        0% {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
         }
     }
 
@@ -282,14 +254,39 @@ export default {
         padding-bottom: 2rem;
 
         .srp-results-heading {
-            margin-top: 20px;
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+            min-height: 44px;
+            padding-bottom: 8px 0;
             span {
                 color: rgb(151, 149, 149);
+            }
+
+            .sort {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 16px;
+                min-height: 44px;
+                position: relative;
+
+                .sort-dropdown {
+                    align-items: center;
+                    display: flex;
+                    justify-content: center;
+                    padding: 8px 0;
+                }
+
+                .text {
+                    align-items: center;
+                    display: flex;
+                    justify-content: center;
+                }
             }
         }
 
         hr {
-            margin-top: 8px;
+            margin-top: 0px;
         }
     }
 
@@ -378,6 +375,11 @@ export default {
     }
 }
 
+.rotate {
+    transform: rotate(180deg);
+    transition: 1s;
+}
+
 @media only screen and (max-width: 1024px) {
     .srp-container {
         flex-direction: column-reverse;
@@ -403,6 +405,29 @@ export default {
 @media only screen and (max-width: 700px) {
     .srp-lists {
         padding: 2rem 4rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .srp-results-heading {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+
+        p {
+            align-self: flex-start;
+            margin-top: 12px;
+        }
+    }
+
+    .sort {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+
+    .text {
+        justify-content: flex-start;
     }
 }
 

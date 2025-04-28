@@ -3,7 +3,7 @@
         <div class="label" @click="toggleDropdown">
             {{ selectedValue || label }}
             <span
-                v-if="selectedValue"
+                v-if="selectedValue && removable"
                 class="material-symbols-outlined"
                 @click.stop="removeSelectedItem"
                 >close</span
@@ -41,6 +41,10 @@ export default {
         selectedValue: {
             type: String,
             default: null,
+        },
+        removable: {
+            type: Boolean,
+            default: true,
         },
     },
     data() {
