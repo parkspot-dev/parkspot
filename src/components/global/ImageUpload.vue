@@ -102,6 +102,12 @@ export default {
             this.validateFileUpload(Array.from(e.dataTransfer.files));
         },
         handleFileChange(e) {
+            if(e.target.files.length > this.maxImageCount){
+                this.showDangerToast(
+                    `Only ${this.maxImageCount} images are allowed to upload.`,
+                );
+                return;
+            }
             this.validateFileUpload(Array.from(e.target.files));
             e.target.value = ''; // Reset input
         },
