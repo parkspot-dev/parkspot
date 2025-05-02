@@ -8,8 +8,9 @@
 <script>
 import TemplateSOPortal from '../components/templates/TemplateSOPortal.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { PAGE_TITLE } from '@/constant/constant';
+import imageUploadService from '@/services/ImageUploadService';
 export default {
     name: 'PageSOPortal',
     components: {
@@ -27,6 +28,9 @@ export default {
             isLoading: false,
         };
     },
+    computed: {
+        ...mapState('user', ['contactForm']),
+    },
     methods: {
         ...mapActions({
             register: 'user/register',
@@ -34,29 +38,42 @@ export default {
             kyc: 'user/kyc',
             contact: 'user/contact',
             registerSpot: 'user/registerSpot',
+            updateImages: 'user/updateImages',
         }),
         async onFinalSubmit() {
             try {
                 this.isLoading = true;
-                this.registerSpot();
-                this.isLoading = false;
-                this.$buefy.toast.open({
-                    message: 'ParkSpot registered successfully!',
-                    type: 'is-success',
-                    duration: 2000,
-                });
-                this.$router.push({ name: 'thankYou' });
+
+                const res = await imageUploadService.uploadImages(
+                    this.contactForm.images,
+                    this.contactForm.cno,
+                );
+
+                if (res.success) {
+                    this.updateImages(res?.urls);
+                    await this.registerSpot();
+                    this.$buefy.toast.open({
+                        message: 'ParkSpot registered successfully!',
+                        type: 'is-success',
+                        duration: 2000,
+                    });
+                    this.$router.push({ name: 'thankYou' });
+                } else {
+                    this.$buefy.toast.open({
+                        message: 'Image upload failed!',
+                        type: 'is-danger',
+                        duration: 2000,
+                    });
+                }
             } catch (error) {
                 console.error({ error });
                 this.$buefy.toast.open({
-                    message: `Something went wrong!`,
+                    message: 'Something went wrong!',
                     type: 'is-danger',
                     duration: 2000,
                 });
-                this.$router.push({
-                    name: 'error',
-                    params: { msg: error.DisplayMsg },
-                });
+            } finally {
+                this.isLoading = false;
             }
         },
     },
