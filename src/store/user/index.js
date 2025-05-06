@@ -208,7 +208,6 @@ const actions = {
     },
 
     async registerSpot({ state }) {
-        console.log("state.contactForm", state.contactForm);
         const req = {
             FullName: state.contactForm.fullname,
             BuildingName: state.contactForm.apartment,
@@ -264,7 +263,6 @@ const actions = {
     },
 
     updateImages({commit}, images) {
-        console.log("These are images", images);
         commit('update-images', images);
     },
 

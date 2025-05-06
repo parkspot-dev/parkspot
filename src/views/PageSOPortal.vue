@@ -50,7 +50,6 @@ export default {
                 );
 
                 if (res.success) {
-                    console.log("This is res", res);
                     this.updateImages(res?.urls);
                     await this.registerSpot();
                     this.$buefy.toast.open({
