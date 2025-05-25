@@ -128,7 +128,7 @@ const actions = {
     },
 
     extractExpiringRequests({ commit, state}) {
-         const extractedCriticalRequests = state.parkingRequests.filter((request) => request.isExpiring)
+         const extractedCriticalRequests = state.parkingRequests.filter((request) => request.IsExpiring)
          commit('set-parking-requests', extractedCriticalRequests)
     }
 };
