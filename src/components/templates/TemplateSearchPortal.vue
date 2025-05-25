@@ -39,7 +39,7 @@
                             <span>{{ summary.today }}</span>
                         </p>
                         <p>
-                            <span>yesterday : </span>
+                            <span>Yesterday : </span>
                             <span>{{ summary.yesterday }}</span>
                         </p>
                     </div>
