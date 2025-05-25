@@ -1,56 +1,70 @@
 <template>
     <div class="search-portal-wrapper">
-        <div class="summary" v-if="isSummary">
-            <div class="so-btn">
-                <AtomButton @click.native="showSummary" v-show="!summary.show">
-                    {{ summary.btn }} Summary
-                </AtomButton>
-            </div>
-            <br />
-            <div class="so-summary" v-show="summary.show">
-                <span class="close-button">
-                    <AtomIcon
-                        @click.native="showSummary"
-                        :icon="'close'"
-                        size=""
+        <div class="header">
+            <div class="critical-request">
+                <span class="material-symbols-outlined"> report </span>
+                <div>
+                    There are {{ this.expiringRequestsCount }}
+                    <span class="hyperlink" @click="handleExpiringRequests"
+                        >critical requests</span
                     >
-                    </AtomIcon>
-                </span>
-                <p class="so-total">
-                    Total Request : {{ summary.totalRequest }}
-                </p>
-                <hr />
-                <div class="so-live-request">
-                    <p>
-                        <span>Today : </span>
-                        <span>{{ summary.today }}</span>
-                    </p>
-                    <p>
-                        <span>yesterday : </span>
-                        <span>{{ summary.yesterday }}</span>
-                    </p>
                 </div>
-                <hr />
-                <div class="so-priority">
-                    <p>High : {{ summary.high }}</p>
-                    <p>Low : {{ summary.low }}</p>
-                    <p>Medium : {{ summary.medium }}</p>
+            </div>
+            <div class="summary" v-if="isSummary">
+                <div class="so-btn">
+                    <AtomButton
+                        @click.native="showSummary"
+                        v-show="!summary.show"
+                    >
+                        {{ summary.btn }} Summary
+                    </AtomButton>
                 </div>
+                <br />
+                <div class="so-summary" v-show="summary.show">
+                    <span class="close-button">
+                        <AtomIcon
+                            @click.native="showSummary"
+                            :icon="'close'"
+                            size=""
+                        >
+                        </AtomIcon>
+                    </span>
+                    <p class="so-total">
+                        Total Request : {{ summary.totalRequest }}
+                    </p>
+                    <hr />
+                    <div class="so-live-request">
+                        <p>
+                            <span>Today : </span>
+                            <span>{{ summary.today }}</span>
+                        </p>
+                        <p>
+                            <span>yesterday : </span>
+                            <span>{{ summary.yesterday }}</span>
+                        </p>
+                    </div>
+                    <hr />
+                    <div class="so-priority">
+                        <p>High : {{ summary.high }}</p>
+                        <p>Low : {{ summary.low }}</p>
+                        <p>Medium : {{ summary.medium }}</p>
+                    </div>
 
-                <hr />
-                <div class="so-status">
-                    <p>
-                        <span>Registered :</span>
-                        <span>{{ summary.status[1] }}</span>
-                    </p>
-                    <p>
-                        <span>Processing :</span>
-                        <span>{{ summary.status[2] }}</span>
-                    </p>
-                    <p>
-                        <span>Suggested : </span>
-                        <span>{{ summary.status[3] }}</span>
-                    </p>
+                    <hr />
+                    <div class="so-status">
+                        <p>
+                            <span>Registered :</span>
+                            <span>{{ summary.status[1] }}</span>
+                        </p>
+                        <p>
+                            <span>Processing :</span>
+                            <span>{{ summary.status[2] }}</span>
+                        </p>
+                        <p>
+                            <span>Suggested : </span>
+                            <span>{{ summary.status[3] }}</span>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -79,6 +93,12 @@
             >
                 <div class="id-column">
                     {{ props.row.ID }}
+                    <div
+                        v-if="props.row.isExpiring"
+                        class="material-symbols-outlined critical-icon"
+                    >
+                        report
+                    </div>
                 </div>
             </b-table-column>
 
@@ -196,7 +216,7 @@
                 ></AtomTextarea>
             </b-table-column>
 
-            <b-table-column
+             <b-table-column
                 field="Agent"
                 label="Agent"
                 searchable
@@ -454,7 +474,7 @@ export default {
     },
     emits: ['updateRequest', 'toSrp'],
     computed: {
-        ...mapState('searchPortal', ['agentList']),
+        ...mapState('searchPortal', ['agentList', 'expiringRequestsCount']),
         ...mapState('user', ['userProfile', 'isAdmin']),
     },
     mounted() {
@@ -462,6 +482,13 @@ export default {
             // If not an admin then agentList will only contain 'NA' and user Fullname
             const agents = [{ id: 0, FullName: this.userProfile?.FullName }];
             this.setAgents(agents);
+        }
+    },
+
+    created() {
+        // Check for critical requests
+        if (this.$route.query['isExpiring']) {
+            this.extractExpiringRequests();
         }
     },
     data() {
@@ -561,7 +588,11 @@ export default {
         },
     },
     methods: {
-        ...mapActions('searchPortal', ['getAgents', 'setAgents']),
+        ...mapActions('searchPortal', [
+            'getAgents',
+            'setAgents',
+            'extractExpiringRequests',
+        ]),
         getPriority(val) {
             switch (val) {
                 case 1:
@@ -673,12 +704,53 @@ export default {
             if (!date) return '';
             return moment(date).format('YYYY-MM-DD');
         },
+
+        handleExpiringRequests() {
+            // Update the URL to include the isCritical parameter
+            const url = new URL(window.location.href);
+            url.searchParams.set('isExpiring', true);
+            window.history.pushState({}, '', url.toString());
+
+            this.extractExpiringRequests();
+        },
     },
 };
 </script>
 
 <style lang="scss">
 $portal-font-size: 13px;
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.critical-request {
+    align-items: center;
+    align-items: center;
+    background-color: rgba(253, 57, 57, 0.169);
+    border-radius: 12px;
+    border: 1px solid rgb(253, 57, 57);
+    color: red;
+    display: flex;
+    font-size: 14px;
+    gap: 10px;
+    height: max-content;
+    justify-content: center;
+    padding: 8px 16px;
+}
+
+.critical-icon {
+    color: red;
+    text-align: center;
+    width: 100%;
+}
+
+.hyperlink {
+    color: rgb(56, 56, 255);
+    cursor: pointer;
+    text-decoration: underline;
+}
 
 @media only screen and (max-width: 1024px) {
     .id-column-parent {

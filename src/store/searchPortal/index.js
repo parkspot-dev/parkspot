@@ -11,6 +11,7 @@ const state = {
     agentList: [],
     parkingRequests: [],
     interestedVOList: [],
+    expiringRequestsCount: 0
 };
 
 const getters = {};
@@ -53,6 +54,9 @@ const mutations = {
     'set-search-mobile'(state, text) {
         state.searchMobile = text;
     },
+    'set-expiring-requests-count'(state, count) {
+        state.expiringRequestsCount = count;
+    }
 };
 const actions = {
     updateActiveTab({ commit }, tabNo) {
@@ -77,8 +81,9 @@ const actions = {
             if (response.ErrorCode) {
                 throw new Error(response.DisplayMsg);
             }
-            commit('set-parking-requests', response);
-            commit('set-interested-vo-list', response);
+            commit('set-parking-requests', response.parking_requests);
+            commit('set-interested-vo-list', response.parking_requests);
+            commit('set-expiring-requests-count', response.expiring_requests_count)
         } catch (error) {
             commit('set-error', error.message);
         } finally {
@@ -120,6 +125,11 @@ const actions = {
     // setAgents
     setAgents({commit}, list) {
         commit('set-agent-list', list)
+    },
+
+    extractExpiringRequests({ commit, state}) {
+         const extractedCriticalRequests = state.parkingRequests.filter((request) => request.isExpiring)
+         commit('set-parking-requests', extractedCriticalRequests)
     }
 };
 
