@@ -81,9 +81,9 @@ const actions = {
             if (response.ErrorCode) {
                 throw new Error(response.DisplayMsg);
             }
-            commit('set-parking-requests', response.parking_requests);
-            commit('set-interested-vo-list', response.parking_requests);
-            commit('set-expiring-requests-count', response.expiring_requests_count)
+            commit('set-parking-requests', response.ParkingRequests);
+            commit('set-interested-vo-list', response.ParkingRequests);
+            commit('set-expiring-requests-count', response.ExpiringRequestsCount)
         } catch (error) {
             commit('set-error', error.message);
         } finally {
