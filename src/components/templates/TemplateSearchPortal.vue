@@ -1,12 +1,12 @@
 <template>
     <div class="search-portal-wrapper">
         <div class="header">
-            <div class="critical-request">
+            <div class="expiring-request">
                 <span class="material-symbols-outlined"> report </span>
                 <div>
                     There are {{ this.expiringRequestsCount }}
                     <span class="hyperlink" @click="handleExpiringRequests"
-                        >critical requests</span
+                        >expiring requests</span
                     >
                 </div>
             </div>
@@ -95,7 +95,7 @@
                     {{ props.row.ID }}
                     <div
                         v-if="props.row.isExpiring"
-                        class="material-symbols-outlined critical-icon"
+                        class="material-symbols-outlined expiring-icon"
                     >
                         report
                     </div>
@@ -486,7 +486,7 @@ export default {
     },
 
     created() {
-        // Check for critical requests
+        // Check for expiring requests
         if (this.$route.query['isExpiring']) {
             this.extractExpiringRequests();
         }
@@ -706,7 +706,7 @@ export default {
         },
 
         handleExpiringRequests() {
-            // Update the URL to include the isCritical parameter
+            // Update the URL to include the isExpiring parameter
             const url = new URL(window.location.href);
             url.searchParams.set('isExpiring', true);
             window.history.pushState({}, '', url.toString());
@@ -725,7 +725,7 @@ $portal-font-size: 13px;
     justify-content: space-between;
 }
 
-.critical-request {
+.expiring-request {
     align-items: center;
     align-items: center;
     background-color: rgba(253, 57, 57, 0.169);
@@ -740,7 +740,7 @@ $portal-font-size: 13px;
     padding: 8px 16px;
 }
 
-.critical-icon {
+.expiring-icon {
     color: red;
     text-align: center;
     width: 100%;
