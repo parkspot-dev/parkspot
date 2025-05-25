@@ -94,7 +94,7 @@
                 <div class="id-column">
                     {{ props.row.ID }}
                     <div
-                        v-if="props.row.isExpiring"
+                        v-if="props.row.IsExpiring"
                         class="material-symbols-outlined expiring-icon"
                     >
                         report
