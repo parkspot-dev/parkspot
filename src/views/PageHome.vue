@@ -7,8 +7,8 @@
             <div class="container">
                 <div class="text">
                     <h2>
-                        Get Car Wash At Your Door Step
-                        <span>Starting from ₹249</span>
+                        Get Full Car Wash At Your Door Step
+                        <span>Starting from ₹1499</span>
                     </h2>
                     <ul class="service-list">
                         <li
@@ -50,6 +50,13 @@
                             label="Address"
                             placeholder="Enter Your Address"
                             v-model="model.address"
+                        />
+
+                        <FormInput
+                            name="carModel"
+                            label="Car Model"
+                            placeholder="e.g. Honda Civic, Maruti Swift, Tata Nexon"
+                            v-model="model.carModel"
                         />
 
                         <div class="btn-wrapper">
@@ -105,6 +112,7 @@ export default {
                 cno: '',
                 address: '',
                 msg: '[Car Wash Request]',
+                carModel: ''
             },
             contactFormSchema,
         };
