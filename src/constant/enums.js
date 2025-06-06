@@ -182,6 +182,7 @@ export const PaymentType = Object.freeze({
     MonthlyRentWithConvenienceFeeAndSecurityDeposit: 2,
     MonthlyRentAndSecurityDeposit: 3,
     MonthlyRent: 4,
+    SecurityDeposit: 5
 });
 
 export const PaymentTypeLabels = [
@@ -190,6 +191,7 @@ export const PaymentTypeLabels = [
     'Rent + Conv Fee + SD',
     'Rent + SD',
     'Rent',
+    'Security Deposit',
 ];
 
 /**
