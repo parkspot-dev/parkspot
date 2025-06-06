@@ -216,7 +216,7 @@
                 ></AtomTextarea>
             </b-table-column>
 
-             <b-table-column
+            <b-table-column
                 field="Agent"
                 label="Agent"
                 searchable
@@ -483,6 +483,10 @@ export default {
             const agents = [{ id: 0, FullName: this.userProfile?.FullName }];
             this.setAgents(agents);
         }
+
+        if(this.parkingRequests && this.parkingRequests.length > 0) {
+            this.updateSummary(this.parkingRequests);
+        }
     },
 
     created() {
@@ -547,45 +551,6 @@ export default {
             defaultStatus: '',
             FREQUENT_COMMENTS: FREQUENT_COMMENTS,
         };
-    },
-    watch: {
-        parkingRequests(requests) {
-            this.summary.totalRequest = requests.length;
-            const today = new Date();
-            const yesterday = new Date(today);
-            yesterday.setDate(yesterday.getDate() - 1);
-            requests.forEach((request) => {
-                if (request.Priority === 3) {
-                    this.summary.high++;
-                }
-
-                if (request.Priority === 2) {
-                    this.summary.medium++;
-                }
-
-                if (request.Priority === 1) {
-                    this.summary.low++;
-                }
-
-                this.summary.agent[request.Agent]++;
-
-                this.summary.status[request.Status]++;
-
-                if (
-                    new Date(request.CreatedAt).toLocaleDateString() ===
-                    today.toLocaleDateString()
-                ) {
-                    this.summary.today++;
-                }
-
-                if (
-                    new Date(request.CreatedAt).toLocaleDateString() ===
-                    yesterday.toLocaleDateString()
-                ) {
-                    this.summary.yesterday++;
-                }
-            });
-        },
     },
     methods: {
         ...mapActions('searchPortal', [
@@ -712,6 +677,44 @@ export default {
             window.history.pushState({}, '', url.toString());
 
             this.extractExpiringRequests();
+        },
+
+        updateSummary(requests) {
+            this.summary.totalRequest = requests.length;
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            requests.forEach((request) => {
+                if (request.Priority === 3) {
+                    this.summary.high++;
+                }
+
+                if (request.Priority === 2) {
+                    this.summary.medium++;
+                }
+
+                if (request.Priority === 1) {
+                    this.summary.low++;
+                }
+
+                this.summary.agent[request.Agent]++;
+
+                this.summary.status[request.Status]++;
+
+                if (
+                    new Date(request.CreatedAt).toLocaleDateString() ===
+                    today.toLocaleDateString()
+                ) {
+                    this.summary.today++;
+                }
+
+                if (
+                    new Date(request.CreatedAt).toLocaleDateString() ===
+                    yesterday.toLocaleDateString()
+                ) {
+                    this.summary.yesterday++;
+                }
+            });
         },
     },
 };
