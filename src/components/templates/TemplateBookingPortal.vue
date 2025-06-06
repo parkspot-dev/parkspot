@@ -199,14 +199,11 @@
                         </div>
                         <p v-else>
                             {{
-                                this.currBookingDetails.Booking?.AgentUserName
-                                    ? getAgentName(
-                                          agents,
-                                          this.currBookingDetails.Booking
-                                              .AgentUserName,
-                                      )
-                                    : this.currBookingDetails.Booking
-                                          ?.AgentUserName || 'N/A'
+                                getAgentName(
+                                    agents,
+                                    this.currBookingDetails.Booking
+                                        .AgentUserName,
+                                )
                             }}
                         </p>
                     </div>
@@ -665,12 +662,20 @@ export default {
             return getUserTypeLabel(userType);
         },
         getAgentName(agents, agentUserName) {
-            if (agentUserName === '') {
-                return '';
+            if (!agentUserName) {
+                return 'Agent not assigned';
             }
-            return agents
-                .find((item) => item.UserName == agentUserName)
-                .FullName.split(' ')[0];
+
+            const agent = agents.find(
+                (item) => item.UserName === agentUserName,
+            );
+
+            // if agent full name is available, return the username
+            if (agent && agent.FullName) {
+                return agent.FullName.split(' ')[0];
+            }
+
+            return agentUserName;
         },
 
         getPaymentClass(status) {
