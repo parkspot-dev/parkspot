@@ -199,11 +199,14 @@
                         </div>
                         <p v-else>
                             {{
-                                getAgentName(
-                                    agents,
-                                    this.currBookingDetails.Booking
-                                        .AgentUserName,
-                                )
+                                this.currBookingDetails.Booking?.AgentUserName
+                                    ? getAgentName(
+                                          agents,
+                                          this.currBookingDetails.Booking
+                                              .AgentUserName,
+                                      )
+                                    : this.currBookingDetails.Booking
+                                          ?.AgentUserName || 'N/A'
                             }}
                         </p>
                     </div>
