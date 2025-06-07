@@ -254,12 +254,12 @@ export const FREQUENT_COMMENTS = [
 ];
 
 export const CAR_WASH_SERVICES = [
-    'Car Body Cleaning',
-    'Windshield & Windows',
-    'Wheels & Alloy',
-    'Shine & Protects with Carnauba Wax',
-    'Imported Biodegradable Cleaning Solutions',
-    'Professional Services',
+    'Full Exterior Steam Wash',
+    'Vecuuming of Interior',
+    'Dashboard & Door Step Cleaning',
+    'Boot Cleaning',
+    'Wheel and Wheel Arch Cleaning',
+    'Tyre Dressing',
 ];
 
 export const ParkingSizeLabels = Object.freeze([

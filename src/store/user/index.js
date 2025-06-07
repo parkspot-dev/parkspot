@@ -85,8 +85,8 @@ const mutations = {
         state.isAgent = userType == UserType.Agent || state.isAdmin;
     },
     'update-images'(state, images = {}) {
-        state.contactForm.images = images
-    }
+        state.contactForm.images = images;
+    },
 };
 
 const actions = {
@@ -193,7 +193,7 @@ const actions = {
     },
 
     onlyContact({ state }) {
-        const comments = 'From the Home Page ----->' + state.contactForm.msg;
+        const comments = 'From the Home Page ----->' + state.contactForm.msg + ' Car Model: ' + state.contactForm.carModel;
         // prettier-ignore
         const req = {
             User: {
@@ -202,6 +202,7 @@ const actions = {
                 Mobile: state.contactForm.cno,
             },
             Comments: comments,
+            CarModel: state.contactForm.carModel ? state.contactForm.carModel : '',
         };
 
         mayaClient.post('/contact', req);
@@ -262,7 +263,7 @@ const actions = {
         }
     },
 
-    updateImages({commit}, images) {
+    updateImages({ commit }, images) {
         commit('update-images', images);
     },
 
