@@ -27,7 +27,8 @@ export const pages = {
     APP                     : "/app",
     PRIVACY                 : "/privacy",
     REGISTER_REQUEST        : "/internal/register-request",  
-    SPOT_REQUESTS           : "/internal/spot-requests"
+    SPOT_REQUESTS           : "/internal/spot-requests",
+    SOCIETY_PARKING_PORTAL  : "/society-parking-portal",
 };
 
 export const routes = [
@@ -147,6 +148,11 @@ export const routes = [
         path: pages.REGISTER_REQUEST,
         name: 'vehicle-owner-registration',
         component: () => import('@/views/RegisterRequest.vue'),
+    },
+    {
+        path: pages.SOCIETY_PARKING_PORTAL,
+        name: 'society-parking-portal',
+        component: () => import('@/views/PageSocietyParking.vue'),
     },
     {
         path: pages.APP,
