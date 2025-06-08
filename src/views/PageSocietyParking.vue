@@ -17,7 +17,7 @@
 
         <!-- Why Choose Section -->
         <section class="why-choose">
-            <h2>Why Choose Parkspot for Your Society?</h2>
+            <h2 class="heading" >Why Choose Parkspot for Your Society?</h2>
             <div class="cards-grid">
                 <div class="card">
                     <h3>Seamless Operations</h3>
@@ -68,8 +68,35 @@
                 </div>
             </div>
         </section>
+
+        <!--How its works-->
+        <section class="" >
+            <Whats_Next :steps="WHAT_NEXT_SO" />
+        </section>
     </div>
 </template>
+
+<script>
+import Whats_Next from '@/components/global/Whats_Next.vue';
+import { WHAT_NEXT_SO } from '@/constant/constant';
+export default {
+    name: 'PageSocietyParking',
+    components: {
+        Whats_Next
+    },
+    metaInfo() {
+        return {
+            title: 'ParkSpot - Society Parking Management',
+            titleTemplate: '%s | ParkSpot',
+        };
+    },
+    data () {
+        return {
+            WHAT_NEXT_SO: WHAT_NEXT_SO,
+        }
+    }
+};
+</script>
 
 <style scoped>
 .container-main {
@@ -132,7 +159,7 @@
   text-align: center;
 }
 
-.why-choose h2 {
+.heading {
   font-size: 2rem;
   margin-bottom: 2rem;
 }
