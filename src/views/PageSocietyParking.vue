@@ -17,7 +17,7 @@
 
         <!-- Why Choose Section -->
         <section class="why-choose">
-            <h2 class="heading" >Why Choose Parkspot for Your Society?</h2>
+            <h2 class="heading">Why Choose Parkspot for Your Society?</h2>
             <div class="cards-grid">
                 <div class="card">
                     <h3>Seamless Operations</h3>
@@ -70,19 +70,25 @@
         </section>
 
         <!--How its works-->
-        <section class="" >
+        <section class="">
             <Whats_Next :steps="WHAT_NEXT_SO" />
+        </section>
+
+        <section>
+            <TestimonialSection />
         </section>
     </div>
 </template>
 
 <script>
+import TestimonialSection from '@/components/global/TestimonialSection.vue';
 import Whats_Next from '@/components/global/Whats_Next.vue';
 import { WHAT_NEXT_SO } from '@/constant/constant';
 export default {
     name: 'PageSocietyParking',
     components: {
-        Whats_Next
+        Whats_Next,
+        TestimonialSection
     },
     metaInfo() {
         return {
@@ -90,11 +96,11 @@ export default {
             titleTemplate: '%s | ParkSpot',
         };
     },
-    data () {
+    data() {
         return {
             WHAT_NEXT_SO: WHAT_NEXT_SO,
-        }
-    }
+        };
+    },
 };
 </script>
 
@@ -154,63 +160,63 @@ export default {
 }
 
 .why-choose {
-  background-color: #f9f9f9;
-  padding: 4rem 2rem;
-  text-align: center;
+    background-color: #f9f9f9;
+    padding: 4rem 2rem;
+    text-align: center;
 }
 
 .heading {
-  font-size: 2rem;
-  margin-bottom: 2rem;
+    font-size: 2rem;
+    margin-bottom: 2rem;
 }
 
 .cards-grid {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(3, 1fr);
-  margin: 0 auto;
-  max-width: 1200px;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0 auto;
+    max-width: 1200px;
 }
 
 .card {
-  background-color: #fff;
-  border-radius: 12px;
-  border: 1px solid var(--primary-color);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 220px;
-  padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 220px;
+    padding: 1.5rem;
 }
 
 .card h3 {
-  color: var(--secondary-color);
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
 }
 
 .card p {
-  flex-grow: 1;
-  font-size: 0.95rem;
-  margin-bottom: 1rem;
+    flex-grow: 1;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
 }
 
 .card button {
-  background-color: var(--secondary-color);
-  border-radius: 6px;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 600;
-  padding: 0.6rem 1.2rem;
-  transition: background 0.3s;
+    background-color: var(--secondary-color);
+    border-radius: 6px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
+    transition: background 0.3s;
 }
 
 .card button:hover {
-  background-color: white;
-  border: 1px solid var(--secondary-color);
-  color: var(--secondary-color);
+    background-color: white;
+    border: 1px solid var(--secondary-color);
+    color: var(--secondary-color);
 }
 
 @media (max-width: 768px) {
@@ -224,9 +230,9 @@ export default {
         text-align: center;
     }
 
-    .cards-grid{
-      display: flex;
-      flex-direction: column;
+    .cards-grid {
+        display: flex;
+        flex-direction: column;
     }
 }
 </style>
