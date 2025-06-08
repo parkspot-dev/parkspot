@@ -489,6 +489,12 @@ export default {
         }
     },
 
+    watch: {
+        parkingRequests(newRequests) {
+            this.updateSummary(newRequests);
+        }
+    },
+
     created() {
         // Check for expiring requests
         if (this.$route.query['isExpiring']) {

@@ -3,7 +3,6 @@
         <b-tab-item label="Parking Request (VO/SO)">
             <div class="request-search-control">
                 <MoleculeSearchBox
-                v-if="parkingRequests.length > 0"
                     placeholder="Mobile"
                     :initialValue="searchMobile"
                     @on-search="searchRequestWithMobile"
@@ -11,7 +10,6 @@
                 ></MoleculeSearchBox>
             </div>
             <TemplateSearchPortal
-            v-if="parkingRequests.length > 0"
                 :parkingRequests="parkingRequests"
                 :isLoading="loading"
                 :isSummary="true"
