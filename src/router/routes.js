@@ -28,7 +28,7 @@ export const pages = {
     PRIVACY                 : "/privacy",
     REGISTER_REQUEST        : "/internal/register-request",  
     SPOT_REQUESTS           : "/internal/spot-requests",
-    SOCIETY_PARKING_PORTAL  : "/society-parking-portal",
+    SOCIETY_PARKING_PORTAL  : "/automated-parking",
 };
 
 export const routes = [
@@ -151,7 +151,7 @@ export const routes = [
     },
     {
         path: pages.SOCIETY_PARKING_PORTAL,
-        name: 'society-parking-portal',
+        name: 'automated-parking',
         component: () => import('@/views/PageSocietyParking.vue'),
     },
     {

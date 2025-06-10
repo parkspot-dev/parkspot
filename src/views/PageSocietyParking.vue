@@ -17,65 +17,84 @@
 
         <!-- Why Choose Section -->
         <section class="why-choose">
-            <h2 class="heading">Why Choose Parkspot for Your Society?</h2>
+            <AtomHeading class="section-title" :level="'h3'">
+                Why Choose Parkspot for Your Society?
+            </AtomHeading>
             <div class="cards-grid">
-                <div class="card">
-                    <h3>Seamless Operations</h3>
-                    <p>
-                        Automate entry, exit, and slot allocation with real-time
-                        tracking.
-                    </p>
-                    <button>Learn more</button>
-                </div>
-                <div class="card">
-                    <h3>Resident-Friendly</h3>
-                    <p>
-                        Mobile access and hassle-free parking for all residents
-                        and guests.
-                    </p>
-                    <button>Get started</button>
-                </div>
-                <div class="card">
-                    <h3>Admin Control</h3>
-                    <p>
-                        Manage user roles, generate reports, and configure
-                        society-specific rules.
-                    </p>
-                    <button>See features</button>
-                </div>
-                <div class="card">
-                    <h3>Security & Monitoring</h3>
-                    <p>
-                        Track vehicle history, enable alerts, and integrate with
-                        CCTV systems.
-                    </p>
-                    <button>Explore</button>
-                </div>
-                <div class="card">
-                    <h3>Visitor Management</h3>
-                    <p>
-                        Pre-booking, QR codes, and smoother entry experience for
-                        visitors.
-                    </p>
-                    <button>Know more</button>
-                </div>
-                <div class="card">
-                    <h3>Need Custom Setup?</h3>
-                    <p>
-                        We customize solutions for your society’s unique needs.
-                    </p>
-                    <button>Contact us</button>
+                <div
+                    class="card"
+                    v-for="(service, index) in whyChooseUsOptions"
+                    :key="index"
+                >
+                    <h3>{{ service.title }}</h3>
+                    <p>{{ service.description }}</p>
+                    <a :href="service.redirectUrl"><button class="btn"  >{{ service.button }}</button></a>
                 </div>
             </div>
         </section>
 
         <!--How its works-->
-        <section class="">
-            <Whats_Next :steps="WHAT_NEXT_SO" />
+        <section id="how-its-work" >
+            <BodyWrapper>
+                <Whats_Next :steps="WHAT_NEXT_SO" />
+            </BodyWrapper>
         </section>
 
+        <!-- Registration Form Section -->
+        <section class="form-section" id="register">
+            <div>
+                <h3>Interested in Automated Parking?</h3>
+                <p>
+                    Schedule a call with us to discuss how ParkSpot can
+                    transform your society's parking experience.
+                </p>
+            </div>
+            <!-- Right Side Form -->
+            <div class="form-container">
+                <Form
+                    @submit="handleSubmit"
+                    :validation-schema="contactFormSchema"
+                >
+                    <FormInput
+                        name="fullname"
+                        label="Fullname"
+                        placeholder="Enter Your Fullname"
+                        v-model="model.fullname"
+                    />
+
+                    <FormInput
+                        name="email"
+                        label="Email"
+                        placeholder="example@gmail.com"
+                        v-model="model.email"
+                    />
+
+                    <FormInput
+                        name="cno"
+                        label="Mobile Number"
+                        placeholder="Enter Your Mobile Number"
+                        v-model="model.cno"
+                    />
+
+                    <FormInput
+                        name="addr"
+                        label="Address"
+                        placeholder="Enter Your Address"
+                        v-model="model.address"
+                    />
+
+                    <div class="btn-wrapper">
+                        <button type="submit" class="btn">Submit</button>
+                    </div>
+                </Form>
+            </div>
+        </section>
+
+        <!-- Testimonial Section -->
         <section>
-            <TestimonialSection />
+            <BodyWrapper>
+                <TestimonialSection />
+            </BodyWrapper>
         </section>
     </div>
 </template>
@@ -84,11 +103,21 @@
 import TestimonialSection from '@/components/global/TestimonialSection.vue';
 import Whats_Next from '@/components/global/Whats_Next.vue';
 import { WHAT_NEXT_SO } from '@/constant/constant';
+import FormInput from '@/components/global/FormInput.vue';
+import { contactFormSchema } from '@/validationSchemas';
+import { mapMutations, mapActions } from 'vuex';
+import AtomHeading from '@/components/atoms/AtomHeading.vue';
+import BodyWrapper from '@/components/extras/BodyWrapper.vue';
+import { Form } from 'vee-validate';
 export default {
     name: 'PageSocietyParking',
     components: {
         Whats_Next,
-        TestimonialSection
+        TestimonialSection,
+        FormInput,
+        AtomHeading,
+        BodyWrapper,
+        Form,
     },
     metaInfo() {
         return {
@@ -99,7 +128,90 @@ export default {
     data() {
         return {
             WHAT_NEXT_SO: WHAT_NEXT_SO,
+            model: {
+                fullname: '',
+                cno: '',
+                address: '',
+                msg: '[Automated Parking] Interested in scheduling a call',
+                email: '',
+            },
+            contactFormSchema: contactFormSchema,
+            whyChooseUsOptions: [
+                {
+                    title: 'Seamless Operations',
+                    description:
+                        'Automate entry, exit, and slot allocation with real-time tracking.',
+                    button: 'Learn more',
+                    redirectUrl: '/automated-parking'
+                },
+                {
+                    title: 'Resident-Friendly',
+                    description:
+                        'Mobile access and hassle-free parking for all residents and guests.',
+                    button: 'Get started',
+                    redirectUrl: '/automated-parking#register'
+                },
+                {
+                    title: 'Admin Control',
+                    description:
+                        'Manage user roles, generate reports, and configure society-specific rules.',
+                    button: 'See features',
+                    redirectUrl: '/features'
+                },
+                {
+                    title: 'Security & Monitoring',
+                    description:
+                        'Track vehicle history, enable alerts, and integrate with CCTV systems.',
+                    button: 'Explore',
+                    redirectUrl: '/automated-parking#how-its-work'
+                },
+                {
+                    title: 'Visitor Management',
+                    description:
+                        'Pre-booking, QR codes, and smoother entry experience for visitors.',
+                    button: 'Know more',
+                    redirectUrl: '/'
+                },
+                {
+                    title: 'Need Custom Setup?',
+                    description:
+                        'We customize solutions for your society’s unique needs.',
+                    button: 'Contact now',
+                    redirectUrl: '/contact'
+                },
+            ],
         };
+    },
+    methods: {
+        ...mapActions({
+            onlyContact: 'user/onlyContact',
+        }),
+
+        ...mapMutations({
+            updateContactForm: 'user/update-contact',
+        }),
+
+        async handleSubmit() {
+            this.updateContactForm(this.model);
+            try {
+                this.isLoading = true;
+
+                await this.onlyContact();
+
+                this.$router.push({ name: 'thankYou' });
+            } catch (error) {
+                console.error({ error });
+
+                this.$buefy.toast.open({
+                    message: `Something went wrong!`,
+                    type: 'is-danger',
+                    duration: 2000,
+                });
+
+                this.$router.push({ name: 'Home' });
+            }
+            this.isLoading = false;
+        },
     },
 };
 </script>
@@ -135,7 +247,7 @@ export default {
 
 .hero-content {
     border-radius: 10px;
-    padding: 2rem;
+    padding: 4rem;
     text-align: left;
 }
 
@@ -174,12 +286,12 @@ export default {
     display: grid;
     gap: 1.5rem;
     grid-template-columns: repeat(3, 1fr);
-    margin: 0 auto;
+    margin: 4rem auto 0 auto;
     max-width: 1200px;
 }
 
 .card {
-    background-color: #fff;
+    background-color: var(--parkspot-white);
     border-radius: 12px;
     border: 1px solid var(--primary-color);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
@@ -202,7 +314,7 @@ export default {
     margin-bottom: 1rem;
 }
 
-.card button {
+.btn {
     background-color: var(--secondary-color);
     border-radius: 6px;
     border: none;
@@ -213,10 +325,64 @@ export default {
     transition: background 0.3s;
 }
 
-.card button:hover {
+.btn:hover {
     background-color: white;
     border: 1px solid var(--secondary-color);
     color: var(--secondary-color);
+}
+
+.form-section {
+    align-items: center;
+    background-color: var(--primary-color);
+    display: flex;
+    padding: 4rem;
+}
+
+.form-section > div {
+    flex: 1;
+    min-width: 300px;
+}
+
+.form-section h3 {
+    color: var(--secondary-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.form-section p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #333;
+    max-width: 500px;
+}
+
+.form-container {
+    backdrop-filter: blur(5px);
+    background-color: var(--parkspot-white);
+    border-radius: 8px;
+    color: var(--parkspot-black);
+    max-width: 40%;
+    padding: 2rem;
+    width: 100%;
+    box-shadow: 4px 6px 14px rgba(0, 0, 0, 0.1);
+}
+
+.btn-wrapper {
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.submit-btn {
+    background-color: var(--primary-color);
+    border-radius: 4px;
+    border: none;
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 1rem;
+    padding: 0.6rem 1.2rem;
 }
 
 @media (max-width: 768px) {
@@ -233,6 +399,15 @@ export default {
     .cards-grid {
         display: flex;
         flex-direction: column;
+    }
+
+    .form-section {
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .form-container {
+        min-width: 100%;
     }
 }
 </style>
