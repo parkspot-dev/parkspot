@@ -6,22 +6,22 @@
     >
         <div class="form-row">
             <FormInput
-                :label="CONTACT_FORM.FULLNAME"
-                :placeholder="CONTACT_FORM.FULLNAME"
+                :label="FORM.FULLNAME"
+                :placeholder="FORM_PLACEHOLDERS.FULLNAME"
                 :name="'fullname'"
                 v-model="contactModel.fullname"
             />
 
             <FormInput
-                :label="CONTACT_FORM.CONTACT_NO"
-                :placeholder="CONTACT_FORM.CONTACT_NO"
+                :label="FORM.CONTACT_NO"
+                :placeholder="FORM_PLACEHOLDERS.CONTACT_NO"
                 :name="'cno'"
                 v-model="contactModel.cno"
             />
         </div>
         <FormInput
-            :label="CONTACT_FORM.EMAIL"
-            :placeholder="CONTACT_FORM.EMAIL"
+            :label="FORM.EMAIL"
+            :placeholder="FORM_PLACEHOLDERS.EMAIL"
             :name="'email'"
             type="email"
             v-model="contactModel.email"
@@ -46,8 +46,8 @@
             />
         </div>
         <FormInput
-            :label="PREFERENCE.MODEL"
-            :placeholder="PREFERENCE.MODEL"
+            :label="FORM.CAR_MODEL"
+            :placeholder="FORM_PLACEHOLDERS.CAR_MODEL"
             :name="'carModel'"
             v-model="preferenceModel.carModel"
         />
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { ADD_INFO, PREFERENCE, FORM } from '../../constant/constant';
+import { ADD_INFO, PREFERENCE, FORM, FORM_PLACEHOLDERS } from '../../constant/constant';
 import { Form } from 'vee-validate';
 import { mapMutations } from 'vuex';
 import { parkingRequestFormSchema } from '@/validationSchemas';
@@ -102,7 +102,8 @@ export default {
                     : '',
                 terms: '',
             },
-            CONTACT_FORM: FORM,
+            FORM,
+            FORM_PLACEHOLDERS,
             PREFERENCE,
             ADD_INFO,
             parkingTypeData: PREFERENCE.PARKING_TYPE_LIST.map(

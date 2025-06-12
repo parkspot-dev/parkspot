@@ -2,30 +2,30 @@
     <Form @submit="submitForm" :validation-schema="contactFormSchema">
         <FormInput
             :name="'fullname'"
-            :label="CONTACT_FORM.FULLNAME"
-            :placeholder="CONTACT_FORM.FULLNAME"
+            :label="FORM.FULLNAME"
+            :placeholder="FORM_PLACEHOLDERS.FULLNAME"
             v-model="model.fullname"
         />
 
         <FormInput
             :name="'email'"
-            :label="CONTACT_FORM.EMAIL"
-            :placeholder="CONTACT_FORM.EMAIL"
+            :label="FORM.EMAIL"
+            :placeholder="FORM_PLACEHOLDERS.EMAIL"
             type="email"
             v-model="model.email"
         />
 
         <FormInput
             :name="'cno'"
-            :label="CONTACT_FORM.CONTACT_NO"
-            :placeholder="CONTACT_FORM.CONTACT_NO"
+            :label="FORM.CONTACT_NO"
+            :placeholder="FORM_PLACEHOLDERS.CONTACT_NO"
             v-model="model.cno"
         />
 
         <FormInput
             :name="'addr'"
-            :label="'Address'"
-            :placeholder="'Enter your address'"
+            :label="FORM.ADDRESS"
+            :placeholder="FORM_PLACEHOLDERS.ADDRESS"
             v-if="isEnable"
             v-model="model.addr"
         />
@@ -33,8 +33,8 @@
         <div v-if="textArea">
             <AtomTextarea
                 :name="'msg'"
-                :label="'Message'"
-                v-model="model.msg"
+                :label="FORM.MESSAGE"
+                v-model="FORM_PLACEHOLDERS.MESSAGE"
             />
         </div>
         <button class="send-button" type="submit">
@@ -45,7 +45,7 @@
 
 <script>
 import { contactFormSchema } from '@/validationSchemas';
-import { FORM } from '../../constant/constant';
+import { FORM, FORM_PLACEHOLDERS } from '../../constant/constant';
 import { Form } from 'vee-validate';
 import { mapMutations } from 'vuex';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
@@ -69,7 +69,8 @@ export default {
     emits: ['submitForm'],
     data() {
         return {
-            CONTACT_FORM: FORM,
+            FORM: FORM,
+            FORM_PLACEHOLDERS: FORM_PLACEHOLDERS,
             contactFormSchema,
             isEnable: false,
             model: {
