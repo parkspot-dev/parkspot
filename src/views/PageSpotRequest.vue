@@ -1,5 +1,12 @@
 <template>
     <div class="spot-requests-root">
+        <!-- Search Bar -->
+        <div class="search-control">
+            <MoleculeSearchBox
+                placeholder="Request ID"
+                @on-search="searchSpotRequest"
+            ></MoleculeSearchBox>
+        </div>
         <div class="header">
             <div class="summary" v-if="isSummary">
                 <div class="so-btn">
@@ -20,6 +27,8 @@
                         >
                         </AtomIcon>
                     </span>
+                    <p class="so-total">Summary</p>
+                    <hr />
                     <div class="so-status">
                         <p>
                             <span>Registered :</span>
@@ -30,28 +39,14 @@
                             <span>{{ summary.status[2] || 0 }}</span>
                         </p>
                         <p>
-                            <span>Req. Modification :</span>
-                            <span>{{ summary.status[3] || 0 }}</span>
-                        </p>
-                        <p>
                             <span>Verified :</span>
                             <span>{{ summary.status[4] || 0 }}</span>
-                        </p>
-                        <p>
-                            <span>Denied :</span>
-                            <span>{{ summary.status[5] || 0 }}</span>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Search Bar -->
-        <div class="search-control">
-            <MoleculeSearchBox
-                placeholder="Request ID"
-                @on-search="searchSpotRequest"
-            ></MoleculeSearchBox>
-        </div>
+
         <!-- Loading modal displayed during data fetch -->
         <LoaderModal v-if="isLoading"></LoaderModal>
         <!-- Buefy Table for spot requests with pagination -->
@@ -339,7 +334,7 @@ $portal-font-size: 13px;
         top: 120px;
         right: 12px;
         z-index: 9999;
-        padding: 4rem 1rem;
+        padding: 1.25rem;
         max-width: 430px;
         border: 1px solid var(--parkspot-black);
         background-color: #f5f5dc;
@@ -354,25 +349,22 @@ $portal-font-size: 13px;
 
         .so-total {
             font-size: 16px;
+            font-weight: 600;
             font-weight: var(--semi-bold-font);
             text-align: center;
         }
 
-        .so-live-request {
-            display: flex;
-            font-size: $portal-font-size;
-            gap: 6rem;
-        }
-
         .so-status {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            column-gap: 2.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
 
             p {
                 display: flex;
                 justify-content: space-between;
+                align-items: center;
                 font-size: $portal-font-size;
+                gap: 5px;
             }
         }
     }
