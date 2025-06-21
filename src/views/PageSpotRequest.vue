@@ -27,7 +27,7 @@
                         >
                         </AtomIcon>
                     </span>
-                    <p class="so-total">Summary</p>
+                    <p class="so-total">Spot Request Summary</p>
                     <hr />
                     <div class="so-status">
                         <p>
@@ -349,7 +349,7 @@ $portal-font-size: 13px;
 
         .so-total {
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 600 !important;
             font-weight: var(--semi-bold-font);
             text-align: center;
         }
@@ -364,7 +364,7 @@ $portal-font-size: 13px;
                 justify-content: space-between;
                 align-items: center;
                 font-size: $portal-font-size;
-                gap: 5px;
+                gap: 2px;
             }
         }
     }
@@ -412,7 +412,9 @@ $portal-font-size: 13px;
 
 .tag:not(body) {
     background-color: var(--primary-color);
-    color: black;
+}
+.is-success {
+    background-color: #5cb85c !important;
 }
 
 .column-width {
