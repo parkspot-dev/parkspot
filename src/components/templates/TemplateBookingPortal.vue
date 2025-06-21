@@ -262,7 +262,15 @@
                                 :size="'is-small'"
                                 type="number"
                                 v-model.number="currBookingDetails.Booking.Rent"
+                                @input="validateRentInput"
+                                :class="{ 'is-danger': rentValidationError }"
                             ></AtomInput>
+                            <p
+                                v-if="rentValidationError"
+                                class="validation-error"
+                            >
+                                {{ rentValidationError }}
+                            </p>
                         </div>
                         <p v-else>
                             {{ currBookingDetails.Booking.Rent }}
@@ -581,6 +589,7 @@ export default {
             refundDialogVisible: false,
             selectedPaymentAmount: null,
             toolTipLabel: 'Copy payment url!',
+            rentValidationError: '',
         };
     },
     beforeMount() {
@@ -633,6 +642,10 @@ export default {
                 this.currBookingDetails.Booking.AgentUserName =
                     this.agents[value].UserName;
             },
+        },
+        isRentValid() {
+            const rent = this.currBookingDetails?.Booking?.Rent;
+            return rent && rent > 0;
         },
     },
     mounted() {
@@ -733,6 +746,20 @@ export default {
         },
 
         saveField() {
+            this.rentValidationError = '';
+
+            if (this.editField === 'Rent Details') {
+                const rent = this.currBookingDetails?.Booking?.Rent;
+
+                if (!rent || rent <= 0) {
+                    this.rentValidationError = 'Rent must be greater than zero';
+                    this.alertError(
+                        'Rent cannot be zero or empty. Please enter a valid rent amount.',
+                    );
+                    return;
+                }
+            }
+
             this.editField = null;
 
             // Remove Payments field from currentBookingDetails.Booking object
@@ -836,6 +863,14 @@ export default {
                 title: 'Success',
                 type: 'is-success',
             });
+        },
+        validateRentInput() {
+            const rent = this.currBookingDetails?.Booking?.Rent;
+            if (!rent || rent <= 0) {
+                this.rentValidationError = 'Rent must be greater than zero';
+            } else {
+                this.rentValidationError = '';
+            }
         },
     },
     watch: {
@@ -1058,5 +1093,19 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.validation-error {
+    color: var(--parkspot-red, #ff3860);
+    font-size: 12px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+.input-field {
+    margin-bottom: 6px;
+
+    .is-danger {
+        border-color: var(--parkspot-red, #ff3860);
+    }
 }
 </style>
