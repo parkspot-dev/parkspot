@@ -118,7 +118,7 @@ import SelectInput from '@/components/global/SelectInput.vue';
 import { registerSpotRequestFormSchema } from '@/validationSchemas';
 import { mapMutations } from 'vuex';
 import { ParkingSizeDisplayMap, ParkingSizeLabels } from '@/constant/constant';
-import { Form } from 'vee-validate'; 
+import { Form } from 'vee-validate';
 
 export default {
     name: 'RegisterRequestForm',
