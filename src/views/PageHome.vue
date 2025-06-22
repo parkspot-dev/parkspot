@@ -34,7 +34,7 @@
                         <FormInput
                             name="fullname"
                             :label="FORM.FULLNAME"
-                            :placeholder="FORM_PLACEHOLDERS.FULLNAME"
+                            :placeholder="FORM_PLACEHOLDERS.FULL_NAME"
                             v-model="model.fullname"
                         />
 

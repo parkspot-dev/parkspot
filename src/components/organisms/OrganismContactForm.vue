@@ -3,7 +3,7 @@
         <FormInput
             :name="'fullname'"
             :label="FORM.FULLNAME"
-            :placeholder="FORM_PLACEHOLDERS.FULLNAME"
+            :placeholder="FORM_PLACEHOLDERS.FULL_NAME"
             v-model="model.fullname"
         />
 
@@ -45,7 +45,7 @@
 
 <script>
 import { contactFormSchema } from '@/validationSchemas';
-import { FORM, FORM_PLACEHOLDERS } from '../../constant/constant';
+import { FORM, FORM_PLACEHOLDERS } from '@/constant/constant';
 import { Form } from 'vee-validate';
 import { mapMutations } from 'vuex';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';

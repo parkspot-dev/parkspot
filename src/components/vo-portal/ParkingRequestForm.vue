@@ -7,7 +7,7 @@
         <div class="form-row">
             <FormInput
                 :label="FORM.FULLNAME"
-                :placeholder="FORM_PLACEHOLDERS.FULLNAME"
+                :placeholder="FORM_PLACEHOLDERS.FULL_NAME"
                 :name="'fullname'"
                 v-model="contactModel.fullname"
             />
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { ADD_INFO, PREFERENCE, FORM, FORM_PLACEHOLDERS } from '../../constant/constant';
+import { ADD_INFO, PREFERENCE, FORM, FORM_PLACEHOLDERS } from '@/constant/constant';
 import { Form } from 'vee-validate';
 import { mapMutations } from 'vuex';
 import { parkingRequestFormSchema } from '@/validationSchemas';

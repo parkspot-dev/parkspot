@@ -19,14 +19,14 @@ export const FORM = {
 export const FORM_PLACEHOLDERS = {
     USERNAME: 'Enter your username',
     NAME: 'Enter your name',
-    FULLNAME: 'Enter your full name',
-    FIRSTNAME: 'Enter your first name',
-    LASTNAME: 'Enter your last name',
+    FULL_NAME: 'Enter your full name',
+    FIRS_TNAME: 'Enter your first name',
+    LAST_NAME: 'Enter your last name',
     EMAIL: 'Enter your email address',
     CONTACT_NO: 'Enter your mobile number',
     ADDRESS: 'Enter your full address',
     APARTMENT: 'Enter your apartment or building name',
-    BASEAMOUNT: 'Enter the expected monthly rent',
+    BASE_AMOUNT: 'Enter the expected monthly rent',
     CAR_MODEL: 'e.g. Honda Civic, Maruti Swift, Tata Nexon',
     MESSAGE: 'Write Something...',
     GOOGLE_MAP_LINK: 'Maps URL'

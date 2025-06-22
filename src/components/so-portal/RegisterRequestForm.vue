@@ -6,7 +6,7 @@
         <div class="form-row">
             <FormInput
                 :label="FORM.FULLNAME"
-                :placeholder="FORM_PLACEHOLDERS.FULLNAME"
+                :placeholder="FORM_PLACEHOLDERS.FULL_NAME"
                 name="fullname"
                 required
                 v-model="contactModel.fullname"
@@ -62,7 +62,7 @@
                     :label="FORM.BASEAMOUNT"
                     min="0"
                     name="expectedRent"
-                    :placeholder="FORM_PLACEHOLDERS.BASEAMOUNT"
+                    :placeholder="FORM_PLACEHOLDERS.BASE_AMOUNT"
                     type="number"
                     v-model="contactModel.expectedRent"
                 />
