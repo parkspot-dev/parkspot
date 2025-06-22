@@ -645,15 +645,15 @@ export default {
 
 <style lang="scss" scoped>
 .add-new-url-btn {
+    display: flex;
     align-items: center;
     background-color: var(--primary-color);
-    border-radius: 4px;
-    border: none;
     color: var(--parkspot-black);
-    cursor: pointer;
-    display: flex;
-    font-size: 14px;
+    border: none;
+    border-radius: 4px;
     padding: 4px 8px;
+    cursor: pointer;
+    font-size: 14px;
 }
 .btn {
     border-radius: var(--border-default);
@@ -682,8 +682,8 @@ export default {
 .error {
     color: red;
     font-size: 0.8rem;
-    margin-top: 4px;
     font-weight: 500;
+    margin-top: 4px;
 }
 .error-field {
     display: flex;
@@ -691,9 +691,9 @@ export default {
     width: 100%;
 }
 .form-field {
-    align-items: flex-start;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     justify-content: center;
     margin: 0% 9%;
 }
@@ -747,29 +747,29 @@ export default {
     padding: 8px 12px;
 }
 .heading {
-    align-items: center;
     display: flex;
+    align-items: center;
     justify-content: center;
 }
 .modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
     background: var(--parkspot-white);
     border-radius: var(--border-default);
-    left: 50%;
     padding: 20px;
-    position: fixed;
     text-align: center;
-    top: 50%;
     transform: translate(-50%, -50%);
-    z-index: 999;
 }
 .modal-overlay {
     background: rgba(0, 0, 0, 0.5);
-    height: 100%;
-    left: 0;
     position: fixed;
+    left: 0;
     top: 0;
     width: 100%;
     z-index: 998;
+    height: 100%;
 }
 .modal-actions {
     margin-top: 15px;
@@ -780,9 +780,9 @@ export default {
     font-weight: 600;
 }
 .readonly-field {
-    align-items: flex-start;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     justify-content: start;
 
     label {
@@ -790,20 +790,20 @@ export default {
     }
 
     input {
-        align-items: center;
         display: flex;
         flex-direction: column;
-        height: 100%;
+        align-items: center;
         justify-content: center;
         padding: 4px 0;
         text-align: start;
+        height: 100%;
     }
 }
 .remove-url-btn {
-    margin-top: 8px;
     font-size: 24px;
+    color: red;
     cursor: pointer;
-    color: #ff4d4f;
+    margin-top: 8px;
 }
 .root {
     margin: 1% 8%;
