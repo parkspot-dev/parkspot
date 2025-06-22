@@ -285,7 +285,17 @@
                                 v-model.number="
                                     currBookingDetails.Booking.BaseAmount
                                 "
+                                @input="validateSOChargesInput"
+                                :class="{
+                                    'is-danger': soChargesValidationError,
+                                }"
                             ></AtomInput>
+                            <p
+                                v-if="soChargesValidationError"
+                                class="validation-error"
+                            >
+                                {{ soChargesValidationError }}
+                            </p>
                         </div>
                         <p v-else>
                             {{ currBookingDetails.Booking.BaseAmount }}
@@ -590,6 +600,7 @@ export default {
             selectedPaymentAmount: null,
             toolTipLabel: 'Copy payment url!',
             rentValidationError: '',
+            soChargesValidationError: '',
         };
     },
     beforeMount() {
@@ -747,14 +758,34 @@ export default {
 
         saveField() {
             this.rentValidationError = '';
+            this.soChargesValidationError = '';
 
             if (this.editField === 'Rent Details') {
                 const rent = this.currBookingDetails?.Booking?.Rent;
+                const soCharges = this.currBookingDetails?.Booking?.BaseAmount;
 
                 if (!rent || rent <= 0) {
                     this.rentValidationError = 'Rent must be greater than zero';
                     this.alertError(
                         'Rent cannot be zero or empty. Please enter a valid rent amount.',
+                    );
+                    return;
+                }
+
+                if (!soCharges || soCharges <= 0) {
+                    this.soChargesValidationError =
+                        'SO Charges must be greater than zero';
+                    this.alertError(
+                        'SO Charges cannot be zero or empty. Please enter a valid amount.',
+                    );
+                    return;
+                }
+
+                if (soCharges > rent) {
+                    this.soChargesValidationError =
+                        'SO Charges cannot be greater than Rent amount';
+                    this.alertError(
+                        'SO Charges cannot be greater than the Rent amount.',
                     );
                     return;
                 }
@@ -787,6 +818,8 @@ export default {
 
         cancelField() {
             this.editField = null;
+            this.rentValidationError = '';
+            this.soChargesValidationError = '';
             this.currBookingDetails = cloneDeep(this.bookingDetails);
         },
 
@@ -870,6 +903,20 @@ export default {
                 this.rentValidationError = 'Rent must be greater than zero';
             } else {
                 this.rentValidationError = '';
+            }
+        },
+        validateSOChargesInput() {
+            const soCharges = this.currBookingDetails?.Booking?.BaseAmount;
+            const rent = this.currBookingDetails?.Booking?.Rent;
+
+            if (!soCharges || soCharges <= 0) {
+                this.soChargesValidationError =
+                    'SO Charges must be greater than zero';
+            } else if (rent && soCharges > rent) {
+                this.soChargesValidationError =
+                    'SO Charges cannot be greater than Rent amount';
+            } else {
+                this.soChargesValidationError = '';
             }
         },
     },

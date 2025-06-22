@@ -618,7 +618,7 @@ export default {
         },
         validateBaseAmount() {
             if (!this.Rent.baseAmount || this.Rent.baseAmount <= 0) {
-                this.baseAmountError = 'Base amount must be greater than 0';
+                this.baseAmountError = 'SO charges must be greater than 0';
                 return false;
             }
             this.baseAmountError = '';
@@ -698,8 +698,8 @@ export default {
     margin: 0% 9%;
 }
 .form-field input.error-input {
-    border-color: #ff4d4f;
-    background-color: #fff2f0;
+    border-color: var(--parkspot-red, #ff3860);
+    background-color: var(--primary-color);
 }
 .form-field-column {
     display: flex;
@@ -715,7 +715,6 @@ export default {
 .form-field textarea:focus {
     background-color: var(--primary-color);
     border-color: var(--parkspot-black);
-    border-color: white;
     outline: none;
 }
 .form-field > input,
