@@ -4,12 +4,13 @@
         <section class="hero">
             <div class="hero-content">
                 <h1>
-                    Simplify Your <span class="heighlight">Society's</span>
+                    Simplify Your <span class="heighlight">parking</span>
                     <br />
-                    Parking Experience
+                    access management system
                 </h1>
                 <p>
-                    Smart parking management for residents, visitors & admins.
+                    Make your society parking simple, smart, and stress-free for
+                    everyone..
                 </p>
                 <button>Register Now</button>
             </div>
@@ -28,15 +29,14 @@
                 >
                     <h3>{{ service.title }}</h3>
                     <p>{{ service.description }}</p>
-                    <a :href="service.redirectUrl"><button class="btn"  >{{ service.button }}</button></a>
                 </div>
             </div>
         </section>
 
         <!--How its works-->
-        <section id="how-its-work" >
+        <section id="how-its-work">
             <BodyWrapper>
-                <Whats_Next :steps="WHAT_NEXT_SO" />
+                <Whats_Next :steps="WHAT_NEXT_AUTOMATED_PARKING" />
             </BodyWrapper>
         </section>
 
@@ -93,7 +93,9 @@
         <!-- Testimonial Section -->
         <section>
             <BodyWrapper>
-                <TestimonialSection />
+                <TestimonialSection
+                    :testimonials="AUTOMATION_PARKING_PAGE_TESTIMONIALS"
+                />
             </BodyWrapper>
         </section>
     </div>
@@ -102,7 +104,11 @@
 <script>
 import TestimonialSection from '@/components/global/TestimonialSection.vue';
 import Whats_Next from '@/components/global/Whats_Next.vue';
-import { WHAT_NEXT_SO } from '@/constant/constant';
+import {
+    WHAT_NEXT_AUTOMATED_PARKING,
+    AUTOMATION_PARKING_PAGE_TESTIMONIALS,
+    WHY_CHOOSE_PARKSPOT_SOCIETY_AUTOMATION,
+} from '@/constant/constant';
 import FormInput from '@/components/global/FormInput.vue';
 import { contactFormSchema } from '@/validationSchemas';
 import { mapMutations, mapActions } from 'vuex';
@@ -127,7 +133,8 @@ export default {
     },
     data() {
         return {
-            WHAT_NEXT_SO: WHAT_NEXT_SO,
+            WHAT_NEXT_AUTOMATED_PARKING,
+            AUTOMATION_PARKING_PAGE_TESTIMONIALS,
             model: {
                 fullname: '',
                 cno: '',
@@ -136,50 +143,7 @@ export default {
                 email: '',
             },
             contactFormSchema: contactFormSchema,
-            whyChooseUsOptions: [
-                {
-                    title: 'Seamless Operations',
-                    description:
-                        'Automate entry, exit, and slot allocation with real-time tracking.',
-                    button: 'Learn more',
-                    redirectUrl: '/automated-parking'
-                },
-                {
-                    title: 'Resident-Friendly',
-                    description:
-                        'Mobile access and hassle-free parking for all residents and guests.',
-                    button: 'Get started',
-                    redirectUrl: '/automated-parking#register'
-                },
-                {
-                    title: 'Admin Control',
-                    description:
-                        'Manage user roles, generate reports, and configure society-specific rules.',
-                    button: 'See features',
-                    redirectUrl: '/features'
-                },
-                {
-                    title: 'Security & Monitoring',
-                    description:
-                        'Track vehicle history, enable alerts, and integrate with CCTV systems.',
-                    button: 'Explore',
-                    redirectUrl: '/automated-parking#how-its-work'
-                },
-                {
-                    title: 'Visitor Management',
-                    description:
-                        'Pre-booking, QR codes, and smoother entry experience for visitors.',
-                    button: 'Know more',
-                    redirectUrl: '/'
-                },
-                {
-                    title: 'Need Custom Setup?',
-                    description:
-                        'We customize solutions for your society’s unique needs.',
-                    button: 'Contact now',
-                    redirectUrl: '/contact'
-                },
-            ],
+            whyChooseUsOptions: WHY_CHOOSE_PARKSPOT_SOCIETY_AUTOMATION,
         };
     },
     methods: {
