@@ -268,7 +268,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 220px;
+    min-height: 180px;
     padding: 1.5rem;
 }
 
