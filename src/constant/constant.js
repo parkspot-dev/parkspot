@@ -20,7 +20,6 @@ export const FORM_PLACEHOLDERS = {
     USERNAME: 'Enter your username',
     NAME: 'Enter your name',
     FULL_NAME: 'Enter your full name',
-    FIRS_TNAME: 'Enter your first name',
     LAST_NAME: 'Enter your last name',
     EMAIL: 'Enter your email address',
     CONTACT_NO: 'Enter your mobile number',
