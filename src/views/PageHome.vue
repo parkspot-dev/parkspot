@@ -33,35 +33,35 @@
 
                         <FormInput
                             name="fullname"
-                            label="Fullname"
-                            placeholder="Enter Your Fullname"
+                            :label="FORM.FULLNAME"
+                            :placeholder="FORM_PLACEHOLDERS.FULL_NAME"
                             v-model="model.fullname"
                         />
 
                         <FormInput
                             name="cno"
-                            label="Mobile Number"
-                            placeholder="Enter Your Mobile Number"
+                            :label="FORM.CONTACT_NO"
+                            :placeholder="FORM_PLACEHOLDERS.CONTACT_NO"
                             v-model="model.cno"
                         />
 
                         <FormInput
                             name="addr"
-                            label="Address"
-                            placeholder="Enter Your Address"
+                            :label="FORM.ADDRESS"
+                            :placeholder="FORM_PLACEHOLDERS.ADDRESS"
                             v-model="model.address"
                         />
 
                         <FormInput
                             name="carModel"
-                            label="Car Model"
-                            placeholder="e.g. Honda Civic, Maruti Swift, Tata Nexon"
+                            :label="FORM.CAR_MODEL"
+                            :placeholder="FORM_PLACEHOLDERS.CAR_MODEL"
                             v-model="model.carModel"
                         />
 
                         <div class="btn-wrapper">
-                            <button type="submit" class="submit-btn">
-                                Submit
+                            <button type="submit" class="send-button">
+                                Submit <AtomIcon class="btn-icon" :icon="'send-outline'"></AtomIcon>
                             </button>
                         </div>
                     </Form>
@@ -79,7 +79,7 @@ import { CAR_WASH_SERVICES } from '@/constant/constant';
 import { contactFormSchema } from '@/validationSchemas';
 import { Form } from 'vee-validate';
 import { mapActions, mapMutations } from 'vuex';
-import { PAGE_TITLE } from '@/constant/constant';
+import { PAGE_TITLE, FORM, FORM_PLACEHOLDERS } from '@/constant/constant';
 import FormInput from '@/components/global/FormInput.vue';
 import PageAbout from './PageAbout.vue';
 import PageContactUs from './PageContactUs.vue';
@@ -87,9 +87,11 @@ import TemplateFeatureHome from '../components/templates/TemplateFeatureHome.vue
 import TemplateHomeBanner from '../components/templates/TemplateHomeBanner.vue';
 import TemplateOurProducts from '../components/templates/TemplateOurProducts.vue';
 import TestimonialSection from '@/components/global/TestimonialSection.vue';
+import AtomIcon from '@/components/atoms/AtomIcon.vue';
 export default {
     name: 'PageHome',
     components: {
+        AtomIcon,
         Form,
         FormInput,
         PageAbout,
@@ -115,6 +117,8 @@ export default {
                 carModel: ''
             },
             contactFormSchema,
+            FORM: FORM,
+            FORM_PLACEHOLDERS : FORM_PLACEHOLDERS
         };
     },
     methods: {
@@ -254,14 +258,7 @@ form h3 {
     width: 100%;
 }
 
-.submit-btn {
-    background-color: var(--primary-color);
-    border-radius: 4px;
-    border: none;
-    color: black;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 1rem;
-    padding: 0.6rem 1.2rem;
+.btn-icon {
+    font-size: 1.25rem;
 }
 </style>

@@ -5,15 +5,15 @@
     >
         <div class="form-row">
             <FormInput
-                :label="CONTACT_FORM.FULLNAME"
-                :placeholder="CONTACT_FORM.FULLNAME"
+                :label="FORM.FULLNAME"
+                :placeholder="FORM_PLACEHOLDERS.FULL_NAME"
                 name="fullname"
                 required
                 v-model="contactModel.fullname"
             />
             <FormInput
-                :label="CONTACT_FORM.CONTACT_NO"
-                :placeholder="CONTACT_FORM.CONTACT_NO"
+                :label="FORM.CONTACT_NO"
+                :placeholder="FORM_PLACEHOLDERS.CONTACT_NO"
                 name="cno"
                 required
                 type="tel"
@@ -23,8 +23,8 @@
 
         <div class="form-row">
             <FormInput
-                :label="CONTACT_FORM.EMAIL"
-                :placeholder="CONTACT_FORM.EMAIL"
+                :label="FORM.EMAIL"
+                :placeholder="FORM_PLACEHOLDERS.EMAIL"
                 name="email"
                 required
                 type="email"
@@ -32,9 +32,9 @@
             />
 
             <FormInput
-                label="Google Maps Link"
+                :label="FORM.GOOGLE_MAP_LINK"
                 name="mapsLink"
-                placeholder="Maps URL"
+                :placeholder="FORM_PLACEHOLDERS.GOOGLE_MAP_LINK"
                 type="url"
                 v-model="contactModel.mapsLink"
             />
@@ -42,14 +42,14 @@
 
         <div class="form-row">
             <FormInput
-                :label="CONTACT_FORM.APARTMENT"
-                :placeholder="CONTACT_FORM.APARTMENT"
+                :label="FORM.APARTMENT"
+                :placeholder="FORM_PLACEHOLDERS.APARTMENT"
                 name="apartment"
                 v-model="contactModel.apartment"
             />
             <FormInput
-                :label="CONTACT_FORM.ADDRESS"
-                :placeholder="CONTACT_FORM.ADDRESS"
+                :label="FORM.ADDRESS"
+                :placeholder="FORM_PLACEHOLDERS.ADDRESS"
                 name="address"
                 required
                 v-model="contactModel.address"
@@ -59,10 +59,10 @@
         <div class="form-row">
             <div class="form-column">
                 <FormInput
-                    :label="CONTACT_FORM.BASEAMOUNT"
+                    :label="FORM.BASEAMOUNT"
                     min="0"
                     name="expectedRent"
-                    placeholder="₹"
+                    :placeholder="FORM_PLACEHOLDERS.BASE_AMOUNT"
                     type="number"
                     v-model="contactModel.expectedRent"
                 />
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { ADD_INFO, FORM, PARKING_FACILITY } from '@/constant/constant';
+import { ADD_INFO, FORM, PARKING_FACILITY, FORM_PLACEHOLDERS } from '@/constant/constant';
 import MultiSelectInput from '@/components/global/MultiSelectInput.vue';
 import ImageUpload from '@/components/global/ImageUpload.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
@@ -150,7 +150,8 @@ export default {
                 images: [],
                 isTermsAccepted: false,
             },
-            CONTACT_FORM: FORM,
+            FORM,
+            FORM_PLACEHOLDERS,
             ADD_INFO,
             termData: ADD_INFO.TERMS_DATA,
         };
