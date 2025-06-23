@@ -12,7 +12,9 @@
                     Make your society parking simple, smart, and stress-free for
                     everyone..
                 </p>
-                <button>Register Now</button>
+                <a href="#register">
+                    <button>Register Now</button>
+                </a>
             </div>
         </section>
 
@@ -56,30 +58,30 @@
                     :validation-schema="contactFormSchema"
                 >
                     <FormInput
+                        :label="FORM.FULLNAME"
+                        :placeholder="FORM_PLACEHOLDERS.FULL_NAME"
                         name="fullname"
-                        label="Fullname"
-                        placeholder="Enter Your Fullname"
                         v-model="model.fullname"
                     />
 
                     <FormInput
+                        :label="FORM.EMAIL"
+                        :placeholder="FORM_PLACEHOLDERS.EMAIL"
                         name="email"
-                        label="Email"
-                        placeholder="example@gmail.com"
                         v-model="model.email"
                     />
 
                     <FormInput
+                        :label="FORM.CONTACT_NO"
+                        :placeholder="FORM_PLACEHOLDERS.CONTACT_NO"
                         name="cno"
-                        label="Mobile Number"
-                        placeholder="Enter Your Mobile Number"
                         v-model="model.cno"
                     />
 
                     <FormInput
+                        :label="FORM.ADDRESS"
+                        :placeholder="FORM_PLACEHOLDERS.ADDRESS"
                         name="addr"
-                        label="Address"
-                        placeholder="Enter Your Address"
                         v-model="model.address"
                     />
 
@@ -108,6 +110,8 @@ import {
     WHAT_NEXT_AUTOMATED_PARKING,
     AUTOMATION_PARKING_PAGE_TESTIMONIALS,
     WHY_CHOOSE_PARKSPOT_SOCIETY_AUTOMATION,
+    FORM_PLACEHOLDERS,
+    FORM,
 } from '@/constant/constant';
 import FormInput from '@/components/global/FormInput.vue';
 import { contactFormSchema } from '@/validationSchemas';
@@ -135,6 +139,8 @@ export default {
         return {
             WHAT_NEXT_AUTOMATED_PARKING,
             AUTOMATION_PARKING_PAGE_TESTIMONIALS,
+            FORM_PLACEHOLDERS,
+            FORM,
             model: {
                 fullname: '',
                 cno: '',
