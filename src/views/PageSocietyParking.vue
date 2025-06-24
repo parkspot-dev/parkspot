@@ -85,9 +85,13 @@
                         v-model="model.address"
                     />
 
-                    <div class="btn-wrapper">
-                        <button type="submit" class="btn">Submit</button>
-                    </div>
+                    <button class="send-button" type="submit">
+                        Submit
+                        <AtomIcon
+                            :icon="'send-outline'"
+                            class="btn-icon"
+                        ></AtomIcon>
+                    </button>
                 </Form>
             </div>
         </section>
@@ -104,30 +108,32 @@
 </template>
 
 <script>
-import TestimonialSection from '@/components/global/TestimonialSection.vue';
-import Whats_Next from '@/components/global/Whats_Next.vue';
 import {
-    WHAT_NEXT_AUTOMATED_PARKING,
     AUTOMATION_PARKING_PAGE_TESTIMONIALS,
-    WHY_CHOOSE_PARKSPOT_SOCIETY_AUTOMATION,
     FORM_PLACEHOLDERS,
     FORM,
+    WHAT_NEXT_AUTOMATED_PARKING,
+    WHY_CHOOSE_PARKSPOT_SOCIETY_AUTOMATION,
 } from '@/constant/constant';
-import FormInput from '@/components/global/FormInput.vue';
 import { contactFormSchema } from '@/validationSchemas';
+import { Form } from 'vee-validate';
 import { mapMutations, mapActions } from 'vuex';
+import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import BodyWrapper from '@/components/extras/BodyWrapper.vue';
-import { Form } from 'vee-validate';
+import FormInput from '@/components/global/FormInput.vue';
+import TestimonialSection from '@/components/global/TestimonialSection.vue';
+import Whats_Next from '@/components/global/Whats_Next.vue';
 export default {
     name: 'PageSocietyParking',
     components: {
-        Whats_Next,
-        TestimonialSection,
-        FormInput,
+        AtomIcon,
         AtomHeading,
         BodyWrapper,
         Form,
+        FormInput,
+        TestimonialSection,
+        Whats_Next,
     },
     metaInfo() {
         return {
@@ -142,11 +148,11 @@ export default {
             FORM_PLACEHOLDERS,
             FORM,
             model: {
-                fullname: '',
-                cno: '',
                 address: '',
-                msg: '[Automated Parking] Interested in scheduling a call',
+                cno: '',
                 email: '',
+                fullname: '',
+                msg: '[Automated Parking] Interested in scheduling a call',
             },
             contactFormSchema: contactFormSchema,
             whyChooseUsOptions: WHY_CHOOSE_PARKSPOT_SOCIETY_AUTOMATION,
@@ -202,9 +208,9 @@ export default {
 /* Hero Section */
 .hero {
     align-items: flex-start;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-        url('https://media.gettyimages.com/id/1397252319/photo/red-car-paked-in-underground-garage-with-lots-of-vehicles.jpg?b=1&s=2048x2048&w=0&k=20&c=zYf5DmORC8KX0XsWX-pxzTQh615LZfIoGm2H3HCr_cM=');
     background-color: #222;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url('https://www.secureye.com/uploads/images/1726837469_48d395141c9a1cbbd837.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -223,8 +229,8 @@ export default {
 
 .hero h1 {
     font-size: 3rem;
-    margin-bottom: 0.5rem;
     line-height: 60px;
+    margin-bottom: 0.5rem;
 }
 
 .hero p {
@@ -296,7 +302,7 @@ export default {
 }
 
 .btn:hover {
-    background-color: white;
+    background-color: var(--parkspot-white);
     border: 1px solid var(--secondary-color);
     color: var(--secondary-color);
 }
@@ -321,9 +327,9 @@ export default {
 }
 
 .form-section p {
+    color: #333;
     font-size: 1.1rem;
     line-height: 1.6;
-    color: #333;
     max-width: 500px;
 }
 
@@ -331,6 +337,7 @@ export default {
     backdrop-filter: blur(5px);
     background-color: var(--parkspot-white);
     border-radius: 8px;
+    box-shadow: 4px 6px 14px rgba(0, 0, 0, 0.1);
     color: var(--parkspot-black);
     max-width: 40%;
     padding: 2rem;
@@ -338,22 +345,7 @@ export default {
     box-shadow: 4px 6px 14px rgba(0, 0, 0, 0.1);
 }
 
-.btn-wrapper {
-    margin-top: 20px;
-    text-align: center;
-    width: 100%;
-}
 
-.submit-btn {
-    background-color: var(--primary-color);
-    border-radius: 4px;
-    border: none;
-    color: black;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 1rem;
-    padding: 0.6rem 1.2rem;
-}
 
 @media (max-width: 768px) {
     .hero h1 {

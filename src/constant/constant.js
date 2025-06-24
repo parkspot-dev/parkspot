@@ -11,9 +11,9 @@ export const FORM = {
     ADDRESS: 'Address',
     APARTMENT: 'Apartment Name',
     BASEAMOUNT: 'Expected Rent',
-    CAR_MODEL: "Car Model",
-    MESSAGE: "Message",
-    GOOGLE_MAP_LINK: "Google Map Link"
+    CAR_MODEL: 'Car Model',
+    MESSAGE: 'Message',
+    GOOGLE_MAP_LINK: 'Google Map Link',
 };
 
 export const FORM_PLACEHOLDERS = {
@@ -28,7 +28,7 @@ export const FORM_PLACEHOLDERS = {
     BASE_AMOUNT: 'Enter the expected monthly rent',
     CAR_MODEL: 'e.g. Honda Civic, Maruti Swift, Tata Nexon',
     MESSAGE: 'Write Something...',
-    GOOGLE_MAP_LINK: 'Maps URL'
+    GOOGLE_MAP_LINK: 'Maps URL',
 };
 
 export const PARKING_FACILITY = {
@@ -402,7 +402,7 @@ export const AUTOMATION_PARKING_PAGE_TESTIMONIALS = [
     },
     {
         name: 'Anita Desai',
-        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSafRBJi8MwVYS2o0Zlbz1AcMpzw9AscgoRWw&s',
+        image: 'https://static1.innoget.com/uploads/5dda279c5df6b.jpg',
         quote: `Earlier, visitor parking meant calls, logs, and delays. Now I just approve entries with a tap on the app. Residents love the convenience, and our security staff is finally stress-free!`,
         rate: 5,
         role: 'Society Secretary, Bangalore',
@@ -423,7 +423,7 @@ export const AUTOMATION_PARKING_PAGE_TESTIMONIALS = [
     },
     {
         name: 'Priya Nair',
-        image: 'https://www.blazkos.com/wp-content/uploads/2021/05/letter_P.png',
+        image: 'https://lh3.googleusercontent.com/a/ACg8ocIYH1USwJFQ2QlXEkvzrJ0P7B4dcKwIBnXQ5cTOstU9bgGK5A',
         quote: ` Apart from the seamless parking access, I also love that I can book a doorstep car wash directly through the app. Everything I need is just a click away—modern living, truly!`,
         rate: 5,
         role: 'Resident, Bangalore',
