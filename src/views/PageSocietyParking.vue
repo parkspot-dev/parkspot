@@ -4,7 +4,7 @@
         <section class="hero">
             <div class="hero-content">
                 <h1>
-                    Simplify Your <span class="heighlight">parking</span>
+                    Simplify your <span class="heighlight">parking</span>
                     <br />
                     access management system
                 </h1>
@@ -13,7 +13,7 @@
                     everyone..
                 </p>
                 <a href="#register">
-                    <button>Register Now</button>
+                    <button class="btn">Register Now</button>
                 </a>
             </div>
         </section>
@@ -210,7 +210,7 @@ export default {
     align-items: flex-start;
     background-color: #222;
     background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-        url('https://www.secureye.com/uploads/images/1726837469_48d395141c9a1cbbd837.jpg');
+        url('https://mairsturnstile.com/wp-content/uploads/2024/03/boom-barrier.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -245,6 +245,21 @@ export default {
     cursor: pointer;
     font-weight: bold;
     padding: 0.75rem 1.5rem;
+}
+
+.btn{
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    font-size: 16px;
+    font-weight: var(--semi-bold-font);
+    gap: 8px;
+    padding: 10px 20px;
+    transition:
+        background 0.3s,
+        transform 0.2s; 
 }
 
 .why-choose {
@@ -288,23 +303,6 @@ export default {
     flex-grow: 1;
     font-size: 0.95rem;
     margin-bottom: 1rem;
-}
-
-.btn {
-    background-color: var(--secondary-color);
-    border-radius: 6px;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    font-weight: 600;
-    padding: 0.6rem 1.2rem;
-    transition: background 0.3s;
-}
-
-.btn:hover {
-    background-color: var(--parkspot-white);
-    border: 1px solid var(--secondary-color);
-    color: var(--secondary-color);
 }
 
 .form-section {
@@ -366,10 +364,15 @@ export default {
     .form-section {
         align-items: center;
         flex-direction: column;
+        gap: 20px;
     }
 
     .form-container {
         min-width: 100%;
+    }
+
+    .btn{
+        margin: 16px auto;
     }
 }
 </style>
