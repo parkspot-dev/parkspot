@@ -7,6 +7,46 @@
                 @on-search="searchSpotRequest"
             ></MoleculeSearchBox>
         </div>
+        <div class="header">
+            <div class="summary" v-if="isSummary">
+                <div class="so-btn">
+                    <AtomButton
+                        @click.native="showSummary"
+                        v-show="!summary.show"
+                    >
+                        {{ summary.btn }} Summary
+                    </AtomButton>
+                </div>
+                <br />
+                <div class="so-summary" v-show="summary.show">
+                    <span class="close-button">
+                        <AtomIcon
+                            @click.native="showSummary"
+                            :icon="'close'"
+                            size=""
+                        >
+                        </AtomIcon>
+                    </span>
+                    <p class="so-total">Spot Request Summary</p>
+                    <hr />
+                    <div class="so-status">
+                        <p>
+                            <span>Registered :</span>
+                            <span>{{ summary.status[1] || 0 }}</span>
+                        </p>
+                        <p>
+                            <span>Processing :</span>
+                            <span>{{ summary.status[2] || 0 }}</span>
+                        </p>
+                        <p>
+                            <span>Verified :</span>
+                            <span>{{ summary.status[4] || 0 }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Loading modal displayed during data fetch -->
         <LoaderModal v-if="isLoading"></LoaderModal>
         <!-- Buefy Table for spot requests with pagination -->
@@ -36,7 +76,6 @@
                 </template>
             </b-table-column>
 
-
             <b-table-column
                 field="Name"
                 label="Name"
@@ -51,7 +90,6 @@
                 </template>
             </b-table-column>
 
-
             <b-table-column
                 field="Address"
                 label="Address"
@@ -64,7 +102,6 @@
                     </div>
                 </template>
             </b-table-column>
-
 
             <!-- Status Column -->
             <b-table-column
@@ -106,7 +143,6 @@
                 </template>
             </b-table-column>
 
-
             <b-table-column
                 field="Remark"
                 label="Remark"
@@ -121,7 +157,6 @@
                 </template>
             </b-table-column>
 
-
             <b-table-column
                 field="LastCallDate"
                 label="Last Call Date"
@@ -130,7 +165,11 @@
             >
                 <template v-slot="props">
                     <div>
-                        {{ props.row.LastCallDate ? formatDate(props.row.LastCallDate) : 'N/A' }}
+                        {{
+                            props.row.LastCallDate
+                                ? formatDate(props.row.LastCallDate)
+                                : 'N/A'
+                        }}
                     </div>
                 </template>
             </b-table-column>
@@ -138,14 +177,14 @@
     </div>
 </template>
 
-
 <script>
 import { mapState, mapActions } from 'vuex';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
 import { getSpotRequestStatusLabel } from '../constant/enums';
 import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
-
+import AtomButton from '@/components/atoms/AtomButton.vue';
+import AtomIcon from '@/components/atoms/AtomIcon.vue';
 
 export default {
     name: 'SpotRequestsPage',
@@ -153,8 +192,16 @@ export default {
         AtomSelectInput,
         LoaderModal,
         MoleculeSearchBox,
+        AtomButton,
+        AtomIcon,
     },
 
+    props: {
+        isSummary: {
+            type: Boolean,
+            default: true,
+        },
+    },
 
     data() {
         return {
@@ -166,6 +213,11 @@ export default {
                 { id: 4, name: 'Verified' },
                 { id: 5, name: 'Denied' },
             ],
+            summary: {
+                btn: 'Show',
+                show: false,
+                status: [0, 0, 0, 0, 0, 0], // Array to hold counts for each status
+            },
         };
     },
     computed: {
@@ -177,13 +229,11 @@ export default {
         ]),
     },
 
-
     mounted() {
         this.fetchSpotRequests();
     },
     methods: {
         ...mapActions('spotRequests', ['fetchSpotRequests']),
-
 
         // Search by Request ID with validation for numeric input
         searchSpotRequest(requestId) {
@@ -198,12 +248,10 @@ export default {
             });
         },
 
-
         // Generate detail URL for a specific Request ID
         RequestDetailURL(requestId) {
             return `${this.$route.path}/?requestId=${requestId}`;
         },
-
 
         // Format date strings to locale-specific format
         formatDate(dateString) {
@@ -211,12 +259,10 @@ export default {
             return date.toLocaleString();
         },
 
-
         // Get label for status based on the enum value
         getSpotRequestStatusLabel(spotRequestStatus) {
             return getSpotRequestStatusLabel(spotRequestStatus);
         },
-
 
         alertError(msg) {
             this.$buefy.dialog.alert({
@@ -229,8 +275,31 @@ export default {
                 ariaModal: true,
             });
         },
+
+        showSummary() {
+            this.summary.show = !this.summary.show;
+            if (this.summary.show) {
+                this.summary.btn = 'Hide';
+            } else {
+                this.summary.btn = 'Show';
+            }
+        },
+
+        updateSummary(requests) {
+            this.summary.status = [0, 0, 0, 0, 0, 0];
+            requests.forEach((request) => {
+                if (request.Status >= 0 && request.Status <= 5) {
+                    this.summary.status[request.Status]++;
+                }
+            });
+        },
     },
     watch: {
+        spotRequests(newRequests) {
+            if (newRequests && newRequests.length > 0) {
+                this.updateSummary(newRequests);
+            }
+        },
         hasError(error) {
             if (error) {
                 this.alertError(this.errorMessage);
@@ -240,21 +309,75 @@ export default {
 };
 </script>
 
-
 <style lang="scss" scoped>
 $portal-font-size: 13px;
 
+.header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.title h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.summary {
+    .so-btn {
+        text-align: right;
+    }
+
+    .so-summary {
+        position: absolute;
+        top: 120px;
+        right: 12px;
+        z-index: 9999;
+        padding: 1.25rem;
+        max-width: 430px;
+        border: 1px solid var(--parkspot-black);
+        background-color: #f5f5dc;
+        .close-button {
+            background: none;
+            border: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .so-total {
+            font-size: 16px;
+            font-weight: 600 !important;
+            font-weight: var(--semi-bold-font);
+            text-align: center;
+        }
+
+        .so-status {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+
+            p {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: $portal-font-size;
+                gap: 2px;
+            }
+        }
+    }
+}
 
 .column-padding {
     padding: 10px 20px;
 }
 
-
 .spot-requests-root {
     background: #f5f5fb;
     padding: 16px;
     text-align: center;
-
 
     h1 {
         font-size: 24px;
@@ -262,10 +385,12 @@ $portal-font-size: 13px;
     }
 }
 
+.search-control {
+    margin-bottom: 20px;
+}
 
 .status-column {
     font-size: $portal-font-size;
-
 
     .status-part {
         display: flex;
@@ -274,7 +399,6 @@ $portal-font-size: 13px;
         margin-bottom: 20px;
     }
 
-
     .next-call-part {
         display: flex;
         flex-direction: column;
@@ -282,13 +406,22 @@ $portal-font-size: 13px;
     }
 }
 
-
 .table {
     margin-top: 20px;
 }
 
-
 .tag:not(body) {
     background-color: var(--primary-color);
+}
+.is-success {
+    background-color: #5cb85c !important;
+}
+
+.column-width {
+    width: 100px;
+
+    @media only screen and (max-width: 1024px) {
+        width: 150px;
+    }
 }
 </style>

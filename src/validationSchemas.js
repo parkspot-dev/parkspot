@@ -25,6 +25,7 @@ const rules = {
     address: z.string().optional(),
     msg: z.string().optional(),
     carModel: z.string().min(1, 'Car model is required'),
+    expectedRent: z.number().min(1, 'Expected rent must be greater than zero.'),
     terms: z.boolean().refine((val) => val === true, {
         message: 'You must accept the terms and conditions.',
     }),
@@ -67,6 +68,7 @@ export const registerSpotRequestFormSchema = toTypedSchema(
         cno: rules.cno,
         address: rules.address,
         apartment: rules.address,
+        expectedRent: rules.expectedRent,
         terms: rules.terms,
-  }),
+    }),
 );
