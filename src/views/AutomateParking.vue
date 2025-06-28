@@ -125,7 +125,7 @@ import FormInput from '@/components/global/FormInput.vue';
 import TestimonialSection from '@/components/global/TestimonialSection.vue';
 import WhatsNext from '@/components/global/Whats_Next.vue';
 export default {
-    name: 'PageSocietyParking',
+    name: 'AutomateParkingPage',
     components: {
         AtomIcon,
         AtomHeading,

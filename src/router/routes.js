@@ -152,7 +152,7 @@ export const routes = [
     {
         path: pages.AUTOMATED_PARKING,
         name: 'automated-parking',
-        component: () => import('@/views/PageSocietyParking.vue'),
+        component: () => import('@/views/AutomateParking.vue'),
     },
     {
         path: pages.APP,
