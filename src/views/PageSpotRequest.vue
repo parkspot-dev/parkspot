@@ -8,7 +8,7 @@
             ></MoleculeSearchBox>
         </div>
         <div class="header">
-            <div class="summary" v-if="isSummary">
+            <div class="summary">
                 <div class="so-btn">
                     <AtomButton
                         @click.native="showSummary"
@@ -178,29 +178,22 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-import LoaderModal from '../components/extras/LoaderModal.vue';
-import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
 import { getSpotRequestStatusLabel } from '../constant/enums';
-import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
+import { mapState, mapActions } from 'vuex';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
+import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
+import LoaderModal from '../components/extras/LoaderModal.vue';
+import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
 
 export default {
     name: 'SpotRequestsPage',
     components: {
+        AtomButton,
+        AtomIcon,
         AtomSelectInput,
         LoaderModal,
         MoleculeSearchBox,
-        AtomButton,
-        AtomIcon,
-    },
-
-    props: {
-        isSummary: {
-            type: Boolean,
-            default: true,
-        },
     },
 
     data() {
@@ -313,9 +306,9 @@ export default {
 $portal-font-size: 13px;
 
 .header {
+    align-items: flex-start;
     display: flex;
     justify-content: flex-end;
-    align-items: flex-start;
     margin-bottom: 20px;
 }
 
@@ -330,21 +323,21 @@ $portal-font-size: 13px;
     }
 
     .so-summary {
-        position: absolute;
-        top: 120px;
-        right: 12px;
-        z-index: 9999;
-        padding: 1.25rem;
-        max-width: 430px;
-        border: 1px solid var(--parkspot-black);
         background-color: #f5f5dc;
+        border: 1px solid var(--parkspot-black);
+        max-width: 430px;
+        padding: 1.25rem;
+        position: absolute;
+        right: 12px;
+        top: 120px;
+        z-index: 9999;
         .close-button {
             background: none;
             border: none;
-            position: absolute;
-            top: 10px;
-            right: 10px;
             cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 10px;
         }
 
         .so-total {
@@ -356,15 +349,15 @@ $portal-font-size: 13px;
 
         .so-status {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
             gap: 2.5rem;
+            grid-template-columns: repeat(3, 1fr);
 
             p {
-                display: flex;
-                justify-content: space-between;
                 align-items: center;
+                display: flex;
                 font-size: $portal-font-size;
                 gap: 2px;
+                justify-content: space-between;
             }
         }
     }
@@ -414,7 +407,9 @@ $portal-font-size: 13px;
     background-color: var(--primary-color);
 }
 .is-success {
-    background-color: #5cb85c !important;
+    background-color: #b5fca1 !important;
+    color: #008000 !important;
+    font-weight: bold;
 }
 
 .column-width {
