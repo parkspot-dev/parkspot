@@ -365,16 +365,24 @@
                 <AtomButton
                     @click.native="openModal('Save')"
                     class="btn"
-                    :disabled="!isFormModified"
+                    :class="{ 'btn-disabled': !isFormModified || !isFormValid }"
+                    :disabled="!isFormModified || !isFormValid"
                 >
                     Save
                 </AtomButton>
                 <AtomButton
                     @click.native="openModal('Publish')"
                     class="btn"
+                    :class="{
+                        'btn-disabled':
+                            !isFormValid ||
+                            Booking.spotrequestStatus !==
+                                spotRequestStatusOptions.Verified,
+                    }"
                     :disabled="
+                        !isFormValid ||
                         Booking.spotrequestStatus !==
-                        spotRequestStatusOptions.Verified
+                            spotRequestStatusOptions.Verified
                     "
                 >
                     Publish
@@ -661,6 +669,12 @@ export default {
     margin: 4px;
     width: 15%;
 }
+.btn-disabled {
+    opacity: 0.6;
+    cursor: not-allowed !important;
+    background-color: #f5f5f5 !important;
+    color: #999 !important;
+}
 .body {
     background: #f5f5fb;
     padding: 16px;
@@ -680,7 +694,7 @@ export default {
     width: 100%;
 }
 .error {
-    color: red;
+    color: #ff4d4f;
     font-size: 0.8rem;
     font-weight: 500;
     margin-top: 4px;

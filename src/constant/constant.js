@@ -11,6 +11,24 @@ export const FORM = {
     ADDRESS: 'Address',
     APARTMENT: 'Apartment Name',
     BASEAMOUNT: 'Expected Rent',
+    CAR_MODEL: "Car Model",
+    MESSAGE: "Message",
+    GOOGLE_MAP_LINK: "Google Map Link"
+};
+
+export const FORM_PLACEHOLDERS = {
+    USERNAME: 'Enter your username',
+    NAME: 'Enter your name',
+    FULL_NAME: 'Enter your full name',
+    LAST_NAME: 'Enter your last name',
+    EMAIL: 'Enter your email address',
+    CONTACT_NO: 'Enter your mobile number',
+    ADDRESS: 'Enter your full address',
+    APARTMENT: 'Enter your apartment or building name',
+    BASE_AMOUNT: 'Enter the expected monthly rent',
+    CAR_MODEL: 'e.g. Honda Civic, Maruti Swift, Tata Nexon',
+    MESSAGE: 'Write Something...',
+    GOOGLE_MAP_LINK: 'Maps URL'
 };
 
 export const PARKING_FACILITY = {
