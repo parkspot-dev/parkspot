@@ -38,7 +38,7 @@
         <!--How its works-->
         <section id="how-its-work">
             <BodyWrapper>
-                <Whats_Next :steps="WHAT_NEXT_AUTOMATED_PARKING" />
+                <WhatsNext :steps="WHAT_NEXT_AUTOMATED_PARKING" />
             </BodyWrapper>
         </section>
 
@@ -123,7 +123,7 @@ import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import BodyWrapper from '@/components/extras/BodyWrapper.vue';
 import FormInput from '@/components/global/FormInput.vue';
 import TestimonialSection from '@/components/global/TestimonialSection.vue';
-import Whats_Next from '@/components/global/Whats_Next.vue';
+import WhatsNext from '@/components/global/Whats_Next.vue';
 export default {
     name: 'PageSocietyParking',
     components: {
@@ -133,7 +133,7 @@ export default {
         Form,
         FormInput,
         TestimonialSection,
-        Whats_Next,
+        WhatsNext,
     },
     metaInfo() {
         return {
