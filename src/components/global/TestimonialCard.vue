@@ -13,10 +13,21 @@
         </div>
         <div class="divider-line"></div>
         <p class="testimonial-text" v-html="formattedQuote"></p>
-        <a class="read-more-link" :href="item.link" target="_blank">
+        <a
+            v-if="item.link"
+            :href="item.link"
+            class="read-more-link"
+            target="_blank"
+        >
             <img alt="Google Icon" class="google-icon" :src="googleIcon" />
             <span>View review</span>
         </a>
+        <div
+            v-if="item.role"
+            class="read-more-link"
+        >
+            {{ item.role }}
+        </div>
     </div>
 </template>
 

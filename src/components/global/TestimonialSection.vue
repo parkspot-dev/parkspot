@@ -43,14 +43,21 @@ import TestimonialCard from './TestimonialCard.vue';
 
 export default {
     name: 'TestimonialSection',
+        props: {
+        testimonials: {
+            type: Array,
+            default: () => [],
+        },
+    },
     components: {
         AtomHeading,
         AtomParagraph,
         TestimonialCard,
     },
-    setup() {
+    setup(props) {
+        console.log("props",props);
         const swiperContainer = ref(null);
-        const items = ref(VO_PAGE_TESTIMONIALS);
+        const items = ref(props.testimonials.length ? props.testimonials : VO_PAGE_TESTIMONIALS);
 
         onMounted(() => {
             new Swiper(swiperContainer.value, {
