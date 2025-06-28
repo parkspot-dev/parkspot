@@ -698,8 +698,8 @@ export default {
     margin: 0% 9%;
 }
 .form-field input.error-input {
-    border-color: var(--parkspot-red, #ff3860);
     background-color: var(--primary-color);
+    border-color: #ff3860;
 }
 .form-field-column {
     display: flex;
