@@ -221,10 +221,16 @@
                         >
                         <input
                             placeholder="Enter the SO charges"
+                            @input="validateBaseAmount"
+                            @blur="validateBaseAmount"
                             required
+                            min="1"
                             type="number"
                             v-model="Rent.baseAmount"
                         />
+                        <div class="error" v-if="baseAmountError">
+                            {{ baseAmountError }}
+                        </div>
                     </div>
                     <!-- Rent Unit -->
                     <div class="form-field">
@@ -359,16 +365,24 @@
                 <AtomButton
                     @click.native="openModal('Save')"
                     class="btn"
-                    :disabled="!isFormModified"
+                    :class="{ 'btn-disabled': !isFormModified || !isFormValid }"
+                    :disabled="!isFormModified || !isFormValid"
                 >
                     Save
                 </AtomButton>
                 <AtomButton
                     @click.native="openModal('Publish')"
                     class="btn"
+                    :class="{
+                        'btn-disabled':
+                            !isFormValid ||
+                            Booking.spotrequestStatus !==
+                                spotRequestStatusOptions.Verified,
+                    }"
                     :disabled="
+                        !isFormValid ||
                         Booking.spotrequestStatus !==
-                        spotRequestStatusOptions.Verified
+                            spotRequestStatusOptions.Verified
                     "
                 >
                     Publish
@@ -433,6 +447,7 @@ export default {
                 title: '',
             },
             initialFormData: {},
+            baseAmountError: '',
         };
     },
     computed: {
@@ -461,14 +476,17 @@ export default {
             return SiteType;
         },
         isFormModified() {
-            return (
+            const formChanged =
                 JSON.stringify(this.initialFormData) !==
                 JSON.stringify({
                     SO: this.SO,
                     Rent: this.Rent,
                     Booking: this.Booking,
-                })
-            );
+                });
+            return formChanged && this.isFormValid;
+        },
+        isFormValid() {
+            return this.Rent.baseAmount && this.Rent.baseAmount > 0;
         },
         spotImages() {
             let spotImages = [];
@@ -606,6 +624,14 @@ export default {
             this.SO.spotImagesList.splice(index, 1);
             this.spotImagesError.splice(index, 1);
         },
+        validateBaseAmount() {
+            if (!this.Rent.baseAmount || this.Rent.baseAmount <= 0) {
+                this.baseAmountError = 'Base amount must be greater than 0';
+                return false;
+            }
+            this.baseAmountError = '';
+            return true;
+        },
     },
     watch: {
         status(newStatus) {
@@ -643,6 +669,12 @@ export default {
     margin: 4px;
     width: 15%;
 }
+.btn-disabled {
+    opacity: 0.6;
+    cursor: not-allowed !important;
+    background-color: #f5f5f5 !important;
+    color: #999 !important;
+}
 .body {
     background: #f5f5fb;
     padding: 16px;
@@ -662,8 +694,10 @@ export default {
     width: 100%;
 }
 .error {
-    color: red;
+    color: #ff4d4f;
     font-size: 0.8rem;
+    margin-top: 4px;
+    font-weight: 500;
 }
 .error-field {
     display: flex;
@@ -676,6 +710,10 @@ export default {
     flex-direction: column;
     justify-content: center;
     margin: 0% 9%;
+}
+.form-field input.error-input {
+    border-color: #ff4d4f;
+    background-color: #fff2f0;
 }
 .form-field-column {
     display: flex;
