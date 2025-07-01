@@ -27,26 +27,36 @@
                     </p>
                 </div>
             </div>
-            <hr />
 
-            <div class="spot-detail-amenities">
-                <h2>What this place offers</h2>
-                <ul>
-                    <li>Covered</li>
-                    <li>Gated</li>
-                    <li>Security Guard</li>
-                </ul>
+            <div>
+                <hr />
+                <div class="spot-detail-amenities">
+                    <h2>What this place offers?</h2>
+                    <div class="facilities-grid">
+                        <div
+                            v-for="facility in facilities"
+                            :key="facility.id"
+                            class="facility-card"
+                        >
+                            <span class="material-symbols-outlined">
+                                settings
+                            </span>
+                            <div class="facility-text">
+                                <div>{{ facility.name }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
             </div>
-            <hr />
-
             <div class="spot-detail-map">
                 <h2>How to get here?</h2>
                 <div class="warning">
-                        <span class="material-symbols-outlined"> warning </span>
-                        The provided address is for reference only. For the
-                        exact location, book the spot now and our team will
-                        share the precise address with you!
-                    </div>
+                    <span class="material-symbols-outlined"> warning </span>
+                    The provided address is for reference only. For the exact
+                    location, book the spot now and our team will share the
+                    precise address with you!
+                </div>
                 <MapContainer
                     :center="center"
                     :spotDetails="selectedSpot[0]"
@@ -251,6 +261,7 @@ import {
 } from '@/constant/enums';
 import { mapState } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
+import { FACILITIES_DATA } from '@/constant/constant';
 
 export default {
     name: 'TemplateSpotDetail',
@@ -267,6 +278,7 @@ export default {
     data() {
         return {
             BookingStatus: BookingStatus,
+            facilities: FACILITIES_DATA,
         };
     },
     props: {
@@ -412,30 +424,75 @@ hr {
 }
 
 .spot-detail-amenities {
-    width: 600px;
-    min-height: 158px;
-    margin-left: 20px;
+    padding: 20px;
+    max-width: 50%;
+}
 
-    @media only screen and (max-width: 1024px) {
-        margin-left: 0px;
+h2 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 26px;
+    color: black;
+}
+
+.facilities-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 16px;
+    justify-content: flex-start;
+}
+
+.facility-card {
+   flex: 1 1 calc(33.333% - 20px);
+   max-width: calc(33.333% - 20px);
+    border: 1px solid hsla(141, 93%, 30%, 0.442);
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.316);
+    padding: 16px;
+    text-align: center;
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 10px;
+}
+
+.facility-card:hover {
+    transform: translateY(-4px);
+}
+
+.facility-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+}
+
+.facility-text {
+    font-size: 14px;
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.material-symbols-outlined {
+    color: hsl(141, 93%, 30%);
+}
+
+@media screen and (max-width: 768px) {
+    .facility-card {
+        flex: 1 1 calc(50% - 20px);
+        max-width: calc(50% - 20px);
     }
 
-    h2 {
-        font-size: 24px;
-        font-weight: 500;
-        margin-bottom: 26px;
-        color: black;
+    .spot-detail-amenities {
+        max-width: 100%;
     }
+}
 
-    ul {
-        list-style: none;
-    }
-
-    ul li:before {
-        content: '✓ ';
-        color: hsl(141, 53%, 53%);
-        font-weight: bold;
-        font-size: 20px;
+@media screen and (max-width: 480px) {
+    .facility-card {
+        flex: 1 1 100%;
+        max-width: 100%;
     }
 }
 
@@ -588,7 +645,7 @@ hr {
     display: flex;
     margin-bottom: 20px;
     margin-top: -20px;
-    span{
+    span {
         color: red;
     }
 }
