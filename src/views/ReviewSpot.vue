@@ -668,7 +668,6 @@ export default {
              const FacilitiesName = this.SO.Facilities.map((facility) => {
               return facility.Name;
            })
-
            return JSON.stringify(FacilitiesName) !== JSON.stringify(this.Facilities);
            }
 
