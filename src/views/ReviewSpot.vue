@@ -671,7 +671,6 @@ export default {
         },
         async handleThumbnailUpload(event) {
             const file = event.target.files[0];
-            console.log("This is image", event.target.files[0]);
             if (!file) return;
 
             const options = {
@@ -682,18 +681,14 @@ export default {
 
             try {
                 const compressedFile = await imageCompression(file, options);
-                console.log("This is compressed image", compressedFile);
                 // Now send `compressedFile` to server
-                const formData = new FormData();
-                formData.append('thumbnail', compressedFile);
                 this.SO.thumbnailImage = URL.createObjectURL(compressedFile);
                 const res = await ImageUploadService.uploadImages(
                     [compressedFile],
                     this.SO.spotId,
                 );
-                console.log('Thumbnail uploaded successfully', res);
+                this.SO.thumbnailImage = res.urls[0];
             } catch (error) {
-                console.log("Error a gai", error);
                 console.error(error);
             }
         },

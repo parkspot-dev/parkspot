@@ -26,50 +26,49 @@ async function uploadImages(Images, namePrefix) {
     };
     const [baseUrl, queryParams] = sasUrl.split('?');
     const uploadPromises = Images.map(async (img, index) => {
-        // TODO: See other way to handle epoch time for unique filename
-        const epochTime = Date.now() + index; // Using index to make the timestamp unique
-        const extension = extensionMap[img.file.type];
+    const epochTime = Date.now() + index;
 
-        let modifiedBase = `${baseUrl}/${namePrefix}:${epochTime}${extension}`;
-        const uploadUrl = `${modifiedBase}?${queryParams}`;
+    const fileObj = img.file || img; 
+    const extension = extensionMap[fileObj.type];
+    let modifiedBase = `${baseUrl}/${namePrefix}:${epochTime}${extension}`;
+    const uploadUrl = `${modifiedBase}?${queryParams}`;
 
-        // Return fetch promise for each file
-        return fetch(uploadUrl, {
-            method: 'PUT',
-            headers: {
-                'x-ms-blob-type': 'BlockBlob',
-                'Content-Type':
-                    img.file.type || 'application/octet-stream',
-            },
-            body: img.file,
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return {
-                        fileName: img.file.name,
-                        url: modifiedBase,
-                        status: 'success',
-                    };
-                } else {
-                    return response.text().then((errorText) => {
-                        return {
-                            fileName: img.file.name,
-                            url: modifiedBase,
-                            status: 'failed',
-                            error: errorText,
-                        };
-                    });
-                }
-            })
-            .catch((err) => {
+    return fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+            'x-ms-blob-type': 'BlockBlob',
+            'Content-Type': fileObj.type || 'application/octet-stream',
+        },
+        body: fileObj,
+    })
+        .then((response) => {
+            if (response.ok) {
                 return {
-                    fileName: img.file.name,
+                    fileName: fileObj.name,
                     url: modifiedBase,
-                    status: 'failed',
-                    error: err.message,
+                    status: 'success',
                 };
-            });
-    });
+            } else {
+                return response.text().then((errorText) => {
+                    return {
+                        fileName: fileObj.name,
+                        url: modifiedBase,
+                        status: 'failed',
+                        error: errorText,
+                    };
+                });
+            }
+        })
+        .catch((err) => {
+            return {
+                fileName: fileObj.name,
+                url: modifiedBase,
+                status: 'failed',
+                error: err.message,
+            };
+        });
+});
+
     const uploadResults = await Promise.all(uploadPromises);
 
     // Check for failed uploads
