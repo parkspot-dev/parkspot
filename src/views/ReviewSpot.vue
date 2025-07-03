@@ -131,7 +131,7 @@
                         ></textarea>
                     </div>
 
-                    <div class="form-field-column">
+                     <div class="form-field-column">
                         <!-- Thumbnail image -->
                         <div class="form-field">
                             <label for="thumbnailImage">Thumbnail Image:</label>
@@ -180,7 +180,45 @@
                                 Add New URL
                             </button>
                         </div>
-                    </div>
+                    </div> 
+
+
+
+
+
+
+
+
+                  <!-- Thumbnail image -->
+                        <div class="form-field">
+                            <label for="thumbnailImage">Thumbnail Image:</label>
+                            <input
+                                type="text"
+                                v-model="SO.thumbnailImage"
+                                readonly
+                            />
+                            <div class="thumbnail-image-wrapper">
+                                <input
+                                    @change="handleThumbnailUpload"
+                                    accept="image/*"
+                                    id="thumbnailImage"
+                                    type="file"
+                                />
+                                <img
+                                    v-if="SO.thumbnailImage"
+                                    :src="SO.thumbnailImage"
+                                    style="
+                                        max-width: 150px;
+                                        max-height: 150px;
+                                        margin-top: 10px;
+                                    "
+                                    alt="preview"
+                                />
+                            </div>
+                        </div>
+
+
+
 
                     <!-- Upload Images -->
                     <div class="form-field">
@@ -423,6 +461,7 @@ import { SiteType } from '../constant/enums';
 import { SpotRequestStatus } from '../constant/enums';
 import { RentUnit } from '../constant/enums';
 import imageCompression from 'browser-image-compression';
+import ImageUploadService from '@/services/ImageUploadService';
 
 export default {
     name: 'ReviewSpot',
@@ -632,29 +671,29 @@ export default {
         },
         async handleThumbnailUpload(event) {
             const file = event.target.files[0];
-
+            console.log("This is image", event.target.files[0]);
             if (!file) return;
 
             const options = {
-                maxWidthOrHeight: 300, // resize max dimension to 300px
-                maxSizeMB: 0.2, // optional compression as well (0.2 MB)
+                maxWidthOrHeight: 128,
+                maxSizeMB: 0.2,
                 useWebWorker: true,
             };
 
             try {
                 const compressedFile = await imageCompression(file, options);
-
+                console.log("This is compressed image", compressedFile);
                 // Now send `compressedFile` to server
                 const formData = new FormData();
                 formData.append('thumbnail', compressedFile);
-
-                await fetch('/api/upload', {
-                    method: 'POST',
-                    body: formData,
-                });
-
-                console.log('Thumbnail uploaded successfully');
+                this.SO.thumbnailImage = URL.createObjectURL(compressedFile);
+                const res = await ImageUploadService.uploadImages(
+                    [compressedFile],
+                    this.SO.spotId,
+                );
+                console.log('Thumbnail uploaded successfully', res);
             } catch (error) {
+                console.log("Error a gai", error);
                 console.error(error);
             }
         },
