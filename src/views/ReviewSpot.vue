@@ -135,12 +135,9 @@
                         <!-- Thumbnail image -->
                         <div class="form-field">
                             <label for="thumbnailImage">Thumbnail Image:</label>
-                            <input
-                                id="thumbnailImage"
-                                placeholder="Enter image url"
-                                type="text"
-                                v-model="SO.thumbnailImage"
-                            />
+                            <ImageUpload
+                            v-model:images="SO.uploadImages"
+                        ></ImageUpload>
                         </div>
 
                         <!-- Spot Images URLs -->
@@ -425,6 +422,7 @@ import { ParkingSize } from '../constant/enums';
 import { SiteType } from '../constant/enums';
 import { SpotRequestStatus } from '../constant/enums';
 import { RentUnit } from '../constant/enums';
+import imageCompression from 'browser-image-compression';
 
 export default {
     name: 'ReviewSpot',
@@ -631,6 +629,34 @@ export default {
             }
             this.baseAmountError = '';
             return true;
+        },
+        async handleThumbnailUpload(event) {
+            const file = event.target.files[0];
+
+            if (!file) return;
+
+            const options = {
+                maxWidthOrHeight: 300, // resize max dimension to 300px
+                maxSizeMB: 0.2, // optional compression as well (0.2 MB)
+                useWebWorker: true,
+            };
+
+            try {
+                const compressedFile = await imageCompression(file, options);
+
+                // Now send `compressedFile` to server
+                const formData = new FormData();
+                formData.append('thumbnail', compressedFile);
+
+                await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                console.log('Thumbnail uploaded successfully');
+            } catch (error) {
+                console.error(error);
+            }
         },
     },
     watch: {

@@ -16,6 +16,7 @@
         "aos": "^2.3.4",
         "axios": "^1.7.9",
         "boxicons": "^2.1.4",
+        "browser-image-compression": "^2.0.2",
         "buefy": "npm:@ntohq/buefy-next@^0.1.4",
         "bulma": "^1.0.3",
         "caniuse-lite": "^1.0.30001690",
