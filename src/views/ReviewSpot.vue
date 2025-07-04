@@ -841,8 +841,8 @@ export default {
 }
 
 .thumbnail-image-wrapper{
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: center;
 }
 
