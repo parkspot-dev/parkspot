@@ -131,94 +131,33 @@
                         ></textarea>
                     </div>
 
-                     <div class="form-field-column">
-                        <!-- Thumbnail image -->
-                        <div class="form-field">
-                            <label for="thumbnailImage">Thumbnail Image:</label>
-                            <ImageUpload
-                            v-model:images="SO.uploadImages"
-                        ></ImageUpload>
-                        </div>
-
-                        <!-- Spot Images URLs -->
-                        <div class="form-field">
-                            <label for="spotImages" style="margin-bottom: 4px"
-                                >Spot Images:</label
-                            >
-                            <div
-                                :key="index"
-                                class="url-entry"
-                                v-for="(_, index) in SO.spotImagesList"
-                            >
-                                <div style="display: flex; gap: 8px">
-                                    <input
-                                        type="text"
-                                        :placeholder="'Enter spot Image URL'"
-                                        v-model="SO.spotImagesList[index]"
-                                        @blur="validateSpotImageUrl(index)"
-                                        class="full-width-input"
-                                    />
-                                    <AtomIcon
-                                        :icon="'delete'"
-                                        @click="removeUrlField(index)"
-                                        class="remove-url-btn"
-                                    >
-                                    </AtomIcon>
-                                </div>
-                                <span
-                                    class="error"
-                                    v-if="spotImagesError[index]"
-                                >
-                                    {{ spotImagesError[index] }}
-                                </span>
-                            </div>
-                            <!-- Add a new URL -->
-                            <button
-                                @click="addNewUrlField"
-                                class="add-new-url-btn"
-                            >
-                                Add New URL
-                            </button>
-                        </div>
-                    </div> 
-
-
-
-
-
-
-
-
-                  <!-- Thumbnail image -->
-                        <div class="form-field">
-                            <label for="thumbnailImage">Thumbnail Image:</label>
+                    <!-- Thumbnail image -->
+                    <div class="form-field">
+                        <label for="thumbnailImage">Thumbnail Image:</label>
+                        <input
+                            type="text"
+                            v-model="SO.thumbnailImage"
+                            readonly
+                        />
+                        <div class="thumbnail-image-wrapper">
                             <input
-                                type="text"
-                                v-model="SO.thumbnailImage"
-                                readonly
+                                @change="handleThumbnailUpload"
+                                accept="image/*"
+                                id="thumbnailImage"
+                                type="file"
                             />
-                            <div class="thumbnail-image-wrapper">
-                                <input
-                                    @change="handleThumbnailUpload"
-                                    accept="image/*"
-                                    id="thumbnailImage"
-                                    type="file"
-                                />
-                                <img
-                                    v-if="SO.thumbnailImage"
-                                    :src="SO.thumbnailImage"
-                                    style="
-                                        max-width: 150px;
-                                        max-height: 150px;
-                                        margin-top: 10px;
-                                    "
-                                    alt="preview"
-                                />
-                            </div>
+                            <img
+                                v-if="SO.thumbnailImage"
+                                :src="SO.thumbnailImage"
+                                style="
+                                    max-width: 150px;
+                                    max-height: 150px;
+                                    margin-top: 10px;
+                                "
+                                alt="preview"
+                            />
                         </div>
-
-
-
+                    </div>
 
                     <!-- Upload Images -->
                     <div class="form-field">
@@ -899,6 +838,12 @@ export default {
 }
 .url-entry {
     margin-bottom: 8px;
+}
+
+.thumbnail-image-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @media (max-width: 1024px) {
