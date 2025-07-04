@@ -388,19 +388,19 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import { ParkingSize } from '../constant/enums';
+import { RentUnit } from '../constant/enums';
+import { SiteType } from '../constant/enums';
+import { SpotRequestStatus } from '../constant/enums';
 import AtomButton from '../components/atoms/AtomButton.vue';
 import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
-import LoaderModal from '@/components/extras/LoaderModal.vue';
+import imageCompression from 'browser-image-compression';
 import ImageGallery from '@/components/organisms/OrganismImageGallery.vue';
 import ImageUpload from '@/components/global/ImageUpload.vue';
-import { ParkingSize } from '../constant/enums';
-import { SiteType } from '../constant/enums';
-import { SpotRequestStatus } from '../constant/enums';
-import { RentUnit } from '../constant/enums';
-import imageCompression from 'browser-image-compression';
 import ImageUploadService from '@/services/ImageUploadService';
+import LoaderModal from '@/components/extras/LoaderModal.vue';
 
 export default {
     name: 'ReviewSpot',
@@ -620,7 +620,6 @@ export default {
 
             try {
                 const compressedFile = await imageCompression(file, options);
-                // Now send `compressedFile` to server
                 this.SO.thumbnailImage = URL.createObjectURL(compressedFile);
                 const res = await ImageUploadService.uploadImages(
                     [compressedFile],

@@ -26,13 +26,15 @@ async function uploadImages(Images, namePrefix) {
     };
     const [baseUrl, queryParams] = sasUrl.split('?');
     const uploadPromises = Images.map(async (img, index) => {
-    const epochTime = Date.now() + index;
+    // TODO: See other way to handle epoch time for unique filename
+    const epochTime = Date.now() + index; // Using index to make the timestamp unique
 
     const fileObj = img.file || img; 
     const extension = extensionMap[fileObj.type];
     let modifiedBase = `${baseUrl}/${namePrefix}:${epochTime}${extension}`;
     const uploadUrl = `${modifiedBase}?${queryParams}`;
-
+    
+    // Return fetch promise for each file
     return fetch(uploadUrl, {
         method: 'PUT',
         headers: {
