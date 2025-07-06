@@ -403,7 +403,7 @@ const actions = {
         const response = await mayaClient.post(
             `/owner/spot-update?spot-id=${state.SO.spotId}`,
             {},
-            { timeout : 20000 }
+            { timeout : 2000 }
         );
         if (response.ErrorCode) {
             // Network issues or server errors could cause the API call to fail.
