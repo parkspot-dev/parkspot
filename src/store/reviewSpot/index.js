@@ -405,7 +405,7 @@ const actions = {
         );
         if (response.ErrorCode) {
             // Network issues or server errors could cause the API call to fail.
-            commit('set-error-msg', response.DisplayMsg);
+            commit('set-error-msg', response.ErrorMsg);
         } else {
             commit(
                 'set-success-msg',
