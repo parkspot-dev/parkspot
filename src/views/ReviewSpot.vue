@@ -487,10 +487,10 @@ export default {
         },
         isFormValid() {
             return (
-                this.validateBaseAmount() ||
-                this.validateLatLong() ||
-                this.validateCity() ||
-                this.validateMobile() ||
+                this.validateBaseAmount() &&
+                this.validateLatLong() &&
+                this.validateCity() &&
+                this.validateMobile() &&
                 this.validateSpotImageUrl()
             );
         },
