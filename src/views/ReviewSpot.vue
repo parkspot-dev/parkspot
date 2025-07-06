@@ -486,7 +486,13 @@ export default {
             return formChanged && this.isFormValid;
         },
         isFormValid() {
-            return this.Rent.baseAmount && this.Rent.baseAmount > 0;
+            return (
+                this.validateBaseAmount() ||
+                this.validateLatLong() ||
+                this.validateCity() ||
+                this.validateMobile() ||
+                this.validateSpotImageUrl()
+            );
         },
         spotImages() {
             let spotImages = [];
