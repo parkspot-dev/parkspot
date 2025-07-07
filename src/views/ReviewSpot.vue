@@ -596,13 +596,22 @@ export default {
             });
         },
         onLastCallDateUpdate(updatedDate) {
-            this.Booking.lastCallDate = updatedDate.toISOString();
+            const dateObj = new Date(updatedDate);
+            if (!isNaN(dateObj)) {
+                this.Booking.lastCallDate = dateObj.toISOString();
+            }
         },
         onStartDateUpdate(updatedDate) {
-            this.Booking.startDate = updatedDate.toISOString();
+            const dateObj = new Date(updatedDate);
+            if (!isNaN(dateObj)) {
+                this.Booking.startDate = dateObj.toISOString();
+            }
         },
         onEndDateUpdate(updatedDate) {
-            this.Booking.endDate = updatedDate.toISOString();
+            const dateObj = new Date(updatedDate);
+            if (!isNaN(dateObj)) {
+                this.Booking.endDate = dateObj.toISOString();
+            }
         },
         updateInitialFormState() {
             this.initialFormData = JSON.parse(
