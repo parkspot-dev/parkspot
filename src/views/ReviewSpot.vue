@@ -596,14 +596,13 @@ export default {
             });
         },
         onLastCallDateUpdate(updatedDate) {
-    
-                this.Booking.lastCallDate = updatedDate;
+            this.Booking.lastCallDate = updatedDate;
         },
         onStartDateUpdate(updatedDate) {
             this.Booking.startDate = updatedDate;
         },
         onEndDateUpdate(updatedDate) {
-             this.Booking.endDate = updatedDate;
+            this.Booking.endDate = updatedDate;
         },
         updateInitialFormState() {
             this.initialFormData = JSON.parse(
