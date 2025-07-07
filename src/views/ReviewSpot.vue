@@ -388,6 +388,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+
+import imageCompression from 'browser-image-compression';
+
 import { ParkingSize } from '../constant/enums';
 import { RentUnit } from '../constant/enums';
 import { SiteType } from '../constant/enums';
@@ -396,7 +399,6 @@ import AtomButton from '../components/atoms/AtomButton.vue';
 import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
-import imageCompression from 'browser-image-compression';
 import ImageGallery from '@/components/organisms/OrganismImageGallery.vue';
 import ImageUpload from '@/components/global/ImageUpload.vue';
 import ImageUploadService from '@/services/ImageUploadService';
