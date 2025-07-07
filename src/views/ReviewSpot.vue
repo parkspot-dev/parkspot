@@ -596,22 +596,14 @@ export default {
             });
         },
         onLastCallDateUpdate(updatedDate) {
-            const dateObj = new Date(updatedDate);
-            if (!isNaN(dateObj)) {
-                this.Booking.lastCallDate = dateObj.toISOString();
-            }
+    
+                this.Booking.lastCallDate = updatedDate;
         },
         onStartDateUpdate(updatedDate) {
-            const dateObj = new Date(updatedDate);
-            if (!isNaN(dateObj)) {
-                this.Booking.startDate = dateObj.toISOString();
-            }
+            this.Booking.startDate = updatedDate;
         },
         onEndDateUpdate(updatedDate) {
-            const dateObj = new Date(updatedDate);
-            if (!isNaN(dateObj)) {
-                this.Booking.endDate = dateObj.toISOString();
-            }
+             this.Booking.endDate = updatedDate;
         },
         updateInitialFormState() {
             this.initialFormData = JSON.parse(
