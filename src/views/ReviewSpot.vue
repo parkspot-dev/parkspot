@@ -131,57 +131,31 @@
                         ></textarea>
                     </div>
 
-                    <div class="form-field-column">
-                        <!-- Thumbnail image -->
-                        <div class="form-field">
-                            <label for="thumbnailImage">Thumbnail Image:</label>
+                    <!-- Thumbnail image -->
+                    <div class="form-field">
+                        <label for="thumbnailImage">Thumbnail Image:</label>
+                        <input
+                            type="text"
+                            v-model="SO.thumbnailImage"
+                            readonly
+                        />
+                        <div class="thumbnail-image-wrapper">
                             <input
+                                @change="handleThumbnailUpload"
+                                accept="image/*"
                                 id="thumbnailImage"
-                                placeholder="Enter image url"
-                                type="text"
-                                v-model="SO.thumbnailImage"
+                                type="file"
                             />
-                        </div>
-
-                        <!-- Spot Images URLs -->
-                        <div class="form-field">
-                            <label for="spotImages" style="margin-bottom: 4px"
-                                >Spot Images:</label
-                            >
-                            <div
-                                :key="index"
-                                class="url-entry"
-                                v-for="(_, index) in SO.spotImagesList"
-                            >
-                                <div style="display: flex; gap: 8px">
-                                    <input
-                                        type="text"
-                                        :placeholder="'Enter spot Image URL'"
-                                        v-model="SO.spotImagesList[index]"
-                                        @blur="validateSpotImageUrl(index)"
-                                        class="full-width-input"
-                                    />
-                                    <AtomIcon
-                                        :icon="'delete'"
-                                        @click="removeUrlField(index)"
-                                        class="remove-url-btn"
-                                    >
-                                    </AtomIcon>
-                                </div>
-                                <span
-                                    class="error"
-                                    v-if="spotImagesError[index]"
-                                >
-                                    {{ spotImagesError[index] }}
-                                </span>
-                            </div>
-                            <!-- Add a new URL -->
-                            <button
-                                @click="addNewUrlField"
-                                class="add-new-url-btn"
-                            >
-                                Add New URL
-                            </button>
+                            <img
+                                v-if="SO.thumbnailImage"
+                                :src="SO.thumbnailImage"
+                                style="
+                                    max-width: 150px;
+                                    max-height: 150px;
+                                    margin-top: 10px;
+                                "
+                                alt="preview"
+                            />
                         </div>
                     </div>
 
@@ -414,17 +388,21 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+
+import imageCompression from 'browser-image-compression';
+
+import { ParkingSize } from '../constant/enums';
+import { RentUnit } from '../constant/enums';
+import { SiteType } from '../constant/enums';
+import { SpotRequestStatus } from '../constant/enums';
 import AtomButton from '../components/atoms/AtomButton.vue';
 import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
-import LoaderModal from '@/components/extras/LoaderModal.vue';
 import ImageGallery from '@/components/organisms/OrganismImageGallery.vue';
 import ImageUpload from '@/components/global/ImageUpload.vue';
-import { ParkingSize } from '../constant/enums';
-import { SiteType } from '../constant/enums';
-import { SpotRequestStatus } from '../constant/enums';
-import { RentUnit } from '../constant/enums';
+import ImageUploadService from '@/services/ImageUploadService';
+import LoaderModal from '@/components/extras/LoaderModal.vue';
 
 export default {
     name: 'ReviewSpot',
@@ -631,6 +609,28 @@ export default {
             }
             this.baseAmountError = '';
             return true;
+        },
+        async handleThumbnailUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const options = {
+                maxWidthOrHeight: 128,
+                maxSizeMB: 0.2,
+                useWebWorker: true,
+            };
+
+            try {
+                const compressedFile = await imageCompression(file, options);
+                this.SO.thumbnailImage = URL.createObjectURL(compressedFile);
+                const res = await ImageUploadService.uploadImages(
+                    [compressedFile],
+                    this.SO.spotId,
+                );
+                this.SO.thumbnailImage = res.urls[0];
+            } catch (error) {
+                console.error(error);
+            }
         },
     },
     watch: {
@@ -839,6 +839,12 @@ export default {
 }
 .url-entry {
     margin-bottom: 8px;
+}
+
+.thumbnail-image-wrapper{
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }
 
 @media (max-width: 1024px) {
