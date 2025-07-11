@@ -461,36 +461,3 @@ export const WHY_CHOOSE_PARKSPOT_SOCIETY_AUTOMATION = [
             'We ensure your system runs smoothly with regular maintenance and updates.',
     },
 ];
-
-export const FACILITIES_DATA = [
-    {
-        id: "covered",
-        name: 'Covered',
-        description: 'Covered parking spaces are protected from the elements, providing shade and shelter for your vehicle.',
-        icon_url: 'https://cdn-icons-png.flaticon.com/512/1040/1040204.png',
-    },
-    {
-        id: "gated",
-        name: 'Gated',
-        description: 'Gated parking spaces offer enhanced security with controlled access, ensuring your vehicle is safe and secure.',
-        icon_url: 'https://cdn-icons-png.flaticon.com/512/1040/1040204.png',
-    },
-    {
-        id: "cctv_camera",
-        name: 'CCTV Camera',
-        description: 'CCTV camera surveillance provides an extra layer of security, monitoring the parking area for any suspicious activity.',
-        icon_url: 'https://cdn-icons-png.flaticon.com/512/1040/1040204.png',
-    },
-    {
-        id: "security_guard",
-        name: 'Security Guard',
-        description: 'Security guards on-site provide immediate assistance and enhance security, ensuring a safe parking environment.',
-        icon_url: 'https://cdn-icons-png.flaticon.com/512/1040/1040204.png',
-    },
-    {
-        id: "24_hours_access",
-        name: '24 Hours Access',
-        description: '24-hour access allows you to park or retrieve your vehicle at any time, providing convenience and flexibility.',
-        icon_url: 'https://cdn-icons-png.flaticon.com/512/1040/1040204.png',
-    }
-]

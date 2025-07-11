@@ -11,7 +11,7 @@
                         :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in'>Parkspot</a></h4><p>Location - ${locationName}</p>`"
                     >
                         <button
-                            v-if="this.images && this.images.length > 0"
+                            v-if="this.removable && this.images && this.images.length > 0"
                             @click.prevent.stop="removeImage(index)"
                             class="delete-btn"
                         >
@@ -57,6 +57,10 @@ export default {
             type: String,
             default: '',
         },
+        removable: {
+            type: Boolean,
+            default: true
+        }
     },
     data() {
         return {

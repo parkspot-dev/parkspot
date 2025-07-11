@@ -669,7 +669,7 @@ export default {
               return facility.Name;
            })
 
-           return JSON.stringify(FacilitiesName) === JSON.stringify(this.Facilities);
+           return JSON.stringify(FacilitiesName) !== JSON.stringify(this.Facilities);
            }
 
            return false;

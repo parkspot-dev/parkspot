@@ -5,6 +5,7 @@
             <ImageGallery
                 :images="displayImages"
                 :locationName="locationName"
+                :removable="false"
             ></ImageGallery>
             <!-- Rate Card Organism -->
             <div class="rate-card-container">
@@ -30,19 +31,19 @@
 
             <div>
                 <hr />
-                <div class="spot-detail-amenities">
+                <div v-if="spotDetails.Facilities.length > 0" class="spot-detail-amenities">
                     <h2>What this place offers?</h2>
                     <div class="facilities-grid">
                         <div
-                            v-for="facility in facilities"
-                            :key="facility.id"
+                            v-for="facility in spotDetails.Facilities"
+                            :key="facility.ID"
                             class="facility-card"
                         >
                             <span class="material-symbols-outlined">
-                                settings
+                                {{ facility.IconURL }}
                             </span>
                             <div class="facility-text">
-                                <div>{{ facility.name }}</div>
+                                <div>{{ facility.Name }}</div>
                             </div>
                         </div>
                     </div>
@@ -261,7 +262,6 @@ import {
 } from '@/constant/enums';
 import { mapState } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
-import { FACILITIES_DATA } from '@/constant/constant';
 
 export default {
     name: 'TemplateSpotDetail',
@@ -278,7 +278,6 @@ export default {
     data() {
         return {
             BookingStatus: BookingStatus,
-            facilities: FACILITIES_DATA,
         };
     },
     props: {
@@ -497,10 +496,9 @@ h2 {
 }
 
 .spot-detail-map {
-    margin-left: 20px;
-
+    margin: 150px 0 0 20px;
     @media only screen and (max-width: 1024px) {
-        margin-left: 0px;
+        margin: 0;
     }
 
     h2 {
