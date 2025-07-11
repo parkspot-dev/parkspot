@@ -316,7 +316,7 @@
                                         ).toLocaleDateString('en-GB')
                                     }}
                                 </b>
-                            </span> 
+                            </span>
                             <AtomDatePicker
                                 :assignedDate="props.row.NextCall"
                                 :size="'is-small'"
