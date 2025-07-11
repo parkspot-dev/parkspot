@@ -162,11 +162,13 @@
                         <p v-if="props.row.Agent !== 'NA' || isAdmin">
                             Mobile:
                             <button
+                                v-if="props.row.Agent !== 'NA'"
                                 @click="onConnect(props.row)"
                                 class="btn px-2"
                             >
                                 Connect
                             </button>
+                            <strong v-else >{{ props.row.Mobile }}</strong>
                         </p>
                         <p>
                             Email:
@@ -314,7 +316,7 @@
                                         ).toLocaleDateString('en-GB')
                                     }}
                                 </b>
-                            </span>
+                            </span> 
                             <AtomDatePicker
                                 :assignedDate="props.row.NextCall"
                                 :size="'is-small'"
