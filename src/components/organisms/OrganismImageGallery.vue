@@ -3,13 +3,20 @@
         <div class="gallery-container">
             <div id="lightgallery">
                 <!-- Loop through displayImages and create image gallery items -->
-                <template v-for="(image, _) in displayImages" :key="image">
+                <template v-for="(image, index) in displayImages" :key="image">
                     <a
                         class="gallery-item"
                         :class="imageSize"
                         :href="image"
                         :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in'>Parkspot</a></h4><p>Location - ${locationName}</p>`"
                     >
+                        <button
+                            v-if="this.images && this.images.length > 0"
+                            @click.prevent.stop="removeImage(index)"
+                            class="delete-btn"
+                        >
+                            <AtomIcon icon="close" />
+                        </button>
                         <img class="img-responsive" :src="image" />
                     </a>
                 </template>
@@ -22,9 +29,12 @@
 import 'lightgallery.js';
 import 'lightgallery.js/dist/css/lightgallery.css';
 import Parkspot_Image from '../../../public/assets/Parkspot_default.png';
-
+import AtomIcon from '@/components/atoms/AtomIcon.vue';
 export default {
     name: 'ImageGallery',
+    components: {
+        AtomIcon,
+    },
     props: {
         images: {
             /**
@@ -94,6 +104,10 @@ export default {
                 default:
                     this.imageSize = 'image-five';
             }
+        },
+
+        removeImage(index) {
+            this.$emit('delete-image', index);
         },
     },
 };
@@ -269,5 +283,29 @@ export default {
             width: 100%;
         }
     }
+}
+
+.delete-btn {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    border: none;
+    color: var(--parkspot-white);
+    cursor: pointer;
+    display: flex;
+    height: 20px;
+    justify-content: center;
+    padding: 8px;
+    position: absolute;
+    position: absolute;
+    right: 16% !important;
+    right: 4px;
+    top: 16% !important;
+    top: 4px;
+    transition: background 0.1s;
+    width: 20px;
+}
+.delete-btn:hover {
+    background: rgba(255, 0, 0, 0.8);
 }
 </style>

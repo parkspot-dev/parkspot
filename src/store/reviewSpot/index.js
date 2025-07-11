@@ -264,6 +264,11 @@ const actions = {
         return await mayaClient.patch('/owner/spot-request', spotRequest);
     },
 
+    async deleteImage({ state }, index) {
+       const filteredImages = state.SO.spotImagesList.filter((_,idx) => index !== idx);
+       state.SO.spotImagesList = filteredImages;
+    },
+
     // Prepares the payload for the spot request update
     async prepareSpotRequest({ state, dispatch }, uploadedImageUrls) {
         // Extract latitude and longitude

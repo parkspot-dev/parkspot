@@ -6,6 +6,7 @@
             <ImageGallery
                 :images="spotImages"
                 :locationName="SO.area"
+                @delete-image="onDeleteImage"
             ></ImageGallery>
             <!-- SO Details Section -->
             <div class="form-section so-form-section">
@@ -493,6 +494,7 @@ export default {
             'validateLatLong',
             'validateMobile',
             'validateSpotImageUrl',
+            'deleteImage',
         ]),
         setSpotId() {
             this.SO.spotId = this.$route.query.requestId;
@@ -631,6 +633,9 @@ export default {
             } catch (error) {
                 console.error(error);
             }
+        },
+        onDeleteImage(index) {
+            this.deleteImage(index);
         },
     },
     watch: {
