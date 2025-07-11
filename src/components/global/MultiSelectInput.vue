@@ -1,5 +1,8 @@
 <template>
-    <div class="select-wrapper custom-multi-select">
+    <div
+        class="select-wrapper custom-multi-select"
+        :class="{ border: showBorder }"
+    >
         <label :for="name" class="label" v-if="label">{{ label }}</label>
 
         <div class="selected-items" @click="focusInput">
@@ -62,6 +65,10 @@ const props = defineProps({
     valueKey: {
         type: String,
         default: 'value',
+    },
+    showBorder: {
+        type: Boolean,
+        default: false,
     },
 });
 
@@ -167,6 +174,12 @@ onBeforeUnmount(() =>
 .select-wrapper {
     display: flex;
     flex-direction: column;
+    min-width: 100%;
+}
+
+.border {
+    border: 1px solid gray;
+    border-radius: 2px;
 }
 .selected-items {
     align-items: center;
