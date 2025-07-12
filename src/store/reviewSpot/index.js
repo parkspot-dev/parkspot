@@ -478,6 +478,7 @@ const actions = {
             const encodedSpotId = encodeURIComponent(response.SiteID);
             const url = `/spot-details/${encodedSpotId}`;
             window.open(url, '_blank');
+            router.push('/internal/spot-requests')
         }
         commit('set-loading', false);
         return response;
