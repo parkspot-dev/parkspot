@@ -476,7 +476,8 @@ const actions = {
                 'Your request was submitted successfully',
             );
             const encodedSpotId = encodeURIComponent(response.SiteID);
-            router.push(`/spot-details/${encodedSpotId}`);
+            const url = `/spot-details/${encodedSpotId}`;
+            window.open(url, '_blank');
         }
         commit('set-loading', false);
         return response;
