@@ -161,14 +161,14 @@
                         </p>
                         <p v-if="props.row.Agent !== 'NA' || isAdmin">
                             Mobile:
+                            <strong v-if="isAdmin" >{{ props.row.Mobile }}</strong>
                             <button
-                                v-if="props.row.Agent !== 'NA'"
+                                v-else
                                 @click="onConnect(props.row)"
                                 class="btn px-2"
                             >
                                 Connect
-                            </button>
-                            <strong v-else >{{ props.row.Mobile }}</strong>
+                            </button> 
                         </p>
                         <p>
                             Email:
