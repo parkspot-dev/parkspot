@@ -494,7 +494,7 @@ export default {
             );
         },
         isFormValid() {
-            return this.Rent.baseAmount && this.Rent.baseAmount > 0;
+            return this.validateFormFields();
         },
         spotImages() {
             let spotImages = [];
@@ -524,7 +524,8 @@ export default {
             'validateMobile',
             'validateSpotImageUrl',
             'deleteImage',
-            'setUpdatedFacilities'
+            'setUpdatedFacilities',
+            'validateFormFields'
         ]),
         setSpotId() {
             this.SO.spotId = this.$route.query.requestId;
