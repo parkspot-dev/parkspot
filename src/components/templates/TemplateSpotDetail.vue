@@ -5,6 +5,7 @@
             <ImageGallery
                 :images="displayImages"
                 :locationName="locationName"
+                :removable="false"
             ></ImageGallery>
             <!-- Rate Card Organism -->
             <div class="rate-card-container">
@@ -27,26 +28,42 @@
                     </p>
                 </div>
             </div>
-            <hr />
 
-            <div class="spot-detail-amenities">
-                <h2>What this place offers</h2>
-                <ul>
-                    <li>Covered</li>
-                    <li>Gated</li>
-                    <li>Security Guard</li>
-                </ul>
+            <div>
+                <hr />
+                <div
+                    v-if="
+                        spotDetails.Facilities &&
+                        spotDetails.Facilities.length > 0
+                    "
+                    class="spot-detail-amenities"
+                >
+                    <h2>What this place offers?</h2>
+                    <div class="facilities-grid">
+                        <div
+                            v-for="facility in spotDetails.Facilities"
+                            :key="facility.FacilityID"
+                            class="facility-card"
+                        >
+                            <span class="material-symbols-outlined">
+                                {{ facility.IconURL }}
+                            </span>
+                            <div class="facility-text">
+                                <div>{{ facility.Name }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
             </div>
-            <hr />
-
             <div class="spot-detail-map">
                 <h2>How to get here?</h2>
                 <div class="warning">
-                        <span class="material-symbols-outlined"> warning </span>
-                        The provided address is for reference only. For the
-                        exact location, book the spot now and our team will
-                        share the precise address with you!
-                    </div>
+                    <span class="material-symbols-outlined"> warning </span>
+                    The provided address is for reference only. For the exact
+                    location, book the spot now and our team will share the
+                    precise address with you!
+                </div>
                 <MapContainer
                     :center="center"
                     :spotDetails="selectedSpot[0]"
@@ -333,6 +350,7 @@ export default {
 hr {
     width: 600px;
 }
+
 .spot-image-container {
     width: 100%;
     height: 400px;
@@ -362,10 +380,12 @@ hr {
         left: 50%;
         transform: translate(-50%, 0);
     }
+
     .card-position {
         position: absolute;
         top: 0;
         right: 0;
+
         @media only screen and (max-width: 1024px) {
             position: relative;
         }
@@ -374,6 +394,7 @@ hr {
 
 .rate-card-container-mobile {
     display: none;
+
     @media only screen and (max-width: 1024px) {
         display: block;
         min-height: 450px;
@@ -412,38 +433,82 @@ hr {
 }
 
 .spot-detail-amenities {
-    width: 600px;
-    min-height: 158px;
-    margin-left: 20px;
+    max-width: 50%;
+    padding: 20px;
+}
 
-    @media only screen and (max-width: 1024px) {
-        margin-left: 0px;
+h2 {
+    color: black;
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 26px;
+}
+
+.facilities-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    margin-top: 16px;
+}
+
+.facility-card {
+    align-items: center;
+    border-radius: 10px;
+    border: 1px solid hsla(141, 93%, 30%, 0.442);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.316);
+    display: flex;
+    flex: 1 1 calc(33.333% - 20px);
+    gap: 10px;
+    justify-content: start;
+    max-width: calc(33.333% - 20px);
+    padding: 16px;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.facility-card:hover {
+    transform: translateY(-4px);
+}
+
+.facility-icon {
+    height: 48px;
+    margin-bottom: 12px;
+    width: 48px;
+}
+
+.facility-text {
+    color: var(--secondary-color);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.material-symbols-outlined {
+    color: hsl(141, 93%, 30%);
+}
+
+@media screen and (max-width: 768px) {
+    .facility-card {
+        flex: 1 1 calc(50% - 20px);
+        max-width: calc(50% - 20px);
     }
 
-    h2 {
-        font-size: 24px;
-        font-weight: 500;
-        margin-bottom: 26px;
-        color: black;
+    .spot-detail-amenities {
+        max-width: 100%;
     }
+}
 
-    ul {
-        list-style: none;
-    }
-
-    ul li:before {
-        content: '✓ ';
-        color: hsl(141, 53%, 53%);
-        font-weight: bold;
-        font-size: 20px;
+@media screen and (max-width: 480px) {
+    .facility-card {
+        flex: 1 1 100%;
+        max-width: 100%;
     }
 }
 
 .spot-detail-map {
-    margin-left: 20px;
-
+    margin: 150px 0 0 20px;
     @media only screen and (max-width: 1024px) {
-        margin-left: 0px;
+        margin: 0;
     }
 
     h2 {
@@ -460,6 +525,7 @@ hr {
 
 .spot-detail-things {
     margin-left: 20px;
+
     h2 {
         font-size: 24px;
         font-weight: 500;
@@ -491,6 +557,7 @@ hr {
     display: flex;
     flex-direction: column;
     margin-left: 20px;
+
     h2 {
         color: black;
         font-size: 24px;
@@ -513,6 +580,7 @@ hr {
         display: flex;
         justify-content: flex-start;
         gap: 20px;
+
         .goto-btn {
             margin-top: 10px;
         }
@@ -540,6 +608,7 @@ hr {
         margin-bottom: 26px;
     }
 }
+
 .table-container {
     height: 340px;
     overflow-y: scroll;
@@ -588,7 +657,8 @@ hr {
     display: flex;
     margin-bottom: 20px;
     margin-top: -20px;
-    span{
+
+    span {
         color: red;
     }
 }

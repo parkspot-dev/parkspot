@@ -83,6 +83,18 @@
                         />
                     </div>
 
+                    <!-- Facilities -->
+                    <div class="form-field">
+                        <label for="facilities">Facilities:</label>
+                        <MultiSelectInput
+                            :list="facilityOptions"
+                            placeholder="Select one or more facilities"
+                            name="facilities"
+                            v-model="Facilities"
+                            :showBorder="true"
+                        />
+                    </div>
+
                     <!-- City -->
                     <div class="form-field">
                         <label for="city">City:</label>
@@ -166,6 +178,17 @@
                         <ImageUpload
                             v-model:images="SO.uploadImages"
                         ></ImageUpload>
+                    </div>
+
+                    <!-- Adddress -->
+                    <div class="form-field">
+                        <label for="address">Address:</label>
+                        <textarea
+                            id="address"
+                            placeholder="Enter SO address"
+                            rows="2"
+                            v-model="SO.address"
+                        ></textarea>
                     </div>
                 </div>
             </div>
@@ -392,6 +415,7 @@ import { mapState, mapActions } from 'vuex';
 
 import imageCompression from 'browser-image-compression';
 
+import { PARKING_FACILITY } from '@/constant/constant';
 import { ParkingSize } from '../constant/enums';
 import { RentUnit } from '../constant/enums';
 import { SiteType } from '../constant/enums';
@@ -404,6 +428,7 @@ import ImageGallery from '@/components/organisms/OrganismImageGallery.vue';
 import ImageUpload from '@/components/global/ImageUpload.vue';
 import ImageUploadService from '@/services/ImageUploadService';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
+import MultiSelectInput from '@/components/global/MultiSelectInput.vue';
 
 export default {
     name: 'ReviewSpot',
@@ -415,11 +440,13 @@ export default {
         ImageGallery,
         ImageUpload,
         LoaderModal,
+        MultiSelectInput,
     },
     data() {
         return {
             clickedButton: null, // Tracks which button is clicked
             isModalOpen: false, // Tracks modal visibility
+            facilityOptions: [...PARKING_FACILITY.SO.FACILITIES_DATA],
             modalContent: {
                 action: '',
                 message: '',
@@ -427,6 +454,7 @@ export default {
             },
             initialFormData: {},
             baseAmountError: '',
+            Facilities: []
         };
     },
     computed: {
@@ -455,14 +483,15 @@ export default {
             return SiteType;
         },
         isFormModified() {
-            const formChanged =
+            return (
+                this.isFacilitiesUpdated() ||
                 JSON.stringify(this.initialFormData) !==
-                JSON.stringify({
-                    SO: this.SO,
-                    Rent: this.Rent,
-                    Booking: this.Booking,
-                });
-            return formChanged && this.isFormValid;
+                    JSON.stringify({
+                        SO: this.SO,
+                        Rent: this.Rent,
+                        Booking: this.Booking,
+                    })
+            );
         },
         isFormValid() {
             return this.Rent.baseAmount && this.Rent.baseAmount > 0;
@@ -495,6 +524,7 @@ export default {
             'validateMobile',
             'validateSpotImageUrl',
             'deleteImage',
+            'setUpdatedFacilities'
         ]),
         setSpotId() {
             this.SO.spotId = this.$route.query.requestId;
@@ -556,6 +586,12 @@ export default {
         },
         confirmSave() {
             const updatedFields = new Set();
+
+            // Compare Facilities
+            if (this.isFacilitiesUpdated()) {
+                updatedFields.add('facilities');
+                this.setUpdatedFacilities(this.Facilities);
+            }
 
             ['SO', 'Rent', 'Booking'].forEach((section) => {
                 for (const key in this[section]) {
@@ -637,8 +673,25 @@ export default {
         onDeleteImage(index) {
             this.deleteImage(index);
         },
+       
+        // isFacilitiesUpdated is compare initial SO.Facilities with this.Facilities 
+        isFacilitiesUpdated() {
+           if(this.SO.Facilities) {
+             const FacilitiesName = this.SO.Facilities.map((facility) => {
+              return facility.Name;
+           })
+           return JSON.stringify(FacilitiesName) !== JSON.stringify(this.Facilities);
+           }
     },
+},
     watch: {
+        SO(SODetails) {
+            if (SODetails.Facilities && SODetails.Facilities.length > 0) {
+                this.Facilities = SODetails.Facilities.map((facility) => {
+                    return facility.Name;
+                });
+            }
+        },
         status(newStatus) {
             if (newStatus === 'error') {
                 this.alertError(this.statusMessage);
@@ -724,6 +777,8 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    background-color: red;
+    height: fit-content;
 }
 .form-field label {
     font-weight: 700;
