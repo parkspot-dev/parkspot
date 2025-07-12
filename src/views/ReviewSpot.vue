@@ -494,13 +494,7 @@ export default {
             );
         },
         isFormValid() {
-            return (
-                this.validateBaseAmount() &&
-                this.validateLatLong() &&
-                this.validateCity() &&
-                this.validateMobile() &&
-                this.validateSpotImageUrl()
-            );
+            return this.validateFormFields();
         },
         spotImages() {
             let spotImages = [];
@@ -530,7 +524,8 @@ export default {
             'validateMobile',
             'validateSpotImageUrl',
             'deleteImage',
-            'setUpdatedFacilities'
+            'setUpdatedFacilities',
+            'validateFormFields'
         ]),
         setSpotId() {
             this.SO.spotId = this.$route.query.requestId;
