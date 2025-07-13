@@ -1,5 +1,6 @@
 import { mayaClient } from '@/services/api';
 import ImageUploadService from '@/services/ImageUploadService';
+import router from '@/router';
 const state = {
     SO: {
         userName: '',
@@ -474,6 +475,10 @@ const actions = {
                 'set-success-msg',
                 'Your request was submitted successfully',
             );
+            const encodedSpotId = encodeURIComponent(response.SiteID);
+            const url = `/spot-details/${encodedSpotId}`;
+            window.open(url, '_blank');
+            router.push('/internal/spot-requests')
         }
         commit('set-loading', false);
         return response;
