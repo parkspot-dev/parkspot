@@ -108,11 +108,7 @@
                             cityError
                         }}</span>
                     </div>
-                    <!-- Area -->
-                    <div class="form-field">
-                        <label for="area">Area:</label>
-                        <input type="text" v-model="SO.area" />
-                    </div>
+
                     <!-- Latitude, Longitude-->
                     <div class="form-field">
                         <label for="latlong"
@@ -133,15 +129,10 @@
                         }}</span>
                     </div>
 
-                    <!-- Adddress -->
+                    <!-- Area -->
                     <div class="form-field">
-                        <label for="address">Address:</label>
-                        <textarea
-                            id="address"
-                            placeholder="Enter SO address"
-                            rows="2"
-                            v-model="SO.address"
-                        ></textarea>
+                        <label for="area">Area:</label>
+                        <input type="text" v-model="SO.area" />
                     </div>
 
                     <!-- Thumbnail image -->
@@ -172,14 +163,6 @@
                         </div>
                     </div>
 
-                    <!-- Upload Images -->
-                    <div class="form-field">
-                        <label for="uploadImages">Upload Images:</label>
-                        <ImageUpload
-                            v-model:images="SO.uploadImages"
-                        ></ImageUpload>
-                    </div>
-
                     <!-- Adddress -->
                     <div class="form-field">
                         <label for="address">Address:</label>
@@ -189,6 +172,14 @@
                             rows="2"
                             v-model="SO.address"
                         ></textarea>
+                    </div>
+
+                    <!-- Upload Images -->
+                    <div class="form-field">
+                        <label for="uploadImages">Upload Images:</label>
+                        <ImageUpload
+                            v-model:images="SO.uploadImages"
+                        ></ImageUpload>
                     </div>
                 </div>
             </div>
