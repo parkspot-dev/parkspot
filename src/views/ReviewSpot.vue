@@ -92,6 +92,7 @@
                             name="facilities"
                             v-model="Facilities"
                             :showBorder="true"
+                            class="multi-select"
                         />
                     </div>
 
