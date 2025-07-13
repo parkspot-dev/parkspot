@@ -279,45 +279,15 @@
                 </div>
                 <!-- Booking Details -->
                 <div class="form-group">
-                    <!-- Start Date -->
-                    <div class="form-field">
-                        <label for="startDate"
-                            >Start Date:<span style="color: red">*</span></label
-                        >
-                        <AtomDatePicker
-                            :assignedDate="Booking.startDate"
-                            :size="'is-small'"
-                            @changed="onStartDateUpdate"
-                            class="calendar"
-                            v-if="Booking.startDate"
-                        >
-                        </AtomDatePicker>
-                    </div>
-                    <!-- End Date -->
-                    <div class="form-field">
-                        <label for="endDate">End Date:</label>
-                        <AtomDatePicker
-                            :assignedDate="Booking.endDate"
-                            :size="'is-small'"
-                            @changed="onEndDateUpdate"
-                            class="calendar"
-                            required
-                            v-if="Booking.endDate"
-                        >
-                        </AtomDatePicker>
-                    </div>
                     <!-- Last Call Date -->
-                    <div class="form-field">
-                        <label for="lastCallDate">Last Call Date:</label>
-                        <AtomDatePicker
-                            :assignedDate="Booking.lastCallDate"
-                            :size="'is-small'"
-                            @changed="onLastCallDateUpdate"
-                            class="calendar"
-                            required
-                            v-if="Booking.lastCallDate"
-                        >
-                        </AtomDatePicker>
+                    <div class="readonly-field form-field">
+                        <label for="spotId">Last Call Date:</label>
+                        <input
+                            class="noborder"
+                            :disabled="true"
+                            type="text"
+                            value="Today"
+                        />
                     </div>
                     <!-- Spot Request Status -->
                     <div class="form-field">
