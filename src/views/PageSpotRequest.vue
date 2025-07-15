@@ -122,24 +122,17 @@
                     </AtomSelectInput>
                 </template>
                 <template v-slot="props">
-                    <div class="status-column">
-                        <div class="status-part">
-                            <span
-                                class="tag"
-                                :class="{
-                                    'is-info': props.row.Status === 0,
-                                    'is-success': props.row.Status === 4,
-                                    'my-status':
-                                        props.row.Status === 1 || 2 || 3,
-                                    'is-danger': props.row.Status === 5,
-                                }"
-                            >
-                                {{
-                                    getSpotRequestStatusLabel(props.row.Status)
-                                }}
-                            </span>
-                        </div>
-                    </div>
+                    <SelectInput
+                        :key="props.row.ID"
+                        :defaultValue="
+                            getSpotRequestStatusLabel(props.row.Status)
+                        "
+                        :list="
+                            spotRequestStatusList.map((status) => status.name)
+                        "
+                        @change="onStatusUpdate(props.row, $event.target.value)"
+                        name="updateStatus"
+                    />
                 </template>
             </b-table-column>
 
@@ -178,13 +171,17 @@
 </template>
 
 <script>
-import { getSpotRequestStatusLabel } from '../constant/enums';
+import {
+    getSpotRequestStatusLabel,
+    SpotRequestStatus,
+} from '../constant/enums';
 import { mapState, mapActions } from 'vuex';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
+import SelectInput from '@/components/global/SelectInput.vue';
 
 export default {
     name: 'SpotRequestsPage',
@@ -194,6 +191,7 @@ export default {
         AtomSelectInput,
         LoaderModal,
         MoleculeSearchBox,
+        SelectInput,
     },
 
     data() {
@@ -226,8 +224,7 @@ export default {
         this.fetchSpotRequests();
     },
     methods: {
-        ...mapActions('spotRequests', ['fetchSpotRequests']),
-
+        ...mapActions('spotRequests', ['fetchSpotRequests', 'updateStatus']),
         // Search by Request ID with validation for numeric input
         searchSpotRequest(requestId) {
             const isValidRequestId = /^[0-9]+$/.test(requestId);
@@ -285,6 +282,23 @@ export default {
                     this.summary.status[request.Status]++;
                 }
             });
+        },
+
+        spotRequestStatusOptions() {
+            return SpotRequestStatus;
+        },
+
+        onStatusUpdate(spotData, status) {
+            console.log('Spotdata, status', spotData, status);
+            // Get the status id from name
+            if (typeof status === 'string') {
+                const foundStatus = this.spotRequestStatusList.find(
+                    (item) => item.name === status,
+                );
+                status = foundStatus.id;
+            }
+            spotData['Status'] = status;
+            this.updateStatus(spotData);
         },
     },
     watch: {

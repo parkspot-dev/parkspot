@@ -40,6 +40,13 @@ const actions = {
             }
             commit('set-loading', false);
     },
+
+    async updateStatus({}, spotData) {
+          const FieldMask = ['Status']
+          const spotRequest = {...spotData, FieldMask};
+          const res = await mayaClient.patch('/owner/spot-request', spotRequest);
+          console.log("This is res...", res);
+    }
 };
 
 export default {
