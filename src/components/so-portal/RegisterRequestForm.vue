@@ -119,6 +119,7 @@ import { registerSpotRequestFormSchema } from '@/validationSchemas';
 import { mapMutations } from 'vuex';
 import { ParkingSizeDisplayMap, ParkingSizeLabels } from '@/constant/constant';
 import { Form } from 'vee-validate'; 
+import { SiteType } from '@/constant/enums';
 
 export default {
     name: 'RegisterRequestForm',
@@ -149,6 +150,7 @@ export default {
                 mapsLink: '',
                 images: [],
                 isTermsAccepted: false,
+                siteType: SiteType.Register  // pass as default
             },
             FORM,
             FORM_PLACEHOLDERS,

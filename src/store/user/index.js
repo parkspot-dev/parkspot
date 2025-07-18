@@ -221,7 +221,8 @@ const actions = {
             Remark: '',
             MapLink: state.contactForm.mapLink,
             SpotImages: state.contactForm.images,
-            ServicesAvailable: state.contactForm.facilities
+            ServicesAvailable: state.contactForm.facilities,
+            SiteType: state.contactForm.siteType
         };
 
         await mayaClient.post('/owner/spot-request', req);
