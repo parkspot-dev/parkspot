@@ -185,7 +185,6 @@ export default {
         updateSelectedCity(event) {
             const newVal = event?.target?.value;
             this.contactModel.city = newVal;
-            console.log("This is city", this.contactModel.city);
         },
 
         updateTermsData(val) {
