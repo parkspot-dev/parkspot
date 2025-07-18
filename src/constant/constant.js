@@ -461,3 +461,5 @@ export const WHY_CHOOSE_PARKSPOT_SOCIETY_AUTOMATION = [
             'We ensure your system runs smoothly with regular maintenance and updates.',
     },
 ];
+
+export const CITY_OPTIONS = [ "Bengaluru", "Chennai", "Hyderabad", "Kolkata", "Other" ];

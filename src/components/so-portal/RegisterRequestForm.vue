@@ -86,6 +86,17 @@
                     v-model="contactModel.facilities"
                 />
             </div>
+
+            <SelectInput
+                :list="citiesOptions"
+                @change="updateSelectedCity"
+                label="Select City"
+                name="city"
+                v-model="contactModel.city"
+            />
+        </div>
+
+        <div class="form-row">
             <div class="upload-images">
                 <label class="label-input">Upload Images</label>
                 <ImageUpload v-model:images="contactModel.images" />
@@ -108,7 +119,7 @@
 </template>
 
 <script>
-import { ADD_INFO, FORM, PARKING_FACILITY, FORM_PLACEHOLDERS } from '@/constant/constant';
+import { ADD_INFO, FORM, PARKING_FACILITY, FORM_PLACEHOLDERS, CITY_OPTIONS } from '@/constant/constant';
 import MultiSelectInput from '@/components/global/MultiSelectInput.vue';
 import ImageUpload from '@/components/global/ImageUpload.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
@@ -150,12 +161,14 @@ export default {
                 mapsLink: '',
                 images: [],
                 isTermsAccepted: false,
-                siteType: SiteType.Register  // pass as default
+                siteType: SiteType.Register,  // pass as default
+                city: ''
             },
             FORM,
             FORM_PLACEHOLDERS,
             ADD_INFO,
             termData: ADD_INFO.TERMS_DATA,
+            citiesOptions: CITY_OPTIONS
         };
     },
     emits: ['submitForm'],
@@ -167,6 +180,12 @@ export default {
             const newVal = event?.target?.value;
             this.contactModel.parkingSize =
                 ParkingSizeDisplayMap[newVal] ?? null;
+        },
+
+        updateSelectedCity(event) {
+            const newVal = event?.target?.value;
+            this.contactModel.city = newVal;
+            console.log("This is city", this.contactModel.city);
         },
 
         updateTermsData(val) {

@@ -103,6 +103,7 @@
                             <option value="Chennai">Chennai</option>
                             <option value="Hyderabad">Hyderabad</option>
                             <option value="Kolkata">Kolkata</option>
+                            <option value="Other">Other</option>
                         </select>
                         <span class="error" v-if="cityError">{{
                             cityError
