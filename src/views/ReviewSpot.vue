@@ -99,10 +99,9 @@
                     <div class="form-field">
                         <label for="city">City:</label>
                         <select v-model="SO.city" @change="validateCity">
-                            <option value="Bengaluru">Bengaluru</option>
-                            <option value="Chennai">Chennai</option>
-                            <option value="Hyderabad">Hyderabad</option>
-                            <option value="Kolkata">Kolkata</option>
+                            <option v-for="city in cityOptions" :key="city" :value="city">
+                                {{ city }}
+                            </option>
                         </select>
                         <span class="error" v-if="cityError">{{
                             cityError
@@ -376,7 +375,7 @@ import { mapState, mapActions } from 'vuex';
 
 import imageCompression from 'browser-image-compression';
 
-import { PARKING_FACILITY } from '@/constant/constant';
+import { CITY_OPTIONS, PARKING_FACILITY } from '@/constant/constant';
 import { ParkingSize } from '../constant/enums';
 import { RentUnit } from '../constant/enums';
 import { SiteType } from '../constant/enums';
@@ -415,7 +414,8 @@ export default {
             },
             initialFormData: {},
             baseAmountError: '',
-            Facilities: []
+            Facilities: [],
+            cityOptions: CITY_OPTIONS
         };
     },
     computed: {
