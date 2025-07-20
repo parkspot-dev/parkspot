@@ -122,6 +122,17 @@ const actions = {
             });
             return;
         }
+
+        // Check that latitude and longitude are not both zero
+        if (latitude === 0 || longitude === 0) {
+            commit('set-error', {
+                field: 'latlongError',
+                message:
+                    'Latitude and longitude cannot be zero. Please provide valid coordinates.',
+            });
+            return;
+        }
+
         commit('set-error', { field: 'latlongError', message: '' });
     },
 
@@ -289,8 +300,10 @@ const actions = {
     },
 
     async deleteImage({ state }, index) {
-       const filteredImages = state.SO.spotImagesList.filter((_,idx) => index !== idx);
-       state.SO.spotImagesList = filteredImages;
+        const filteredImages = state.SO.spotImagesList.filter(
+            (_, idx) => index !== idx,
+        );
+        state.SO.spotImagesList = filteredImages;
     },
 
     // Prepares the payload for the spot request update
@@ -337,7 +350,7 @@ const actions = {
             FieldMask: await dispatch('mapFieldMask'),
         };
 
-        if(state.updatedFacilities) {
+        if (state.updatedFacilities) {
             newSpotRequest.ServicesAvailable = state.updatedFacilities;
         }
 
@@ -390,7 +403,7 @@ const actions = {
                     case 'thumbnailImage':
                         return 'SpotImageURI';
                     case 'facilities':
-                        return 'ServicesAvailable'
+                        return 'ServicesAvailable';
                     default:
                         return null;
                 }
