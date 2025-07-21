@@ -172,9 +172,10 @@
 
 <script>
 import {
+    getIdBasedOnLable,
     getSpotRequestStatusLabel,
     SpotRequestStatus,
-} from '../constant/enums';
+} from '@/constant/enums';
 import { mapState, mapActions } from 'vuex';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
@@ -288,17 +289,19 @@ export default {
             return SpotRequestStatus;
         },
 
-        onStatusUpdate(spotData, status) {
-            console.log('Spotdata, status', spotData, status);
-            // Get the status id from name
-            if (typeof status === 'string') {
-                const foundStatus = this.spotRequestStatusList.find(
-                    (item) => item.name === status,
-                );
-                status = foundStatus.id;
+       async onStatusUpdate(spotData, status) {
+            status = getIdBasedOnLable(this.spotRequestStatusList, status);
+            if (status) {
+                spotData['Status'] = status;
+                await this.updateStatus(spotData);
+                this.$buefy.toast.open({
+                    message: `Status updated to ${getSpotRequestStatusLabel(status)}`,
+                    type: 'is-success',
+                    duration: 3000,
+                });
+            } else {
+                this.alertError('Invalid status selected.');
             }
-            spotData['Status'] = status;
-            this.updateStatus(spotData);
         },
     },
     watch: {

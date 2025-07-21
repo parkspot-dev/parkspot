@@ -182,7 +182,7 @@ export const PaymentType = Object.freeze({
     MonthlyRentWithConvenienceFeeAndSecurityDeposit: 2,
     MonthlyRentAndSecurityDeposit: 3,
     MonthlyRent: 4,
-    SecurityDeposit: 5
+    SecurityDeposit: 5,
 });
 
 export const PaymentTypeLabels = [
@@ -338,7 +338,7 @@ export const UserType = Object.freeze({
     Gaurd: 2,
     VO: 3,
     Agent: 4,
-    Admin: 5
+    Admin: 5,
 });
 
 export const UserTypeLabels = [
@@ -347,7 +347,7 @@ export const UserTypeLabels = [
     'Gaurd',
     'VO',
     'Agent',
-    'Admin'
+    'Admin',
 ];
 
 /**
@@ -356,4 +356,19 @@ export const UserTypeLabels = [
  */
 export function getUserTypeLabel(userType) {
     return getEnumLabel(UserTypeLabels, userType);
+}
+
+/**
+ * @param {Array} enumList
+ * @param {string} label
+ * @return {int|null}: id for the given label or null if not found
+ */
+export function getIdBasedOnLable(enumList, label) {
+    if (typeof label === 'string') {
+        const foundItem = enumList.find((item) => item.name === label);
+        return foundItem ? foundItem.id : null;
+    } else {
+        console.warn('Label should be a string');
+        return null;
+    }
 }
