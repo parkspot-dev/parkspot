@@ -1,10 +1,10 @@
 <template>
-    <div class="spot-requests-root">
+    <div class="kyc-status-portal-root">
         <!-- Loading modal displayed during data fetch -->
         <LoaderModal v-if="isLoading"></LoaderModal>
         <!-- Buefy Table for spot requests with pagination -->
         <b-table
-            :data="dummyUsers"
+            :data="users"
             :paginated="true"
             :per-page="16"
             :bordered="true"
@@ -15,20 +15,6 @@
             :sticky-header="true"
             height="700"
         >
-            <b-table-column
-                field="ID"
-                label="ID"
-                sortable
-                cell-class="has-text-left"
-                width="20"
-            >
-                <template v-slot="props">
-                    <a>
-                        <div>{{ props.row.ID }}</div>
-                    </a>
-                </template>
-            </b-table-column>
-
             <b-table-column
                 field="FullName"
                 label="Full Name"
@@ -61,8 +47,32 @@
             >
                 <template v-slot="props">
                     <div>
-                        <a :href="props.row.IDProofURL" target="_blank" >{{ props.row.IdentityDocument }}</a>
+                        {{ props.row.IdentityDocument }}
                     </div>
+                </template>
+            </b-table-column>
+
+            <b-table-column
+                field="ID Proof Document"
+                label="ID Proof Document View"
+                cell-class="has-text-left"
+            >
+                <template v-slot="props">
+                    <div
+                        v-if="props.row.IDProofURLs.length > 0"
+                        class="documents-preview"
+                    >
+                        <a :href="props.row.IDProofURLs[0]">
+                            <div class="tag">Front</div>
+                        </a>
+                        <a
+                            v-if="props.row.IDProofURLs[1]"
+                            :href="props.row.IDProofURLs[1]"
+                        >
+                            <div class="tag">Back</div>
+                        </a>
+                    </div>
+                    <div v-else>No Document Present</div>
                 </template>
             </b-table-column>
 
@@ -73,8 +83,32 @@
             >
                 <template v-slot="props">
                     <div>
-                        <a :href="props.row.OwnershipProofURL" target="_blank" >{{ props.row.OwnershipDocument }}</a>
+                        {{ props.row.OwnershipDocument }}
                     </div>
+                </template>
+            </b-table-column>
+
+            <b-table-column
+                field="ID Proof Document"
+                label="ID Proof Document View"
+                cell-class="has-text-left"
+            >
+                <template v-slot="props">
+                    <div
+                        v-if="props.row.OwnershipProofURLs.length > 0"
+                        class="documents-preview"
+                    >
+                        <a :href="props.row.OwnershipProofURLs[0]">
+                            <div class="tag">Front</div>
+                        </a>
+                        <a
+                            v-if="props.row.OwnershipProofURLs[1]"
+                            :href="props.row.OwnershipProofURLs[1]"
+                        >
+                            <div class="tag">Back</div>
+                        </a>
+                    </div>
+                    <div v-else>No Document Present</div>
                 </template>
             </b-table-column>
 
@@ -96,14 +130,10 @@
                     </AtomSelectInput>
                 </template>
                 <template v-slot="props">
-                     <SelectInput
+                    <SelectInput
                         :key="props.row.ID"
-                        :defaultValue="
-                            getKYCStatusLabel(props.row.KYCStatus)
-                        "
-                        :list="
-                            kycStatusList.map((kycStatus) => kycStatus.name)
-                        "
+                        :defaultValue="getKYCStatusLabel(props.row.KYCStatus)"
+                        :list="kycStatusList.map((kycStatus) => kycStatus.name)"
                         @change="onStatusUpdate(props.row, $event.target.value)"
                         name="updateKYCStatus"
                     />
@@ -114,7 +144,7 @@
 </template>
 
 <script>
-import { getKYCStatusLabel } from '../constant/enums';
+import { getIdBasedOnLable, getKYCStatusLabel } from '@/constant/enums';
 import { mapState, mapActions } from 'vuex';
 import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
 import LoaderModal from '../components/extras/LoaderModal.vue';
@@ -125,7 +155,7 @@ export default {
     components: {
         AtomSelectInput,
         LoaderModal,
-        SelectInput
+        SelectInput,
     },
 
     data() {
@@ -138,72 +168,21 @@ export default {
                 { id: 4, name: 'Denied' },
                 { id: 5, name: 'Not Verified' },
             ],
-
-            dummyUsers: [
-                {
-                    ID: 1,
-                    UserName: 'john_doe_123',
-                    FullName: 'John Doe',
-                    City: 'Mumbai',
-                    EmailID: 'john.doe@example.com',
-                    Mobile: '9876543210',
-                    KYCStatus: 1,
-                    IDProofURL: 'https://parkspot.blob.core.windows.net/kyc-documents/Nishanth-ID0.jpg ',
-                    OwnershipProofURL: 'https://parkspot.blob.core.windows.net/kyc-documents/Nishanth-ID0.jpg ',
-                    IdentityDocument: 'Aadhar Card',
-                    OwnershipDocument: 'Electricity Bill',
-                    OriginalOwnerName: 'Jane Doe',
-                    OriginalOwnerMobile: '9123456780',
-                },
-                {
-                    ID: 2,
-                    UserName: 'anita_verma',
-                    FullName: 'Anita Verma',
-                    City: 'Delhi',
-                    EmailID: 'anita.verma@example.com',
-                    Mobile: '9823456701',
-                    KYCStatus: 1,
-                    IDProofURL: 'https://parkspot.blob.core.windows.net/kyc-documents/Nishanth-ID0.jpg ',
-                    OwnershipProofURL:
-                        'https://parkspot.blob.core.windows.net/kyc-documents/Nishanth-ID0.jpg ',
-                    IdentityDocument: 'Voter ID',
-                    OwnershipDocument: 'Water Bill',
-                    OriginalOwnerName: 'Raj Verma',
-                    OriginalOwnerMobile: '9934567812',
-                },
-                {
-                    ID: 3,
-                    UserName: 'rahul_mishra',
-                    FullName: 'Rahul Mishra',
-                    City: 'Bengaluru',
-                    EmailID: 'rahul.mishra@example.com',
-                    Mobile: '9871234567',
-                    KYCStatus: 1,
-                    IDProofURL: 'https://parkspot.blob.core.windows.net/kyc-documents/Nishanth-ID0.jpg ',
-                    OwnershipProofURL:
-                        'https://parkspot.blob.core.windows.net/kyc-documents/Nishanth-ID0.jpg ',
-                    IdentityDocument: 'Passport',
-                    OwnershipDocument: 'Property Tax',
-                    OriginalOwnerName: 'Neha Mishra',
-                    OriginalOwnerMobile: '9012345678',
-                },
-            ],
         };
     },
     computed: {
-        ...mapState('spotRequests', [
+        ...mapState('kycStatusPortal', [
             'isLoading',
             'hasError',
             'errorMessage',
-            'spotRequests',
+            'users',
         ]),
     },
-
     mounted() {
-        this.fetchSpotRequests();
+        this.fetchUsers();
     },
     methods: {
-        ...mapActions('spotRequests', ['fetchSpotRequests']),
+        ...mapActions('kycStatusPortal', ['fetchUsers', 'updateStatus']),
 
         // Get label for status based on the enum value
         getKYCStatusLabel(spotRequestStatus) {
@@ -222,15 +201,19 @@ export default {
             });
         },
 
-        onStatusUpdate(row, newStatus) {
-            // const statusId = this.kycStatusList.find(
-            //     (status) => status.name === newStatus
-            // ).id;
-            // this.$store.dispatch('spotRequests/updateKYCStatus', {
-            //     id: row.ID,
-            //     kycStatus: statusId,
-            // });
-            console.log(row, newStatus);;
+        async onStatusUpdate(row, newStatus) {
+            newStatus = getIdBasedOnLable(this.kycStatusList, newStatus);
+            if (newStatus) {
+                row['KYCStatus'] = newStatus;
+                await this.updateStatus(row);
+                this.$buefy.toast.open({
+                    message: `KYC Status updated to ${getKYCStatusLabel(newStatus)}`,
+                    type: 'is-success',
+                    duration: 3000,
+                });
+            } else {
+                this.alertError('Invalid status selected.');
+            }
         },
     },
     watch: {
@@ -246,69 +229,7 @@ export default {
 <style lang="scss" scoped>
 $portal-font-size: 13px;
 
-.header {
-    align-items: flex-start;
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-}
-
-.title h1 {
-    font-size: 24px;
-    margin: 0;
-}
-
-.summary {
-    .so-btn {
-        text-align: right;
-    }
-
-    .so-summary {
-        background-color: #f5f5dc;
-        border: 1px solid var(--parkspot-black);
-        max-width: 430px;
-        padding: 1.25rem;
-        position: absolute;
-        right: 12px;
-        top: 120px;
-        z-index: 9999;
-        .close-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            position: absolute;
-            right: 10px;
-            top: 10px;
-        }
-
-        .so-total {
-            font-size: 16px;
-            font-weight: 600 !important;
-            font-weight: var(--semi-bold-font);
-            text-align: center;
-        }
-
-        .so-status {
-            display: grid;
-            gap: 2.5rem;
-            grid-template-columns: repeat(3, 1fr);
-
-            p {
-                align-items: center;
-                display: flex;
-                font-size: $portal-font-size;
-                gap: 2px;
-                justify-content: space-between;
-            }
-        }
-    }
-}
-
-.column-padding {
-    padding: 10px 20px;
-}
-
-.spot-requests-root {
+.kyc-status-portal-root {
     background: #f5f5fb;
     padding: 16px;
     text-align: center;
@@ -319,38 +240,8 @@ $portal-font-size: 13px;
     }
 }
 
-.search-control {
-    margin-bottom: 20px;
-}
-
-.status-column {
-    font-size: $portal-font-size;
-
-    .status-part {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-
-    .next-call-part {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-}
-
 .table {
-    margin-top: 20px;
-}
-
-.tag:not(body) {
-    background-color: var(--primary-color);
-}
-.is-success {
-    background-color: #b5fca1 !important;
-    color: #008000 !important;
-    font-weight: bold;
+    margin-top: 60px;
 }
 
 .column-width {
@@ -358,6 +249,21 @@ $portal-font-size: 13px;
 
     @media only screen and (max-width: 1024px) {
         width: 150px;
+    }
+}
+
+.documents-preview {
+    display: flex;
+    gap: 12px;
+
+    .tag {
+        background-color: var(--primary-color);
+        border-radius: 10px;
+        border: 1px dashed var(--parkspot-black);
+        color: var(--parkspot-black);
+        cursor: pointer;
+        padding: 12px 12px;
+        text-align: center;
     }
 }
 </style>

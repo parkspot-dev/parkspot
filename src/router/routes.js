@@ -29,7 +29,7 @@ export const pages = {
     REGISTER_REQUEST        : "/internal/register-request",  
     SPOT_REQUESTS           : "/internal/spot-requests",
     AUTOMATED_PARKING       : "/automated-parking",
-    KYC_STATUS_PAGE         : "/internal/kyc-status"
+    KYC_STATUS_PAGE         : "/internal/users/kyc-status"
 };
 
 export const routes = [
