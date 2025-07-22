@@ -122,24 +122,17 @@
                     </AtomSelectInput>
                 </template>
                 <template v-slot="props">
-                    <div class="status-column">
-                        <div class="status-part">
-                            <span
-                                class="tag"
-                                :class="{
-                                    'is-info': props.row.Status === 0,
-                                    'is-success': props.row.Status === 4,
-                                    'my-status':
-                                        props.row.Status === 1 || 2 || 3,
-                                    'is-danger': props.row.Status === 5,
-                                }"
-                            >
-                                {{
-                                    getSpotRequestStatusLabel(props.row.Status)
-                                }}
-                            </span>
-                        </div>
-                    </div>
+                    <SelectInput
+                        :key="props.row.ID"
+                        :defaultValue="
+                            getSpotRequestStatusLabel(props.row.Status)
+                        "
+                        :list="
+                            spotRequestStatusList.map((status) => status.name)
+                        "
+                        @change="onStatusUpdate(props.row, $event.target.value)"
+                        name="updateStatus"
+                    />
                 </template>
             </b-table-column>
 
@@ -178,13 +171,18 @@
 </template>
 
 <script>
-import { getSpotRequestStatusLabel } from '../constant/enums';
+import {
+    getIdBasedOnLabel,
+    getSpotRequestStatusLabel,
+    SpotRequestStatus,
+} from '@/constant/enums';
 import { mapState, mapActions } from 'vuex';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
+import SelectInput from '@/components/global/SelectInput.vue';
 
 export default {
     name: 'SpotRequestsPage',
@@ -194,6 +192,7 @@ export default {
         AtomSelectInput,
         LoaderModal,
         MoleculeSearchBox,
+        SelectInput,
     },
 
     data() {
@@ -226,8 +225,7 @@ export default {
         this.fetchSpotRequests();
     },
     methods: {
-        ...mapActions('spotRequests', ['fetchSpotRequests']),
-
+        ...mapActions('spotRequests', ['fetchSpotRequests', 'updateStatus']),
         // Search by Request ID with validation for numeric input
         searchSpotRequest(requestId) {
             const isValidRequestId = /^[0-9]+$/.test(requestId);
@@ -285,6 +283,25 @@ export default {
                     this.summary.status[request.Status]++;
                 }
             });
+        },
+
+        spotRequestStatusOptions() {
+            return SpotRequestStatus;
+        },
+
+       async onStatusUpdate(spotData, status) {
+            const statusId = getIdBasedOnLabel(this.spotRequestStatusList, status);
+            if (statusId != null) {
+                spotData['Status'] = statusId;
+                await this.updateStatus(spotData);
+                this.$buefy.toast.open({
+                    message: `Status updated to ${getSpotRequestStatusLabel(statusId)}`,
+                    type: 'is-success',
+                    duration: 3000,
+                });
+            } else {
+                this.alertError('Invalid status selected.');
+            }
         },
     },
     watch: {
