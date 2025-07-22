@@ -363,7 +363,7 @@ export function getUserTypeLabel(userType) {
  * @param {string} label
  * @return {int|null}: id for the given label or null if not found
  */
-export function getIdBasedOnLable(enumList, label) {
+export function getIdBasedOnLabel(enumList, label) {
     if (typeof label === 'string') {
         const foundItem = enumList.find((item) => item.name === label);
         return foundItem ? foundItem.id : null;

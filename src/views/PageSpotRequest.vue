@@ -172,7 +172,7 @@
 
 <script>
 import {
-    getIdBasedOnLable,
+    getIdBasedOnLabel,
     getSpotRequestStatusLabel,
     SpotRequestStatus,
 } from '@/constant/enums';
@@ -290,12 +290,12 @@ export default {
         },
 
        async onStatusUpdate(spotData, status) {
-            status = getIdBasedOnLable(this.spotRequestStatusList, status);
-            if (status) {
-                spotData['Status'] = status;
+            const statusId = getIdBasedOnLabel(this.spotRequestStatusList, status);
+            if (statusId != null) {
+                spotData['Status'] = statusId;
                 await this.updateStatus(spotData);
                 this.$buefy.toast.open({
-                    message: `Status updated to ${getSpotRequestStatusLabel(status)}`,
+                    message: `Status updated to ${getSpotRequestStatusLabel(statusId)}`,
                     type: 'is-success',
                     duration: 3000,
                 });
