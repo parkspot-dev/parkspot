@@ -179,10 +179,10 @@ export default {
         ]),
     },
     mounted() {
-        this.fetchUsers();
+        this.fetchKycPendingUsers();
     },
     methods: {
-        ...mapActions('kycStatusPortal', ['fetchUsers', 'updateStatus']),
+        ...mapActions('kycStatusPortal', ['fetchKycPendingUsers', 'updateStatus']),
 
         // Get label for status based on the enum value
         getKYCStatusLabel(spotRequestStatus) {
@@ -202,12 +202,12 @@ export default {
         },
 
         async onStatusUpdate(row, newStatus) {
-            newStatus = getIdBasedOnLable(this.kycStatusList, newStatus);
-            if (newStatus) {
-                row['KYCStatus'] = newStatus;
+            const lableId = getIdBasedOnLable(this.kycStatusList, newStatus);
+            if (lableId != null) {
+                row['KYCStatus'] = lableId;
                 await this.updateStatus(row);
                 this.$buefy.toast.open({
-                    message: `KYC Status updated to ${getKYCStatusLabel(newStatus)}`,
+                    message: `KYC Status updated to ${getKYCStatusLabel(lableId)}`,
                     type: 'is-success',
                     duration: 3000,
                 });
