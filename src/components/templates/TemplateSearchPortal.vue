@@ -305,20 +305,20 @@
                                 class="tag my-status"
                                 :class="{
                                     'is-danger': isCallDelayed(
-                                        props.row.NextCall,
+                                        props.row.Next,
                                     ),
                                 }"
                             >
                                 <b>
                                     {{
                                         new Date(
-                                            props.row.NextCall,
+                                            props.row.Next,
                                         ).toLocaleDateString('en-GB')
                                     }}
                                 </b>
                             </span>
                             <AtomDatePicker
-                                :assignedDate="props.row.NextCall"
+                                :assignedDate="props.row.Next"
                                 :size="'is-small'"
                                 @changed="
                                     (date) => onDateUpdate(props.row, date)
@@ -599,7 +599,7 @@ export default {
         },
 
         onDateUpdate(spotData, date) {
-            spotData['NextCall'] = date;
+            spotData['Next'] = date;
             this.$emit('updateRequest', spotData);
         },
 
