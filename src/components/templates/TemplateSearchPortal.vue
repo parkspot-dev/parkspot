@@ -161,14 +161,16 @@
                         </p>
                         <p v-if="props.row.Agent !== 'NA' || isAdmin">
                             Mobile:
-                            <strong v-if="isAdmin" >{{ props.row.Mobile }}</strong>
+                            <strong v-if="isAdmin">{{
+                                props.row.Mobile
+                            }}</strong>
                             <button
                                 v-else
-                                @click="onConnect(props.row)"
+                                @click="onConnect(props.row, true)"
                                 class="btn px-2"
                             >
                                 Connect
-                            </button> 
+                            </button>
                         </p>
                         <p>
                             Email:
@@ -208,14 +210,18 @@
                 width="10px"
             >
                 <AtomTextarea
-                    :size="'is-small'"
-                    v-model="props.row.Comments"
-                    class="comment-width"
                     :maxlength="1000"
+                    :readOnly="true"
                     :rowNo="8"
-                    @mousedown="storeOldComment(props.row)"
+                    :size="'is-small'"
                     @changed="onCommentUpdate(props.row, oldComments, $event)"
+                    @mousedown="storeOldComment(props.row)"
+                    class="comment-width"
+                    v-model="props.row.Comments"
                 ></AtomTextarea>
+                <button @click="onConnect(props.row)" class="btn px-2">
+                    Add Comment
+                </button>
             </b-table-column>
 
             <b-table-column
@@ -371,7 +377,8 @@
     <!-- Connect popup -->
     <div v-if="isOpen" class="popup-container">
         <div class="popup">
-            <div class="mobile">
+            <div v-if="isConnectModalOpen" class="connect-and-status" >
+                <div class="mobile">
                 Contact With {{ this.selectedRow.Name }} on
                 <span>{{ this.selectedRow.Mobile }}</span>
             </div>
@@ -383,6 +390,7 @@
                 @change="onStatusUpdate(selectedRow, $event.target.value)"
                 name="updateStatus"
             />
+            </div>
             <div>Previous Comments</div>
             <AtomTextarea
                 :maxlength="1000"
@@ -486,7 +494,7 @@ export default {
             this.setAgents(agents);
         }
 
-        if(this.parkingRequests && this.parkingRequests.length > 0) {
+        if (this.parkingRequests && this.parkingRequests.length > 0) {
             this.updateSummary(this.parkingRequests);
         }
     },
@@ -494,7 +502,7 @@ export default {
     watch: {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
-        }
+        },
     },
 
     created() {
@@ -558,6 +566,7 @@ export default {
             newComment: '',
             defaultStatus: '',
             FREQUENT_COMMENTS: FREQUENT_COMMENTS,
+            isConnectModalOpen: false
         };
     },
     methods: {
@@ -663,7 +672,8 @@ export default {
             return moment(date).format('DD MMM YY, hh:mm A');
         },
 
-        onConnect(selectedRow = {}) {
+        onConnect(selectedRow = {}, openModalWithConnect = false) {
+            this.isConnectModalOpen = openModalWithConnect;
             this.selectedRow = selectedRow;
             this.isOpen = !this.isOpen;
             const selectedStatus = this.statusList.find(
@@ -946,6 +956,13 @@ $portal-font-size: 13px;
     padding: 52px 20px 20px 20px;
     position: relative;
     width: 30%;
+
+    .connect-and-status{
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 20px;
+    }
 
     .note {
         display: flex;
