@@ -118,22 +118,12 @@
                 filter
                 label="KYC Status"
                 width="150px"
-                sortable
-                searchable
             >
-                <template #searchable="props">
-                    <AtomSelectInput
-                        :size="'is-small'"
-                        :list="kycStatusList"
-                        class="column-width"
-                    >
-                    </AtomSelectInput>
-                </template>
                 <template v-slot="props">
                     <SelectInput
                         :key="props.row.ID"
                         :defaultValue="getKYCStatusLabel(props.row.KYCStatus)"
-                        :list="kycStatusList.map((kycStatus) => kycStatus.name)"
+                        :list="KYCStatusLabel"
                         @change="onStatusUpdate(props.row, $event.target.value)"
                         name="updateKYCStatus"
                     />
@@ -144,7 +134,7 @@
 </template>
 
 <script>
-import { getIdBasedOnLable, getKYCStatusLabel } from '@/constant/enums';
+import { getKYCStatusLabel, KYCStatusLabel, KYCStatus } from '@/constant/enums';
 import { mapState, mapActions } from 'vuex';
 import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
 import LoaderModal from '../components/extras/LoaderModal.vue';
@@ -160,14 +150,8 @@ export default {
 
     data() {
         return {
-            kycStatusList: [
-                { id: 0, name: 'Not Set' },
-                { id: 1, name: 'Pending' },
-                { id: 2, name: 'ID Verified' },
-                { id: 3, name: 'Ownership Verified' },
-                { id: 4, name: 'Denied' },
-                { id: 5, name: 'Not Verified' },
-            ],
+            KYCStatusLabel,
+            KYCStatus
         };
     },
     computed: {
@@ -202,12 +186,13 @@ export default {
         },
 
         async onStatusUpdate(row, newStatus) {
-            const lableId = getIdBasedOnLable(this.kycStatusList, newStatus);
-            if (lableId != null) {
-                row['KYCStatus'] = lableId;
-                await this.updateStatus(row);
+            console.log(row, newStatus);
+            const labelId = KYCStatus[newStatus];
+            if (labelId != null) {
+                row['KYCStatus'] = labelId;
+                await this.updateStatus({userData: row});
                 this.$buefy.toast.open({
-                    message: `KYC Status updated to ${getKYCStatusLabel(lableId)}`,
+                    message: `KYC Status updated to ${getKYCStatusLabel(labelId)}`,
                     type: 'is-success',
                     duration: 3000,
                 });

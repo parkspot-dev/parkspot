@@ -98,7 +98,7 @@ export const KYCStatus = Object.freeze({
     NotVerified: 6,
 });
 
-const KYCStatusLabel = [
+export const KYCStatusLabel = [
     'NotSet',
     'Pending',
     'IDVerified',
@@ -356,19 +356,4 @@ export const UserTypeLabels = [
  */
 export function getUserTypeLabel(userType) {
     return getEnumLabel(UserTypeLabels, userType);
-}
-
-/**
- * @param {Array} enumList
- * @param {string} label
- * @return {int|null}: id for the given label or null if not found
- */
-export function getIdBasedOnLabel(enumList, label) {
-    if (typeof label === 'string') {
-        const foundItem = enumList.find((item) => item.name === label);
-        return foundItem ? foundItem.id : null;
-    } else {
-        console.warn('Label should be a string');
-        return null;
-    }
 }

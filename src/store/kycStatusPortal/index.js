@@ -41,10 +41,10 @@ const actions = {
         commit('set-loading', false);
     },
 
-    async updateStatus({ commit }, userData) {
+    async updateStatus({ commit }, {userData}) {
         commit('set-loading', true);
-        const res = await mayaClient.post(
-            `/user/${userData.UserName}/kycStatus`,
+        const res = await mayaClient.patch(
+            `auth/user/${userData.UserName}/kycStatus`,
             {
                 KYCStatus: userData.KYCStatus,
             },
