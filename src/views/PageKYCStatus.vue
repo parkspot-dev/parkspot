@@ -186,7 +186,6 @@ export default {
         },
 
         async onStatusUpdate(row, newStatus) {
-            console.log(row, newStatus);
             const labelId = KYCStatus[newStatus];
             if (labelId != null) {
                 row['KYCStatus'] = labelId;

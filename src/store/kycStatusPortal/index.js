@@ -29,7 +29,7 @@ const mutations = {
 };
 
 const actions = {
-    // Fetches spot requests
+    // Fetches Pending KYC Users 
     async fetchKycPendingUsers({ commit }) {
         commit('set-loading', true);
         const res = await mayaClient.get('/internal/users/kyc-status');
