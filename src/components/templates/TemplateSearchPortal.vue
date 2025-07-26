@@ -166,7 +166,7 @@
                             }}</strong>
                             <button
                                 v-else
-                                @click="onConnect(props.row, true)"
+                                @click="onConnect(props.row)"
                                 class="btn px-2"
                             >
                                 Connect
@@ -375,8 +375,7 @@
     <!-- Connect popup -->
     <div v-if="isOpen" class="popup-container">
         <div class="popup">
-            <div v-if="isConnectModalOpen" class="connect-and-status" >
-                <div class="mobile">
+            <div class="mobile">
                 Contact With {{ this.selectedRow.Name }} on
                 <span>{{ this.selectedRow.Mobile }}</span>
             </div>
@@ -388,7 +387,6 @@
                 @change="onStatusUpdate(selectedRow, $event.target.value)"
                 name="updateStatus"
             />
-            </div>
             <div>Previous Comments</div>
             <AtomTextarea
                 :maxlength="1000"
@@ -564,7 +562,6 @@ export default {
             newComment: '',
             defaultStatus: '',
             FREQUENT_COMMENTS: FREQUENT_COMMENTS,
-            isConnectModalOpen: false,
             newCommentMap: {}
         };
     },
@@ -677,8 +674,7 @@ export default {
             return moment(date).format('DD MMM YY, hh:mm A');
         },
 
-        onConnect(selectedRow = {}, openModalWithConnect = false) {
-            this.isConnectModalOpen = openModalWithConnect;
+        onConnect(selectedRow = {}) {
             this.selectedRow = selectedRow;
             this.isOpen = !this.isOpen;
             const selectedStatus = this.statusList.find(
@@ -961,14 +957,6 @@ $portal-font-size: 13px;
     padding: 52px 20px 20px 20px;
     position: relative;
     width: 30%;
-
-    .connect-and-status{
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        margin-bottom: 20px;
-    }
-
     .note {
         display: flex;
         flex-direction: column;
