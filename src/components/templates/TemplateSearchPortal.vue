@@ -209,19 +209,17 @@
                 v-slot="props"
                 width="10px"
             >
+            <div class="previous-comments" >{{ props.row.Comments }}</div>
                 <AtomTextarea
                     :maxlength="1000"
-                    :readOnly="true"
-                    :rowNo="8"
+                    :rowNo="4"
                     :size="'is-small'"
+                    :placeholder="'Add new comment...'"
                     @changed="onCommentUpdate(props.row, oldComments, $event)"
                     @mousedown="storeOldComment(props.row)"
                     class="comment-width"
-                    v-model="props.row.Comments"
+                    v-model="newCommentMap[props.row.ID]"
                 ></AtomTextarea>
-                <button @click="onConnect(props.row)" class="btn px-2">
-                    Add Comment
-                </button>
             </b-table-column>
 
             <b-table-column
@@ -435,7 +433,7 @@
                     onCommentUpdate(
                         selectedRow,
                         selectedRow.Comments,
-                        `${selectedRow.Comments}\n${newComment}`,
+                        newComment,
                     )
                 "
                 class="btn"
@@ -566,7 +564,8 @@ export default {
             newComment: '',
             defaultStatus: '',
             FREQUENT_COMMENTS: FREQUENT_COMMENTS,
-            isConnectModalOpen: false
+            isConnectModalOpen: false,
+            newCommentMap: {}
         };
     },
     methods: {
@@ -617,6 +616,11 @@ export default {
         },
 
         onCommentUpdate(row, oldComment, newComment) {
+            if(!newComment) {
+                return;
+            }
+
+            newComment = `${oldComment}\n${newComment}`
             const date = new Date();
             const dd = date.getDate();
             let mm = date.getMonth() + 1;
@@ -630,6 +634,7 @@ export default {
             this.isOpen = false;
             this.newComment = '';
             this.oldComments = '';
+            this.newCommentMap[row.ID] = ''; // Reset the new comment for the row
         },
 
         onStatusUpdate(spotData, status) {
@@ -1020,5 +1025,13 @@ $portal-font-size: 13px;
         cursor: pointer;
         padding: 12px 16px;
     }
+}
+
+.previous-comments{
+    font-size: 12px;
+    height: 100px;
+    margin: 20px 0;
+    max-height: 100px;
+    overflow-y: scroll;
 }
 </style>
