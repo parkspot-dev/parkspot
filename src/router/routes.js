@@ -29,6 +29,7 @@ export const pages = {
     REGISTER_REQUEST        : "/internal/register-request",  
     SPOT_REQUESTS           : "/internal/spot-requests",
     AUTOMATED_PARKING       : "/automated-parking",
+    KYC_STATUS_PAGE         : "/internal/users/kyc-status"
 };
 
 export const routes = [
@@ -153,6 +154,11 @@ export const routes = [
         path: pages.AUTOMATED_PARKING,
         name: 'automated-parking',
         component: () => import('@/views/AutomateParking.vue'),
+    },
+    {
+        path: pages.KYC_STATUS_PAGE,
+        name: 'kyc-status',
+        component: () => import('@/views/PageKYCStatus.vue')
     },
     {
         path: pages.APP,
