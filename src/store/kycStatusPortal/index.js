@@ -5,6 +5,7 @@ const state = {
     hasError: false,
     errorMessage: '',
     isLoading: false,
+    searchMobile: '',
 };
 
 const getters = {
@@ -26,22 +27,37 @@ const mutations = {
     'set-loading'(state, isLoading) {
         state.isLoading = isLoading;
     },
+    'set-search-mobile'(state, text) {
+        state.searchMobile = text;
+    },
 };
 
 const actions = {
-    // Fetches Pending KYC Users 
+    // Fetches Pending KYC Users
     async fetchKycPendingUsers({ commit }) {
-        commit('set-loading', true);
-        const res = await mayaClient.get('/internal/users/kyc-status');
-        if (res.DisplayMsg) {
-            commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
-        } else {
-            commit('set-users', res);
+        if (state.isLoading) return;
+        try {
+            commit('set-loading', true);
+            const BASE_KYC_PENDING_USERS_URL = '/internal/users/kyc-status';
+            const kycPendingStatusURL = state.searchMobile
+                ? `${BASE_KYC_PENDING_USERS_URL}?mobile=${state.searchMobile.replace(
+                      /\s+/g,
+                      '',
+                  )}`
+                : BASE_KYC_PENDING_USERS_URL;
+            const response = await mayaClient.get(kycPendingStatusURL);
+            if (response.ErrorCode) {
+                throw new Error(response.DisplayMsg);
+            }
+            commit('set-users', response);
+        } catch (error) {
+            commit('set-error', error.message);
+        } finally {
+            commit('set-loading', false);
         }
-        commit('set-loading', false);
     },
 
-    async updateStatus({ commit }, {userData}) {
+    async updateStatus({ commit }, { userData }) {
         commit('set-loading', true);
         const res = await mayaClient.patch(
             `auth/user/${userData.UserName}/kycStatus`,
@@ -53,6 +69,10 @@ const actions = {
             commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
         }
         commit('set-loading', false);
+    },
+
+    updateMobileInput({ commit }, mobileInput) {
+        commit('set-search-mobile', mobileInput);
     },
 };
 

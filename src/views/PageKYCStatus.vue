@@ -1,5 +1,14 @@
 <template>
     <div class="kyc-status-portal-root">
+        <!-- Search Bar -->
+        <div class="search-control">
+            <MoleculeSearchBox
+                :initialValue="searchMobile"
+                @clear-input="onClearMobileInput"
+                @on-search="searchUsersWithMobile"
+                placeholder="Mobile"
+            ></MoleculeSearchBox>
+        </div>
         <!-- Loading modal displayed during data fetch -->
         <LoaderModal v-if="isLoading"></LoaderModal>
         <!-- Buefy Table for spot requests with pagination -->
@@ -13,6 +22,7 @@
             :mobile-cards="true"
             :narrowed="true"
             :sticky-header="true"
+            class="table"
             height="700"
         >
             <b-table-column
@@ -125,6 +135,7 @@
                         :defaultValue="getKYCStatusLabel(props.row.KYCStatus)"
                         :list="KYCStatusLabel"
                         @change="onStatusUpdate(props.row, $event.target.value)"
+                        class="select"
                         name="updateKYCStatus"
                     />
                 </template>
@@ -139,19 +150,21 @@ import { mapState, mapActions } from 'vuex';
 import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import SelectInput from '@/components/global/SelectInput.vue';
+import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
 
 export default {
     name: 'KYCStatusPage',
     components: {
         AtomSelectInput,
         LoaderModal,
+        MoleculeSearchBox,
         SelectInput,
     },
 
     data() {
         return {
             KYCStatusLabel,
-            KYCStatus
+            KYCStatus,
         };
     },
     computed: {
@@ -160,13 +173,27 @@ export default {
             'hasError',
             'errorMessage',
             'users',
+            'searchMobile',
         ]),
     },
     mounted() {
         this.fetchKycPendingUsers();
     },
+    created() {
+        const mobile = this.$route.query.mobile;
+        if (mobile) {
+            this.updateMobileInput(mobile);
+        } else {
+            this.updateMobileInput('');
+        }
+    },
+
     methods: {
-        ...mapActions('kycStatusPortal', ['fetchKycPendingUsers', 'updateStatus']),
+        ...mapActions('kycStatusPortal', [
+            'fetchKycPendingUsers',
+            'updateStatus',
+            'updateMobileInput',
+        ]),
 
         // Get label for status based on the enum value
         getKYCStatusLabel(spotRequestStatus) {
@@ -189,7 +216,7 @@ export default {
             const labelId = KYCStatus[newStatus];
             if (labelId != null) {
                 row['KYCStatus'] = labelId;
-                await this.updateStatus({userData: row});
+                await this.updateStatus({ userData: row });
                 this.$buefy.toast.open({
                     message: `KYC Status updated to ${getKYCStatusLabel(labelId)}`,
                     type: 'is-success',
@@ -198,6 +225,59 @@ export default {
             } else {
                 this.alertError('Invalid status selected.');
             }
+        },
+
+        async searchUsersWithMobile(userMobile) {
+            if (userMobile != '') {
+                // Sanitize Mobile Number
+                const sanitizeMobileNumber = this.sanitizeMobile(userMobile);
+                if (!sanitizeMobileNumber) {
+                    this.$buefy.dialog.alert({
+                        title: 'Error',
+                        message: 'Invalid Mobile Number',
+                        type: 'is-danger',
+                        hasIcon: true,
+                        icon: 'alert-circle',
+                        ariaRole: 'alertdialog',
+                        ariaModal: true,
+                    });
+                } else {
+                    // Update Search Text with voMobile
+                    this.updateMobileInput(sanitizeMobileNumber);
+                    this.$router.push({
+                        path: this.$route.path,
+                        query: {
+                            mobile: sanitizeMobileNumber,
+                        },
+                    });
+                }
+            }
+        },
+
+        // Clear Mobile Input
+        async onClearMobileInput() {
+            if (this.$route.query.mobile) {
+                this.updateMobileInput('');
+                this.$router.push({
+                    name: 'kyc-status',
+                });
+            }
+        },
+
+        // Sanitize mobile number
+        sanitizeMobile(input) {
+            // filter all non-digints characters
+            let sanitized = input.replace(/[^\d]/g, '');
+            // if this constains extra 91 (Country code)
+            if (sanitized.length > 10 && sanitized.startsWith('91')) {
+                sanitized = sanitized.slice(2);
+            }
+
+            if (sanitized.length !== 10) {
+                return null;
+            }
+
+            return sanitized;
         },
     },
     watch: {
@@ -249,5 +329,10 @@ $portal-font-size: 13px;
         padding: 12px 12px;
         text-align: center;
     }
+}
+
+.select {
+    margin-top: 4px;
+    padding-bottom: 0px !important;
 }
 </style>
