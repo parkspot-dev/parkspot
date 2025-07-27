@@ -1021,5 +1021,6 @@ $portal-font-size: 13px;
     margin: 20px 0;
     max-height: 100px;
     overflow-y: scroll;
+    white-space: pre-line;
 }
 </style>
