@@ -1,5 +1,6 @@
 <template>
-    <b-tabs v-if="userProfile.FullName" v-model="activeTabView">
+    <div class="search-portal-root" >
+        <b-tabs v-if="userProfile.FullName" v-model="activeTabView">
         <b-tab-item label="Parking Request (VO/SO)">
             <div class="request-search-control">
                 <MoleculeSearchBox
@@ -34,6 +35,7 @@
             ></TemplateSearchPortal>
         </b-tab-item>
     </b-tabs>
+    </div>
 </template>
 <script>
 import TemplateSearchPortal from '../components/templates/TemplateSearchPortal.vue';
@@ -296,6 +298,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.search-portal-root {
+    background: #f5f5fb;
+    padding: 16px;
+}
 .tab-item {
     .request-search-control {
         display: flex;
