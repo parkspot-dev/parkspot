@@ -10,6 +10,15 @@
                     >
                 </div>
             </div>
+            <div class="filters-summary" v-if="filteredFilters.length">
+                <p><strong>Filters:</strong></p>
+                <ul class="filters-list">
+                    <li v-for="(item, index) in filteredFilters" :key="index">
+                        {{ item.label }} : {{ item.value }}
+                    </li>
+                </ul>
+            </div>
+
             <div class="summary" v-if="isSummary">
                 <div class="so-btn">
                     <AtomButton
@@ -113,7 +122,14 @@
                     <AtomDatePicker
                         :assignedDate="filters.UpdatedAt"
                         @changed="
-                            (date) => (filters.UpdatedAt = formatDate(date))
+                            (date) => {
+                                const formatted = formatDate(date);
+                                filters.UpdatedAt = formatted;
+                                updateFilters({
+                                    field: 'UpdatedAt',
+                                    value: formatted,
+                                });
+                            }
                         "
                         placeholder="Filter by Updated Date"
                     />
@@ -161,14 +177,16 @@
                         </p>
                         <p v-if="props.row.Agent !== 'NA' || isAdmin">
                             Mobile:
-                            <strong v-if="isAdmin" >{{ props.row.Mobile }}</strong>
+                            <strong v-if="isAdmin">{{
+                                props.row.Mobile
+                            }}</strong>
                             <button
                                 v-else
                                 @click="onConnect(props.row)"
                                 class="btn px-2"
                             >
                                 Connect
-                            </button> 
+                            </button>
                         </p>
                         <p>
                             Email:
@@ -233,8 +251,11 @@
                         label=""
                         placeholder="Agent"
                         v-model="props.filters['Agent']"
-                    >
-                    </AtomSelectInput>
+                        @change="
+                            (val) =>
+                                updateFilters({ field: 'Agent', value: val })
+                        "
+                    />
                 </template>
                 <template v-slot="props">
                     <div class="status-column">
@@ -279,6 +300,12 @@
                         :size="'is-small'"
                         class="column-width"
                         placeholder="Select Status"
+                        @click.native="
+                            updateFilters({
+                                field: 'Status',
+                                value: props.filters['Status'],
+                            })
+                        "
                         v-model="props.filters['Status']"
                     >
                     </AtomSelectInput>
@@ -476,8 +503,27 @@ export default {
     },
     emits: ['updateRequest', 'toSrp'],
     computed: {
-        ...mapState('searchPortal', ['agentList', 'expiringRequestsCount']),
+        ...mapState('searchPortal', [
+            'agentList',
+            'expiringRequestsCount',
+            'filters',
+        ]),
         ...mapState('user', ['userProfile', 'isAdmin']),
+
+        filteredFilters() {
+            return Object.entries(this.filters)
+                .filter(([_, value]) => value)
+                .map(([key, value]) => {
+                    let label = key;
+                    if (key === 'Status') {
+                        value = this.statusList[value]?.name || value;
+                    }
+                    if (key === 'UpdatedAt') {
+                        label = 'Date';
+                    }
+                    return { label, value };
+                });
+        },
     },
     mounted() {
         if (this.userProfile && !this.isAdmin) {
@@ -486,7 +532,16 @@ export default {
             this.setAgents(agents);
         }
 
-        if(this.parkingRequests && this.parkingRequests.length > 0) {
+        const params = new URLSearchParams(window.location.search);
+        const filters = {};
+        if (params.get('updatedat'))
+            filters.UpdatedAt = params.get('updatedat');
+        if (params.get('agent'))
+            filters.Agent = this.getAgentFromAgentList(params.get('agent'));
+        if (params.get('status')) filters.Status = params.get('status');
+        this.setFilters(filters);
+
+        if (this.parkingRequests && this.parkingRequests.length > 0) {
             this.updateSummary(this.parkingRequests);
         }
     },
@@ -494,9 +549,18 @@ export default {
     watch: {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
-        }
+        },
+        agentList() {
+            const params = new URLSearchParams(window.location.search);
+            const filters = {};
+            if (params.get('updatedat'))
+                filters.UpdatedAt = params.get('updatedat');
+            if (params.get('agent'))
+                filters.Agent = this.getAgentFromAgentList(params.get('agent'));
+            if (params.get('status')) filters.Status = params.get('status');
+            this.setFilters(filters);
+        },
     },
-
     created() {
         // Check for expiring requests
         if (this.$route.query['isExpiring']) {
@@ -506,11 +570,11 @@ export default {
     data() {
         return {
             // filters were declared explicitly to use in v-model else they have no use
-            filters: {
-                Agent: '',
-                Status: '',
-                UpdatedAt: null,
-            },
+            // filters: {
+            //     Agent: '',
+            //     Status: '',
+            //     UpdatedAt: null,
+            // },
             isEmpty: false,
             isBordered: false,
             isStriped: false,
@@ -565,6 +629,8 @@ export default {
             'getAgents',
             'setAgents',
             'extractExpiringRequests',
+            'updateFilters',
+            'setFilters',
         ]),
         getPriority(val) {
             switch (val) {
@@ -723,6 +789,23 @@ export default {
                     this.summary.yesterday++;
                 }
             });
+        },
+
+        capitalizeFirstLetter(str) {
+            if (!str) return '';
+            return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+        },
+
+        getAgentFromAgentList(agentName) {
+            const match = this.agentList.find((agent) =>
+                agent.name.toLowerCase().includes(agentName.toLowerCase()),
+            );
+
+            if (match) {
+                return match.name;
+            }
+
+            return null;
         },
     },
 };

@@ -11,7 +11,12 @@ const state = {
     agentList: [],
     parkingRequests: [],
     interestedVOList: [],
-    expiringRequestsCount: 0
+    expiringRequestsCount: 0,
+    filters: {
+        Agent: null,
+        Status: null,
+        UpdatedAt: null
+    }
 };
 
 const getters = {};
@@ -56,6 +61,16 @@ const mutations = {
     },
     'set-expiring-requests-count'(state, count) {
         state.expiringRequestsCount = count;
+    },
+    'update-filters'(state, { field, value }) {
+        if (value) {
+            state.filters[field] = value;
+        } else {
+            delete state.filters[field];
+        }
+    },
+    'set-filters'(state, filters) {
+        state.filters = filters
     }
 };
 const actions = {
@@ -130,6 +145,17 @@ const actions = {
     extractExpiringRequests({ commit, state}) {
          const extractedCriticalRequests = state.parkingRequests.filter((request) => request.IsExpiring)
          commit('set-parking-requests', extractedCriticalRequests)
+    },
+
+    updateFilters({ commit }, { field, value }) {
+        const url = new URL(window.location.href);
+        url.searchParams.set(field.toLowerCase(), value.toLowerCase());
+        window.history.pushState({}, '', url.toString());
+        commit('update-filters', { field, value });
+    },
+
+    setFilters({ commit }, filters) {
+        commit('set-filters', filters)
     }
 };
 
