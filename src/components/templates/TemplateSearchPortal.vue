@@ -211,7 +211,7 @@
                     :size="'is-small'"
                     v-model="props.row.Comments"
                     class="comment-width"
-                    :maxlength="1000"
+                    :maxlength="3000"
                     :rowNo="8"
                     @mousedown="storeOldComment(props.row)"
                     @changed="onCommentUpdate(props.row, oldComments, $event)"
