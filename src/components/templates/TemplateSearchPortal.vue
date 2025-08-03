@@ -211,7 +211,7 @@
             >
             <div class="previous-comments" >{{ props.row.Comments }}</div>
                 <AtomTextarea
-                    :maxlength="1000"
+                    :maxlength="3000"
                     :rowNo="4"
                     :size="'is-small'"
                     :placeholder="'Add new comment...'"
@@ -622,12 +622,10 @@ export default {
             const dd = date.getDate();
             let mm = date.getMonth() + 1;
             if (mm < 10) mm = '0' + mm;
-            if (oldComment !== newComment) {
-                row.Comments = `${newComment} [${dd}/${mm}]`;
-                this.$emit('updateRequest', row);
-                // Reset stored old comment
-                this.oldComments = row.Comments;
-            }
+            row.Comments = `${newComment} [${dd}/${mm}]`;
+            this.$emit('updateRequest', row);
+            // Reset stored old comment
+            this.oldComments = row.Comments;
             this.isOpen = false;
             this.newComment = '';
             this.oldComments = '';

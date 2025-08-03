@@ -98,7 +98,7 @@ export const KYCStatus = Object.freeze({
     NotVerified: 6,
 });
 
-const KYCStatusLabel = [
+export const KYCStatusLabel = [
     'NotSet',
     'Pending',
     'IDVerified',

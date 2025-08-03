@@ -75,6 +75,13 @@
                                             Spot Requests
                                         </router-link>
                                     </li>
+                                    <li>
+                                        <router-link
+                                            :to="{ name: 'kyc-status' }"
+                                        >
+                                            KYC Status
+                                        </router-link>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
