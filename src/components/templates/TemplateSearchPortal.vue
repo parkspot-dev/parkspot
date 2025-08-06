@@ -161,14 +161,16 @@
                         </p>
                         <p v-if="props.row.Agent !== 'NA' || isAdmin">
                             Mobile:
-                            <strong v-if="isAdmin" >{{ props.row.Mobile }}</strong>
+                            <strong v-if="isAdmin">{{
+                                props.row.Mobile
+                            }}</strong>
                             <button
                                 v-else
                                 @click="onConnect(props.row)"
                                 class="btn px-2"
                             >
                                 Connect
-                            </button> 
+                            </button>
                         </p>
                         <p>
                             Email:
@@ -207,14 +209,16 @@
                 v-slot="props"
                 width="10px"
             >
+            <div class="previous-comments" >{{ props.row.Comments }}</div>
                 <AtomTextarea
-                    :size="'is-small'"
-                    v-model="props.row.Comments"
-                    class="comment-width"
                     :maxlength="3000"
-                    :rowNo="8"
-                    @mousedown="storeOldComment(props.row)"
+                    :rowNo="4"
+                    :size="'is-small'"
+                    :placeholder="'Add new comment...'"
                     @changed="onCommentUpdate(props.row, oldComments, $event)"
+                    @mousedown="storeOldComment(props.row)"
+                    class="comment-width"
+                    v-model="newCommentMap[props.row.ID]"
                 ></AtomTextarea>
             </b-table-column>
 
@@ -427,7 +431,7 @@
                     onCommentUpdate(
                         selectedRow,
                         selectedRow.Comments,
-                        `${selectedRow.Comments}\n${newComment}`,
+                        newComment,
                     )
                 "
                 class="btn"
@@ -486,7 +490,7 @@ export default {
             this.setAgents(agents);
         }
 
-        if(this.parkingRequests && this.parkingRequests.length > 0) {
+        if (this.parkingRequests && this.parkingRequests.length > 0) {
             this.updateSummary(this.parkingRequests);
         }
     },
@@ -494,7 +498,7 @@ export default {
     watch: {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
-        }
+        },
     },
 
     created() {
@@ -558,6 +562,7 @@ export default {
             newComment: '',
             defaultStatus: '',
             FREQUENT_COMMENTS: FREQUENT_COMMENTS,
+            newCommentMap: {}
         };
     },
     methods: {
@@ -608,19 +613,23 @@ export default {
         },
 
         onCommentUpdate(row, oldComment, newComment) {
+            if(!newComment) {
+                return;
+            }
+
+            newComment = `${oldComment}\n${newComment}`
             const date = new Date();
             const dd = date.getDate();
             let mm = date.getMonth() + 1;
             if (mm < 10) mm = '0' + mm;
-            if (oldComment !== newComment) {
-                row.Comments = `${newComment} [${dd}/${mm}]`;
-                this.$emit('updateRequest', row);
-                // Reset stored old comment
-                this.oldComments = row.Comments;
-            }
+            row.Comments = `${newComment} [${dd}/${mm}]`;
+            this.$emit('updateRequest', row);
+            // Reset stored old comment
+            this.oldComments = row.Comments;
             this.isOpen = false;
             this.newComment = '';
             this.oldComments = '';
+            this.newCommentMap[row.ID] = ''; // Reset the new comment for the row
         },
 
         onStatusUpdate(spotData, status) {
@@ -946,7 +955,6 @@ $portal-font-size: 13px;
     padding: 52px 20px 20px 20px;
     position: relative;
     width: 30%;
-
     .note {
         display: flex;
         flex-direction: column;
@@ -1003,5 +1011,14 @@ $portal-font-size: 13px;
         cursor: pointer;
         padding: 12px 16px;
     }
+}
+
+.previous-comments{
+    font-size: 12px;
+    height: 100px;
+    margin: 20px 0;
+    max-height: 100px;
+    overflow-y: scroll;
+    white-space: pre-line;
 }
 </style>
