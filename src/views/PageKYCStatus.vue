@@ -305,7 +305,7 @@ $portal-font-size: 13px;
 }
 
 .table {
-    margin-top: 60px;
+    margin-top: 32px;
 }
 
 .column-width {
