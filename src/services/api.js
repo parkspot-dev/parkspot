@@ -135,8 +135,7 @@ class MayaApiService extends BaseApiService {
                 if(localStorage.getItem(
                     'PSAuthKey',
                 )) {
-                    const token = await axios.post(`${mayaDomain}/auth/refresh-token`)
-                    console.log("token....", token);
+                    localStorage.setItem('PSAuthKey', auth.currentUser?.accessToken)
                 }
                 config.headers['PSAuthKey'] = `${localStorage.getItem(
                     'PSAuthKey',
