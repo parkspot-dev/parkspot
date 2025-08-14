@@ -1,40 +1,41 @@
 <template>
-    <div class="search-portal-root"> >
+    <div class="search-portal-root">
+        >
         <b-tabs v-if="userProfile.FullName" v-model="activeTabView">
-        <b-tab-item label="Parking Request (VO/SO)">
-            <div class="request-search-control">
-                <MoleculeSearchBox
-                    placeholder="Mobile"
-                    :initialValue="searchMobile"
-                    @on-search="searchRequestWithMobile"
-                    @clear-input="onClearMobileInput"
-                ></MoleculeSearchBox>
-            </div>
-            <TemplateSearchPortal
-                :parkingRequests="parkingRequests"
-                :isLoading="loading"
-                :isSummary="true"
-                @updateRequest="updateRequest"
-                @toSrp="toSrp"
-            ></TemplateSearchPortal>
-        </b-tab-item>
+            <b-tab-item label="Parking Request (VO/SO)">
+                <div class="request-search-control">
+                    <MoleculeSearchBox
+                        placeholder="Mobile"
+                        :initialValue="searchMobile"
+                        @on-search="searchRequestWithMobile"
+                        @clear-input="onClearMobileInput"
+                    ></MoleculeSearchBox>
+                </div>
+                <TemplateSearchPortal
+                    :parkingRequests="parkingRequests"
+                    :isLoading="loading"
+                    :isSummary="true"
+                    @updateRequest="updateRequest"
+                    @toSrp="toSrp"
+                ></TemplateSearchPortal>
+            </b-tab-item>
 
-        <b-tab-item label="Interested Request(VO)">
-            <p></p>
-            <MoleculeSearchBox
-                placeholder="Lat,Long"
-                :initialValue="SOLatLngInput"
-                @on-search="searchRequestWithLatLng"
-                @clear-input="onClearLatLngInput"
-            ></MoleculeSearchBox>
-            <TemplateSearchPortal
-                :isLoading="loading"
-                :parkingRequests="interestedVOList"
-                @toSrp="toSrp"
-                @updateRequest="updateRequest"
-            ></TemplateSearchPortal>
-        </b-tab-item>
-    </b-tabs>
+            <b-tab-item label="Interested Request(VO)">
+                <p></p>
+                <MoleculeSearchBox
+                    placeholder="Lat,Long"
+                    :initialValue="SOLatLngInput"
+                    @on-search="searchRequestWithLatLng"
+                    @clear-input="onClearLatLngInput"
+                ></MoleculeSearchBox>
+                <TemplateSearchPortal
+                    :isLoading="loading"
+                    :parkingRequests="interestedVOList"
+                    @toSrp="toSrp"
+                    @updateRequest="updateRequest"
+                ></TemplateSearchPortal>
+            </b-tab-item>
+        </b-tabs>
     </div>
 </template>
 <script>
@@ -301,6 +302,12 @@ export default {
 .search-portal-root {
     background: #f5f5fb;
     padding: 16px;
+}
+
+@media (max-width: 900px) {
+    .search-portal-root {
+        padding: 4px;
+    }
 }
 
 .tab-item {

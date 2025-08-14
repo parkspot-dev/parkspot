@@ -209,7 +209,8 @@
                 v-slot="props"
                 width="10px"
             >
-            <div class="previous-comments" >{{ props.row.Comments }}</div>
+            <div class="comment-wrapper" >
+                <div class="previous-comments" >{{ props.row.Comments }}</div>
                 <AtomTextarea
                     :maxlength="3000"
                     :rowNo="4"
@@ -220,6 +221,7 @@
                     class="comment-width"
                     v-model="newCommentMap[props.row.ID]"
                 ></AtomTextarea>
+            </div>
             </b-table-column>
 
             <b-table-column
@@ -745,6 +747,20 @@ $portal-font-size: 13px;
     justify-content: space-between;
 }
 
+@media(max-width: 900px) {
+   .header {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+   }
+
+   .comment-wrapper{
+    display: flex;
+    flex-direction: column;
+    max-width: 160px;
+}
+}
+
 .expiring-request {
     align-items: center;
     align-items: center;
@@ -819,7 +835,7 @@ $portal-font-size: 13px;
         width: 330px;
 
         @media only screen and (max-width: 1024px) {
-            width: 200px;
+            width: 100%;
         }
     }
 
