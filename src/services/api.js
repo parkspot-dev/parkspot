@@ -132,6 +132,11 @@ class MayaApiService extends BaseApiService {
         this.client.interceptors.request.use(
             async (config) => {
                 await auth.authStateReady();
+                if(localStorage.getItem(
+                    'PSAuthKey',
+                )) {
+                    localStorage.setItem('PSAuthKey', auth.currentUser?.accessToken)
+                }
                 config.headers['PSAuthKey'] = `${localStorage.getItem(
                     'PSAuthKey',
                 )}`;
