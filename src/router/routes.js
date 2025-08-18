@@ -29,7 +29,8 @@ export const pages = {
     REGISTER_REQUEST        : "/internal/register-request",  
     SPOT_REQUESTS           : "/internal/spot-requests",
     AUTOMATED_PARKING       : "/automated-parking",
-    KYC_STATUS_PAGE         : "/internal/users/kyc-status"
+    KYC_STATUS_PAGE         : "/internal/users/kyc-status",
+    SITES_SEARCH            : "/internal/site-search"
 };
 
 export const routes = [
@@ -159,6 +160,11 @@ export const routes = [
         path: pages.KYC_STATUS_PAGE,
         name: 'kyc-status',
         component: () => import('@/views/PageKYCStatus.vue')
+    },
+    {
+        path: pages.SITES_SEARCH,
+        name: 'site-search',
+        component: () => import('@/views/PageSearchSiteByName.vue')
     },
     {
         path: pages.APP,
