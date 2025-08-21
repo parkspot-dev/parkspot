@@ -1,12 +1,12 @@
 <template>
-    <div class="kyc-status-portal-root p-5">
+    <div class="search-spot-portal-root p-5">
         <!-- Search Bar -->
         <div class="search-control mb-4">
             <MoleculeSearchBox
                 :initialValue="searchName"
                 @clear-input="onClearNameInput"
-                @on-search="searchSitesByName"
-                placeholder="Site Name"
+                @on-search="searchSpotsByName"
+                placeholder="Spot Name"
             ></MoleculeSearchBox>
         </div>
 
@@ -16,7 +16,7 @@
         <!-- Show message when no data -->
         <div v-if="!isLoading && sites.length === 0" class="has-text-centered mt-6">
             <b-icon icon="alert-circle" size="is-large" type="is-info"></b-icon>
-            <p class="mt-3 has-text-grey">No sites found. Try another search.</p>
+            <p class="mt-3 has-text-grey">No spots found. Try another search.</p>
         </div>
 
         <!-- Buefy Table -->
@@ -36,7 +36,7 @@
         >
             <b-table-column
                 field="SiteID"
-                label="Site ID"
+                label="Spot ID"
                 cell-class="has-text-left"
             >
                 <template v-slot="props">
@@ -45,7 +45,7 @@
             </b-table-column>
             <b-table-column
                 field="Name"
-                label="Site Name"
+                label="Spot Name"
                 cell-class="has-text-left"
             >
                 <template v-slot="props">
@@ -107,7 +107,7 @@ export default {
 
             try {
                 console.log("searching site name", name)
-                const res = await mayaClient.get(`/sites-by-name?name=${name}`);
+                const res = await mayaClient.get(`/sites-by-name?name=${mayaClient.get(`/sites-by-name?name=${encodeURIComponent(name)}`)}`);
                 this.sites = res || [];
             } catch (err) {
                 this.hasError = true;
@@ -125,7 +125,7 @@ export default {
             }
         },
 
-        async searchSitesByName(siteName) {
+        async searchSpotsByName(siteName) {
             if (siteName !== '') {
                 const sanitized = this.sanitizeName(siteName);
                 if (!sanitized) {
@@ -176,11 +176,18 @@ export default {
 </script>
 
 <style scoped>
-.kyc-status-portal-root {
-    padding: 40px;
+.search-spot-portal-root {
+    background: #f5f5fb;
+    padding: 16px;
+    text-align: center;
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
 }
 .table {
-    margin-top: 20px;
+    margin-top:32px;
 }
 .cursor-pointer {
     cursor: pointer;

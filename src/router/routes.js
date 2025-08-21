@@ -30,7 +30,7 @@ export const pages = {
     SPOT_REQUESTS           : "/internal/spot-requests",
     AUTOMATED_PARKING       : "/automated-parking",
     KYC_STATUS_PAGE         : "/internal/users/kyc-status",
-    SITES_SEARCH            : "/internal/site-search"
+    SITES_SEARCH            : "/internal/spot-search"
 };
 
 export const routes = [

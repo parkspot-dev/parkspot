@@ -77,6 +77,13 @@
                                     </li>
                                     <li>
                                         <router-link
+                                            :to="{ name: 'site-search' }"
+                                        >
+                                            Search Spot
+                                        </router-link>
+                                    </li>
+                                    <li>
+                                        <router-link
                                             :to="{ name: 'kyc-status' }"
                                         >
                                             KYC Status
