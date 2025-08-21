@@ -40,7 +40,7 @@
                 cell-class="has-text-left"
             >
                 <template v-slot="props">
-                    <div>{{ props.row.SiteID }}</div>
+                    <div class="cursor-pointer" @click="spotDetails(props.row.SiteID)" >{{ props.row.SiteID }}</div>
                 </template>
             </b-table-column>
             <b-table-column
@@ -60,15 +60,6 @@
             >
                 <template v-slot="props">
                     <div>{{ props.row.Address }}</div>
-                </template>
-            </b-table-column>
-            <b-table-column
-                field="Type"
-                label="Type"
-                cell-class="has-text-left"
-            >
-                <template v-slot="props">
-                    <div>{{ props.row.Type }}</div>
                 </template>
             </b-table-column>
         </b-table>
@@ -116,10 +107,8 @@ export default {
 
             try {
                 console.log("searching site name", name)
-                const res = await mayaClient.get(`sites-by-name`, {
-                    params: { name },
-                });
-                this.sites = res.data || [];
+                const res = await mayaClient.get(`/sites-by-name?name=${name}`);
+                this.sites = res || [];
             } catch (err) {
                 this.hasError = true;
                 this.errorMessage =
@@ -160,6 +149,16 @@ export default {
             }
         },
 
+        spotDetails(spotID) {
+            const route = this.$router.resolve({
+                name: 'spot-detail',
+                params: {
+                    spotId: spotID,
+                },
+            });
+            window.open(route.href);
+        },
+
         async onClearNameInput() {
             if (this.$route.query.name) {
                 this.searchName = '';
@@ -182,5 +181,9 @@ export default {
 }
 .table {
     margin-top: 20px;
+}
+.cursor-pointer {
+    cursor: pointer;
+    color: blue
 }
 </style>
