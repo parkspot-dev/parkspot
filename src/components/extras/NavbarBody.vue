@@ -77,7 +77,7 @@
                                     </li>
                                     <li>
                                         <router-link
-                                            :to="{ name: 'site-search' }"
+                                            :to="{ name: 'spot-search' }"
                                         >
                                             Search Spot
                                         </router-link>
@@ -447,6 +447,15 @@
                                             :to="{ name: 'spotRequest' }"
                                         >
                                             Spot Requests
+                                        </router-link>
+                                        </p>
+                                    </li>
+                                    <li class="scroll-item">
+                                        <p @click="toggleMobileNav">
+                                            <router-link
+                                            :to="{ name: 'spot-search' }"
+                                        >
+                                            Search Spot
                                         </router-link>
                                         </p>
                                     </li>

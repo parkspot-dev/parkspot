@@ -163,7 +163,7 @@ export const routes = [
     },
     {
         path: pages.SITES_SEARCH,
-        name: 'site-search',
+        name: 'spot-search',
         component: () => import('@/views/PageSearchSiteByName.vue')
     },
     {
