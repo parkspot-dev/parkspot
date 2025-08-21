@@ -241,6 +241,14 @@
                                         <b-icon icon="chevron-right"> </b-icon>
                                     </li>
                                     <li
+                                        v-if="isAgent"
+                                        class="scroll-item"
+                                        @click="toggleSlide(3)"
+                                    >
+                                        <p><span>Agent Portal</span></p>
+                                        <b-icon icon="chevron-right"> </b-icon>
+                                    </li>
+                                    <li
                                         class="scroll-item"
                                         @click="toggleSlide(2)"
                                     >
@@ -392,6 +400,63 @@
                                             >
                                                 FAQ
                                             </router-link>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- agent slide -->
+                         <div
+                            :class="[
+                                'menu-slide',
+                                activeSlide === 3 ? 'active-slide' : '',
+                            ]"
+                        >
+                            <div class="slide-header">
+                                <i
+                                    class="back-button"
+                                    @click="backToMainScroll"
+                                >
+                                    <b-icon icon="arrow-left"> </b-icon>
+                                </i>
+                                <p class="slide-header-title">Agent Portal</p>
+                            </div>
+                            <div class="scroll-section">
+                                <ul class="scroll-items">
+                                    <li class="scroll-item">
+                                        <p @click="toggleMobileNav">
+                                            <router-link
+                                            :to="{ name: 'SearchPortal' }"
+                                        >
+                                            Search Portal
+                                        </router-link>
+                                        </p>
+                                    </li>
+                                    <li class="scroll-item">
+                                        <p @click="toggleMobileNav">
+                                            <router-link
+                                            :to="{ name: 'booking-portal' }"
+                                        >
+                                            Bookings
+                                        </router-link>
+                                        </p>
+                                    </li>
+                                    <li class="scroll-item">
+                                        <p @click="toggleMobileNav">
+                                            <router-link
+                                            :to="{ name: 'spotRequest' }"
+                                        >
+                                            Spot Requests
+                                        </router-link>
+                                        </p>
+                                    </li>
+                                    <li class="scroll-item">
+                                        <p @click="toggleMobileNav">
+                                            <router-link
+                                            :to="{ name: 'kyc-status' }"
+                                        >
+                                            KYC Status
+                                        </router-link>
                                         </p>
                                     </li>
                                 </ul>
