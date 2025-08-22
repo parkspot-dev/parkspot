@@ -14,9 +14,14 @@
         <LoaderModal v-if="isLoading"></LoaderModal>
 
         <!-- Show message when no data -->
-        <div v-if="!isLoading && sites.length === 0" class="has-text-centered mt-6">
+        <div
+            v-if="!isLoading && sites.length === 0"
+            class="has-text-centered mt-6"
+        >
             <b-icon icon="alert-circle" size="is-large" type="is-info"></b-icon>
-            <p class="mt-3 has-text-grey">No spots found. Try another search.</p>
+            <p class="mt-3 has-text-grey">
+                No spots found. Try another search.
+            </p>
         </div>
 
         <!-- Buefy Table -->
@@ -40,7 +45,12 @@
                 cell-class="has-text-left"
             >
                 <template v-slot="props">
-                    <div class="cursor-pointer" @click="spotDetails(props.row.SiteID)" >{{ props.row.SiteID }}</div>
+                    <div
+                        class="cursor-pointer"
+                        @click="spotDetails(props.row.SiteID)"
+                    >
+                        {{ props.row.SiteID }}
+                    </div>
                 </template>
             </b-table-column>
             <b-table-column
@@ -104,10 +114,12 @@ export default {
             this.hasError = false;
             this.errorMessage = '';
             this.sites = [];
-
+            name = name.trim();
             try {
-                console.log("searching site name", name)
-                const res = await mayaClient.get(`/sites-by-name?name=${mayaClient.get(`/sites-by-name?name=${encodeURIComponent(name)}`)}`);
+
+                const res = await mayaClient.get(
+                    `/sites-by-name?name=${name}`,
+                );
                 this.sites = res || [];
             } catch (err) {
                 this.hasError = true;
@@ -163,7 +175,7 @@ export default {
             if (this.$route.query.name) {
                 this.searchName = '';
                 this.sites = [];
-                this.$router.push({ name: 'site-search' });
+                this.$router.push({ name: 'spot-search' });
             }
         },
 
@@ -186,11 +198,13 @@ export default {
         margin-bottom: 10px;
     }
 }
+
 .table {
-    margin-top:32px;
+    margin-top: 32px;
 }
+
 .cursor-pointer {
     cursor: pointer;
-    color: blue
+    color: blue;
 }
 </style>
