@@ -30,7 +30,7 @@ export const pages = {
     SPOT_REQUESTS           : "/internal/spot-requests",
     AUTOMATED_PARKING       : "/automated-parking",
     KYC_STATUS_PAGE         : "/internal/users/kyc-status",
-    SITES_SEARCH            : "/internal/spot-search"
+    SPOTS_SEARCH            : "/internal/spot-search"
 };
 
 export const routes = [
@@ -162,9 +162,9 @@ export const routes = [
         component: () => import('@/views/PageKYCStatus.vue')
     },
     {
-        path: pages.SITES_SEARCH,
+        path: pages.SPOTS_SEARCH,
         name: 'spot-search',
-        component: () => import('@/views/PageSearchSiteByName.vue')
+        component: () => import('@/views/PageSearchSpotByName.vue')
     },
     {
         path: pages.APP,
