@@ -77,6 +77,13 @@
                                     </li>
                                     <li>
                                         <router-link
+                                            :to="{ name: 'spot-search' }"
+                                        >
+                                            Search Spot
+                                        </router-link>
+                                    </li>
+                                    <li>
+                                        <router-link
                                             :to="{ name: 'kyc-status' }"
                                         >
                                             KYC Status
@@ -440,6 +447,15 @@
                                             :to="{ name: 'spotRequest' }"
                                         >
                                             Spot Requests
+                                        </router-link>
+                                        </p>
+                                    </li>
+                                    <li class="scroll-item">
+                                        <p @click="toggleMobileNav">
+                                            <router-link
+                                            :to="{ name: 'spot-search' }"
+                                        >
+                                            Search Spot
                                         </router-link>
                                         </p>
                                     </li>
