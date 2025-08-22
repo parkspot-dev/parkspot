@@ -8,6 +8,107 @@
                 :locationName="SO.area"
                 @delete-image="onDeleteImage"
             ></ImageGallery>
+
+            <!-- Users Spots and Spots Requests -->
+            <div
+                v-if="
+                    (UsersSpots && UsersSpots.length > 0) ||
+                    (UsersSpotRequests && UsersSpotRequests.length > 0)
+                "
+                class="stops-requests-container"
+            >
+                <div
+                    v-if="UsersSpots && UsersSpots.length > 0"
+                    class="table-container"
+                >
+                    <hr style="width: 100%" />
+                    <h2>Spots From This Number</h2>
+                    <div class="table-container">
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Spot ID</th>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    v-for="spot in UsersSpots"
+                                    :key="spot.SpotID"
+                                >
+                                    <td>
+                                        <a
+                                            :href="
+                                                this.getSpotDetailURL(
+                                                    spot.SpotID,
+                                                )
+                                            "
+                                            target="_blank"
+                                        >
+                                            {{ spot.SpotID }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ spot.Name }}
+                                    </td>
+                                    <td>{{ spot.Address }}</td>
+                                    <td>{{ spot.Latitude }}</td>
+                                    <td>{{ spot.Longitude }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div
+                    v-if="UsersSpotRequests && UsersSpotRequests.length > 0"
+                    class="table-container"
+                >
+                    <hr style="width: 100%" />
+                    <h2>Spot Requests From This Number</h2>
+                    <div class="table-container">
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    v-for="spotRequest in UsersSpotRequests"
+                                    :key="spotRequest.ID"
+                                >
+                                    <td>
+                                        <a
+                                            :href="
+                                                this.getReviewSpotRequestURL(
+                                                    spotRequest.ID,
+                                                )
+                                            "
+                                            target="_blank"
+                                        >
+                                            {{ spotRequest.ID }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ spotRequest.Name }}
+                                    </td>
+                                    <td>{{ spotRequest.Address }}</td>
+                                    <td>{{ spotRequest.Latitude }}</td>
+                                    <td>{{ spotRequest.Longitude }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
             <!-- SO Details Section -->
             <div class="form-section so-form-section">
                 <div class="heading">
@@ -99,7 +200,11 @@
                     <div class="form-field">
                         <label for="city">City:</label>
                         <select v-model="SO.city" @change="validateCity">
-                            <option v-for="city in cityOptions" :key="city" :value="city">
+                            <option
+                                v-for="city in cityOptions"
+                                :key="city"
+                                :value="city"
+                            >
                                 {{ city }}
                             </option>
                         </select>
@@ -415,7 +520,7 @@ export default {
             initialFormData: {},
             baseAmountError: '',
             Facilities: [],
-            cityOptions: CITY_OPTIONS
+            cityOptions: CITY_OPTIONS,
         };
     },
     computed: {
@@ -430,6 +535,8 @@ export default {
             'spotImagesError',
             'status',
             'statusMessage',
+            'UsersSpots',
+            'UsersSpotRequests',
         ]),
         parkingSizeOptions() {
             return ParkingSize;
@@ -486,7 +593,8 @@ export default {
             'validateSpotImageUrl',
             'deleteImage',
             'setUpdatedFacilities',
-            'validateFormFields'
+            'validateFormFields',
+            'fetchUsersSpotsAndSpotRequests',
         ]),
         setSpotId() {
             this.SO.spotId = this.$route.query.requestId;
@@ -635,23 +743,37 @@ export default {
         onDeleteImage(index) {
             this.deleteImage(index);
         },
-       
-        // isFacilitiesUpdated is compare initial SO.Facilities with this.Facilities 
+
+        // isFacilitiesUpdated is compare initial SO.Facilities with this.Facilities
         isFacilitiesUpdated() {
-           if(this.SO.Facilities) {
-             const FacilitiesName = this.SO.Facilities.map((facility) => {
-              return facility.Name;
-           })
-           return JSON.stringify(FacilitiesName) !== JSON.stringify(this.Facilities);
-           }
+            if (this.SO.Facilities) {
+                const FacilitiesName = this.SO.Facilities.map((facility) => {
+                    return facility.Name;
+                });
+                return (
+                    JSON.stringify(FacilitiesName) !==
+                    JSON.stringify(this.Facilities)
+                );
+            }
+        },
+
+        getSpotDetailURL(spotId) {
+            return `${window.location.origin}/spot-details/${spotId}`;
+        },
+
+        getReviewSpotRequestURL(spotRequestId) {
+            return `${window.location.origin}/internal/spot-requests/?requestId=${spotRequestId}`;
+        },
     },
-},
     watch: {
         SO(SODetails) {
             if (SODetails.Facilities && SODetails.Facilities.length > 0) {
                 this.Facilities = SODetails.Facilities.map((facility) => {
                     return facility.Name;
                 });
+            }
+            if (SODetails.Mobile) {
+                this.fetchUsersSpotsAndSpotRequests(SODetails.Mobile);
             }
         },
         status(newStatus) {
@@ -683,47 +805,56 @@ export default {
     cursor: pointer;
     font-size: 14px;
 }
+
 .btn {
     border-radius: var(--border-default);
     font-weight: 700;
     margin: 4px;
     width: 15%;
 }
+
 .btn-disabled {
     opacity: 0.6;
     cursor: not-allowed !important;
     background-color: #f5f5f5 !important;
     color: #999 !important;
 }
+
 .body {
     background: #f5f5fb;
     padding: 16px;
     text-align: center;
 }
+
 .button-container {
     display: flex;
     justify-content: center;
     margin: 20px 0px;
 }
+
 .button-group {
     display: flex;
     justify-content: end;
     margin-top: 15px;
 }
+
 .calendar {
     width: 100%;
 }
+
 .error {
     color: #ff4d4f;
     font-size: 0.8rem;
     font-weight: 500;
     margin-top: 4px;
 }
+
 .error-field {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
+
 .form-field {
     display: flex;
     flex-direction: column;
@@ -731,10 +862,12 @@ export default {
     justify-content: center;
     margin: 0% 9%;
 }
+
 .form-field input.error-input {
     background-color: var(--primary-color);
     border-color: #ff3860;
 }
+
 .form-field-column {
     display: flex;
     flex-direction: column;
@@ -742,10 +875,12 @@ export default {
     background-color: red;
     height: fit-content;
 }
+
 .form-field label {
     font-weight: 700;
     vertical-align: middle;
 }
+
 .form-field input:focus,
 .form-field select:focus,
 .form-field textarea:focus {
@@ -753,6 +888,7 @@ export default {
     border-color: var(--parkspot-black);
     outline: none;
 }
+
 .form-field > input,
 .form-field > select,
 .form-section textarea {
@@ -761,6 +897,7 @@ export default {
     padding: 8px;
     width: 100%;
 }
+
 .form-group {
     display: grid;
     gap: 3%;
@@ -768,6 +905,7 @@ export default {
     grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
     padding-bottom: 2%;
 }
+
 .form-section {
     background-color: var(--parkspot-white);
     border-radius: 5px;
@@ -776,17 +914,20 @@ export default {
     margin: 1% auto;
     padding: 1%;
 }
+
 .full-width-input {
     border: 1px solid #ccc;
     box-sizing: border-box;
     min-width: 260%;
     padding: 8px 12px;
 }
+
 .heading {
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
 .modal-content {
     position: fixed;
     top: 50%;
@@ -798,6 +939,7 @@ export default {
     text-align: center;
     transform: translate(-50%, -50%);
 }
+
 .modal-overlay {
     background: rgba(0, 0, 0, 0.5);
     position: fixed;
@@ -807,14 +949,17 @@ export default {
     z-index: 998;
     height: 100%;
 }
+
 .modal-actions {
     margin-top: 15px;
 }
+
 .noborder {
     background-color: var(--parkspot-white);
     border: none;
     font-weight: 600;
 }
+
 .readonly-field {
     display: flex;
     flex-direction: column;
@@ -835,23 +980,28 @@ export default {
         height: 100%;
     }
 }
+
 .remove-url-btn {
     font-size: 24px;
     color: red;
     cursor: pointer;
     margin-top: 8px;
 }
+
 .root {
     margin: 1% 8%;
     max-width: 100%;
 }
+
 .scrollable-sections {
     max-height: 600px;
     overflow-y: auto;
 }
+
 .so-form-section {
     padding-bottom: 6%;
 }
+
 .sub-heading {
     color: var(--secondary-color);
     font-size: 1.4rem;
@@ -859,11 +1009,12 @@ export default {
     letter-spacing: normal;
     margin-bottom: 10px;
 }
+
 .url-entry {
     margin-bottom: 8px;
 }
 
-.thumbnail-image-wrapper{
+.thumbnail-image-wrapper {
     align-items: center;
     display: flex;
     justify-content: center;
@@ -873,10 +1024,12 @@ export default {
     .so-form-section {
         padding-bottom: 12%;
     }
+
     .full-width-input {
         min-width: 160%;
     }
 }
+
 @media (max-width: 768px) {
     .form-field {
         font-size: 1rem;
@@ -892,27 +1045,34 @@ export default {
         grid-template-columns: 1fr;
         padding-bottom: 8%;
     }
+
     .form-section {
         margin-bottom: 2%;
         margin: 1% 1%;
     }
+
     .full-width-input {
         min-width: 300%;
     }
+
     .root {
         margin: 1% 1%;
     }
+
     .scrollable-sections {
         max-height: 100%;
         overflow-y: auto;
     }
+
     .sub-heading {
         font-size: 1.4rem;
     }
+
     .btn {
         width: 25%;
     }
 }
+
 @media (max-width: 600px) {
     .full-width-input {
         min-width: 200%;
@@ -931,5 +1091,52 @@ export default {
     .full-width-input {
         min-width: 120%;
     }
+}
+.stops-requests-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .stops-requests-container {
+        flex-direction: column;
+    }
+}
+.table-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    justify-items: start;
+    max-height: 400px;
+    overflow-y: scroll;
+    width: 100%;
+
+    h2 {
+        color: black;
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 26px;
+    }
+}
+
+.styled-table {
+    border-collapse: collapse;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.styled-table th,
+.styled-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.styled-table thead {
+    background-color: var(--primary-color);
+    color: var(--parkspot-white);
+    font-weight: bold;
 }
 </style>

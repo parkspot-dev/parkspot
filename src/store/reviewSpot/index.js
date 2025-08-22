@@ -42,6 +42,8 @@ const state = {
     statusMessage: '',
     updatedFields: [],
     updatedFacilities: [],
+    UsersSpots: [],
+    UsersSpotRequests: []
 };
 
 const mutations = {
@@ -78,6 +80,10 @@ const mutations = {
     'set-updated-facilities'(state, facilities) {
         state.updatedFacilities = facilities;
     },
+    'set-spots-spotsRequests'(state, { spots, spotRequests }) {
+        state.UsersSpots = spots;
+        state.UsersSpotRequests = spotRequests;
+    }
 };
 
 const actions = {
@@ -515,6 +521,13 @@ const actions = {
     setUpdatedFacilities({ commit }, facilities) {
         commit('set-updated-facilities', facilities);
     },
+
+    async fetchUsersSpotsAndSpotRequests({ commit }, mobile) {
+            const response = await mayaClient.get(`sites-and-spot-requests?mobile=${mobile}`);
+            const spots = response.Sites || [];
+            const spotRequests = response.SpotRequests || [];
+            commit('set-spots-spotsRequests', { spots, spotRequests });
+    }
 };
 
 export default {
