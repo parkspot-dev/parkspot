@@ -116,9 +116,10 @@ export default {
             this.sites = [];
             name = name.trim();
             try {
-
+                const encodedName = encodeURIComponent(name);
+                console.log('Fetching sites with name:', encodedName);
                 const res = await mayaClient.get(
-                    `/sites-by-name?name=${name}`,
+                    `/sites-by-name?name=${encodedName}`,
                 );
                 this.sites = res || [];
             } catch (err) {
@@ -156,7 +157,6 @@ export default {
                         path: this.$route.path,
                         query: { name: sanitized },
                     });
-                    this.fetchSitesByName(sanitized);
                 }
             }
         },
