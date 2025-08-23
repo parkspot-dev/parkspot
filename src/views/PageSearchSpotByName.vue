@@ -117,7 +117,6 @@ export default {
             name = name.trim();
             try {
                 const encodedName = encodeURIComponent(name);
-                console.log('Fetching sites with name:', encodedName);
                 const res = await mayaClient.get(
                     `/sites-by-name?name=${encodedName}`,
                 );
