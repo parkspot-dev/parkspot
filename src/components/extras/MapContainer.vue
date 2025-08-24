@@ -254,6 +254,14 @@ export default {
             <div class="address"> ${spot.Address}
                 <div>India</div>
             </div>
+            <div  style="
+                 display: inline-block; 
+                 padding: 4px 10px; 
+                 border-radius: 8px; 
+                 font-weight: 600; 
+                 color: ${spot.SlotsAvailable ? '#166534' : '#991b1b'}; 
+                 background-color: ${spot.SlotsAvailable ? '#bbf7d0' : '#fecaca'};
+                 " >${spot.SlotsAvailable ? 'Available' : 'Rented Out'}</div>
         </div>
         <div style="margin-top:.5rem"><b>Distance: </b> ${spot.Distance} Km</div>
         <div><b>Rent: </b> &#8377; ${spot.Rate}/- </div>
