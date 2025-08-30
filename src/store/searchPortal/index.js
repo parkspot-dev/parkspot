@@ -11,6 +11,7 @@ const state = {
     agentList: [],
     parkingRequests: [],
     interestedVOList: [],
+    filteredParkingRequests: [],
     expiringRequestsCount: 0
 };
 
@@ -25,6 +26,7 @@ const mutations = {
     },
     'set-parking-requests'(state, result) {
         state.parkingRequests = result;
+        state.filteredParkingRequests = result;
     },
     'set-interested-vo-list'(state, result) {
         state.interestedVOList = result;
@@ -56,6 +58,9 @@ const mutations = {
     },
     'set-expiring-requests-count'(state, count) {
         state.expiringRequestsCount = count;
+    },
+    'set-filterd-parking-requests'(state, requests) {
+        state.filteredParkingRequests = requests;
     }
 };
 const actions = {
@@ -129,7 +134,11 @@ const actions = {
 
     extractExpiringRequests({ commit, state}) {
          const extractedCriticalRequests = state.parkingRequests.filter((request) => request.IsExpiring)
-         commit('set-parking-requests', extractedCriticalRequests)
+         commit('set-filterd-parking-requests', extractedCriticalRequests)
+    },
+
+    resetFilterParkingRequests({commit, state}) {
+        commit('set-filterd-parking-requests', state.parkingRequests)
     }
 };
 

@@ -68,10 +68,22 @@
                 </div>
             </div>
         </div>
+        <div class="filters">
+            <div class="filters-label">Filters:</div>
+
+            <FilterDropdown
+                :options="requestsFilterOptions"
+                :searchable="false"
+                :selectedValue="filters.isExpiring ? 'Expiring' : ''"
+                @remove="removeExpiringFilter"
+                @update="handleExpiringRequests"
+                label="Requests Type"
+            />
+        </div>
         <b-table
             :paginated="true"
             :per-page="10"
-            :data="isEmpty ? [] : parkingRequests"
+            :data="isEmpty ? [] : filteredParkingRequests"
             :bordered="true"
             :hoverable="true"
             :loading="isLoading"
@@ -209,19 +221,23 @@
                 v-slot="props"
                 width="10px"
             >
-            <div class="comment-wrapper" >
-                <div class="previous-comments" >{{ props.row.Comments }}</div>
-                <AtomTextarea
-                    :maxlength="3000"
-                    :rowNo="4"
-                    :size="'is-small'"
-                    :placeholder="'Add new comment...'"
-                    @changed="onCommentUpdate(props.row, oldComments, $event)"
-                    @mousedown="storeOldComment(props.row)"
-                    class="comment-width"
-                    v-model="newCommentMap[props.row.ID]"
-                ></AtomTextarea>
-            </div>
+                <div class="comment-wrapper">
+                    <div class="previous-comments">
+                        {{ props.row.Comments }}
+                    </div>
+                    <AtomTextarea
+                        :maxlength="3000"
+                        :rowNo="4"
+                        :size="'is-small'"
+                        :placeholder="'Add new comment...'"
+                        @changed="
+                            onCommentUpdate(props.row, oldComments, $event)
+                        "
+                        @mousedown="storeOldComment(props.row)"
+                        class="comment-width"
+                        v-model="newCommentMap[props.row.ID]"
+                    ></AtomTextarea>
+                </div>
             </b-table-column>
 
             <b-table-column
@@ -456,6 +472,7 @@ import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
 import moment from 'moment';
 import SelectInput from '../global/SelectInput.vue';
+import FilterDropdown from '../global/FilterDropdown.vue';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -467,6 +484,7 @@ export default {
         AtomInput,
         AtomButton,
         SelectInput,
+        FilterDropdown,
     },
     props: {
         parkingRequests: {
@@ -482,7 +500,7 @@ export default {
     },
     emits: ['updateRequest', 'toSrp'],
     computed: {
-        ...mapState('searchPortal', ['agentList', 'expiringRequestsCount']),
+        ...mapState('searchPortal', ['agentList', 'expiringRequestsCount', 'filteredParkingRequests']),
         ...mapState('user', ['userProfile', 'isAdmin']),
     },
     mounted() {
@@ -500,14 +518,11 @@ export default {
     watch: {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
+            if(this.$route.query['isExpiring']) {
+                  this.extractExpiringRequests();
+            this.filters.isExpiring = true;
+            }
         },
-    },
-
-    created() {
-        // Check for expiring requests
-        if (this.$route.query['isExpiring']) {
-            this.extractExpiringRequests();
-        }
     },
     data() {
         return {
@@ -516,6 +531,7 @@ export default {
                 Agent: '',
                 Status: '',
                 UpdatedAt: null,
+                isExpiring: true
             },
             isEmpty: false,
             isBordered: false,
@@ -564,7 +580,8 @@ export default {
             newComment: '',
             defaultStatus: '',
             FREQUENT_COMMENTS: FREQUENT_COMMENTS,
-            newCommentMap: {}
+            newCommentMap: {},
+            requestsFilterOptions: ['Expiring'],
         };
     },
     methods: {
@@ -572,6 +589,7 @@ export default {
             'getAgents',
             'setAgents',
             'extractExpiringRequests',
+            'resetFilterParkingRequests'
         ]),
         getPriority(val) {
             switch (val) {
@@ -615,11 +633,11 @@ export default {
         },
 
         onCommentUpdate(row, oldComment, newComment) {
-            if(!newComment) {
+            if (!newComment) {
                 return;
             }
 
-            newComment = `${oldComment}\n${newComment}`
+            newComment = `${oldComment}\n${newComment}`;
             const date = new Date();
             const dd = date.getDate();
             let mm = date.getMonth() + 1;
@@ -694,7 +712,7 @@ export default {
             const url = new URL(window.location.href);
             url.searchParams.set('isExpiring', true);
             window.history.pushState({}, '', url.toString());
-
+            this.filters.isExpiring = true;
             this.extractExpiringRequests();
         },
 
@@ -735,6 +753,14 @@ export default {
                 }
             });
         },
+
+        removeExpiringFilter() {
+            this.filters.isExpiring = false;
+            const url = new URL(window.location.href);
+            url.searchParams.delete('isExpiring');
+            window.history.pushState({}, '', url.toString());
+            this.resetFilterParkingRequests()
+        },
     },
 };
 </script>
@@ -747,18 +773,18 @@ $portal-font-size: 13px;
     justify-content: space-between;
 }
 
-@media(max-width: 900px) {
-   .header {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-   }
+@media (max-width: 900px) {
+    .header {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
 
-   .comment-wrapper{
-    display: flex;
-    flex-direction: column;
-    max-width: 160px;
-}
+    .comment-wrapper {
+        display: flex;
+        flex-direction: column;
+        max-width: 160px;
+    }
 }
 
 .expiring-request {
@@ -1029,12 +1055,35 @@ $portal-font-size: 13px;
     }
 }
 
-.previous-comments{
+.previous-comments {
     font-size: 12px;
     height: 100px;
     margin: 20px 0;
     max-height: 100px;
     overflow-y: scroll;
     white-space: pre-line;
+}
+
+.filters {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px;
+}
+
+.filters-label {
+    font-weight: bold;
+}
+
+.remove-filter {
+    margin-left: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #666;
+}
+
+.remove-filter:hover {
+    color: #e74c3c;
 }
 </style>
