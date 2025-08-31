@@ -772,8 +772,8 @@ export default {
                     return facility.Name;
                 });
             }
-            if (SODetails.Mobile) {
-                this.fetchUsersSpotsAndSpotRequests(SODetails.Mobile);
+            if (SODetails.mobile) {
+                this.fetchUsersSpotsAndSpotRequests(SODetails.mobile);
             }
         },
         status(newStatus) {
