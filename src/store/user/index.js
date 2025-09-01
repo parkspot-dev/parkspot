@@ -39,6 +39,8 @@ const mutations = {
         } else {
             localStorage.setItem('PSAuthKey', null);
             localStorage.removeItem('UserProfile');
+            state.isAdmin = false;
+            state.isAgent = false;
         }
     },
 
@@ -250,7 +252,11 @@ const actions = {
 
     async authenticateWithMaya({ state }) {
         try {
-            await mayaClient.get('/auth/authenticate');
+           const res = await mayaClient.get('/auth/authenticate');
+           if(res.UserType && res.UserType === 5) {
+              state.isAdmin = true;
+              state.isAgent = true;
+           }
         } catch (err) {
             // todo write proper exception case
             throw new Error(err);
