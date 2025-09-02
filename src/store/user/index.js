@@ -195,7 +195,11 @@ const actions = {
     },
 
     onlyContact({ state }) {
-        const comments = 'From the Home Page ----->' + state.contactForm.msg + ' Car Model: ' + state.contactForm.carModel;
+        const comments =
+            'From the Home Page ----->' +
+            state.contactForm.msg +
+            ' Car Model: ' +
+            state.contactForm.carModel;
         // prettier-ignore
         const req = {
             User: {
@@ -225,7 +229,7 @@ const actions = {
             SpotImages: state.contactForm.images,
             ServicesAvailable: state.contactForm.facilities,
             SiteType: state.contactForm.siteType,
-            City: state.contactForm.city
+            City: state.contactForm.city,
         };
 
         await mayaClient.post('/owner/spot-request', req);
@@ -252,11 +256,15 @@ const actions = {
 
     async authenticateWithMaya({ state }) {
         try {
-           const res = await mayaClient.get('/auth/authenticate');
-           if(res.UserType && res.UserType === 5) {
-              state.isAdmin = true;
-              state.isAgent = true;
-           }
+            const res = await mayaClient.get('/auth/authenticate');
+            if (res.UserType) {
+                if (res.UserType === UserType.Admin) {
+                    state.isAdmin = true;
+                } else if (res.UserType && res.UserType === UserType.Agent) {
+                    state.isAdmin = true;
+                    state.isAgent = true;
+                }
+            }
         } catch (err) {
             // todo write proper exception case
             throw new Error(err);
