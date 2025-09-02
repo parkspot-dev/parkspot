@@ -72,15 +72,20 @@
                         v-if="props.row.IDProofURLs.length > 0"
                         class="documents-preview"
                     >
-                        <a :href="props.row.IDProofURLs[0]">
-                            <div class="tag">Front</div>
-                        </a>
-                        <a
-                            v-if="props.row.IDProofURLs[1]"
-                            :href="props.row.IDProofURLs[1]"
+                        <div
+                            class="tag"
+                            @click="openImage(props.row.IDProofURLs[0])"
                         >
-                            <div class="tag">Back</div>
-                        </a>
+                            Front
+                        </div>
+
+                        <div
+                            v-if="props.row.IDProofURLs[1]"
+                            class="tag"
+                            @click="openImage(props.row.IDProofURLs[1])"
+                        >
+                            Back
+                        </div>
                     </div>
                     <div v-else>No Document Present</div>
                 </template>
@@ -99,8 +104,8 @@
             </b-table-column>
 
             <b-table-column
-                field="ID Proof Document"
-                label="ID Proof Document View"
+                field="Ownership Proof Document"
+                label="Ownership Proof Document View"
                 cell-class="has-text-left"
             >
                 <template v-slot="props">
@@ -108,15 +113,19 @@
                         v-if="props.row.OwnershipProofURLs.length > 0"
                         class="documents-preview"
                     >
-                        <a :href="props.row.OwnershipProofURLs[0]">
-                            <div class="tag">Front</div>
-                        </a>
-                        <a
-                            v-if="props.row.OwnershipProofURLs[1]"
-                            :href="props.row.OwnershipProofURLs[1]"
+                        <div
+                            class="tag"
+                            @click="openImage(props.row.OwnershipProofURLs[0])"
                         >
-                            <div class="tag">Back</div>
-                        </a>
+                            Front
+                        </div>
+                        <div
+                            v-if="props.row.OwnershipProofURLs[1]"
+                            class="tag"
+                            @click="openImage(props.row.OwnershipProofURLs[1])"
+                        >
+                            Back
+                        </div>
                     </div>
                     <div v-else>No Document Present</div>
                 </template>
@@ -142,6 +151,11 @@
             </b-table-column>
         </b-table>
     </div>
+    <b-modal v-model="showImageModal" width="800px" scroll="keep">
+        <div class="image-preview-modal">
+            <img :src="selectedImage" alt="Document Preview" />
+        </div>
+    </b-modal>
 </template>
 
 <script>
@@ -165,6 +179,8 @@ export default {
         return {
             KYCStatusLabel,
             KYCStatus,
+            showImageModal: false,
+            selectedImage: null,
         };
     },
     computed: {
@@ -279,6 +295,11 @@ export default {
 
             return sanitized;
         },
+
+        openImage(url) {
+            this.selectedImage = url;
+            this.showImageModal = true;
+        },
     },
     watch: {
         hasError(error) {
@@ -334,5 +355,18 @@ $portal-font-size: 13px;
 .select {
     margin-top: 4px;
     padding-bottom: 0px !important;
+}
+
+.image-preview-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-preview-modal img {
+    max-width: 80vw;
+    max-height: 80vh;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 </style>
