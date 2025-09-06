@@ -456,13 +456,13 @@
                             <li>
                                 <AtomParagraph>
                                     Facilities may vary from spot to spot.
-                                    Please connect with the parking owner for
+                                    Please connect with the spot owner for
                                     accurate information.
                                 </AtomParagraph>
                             </li>
                             <li>
                                 <AtomParagraph>
-                                    Parking owners reserve the right to decline
+                                    Spot owners reserve the right to decline
                                     a booking.
                                 </AtomParagraph>
                             </li>
