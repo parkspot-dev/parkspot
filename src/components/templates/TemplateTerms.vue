@@ -94,6 +94,19 @@
             <ul>
                 <li>
                     <a
+                        href="#booking-conditions"
+                        :class="{
+                            active: activeSection === 'booking-conditions',
+                        }"
+                        @click.prevent="scrollTo('booking-conditions')"
+                    >
+                        Booking Conditions
+                    </a>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <a
                         href="#cancellation"
                         :class="{ active: activeSection === 'cancellation' }"
                         @click.prevent="scrollTo('cancellation')"
@@ -427,6 +440,36 @@
                                     determined by the sole discretion of the
                                     Landlord(the parking spot owner) and
                                     ParkSpot.
+                                </AtomParagraph>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-3">
+                        <AtomParagraph
+                            :variation="'large'"
+                            id="booking-conditions"
+                        >
+                            Booking Conditions:
+                        </AtomParagraph>
+                        <ul class="pl-6" style="list-style-type: disc">
+                            <li>
+                                <AtomParagraph>
+                                    Facilities may vary from spot to spot.
+                                    Please connect with the spot owner for
+                                    accurate information.
+                                </AtomParagraph>
+                            </li>
+                            <li>
+                                <AtomParagraph>
+                                    Spot owners reserve the right to decline
+                                    a booking.
+                                </AtomParagraph>
+                            </li>
+                            <li>
+                                <AtomParagraph>
+                                    A parking spot will not be reserved until
+                                    rent has been paid.
                                 </AtomParagraph>
                             </li>
                         </ul>
