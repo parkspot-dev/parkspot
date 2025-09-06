@@ -157,7 +157,7 @@
                                     />
                                 </div>
                                 <!-- user profile dropdown -->
-                                <div class="user-dropdown">
+                                <div v-if="user" class="user-dropdown">
                                     <ul>
                                         <li class="dropdown-list">
                                             <a @click="gotoProfile">

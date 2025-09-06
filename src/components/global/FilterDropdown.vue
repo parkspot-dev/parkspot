@@ -94,6 +94,7 @@ export default {
 
 <style scoped>
 .label {
+    background-color: white;
     border-radius: 16px;
     border: 1px solid rgba(128, 128, 128, 0.263) !important;
     cursor: pointer;

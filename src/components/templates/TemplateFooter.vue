@@ -52,7 +52,7 @@
                         </div>
                     </div>
 
-                    <div class="top-search">
+                    <!-- <div class="top-search">
                         <AtomParagraph
                             :variation="'large'"
                             class="footer-heading"
@@ -120,7 +120,64 @@
                                 </router-link>
                             </p>
                         </div>
-                    </div>
+                    </div> -->
+                    
+                    <div class="top-search">
+  <AtomParagraph :variation="'large'" class="footer-heading">
+    Top Searched Places
+  </AtomParagraph>
+
+  <!-- Bengaluru Section -->
+  <div class="city-section">
+    <h4 class="city-title">Bengaluru</h4>
+    <p>
+      <router-link class="top-search-link" :to="{ path: '/bangalore/parking-near-jp-nagar' }">
+        Parking Spot in JP Nagar
+      </router-link>
+    </p>
+    <p>
+      <router-link class="top-search-link" :to="{ path: '/bangalore/parking-near-btm' }">
+        Parking Spot in BTM
+      </router-link>
+    </p>
+    <p>
+      <router-link class="top-search-link" :to="{ path: '/bangalore/parking-near-rajajinagar' }">
+        Parking Spot in Rajajinagar
+      </router-link>
+    </p>
+  </div>
+
+  <!-- Hyderabad Section -->
+  <div class="city-section">
+    <h4 class="city-title">Hyderabad</h4>
+    <p>
+      <router-link class="top-search-link" :to="{ path: '/hyderabad/parking-near-hitech-city' }">
+        Parking Spot in Hitech City
+      </router-link>
+    </p>
+    <p>
+      <router-link class="top-search-link" :to="{ path: '/hyderabad/parking-near-gachibowli' }">
+        Parking Spot in Gachibowli
+      </router-link>
+    </p>
+  </div>
+
+  <!-- Chennai Section -->
+  <div class="city-section">
+    <h4 class="city-title">Chennai</h4>
+    <p>
+      <router-link class="top-search-link" :to=" '/srp?latlng=13.075119,80.28375'">
+        Chennai Port Trust
+      </router-link>
+    </p>
+    <p>
+      <router-link class="top-search-link" :to="'/srp?latlng=12.986417,80.17439'">
+        Chennai Internetional Airtport
+      </router-link>
+    </p>
+  </div>
+</div>
+
 
                     <div class="contact-info">
                         <AtomParagraph
@@ -479,4 +536,11 @@ export default {
 .phone-contact:hover {
     color: var(--primary-color);
 }
+
+.city-title {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 0.5rem;
+      color: var(--primary-color); // highlight city names
+    }
 </style>

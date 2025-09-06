@@ -65,7 +65,7 @@ export default {
 }
 .home-banner {
     position: relative;
-    height: 629px;
+    height: 660px;
     max-height: 1000px;
 
     /* Center and scale the image nicely */

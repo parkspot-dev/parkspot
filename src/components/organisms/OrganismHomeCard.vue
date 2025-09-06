@@ -15,6 +15,22 @@
                         <AtomButton class="btn" @click.native="flyToSrp">
                             Search now
                         </AtomButton>
+                            <!-- Inside your template -->
+<div class="top-searches">
+  <h3 class="top-search-title"><b-icon class="icon" icon="map-marker"></b-icon> Popular Searches</h3>
+  <div class="search-tags">
+       <span class="tag city-chip" @click="setSearch('Bengaluru')">
+       Bengaluru
+    </span>
+    <span class="tag city-chip" @click="setSearch('Chennai')">
+       Chennai
+    </span>
+    <span class="tag city-chip" @click="setSearch('Hyderabad')">
+       Hyderabad
+    </span>
+  </div>
+</div>
+
                     </div>
                 </template>
             </b-tab-item>
@@ -59,16 +75,20 @@ import SearchInput from '../extras/SearchInput.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import { mapGetters } from 'vuex';
 import { getCoordinate } from '../../includes/LatLng';
+import TopSearchesCard from '../vo-portal/TopSearchesCard.vue';
+import { TOP_SEARCH_PLACES } from '@/constant/constant';
 export default {
     name: 'HomeCard',
     data() {
         return {
             activeTabValue: 'VO',
+            items: TOP_SEARCH_PLACES
         };
     },
     components: {
         SearchInput,
         AtomButton,
+        TopSearchesCard
     },
     computed: {
         ...mapGetters({
@@ -104,7 +124,7 @@ export default {
 <style lang="scss" scoped>
 .home-card {
     max-width: 640px;
-    height: 532px;
+    height: 560px;
     border-radius: var(--border-default);
     background: var(--parkspot-white);
 
@@ -248,4 +268,60 @@ export default {
         }
     }
 }
+
+/* --- Top Searches --- */
+.top-searches {
+  margin: 2rem 0 1.5rem;
+  text-align: left;
+
+  .top-search-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--parkspot-black);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &::after {
+      content: "";
+      flex-grow: 1;
+      height: 2px;
+      background: linear-gradient(90deg, var(--secondary-color), transparent);
+      margin-left: 10px;
+      border-radius: 2px;
+    }
+  }
+
+  .search-tags {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    background-color: var(--secondary-color);
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+ .icon {
+      font-size: 1rem;
+      color: var(--secondary-color) !important;
+    }
+
 </style>
