@@ -469,7 +469,7 @@
                             <li>
                                 <AtomParagraph>
                                     A parking spot will not be reserved until
-                                    rent has been completed.
+                                    rent has been paid.
                                 </AtomParagraph>
                             </li>
                         </ul>
