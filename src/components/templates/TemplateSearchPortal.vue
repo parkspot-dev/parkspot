@@ -1125,7 +1125,7 @@ $portal-font-size: 13px;
     display: none;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
     .is-hidden-mobile {
         display: none;
     }
