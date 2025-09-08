@@ -675,7 +675,6 @@ export default {
         },
 
         updateWidth() {
-            alert(window.innerWidth);
             this.windowWidth = window.innerWidth;
         },
 
