@@ -214,8 +214,10 @@ export default {
 }
 
 .mobile-card .card-body p {
-    margin: 8px 0;
+    display: flex; 
+    justify-content: space-between;
     line-height: 1.4;
+    margin: 8px 0;
 }
 
 .comment-section {
