@@ -92,6 +92,7 @@
             :narrowed="true"
             :sticky-header="true"
             class="is-hidden-mobile"
+            v-if="windowWidth > 768 || forceDesktop"
             height="800"
         >
             <b-table-column
@@ -544,7 +545,26 @@ export default {
         if (this.parkingRequests && this.parkingRequests.length > 0) {
             this.updateSummary(this.parkingRequests);
         }
+
+
+
+          if (typeof window !== "undefined") {
+    this.windowWidth = window.innerWidth;
+    window.addEventListener("resize", this.updateWidth);
+
+    const ua = navigator.userAgent.toLowerCase();
+    if ((ua.includes("android") || ua.includes("iphone")) && !ua.includes("mobile")) {
+      this.forceDesktop = true;
+    }
+  }
     },
+
+
+    beforeUnmount() {
+  if (typeof window !== "undefined") {
+    window.removeEventListener("resize", this.updateWidth);
+  }
+},
 
     watch: {
         parkingRequests(newRequests) {
@@ -613,6 +633,8 @@ export default {
             FREQUENT_COMMENTS: FREQUENT_COMMENTS,
             newCommentMap: {},
             requestsFilterOptions: ['Expiring'],
+                windowWidth: 0,
+    forceDesktop: false,
         };
     },
     methods: {
@@ -645,6 +667,11 @@ export default {
         getLatLng(lat, lng) {
             return lat + ',' + lng;
         },
+
+          updateWidth() {
+          alert(window.innerWidth)
+    this.windowWidth = window.innerWidth;
+  },
 
         isCallDelayed(nextCall) {
             if (new Date().getTime() > new Date(nextCall).getTime()) {
