@@ -81,6 +81,7 @@
             />
         </div>
         <b-table
+            v-if="isDesktopView"
             :paginated="true"
             :per-page="10"
             :data="isEmpty ? [] : filteredParkingRequests"
@@ -91,8 +92,6 @@
             :mobile-cards="hasMobileCards"
             :narrowed="true"
             :sticky-header="true"
-            class="is-hidden-mobile"
-            v-if="windowWidth > 768 || forceDesktop"
             height="800"
         >
             <b-table-column
@@ -391,7 +390,7 @@
             </template>
         </b-table>
 
-        <div class="is-hidden-tablet">
+        <div v-else>
             <div v-if="isLoading" class="loading">Loading...</div>
             <div v-else>
                 <MobileView
@@ -532,8 +531,18 @@ export default {
     },
     emits: ['updateRequest', 'toSrp'],
     computed: {
-        ...mapState('searchPortal', ['agentList', 'expiringRequestsCount', 'filteredParkingRequests']),
+        ...mapState('searchPortal', [
+            'agentList',
+            'expiringRequestsCount',
+            'filteredParkingRequests',
+        ]),
         ...mapState('user', ['userProfile', 'isAdmin']),
+        isDesktopView() {
+            if (this.isMobileDevice) {
+                return false;
+            }
+            return this.windowWidth > 768 || this.forceDesktop;
+        },
     },
     mounted() {
         if (this.userProfile && !this.isAdmin) {
@@ -546,32 +555,28 @@ export default {
             this.updateSummary(this.parkingRequests);
         }
 
+        if (typeof window !== 'undefined') {
+            this.windowWidth = window.innerWidth;
+            window.addEventListener('resize', this.updateWidth);
 
-
-          if (typeof window !== "undefined") {
-    this.windowWidth = window.innerWidth;
-    window.addEventListener("resize", this.updateWidth);
-
-    const ua = navigator.userAgent.toLowerCase();
-    if ((ua.includes("android") || ua.includes("iphone")) && !ua.includes("mobile")) {
-      this.forceDesktop = true;
-    }
-  }
+            const ua = navigator.userAgent.toLowerCase();
+            this.isMobileDevice =
+                ua.includes('android') || ua.includes('iphone');
+        }
     },
 
-
     beforeUnmount() {
-  if (typeof window !== "undefined") {
-    window.removeEventListener("resize", this.updateWidth);
-  }
-},
+        if (typeof window !== 'undefined') {
+            window.removeEventListener('resize', this.updateWidth);
+        }
+    },
 
     watch: {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
-            if(this.$route.query['isExpiring']) {
-                  this.extractExpiringRequests();
-            this.filters.isExpiring = true;
+            if (this.$route.query['isExpiring']) {
+                this.extractExpiringRequests();
+                this.filters.isExpiring = true;
             }
         },
     },
@@ -582,7 +587,7 @@ export default {
                 Agent: '',
                 Status: '',
                 UpdatedAt: null,
-                isExpiring: true
+                isExpiring: true,
             },
             isEmpty: false,
             isBordered: false,
@@ -633,8 +638,9 @@ export default {
             FREQUENT_COMMENTS: FREQUENT_COMMENTS,
             newCommentMap: {},
             requestsFilterOptions: ['Expiring'],
-                windowWidth: 0,
-    forceDesktop: false,
+            windowWidth: 0,
+            forceDesktop: false,
+            isMobileDevice: false,
         };
     },
     methods: {
@@ -642,7 +648,7 @@ export default {
             'getAgents',
             'setAgents',
             'extractExpiringRequests',
-            'resetFilterParkingRequests'
+            'resetFilterParkingRequests',
         ]),
         getPriority(val) {
             switch (val) {
@@ -668,10 +674,10 @@ export default {
             return lat + ',' + lng;
         },
 
-          updateWidth() {
-          alert(window.innerWidth)
-    this.windowWidth = window.innerWidth;
-  },
+        updateWidth() {
+            alert(window.innerWidth);
+            this.windowWidth = window.innerWidth;
+        },
 
         isCallDelayed(nextCall) {
             if (new Date().getTime() > new Date(nextCall).getTime()) {
@@ -817,7 +823,7 @@ export default {
             const url = new URL(window.location.href);
             url.searchParams.delete('isExpiring');
             window.history.pushState({}, '', url.toString());
-            this.resetFilterParkingRequests()
+            this.resetFilterParkingRequests();
         },
     },
 };
@@ -1055,6 +1061,7 @@ $portal-font-size: 13px;
     padding: 52px 20px 20px 20px;
     position: relative;
     width: 30%;
+
     .note {
         display: flex;
         flex-direction: column;
@@ -1144,6 +1151,7 @@ $portal-font-size: 13px;
 .remove-filter:hover {
     color: #e74c3c;
 }
+
 .is-hidden-mobile {
     display: block;
 }
