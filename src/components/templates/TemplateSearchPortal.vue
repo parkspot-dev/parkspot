@@ -81,6 +81,7 @@
             />
         </div>
         <b-table
+            v-if="isDesktopView"
             :paginated="true"
             :per-page="10"
             :data="isEmpty ? [] : filteredParkingRequests"
@@ -388,6 +389,34 @@
                 <div class="has-text-centered">No records</div>
             </template>
         </b-table>
+
+        <div v-else>
+            <div v-if="isLoading" class="loading">Loading...</div>
+            <div v-else>
+                <MobileView
+                    v-if="!isEmpty"
+                    :parkingRequests="parkingRequests"
+                    :isEmpty="isEmpty"
+                    :isAdmin="isAdmin"
+                    :newCommentMap="newCommentMap"
+                    :statusList="statusList"
+                    :agentList="agentList"
+                    :getFormattedDate="getFormattedDate"
+                    :getPriority="getPriority"
+                    :isCallDelayed="isCallDelayed"
+                    :toSrp="toSrp"
+                    :storeOldComment="storeOldComment"
+                    :oldComments="oldComments"
+                    @connect="onConnect"
+                    @comment-update="onCommentUpdate"
+                    @agent-update="onAgentUpdate"
+                    @status-update="onStatusUpdate"
+                    @date-update="onDateUpdate"
+                    @latlng-update="updateLatLng"
+                />
+                <div v-else class="has-text-centered">No records</div>
+            </div>
+        </div>
     </div>
 
     <!-- Connect popup -->
@@ -473,6 +502,7 @@ import AtomTextarea from '../atoms/AtomTextarea.vue';
 import moment from 'moment';
 import SelectInput from '../global/SelectInput.vue';
 import FilterDropdown from '../global/FilterDropdown.vue';
+import MobileView from '../search-portal/MobileView.vue';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -485,6 +515,7 @@ export default {
         AtomButton,
         SelectInput,
         FilterDropdown,
+        MobileView,
     },
     props: {
         parkingRequests: {
@@ -500,8 +531,18 @@ export default {
     },
     emits: ['updateRequest', 'toSrp'],
     computed: {
-        ...mapState('searchPortal', ['agentList', 'expiringRequestsCount', 'filteredParkingRequests']),
+        ...mapState('searchPortal', [
+            'agentList',
+            'expiringRequestsCount',
+            'filteredParkingRequests',
+        ]),
         ...mapState('user', ['userProfile', 'isAdmin']),
+        isDesktopView() {
+            if (this.isMobileDevice) {
+                return false;
+            }
+            return this.windowWidth > 768 || this.forceDesktop;
+        },
     },
     mounted() {
         if (this.userProfile && !this.isAdmin) {
@@ -513,14 +554,29 @@ export default {
         if (this.parkingRequests && this.parkingRequests.length > 0) {
             this.updateSummary(this.parkingRequests);
         }
+
+        if (typeof window !== 'undefined') {
+            this.windowWidth = window.innerWidth;
+            window.addEventListener('resize', this.updateWidth);
+
+            const ua = navigator.userAgent.toLowerCase();
+            this.isMobileDevice =
+                ua.includes('android') || ua.includes('iphone');
+        }
+    },
+
+    beforeUnmount() {
+        if (typeof window !== 'undefined') {
+            window.removeEventListener('resize', this.updateWidth);
+        }
     },
 
     watch: {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
-            if(this.$route.query['isExpiring']) {
-                  this.extractExpiringRequests();
-            this.filters.isExpiring = true;
+            if (this.$route.query['isExpiring']) {
+                this.extractExpiringRequests();
+                this.filters.isExpiring = true;
             }
         },
     },
@@ -531,7 +587,7 @@ export default {
                 Agent: '',
                 Status: '',
                 UpdatedAt: null,
-                isExpiring: true
+                isExpiring: true,
             },
             isEmpty: false,
             isBordered: false,
@@ -582,6 +638,9 @@ export default {
             FREQUENT_COMMENTS: FREQUENT_COMMENTS,
             newCommentMap: {},
             requestsFilterOptions: ['Expiring'],
+            windowWidth: 0,
+            forceDesktop: false,
+            isMobileDevice: false,
         };
     },
     methods: {
@@ -589,7 +648,7 @@ export default {
             'getAgents',
             'setAgents',
             'extractExpiringRequests',
-            'resetFilterParkingRequests'
+            'resetFilterParkingRequests',
         ]),
         getPriority(val) {
             switch (val) {
@@ -613,6 +672,10 @@ export default {
 
         getLatLng(lat, lng) {
             return lat + ',' + lng;
+        },
+
+        updateWidth() {
+            this.windowWidth = window.innerWidth;
         },
 
         isCallDelayed(nextCall) {
@@ -759,7 +822,7 @@ export default {
             const url = new URL(window.location.href);
             url.searchParams.delete('isExpiring');
             window.history.pushState({}, '', url.toString());
-            this.resetFilterParkingRequests()
+            this.resetFilterParkingRequests();
         },
     },
 };
@@ -997,6 +1060,7 @@ $portal-font-size: 13px;
     padding: 52px 20px 20px 20px;
     position: relative;
     width: 30%;
+
     .note {
         display: flex;
         flex-direction: column;
@@ -1085,5 +1149,50 @@ $portal-font-size: 13px;
 
 .remove-filter:hover {
     color: #e74c3c;
+}
+
+.is-hidden-mobile {
+    display: block;
+}
+
+.is-hidden-tablet {
+    display: none;
+}
+
+@media (max-width: 1100px) {
+    .is-hidden-mobile {
+        display: none;
+    }
+
+    .is-hidden-tablet {
+        display: block;
+    }
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(63, 63, 63);
+}
+
+.loading::after {
+    content: '';
+    width: 18px;
+    height: 18px;
+    margin-left: 10px;
+    border: 3px solid rgb(63, 63, 63);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 </style>
