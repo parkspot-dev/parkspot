@@ -59,20 +59,16 @@ import SearchInput from '../extras/SearchInput.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import { mapGetters } from 'vuex';
 import { getCoordinate } from '../../includes/LatLng';
-import TopSearchesCard from '../vo-portal/TopSearchesCard.vue';
-import { TOP_SEARCH_PLACES } from '@/constant/constant';
 export default {
     name: 'HomeCard',
     data() {
         return {
             activeTabValue: 'VO',
-            items: TOP_SEARCH_PLACES
         };
     },
     components: {
         SearchInput,
         AtomButton,
-        TopSearchesCard
     },
     computed: {
         ...mapGetters({
@@ -108,7 +104,7 @@ export default {
 <style lang="scss" scoped>
 .home-card {
     max-width: 640px;
-    height: 560px;
+    height: 532px;
     border-radius: var(--border-default);
     background: var(--parkspot-white);
 
