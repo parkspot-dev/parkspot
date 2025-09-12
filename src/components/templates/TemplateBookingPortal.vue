@@ -428,6 +428,9 @@
                         <p>
                             <strong> Email: </strong>
                         </p>
+                        <p>
+                            <strong> KYC Status: </strong>
+                        </p>
                     </div>
                     <div class="value-col">
                         <p>
@@ -435,6 +438,13 @@
                         </p>
                         <p>
                             {{ currBookingDetails.Booking.EmailID }}
+                        </p>
+                        <p>
+                            <router-link
+                                :to="`/internal/users/kyc-status?mobile=${currBookingDetails.Booking.Mobile}`"
+                            >
+                                {{ getKYCStatusLabel(currBookingDetails.Booking.KYCStatus) }}
+                            </router-link>
                         </p>
                     </div>
                 </div>
@@ -557,10 +567,12 @@ import RefundIcon from '/assets/refund.png';
 import {
     BookingStatusLabels,
     getBookingStatusLabel,
+    getKYCStatusLabel,
     getPaymentPeriodicityLabel,
     getPaymentStatusLabel,
     getPaymentTypeLabel,
     getUserTypeLabel,
+    KYCStatus,
     PaymentPeriodicityLabels,
     PaymentStatus,
     PaymentTypeLabels,
@@ -919,6 +931,9 @@ export default {
                 this.soChargesValidationError = '';
             }
         },
+        getKYCStatusLabel(kycStatus) {
+            return getKYCStatusLabel(kycStatus)
+        }
     },
     watch: {
         status(newStatus) {
