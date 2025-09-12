@@ -572,7 +572,6 @@ import {
     getPaymentStatusLabel,
     getPaymentTypeLabel,
     getUserTypeLabel,
-    KYCStatus,
     PaymentPeriodicityLabels,
     PaymentStatus,
     PaymentTypeLabels,
