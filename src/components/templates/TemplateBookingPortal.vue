@@ -440,10 +440,12 @@
                             {{ currBookingDetails.Booking.EmailID }}
                         </p>
                         <p>
+                            <span v-if="currBookingDetails.Booking.VOKYCStatus === KYCStatus.NotSet" ></span>
                             <router-link
+                                v-else
                                 :to="`/internal/users/kyc-status?mobile=${currBookingDetails.Booking.Mobile}`"
                             >
-                                {{ getKYCStatusLabel(currBookingDetails.Booking.KYCStatus) }}
+                                {{ getKYCStatusLabel(currBookingDetails.Booking.VOKYCStatus) }}
                             </router-link>
                         </p>
                     </div>
@@ -572,6 +574,7 @@ import {
     getPaymentStatusLabel,
     getPaymentTypeLabel,
     getUserTypeLabel,
+    KYCStatus,
     PaymentPeriodicityLabels,
     PaymentStatus,
     PaymentTypeLabels,
@@ -612,6 +615,7 @@ export default {
             toolTipLabel: 'Copy payment url!',
             rentValidationError: '',
             soChargesValidationError: '',
+            KYCStatus
         };
     },
     beforeMount() {
