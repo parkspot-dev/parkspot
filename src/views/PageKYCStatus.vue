@@ -151,7 +151,7 @@
             </b-table-column>
         </b-table>
     </div>
-    <b-modal v-model="showImageModal" width="800px" scroll="keep">
+    <b-modal v-model="showImageModal" has-modal-card full-screen scroll="keep">
         <div class="image-preview-modal">
             <img :src="selectedImage" alt="Document Preview" />
         </div>
@@ -358,15 +358,19 @@ $portal-font-size: 13px;
 }
 
 .image-preview-modal {
-    display: flex;
-    justify-content: center;
     align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
 }
 
 .image-preview-modal img {
-    max-width: 80vw;
-    max-height: 80vh;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    max-height: 90vh;
+    max-width: 100%;
+    object-fit: contain;
+    z-index: 999;
 }
 </style>
