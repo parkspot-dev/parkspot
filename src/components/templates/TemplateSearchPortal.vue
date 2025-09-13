@@ -587,7 +587,7 @@ export default {
                 Agent: '',
                 Status: '',
                 UpdatedAt: null,
-                isExpiring: true,
+                isExpiring: false,
             },
             isEmpty: false,
             isBordered: false,
