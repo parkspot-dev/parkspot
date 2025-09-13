@@ -5,7 +5,7 @@
                 v-model="search"
                 :data="filteredLocationName"
                 ref="autocomplete"
-                placeholder="e.g. Bengaluru"
+                placeholder="e.g. Bengaluru, Hyderabad, Chennai..."
                 field="place_name"
                 icon="magnify"
                 :loading="isFetching"

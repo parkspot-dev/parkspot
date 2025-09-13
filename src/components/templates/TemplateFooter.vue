@@ -51,7 +51,6 @@
                             </span>
                         </div>
                     </div>
-
                     <div class="top-search">
                         <AtomParagraph
                             :variation="'large'"
@@ -59,64 +58,66 @@
                         >
                             Top Searched Places
                         </AtomParagraph>
-                        <div>
+
+                        <!-- Bengaluru Section -->
+                        <div class="city-section">
+                            <h4 class="city-title">Bengaluru</h4>
                             <p>
                                 <router-link
                                     class="top-search-link"
-                                    :to="{
-                                        path: '/bangalore/parking-near-jp-nagar',
-                                    }"
+                                    :to=" '/srp?latlng=12.910473,77.58575'"
                                 >
-                                    Parking Spot in JP-Nagar
+                                    Parking Spot in JP Nagar
                                 </router-link>
                             </p>
                             <p>
                                 <router-link
                                     class="top-search-link"
-                                    :to="{
-                                        path: '/bangalore/parking-near-btm',
-                                    }"
+                                    :to=" '/srp?latlng=12.913989,77.60205'"
                                 >
                                     Parking Spot in BTM
                                 </router-link>
                             </p>
+                        </div>
+
+                        <!-- Hyderabad Section -->
+                        <div class="city-section">
+                            <h4 class="city-title">Hyderabad</h4>
                             <p>
                                 <router-link
                                     class="top-search-link"
-                                    :to="{
-                                        path: '/hyderabad/parking-near-hyderabad',
-                                    }"
+                                    :to="'/srp?latlng=17.38321,78.37273'"
                                 >
-                                    Parking Spot in Hyderabad
+                                    Parking Spot in Mahalneknapur
                                 </router-link>
                             </p>
                             <p>
                                 <router-link
                                     class="top-search-link"
-                                    :to="{
-                                        path: '/bangalore/parking-near-rajajinagar',
-                                    }"
-                                    >Parking Spot in Rajajinagar</router-link
+                                    :to=" '/srp?latlng=17.444939,78.35281'"
                                 >
+                                    Parking Spot in Gachibowli
+                                </router-link>
                             </p>
+                        </div>
+
+                        <!-- Chennai Section -->
+                        <div class="city-section">
+                            <h4 class="city-title">Chennai</h4>
                             <p>
                                 <router-link
                                     class="top-search-link"
-                                    :to="{
-                                        path: '/bangalore/parking-near-banashankari',
-                                    }"
+                                    :to="'/srp?latlng=13.086109,80.21613'"
                                 >
-                                    Parking Spot in Banashankari
+                                    Parking Spot in Anna Nagar
                                 </router-link>
                             </p>
                             <p>
                                 <router-link
                                     class="top-search-link"
-                                    :to="{
-                                        path: '/bangalore/parking-near-marathahalli',
-                                    }"
+                                    :to="'/srp?latlng=13.006768,80.25779'"
                                 >
-                                    Parking Spot in marathahalli
+                                    Parking Spot in Adyar
                                 </router-link>
                             </p>
                         </div>
@@ -477,6 +478,13 @@ export default {
 }
 
 .phone-contact:hover {
+    color: var(--primary-color);
+}
+
+.city-title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
     color: var(--primary-color);
 }
 </style>
