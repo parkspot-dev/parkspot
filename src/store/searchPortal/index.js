@@ -110,6 +110,7 @@ const actions = {
                 throw new Error(response.DisplayMsg);
             }
             commit('set-interested-vo-list', response);
+            commit('set-filterd-parking-requests', response)
         } catch (error) {
             commit('set-error', error.message);
         } finally {
