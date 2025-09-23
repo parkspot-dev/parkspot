@@ -428,6 +428,9 @@
                         <p>
                             <strong> Email: </strong>
                         </p>
+                        <p>
+                            <strong> KYC Status: </strong>
+                        </p>
                     </div>
                     <div class="value-col">
                         <p>
@@ -435,6 +438,15 @@
                         </p>
                         <p>
                             {{ currBookingDetails.Booking.EmailID }}
+                        </p>
+                        <p>
+                            <span v-if="currBookingDetails.Booking.VOKYCStatus === KYCStatus.NotSet" ></span>
+                            <router-link
+                                v-else
+                                :to="`/internal/users/kyc-status?mobile=${currBookingDetails.Booking.Mobile}`"
+                            >
+                                {{ getKYCStatusLabel(currBookingDetails.Booking.VOKYCStatus) }}
+                            </router-link>
                         </p>
                     </div>
                 </div>
@@ -557,10 +569,12 @@ import RefundIcon from '/assets/refund.png';
 import {
     BookingStatusLabels,
     getBookingStatusLabel,
+    getKYCStatusLabel,
     getPaymentPeriodicityLabel,
     getPaymentStatusLabel,
     getPaymentTypeLabel,
     getUserTypeLabel,
+    KYCStatus,
     PaymentPeriodicityLabels,
     PaymentStatus,
     PaymentTypeLabels,
@@ -601,6 +615,7 @@ export default {
             toolTipLabel: 'Copy payment url!',
             rentValidationError: '',
             soChargesValidationError: '',
+            KYCStatus
         };
     },
     beforeMount() {
@@ -919,6 +934,9 @@ export default {
                 this.soChargesValidationError = '';
             }
         },
+        getKYCStatusLabel(kycStatus) {
+            return getKYCStatusLabel(kycStatus)
+        }
     },
     watch: {
         status(newStatus) {
