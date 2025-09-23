@@ -302,15 +302,16 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    Vehicle owners are required to submit a copy
-                                    of a valid government-issued identity card.
+                                    All vehicle owners must provide a valid
+                                    government-issued ID card.
                                 </AtomParagraph>
                             </li>
                             <li>
                                 <AtomParagraph>
-                                    Vehicle owners must submit Vehicle ownership
-                                    documents, including the Registration
-                                    Certificate (RC) or proof of insurance.
+                                    Vehicle owners must provide proof of
+                                    ownership, such as the Registration
+                                    Certificate (RC) or valid insurance
+                                    documents.”
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -326,9 +327,9 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    The vehicle owner specifies that all
-                                    information provided during the KYC process
-                                    is accurate, complete, and up-to-date.
+                                    Vehicle owners must ensure that all details
+                                    provided during the KYC process are
+                                    accurate, complete, and up to date.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -344,10 +345,9 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    ParkSpot assures that all submitted
-                                    documents will be treated with the utmost
-                                    confidentiality and will only be used for
-                                    the purpose of verifying ownership.
+                                    ParkSpot guarantees that all submitted
+                                    documents will remain confidential and will
+                                    only be used to verify vehicle ownership.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -363,11 +363,9 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    ParkSpot team will review the submitted
-                                    documents of the vehicle owner and reserve
-                                    the right to request additional information
-                                    or clarification if needed from the vehicle
-                                    owner.
+                                    The ParkSpot team will review the submitted
+                                    documents and may request additional
+                                    information or clarification if needed.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -383,21 +381,19 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    ParkSpot team reserves the right to refuse
-                                    service to any user who fails to meet our
-                                    KYC requirements or engages in activities
-                                    that violate our terms and conditions.
+                                    ParkSpot reserves the right to refuse
+                                    service to any user who does not meet KYC
+                                    requirements or violates our terms and
+                                    conditions.
                                 </AtomParagraph>
                             </li>
                             <li>
                                 <AtomParagraph>
-                                    If the Vehicle Owner vacates the premises
-                                    without paying the current month's rent or
-                                    clearing past arrears, and the property
-                                    remains unoccupied for 10 consecutive days,
-                                    the ParkSpot has the right to terminate the
-                                    booking and barring re-entry of the vehicle
-                                    owner.
+                                    If a vehicle owner leaves without paying the
+                                    current month’s rent or clearing past dues,
+                                    and the property stays unoccupied for 10
+                                    days in a row, ParkSpot may cancel the
+                                    booking and deny re-entry.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -413,12 +409,12 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    The vehicle owner agrees to use the services
-                                    from ParkSpot (Neospot Technologies Private
-                                    Limited) only for Digital Management
-                                    including online rent payment and managing
-                                    booking. ParkSpot’s liability will be
-                                    limited to the same.
+                                    The vehicle owner agrees to use ParkSpot
+                                    (Neospot Technologies Pvt. Ltd.) only for
+                                    digital management services, such as online
+                                    rent payments and booking management.
+                                    ParkSpot’s responsibility is limited to
+                                    these services.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -434,11 +430,10 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    The Vehicle Owner shall be entitled to use
-                                    the scheduled premises for parking his
-                                    vehicle only. Permission to sublease will be
-                                    determined by the sole discretion of the
-                                    Landlord(the parking spot owner) and
+                                    The vehicle owner may use the allotted
+                                    premises only for parking their vehicle.
+                                    Subleasing is not allowed unless approved by
+                                    both the landlord (parking spot owner) and
                                     ParkSpot.
                                 </AtomParagraph>
                             </li>
@@ -455,15 +450,15 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    Facilities may vary from spot to spot.
-                                    Please connect with the spot owner for
-                                    accurate information.
+                                    Facilities may differ from one parking spot
+                                    to another. For exact details, please
+                                    contact the spot owner.
                                 </AtomParagraph>
                             </li>
                             <li>
                                 <AtomParagraph>
-                                    Spot owners reserve the right to decline
-                                    a booking.
+                                    Spot owners have the right to decline any
+                                    booking.
                                 </AtomParagraph>
                             </li>
                             <li>
@@ -482,14 +477,11 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    For cancellation of the active booking of a
-                                    vehicle owner, he/she(the vehicle owner)
-                                    will have to give one month prior notice to
-                                    the ParkSpot team. Failing to which the
-                                    ParkSpot team has the right to use the
-                                    security deposit(If the vehicle owner has
-                                    paid the security deposit) to pay the rent
-                                    for next month.
+                                    To cancel an active booking, the vehicle
+                                    owner must give ParkSpot at least one
+                                    month’s prior notice. If no notice is given,
+                                    ParkSpot may use the security deposit (if
+                                    paid) to cover the next month’s rent.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -505,18 +497,14 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    In the event of any unfortunate incidents,
-                                    the spot owner will promptly inform the
-                                    vehicle owner and offer assistance in the
-                                    investigation. It is expressly understood
-                                    that the spot owner will not be held
-                                    responsible for such events. Additionally,
-                                    the landlord will cooperate by providing
-                                    CCTV recording footage to aid in the
-                                    investigation process. This clause aims to
-                                    facilitate collaboration between the parties
-                                    in addressing unforeseen circumstances while
-                                    clarifying the landlord's liability.
+                                    In case of any unfortunate incident, the
+                                    spot owner will inform the vehicle owner and
+                                    assist in the investigation. The spot owner
+                                    will not be held responsible for such
+                                    events. The landlord will also cooperate by
+                                    providing CCTV footage if available. This
+                                    ensures cooperation while clarifying that
+                                    the landlord is not liable.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -529,15 +517,14 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    Rent and security deposit are required to be
-                                    prepaid. Additionally, a one-time service
-                                    fee must be paid by the vehicle owner before
-                                    obtaining the spot owner's contact details.
-                                    This service fee is fully refundable if the
-                                    user decides not to proceed with booking the
-                                    parking spot. This service charge is
-                                    non-refundable if the customer confirms the
-                                    booking.
+                                    Rent and security deposit must be paid in
+                                    advance. A one-time service fee is also
+                                    required before receiving the spot owner’s
+                                    contact details. This fee is fully
+                                    refundable if the user chooses not to book
+                                    the parking spot. However, once the booking
+                                    is confirmed, the service fee becomes
+                                    non-refundable.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -558,9 +545,9 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    The ParkSpot company undertakes to create a
-                                    comprehensive listing for the parking spot
-                                    on its website and mobile app.
+                                    ParkSpot will create a detailed listing for
+                                    the parking spot on its website and mobile
+                                    app.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -576,9 +563,8 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    The spot owner must provide authentic
-                                    documents verifying ownership of the parking
-                                    spot.
+                                    The spot owner must provide valid documents
+                                    that prove ownership of the parking spot.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -594,10 +580,9 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    Failing to provide the necessary documents
-                                    for ownership verification may result in the
-                                    removal of the parking spot from the
-                                    ParkSpot portal.
+                                    If the required ownership documents are not
+                                    provided, the parking spot may be removed
+                                    from the ParkSpot portal.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -613,10 +598,9 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    In the event of non-compliance with
-                                    ownership verification requirements,
-                                    ParkSpot reserves the right to remove the
-                                    parking spot from the platform.
+                                    If ownership verification requirements are
+                                    not met, ParkSpot may remove the parking
+                                    spot from the platform.”
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -632,11 +616,9 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    If the ownership verification process is not
-                                    successfully completed, ParkSpot will
-                                    withhold customer referrals to the spot
-                                    owner until the necessary documentation is
-                                    provided.
+                                    If ownership verification is not completed,
+                                    ParkSpot will withhold customer referrals
+                                    until the required documents are provided.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -652,18 +634,13 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    As part of the agreement, the spot owner
-                                    acknowledges and agrees to pay the ParkSpot
-                                    company a monthly service fee for each month
-                                    the parking spot is booked through the
-                                    Company's platform. This service fee will be
-                                    deducted directly from the monthly rent
-                                    collected from the vehicle owner. By
-                                    entering into this arrangement, both parties
-                                    acknowledge their understanding and
-                                    acceptance of this financial arrangement
-                                    associated with the services provided by the
-                                    Company.
+                                    The spot owner agrees to pay ParkSpot a
+                                    monthly service fee for each month the
+                                    parking spot is booked through the platform.
+                                    This fee will be deducted from the rent
+                                    collected from the vehicle owner. By using
+                                    the service, both parties accept this
+                                    payment arrangement.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -676,14 +653,11 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    The ParkSpot company will collect monthly
-                                    rent from the vehicle owner(the parkspot
-                                    user who has booked the parking spot through
-                                    our portal), after deducting a service fee,
-                                    and promptly deposit the balance into the
-                                    landlord's designated bank account. Both
-                                    parties acknowledge and accept these
-                                    streamlined procedures for efficient
+                                    ParkSpot will collect the monthly rent from
+                                    the vehicle owner, deduct the service fee,
+                                    and deposit the remaining amount into the
+                                    landlord’s designated bank account. Both
+                                    parties agree to this process for smooth
                                     financial transactions.
                                 </AtomParagraph>
                             </li>
@@ -697,9 +671,10 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    Only if booking cancelled within 15 days of
-                                    booking or before parking start date
-                                    (whichever is early).
+                                    Refunds apply only if the booking is
+                                    cancelled within 15 days of booking or
+                                    before the parking start date, whichever
+                                    comes first.
                                 </AtomParagraph>
                             </li>
                         </ul>
@@ -729,16 +704,12 @@
                         <ul class="pl-6" style="list-style-type: disc">
                             <li>
                                 <AtomParagraph>
-                                    We reserve the right, at Our sole
-                                    discretion, to modify or replace these Terms
-                                    at any time.What constitutes a material
-                                    change will be determined at Our sole
-                                    discretion.By continuing to access or use
-                                    Our Service after those revisions become
-                                    effective, You agree to be bound by the
-                                    revised terms. If You do not agree to the
-                                    new terms, in whole or in part, please stop
-                                    using the website and the Service.
+                                    We may update or change these Terms at any
+                                    time. What counts as a major change will be
+                                    decided by us. By continuing to use our
+                                    service after changes take effect, you agree
+                                    to the new terms. If you do not agree,
+                                    please stop using the website and service.
                                 </AtomParagraph>
                             </li>
                         </ul>
