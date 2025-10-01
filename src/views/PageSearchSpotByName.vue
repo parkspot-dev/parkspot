@@ -120,6 +120,7 @@ export default {
                 const res = await mayaClient.get(
                     `/sites-by-name?name=${encodedName}`,
                 );
+                console.log("this is res", res)
                 this.sites = res || [];
             } catch (err) {
                 this.hasError = true;

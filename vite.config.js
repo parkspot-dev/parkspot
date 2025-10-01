@@ -27,4 +27,9 @@ export default defineConfig({
         //  since it can interfere with IDE and type support."
         extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
     },
+    test: {
+        globals: true,
+        environment: 'jsdom', // Simulate a browser environment
+        // setupFiles: './vitest.setup.js' // Optional setup file
+    },
 });
