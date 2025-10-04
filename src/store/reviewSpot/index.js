@@ -133,6 +133,7 @@ const actions = {
             return;
         }
         
+        
         commit('set-error', { field: 'latlongError', message: '' });
     },
 
