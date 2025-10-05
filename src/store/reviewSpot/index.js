@@ -434,10 +434,10 @@ const actions = {
 
     // saveForm validates form data for errors and updates the spot request data on the backend (for temporary saving or drafts)
     async saveForm({ dispatch, commit }) {
-        const isValid = await dispatch('handleFormErrors');
-        if (!isValid) {
-            return;
-        }
+        // const isValid = await dispatch('handleFormErrors');
+        // if (!isValid) {
+        //     return;
+        // }
         let response;
         commit('set-loading', true);
         if (
