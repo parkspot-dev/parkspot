@@ -428,8 +428,8 @@
                 <AtomButton
                     @click.native="openModal('Save')"
                     class="btn"
-                    :class="{ 'btn-disabled': !isFormModified || !isFormValid }"
-                    :disabled="!isFormModified || !isFormValid"
+                    :class="{ 'btn-disabled': !isFormModified }"
+                    :disabled="!isFormModified"
                 >
                     Save
                 </AtomButton>
@@ -448,7 +448,7 @@
                             spotRequestStatusOptions.Verified
                     "
                 >
-                    Publish
+                    Promote
                 </AtomButton>
             </div>
         </div>
@@ -635,10 +635,10 @@ export default {
                 };
             } else if (action === 'Publish') {
                 this.modalContent = {
-                    action: 'Publish',
+                    action: 'Promote',
                     message:
                         'This saves the details and start showing it to customers.',
-                    title: 'Confirm Publish',
+                    title: 'Confirm Promote',
                 };
             }
         },
