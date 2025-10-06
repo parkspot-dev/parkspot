@@ -22,7 +22,7 @@
                     class="table-container"
                 >
                     <hr style="width: 100%" />
-                    <h2>Spots From This Number</h2>
+                    <h2>Promoted Spots</h2>
                     <div class="table-container">
                         <table class="styled-table">
                             <thead>
@@ -68,7 +68,7 @@
                     class="table-container"
                 >
                     <hr style="width: 100%" />
-                    <h2>Spot Requests From This Number</h2>
+                    <h2>Pending Spots</h2>
                     <div class="table-container">
                         <table class="styled-table">
                             <thead>
@@ -88,7 +88,7 @@
                                     <td>
                                         <a
                                             :href="
-                                                this.getReviewSpotRequestURL(
+                                                getReviewSpotRequestURL(
                                                     spotRequest.ID,
                                                 )
                                             "
@@ -97,9 +97,7 @@
                                             {{ spotRequest.ID }}
                                         </a>
                                     </td>
-                                    <td>
-                                        {{ spotRequest.Name }}
-                                    </td>
+                                    <td>{{ spotRequest.Name }}</td>
                                     <td>{{ spotRequest.Address }}</td>
                                     <td>{{ spotRequest.Latitude }}</td>
                                     <td>{{ spotRequest.Longitude }}</td>
@@ -773,7 +771,7 @@ export default {
                 });
             }
             if (SODetails.mobile) {
-                this.fetchUsersSpotsAndSpotRequests(SODetails.mobile);
+                this.fetchUsersSpotsAndSpotRequests({mobile : SODetails.mobile, spotId: SODetails.spotId});
             }
         },
         status(newStatus) {

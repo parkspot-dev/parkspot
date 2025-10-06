@@ -83,8 +83,11 @@ const mutations = {
     'set-spots-spotsRequests'(state, { spots, spotRequests }) {
         state.UsersSpots = spots;
         state.UsersSpotRequests = spotRequests;
+    },
+    'update-users-spot-requests'(state, spotRequests) {
+        state.UsersSpotRequests = spotRequests
     }
-};
+}
 
 const actions = {
     // Validate Latitude and Longitude type
@@ -522,11 +525,17 @@ const actions = {
         commit('set-updated-facilities', facilities);
     },
 
-    async fetchUsersSpotsAndSpotRequests({ commit }, mobile) {
+    async fetchUsersSpotsAndSpotRequests({ commit }, {mobile, spotId}) {
             const response = await mayaClient.get(`sites-and-spot-requests?mobile=${mobile}`);
             const spots = response.Sites || [];
             const spotRequests = response.SpotRequests || [];
-            commit('set-spots-spotsRequests', { spots, spotRequests });
+            const filteredSpotRequests = spotRequests.filter((spotRequest) => spotRequest.ID !== spotId);
+            commit('set-spots-spotsRequests', { spots, spotRequests: filteredSpotRequests });
+    },
+
+    filterSpotRequests({commit, state}, spotId) {
+        const filteredSpotRequests = state.UsersSpotRequests.filter((spotRequest) => spotRequest.ID !== spotId);
+        commit('update-users-spot-requests', filteredSpotRequests)
     }
 };
 
