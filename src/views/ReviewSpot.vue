@@ -432,7 +432,7 @@
                     Save
                 </AtomButton>
                 <AtomButton
-                    @click.native="openModal('Publish')"
+                    @click.native="openModal('Promote')"
                     class="btn"
                     :class="{
                         'btn-disabled':
@@ -446,7 +446,7 @@
                             spotRequestStatusOptions.Verified
                     "
                 >
-                    Publish
+                  Promote
                 </AtomButton>
             </div>
         </div>
@@ -631,12 +631,12 @@ export default {
                         'This will only save the details. Spot will NOT is shown to customers.',
                     title: 'Confirm Save',
                 };
-            } else if (action === 'Publish') {
+            } else if (action === 'Promote') {
                 this.modalContent = {
-                    action: 'Publish',
+                    action: 'Promote',
                     message:
                         'This saves the details and start showing it to customers.',
-                    title: 'Confirm Publish',
+                    title: 'Confirm Promote',
                 };
             }
         },
@@ -1141,12 +1141,14 @@ export default {
 }
 
 .promoted-spots{
-    color: #48c78e !important;
-    border: 1px solid #48c78e;
+    background-color: white;
     border-radius: 20px;
+    border: 1px solid #48c78e;
+    color: #48c78e !important;
     padding: 4px;
 }
 .pending-spot{
+    background-color: white;
     color: #f3d407 !important;
     border: 1px solid #f3d407;
     border-radius: 20px;
