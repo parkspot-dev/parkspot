@@ -434,7 +434,7 @@
                     Save
                 </AtomButton>
                 <AtomButton
-                    @click.native="openModal('Publish')"
+                    @click.native="openModal('Promote')"
                     class="btn"
                     :class="{
                         'btn-disabled':
@@ -633,7 +633,7 @@ export default {
                         'This will only save the details. Spot will NOT is shown to customers.',
                     title: 'Confirm Save',
                 };
-            } else if (action === 'Publish') {
+            } else if (action === 'Promote') {
                 this.modalContent = {
                     action: 'Promote',
                     message:
