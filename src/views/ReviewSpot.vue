@@ -102,26 +102,28 @@
                                     <td>{{ spotRequest.Address }}</td>
                                     <td>{{ spotRequest.Latitude }}</td>
                                     <td>{{ spotRequest.Longitude }}</td>
-                                    <SelectInput
-                                        :key="spotRequest.$eventID"
-                                        :defaultValue="
-                                            getSpotRequestStatusLabel(
-                                                spotRequest.Status,
-                                            )
-                                        "
-                                        :list="
-                                            spotRequestStatusList.map(
-                                                (status) => status.name,
-                                            )
-                                        "
-                                        @change="
-                                            onStatusUpdate(
-                                                spotRequest,
-                                                $event.target.value,
-                                            )
-                                        "
-                                        name="updateStatus"
-                                    />
+                                    <td class="center-select">
+                                        <SelectInput
+                                            :key="spotRequest.$eventID"
+                                            :defaultValue="
+                                                getSpotRequestStatusLabel(
+                                                    spotRequest.Status,
+                                                )
+                                            "
+                                            :list="
+                                                spotRequestStatusList.map(
+                                                    (status) => status.name,
+                                                )
+                                            "
+                                            @change="
+                                                onStatusUpdate(
+                                                    spotRequest,
+                                                    $event.target.value,
+                                                )
+                                            "
+                                            name="updateStatus"
+                                        />
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1210,5 +1212,11 @@ export default {
     border: 1px solid #f3d407;
     border-radius: 20px;
     padding: 4px;
+}
+.center-select {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 </style>
