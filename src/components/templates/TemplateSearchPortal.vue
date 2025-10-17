@@ -79,6 +79,22 @@
                 @update="handleExpiringRequests"
                 label="Requests Type"
             />
+            <FilterDropdown
+                :options="agentList.map((agent) => agent.name)"
+                :searchable="false"
+                :selectedValue="filters.Agent ? filters.Agent : ''"
+                @remove="removeAgentFilter"
+                @update="handleAgentFilter"
+                label="Agent"
+            />
+            <FilterDropdown
+                :options="statusList.map((status) => status.name)"
+                :searchable="false"
+                :selectedValue="filters.Agent ? filters.Agent : ''"
+                @remove="removeAgentFilter"
+                @update="handleAgentFilter"
+                label="Status"
+            />
         </div>
         <b-table
             v-if="isDesktopView"
@@ -821,6 +837,21 @@ export default {
             this.filters.isExpiring = false;
             const url = new URL(window.location.href);
             url.searchParams.delete('isExpiring');
+            window.history.pushState({}, '', url.toString());
+            this.resetFilterParkingRequests();
+        },
+        handleAgentFilter(agent) {
+            // Update the URL to include the isExpiring parameter
+            const url = new URL(window.location.href);
+            url.searchParams.set('agent', agent);
+            window.history.pushState({}, '', url.toString());
+            this.filters.Agent = agent;
+            // this.extractExpiringRequests();
+        },
+        removeAgentFilter() {
+            this.filters.Agent = '';
+            const url = new URL(window.location.href);
+            url.searchParams.delete('agent');
             window.history.pushState({}, '', url.toString());
             this.resetFilterParkingRequests();
         },
