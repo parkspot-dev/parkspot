@@ -649,6 +649,7 @@ export default {
             if (this.clickedButton === 'Save') {
                 this.confirmSave();
             } else {
+                this.validateFormFields()
                 if (this.isFormModified) this.confirmSave();
                 this.submitForm();
             }
