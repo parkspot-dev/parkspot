@@ -43,7 +43,7 @@ const state = {
     updatedFields: [],
     updatedFacilities: [],
     UsersSpots: [],
-    UsersSpotRequests: []
+    UsersSpotRequests: [],
 };
 
 const mutations = {
@@ -100,7 +100,6 @@ const actions = {
                 message:
                     'Latitude and longitude are required and must be a non-empty string.',
             });
-
             return;
         }
         // Split input into latitude and longitude
@@ -142,7 +141,7 @@ const actions = {
             });
             return;
         }
-        
+
         commit('set-error', { field: 'latlongError', message: '' });
     },
 
@@ -486,7 +485,7 @@ const actions = {
         const response = await mayaClient.post(
             `/owner/spot-update?spot-id=${state.SO.spotId}`,
             {},
-            { timeout : 2000 }
+            { timeout: 2000 },
         );
         if (response.ErrorCode) {
             // Network issues or server errors could cause the API call to fail.
@@ -499,7 +498,7 @@ const actions = {
             const encodedSpotId = encodeURIComponent(response.SiteID);
             const url = `/spot-details/${encodedSpotId}`;
             window.open(url, '_blank');
-            router.push('/internal/spot-requests')
+            router.push('/internal/spot-requests');
         }
         commit('set-loading', false);
         return response;
