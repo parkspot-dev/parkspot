@@ -43,7 +43,7 @@ const state = {
     updatedFields: [],
     updatedFacilities: [],
     UsersSpots: [],
-    UsersSpotRequests: []
+    UsersSpotRequests: [],
 };
 
 const mutations = {
@@ -433,10 +433,6 @@ const actions = {
 
     // saveForm validates form data for errors and updates the spot request data on the backend (for temporary saving or drafts)
     async saveForm({ dispatch, commit }) {
-        const isValid = await dispatch('handleFormErrors');
-        if (!isValid) {
-            return;
-        }
         let response;
         commit('set-loading', true);
         if (
@@ -489,7 +485,7 @@ const actions = {
         const response = await mayaClient.post(
             `/owner/spot-update?spot-id=${state.SO.spotId}`,
             {},
-            { timeout : 2000 }
+            { timeout: 2000 },
         );
         if (response.ErrorCode) {
             // Network issues or server errors could cause the API call to fail.
@@ -502,7 +498,7 @@ const actions = {
             const encodedSpotId = encodeURIComponent(response.SiteID);
             const url = `/spot-details/${encodedSpotId}`;
             window.open(url, '_blank');
-            router.push('/internal/spot-requests')
+            router.push('/internal/spot-requests');
         }
         commit('set-loading', false);
         return response;

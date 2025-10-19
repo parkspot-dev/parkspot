@@ -426,8 +426,8 @@
                 <AtomButton
                     @click.native="openModal('Save')"
                     class="btn"
-                    :class="{ 'btn-disabled': !isFormModified || !isFormValid }"
-                    :disabled="!isFormModified || !isFormValid"
+                    :class="{ 'btn-disabled': !isFormModified }"
+                    :disabled="!isFormModified"
                 >
                     Save
                 </AtomButton>
