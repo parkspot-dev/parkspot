@@ -12,7 +12,7 @@ const state = {
     parkingRequests: [],
     interestedVOList: [],
     filteredParkingRequests: [],
-    expiringRequestsCount: 0
+    expiringRequestsCount: 0,
 };
 
 const getters = {};
@@ -61,7 +61,7 @@ const mutations = {
     },
     'set-filterd-parking-requests'(state, requests) {
         state.filteredParkingRequests = requests;
-    }
+    },
 };
 const actions = {
     updateActiveTab({ commit }, tabNo) {
@@ -88,7 +88,10 @@ const actions = {
             }
             commit('set-parking-requests', response.ParkingRequests);
             commit('set-interested-vo-list', response.ParkingRequests);
-            commit('set-expiring-requests-count', response.ExpiringRequestsCount)
+            commit(
+                'set-expiring-requests-count',
+                response.ExpiringRequestsCount,
+            );
         } catch (error) {
             commit('set-error', error.message);
         } finally {
@@ -110,7 +113,7 @@ const actions = {
                 throw new Error(response.DisplayMsg);
             }
             commit('set-interested-vo-list', response);
-            commit('set-filterd-parking-requests', response)
+            commit('set-filterd-parking-requests', response);
         } catch (error) {
             commit('set-error', error.message);
         } finally {
@@ -129,18 +132,34 @@ const actions = {
         commit('update-SO-Lat-Lng-Input', text);
     },
     // setAgents
-    setAgents({commit}, list) {
-        commit('set-agent-list', list)
+    setAgents({ commit }, list) {
+        commit('set-agent-list', list);
     },
 
-    extractExpiringRequests({ commit, state}) {
-         const extractedCriticalRequests = state.parkingRequests.filter((request) => request.IsExpiring)
-         commit('set-filterd-parking-requests', extractedCriticalRequests)
+    extractExpiringRequests({ commit, state }) {
+        const extractedCriticalRequests = state.filteredParkingRequests.filter(
+            (request) => request.IsExpiring,
+        );
+        commit('set-filterd-parking-requests', extractedCriticalRequests);
     },
 
-    resetFilterParkingRequests({commit, state}) {
-        commit('set-filterd-parking-requests', state.parkingRequests)
-    }
+    extractRequetsByAgentName({ commit, state }, agentName) {
+        const extractedAgentNameRequests = state.filteredParkingRequests.filter(
+            (requests) => requests.Agent === agentName,
+        );
+        commit('set-filterd-parking-requests', extractedAgentNameRequests);
+    },
+
+    extractRequetsByStatus({ commit, state }, status) {
+        const extractRequestsByStatys = state.filteredParkingRequests.filter(
+            (requests) => requests.Status === status,
+        );
+        commit('set-filterd-parking-requests', extractRequestsByStatys);
+    },
+
+    resetFilterParkingRequests({ commit, state }) {
+        commit('set-filterd-parking-requests', state.parkingRequests);
+    },
 };
 
 export default {

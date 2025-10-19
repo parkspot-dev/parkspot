@@ -79,6 +79,24 @@
                 @update="handleExpiringRequests"
                 label="Requests Type"
             />
+
+            <FilterDropdown
+                :options="agentList.map((agent) => agent.name)"
+                :searchable="false"
+                :selectedValue="filters.Agent ? filters.Agent : ''"
+                @remove="removeAgentFilter"
+                @update="handleAgentFilter"
+                label="Agent"
+            />
+
+            <FilterDropdown
+                :options="statusList.map((status) => status.name)"
+                :searchable="false"
+                :selectedValue="filters.Status ? filters.Status : ''"
+                @remove="removeStatusFilter"
+                @update="handleStatusFilter"
+                label="Status"
+            />
         </div>
         <b-table
             v-if="isDesktopView"
@@ -649,6 +667,8 @@ export default {
             'setAgents',
             'extractExpiringRequests',
             'resetFilterParkingRequests',
+            'extractRequetsByAgentName',
+            'extractRequetsByStatus',
         ]),
         getPriority(val) {
             switch (val) {
@@ -779,6 +799,26 @@ export default {
             this.extractExpiringRequests();
         },
 
+        handleAgentFilter(agent) {
+            // Update the URL to include the isExpiring parameter
+            const url = new URL(window.location.href);
+            url.searchParams.set('agent', agent);
+            window.history.pushState({}, '', url.toString());
+            this.filters.Agent = agent;
+            this.extractRequetsByAgentName();
+        },
+
+        handleStatusFilter(status) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('status', status);
+            window.history.pushState({}, '', url.toString());
+            this.filters.Status = status;
+            const statusRow = this.statusList.find(
+                (item) => item.name === status,
+            );
+            this.extractRequetsByStatus(statusRow.id);
+        },
+
         updateSummary(requests) {
             this.summary.totalRequest = requests.length;
             const today = new Date();
@@ -821,6 +861,20 @@ export default {
             this.filters.isExpiring = false;
             const url = new URL(window.location.href);
             url.searchParams.delete('isExpiring');
+            window.history.pushState({}, '', url.toString());
+            this.resetFilterParkingRequests();
+        },
+        removeAgentFilter() {
+            this.filters.Agent = '';
+            const url = new URL(window.location.href);
+            url.searchParams.delete('agent');
+            window.history.pushState({}, '', url.toString());
+            this.resetFilterParkingRequests();
+        },
+        removeStatusFilter() {
+            this.filters.Status = '';
+            const url = new URL(window.location.href);
+            url.searchParams.delete('status');
             window.history.pushState({}, '', url.toString());
             this.resetFilterParkingRequests();
         },
