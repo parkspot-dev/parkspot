@@ -22,7 +22,7 @@
                     class="table-container"
                 >
                     <hr style="width: 100%" />
-                    <h2>Spots From This Number</h2>
+                    <h2 class="promoted-spots">Promoted Spots </h2>
                     <div class="table-container">
                         <table class="styled-table">
                             <thead>
@@ -37,18 +37,18 @@
                             <tbody>
                                 <tr
                                     v-for="spot in UsersSpots"
-                                    :key="spot.SpotID"
+                                    :key="spot.SiteID"
                                 >
                                     <td>
                                         <a
                                             :href="
                                                 this.getSpotDetailURL(
-                                                    spot.SpotID,
+                                                    spot.SiteID,
                                                 )
                                             "
                                             target="_blank"
                                         >
-                                            {{ spot.SpotID }}
+                                            {{ spot.SiteID }}
                                         </a>
                                     </td>
                                     <td>
@@ -68,7 +68,7 @@
                     class="table-container"
                 >
                     <hr style="width: 100%" />
-                    <h2>Spot Requests From This Number</h2>
+                    <h2 class="pending-spot">Pending Spots</h2>
                     <div class="table-container">
                         <table class="styled-table">
                             <thead>
@@ -88,7 +88,7 @@
                                     <td>
                                         <a
                                             :href="
-                                                this.getReviewSpotRequestURL(
+                                                getReviewSpotRequestURL(
                                                     spotRequest.ID,
                                                 )
                                             "
@@ -97,9 +97,7 @@
                                             {{ spotRequest.ID }}
                                         </a>
                                     </td>
-                                    <td>
-                                        {{ spotRequest.Name }}
-                                    </td>
+                                    <td>{{ spotRequest.Name }}</td>
                                     <td>{{ spotRequest.Address }}</td>
                                     <td>{{ spotRequest.Latitude }}</td>
                                     <td>{{ spotRequest.Longitude }}</td>
@@ -649,6 +647,7 @@ export default {
             if (this.clickedButton === 'Save') {
                 this.confirmSave();
             } else {
+                this.validateFormFields()
                 if (this.isFormModified) this.confirmSave();
                 this.submitForm();
             }
@@ -758,7 +757,8 @@ export default {
         },
 
         getSpotDetailURL(spotId) {
-            return `${window.location.origin}/spot-details/${spotId}`;
+            const encodedSpotId = encodeURIComponent(spotId)
+            return `${window.location.origin}/spot-details/${encodedSpotId}`;
         },
 
         getReviewSpotRequestURL(spotRequestId) {
@@ -773,7 +773,7 @@ export default {
                 });
             }
             if (SODetails.mobile) {
-                this.fetchUsersSpotsAndSpotRequests(SODetails.mobile);
+                this.fetchUsersSpotsAndSpotRequests({mobile : SODetails.mobile, spotId: SODetails.spotId});
             }
         },
         status(newStatus) {
@@ -1138,5 +1138,21 @@ export default {
     background-color: var(--primary-color);
     color: var(--parkspot-white);
     font-weight: bold;
+
+}
+
+.promoted-spots{
+    background-color: white;
+    border-radius: 20px;
+    border: 1px solid #48c78e;
+    color: #48c78e !important;
+    padding: 4px;
+}
+.pending-spot{
+    background-color: white;
+    color: #f3d407 !important;
+    border: 1px solid #f3d407;
+    border-radius: 20px;
+    padding: 4px;
 }
 </style>

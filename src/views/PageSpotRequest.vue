@@ -93,6 +93,7 @@
             <b-table-column
                 field="Address"
                 label="Address"
+                searchable
                 sortable
                 cell-class="has-text-left"
             >
