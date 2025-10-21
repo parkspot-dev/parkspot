@@ -529,11 +529,6 @@ const actions = {
             const filteredSpotRequests = spotRequests.filter((spotRequest) => spotRequest.ID !== spotId);
             commit('set-spots-spotsRequests', { spots, spotRequests: filteredSpotRequests });
     },
-
-    filterSpotRequests({commit, state}, spotId) {
-        const filteredSpotRequests = state.UsersSpotRequests.filter((spotRequest) => spotRequest.ID !== spotId);
-        commit('update-users-spot-requests', filteredSpotRequests)
-    }
 };
 
 export default {
