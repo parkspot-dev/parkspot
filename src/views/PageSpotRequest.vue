@@ -204,7 +204,7 @@ export default {
                 { id: 2, name: 'Processing' },
                 { id: 3, name: 'Requested Modification' },
                 { id: 4, name: 'Verified' },
-                { id: 5, name: 'Denied' },
+                { id: 6, name: 'Denied' },
             ],
             summary: {
                 btn: 'Show',

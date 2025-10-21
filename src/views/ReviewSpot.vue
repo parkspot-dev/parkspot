@@ -446,7 +446,7 @@
                             spotRequestStatusOptions.Verified
                     "
                 >
-                  Promote
+                    Promote
                 </AtomButton>
             </div>
         </div>
