@@ -100,6 +100,7 @@ const actions = {
                 message:
                     'Latitude and longitude are required and must be a non-empty string.',
             });
+
             return;
         }
         // Split input into latitude and longitude
@@ -131,7 +132,7 @@ const actions = {
             });
             return;
         }
-
+        
         // Check that latitude and longitude are not both zero
         if (latitude === 0 || longitude === 0) {
             commit('set-error', {
@@ -528,11 +529,6 @@ const actions = {
             const filteredSpotRequests = spotRequests.filter((spotRequest) => spotRequest.ID !== spotId);
             commit('set-spots-spotsRequests', { spots, spotRequests: filteredSpotRequests });
     },
-
-    filterSpotRequests({commit, state}, spotId) {
-        const filteredSpotRequests = state.UsersSpotRequests.filter((spotRequest) => spotRequest.ID !== spotId);
-        commit('update-users-spot-requests', filteredSpotRequests)
-    }
 };
 
 export default {

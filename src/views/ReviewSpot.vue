@@ -22,7 +22,7 @@
                     class="table-container"
                 >
                     <hr style="width: 100%" />
-                    <h2 class="promoted-spots">Promoted Spots </h2>
+                    <h2 class="promoted-spots">Promoted Spots</h2>
                     <div class="table-container">
                         <table class="styled-table">
                             <thead>
@@ -78,6 +78,7 @@
                                     <th>Address</th>
                                     <th>Latitude</th>
                                     <th>Longitude</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -101,6 +102,28 @@
                                     <td>{{ spotRequest.Address }}</td>
                                     <td>{{ spotRequest.Latitude }}</td>
                                     <td>{{ spotRequest.Longitude }}</td>
+                                    <td class="center-select">
+                                        <SelectInput
+                                            :key="spotRequest.$eventID"
+                                            :defaultValue="
+                                                getSpotRequestStatusLabel(
+                                                    spotRequest.Status,
+                                                )
+                                            "
+                                            :list="
+                                                spotRequestStatusList.map(
+                                                    (status) => status.name,
+                                                )
+                                            "
+                                            @change="
+                                                onStatusUpdate(
+                                                    spotRequest,
+                                                    $event.target.value,
+                                                )
+                                            "
+                                            name="updateStatus"
+                                        />
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -479,7 +502,12 @@ import { mapState, mapActions } from 'vuex';
 import imageCompression from 'browser-image-compression';
 
 import { CITY_OPTIONS, PARKING_FACILITY } from '@/constant/constant';
-import { ParkingSize } from '../constant/enums';
+import {
+    getIdBasedOnLabel,
+    getSpotRequestStatusLabel,
+    ParkingSize,
+} from '../constant/enums';
+import SelectInput from '@/components/global/SelectInput.vue';
 import { RentUnit } from '../constant/enums';
 import { SiteType } from '../constant/enums';
 import { SpotRequestStatus } from '../constant/enums';
@@ -504,9 +532,18 @@ export default {
         ImageUpload,
         LoaderModal,
         MultiSelectInput,
+        SelectInput,
     },
     data() {
         return {
+            spotRequestStatusList: [
+                { id: 0, name: 'Not Set' },
+                { id: 1, name: 'Registered' },
+                { id: 2, name: 'Processing' },
+                { id: 3, name: 'Requested Modification' },
+                { id: 4, name: 'Verified' },
+                { id: 6, name: 'Denied' },
+            ],
             clickedButton: null, // Tracks which button is clicked
             isModalOpen: false, // Tracks modal visibility
             facilityOptions: [...PARKING_FACILITY.SO.FACILITIES_DATA],
@@ -594,6 +631,7 @@ export default {
             'validateFormFields',
             'fetchUsersSpotsAndSpotRequests',
         ]),
+        ...mapActions('spotRequests', ['updateStatus']),
         setSpotId() {
             this.SO.spotId = this.$route.query.requestId;
         },
@@ -757,12 +795,33 @@ export default {
         },
 
         getSpotDetailURL(spotId) {
-            const encodedSpotId = encodeURIComponent(spotId)
+            const encodedSpotId = encodeURIComponent(spotId);
             return `${window.location.origin}/spot-details/${encodedSpotId}`;
         },
 
         getReviewSpotRequestURL(spotRequestId) {
             return `${window.location.origin}/internal/spot-requests/?requestId=${spotRequestId}`;
+        },
+        async onStatusUpdate(spotData, status) {
+            const statusId = getIdBasedOnLabel(
+                this.spotRequestStatusList,
+                status,
+            );
+            if (statusId != null) {
+                spotData['Status'] = statusId;
+                await this.updateStatus(spotData);
+                this.$buefy.toast.open({
+                    message: `Status updated to ${getSpotRequestStatusLabel(statusId)}`,
+                    type: 'is-success',
+                    duration: 3000,
+                });
+            } else {
+                this.alertError('Invalid status selected.');
+            }
+        },
+
+        getSpotRequestStatusLabel(spotRequestStatus) {
+            return getSpotRequestStatusLabel(spotRequestStatus);
         },
     },
     watch: {
@@ -773,7 +832,10 @@ export default {
                 });
             }
             if (SODetails.mobile) {
-                this.fetchUsersSpotsAndSpotRequests({mobile : SODetails.mobile, spotId: SODetails.spotId});
+                this.fetchUsersSpotsAndSpotRequests({
+                    mobile: SODetails.mobile,
+                    spotId: SODetails.spotId,
+                });
             }
         },
         status(newStatus) {
@@ -1138,7 +1200,6 @@ export default {
     background-color: var(--primary-color);
     color: var(--parkspot-white);
     font-weight: bold;
-
 }
 
 .promoted-spots{
@@ -1154,5 +1215,11 @@ export default {
     border: 1px solid #f3d407;
     border-radius: 20px;
     padding: 4px;
+}
+.center-select {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 </style>
