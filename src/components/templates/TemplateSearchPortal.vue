@@ -592,12 +592,30 @@ export default {
     watch: {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
+
             if (this.$route.query['isExpiring']) {
                 this.extractExpiringRequests();
                 this.filters.isExpiring = true;
             }
+
+            if (this.$route.query['agent']) {
+                const agentName = this.$route.query['agent'];
+                this.filters.Agent = agentName;
+                this.extractRequetsByAgentName(agentName);
+            }
+            if (this.$route.query['status']) {
+                const statusName = this.$route.query['status'];
+                this.filters.Status = statusName;
+                const statusRow = this.statusList.find(
+                    (item) => item.name === statusName,
+                );
+                if (statusRow) {
+                    this.extractRequetsByStatus(statusRow.id);
+                }
+            }
         },
     },
+
     data() {
         return {
             // filters were declared explicitly to use in v-model else they have no use
@@ -800,12 +818,13 @@ export default {
         },
 
         handleAgentFilter(agent) {
+            console.log('agent', agent);
             // Update the URL to include the isExpiring parameter
             const url = new URL(window.location.href);
             url.searchParams.set('agent', agent);
             window.history.pushState({}, '', url.toString());
             this.filters.Agent = agent;
-            this.extractRequetsByAgentName();
+            this.extractRequetsByAgentName(agent);
         },
 
         handleStatusFilter(status) {

@@ -144,17 +144,20 @@ const actions = {
     },
 
     extractRequetsByAgentName({ commit, state }, agentName) {
-        const extractedAgentNameRequests = state.filteredParkingRequests.filter(
+        console.log('inside ', agentName);
+        console.log('filter', state.filteredParkingRequests);
+        const extractedAgentNameRequests = state.parkingRequests.filter(
             (requests) => requests.Agent === agentName,
         );
+
         commit('set-filterd-parking-requests', extractedAgentNameRequests);
     },
 
     extractRequetsByStatus({ commit, state }, status) {
-        const extractRequestsByStatys = state.filteredParkingRequests.filter(
+        const extractRequestsByStatus = state.parkingRequests.filter(
             (requests) => requests.Status === status,
         );
-        commit('set-filterd-parking-requests', extractRequestsByStatys);
+        commit('set-filterd-parking-requests', extractRequestsByStatus);
     },
 
     resetFilterParkingRequests({ commit, state }) {
