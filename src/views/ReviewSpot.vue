@@ -630,6 +630,7 @@ export default {
             'setUpdatedFacilities',
             'validateFormFields',
             'fetchUsersSpotsAndSpotRequests',
+            'handleFormErrors',
         ]),
         ...mapActions('spotRequests', ['updateStatus']),
         setSpotId() {
@@ -681,11 +682,16 @@ export default {
         closeModal() {
             this.isModalOpen = false;
         },
-        confirmAction() {
+        async confirmAction() {
+            const isValid = await this.handleFormErrors();
+            if (!isValid) {
+                this.closeModal();
+                return;
+            }
             if (this.clickedButton === 'Save') {
                 this.confirmSave();
             } else {
-                this.validateFormFields()
+                this.validateFormFields();
                 if (this.isFormModified) this.confirmSave();
                 this.submitForm();
             }
@@ -1202,14 +1208,14 @@ export default {
     font-weight: bold;
 }
 
-.promoted-spots{
+.promoted-spots {
     background-color: white;
     border-radius: 20px;
     border: 1px solid #48c78e;
     color: #48c78e !important;
     padding: 4px;
 }
-.pending-spot{
+.pending-spot {
     background-color: white;
     color: #f3d407 !important;
     border: 1px solid #f3d407;
