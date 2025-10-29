@@ -1206,6 +1206,7 @@ $portal-font-size: 13px;
     align-items: center;
     gap: 10px;
     font-family: Arial, sans-serif;
+    margin: 5px;
     margin-bottom: 20px;
 }
 
