@@ -550,11 +550,6 @@ export default {
             const agents = [{ id: 0, FullName: this.userProfile?.FullName }];
             this.setAgents(agents);
         }
-
-        if (this.parkingRequests && this.parkingRequests.length > 0) {
-            this.updateSummary(this.parkingRequests);
-        }
-
         if (typeof window !== 'undefined') {
             this.windowWidth = window.innerWidth;
             window.addEventListener('resize', this.updateWidth);
@@ -570,7 +565,6 @@ export default {
             window.removeEventListener('resize', this.updateWidth);
         }
     },
-
     watch: {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
