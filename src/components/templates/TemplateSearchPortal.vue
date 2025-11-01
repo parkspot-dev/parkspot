@@ -604,11 +604,11 @@ export default {
                 this.extractRequetsByAgentName(agentName);
             }
             if (this.$route.query['status']) {
-                const statusName = this.$route.query['status'];
-                this.filters.Status = statusName;
+                const statusId = parseInt(this.$route.query['status'])
                 const statusRow = this.statusList.find(
-                    (item) => item.name === statusName,
+                    (item) => item.id === statusId,
                 );
+                 this.filters.Status = statusRow.name;
                 if (statusRow) {
                     this.extractRequetsByStatus(statusRow.id);
                 }
@@ -829,12 +829,12 @@ export default {
 
         handleStatusFilter(status) {
             const url = new URL(window.location.href);
-            url.searchParams.set('status', status);
-            window.history.pushState({}, '', url.toString());
-            this.filters.Status = status;
             const statusRow = this.statusList.find(
                 (item) => item.name === status,
             );
+            url.searchParams.set('status', statusRow.id);
+            window.history.pushState({}, '', url.toString());
+            this.filters.Status = status;
             this.extractRequetsByStatus(statusRow.id);
         },
 
@@ -1206,6 +1206,7 @@ $portal-font-size: 13px;
     align-items: center;
     gap: 10px;
     font-family: Arial, sans-serif;
+    margin: 5px;
     margin-bottom: 20px;
 }
 
