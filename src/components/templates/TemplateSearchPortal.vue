@@ -10,12 +10,9 @@
                     >
                 </div>
             </div>
-            <div class="summary" v-if="isSummary">
+                 <div class="summary" v-if="isSummary">
                 <div class="so-btn">
-                    <AtomButton
-                        @click.native="showSummary"
-                        v-show="!summary.show"
-                    >
+                    <AtomButton @click.native="showSummary">
                         {{ summary.btn }} Summary
                     </AtomButton>
                 </div>
@@ -26,44 +23,68 @@
                             @click.native="showSummary"
                             :icon="'close'"
                             size=""
-                        >
-                        </AtomIcon>
+                        />
                     </span>
-                    <p class="so-total">
-                        Total Request : {{ summary.totalRequest }}
-                    </p>
-                    <hr />
-                    <div class="so-live-request">
-                        <p>
-                            <span>Today : </span>
-                            <span>{{ summary.today }}</span>
-                        </p>
-                        <p>
-                            <span>Yesterday : </span>
-                            <span>{{ summary.yesterday }}</span>
-                        </p>
-                    </div>
-                    <hr />
-                    <div class="so-priority">
-                        <p>High : {{ summary.high }}</p>
-                        <p>Low : {{ summary.low }}</p>
-                        <p>Medium : {{ summary.medium }}</p>
-                    </div>
+                    <div class="summary-layout">
+                        <div class="summary-header">
+                            <p class="total-request">
+                                Total Requests: {{ summary.totalRequest }}
+                            </p>
+                            <p class="total-agent">
+                                Total Agents:
+                                {{ Object.keys(summary.agent).length }}
+                            </p>
+                        </div>
 
-                    <hr />
-                    <div class="so-status">
-                        <p>
-                            <span>Registered :</span>
-                            <span>{{ summary.status[1] }}</span>
-                        </p>
-                        <p>
-                            <span>Processing :</span>
-                            <span>{{ summary.status[2] }}</span>
-                        </p>
-                        <p>
-                            <span>Suggested : </span>
-                            <span>{{ summary.status[3] }}</span>
-                        </p>
+                        <table class="summary-table">
+                            <thead>
+                                <tr>
+                                    <th>Requests</th>
+                                    <th>Agents</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <p>Today: {{ summary.today }}</p>
+                                        <p>
+                                            Yesterday: {{ summary.yesterday }}
+                                        </p>
+                                    </td>
+
+                                    <td>
+                                        <div
+                                            v-for="(
+                                                count, name
+                                            ) in summary.agent"
+                                            :key="name"
+                                        >
+                                            {{ name }} : {{ count }}
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <p>High: {{ summary.high }}</p>
+                                        <p>Medium: {{ summary.medium }}</p>
+                                        <p>Low: {{ summary.low }}</p>
+                                    </td>
+
+                                    <td>
+                                        <p>
+                                            Registered: {{ summary.status[1] }}
+                                        </p>
+                                        <p>
+                                            Processing: {{ summary.status[2] }}
+                                        </p>
+                                        <p>
+                                            Suggested: {{ summary.status[3] }}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -625,6 +646,7 @@ export default {
                 status: [0, 0, 0, 0, 0, 0],
                 today: 0,
                 yesterday: 0,
+                agent: {},
             },
             showSecondaryDetails: {
                 ID: 0,
@@ -781,39 +803,39 @@ export default {
 
         updateSummary(requests) {
             this.summary.totalRequest = requests.length;
+            this.summary.today = 0;
+            this.summary.yesterday = 0;
+            this.summary.high = 0;
+            this.summary.medium = 0;
+            this.summary.low = 0;
+            this.summary.status = [0, 0, 0, 0];
+            this.summary.agent = {};
+
             const today = new Date();
             const yesterday = new Date(today);
             yesterday.setDate(yesterday.getDate() - 1);
+
             requests.forEach((request) => {
-                if (request.Priority === 3) {
-                    this.summary.high++;
-                }
-
-                if (request.Priority === 2) {
-                    this.summary.medium++;
-                }
-
-                if (request.Priority === 1) {
-                    this.summary.low++;
-                }
-
-                this.summary.agent[request.Agent]++;
-
+                if (request.Priority === 3) this.summary.high++;
+                if (request.Priority === 2) this.summary.medium++;
+                if (request.Priority === 1) this.summary.low++;
                 this.summary.status[request.Status]++;
 
-                if (
-                    new Date(request.CreatedAt).toLocaleDateString() ===
-                    today.toLocaleDateString()
-                ) {
-                    this.summary.today++;
+                const agentName = request.Agent;
+                if (agentName) {
+                    if (!this.summary.agent[agentName]) {
+                        this.summary.agent[agentName] = 0;
+                    }
+                    this.summary.agent[agentName]++;
                 }
 
-                if (
-                    new Date(request.CreatedAt).toLocaleDateString() ===
-                    yesterday.toLocaleDateString()
-                ) {
+                const createdDate = new Date(
+                    request.CreatedAt,
+                ).toLocaleDateString();
+                if (createdDate === today.toLocaleDateString())
+                    this.summary.today++;
+                if (createdDate === yesterday.toLocaleDateString())
                     this.summary.yesterday++;
-                }
             });
         },
 
@@ -931,48 +953,6 @@ $portal-font-size: 13px;
     .summary {
         .so-btn {
             text-align: right;
-        }
-
-        .so-summary {
-            position: absolute;
-            top: 120px;
-            right: 12px;
-            z-index: 9999;
-            padding: 1.25rem;
-            max-width: 430px;
-            border: 1px solid var(--parkspot-black);
-            background-color: #f5f5dc;
-            // display: none;
-
-            .so-total {
-                font-size: 16px;
-                font-weight: var(--semi-bold-font);
-                text-align: center;
-            }
-
-            .so-live-request {
-                display: flex;
-                font-size: $portal-font-size;
-                gap: 6rem;
-            }
-
-            .so-priority {
-                display: flex;
-                justify-content: space-between;
-                font-size: $portal-font-size;
-            }
-
-            .so-status {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                column-gap: 2.5rem;
-
-                p {
-                    display: flex;
-                    justify-content: space-between;
-                    font-size: $portal-font-size;
-                }
-            }
         }
     }
 
@@ -1193,6 +1173,105 @@ $portal-font-size: 13px;
 @keyframes spin {
     to {
         transform: rotate(360deg);
+    }
+}
+
+.summary-layout {
+    background-color: #f5f5dc;
+    border-radius: 8px;
+    padding: 14px;
+    font-family: Arial, sans-serif;
+    max-width: 540px;
+    margin: 16px auto;
+    box-sizing: border-box;
+    border: none;
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    z-index: 999;
+}
+
+.summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.total-request,
+.total-agent {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0;
+    color: #222;
+}
+
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: fixed;
+    background-color: transparent;
+}
+
+.summary-table th,
+.summary-table td {
+    border: 1px dotted #444;
+    padding: 10px 8px;
+    text-align: center;
+    vertical-align: middle;
+    color: #222;
+    line-height: 1.5;
+}
+
+.summary-table th {
+    background-color: #f0e8c2;
+    font-weight: bold;
+}
+
+.summary-table th,
+.summary-table td {
+    width: 25%;
+}
+
+.summary-table th:last-child,
+.summary-table td:last-child {
+    width: 35%;
+}
+
+.summary-table td p {
+    margin: 2px 0;
+    line-height: 1.4;
+}
+
+.summary-table tr:hover {
+    background-color: #ede5c7;
+}
+
+@media (max-width: 768px) {
+    .summary-layout {
+        width: 96%;
+        padding: 10px;
+    }
+
+    .summary-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .summary-table {
+        font-size: 11px;
+    }
+
+    .summary-table th,
+    .summary-table td {
+        padding: 6px 4px;
+    }
+
+    .summary-table th:last-child,
+    .summary-table td:last-child {
+        width: 30%;
     }
 }
 </style>
