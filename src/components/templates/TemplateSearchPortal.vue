@@ -841,14 +841,12 @@ export default {
         },
 
         handleStatusFilter(status) {
-            console.log("this is status", status)
             const url = new URL(window.location.href);
             this.filters.Status = status;
             const statusRow = this.statusList.find(
                 (item) => item.name === status,
             );
-            console.log(statusRow)
-            url.searchParams.set('status', statusRow.id);
+            url.searchParams.set('status', statusRow.name);
             window.history.pushState({}, '', url.toString());
             this.extractRequetsByStatus(statusRow.id);
         },
