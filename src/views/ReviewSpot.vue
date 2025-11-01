@@ -22,7 +22,7 @@
                     class="table-container"
                 >
                     <hr style="width: 100%" />
-                    <h2>Spots From This Number</h2>
+                    <h2 class="promoted-spots">Promoted Spots</h2>
                     <div class="table-container">
                         <table class="styled-table">
                             <thead>
@@ -37,18 +37,18 @@
                             <tbody>
                                 <tr
                                     v-for="spot in UsersSpots"
-                                    :key="spot.SpotID"
+                                    :key="spot.SiteID"
                                 >
                                     <td>
                                         <a
                                             :href="
                                                 this.getSpotDetailURL(
-                                                    spot.SpotID,
+                                                    spot.SiteID,
                                                 )
                                             "
                                             target="_blank"
                                         >
-                                            {{ spot.SpotID }}
+                                            {{ spot.SiteID }}
                                         </a>
                                     </td>
                                     <td>
@@ -68,7 +68,7 @@
                     class="table-container"
                 >
                     <hr style="width: 100%" />
-                    <h2>Spot Requests From This Number</h2>
+                    <h2 class="pending-spot">Pending Spots</h2>
                     <div class="table-container">
                         <table class="styled-table">
                             <thead>
@@ -78,6 +78,7 @@
                                     <th>Address</th>
                                     <th>Latitude</th>
                                     <th>Longitude</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -88,7 +89,7 @@
                                     <td>
                                         <a
                                             :href="
-                                                this.getReviewSpotRequestURL(
+                                                getReviewSpotRequestURL(
                                                     spotRequest.ID,
                                                 )
                                             "
@@ -97,12 +98,32 @@
                                             {{ spotRequest.ID }}
                                         </a>
                                     </td>
-                                    <td>
-                                        {{ spotRequest.Name }}
-                                    </td>
+                                    <td>{{ spotRequest.Name }}</td>
                                     <td>{{ spotRequest.Address }}</td>
                                     <td>{{ spotRequest.Latitude }}</td>
                                     <td>{{ spotRequest.Longitude }}</td>
+                                    <td class="center-select">
+                                        <SelectInput
+                                            :key="spotRequest.$eventID"
+                                            :defaultValue="
+                                                getSpotRequestStatusLabel(
+                                                    spotRequest.Status,
+                                                )
+                                            "
+                                            :list="
+                                                spotRequestStatusList.map(
+                                                    (status) => status.name,
+                                                )
+                                            "
+                                            @change="
+                                                onStatusUpdate(
+                                                    spotRequest,
+                                                    $event.target.value,
+                                                )
+                                            "
+                                            name="updateStatus"
+                                        />
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -428,13 +449,13 @@
                 <AtomButton
                     @click.native="openModal('Save')"
                     class="btn"
-                    :class="{ 'btn-disabled': !isFormModified || !isFormValid }"
-                    :disabled="!isFormModified || !isFormValid"
+                    :class="{ 'btn-disabled': !isFormModified }"
+                    :disabled="!isFormModified"
                 >
                     Save
                 </AtomButton>
                 <AtomButton
-                    @click.native="openModal('Publish')"
+                    @click.native="openModal('Promote')"
                     class="btn"
                     :class="{
                         'btn-disabled':
@@ -448,7 +469,7 @@
                             spotRequestStatusOptions.Verified
                     "
                 >
-                    Publish
+                    Promote
                 </AtomButton>
             </div>
         </div>
@@ -481,7 +502,12 @@ import { mapState, mapActions } from 'vuex';
 import imageCompression from 'browser-image-compression';
 
 import { CITY_OPTIONS, PARKING_FACILITY } from '@/constant/constant';
-import { ParkingSize } from '../constant/enums';
+import {
+    getIdBasedOnLabel,
+    getSpotRequestStatusLabel,
+    ParkingSize,
+} from '../constant/enums';
+import SelectInput from '@/components/global/SelectInput.vue';
 import { RentUnit } from '../constant/enums';
 import { SiteType } from '../constant/enums';
 import { SpotRequestStatus } from '../constant/enums';
@@ -506,9 +532,18 @@ export default {
         ImageUpload,
         LoaderModal,
         MultiSelectInput,
+        SelectInput,
     },
     data() {
         return {
+            spotRequestStatusList: [
+                { id: 0, name: 'Not Set' },
+                { id: 1, name: 'Registered' },
+                { id: 2, name: 'Processing' },
+                { id: 3, name: 'Requested Modification' },
+                { id: 4, name: 'Verified' },
+                { id: 6, name: 'Denied' },
+            ],
             clickedButton: null, // Tracks which button is clicked
             isModalOpen: false, // Tracks modal visibility
             facilityOptions: [...PARKING_FACILITY.SO.FACILITIES_DATA],
@@ -595,7 +630,9 @@ export default {
             'setUpdatedFacilities',
             'validateFormFields',
             'fetchUsersSpotsAndSpotRequests',
+            'handleFormErrors',
         ]),
+        ...mapActions('spotRequests', ['updateStatus']),
         setSpotId() {
             this.SO.spotId = this.$route.query.requestId;
         },
@@ -633,23 +670,28 @@ export default {
                         'This will only save the details. Spot will NOT is shown to customers.',
                     title: 'Confirm Save',
                 };
-            } else if (action === 'Publish') {
+            } else if (action === 'Promote') {
                 this.modalContent = {
-                    action: 'Publish',
+                    action: 'Promote',
                     message:
                         'This saves the details and start showing it to customers.',
-                    title: 'Confirm Publish',
+                    title: 'Confirm Promote',
                 };
             }
         },
         closeModal() {
             this.isModalOpen = false;
         },
-        confirmAction() {
+        async confirmAction() {
+            const isValid = await this.handleFormErrors();
+            if (!isValid) {
+                this.closeModal();
+                return;
+            }
             if (this.clickedButton === 'Save') {
                 this.confirmSave();
             } else {
-                this.validateFormFields()
+                this.validateFormFields();
                 if (this.isFormModified) this.confirmSave();
                 this.submitForm();
             }
@@ -759,11 +801,33 @@ export default {
         },
 
         getSpotDetailURL(spotId) {
-            return `${window.location.origin}/spot-details/${spotId}`;
+            const encodedSpotId = encodeURIComponent(spotId);
+            return `${window.location.origin}/spot-details/${encodedSpotId}`;
         },
 
         getReviewSpotRequestURL(spotRequestId) {
             return `${window.location.origin}/internal/spot-requests/?requestId=${spotRequestId}`;
+        },
+        async onStatusUpdate(spotData, status) {
+            const statusId = getIdBasedOnLabel(
+                this.spotRequestStatusList,
+                status,
+            );
+            if (statusId != null) {
+                spotData['Status'] = statusId;
+                await this.updateStatus(spotData);
+                this.$buefy.toast.open({
+                    message: `Status updated to ${getSpotRequestStatusLabel(statusId)}`,
+                    type: 'is-success',
+                    duration: 3000,
+                });
+            } else {
+                this.alertError('Invalid status selected.');
+            }
+        },
+
+        getSpotRequestStatusLabel(spotRequestStatus) {
+            return getSpotRequestStatusLabel(spotRequestStatus);
         },
     },
     watch: {
@@ -774,7 +838,10 @@ export default {
                 });
             }
             if (SODetails.mobile) {
-                this.fetchUsersSpotsAndSpotRequests(SODetails.mobile);
+                this.fetchUsersSpotsAndSpotRequests({
+                    mobile: SODetails.mobile,
+                    spotId: SODetails.spotId,
+                });
             }
         },
         status(newStatus) {
@@ -1139,5 +1206,26 @@ export default {
     background-color: var(--primary-color);
     color: var(--parkspot-white);
     font-weight: bold;
+}
+
+.promoted-spots {
+    background-color: white;
+    border-radius: 20px;
+    border: 1px solid #48c78e;
+    color: #48c78e !important;
+    padding: 4px;
+}
+.pending-spot {
+    background-color: white;
+    color: #f3d407 !important;
+    border: 1px solid #f3d407;
+    border-radius: 20px;
+    padding: 4px;
+}
+.center-select {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 </style>

@@ -43,7 +43,7 @@ const state = {
     updatedFields: [],
     updatedFacilities: [],
     UsersSpots: [],
-    UsersSpotRequests: []
+    UsersSpotRequests: [],
 };
 
 const mutations = {
@@ -83,8 +83,11 @@ const mutations = {
     'set-spots-spotsRequests'(state, { spots, spotRequests }) {
         state.UsersSpots = spots;
         state.UsersSpotRequests = spotRequests;
+    },
+    'update-users-spot-requests'(state, spotRequests) {
+        state.UsersSpotRequests = spotRequests
     }
-};
+}
 
 const actions = {
     // Validate Latitude and Longitude type
@@ -97,6 +100,7 @@ const actions = {
                 message:
                     'Latitude and longitude are required and must be a non-empty string.',
             });
+
             return;
         }
         // Split input into latitude and longitude
@@ -128,7 +132,7 @@ const actions = {
             });
             return;
         }
-
+        
         // Check that latitude and longitude are not both zero
         if (latitude === 0 || longitude === 0) {
             commit('set-error', {
@@ -430,10 +434,6 @@ const actions = {
 
     // saveForm validates form data for errors and updates the spot request data on the backend (for temporary saving or drafts)
     async saveForm({ dispatch, commit }) {
-        const isValid = await dispatch('handleFormErrors');
-        if (!isValid) {
-            return;
-        }
         let response;
         commit('set-loading', true);
         if (
@@ -486,7 +486,7 @@ const actions = {
         const response = await mayaClient.post(
             `/owner/spot-update?spot-id=${state.SO.spotId}`,
             {},
-            { timeout : 2000 }
+            { timeout: 2000 },
         );
         if (response.ErrorCode) {
             // Network issues or server errors could cause the API call to fail.
@@ -499,7 +499,7 @@ const actions = {
             const encodedSpotId = encodeURIComponent(response.SiteID);
             const url = `/spot-details/${encodedSpotId}`;
             window.open(url, '_blank');
-            router.push('/internal/spot-requests')
+            router.push('/internal/spot-requests');
         }
         commit('set-loading', false);
         return response;
@@ -522,12 +522,13 @@ const actions = {
         commit('set-updated-facilities', facilities);
     },
 
-    async fetchUsersSpotsAndSpotRequests({ commit }, mobile) {
+    async fetchUsersSpotsAndSpotRequests({ commit }, {mobile, spotId}) {
             const response = await mayaClient.get(`sites-and-spot-requests?mobile=${mobile}`);
             const spots = response.Sites || [];
             const spotRequests = response.SpotRequests || [];
-            commit('set-spots-spotsRequests', { spots, spotRequests });
-    }
+            const filteredSpotRequests = spotRequests.filter((spotRequest) => spotRequest.ID !== spotId);
+            commit('set-spots-spotsRequests', { spots, spotRequests: filteredSpotRequests });
+    },
 };
 
 export default {
