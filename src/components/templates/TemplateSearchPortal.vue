@@ -1225,7 +1225,7 @@ $portal-font-size: 13px;
 }
 
 .summary-table th {
-    background-color: #f5f5dc;
+    background-color: #ffe08a66;
     font-weight: bold;
 }
 
@@ -1242,10 +1242,6 @@ $portal-font-size: 13px;
 .summary-table td p {
     margin: 2px 0;
     line-height: 1.4;
-}
-
-.summary-table tr:hover {
-    background-color: #f5f5dc;
 }
 
 @media (max-width: 768px) {
