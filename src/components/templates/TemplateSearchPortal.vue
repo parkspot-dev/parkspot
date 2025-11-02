@@ -10,7 +10,7 @@
                     >
                 </div>
             </div>
-                 <div class="summary" v-if="isSummary">
+            <div class="summary" v-if="isSummary">
                 <div class="so-btn">
                     <AtomButton @click.native="showSummary">
                         {{ summary.btn }} Summary
@@ -1201,7 +1201,7 @@ $portal-font-size: 13px;
 .total-request,
 .total-agent {
     font-weight: bold;
-    font-size: 14px;
+    font-size: $portal-font-size;
     margin: 0;
     color: #222;
 }
@@ -1209,7 +1209,7 @@ $portal-font-size: 13px;
 .summary-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: $portal-font-size;
     table-layout: fixed;
     background-color: transparent;
 }
@@ -1225,7 +1225,7 @@ $portal-font-size: 13px;
 }
 
 .summary-table th {
-    background-color: #f0e8c2;
+    background-color: #f5f5dc;
     font-weight: bold;
 }
 
@@ -1245,7 +1245,7 @@ $portal-font-size: 13px;
 }
 
 .summary-table tr:hover {
-    background-color: #ede5c7;
+    background-color: #f5f5dc;
 }
 
 @media (max-width: 768px) {
@@ -1261,7 +1261,7 @@ $portal-font-size: 13px;
     }
 
     .summary-table {
-        font-size: 11px;
+        font-size: $portal-font-size;
     }
 
     .summary-table th,
