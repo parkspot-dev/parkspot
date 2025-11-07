@@ -524,6 +524,7 @@ import moment from 'moment';
 import SelectInput from '../global/SelectInput.vue';
 import FilterDropdown from '../global/FilterDropdown.vue';
 import MobileView from '../search-portal/MobileView.vue';
+import { PriorityLables } from '@/constant/enums';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -816,9 +817,11 @@ export default {
             yesterday.setDate(yesterday.getDate() - 1);
 
             requests.forEach((request) => {
-                if (request.Priority === 3) this.summary.high++;
-                if (request.Priority === 2) this.summary.medium++;
-                if (request.Priority === 1) this.summary.low++;
+                if (request.Priority === PriorityLables.High)
+                    this.summary.high++;
+                if (request.Priority === PriorityLables.Medium)
+                    this.summary.medium++;
+                if (request.Priority === PriorityLables.Low) this.summary.low++;
                 this.summary.status[request.Status]++;
 
                 const agentName = request.Agent;
@@ -1179,49 +1182,49 @@ $portal-font-size: 13px;
 .summary-layout {
     background-color: #f5f5dc;
     border-radius: 8px;
-    padding: 14px;
-    font-family: Arial, sans-serif;
-    max-width: 540px;
-    margin: 16px auto;
-    box-sizing: border-box;
     border: none;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    margin: 16px auto;
+    max-width: 540px;
+    padding: 14px;
     position: absolute;
-    top: 50px;
     right: 20px;
+    top: 50px;
     z-index: 999;
 }
 
 .summary-header {
+    align-items: center;
     display: flex;
     justify-content: space-between;
-    align-items: center;
     margin-bottom: 8px;
 }
 
 .total-request,
 .total-agent {
-    font-weight: bold;
+    color: var(--parkspot-black);
     font-size: $portal-font-size;
+    font-weight: bold;
     margin: 0;
-    color: #222;
 }
 
 .summary-table {
-    width: 100%;
+    background-color: transparent;
     border-collapse: collapse;
     font-size: $portal-font-size;
     table-layout: fixed;
-    background-color: transparent;
+    width: 100%;
 }
 
 .summary-table th,
 .summary-table td {
-    border: 1px dotted #444;
+    border: 1px dotted var(--parkspot-black);
+    color: var(--parkspot-black);
+    line-height: 1.5;
     padding: 10px 8px;
     text-align: center;
     vertical-align: middle;
-    color: #222;
-    line-height: 1.5;
 }
 
 .summary-table th {
@@ -1240,19 +1243,19 @@ $portal-font-size: 13px;
 }
 
 .summary-table td p {
-    margin: 2px 0;
     line-height: 1.4;
+    margin: 2px 0;
 }
 
 @media (max-width: 768px) {
     .summary-layout {
-        width: 96%;
         padding: 10px;
+        width: 96%;
     }
 
     .summary-header {
-        flex-direction: column;
         align-items: flex-start;
+        flex-direction: column;
         gap: 4px;
     }
 

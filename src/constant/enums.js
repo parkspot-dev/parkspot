@@ -372,3 +372,8 @@ export function getIdBasedOnLabel(enumList, label) {
         return null;
     }
 }
+export const PriorityLables = Object.freeze({
+    Low: 1,
+    Medium: 2,
+    High: 3,
+});
