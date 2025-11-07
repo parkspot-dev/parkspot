@@ -144,8 +144,6 @@ const actions = {
     },
 
     extractRequetsByAgentName({ commit, state }, agentName) {
-        console.log('inside ', agentName);
-        console.log('filter', state.filteredParkingRequests);
         const extractedAgentNameRequests = state.parkingRequests.filter(
             (requests) => requests.Agent === agentName,
         );

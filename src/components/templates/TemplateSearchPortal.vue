@@ -593,22 +593,22 @@ export default {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
 
-            if (this.$route.query['isExpiring']) {
+            if (this.$route.query[this.QUERY_PARAMS.IS_EXPIRING]) {
                 this.extractExpiringRequests();
                 this.filters.isExpiring = true;
             }
 
-            if (this.$route.query['agent']) {
+            if (this.$route.query[this.QUERY_PARAMS.AGENT]) {
                 const agentName = this.$route.query['agent'];
                 this.filters.Agent = agentName;
                 this.extractRequetsByAgentName(agentName);
             }
-            if (this.$route.query['status']) {
-                const statusId = parseInt(this.$route.query['status'])
+            if (this.$route.query[this.QUERY_PARAMS.STATUS]) {
+                const statusId = parseInt(this.$route.query['status']);
                 const statusRow = this.statusList.find(
                     (item) => item.id === statusId,
                 );
-                 this.filters.Status = statusRow.name;
+                this.filters.Status = statusRow.name;
                 if (statusRow) {
                     this.extractRequetsByStatus(statusRow.id);
                 }
@@ -677,6 +677,11 @@ export default {
             windowWidth: 0,
             forceDesktop: false,
             isMobileDevice: false,
+            QUERY_PARAMS: {
+                AGENT: 'agent',
+                STATUS: 'status',
+                IS_EXPIRING: 'isExpiring',
+            },
         };
     },
     methods: {
@@ -818,8 +823,6 @@ export default {
         },
 
         handleAgentFilter(agent) {
-            console.log('agent', agent);
-            // Update the URL to include the isExpiring parameter
             const url = new URL(window.location.href);
             url.searchParams.set('agent', agent);
             window.history.pushState({}, '', url.toString());
