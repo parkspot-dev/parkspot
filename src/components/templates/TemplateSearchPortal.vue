@@ -524,7 +524,7 @@ import moment from 'moment';
 import SelectInput from '../global/SelectInput.vue';
 import FilterDropdown from '../global/FilterDropdown.vue';
 import MobileView from '../search-portal/MobileView.vue';
-import { PriorityLables } from '@/constant/enums';
+import { PriorityLables  } from '@/constant/enums';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -817,10 +817,8 @@ export default {
             yesterday.setDate(yesterday.getDate() - 1);
 
             requests.forEach((request) => {
-                if (request.Priority === PriorityLables.High)
-                    this.summary.high++;
-                if (request.Priority === PriorityLables.Medium)
-                    this.summary.medium++;
+                if (request.Priority === PriorityLables.High) this.summary.high++;
+                if (request.Priority === PriorityLables.Medium ) this.summary.medium++;
                 if (request.Priority === PriorityLables.Low) this.summary.low++;
                 this.summary.status[request.Status]++;
 
@@ -1187,10 +1185,10 @@ $portal-font-size: 13px;
     font-family: Arial, sans-serif;
     margin: 16px auto;
     max-width: 540px;
-    padding: 14px;
+    padding: 12px;
     position: absolute;
     right: 20px;
-    top: 50px;
+    top: 48px;
     z-index: 999;
 }
 
@@ -1203,10 +1201,10 @@ $portal-font-size: 13px;
 
 .total-request,
 .total-agent {
-    color: var(--parkspot-black);
+    color:  var(--parkspot-black);
     font-size: $portal-font-size;
     font-weight: bold;
-    margin: 0;
+    margin: 4;
 }
 
 .summary-table {
@@ -1219,10 +1217,10 @@ $portal-font-size: 13px;
 
 .summary-table th,
 .summary-table td {
-    border: 1px dotted var(--parkspot-black);
+    border: 1px dotted  var(--parkspot-black);
     color: var(--parkspot-black);
     line-height: 1.5;
-    padding: 10px 8px;
+    padding: 8px 8px;
     text-align: center;
     vertical-align: middle;
 }
@@ -1244,12 +1242,12 @@ $portal-font-size: 13px;
 
 .summary-table td p {
     line-height: 1.4;
-    margin: 2px 0;
+    margin: 4px 0;
 }
 
 @media (max-width: 768px) {
     .summary-layout {
-        padding: 10px;
+        padding: 8px;
         width: 96%;
     }
 
@@ -1265,7 +1263,7 @@ $portal-font-size: 13px;
 
     .summary-table th,
     .summary-table td {
-        padding: 6px 4px;
+        padding: 8px 4px;
     }
 
     .summary-table th:last-child,
