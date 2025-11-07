@@ -153,6 +153,10 @@
                                     <td>Account</td>
                                     <td>{{ paymentDetails }}</td>
                                 </tr>
+                                 <tr v-if="ownerInfoDetails.UserName">
+                                    <td>UserName</td>
+                                    <td>{{ ownerInfoDetails.UserName }}</td>
+                                </tr>
                             </table>
                         </div>
                         <div class="btn-group">
