@@ -524,7 +524,7 @@ import moment from 'moment';
 import SelectInput from '../global/SelectInput.vue';
 import FilterDropdown from '../global/FilterDropdown.vue';
 import MobileView from '../search-portal/MobileView.vue';
-import { PriorityLables  } from '@/constant/enums';
+import { RequestPriority } from '@/constant/enums';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -817,9 +817,12 @@ export default {
             yesterday.setDate(yesterday.getDate() - 1);
 
             requests.forEach((request) => {
-                if (request.Priority === PriorityLables.High) this.summary.high++;
-                if (request.Priority === PriorityLables.Medium ) this.summary.medium++;
-                if (request.Priority === PriorityLables.Low) this.summary.low++;
+                if (request.Priority === RequestPriority.High)
+                    this.summary.high++;
+                if (request.Priority === RequestPriority.Medium)
+                    this.summary.medium++;
+                if (request.Priority === RequestPriority.Low)
+                    this.summary.low++;
                 this.summary.status[request.Status]++;
 
                 const agentName = request.Agent;
@@ -1201,7 +1204,7 @@ $portal-font-size: 13px;
 
 .total-request,
 .total-agent {
-    color:  var(--parkspot-black);
+    color: var(--parkspot-black);
     font-size: $portal-font-size;
     font-weight: bold;
     margin: 4;
@@ -1217,7 +1220,7 @@ $portal-font-size: 13px;
 
 .summary-table th,
 .summary-table td {
-    border: 1px dotted  var(--parkspot-black);
+    border: 1px dotted var(--parkspot-black);
     color: var(--parkspot-black);
     line-height: 1.5;
     padding: 8px 8px;
