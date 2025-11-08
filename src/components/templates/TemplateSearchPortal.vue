@@ -79,6 +79,24 @@
                 @update="handleExpiringRequests"
                 label="Requests Type"
             />
+
+            <FilterDropdown
+                :options="agentList.map((agent) => agent.name)"
+                :searchable="false"
+                :selectedValue="filters.Agent ? filters.Agent : ''"
+                @remove="removeAgentFilter"
+                @update="handleAgentFilter"
+                label="Agent"
+            />
+
+            <FilterDropdown
+                :options="statusList.map((status) => status.name)"
+                :searchable="false"
+                :selectedValue="filters.Status ? filters.Status : ''"
+                @remove="removeStatusFilter"
+                @update="handleStatusFilter"
+                label="Status"
+            />
         </div>
         <b-table
             v-if="isDesktopView"
@@ -574,12 +592,30 @@ export default {
     watch: {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
-            if (this.$route.query['isExpiring']) {
+
+            if (this.$route.query[this.QUERY_PARAMS.IS_EXPIRING]) {
                 this.extractExpiringRequests();
                 this.filters.isExpiring = true;
             }
+
+            if (this.$route.query[this.QUERY_PARAMS.AGENT]) {
+                const agentName = this.$route.query['agent'];
+                this.filters.Agent = agentName;
+                this.extractRequetsByAgentName(agentName);
+            }
+            if (this.$route.query[this.QUERY_PARAMS.STATUS]) {
+                const statusId = parseInt(this.$route.query['status']);
+                const statusRow = this.statusList.find(
+                    (item) => item.id === statusId,
+                );
+                this.filters.Status = statusRow.name;
+                if (statusRow) {
+                    this.extractRequetsByStatus(statusRow.id);
+                }
+            }
         },
     },
+
     data() {
         return {
             // filters were declared explicitly to use in v-model else they have no use
@@ -641,6 +677,11 @@ export default {
             windowWidth: 0,
             forceDesktop: false,
             isMobileDevice: false,
+            QUERY_PARAMS: {
+                AGENT: 'agent',
+                STATUS: 'status',
+                IS_EXPIRING: 'isExpiring',
+            },
         };
     },
     methods: {
@@ -649,6 +690,8 @@ export default {
             'setAgents',
             'extractExpiringRequests',
             'resetFilterParkingRequests',
+            'extractRequetsByAgentName',
+            'extractRequetsByStatus',
         ]),
         getPriority(val) {
             switch (val) {
@@ -779,6 +822,25 @@ export default {
             this.extractExpiringRequests();
         },
 
+        handleAgentFilter(agent) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('agent', agent);
+            window.history.pushState({}, '', url.toString());
+            this.filters.Agent = agent;
+            this.extractRequetsByAgentName(agent);
+        },
+
+        handleStatusFilter(status) {
+            const url = new URL(window.location.href);
+            const statusRow = this.statusList.find(
+                (item) => item.name === status,
+            );
+            url.searchParams.set('status', statusRow.id);
+            window.history.pushState({}, '', url.toString());
+            this.filters.Status = status;
+            this.extractRequetsByStatus(statusRow.id);
+        },
+
         updateSummary(requests) {
             this.summary.totalRequest = requests.length;
             const today = new Date();
@@ -821,6 +883,20 @@ export default {
             this.filters.isExpiring = false;
             const url = new URL(window.location.href);
             url.searchParams.delete('isExpiring');
+            window.history.pushState({}, '', url.toString());
+            this.resetFilterParkingRequests();
+        },
+        removeAgentFilter() {
+            this.filters.Agent = '';
+            const url = new URL(window.location.href);
+            url.searchParams.delete('agent');
+            window.history.pushState({}, '', url.toString());
+            this.resetFilterParkingRequests();
+        },
+        removeStatusFilter() {
+            this.filters.Status = '';
+            const url = new URL(window.location.href);
+            url.searchParams.delete('status');
             window.history.pushState({}, '', url.toString());
             this.resetFilterParkingRequests();
         },
@@ -1133,6 +1209,7 @@ $portal-font-size: 13px;
     align-items: center;
     gap: 10px;
     font-family: Arial, sans-serif;
+    margin: 5px;
     margin-bottom: 20px;
 }
 
