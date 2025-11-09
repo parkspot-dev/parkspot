@@ -1,30 +1,43 @@
 <template>
-  <div class="sidebar">
-    <h2>My Bookings</h2>
-    <div class="filters">
-      <button
-        v-for="filter in filters"
-        :key="filter"
-        :class="{ active: filter === selectedFilter }"
-        @click="$emit('filter-change', filter)"
-      >
-        {{ filter }}
-      </button>
+  <div class="booking-sidebar">
+    <!-- Header + Filter Buttons -->
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">My Bookings</h2>
+
+      <div class="filter-buttons">
+        <button
+          v-for="tab in tabs"
+          :key="tab"
+          @click="activeTab = tab"
+          :class="{ active: activeTab === tab }"
+        >
+          {{ tab }}
+        </button>
+      </div>
     </div>
+
+    <!-- Booking List -->
     <div class="booking-list">
       <div
         v-for="booking in filteredBookings"
         :key="booking.id"
         class="booking-card"
+        @click="$emit('select-booking', booking)"
+        :class="{ selected: selectedBooking && selectedBooking.id === booking.id }"
       >
-        <div class="booking-info">
-          <p class="spot-name">{{ booking.spot }}</p>
-          <span class="status-badge">{{ booking.status.toUpperCase() }}</span>
-          <p>Payment: ₹{{ booking.payment }}</p>
+        <div class="card-left">
+          <img :src="booking.image" alt="booking" />
         </div>
-        <button class="view-btn" @click="$emit('view-booking', booking)">
-          View
-        </button>
+        <div class="card-right">
+          <p class="booking-id">Booking ID: <strong>{{ booking.id }}</strong></p>
+          <h3>{{ booking.siteName }}</h3>
+          <p class="address">{{ booking.address }}</p>
+
+          <!-- Status badge -->
+          <span class="status-badge" :class="booking.status.toLowerCase()">
+            {{ booking.status }}
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -32,90 +45,172 @@
 
 <script>
 export default {
-  name: 'BookingSidebar',
+  name: "BookingSidebar",
   props: {
     bookings: Array,
-    selectedFilter: String,
+    selectedBooking: Object,
+  },
+  data() {
+    return {
+      tabs: ["Past", "Active", "Request"],
+      activeTab: "Active",
+    };
   },
   computed: {
-    filters() {
-      return ['Past', 'Active', 'Requested']
-    },
     filteredBookings() {
-      return this.bookings.filter(
-        (b) => b.status.toLowerCase() === this.selectedFilter.toLowerCase()
-      )
+      if (this.activeTab === "Active") {
+        return this.bookings.filter((b) => b.status === "Active");
+      } else if (this.activeTab === "Past") {
+        return this.bookings.filter((b) => b.status === "Past");
+      } else {
+        return this.bookings.filter((b) => b.status === "Request");
+      }
     },
   },
-}
+};
 </script>
 
-<style scoped>
-.sidebar {
-  width: 250px;
+<style scoped lang="scss">
+.booking-sidebar {
   background: #fff;
-  padding: 20px;
   border-radius: 12px;
-  box-shadow: 0px 0px 10px #ddd;
-}
-h2 {
-  margin-bottom: 15px;
-}
-.filters {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 16px;
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  flex-direction: column;
+  height: 85vh;
+  overflow-y: auto;
 }
-.filters button {
-  background-color: #e0e0e0;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
+
+/* Header Section */
+.sidebar-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sidebar-title {
+  font-size: 20px;
   font-weight: 600;
+  color: #2e2e48;
 }
-.filters button.active {
-  background-color: #007bff;
-  color: white;
+
+/* Filter Buttons */
+.filter-buttons {
+  display: flex;
+  justify-content: space-between;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 4px;
 }
+
+.filter-buttons button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-weight: 500;
+  font-size: 14px;
+  color: #4b5563;
+  padding: 8px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.filter-buttons button:hover {
+  background: #e5e7eb;
+}
+
+.filter-buttons button.active {
+  background: #4f46e5;
+  color: #fff;
+}
+
+/* Booking Cards */
 .booking-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
 }
+
 .booking-card {
-  background: #fefefe;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 1px 4px rgb(0 0 0 / 0.12);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.spot-name {
-  font-weight: bold;
-  margin: 0 0 5px 0;
-  max-width: 140px;
-}
-.status-badge {
-  background: #ddd;
-  border-radius: 6px;
-  padding: 3px 8px;
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  display: inline-block;
-}
-.view-btn {
-  background-color: #007bff;
-  border: none;
-  color: white;
-  padding: 7px 12px;
+  gap: 12px;
+  background: #fafafa;
+  padding: 10px;
   border-radius: 10px;
   cursor: pointer;
-  font-weight: 600;
+  transition: all 0.2s ease;
+  align-items: center;
+  border: 1px solid transparent;
 }
-.view-btn:hover {
-  background-color: #0056b3;
+
+.booking-card:hover {
+  background: #f0f0ff;
+}
+
+.booking-card.selected {
+  border: 1px solid #4f46e5;
+  background: #eef2ff;
+}
+
+.card-left img {
+  width: 60px;
+  height: 50px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.card-right {
+  flex: 1;
+  text-align: left;
+  position: relative;
+}
+
+.booking-id {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.card-right h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.address {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+/* Status Badge */
+.status-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.status-badge.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.past {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.request {
+  background: #dbeafe;
+  color: #1e3a8a;
 }
 </style>

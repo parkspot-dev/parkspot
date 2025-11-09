@@ -1,152 +1,143 @@
 <template>
-  <div>
-    <!-- Header / Navbar -->
-    <header class="header">
-      <div class="container">
-        <div class="logo">ParkSpot</div>
-        <nav class="nav">
-          <ul>
-            <li class="dropdown">
-              <a href="#">Company ▼</a>
-              <ul class="dropdown-menu">
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Team</a></li>
-                <li><a href="#">Careers</a></li>
-              </ul>
-            </li>
-            <li class="dropdown">
-              <a href="#">Agent Portal ▼</a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Login</a></li>
-                <li><a href="#">Signup</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Request Spot</a></li>
-            <li><a href="#">Register Spot</a></li>
-          </ul>
-        </nav>
-        <div class="contact-info">
-          <i class="phone-icon">📞</i> +91 74882 39471
-          <img class="profile-pic" src="https://via.placeholder.com/32" alt="Profile"/>
-        </div>
-      </div>
-    </header>
+  <div class="page-my-booking">
+    <h1 class="page-title">My Bookings</h1>
 
-    <!-- Main Content -->
-    <main class="main-content">
-      <MyBookings />
-    </main>
+    <div class="booking-layout">
+      <!-- Sidebar -->
+      <BookingSidebar
+        :bookings="activeBookings"
+        :selectedBooking="selectedBooking"
+        @select-booking="onSelectBooking"
+      />
+
+      <!-- Right Details -->
+      <BookingDetails
+        :booking="selectedBooking"
+        @payment-link="onPaymentLink"
+        @refresh-payment="onRefreshPayment"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import MyBookings from '../my-booking/MyBookings.vue'
+import BookingSidebar from "@/components/my-bookings/BookingSidebar.vue";
+import BookingDetails from "@/components/my-bookings/BookingDetails.vue";
 
 export default {
-  name: 'MyBookingsView',
-  components: {
-    MyBookings,
+  name: "PageMyBooking",
+  components: { BookingSidebar, BookingDetails },
+  data() {
+    return {
+      selectedBooking: null,
+      activeBookings: [
+        {
+          id: "B001",
+          siteName: "Downtown Parking",
+          siteCode: "DP-01",
+          address: "MG Road, Pune",
+          image: "https://via.placeholder.com/100x70?text=Parking+1",
+          status: "Active",
+          latitude: 18.5204,
+          longitude: 73.8567,
+          startTime: "2025-11-09T10:00:00",
+          endTime: "2025-11-09T12:00:00",
+          slot: "A-12",
+          vehicle: "MH12AB1234",
+          duration: "2 hrs",
+          billingCycle: "Hourly",
+          payment: { baseRent: 120, fees: 30, discount: 0, status: "Pending" },
+        },
+        {
+          id: "B002",
+          siteName: "City Center Mall",
+          siteCode: "CCM-22",
+          address: "FC Road, Pune",
+          image: "https://via.placeholder.com/100x70?text=Parking+2",
+          status: "Active",
+          latitude: 18.5167,
+          longitude: 73.8415,
+          startTime: "2025-11-10T09:00:00",
+          endTime: "2025-11-10T11:00:00",
+          slot: "B-07",
+          vehicle: "MH14CD4567",
+          duration: "2 hrs",
+          billingCycle: "Hourly",
+          payment: { baseRent: 100, fees: 20, discount: 10, status: "Paid" },
+        },
+        {
+          id: "B003",
+          siteName: "Airport Lot",
+          siteCode: "AIR-09",
+          address: "Viman Nagar, Pune",
+          image: "https://via.placeholder.com/100x70?text=Parking+3",
+          status: "Active",
+          latitude: 18.5667,
+          longitude: 73.9167,
+          startTime: "2025-11-11T15:00:00",
+          endTime: "2025-11-11T18:00:00",
+          slot: "C-03",
+          vehicle: "MH12EF7890",
+          duration: "3 hrs",
+          billingCycle: "Hourly",
+          payment: { baseRent: 150, fees: 30, discount: 0, status: "Pending" },
+        },
+      ],
+    };
   },
-}
+  methods: {
+    onSelectBooking(booking) {
+      this.selectedBooking = booking;
+    },
+    onPaymentLink(id) {
+      alert(`Get payment link for Booking ID: ${id}`);
+    },
+    onRefreshPayment(id) {
+      alert(`Refresh payment for Booking ID: ${id}`);
+    },
+  },
+};
 </script>
 
-<style scoped>
-/* Header styling */
-.header {
-  background: #fff;
-  box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
-  padding: 10px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+<style scoped lang="scss">
+.page-my-booking {
+  background: #f5f5fb;
+  min-height: 100vh;
+  padding: 20px;
 }
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.logo {
-  font-family: 'Arial Black', Arial, sans-serif;
+
+.page-title {
   font-size: 24px;
-  color: #000;
-  font-weight: 900;
-  user-select: none;
-}
-.nav ul {
-  list-style: none;
-  display: flex;
-  gap: 25px;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-}
-.nav ul li {
-  position: relative;
-  font-weight: 600;
-  cursor: pointer;
-}
-.nav ul li a {
-  text-decoration: none;
-  color: #333;
-  transition: color 0.3s;
-}
-.nav ul li a:hover {
-  color: #007bff;
-}
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-.dropdown-menu {
-  position: absolute;
-  top: 110%;
-  left: 0;
-  background: white;
-  border: 1px solid #ddd;
-  box-shadow: 0 6px 12px rgb(0 0 0 / 0.1);
-  border-radius: 6px;
-  display: none;
-  min-width: 140px;
-  z-index: 200;
-}
-.dropdown-menu li {
-  padding: 8px 15px;
-}
-.dropdown-menu li a {
-  display: block;
-  color: #333;
-}
-.dropdown-menu li a:hover {
-  background: #f0f0f0;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 20px;
 }
 
-/* Contact info */
-.contact-info {
+.booking-layout {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  color: #333;
-}
-.phone-icon {
-  font-size: 18px;
-}
-.profile-pic {
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  object-fit: cover;
+  gap: 20px;
+  align-items: flex-start;
 }
 
-/* Main content area */
-.main-content {
-  margin: 40px auto;
-  max-width: 1100px;
-  background: #f9fbfd;
-  border-radius: 18px;
-  padding: 25px;
-  min-height: 600px;
-  box-shadow: 0 0 20px rgb(0 0 0 / 0.05);
+/* Sidebar */
+.booking-layout > *:first-child {
+  width: 300px;
+  flex-shrink: 0;
+}
+
+/* Details section */
+.booking-layout > *:last-child {
+  flex: 1;
+}
+
+/* ✅ Responsive */
+@media (max-width: 992px) {
+  .booking-layout {
+    flex-direction: column;
+  }
+
+  .booking-layout > *:first-child {
+    width: 100%;
+  }
 }
 </style>
