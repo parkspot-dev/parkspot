@@ -12,10 +12,7 @@
             </div>
             <div class="summary" v-if="isSummary">
                 <div class="so-btn">
-                    <AtomButton
-                        @click.native="showSummary"
-                        v-show="!summary.show"
-                    >
+                    <AtomButton @click.native="showSummary">
                         {{ summary.btn }} Summary
                     </AtomButton>
                 </div>
@@ -26,44 +23,68 @@
                             @click.native="showSummary"
                             :icon="'close'"
                             size=""
-                        >
-                        </AtomIcon>
+                        />
                     </span>
-                    <p class="so-total">
-                        Total Request : {{ summary.totalRequest }}
-                    </p>
-                    <hr />
-                    <div class="so-live-request">
-                        <p>
-                            <span>Today : </span>
-                            <span>{{ summary.today }}</span>
-                        </p>
-                        <p>
-                            <span>Yesterday : </span>
-                            <span>{{ summary.yesterday }}</span>
-                        </p>
-                    </div>
-                    <hr />
-                    <div class="so-priority">
-                        <p>High : {{ summary.high }}</p>
-                        <p>Low : {{ summary.low }}</p>
-                        <p>Medium : {{ summary.medium }}</p>
-                    </div>
+                    <div class="summary-layout">
+                        <div class="summary-header">
+                            <p class="total-request">
+                                Total Requests: {{ summary.totalRequest }}
+                            </p>
+                            <p class="total-agent">
+                                Total Agents:
+                                {{ Object.keys(summary.agent).length }}
+                            </p>
+                        </div>
 
-                    <hr />
-                    <div class="so-status">
-                        <p>
-                            <span>Registered :</span>
-                            <span>{{ summary.status[1] }}</span>
-                        </p>
-                        <p>
-                            <span>Processing :</span>
-                            <span>{{ summary.status[2] }}</span>
-                        </p>
-                        <p>
-                            <span>Suggested : </span>
-                            <span>{{ summary.status[3] }}</span>
-                        </p>
+                        <table class="summary-table">
+                            <thead>
+                                <tr>
+                                    <th>Requests</th>
+                                    <th>Agents</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <p>Today: {{ summary.today }}</p>
+                                        <p>
+                                            Yesterday: {{ summary.yesterday }}
+                                        </p>
+                                    </td>
+
+                                    <td>
+                                        <div
+                                            v-for="(
+                                                count, name
+                                            ) in summary.agent"
+                                            :key="name"
+                                        >
+                                            {{ name }} : {{ count }}
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <p>High: {{ summary.high }}</p>
+                                        <p>Medium: {{ summary.medium }}</p>
+                                        <p>Low: {{ summary.low }}</p>
+                                    </td>
+
+                                    <td>
+                                        <p>
+                                            Registered: {{ summary.status[1] }}
+                                        </p>
+                                        <p>
+                                            Processing: {{ summary.status[2] }}
+                                        </p>
+                                        <p>
+                                            Suggested: {{ summary.status[3] }}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -78,6 +99,24 @@
                 @remove="removeExpiringFilter"
                 @update="handleExpiringRequests"
                 label="Requests Type"
+            />
+
+            <FilterDropdown
+                :options="agentList.map((agent) => agent.name)"
+                :searchable="false"
+                :selectedValue="filters.Agent ? filters.Agent : ''"
+                @remove="removeAgentFilter"
+                @update="handleAgentFilter"
+                label="Agent"
+            />
+
+            <FilterDropdown
+                :options="statusList.map((status) => status.name)"
+                :searchable="false"
+                :selectedValue="filters.Status ? filters.Status : ''"
+                @remove="removeStatusFilter"
+                @update="handleStatusFilter"
+                label="Status"
             />
         </div>
         <b-table
@@ -503,6 +542,7 @@ import moment from 'moment';
 import SelectInput from '../global/SelectInput.vue';
 import FilterDropdown from '../global/FilterDropdown.vue';
 import MobileView from '../search-portal/MobileView.vue';
+import { RequestPriority } from '@/constant/enums';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -574,12 +614,30 @@ export default {
     watch: {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
-            if (this.$route.query['isExpiring']) {
+
+            if (this.$route.query[this.QUERY_PARAMS.IS_EXPIRING]) {
                 this.extractExpiringRequests();
                 this.filters.isExpiring = true;
             }
+
+            if (this.$route.query[this.QUERY_PARAMS.AGENT]) {
+                const agentName = this.$route.query['agent'];
+                this.filters.Agent = agentName;
+                this.extractRequetsByAgentName(agentName);
+            }
+            if (this.$route.query[this.QUERY_PARAMS.STATUS]) {
+                const statusId = parseInt(this.$route.query['status']);
+                const statusRow = this.statusList.find(
+                    (item) => item.id === statusId,
+                );
+                this.filters.Status = statusRow.name;
+                if (statusRow) {
+                    this.extractRequetsByStatus(statusRow.id);
+                }
+            }
         },
     },
+
     data() {
         return {
             // filters were declared explicitly to use in v-model else they have no use
@@ -625,6 +683,7 @@ export default {
                 status: [0, 0, 0, 0, 0, 0],
                 today: 0,
                 yesterday: 0,
+                agent: {},
             },
             showSecondaryDetails: {
                 ID: 0,
@@ -641,6 +700,11 @@ export default {
             windowWidth: 0,
             forceDesktop: false,
             isMobileDevice: false,
+            QUERY_PARAMS: {
+                AGENT: 'agent',
+                STATUS: 'status',
+                IS_EXPIRING: 'isExpiring',
+            },
         };
     },
     methods: {
@@ -649,6 +713,8 @@ export default {
             'setAgents',
             'extractExpiringRequests',
             'resetFilterParkingRequests',
+            'extractRequetsByAgentName',
+            'extractRequetsByStatus',
         ]),
         getPriority(val) {
             switch (val) {
@@ -779,41 +845,63 @@ export default {
             this.extractExpiringRequests();
         },
 
+        handleAgentFilter(agent) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('agent', agent);
+            window.history.pushState({}, '', url.toString());
+            this.filters.Agent = agent;
+            this.extractRequetsByAgentName(agent);
+        },
+
+        handleStatusFilter(status) {
+            const url = new URL(window.location.href);
+            const statusRow = this.statusList.find(
+                (item) => item.name === status,
+            );
+            url.searchParams.set('status', statusRow.id);
+            window.history.pushState({}, '', url.toString());
+            this.filters.Status = status;
+            this.extractRequetsByStatus(statusRow.id);
+        },
+
         updateSummary(requests) {
             this.summary.totalRequest = requests.length;
+            this.summary.today = 0;
+            this.summary.yesterday = 0;
+            this.summary.high = 0;
+            this.summary.medium = 0;
+            this.summary.low = 0;
+            this.summary.status = [0, 0, 0, 0];
+            this.summary.agent = {};
+
             const today = new Date();
             const yesterday = new Date(today);
             yesterday.setDate(yesterday.getDate() - 1);
+
             requests.forEach((request) => {
-                if (request.Priority === 3) {
+                if (request.Priority === RequestPriority.High)
                     this.summary.high++;
-                }
-
-                if (request.Priority === 2) {
+                if (request.Priority === RequestPriority.Medium)
                     this.summary.medium++;
-                }
-
-                if (request.Priority === 1) {
+                if (request.Priority === RequestPriority.Low)
                     this.summary.low++;
-                }
-
-                this.summary.agent[request.Agent]++;
-
                 this.summary.status[request.Status]++;
 
-                if (
-                    new Date(request.CreatedAt).toLocaleDateString() ===
-                    today.toLocaleDateString()
-                ) {
-                    this.summary.today++;
+                const agentName = request.Agent;
+                if (agentName) {
+                    if (!this.summary.agent[agentName]) {
+                        this.summary.agent[agentName] = 0;
+                    }
+                    this.summary.agent[agentName]++;
                 }
 
-                if (
-                    new Date(request.CreatedAt).toLocaleDateString() ===
-                    yesterday.toLocaleDateString()
-                ) {
+                const createdDate = new Date(
+                    request.CreatedAt,
+                ).toLocaleDateString();
+                if (createdDate === today.toLocaleDateString())
+                    this.summary.today++;
+                if (createdDate === yesterday.toLocaleDateString())
                     this.summary.yesterday++;
-                }
             });
         },
 
@@ -821,6 +909,20 @@ export default {
             this.filters.isExpiring = false;
             const url = new URL(window.location.href);
             url.searchParams.delete('isExpiring');
+            window.history.pushState({}, '', url.toString());
+            this.resetFilterParkingRequests();
+        },
+        removeAgentFilter() {
+            this.filters.Agent = '';
+            const url = new URL(window.location.href);
+            url.searchParams.delete('agent');
+            window.history.pushState({}, '', url.toString());
+            this.resetFilterParkingRequests();
+        },
+        removeStatusFilter() {
+            this.filters.Status = '';
+            const url = new URL(window.location.href);
+            url.searchParams.delete('status');
             window.history.pushState({}, '', url.toString());
             this.resetFilterParkingRequests();
         },
@@ -931,48 +1033,6 @@ $portal-font-size: 13px;
     .summary {
         .so-btn {
             text-align: right;
-        }
-
-        .so-summary {
-            position: absolute;
-            top: 120px;
-            right: 12px;
-            z-index: 9999;
-            padding: 1.25rem;
-            max-width: 430px;
-            border: 1px solid var(--parkspot-black);
-            background-color: #f5f5dc;
-            // display: none;
-
-            .so-total {
-                font-size: 16px;
-                font-weight: var(--semi-bold-font);
-                text-align: center;
-            }
-
-            .so-live-request {
-                display: flex;
-                font-size: $portal-font-size;
-                gap: 6rem;
-            }
-
-            .so-priority {
-                display: flex;
-                justify-content: space-between;
-                font-size: $portal-font-size;
-            }
-
-            .so-status {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                column-gap: 2.5rem;
-
-                p {
-                    display: flex;
-                    justify-content: space-between;
-                    font-size: $portal-font-size;
-                }
-            }
         }
     }
 
@@ -1133,6 +1193,7 @@ $portal-font-size: 13px;
     align-items: center;
     gap: 10px;
     font-family: Arial, sans-serif;
+    margin: 5px;
     margin-bottom: 20px;
 }
 
@@ -1193,6 +1254,101 @@ $portal-font-size: 13px;
 @keyframes spin {
     to {
         transform: rotate(360deg);
+    }
+}
+
+.summary-layout {
+    background-color: #f5f5dc;
+    border-radius: 8px;
+    border: none;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    margin: 16px auto;
+    max-width: 540px;
+    padding: 12px;
+    position: absolute;
+    right: 20px;
+    top: 48px;
+    z-index: 999;
+}
+
+.summary-header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.total-request,
+.total-agent {
+    color: var(--parkspot-black);
+    font-size: $portal-font-size;
+    font-weight: bold;
+    margin: 4;
+}
+
+.summary-table {
+    background-color: transparent;
+    border-collapse: collapse;
+    font-size: $portal-font-size;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.summary-table th,
+.summary-table td {
+    border: 1px dotted var(--parkspot-black);
+    color: var(--parkspot-black);
+    line-height: 1.5;
+    padding: 8px 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.summary-table th {
+    background-color: #ffe08a66;
+    font-weight: bold;
+}
+
+.summary-table th,
+.summary-table td {
+    width: 25%;
+}
+
+.summary-table th:last-child,
+.summary-table td:last-child {
+    width: 35%;
+}
+
+.summary-table td p {
+    line-height: 1.4;
+    margin: 4px 0;
+}
+
+@media (max-width: 768px) {
+    .summary-layout {
+        padding: 8px;
+        width: 96%;
+    }
+
+    .summary-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .summary-table {
+        font-size: $portal-font-size;
+    }
+
+    .summary-table th,
+    .summary-table td {
+        padding: 8px 4px;
+    }
+
+    .summary-table th:last-child,
+    .summary-table td:last-child {
+        width: 30%;
     }
 }
 </style>
