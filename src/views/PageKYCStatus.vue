@@ -210,6 +210,7 @@ export default {
             'updateStatus',
             'updateMobileInput',
         ]),
+        
 
         // Get label for status based on the enum value
         getKYCStatusLabel(spotRequestStatus) {

@@ -10,6 +10,7 @@ import registerRequest from './registerRequest';
 import spotRequests from './spotRequests';
 import reviewSpot from './reviewSpot';
 import kycStatusPortal from './kycStatusPortal'
+import myBookings from './myBookings';
 import { createStore } from 'vuex';
 
 const store = createStore({
@@ -25,7 +26,8 @@ const store = createStore({
         registerRequest,
         spotRequests,
         reviewSpot,
-        kycStatusPortal
+        kycStatusPortal,
+        myBookings
     },
 });
 
