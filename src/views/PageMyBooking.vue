@@ -78,7 +78,7 @@ export default {
 
 /* Sidebar */
 .booking-layout > *:first-child {
-    width: 300px;
+    width: 320px;
     flex-shrink: 0;
 }
 

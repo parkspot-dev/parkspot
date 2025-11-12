@@ -1,7 +1,7 @@
 <template>
     <div class="booking-sidebar">
         <div class="sidebar-header">
-            <h2 class="sidebar-title">My Bookings</h2>
+            
             <div class="filter-buttons">
                 <button
                     v-for="tab in tabs"
@@ -43,55 +43,65 @@
         </div>
     </div>
 </template>
-
 <script>
 export default {
-    name: 'BookingSidebar',
-      props: {
-    activebookings: {
-        type: Array,
-        default: () => []
-    },
-    pastbookings: {
-        type: Array,
-        default: () => []
-    },
-    requestbookings: {
-        type: Array,
-        default: () => []
-    },
+  name: 'BookingSidebar',
+  props: {
+    activebookings: { type: Array, default: () => [] },
+    pastbookings: { type: Array, default: () => [] },
+    requestbookings: { type: Array, default: () => [] },
     selectedBooking: Object,
+  },
 
+  data() {
+    return {
+      tabs: ['Past', 'Active', 'Request'],
+      activeTab: 'Active',
+      internalSelectedBooking: null,
+    };
+  },
 
-        selectedBooking: Object,
-    },
-    data() {
-        return {
-            tabs: ['Past', 'Active', 'Request'],
-            activeTab: 'Active',
-        };
-    },
-    methods: {
-        changeTab(tab) {
-            this.activeTab = tab;
-            console.log('Active Tab:', tab);
-        },
-    },
-computed: {
+  computed: {
     filteredBookings() {
-        if (this.activeTab === 'Active') return this.activebookings
-        if (this.activeTab === 'Past') return this.pastbookings
-        if (this.activeTab === 'Request') return this.requestbookings
-        return []
-    }
-}
+      if (this.activeTab === 'Active') return this.activebookings;
+      if (this.activeTab === 'Past') return this.pastbookings;
+      if (this.activeTab === 'Request') return this.requestbookings;
+      return [];
+    },
+    limitedBookings() {
+      return this.filteredBookings.slice(0, 5);
+    },
+  },
 
+  methods: {
+    changeTab(tab) {
+      this.activeTab = tab;
+      this.autoSelectFirstBooking();
+    },
+
+    selectBooking(booking) {
+      this.internalSelectedBooking = booking;
+      this.$emit('select-booking', booking);
+    },
+
+    autoSelectFirstBooking() {
+      const first = this.filteredBookings[0];
+      if (first) {
+        this.selectBooking(first);
+      }
+    },
+  },
+
+  mounted() {
+    this.autoSelectFirstBooking();
+  },
 };
 </script>
 
+
 <style scoped lang="scss">
 .booking-sidebar {
-    background: #fff;
+    background:var(--parkspot-white);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     padding: 16px;
@@ -128,19 +138,17 @@ computed: {
     border: none;
     font-weight: 500;
     font-size: 14px;
-    color: #206dd8;
+    color: var(--parkspot-black);
     padding: 8px 0;
     border-radius: 6px;
     cursor: pointer;
     transition: 0.2s;
 }
 
-.filter-buttons button:hover {
-    background: #e5e7eb;
-}
+
 
 .filter-buttons button.active {
-    background: #4f46e5;
+    background: var(--secondary-color);
     color: #fff;
 }
 
@@ -167,13 +175,14 @@ computed: {
 }
 
 .booking-card.selected {
-    border: 1px solid #4f46e5;
-    background: #eef2ff;
+    border: 1px solid;
+    border-color: var(--parkspot-black);
+    background: var(--primary-color);
 }
 
 .card-left img {
-    width: 60px;
-    height: 50px;
+    width: 80px;
+    height: 100px;
     border-radius: 6px;
     object-fit: cover;
 }
@@ -199,9 +208,10 @@ computed: {
 }
 
 .address {
+    margin-top:4px;
     font-size: 12px;
-    color: #666;
-    margin-bottom: 4px;
+    color:black;
+    margin-bottom: 8px;
 }
 
 .status-badge {
@@ -262,7 +272,7 @@ computed: {
   .navigate-btn {
     background: #2563eb;
     color: #fff;
-    padding: 10px 16px;
+    padding: px 16px;
     font-size: 13px;
     border-radius: 8px;
     font-weight: 600;

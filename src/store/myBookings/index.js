@@ -37,7 +37,6 @@ const mutations = {
 };
 
 const actions = {
-    // Fetches Pending KYC Users
     async fetchUsersRequests({ commit }) {
         console.log("inside store fetch requests")
         if (state.isLoading) return;

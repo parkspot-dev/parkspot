@@ -1,6 +1,5 @@
 <template>
   <div class="booking-details" v-if="booking">
-    <!-- Map Section -->
     <div class="map-section">
       <MapContainer
         :center="center"
@@ -14,73 +13,93 @@
       </div>
     </div>
 
-    <!-- Booking Information Cards -->
     <div class="details-row">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Booking Information</h3>
-          <span
-            class="status"
-            :class="statusClass(booking.BookingStatus)"
-          >
-            {{ this.getParkingRequestLabel(booking.BookingStatus) }}
-          </span>
+          <h3 class="card-title">Booking Information:</h3>
+          <h3 class="status">{{ getParkingRequestLabel(booking.BookingStatus) }}</h3>
         </div>
-        <div class="info-grid">
-          <p><strong>Booking ID:</strong> {{ booking.BookingID }}</p>
-          <p ><strong>Vehicle:</strong> {{ booking.VehicleNumber || "—" }}</p>
-          <p><strong>Start Time:</strong> {{ booking.StartTime }}</p>
-          <p><strong>End Time:</strong> {{ booking.EndTime }}</p>
-          <p><strong>Rent Cycle:</strong> {{ rentCycleText(booking.RentCycle) }}</p>
+
+        <div class="info-list">
+          <div class="info-row">
+            <span>Booking ID</span>
+            <strong>{{ booking.BookingID }}</strong>
+          </div>
+          <div class="info-row">
+            <span>Vehicle</span>
+            <strong>{{ (booking.VehicleNumber || '—').toUpperCase() }}</strong>
+          </div>
+          <div class="info-row">
+            <span>Start Time</span>
+            <strong>{{ booking.StartTime }}</strong>
+          </div>
+          <div class="info-row">
+            <span>End Time</span>
+            <strong>{{ booking.EndTime }}</strong>
+          </div>
+          <div
+            class="info-row rent-cycle"
+            @mouseenter="showPopover = true"
+            @mouseleave="showPopover = false"
+          >
+            <span>Rent Cycle:</span>
+            <strong>{{ booking.RentCycle }}</strong>
+            <div v-if="showPopover" class="popover">
+              Payment Date: {{ booking.RentCycle }}
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="card">
-        <h3 class="card-title">Payment Details</h3>
-        <div class="info-grid">
-          <p><strong>Rent:</strong> ₹{{ booking.Fee.Rent }}</p>
-          <p><strong>Convenience Fee:</strong> ₹{{ booking.Fee.ConvenienceFee }}</p>
-          <p><strong>Discount:</strong> ₹{{ booking.Fee.Discount }}</p>
-          <p><strong>Security Deposit:</strong> ₹{{ booking.Fee.SecurityDeposit }}</p>
+        <div class="card-header">
+          <h3 class="card-title">Rent Details</h3>
         </div>
-        <div class="total">
-          <p>Total:</p>
-          <h3>₹{{ totalAmount }}</h3>
+        <div class="info-list">
+          <div class="info-row">
+            <span>Rent</span>
+            <strong>₹{{ booking.Fee.Rent }}</strong>
+          </div>
+          <div class="info-row">
+            <span>Convenience Fee</span>
+            <strong>₹{{ booking.Fee.ConvenienceFee }}</strong>
+          </div>
+          <div class="info-row">
+            <span>Security Deposit</span>
+            <strong>₹{{ booking.Fee.SecurityDeposit }}</strong>
+          </div>
+          <div class="info-row total">
+            <span>Total</span>
+            <strong>₹{{ totalAmount }}</strong>
+          </div>
         </div>
       </div>
 
-   <div class="card location-card">
-  <h3 class="card-title">Location Details</h3>
-
-<div class="location-box">
-  <div class="loc-left">
-    <p class="row-item">
-      <span class="label">Site Name:</span>
-      <span class="value">{{ booking.SiteDetails.SiteName }}</span>
-    </p>
-
-    <p class="row-item">
-      <span class="label">Navigation:</span>
-      <a
-        class="navigate-link"
-        :href="`https://www.google.com/maps/dir/?api=1&destination=${booking.SiteDetails.Latitude},${booking.SiteDetails.Longitude}`"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Google Map
-      </a>
-    </p>
-    <button
-  class="spot-btn"
-  @click="spotDetails(booking.SiteDetails.SiteID)"
->
-  Spot Details
-</button>
-  </div>
-</div>
-
-</div>
-
+      <div class="card location-card">
+        <div class="card-header">
+          <h3 class="card-title">Location Details:</h3>
+        </div>
+        <div class="info-list">
+          <div class="info-row">
+            <span>Site Name</span>
+            <strong>{{ booking.SiteDetails.SiteName }}</strong>
+          </div>
+          <div class="info-row">
+            <span>Navigation</span>
+            <a
+              class="navigate-link"
+              :href="`https://www.google.com/maps/dir/?api=1&destination=${booking.SiteDetails.Latitude},${booking.SiteDetails.Longitude}`"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Google Map
+            </a>
+          </div>
+        </div>
+        <button class="spot-btn" @click="spotDetails(booking.SiteDetails.SiteID)">
+          Spot Details
+        </button>
+      </div>
     </div>
   </div>
 
@@ -96,12 +115,15 @@
 
 <script>
 import MapContainer from "@/components/extras/MapContainer.vue";
-import {getBookingStatusLabel} from "@/constant/enums"
+import { getBookingStatusLabel } from "@/constant/enums";
 
 export default {
   name: "BookingDetails",
   components: { MapContainer },
   props: { booking: Object },
+  data() {
+    return { showPopover: false };
+  },
   computed: {
     center() {
       return this.booking?.SiteDetails
@@ -113,49 +135,31 @@ export default {
     },
     totalAmount() {
       const f = this.booking?.Fee || {};
-      return ((f.Rent || 0) + (f.ConvenienceFee || 0) - (f.Discount || 0)).toFixed(2);
+      return (
+        (f.Rent || 0) +
+        (f.ConvenienceFee || 0) +
+        (f.SecurityDeposit || 0)
+      ).toFixed(2);
     },
   },
   methods: {
-    getParkingRequestLabel(status){
-      return getBookingStatusLabel(status)
-    },
-    statusClass(status) {
-      switch (status) {
-        case 1:
-          return "active";
-        case 2:
-          return "pending";
-        case 3:
-          return "completed";
-        case 4:
-          return "cancelled";
-        default:
-          return "unknown";
-      }
-    },
-    rentCycleText(cycle) {
-      if (cycle === 0) return "Monthly";
-      if (cycle === 1) return "Weekly";
-      if (cycle === 2) return "Daily";
-      return "Custom";
+    getParkingRequestLabel(status) {
+      return getBookingStatusLabel(status);
     },
     spotDetails(spotID) {
-            const route = this.$router.resolve({
-                name: 'spot-detail',
-                params: {
-                    spotId: spotID,
-                },
-            });
-            window.open(route.href);
-        }
+      const route = this.$router.resolve({
+        name: "spot-detail",
+        params: { spotId: spotID },
+      });
+      window.open(route.href);
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
 .booking-details {
-  background: #f9fafb;
+  background: var(--parkspot-white);
   border-radius: 12px;
   padding: 16px;
   height: 85vh;
@@ -169,7 +173,6 @@ export default {
   position: relative;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .sdp-map {
@@ -180,95 +183,102 @@ export default {
 
 .image-overlay {
   position: absolute;
-  height: 100px;
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 16px;
+  padding: 8px 16px;
   background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.6));
-  color: #fff;
-  border-radius: 0 0 12px 12px;
-}
-
-.image-overlay h2 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.image-overlay p {
-  font-size: 13px;
-  margin: 4px 0 0;
+  color: var(--parkspot-white);
 }
 
 .details-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
   gap: 20px;
 }
 
 .card {
-  background: #fff;
+  background: var(--parkspot-white);
+  border: 1px solid #e8faff;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
 }
 
 .card-title {
   font-size: 16px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--parkspot-black);
 }
 
-.status {
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #fff;
-  text-transform: uppercase;
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.status.active {
-  background: #16a34a;
-}
-
-.status.pending {
-  background: #facc15;
-  color: #1f2937;
-}
-
-.status.completed {
-  background: #3b82f6;
-}
-
-.status.cancelled {
-  background: #ef4444;
-}
-
-.info-grid p {
-  margin: 6px 0;
-  font-size: 14px;
-  color: #374151;
-}
-
-.total {
+.info-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 14px;
+  color: #1f2e3b;
+  padding: 4px 0;
+}
+
+.total {
+  color: var(--parkspot-green);
   font-weight: 600;
-  color: #2563eb;
-  margin-top: 10px;
+}
+
+.navigate-link {
+  color: var(--secondary-color);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.navigate-link:hover {
+  text-decoration: underline;
+}
+
+.spot-btn {
+  background: var(--primary-color);
+  color: var(--parkspot-black);
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.spot-btn:hover {
+  background: #ffd35c;
+}
+
+.popover {
+  position: absolute;
+  top: 25px;
+  left: 0;
+  background: #fff;
+  color: #111827;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+  z-index: 10;
 }
 
 .empty-state {
@@ -286,64 +296,16 @@ export default {
   width: 280px;
   height: auto;
 }
-
-@media (max-width: 768px) {
-  .map-section {
-    height: 400px;
-  }
-  .image-overlay h2 {
-    font-size: 16px;
-  }
-  .card-title {
-    font-size: 15px;
-  }
-}
-.location-box {
-  background: #f9fafb;
-  border-radius: 10px;
-  padding: 14px;
-  border: 1px solid #e5e7eb;
-}
-
-.row-item {
-  margin: 6px 0;
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-}
-
-.label {
+.status {
+  display: inline-block;
+  background: var(--primary-color); /* yellow from your root variables */
+  color: var(--parkspot-black);
+  font-size: 12px;
   font-weight: 600;
-  color: #111827;
-  min-width: 110px;
+  padding: 4px 10px;
+  border-radius: 20px; /* rounded pill look */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
 }
-
-.value {
-  color: #374151;
-}
-
-.navigate-link {
-  color: #2563eb;
-  font-weight: 600;
-  text-decoration: none;
-  transition: 0.2s ease;
-}
-
-.navigate-link:hover {
-  text-decoration: underline;
-  color: #1e40af;
-}
-.spot-btn {
-  background: var(--primary-color);
-  color:var(--parksport-black);
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s ease-in-out;
-}
-
-
 </style>
