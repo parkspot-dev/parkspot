@@ -164,8 +164,13 @@
                                                 Profile
                                             </a>
                                         </li>
+                                          <li class="dropdown-list">
+                                            <a @click="gotoMybookings">
+                                               MyBookings
+                                            </a>
+                                        </li>
                                         <li class="dropdown-list">
-                                            <a @click="signout"> Sign Out </a>
+                                            <a @click="signout"> Sign Out</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -522,7 +527,10 @@ export default {
         gotoProfile() {
             this.$router.push({ name: 'editProfile' });
         },
-
+        gotoMybookings() {
+            this.$router.push({ name: 'my-booking' });
+        },
+        
         toggleMobileNav() {
             this.showMobileNav = !this.showMobileNav;
         },

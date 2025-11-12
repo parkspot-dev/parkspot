@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       tabs: ['Past', 'Active', 'Request'],
-      activeTab: 'Active',
+      activeTab: 'Past',
       internalSelectedBooking: null,
     };
   },

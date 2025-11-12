@@ -109,7 +109,6 @@
       class="default-img"
       alt="default-img"
     />
-    <p>Select a booking to view details.</p>
   </div>
 </template>
 
@@ -187,8 +186,8 @@ export default {
   left: 0;
   width: 100%;
   padding: 8px 16px;
-  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.6));
-  color: var(--parkspot-white);
+  background: linear-gradient(180deg, transparent, rgba(19, 18, 18, 0.6));
+  color:#1f2e3b;
 }
 
 .details-row {
@@ -231,7 +230,6 @@ export default {
   justify-content: space-between;
   align-items: center;
   font-size: 14px;
-  color: #1f2e3b;
   padding: 4px 0;
 }
 
