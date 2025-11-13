@@ -175,9 +175,9 @@ export default {
 }
 
 .booking-card.selected {
-    border: 1px solid;
-    border-color: var(--parkspot-black);
-    background: var(--primary-color);
+    border: 2px solid;
+    border-color: var(--secondary-color);
+    background: var(--pr);
 }
 
 .card-left img {
