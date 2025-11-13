@@ -543,6 +543,7 @@ export default {
                 { id: 3, name: 'Requested Modification' },
                 { id: 4, name: 'Verified' },
                 { id: 6, name: 'Denied' },
+                { id: 8, name: 'Duplicate' }
             ],
             clickedButton: null, // Tracks which button is clicked
             isModalOpen: false, // Tracks modal visibility

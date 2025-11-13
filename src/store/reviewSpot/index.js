@@ -132,16 +132,6 @@ const actions = {
             });
             return;
         }
-        
-        // Check that latitude and longitude are not both zero
-        if (latitude === 0 || longitude === 0) {
-            commit('set-error', {
-                field: 'latlongError',
-                message:
-                    'Latitude and longitude cannot be zero. Please provide valid coordinates.',
-            });
-            return;
-        }
 
         commit('set-error', { field: 'latlongError', message: '' });
     },
