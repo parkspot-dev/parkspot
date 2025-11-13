@@ -543,7 +543,7 @@ export default {
                 { id: 3, name: 'Requested Modification' },
                 { id: 4, name: 'Verified' },
                 { id: 6, name: 'Denied' },
-                { id: 8, name: 'Duplicate' }
+                { id: 8, name: 'Duplicate' },
             ],
             clickedButton: null, // Tracks which button is clicked
             isModalOpen: false, // Tracks modal visibility
@@ -684,16 +684,17 @@ export default {
             this.isModalOpen = false;
         },
         async confirmAction() {
-            const isValid = await this.handleFormErrors();
-            if (!isValid) {
-                this.closeModal();
-                return;
-            }
             if (this.clickedButton === 'Save') {
                 this.confirmSave();
-            } else {
-                this.validateFormFields();
-                if (this.isFormModified) this.confirmSave();
+            } else if (this.clickedButton === 'Promote') {
+                const isValid = await this.handleFormErrors();
+                if (!isValid) {
+                    this.closeModal();
+                    return;
+                }
+                if (this.isFormModified) {
+                    this.confirmSave();
+                }
                 this.submitForm();
             }
             this.closeModal();
