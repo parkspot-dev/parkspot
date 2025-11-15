@@ -69,7 +69,7 @@
             <!-- Rent Details Card -->
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Rent Details</h3>
+                    <h3 class="card-title">Rent Details:</h3>
                 </div>
                 <div class="info-list">
                     <div class="info-row">
@@ -329,19 +329,18 @@ export default {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding: 4px 10px;
-    margin-top: 4px;
     border-radius: 20px;
     color: var(--parkspot-black);
     background: var(--primary-color);
 }
 
 .status-confirmed {
-    background: var(--parkspot-green) !important;
+    background: var(--parkspot-green);
     color: var(--parkspot-white);
 }
 
 .status-cancelled {
-    background: #eb2727 !important;
+    background: #eb2727;
     color: var(--parkspot-white);
 }
 
@@ -435,6 +434,17 @@ export default {
     color: #9ca3af;
 }
 
+.txn-popup {
+    width: 90%;
+    max-width: 850px;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+    background: var(--parkspot-white);
+    box-sizing: border-box;
+    overflow-x: auto;
+}
+
 .popup-overlay {
     display: flex;
     justify-content: center;
@@ -445,16 +455,6 @@ export default {
     background: rgba(0, 0, 0, 0.45);
     padding-top: 60px;
     overflow-y: auto;
-}
-
-.txn-popup {
-    width: 90%;
-    max-width: 850px;
-    padding: 22px;
-    border-radius: 16px;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
-    background: var(--parkspot-white);
-    box-sizing: border-box;
 }
 
 .popup-header {
@@ -481,16 +481,15 @@ export default {
 .txn-table {
     width: 100%;
     border-collapse: collapse;
-    display: block;
-    overflow-x: auto;
+    table-layout: auto;
 }
 
 .txn-table th,
 .txn-table td {
-    padding: 10px 6px;
+    padding: 8px 6px;
     border-bottom: 1px solid #ddd;
-    min-width: 120px;
     font-weight: 400;
+    white-space: nowrap;
 }
 
 .txn-table th {
@@ -509,9 +508,19 @@ export default {
 }
 
 @media (max-width: 768px) {
+    .details-row {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    .details-row .card {
+        width: 100%;
+        max-width: 400px;
+    }
+
     .txn-popup {
         width: 95%;
-        padding: 16px;
+        padding: 12px;
     }
 
     .popup-header h2 {
@@ -520,8 +529,8 @@ export default {
 
     .txn-table th,
     .txn-table td {
+        padding: 6px 4px;
         font-size: 12px;
-        padding: 8px 4px;
     }
 
     .btn-container {
@@ -529,6 +538,7 @@ export default {
         gap: 8px;
     }
 }
+
 .empty-state {
     display: flex;
     flex-direction: column;
