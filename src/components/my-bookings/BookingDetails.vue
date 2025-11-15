@@ -1,34 +1,34 @@
 <template>
+    <!-- Booking Details Section -->
     <div class="booking-details" v-if="booking">
+        <!-- Map Section -->
         <div class="map-section">
             <MapContainer
+                :key="booking?.BookingID"
                 :center="center"
                 :spotDetails="booking.SiteDetails"
                 :zoom="13"
                 class="sdp-map"
             />
-            <div class="image-overlay">
-                <h2>{{ booking.SiteDetails.SiteName }}</h2>
-                <p>{{ booking.SiteDetails.Address }}</p>
-            </div>
         </div>
 
         <div class="details-row">
+            <!-- Booking Information Card -->
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Booking Information:</h3>
-  <h3
-  class="status"
-  :class="{
-    'status-confirmed': booking.BookingStatus === 1,
-    'status-cancelled': booking.BookingStatus === 2
-  }"
->
-  {{ getParkingRequestLabel(booking.BookingStatus) }}
-</h3>
-
+                    <h3
+                        class="status"
+                        :class="{
+                            'status-confirmed': booking.BookingStatus === 1,
+                            'status-cancelled': booking.BookingStatus === 2,
+                        }"
+                    >
+                        {{ getParkingRequestLabel(booking.BookingStatus) }}
+                    </h3>
                 </div>
 
+                <!-- Booking Details List -->
                 <div class="info-list">
                     <div class="info-row">
                         <span>Booking ID</span>
@@ -52,7 +52,7 @@
                         <div class="rent-cycle-label">
                             <span>Rent Cycle:</span>
                             <AtomTooltip
-                                :label="`Your Payment Date is: ${booking.RentCycle}`"
+                                :label="`Your payment date is: ${booking.RentCycle}`"
                             >
                                 <AtomIcon
                                     :icon="ICON.INFO"
@@ -66,6 +66,7 @@
                 </div>
             </div>
 
+            <!-- Rent Details Card -->
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Rent Details</h3>
@@ -87,68 +88,150 @@
                         <span>Total</span>
                         <strong>₹{{ totalAmount }}</strong>
                     </div>
+
+                    <!-- Show Transaction History Button -->
+                    <div class="btn-container">
+                        <AtomButton
+                            class="btn"
+                            @click.native="showPopup = true"
+                        >
+                            Show History
+                        </AtomButton>
+                    </div>
+
+                    <!-- Transaction Popup -->
+                    <div v-if="showPopup" class="popup-overlay">
+                        <div class="txn-popup">
+                            <div class="popup-header">
+                                <h2>Transaction Details:</h2>
+                                <span
+                                    class="close-btn"
+                                    @click="showPopup = false"
+                                >
+                                    <AtomIcon icon="close" size="16" />
+                                </span>
+                            </div>
+
+                            <!-- Transaction Table -->
+                            <table class="txn-table">
+                                <thead>
+                                    <tr>
+                                        <th>Payment ID</th>
+                                        <th>Transaction ID</th>
+                                        <th>Transaction Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        v-for="p in payments"
+                                        :key="p.PaymentID"
+                                    >
+                                        <td>{{ p.PaymentID }}</td>
+                                        <td>{{ p.TransactionID || '—' }}</td>
+                                        <td>{{ formatDate(p.CreatedAt) }}</td>
+                                        <td>{{ p.Amount }}</td>
+                                        <td>
+                                            {{
+                                                getPaymentStatusUILabel(
+                                                    p.Status,
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- Location Details Card -->
             <div class="card location-card">
                 <div class="card-header">
                     <h3 class="card-title">Location Details:</h3>
                 </div>
-               <div class="info-row">
-    <span>Site Name</span>
-    <strong>{{ booking.SiteDetails.SiteName }}</strong>
-</div>
+                <div class="info-list">
+                    <div class="info-row">
+                        <span>Site Name</span>
+                        <strong>{{ booking.SiteDetails.SiteName }}</strong>
+                    </div>
+                    <div class="info-row">
+                        <span>Navigation</span>
+                        <a
+                            class="navigate-link"
+                            :href="`https://www.google.com/maps/dir/?api=1&destination=${booking.SiteDetails.Latitude},${booking.SiteDetails.Longitude}`"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Google Map
+                        </a>
+                    </div>
+                    <div class="info-row">
+                        <span>Site Address</span>
+                        <strong>{{ booking.SiteDetails.Address }}</strong>
+                    </div>
 
-<div class="info-row">
-    <span>Navigation</span>
-    <a
-        class="navigate-link"
-        :href="`https://www.google.com/maps/dir/?api=1&destination=${booking.SiteDetails.Latitude},${booking.SiteDetails.Longitude}`"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
-        Google Map
-    </a>
-</div>
-
-                <button
-                    class="spot-btn"
-                    @click="spotDetails(booking.SiteDetails.SiteID)"
-                >
-                    Spot Details
-                </button>
+                    <!-- Spot Details Button -->
+                    <div class="btn-container">
+                        <AtomButton
+                            class="btn"
+                            @click.native="
+                                spotDetails(booking.SiteDetails.SiteID)
+                            "
+                        >
+                            Spot Details
+                        </AtomButton>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Empty State -->
     <div v-else class="empty-state">
         <img
             src="https://www.parkspot.in/assets/about.svg"
             class="default-img"
-            alt="default-img"
+            alt="No bookings"
         />
+        <p class="empty-text">
+            Oops! Looks like you haven’t booked any parking yet.
+        </p>
+        <p class="empty-subtext">
+            Start exploring spots and reserve your first parking now!
+        </p>
     </div>
 </template>
-
 <script>
 import MapContainer from '@/components/extras/MapContainer.vue';
 import { getBookingStatusLabel } from '@/constant/enums';
-import AtomTooltip from "@/components/atoms/AtomTooltip.vue";
-import AtomIcon from "@/components/atoms/AtomIcon.vue";
-import { ICON } from '@/constant/constant'
+import AtomTooltip from '@/components/atoms/AtomTooltip.vue';
+import AtomIcon from '@/components/atoms/AtomIcon.vue';
+import { ICON } from '@/constant/constant';
+import { mapActions, mapState } from 'vuex';
+import { getPaymentStatusUILabel } from '@/constant/enums';
+import AtomButton from '../atoms/AtomButton.vue';
+import moment from 'moment';
 
 export default {
     name: 'BookingDetails',
-    components: { MapContainer ,AtomTooltip,
-    AtomIcon },
-    props: { booking: Object },
+    components: { MapContainer, AtomTooltip, AtomIcon, AtomButton },
+    props: { booking: Object, activeTab: String },
     data() {
-        return { 
-        showPopover: false,
-        ICON,
-         };
+        return {
+            ICON,
+            showPopup: false,
+        };
     },
     computed: {
+        ...mapState('myBookings', [
+            'isLoading',
+            'hasError',
+            'errorMessage',
+            'payments',
+        ]),
         center() {
             return this.booking?.SiteDetails
                 ? {
@@ -166,7 +249,9 @@ export default {
             ).toFixed(2);
         },
     },
+
     methods: {
+        ...mapActions('myBookings', ['fetchPayments']),
         getParkingRequestLabel(status) {
             return getBookingStatusLabel(status);
         },
@@ -177,60 +262,53 @@ export default {
             });
             window.open(route.href);
         },
+        getPaymentStatusUILabel(status) {
+            return getPaymentStatusUILabel(status);
+        },
+
+        // formatDate to formate the date in 'YYYY-MM-DD' ex: "2024-08-12"
+        formatDate(date) {
+            if (!date) return '';
+            return moment(date).format('YYYY-MM-DD');
+        },
+    },
+
+    watch: {
+        booking: {
+            handler(value) {
+                if (value) this.fetchPayments(value.BookingID);
+            },
+            immediate: true,
+        },
     },
 };
 </script>
-
 <style scoped lang="scss">
 .booking-details {
-    background: var(--parkspot-white);
-    border-radius: 12px;
-    padding: 16px;
-    height: 85vh;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
-
-.map-section {
-    position: relative;
+    height: 85vh;
+    overflow-y: auto;
+    padding: 16px;
+    background: var(--parkspot-white);
     border-radius: 12px;
-    overflow: hidden;
-}
-
-.sdp-map {
-    height: 100%;
-    width: 100%;
-    border-radius: 12px;
-}
-
-.image-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 8px 16px;
-    background: linear-gradient(180deg, transparent,var(--grey-shade));
-    color:var(--parkspot-black);
-    
 }
 
 .details-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
     gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
 }
 
 .card {
-    background: var(--parkspot-white);
-    border: 1px solid #e8faff;
-    border-radius: 12px;
-    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    min-height: 200px;
+    padding: 16px;
+    background: var(--card-bg, #fff);
+    border-radius: var(--border-default, 8px);
+    box-shadow: var(--card-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
 }
 
 .card-header {
@@ -245,28 +323,71 @@ export default {
     color: var(--parkspot-black);
 }
 
+.status {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    margin-top: 4px;
+    border-radius: 20px;
+    color: var(--parkspot-black);
+    background: var(--primary-color);
+}
+
+.status-confirmed {
+    background: var(--parkspot-green) !important;
+    color: var(--parkspot-white);
+}
+
+.status-cancelled {
+    background: #eb2727 !important;
+    color: var(--parkspot-white);
+}
+
 .info-list {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    margin-top: 20px;
+    flex: 1;
 }
 
 .info-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-    padding: 4px 0;
+    align-items: flex-start;
+    gap: 10px;
 }
 
-.total {
-    color: var(--parkspot-green);
-    font-weight: 600;
+.info-row span {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.info-row strong {
+    display: block;
+    max-width: 100%;
+    text-align: right;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.map-section {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.sdp-map {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
 }
 
 .navigate-link {
-    color: var(--secondary-color);
     font-weight: 600;
+    color: var(--secondary-color);
     text-decoration: none;
 }
 
@@ -274,35 +395,33 @@ export default {
     text-decoration: underline;
 }
 
-.spot-btn {
-    background: var(--primary-color);
-    color: var(--parkspot-black);
-    padding: 10px 18px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
+.info-icon {
     cursor: pointer;
-    transition: 0.2s;
+    transition: transform 0.2s ease;
+    color: var(--parkspot-black);
 }
 
-.spot-btn:hover {
-    background: #ffd35c;
+.info-icon:hover {
+    transform: scale(1.1);
 }
 
-.popover {
-    position: absolute;
-    top: 25px;
-    left: 0;
-    background: #fff;
-    color: #111827;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    padding: 6px 10px;
-    font-size: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    white-space: nowrap;
-    z-index: 10;
+.btn-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: auto;
+}
+
+.btn {
+    font-weight: 700;
+    border-radius: var(--border-default);
+    margin: 4px;
+    width: fit-content;
+}
+
+.default-img {
+    width: 280px;
+    height: auto;
 }
 
 .empty-state {
@@ -311,53 +430,124 @@ export default {
     align-items: center;
     justify-content: center;
     height: 80vh;
-    color: #9ca3af;
     gap: 20px;
     text-align: center;
+    color: #9ca3af;
 }
 
-.default-img {
-    width: 280px;
-    height: auto;
+.popup-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.45);
+    padding-top: 60px;
+    overflow-y: auto;
 }
-.status {
-    display: inline-block;
-    background: var(--primary-color); /* yellow from your root variables */
-    color: var(--parkspot-black);
-    font-size: 12px;
+
+.txn-popup {
+    width: 90%;
+    max-width: 850px;
+    padding: 22px;
+    border-radius: 16px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+    background: var(--parkspot-white);
+    box-sizing: border-box;
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.popup-header h2 {
+    font-size: 20px;
     font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 20px; /* rounded pill look */
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 4px;
+    color: var(--parkspot-black);
 }
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    color: var(--parkspot-black);
+}
+
+.txn-table {
+    width: 100%;
+    border-collapse: collapse;
+    display: block;
+    overflow-x: auto;
+}
+
+.txn-table th,
+.txn-table td {
+    padding: 10px 6px;
+    border-bottom: 1px solid #ddd;
+    min-width: 120px;
+    font-weight: 400;
+}
+
+.txn-table th {
+    font-weight: 600;
+}
+
 .rent-cycle-label {
-  display: flex;
-  align-items: center;
-  gap: 6px; /* space between text and icon */
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.info-icon {
-  color: var(--parkspot-black); /* same yellow or theme color as rest of icons */
-  cursor: pointer;
-  transition: transform 0.2s ease;
+.total {
+    font-weight: 600;
+    color: var(--parkspot-green);
 }
 
-.info-icon:hover {
-  transform: scale(1.1);
+@media (max-width: 768px) {
+    .txn-popup {
+        width: 95%;
+        padding: 16px;
+    }
+
+    .popup-header h2 {
+        font-size: 18px;
+    }
+
+    .txn-table th,
+    .txn-table td {
+        font-size: 12px;
+        padding: 8px 4px;
+    }
+
+    .btn-container {
+        flex-direction: column;
+        gap: 8px;
+    }
 }
-.status-confirmed {
-  background: var(--parkspot-green) !important;
-  color: var(--parkspot-white);
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    height: 80vh;
+    text-align: center;
+    color: var(--parkspot-black);
 }
-.status-cancelled{
-    background: #eb2727 !important;
-  color: var(--parkspot-white);
+
+.empty-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--parkspot-black);
 }
-.info-row strong {
-    display: block;      /* Block level so it wraps properly */
-    word-wrap: break-word; /* Break long words/lines */
-    max-width: 100%;     /* Don't overflow card */
+
+.empty-subtext {
+    font-size: 14px;
+    color: var(--parkspot-gray, #6b7280);
 }
 </style>

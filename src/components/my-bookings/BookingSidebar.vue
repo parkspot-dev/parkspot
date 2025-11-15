@@ -1,7 +1,6 @@
 <template>
     <div class="booking-sidebar">
         <div class="sidebar-header">
-            
             <div class="filter-buttons">
                 <button
                     v-for="tab in tabs"
@@ -14,12 +13,13 @@
             </div>
         </div>
 
+        <!-- List of bookings based on active tab -->
         <div class="booking-list">
             <div
                 v-for="booking in filteredBookings"
                 :key="booking.BookingID"
                 class="booking-card"
-                @click="$emit('select-booking', booking)"
+                @click="selectCard(booking)"
                 :class="{
                     selected:
                         selectedBooking &&
@@ -43,65 +43,76 @@
         </div>
     </div>
 </template>
+
 <script>
 export default {
-  name: 'BookingSidebar',
-  props: {
-    activebookings: { type: Array, default: () => [] },
-    pastbookings: { type: Array, default: () => [] },
-    requestbookings: { type: Array, default: () => [] },
-    selectedBooking: Object,
-  },
-
-  data() {
-    return {
-      tabs: ['Past', 'Active', 'Request'],
-      activeTab: 'Past',
-      internalSelectedBooking: null,
-    };
-  },
-
-  computed: {
-    filteredBookings() {
-      if (this.activeTab === 'Active') return this.activebookings;
-      if (this.activeTab === 'Past') return this.pastbookings;
-      if (this.activeTab === 'Request') return this.requestbookings;
-      return [];
-    },
-    limitedBookings() {
-      return this.filteredBookings.slice(0, 5);
-    },
-  },
-
-  methods: {
-    changeTab(tab) {
-      this.activeTab = tab;
-      this.autoSelectFirstBooking();
+    name: 'BookingSidebar',
+    props: {
+        activebookings: Array,
+        pastbookings: Array,
+        requestbookings: Array,
+        selectedBooking: Object,
     },
 
-    selectBooking(booking) {
-      this.internalSelectedBooking = booking;
-      this.$emit('select-booking', booking);
+    data() {
+        return {
+            tabs: ['Past', 'Active', 'Request'],
+            activeTab: 'Past',
+        };
     },
 
-    autoSelectFirstBooking() {
-      const first = this.filteredBookings[0];
-      if (first) {
-        this.selectBooking(first);
-      }
+    computed: {
+        filteredBookings() {
+            if (this.activeTab === 'Active') return this.activebookings || [];
+            if (this.activeTab === 'Past') return this.pastbookings || [];
+            if (this.activeTab === 'Request') return this.requestbookings || [];
+            return [];
+        },
     },
-  },
 
-  mounted() {
-    this.autoSelectFirstBooking();
-  },
+    methods: {
+        changeTab(tab) {
+            this.activeTab = tab;
+            const firstBooking = this.filteredBookings[0];
+            if (firstBooking) this.selectCard(firstBooking);
+            this.emitQuery();
+        },
+
+        selectCard(booking) {
+            this.$emit('select-booking', booking);
+            this.emitQuery(booking.BookingID);
+        },
+
+        emitQuery(bookingId = null) {
+            this.$emit('update-query', {
+                tab: this.activeTab,
+                bookingId,
+            });
+        },
+
+        restoreFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const tab = params.get('tab');
+            const bookingId = params.get('bookingId');
+
+            if (tab && this.tabs.includes(tab)) this.activeTab = tab;
+
+            const booking =
+                this.filteredBookings.find((b) => b.BookingID == bookingId) ||
+                this.filteredBookings[0];
+
+            if (booking) this.selectCard(booking);
+        },
+    },
+
+    mounted() {
+        this.restoreFromUrl();
+    },
 };
 </script>
-
-
 <style scoped lang="scss">
 .booking-sidebar {
-    background:var(--parkspot-white);
+    background: var(--parkspot-white);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     padding: 16px;
@@ -117,13 +128,6 @@ export default {
     gap: 12px;
     margin-bottom: 16px;
 }
-
-.sidebar-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #2e2e48;
-}
-
 .filter-buttons {
     display: flex;
     justify-content: space-between;
@@ -144,8 +148,6 @@ export default {
     cursor: pointer;
     transition: 0.2s;
 }
-
-
 
 .filter-buttons button.active {
     background: var(--secondary-color);
@@ -170,14 +172,8 @@ export default {
     border: 1px solid transparent;
 }
 
-.booking-card:hover {
-    background: #f0f0ff;
-}
-
 .booking-card.selected {
-    border: 2px solid;
-    border-color: var(--secondary-color);
-    background: var(--pr);
+    border: 2px solid var(--secondary-color);
 }
 
 .card-left img {
@@ -188,7 +184,7 @@ export default {
 }
 
 .card-right {
-    flex: 4px;
+    flex: 4;
     text-align: left;
     position: relative;
 }
@@ -208,9 +204,9 @@ export default {
 }
 
 .address {
-    margin-top:4px;
+    margin-top: 4px;
     font-size: 12px;
-    color:black;
+    color: black;
     margin-bottom: 8px;
 }
 
@@ -224,66 +220,4 @@ export default {
     border-radius: 4px;
     text-transform: uppercase;
 }
-
-.status-badge.active {
-    background: #d1fae5;
-    color: #065f46;
-}
-
-.status-badge.past {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.status-badge.request {
-    background: #dbeafe;
-    color: #1e3a8a;
-}
-.location-card {
-  .location-box {
-    background: #f9fafb;
-    border-radius: 10px;
-    padding: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    border: 1px solid #e5e7eb;
-  }
-
-  .loc-left h4 {
-    margin: 0;
-    font-size: 15px;
-    font-weight: 600;
-    color: #111827;
-  }
-
-  .loc-left .addr {
-    margin: 4px 0;
-    font-size: 13px;
-    color: #6b7280;
-  }
-
-  .site-id {
-    font-size: 12px;
-    color: #374151;
-  }
-
-  .navigate-btn {
-    background: #2563eb;
-    color: #fff;
-    padding: px 16px;
-    font-size: 13px;
-    border-radius: 8px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: 0.2s ease;
-    white-space: nowrap;
-  }
-
-  .navigate-btn:hover {
-    background: #1e40af;
-  }
-}
-
 </style>

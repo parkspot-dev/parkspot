@@ -4,6 +4,7 @@ const state = {
     activeBookings: [],
     pastBookings: [],
     requestedBookings: [],
+    payments: [],
     hasError: false,
     errorMessage: '',
     isLoading: false,
@@ -34,16 +35,17 @@ const mutations = {
     'set-search-date'(state, text) {
         state.searchMobile = text;
     },
+    'set-payments'(state, payments) {
+        state.payments = payments;
+    }
 };
 
 const actions = {
     async fetchUsersRequests({ commit }) {
-        console.log("inside store fetch requests")
         if (state.isLoading) return;
         try {
             commit('set-loading', true);
             const response = await mayaClient.get(`/booking/history`);
-            console.log("this is response", response)
             if (response.ErrorCode) {
                 throw new Error(response.DisplayMsg);
             }
@@ -54,6 +56,23 @@ const actions = {
             commit('set-loading', false);
         }
     },
+
+    async fetchPayments({commit}, paymentID) {
+         if (state.isLoading) return;
+        try {
+            commit('set-loading', true);
+            const response = await mayaClient.get(`/booking/${paymentID}/payments`);
+            if (response.ErrorCode) {
+                throw new Error(response.DisplayMsg);
+            }
+            console.log("payments", response.Payments)
+            commit('set-payments', response.Payments);
+        } catch (error) {
+            commit('set-error', error.message);
+        } finally {
+            commit('set-loading', false);
+        }
+    }
 };
 
 export default {
