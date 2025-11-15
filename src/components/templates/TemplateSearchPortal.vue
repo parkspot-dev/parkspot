@@ -542,6 +542,7 @@ import moment from 'moment';
 import SelectInput from '../global/SelectInput.vue';
 import FilterDropdown from '../global/FilterDropdown.vue';
 import MobileView from '../search-portal/MobileView.vue';
+import { RequestPriority } from '@/constant/enums';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -614,22 +615,22 @@ export default {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
 
-            if (this.$route.query['isExpiring']) {
+            if (this.$route.query[this.QUERY_PARAMS.IS_EXPIRING]) {
                 this.extractExpiringRequests();
                 this.filters.isExpiring = true;
             }
 
-            if (this.$route.query['agent']) {
+            if (this.$route.query[this.QUERY_PARAMS.AGENT]) {
                 const agentName = this.$route.query['agent'];
                 this.filters.Agent = agentName;
                 this.extractRequetsByAgentName(agentName);
             }
-            if (this.$route.query['status']) {
-                const statusId = parseInt(this.$route.query['status'])
+            if (this.$route.query[this.QUERY_PARAMS.STATUS]) {
+                const statusId = parseInt(this.$route.query['status']);
                 const statusRow = this.statusList.find(
                     (item) => item.id === statusId,
                 );
-                 this.filters.Status = statusRow.name;
+                this.filters.Status = statusRow.name;
                 if (statusRow) {
                     this.extractRequetsByStatus(statusRow.id);
                 }
@@ -699,6 +700,11 @@ export default {
             windowWidth: 0,
             forceDesktop: false,
             isMobileDevice: false,
+            QUERY_PARAMS: {
+                AGENT: 'agent',
+                STATUS: 'status',
+                IS_EXPIRING: 'isExpiring',
+            },
         };
     },
     methods: {
@@ -840,8 +846,6 @@ export default {
         },
 
         handleAgentFilter(agent) {
-            console.log('agent', agent);
-            // Update the URL to include the isExpiring parameter
             const url = new URL(window.location.href);
             url.searchParams.set('agent', agent);
             window.history.pushState({}, '', url.toString());
@@ -875,9 +879,12 @@ export default {
             yesterday.setDate(yesterday.getDate() - 1);
 
             requests.forEach((request) => {
-                if (request.Priority === 3) this.summary.high++;
-                if (request.Priority === 2) this.summary.medium++;
-                if (request.Priority === 1) this.summary.low++;
+                if (request.Priority === RequestPriority.High)
+                    this.summary.high++;
+                if (request.Priority === RequestPriority.Medium)
+                    this.summary.medium++;
+                if (request.Priority === RequestPriority.Low)
+                    this.summary.low++;
                 this.summary.status[request.Status]++;
 
                 const agentName = request.Agent;
@@ -1253,49 +1260,49 @@ $portal-font-size: 13px;
 .summary-layout {
     background-color: #f5f5dc;
     border-radius: 8px;
-    padding: 14px;
-    font-family: Arial, sans-serif;
-    max-width: 540px;
-    margin: 16px auto;
-    box-sizing: border-box;
     border: none;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    margin: 16px auto;
+    max-width: 540px;
+    padding: 12px;
     position: absolute;
-    top: 50px;
     right: 20px;
+    top: 48px;
     z-index: 999;
 }
 
 .summary-header {
+    align-items: center;
     display: flex;
     justify-content: space-between;
-    align-items: center;
     margin-bottom: 8px;
 }
 
 .total-request,
 .total-agent {
-    font-weight: bold;
+    color: var(--parkspot-black);
     font-size: $portal-font-size;
-    margin: 0;
-    color: #222;
+    font-weight: bold;
+    margin: 4;
 }
 
 .summary-table {
-    width: 100%;
+    background-color: transparent;
     border-collapse: collapse;
     font-size: $portal-font-size;
     table-layout: fixed;
-    background-color: transparent;
+    width: 100%;
 }
 
 .summary-table th,
 .summary-table td {
-    border: 1px dotted #444;
-    padding: 10px 8px;
+    border: 1px dotted var(--parkspot-black);
+    color: var(--parkspot-black);
+    line-height: 1.5;
+    padding: 8px 8px;
     text-align: center;
     vertical-align: middle;
-    color: #222;
-    line-height: 1.5;
 }
 
 .summary-table th {
@@ -1314,19 +1321,19 @@ $portal-font-size: 13px;
 }
 
 .summary-table td p {
-    margin: 2px 0;
     line-height: 1.4;
+    margin: 4px 0;
 }
 
 @media (max-width: 768px) {
     .summary-layout {
+        padding: 8px;
         width: 96%;
-        padding: 10px;
     }
 
     .summary-header {
-        flex-direction: column;
         align-items: flex-start;
+        flex-direction: column;
         gap: 4px;
     }
 
@@ -1336,7 +1343,7 @@ $portal-font-size: 13px;
 
     .summary-table th,
     .summary-table td {
-        padding: 6px 4px;
+        padding: 8px 4px;
     }
 
     .summary-table th:last-child,
