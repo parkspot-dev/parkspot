@@ -85,9 +85,9 @@ const mutations = {
         state.UsersSpotRequests = spotRequests;
     },
     'update-users-spot-requests'(state, spotRequests) {
-        state.UsersSpotRequests = spotRequests
-    }
-}
+        state.UsersSpotRequests = spotRequests;
+    },
+};
 
 const actions = {
     // Validate Latitude and Longitude type
@@ -132,7 +132,15 @@ const actions = {
             });
             return;
         }
-
+        // Check that latitude and longitude are not both zero
+        if (latitude === 0 || longitude === 0) {
+            commit('set-error', {
+                field: 'latlongError',
+                message:
+                    'Latitude and longitude cannot be zero. Please provide valid coordinates.',
+            });
+            return;
+        }
         commit('set-error', { field: 'latlongError', message: '' });
     },
 
@@ -512,12 +520,19 @@ const actions = {
         commit('set-updated-facilities', facilities);
     },
 
-    async fetchUsersSpotsAndSpotRequests({ commit }, {mobile, spotId}) {
-            const response = await mayaClient.get(`sites-and-spot-requests?mobile=${mobile}`);
-            const spots = response.Sites || [];
-            const spotRequests = response.SpotRequests || [];
-            const filteredSpotRequests = spotRequests.filter((spotRequest) => spotRequest.ID !== spotId);
-            commit('set-spots-spotsRequests', { spots, spotRequests: filteredSpotRequests });
+    async fetchUsersSpotsAndSpotRequests({ commit }, { mobile, spotId }) {
+        const response = await mayaClient.get(
+            `sites-and-spot-requests?mobile=${mobile}`,
+        );
+        const spots = response.Sites || [];
+        const spotRequests = response.SpotRequests || [];
+        const filteredSpotRequests = spotRequests.filter(
+            (spotRequest) => spotRequest.ID !== spotId,
+        );
+        commit('set-spots-spotsRequests', {
+            spots,
+            spotRequests: filteredSpotRequests,
+        });
     },
 };
 
