@@ -65,7 +65,6 @@ const actions = {
             if (response.ErrorCode) {
                 throw new Error(response.DisplayMsg);
             }
-            console.log("payments", response.Payments)
             commit('set-payments', response.Payments);
         } catch (error) {
             commit('set-error', error.message);
