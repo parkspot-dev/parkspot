@@ -96,7 +96,7 @@ export default {
                 this.emptyTabTitle =
                     'Oops! You don’t have any active bookings.';
                 this.emptyTabSubtitle =
-                    'Start exploring spots and reserve your first parking now!';
+                    'Start exploring spots and reserve your parking now!';
             } else if (tab === 'Past') {
                 this.emptyTabTitle = 'No past bookings found.';
                 this.emptyTabSubtitle =
@@ -121,23 +121,26 @@ export default {
 
         restoreSelectionFromUrl() {
             const params = new URLSearchParams(window.location.search);
-            const tab = params.get('tab');
+            const tab = params.get('tab') || 'Active';
             const bookingId = params.get('bookingId');
-            let list = [];
-            if (tab === 'Active') list = this.activeBookings;
-            else if (tab === 'Request') list = this.requestedBookings;
-            else list = this.pastBookings;
+
+            let list = this.getListForTab(tab);
+
+            if (!list || list.length === 0) {
+                this.selectedBooking = null;
+                return;
+            }
 
             const booking =
                 list.find((b) => b.BookingID == bookingId) || list[0];
-
-            if (booking) this.selectedBooking = booking;
+            this.selectedBooking = booking;
         },
     },
 
     mounted() {
         this.fetchUsersRequests().then(() => {
             this.restoreSelectionFromUrl();
+            this.onTabChange(this.activeTab);
         });
     },
 };
@@ -184,70 +187,68 @@ export default {
         display: flex;
         flex-direction: column;
 
-    .empty-state {
-    flex: 1; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--parkspot-white);
-    border-radius: 12px;
-    height: 85vh;
-    text-align: center;
-    padding: 88px;
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--parkspot-white);
+            border-radius: 12px;
+            height: 85vh;
+            text-align: center;
+            padding: 88px;
 
-    img {
-        max-width: 300px;
-        margin-bottom: 20px;
-    }
+            img {
+                max-width: 300px;
+                margin-bottom: 20px;
+            }
 
-    .empty-text {
-        font-size: 18px;
-        font-weight: 600;
-        color: #1e293b;
-        margin-bottom: 8px;
-    }
+            .empty-text {
+                font-size: 18px;
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 8px;
+            }
 
-    .empty-subtext {
-        font-size: 14px;
-        color: #6b7280;
-    }
-    @media (max-width: 992px) {
-        height: 70vh; 
-        padding: 40px;
+            .empty-subtext {
+                font-size: 14px;
+                color: #6b7280;
+            }
+            @media (max-width: 992px) {
+                height: 70vh;
+                padding: 40px;
 
-        img {
-            max-width: 200px;
+                img {
+                    max-width: 200px;
+                }
+
+                .empty-text {
+                    font-size: 16px;
+                }
+
+                .empty-subtext {
+                    font-size: 12px;
+                }
+            }
+
+            @media (max-width: 576px) {
+                height: 60vh;
+                padding: 24px;
+
+                img {
+                    max-width: 150px;
+                }
+
+                .empty-text {
+                    font-size: 14px;
+                }
+
+                .empty-subtext {
+                    font-size: 11px;
+                }
+            }
         }
-
-        .empty-text {
-            font-size: 16px;
-        }
-
-        .empty-subtext {
-            font-size: 12px;
-        }
-    }
-
-    @media (max-width: 576px) {
-        height: 60vh;
-        padding: 24px;
-
-        img {
-            max-width: 150px;
-        }
-
-        .empty-text {
-            font-size: 14px;
-        }
-
-        .empty-subtext {
-            font-size: 11px;
-        }
-    }
-}
-
     }
 }
 </style>
-
