@@ -1,6 +1,6 @@
 <template>
     <!-- Booking Details Section -->
-    <div class="booking-details" v-if="booking">
+    <div class="booking-details" v-if="booking && booking.SiteDetails && Object.keys(booking.SiteDetails).length > 0">
         <!-- Map Section -->
         <div class="map-section">
             <MapContainer
