@@ -6,12 +6,13 @@ const state = {
     activeBookings: [],
     pastBookings: [],
     requestedBookings: [],
-    payments: {},
+    payments: [], 
     hasError: false,
     errorMessage: '',
     isLoading: false,
     searchDate: '',
-    paymentsCachedAt: {},
+    paymentsCachedAt: 0, 
+    cachedPaymentID: null, 
 };
 
 const getters = {
@@ -39,14 +40,14 @@ const mutations = {
         state.searchMobile = text;
     },
     'set-payments'(state, { paymentID, payments }) {
-        state.payments[paymentID] = payments;
-        state.paymentsCachedAt[paymentID] = Date.now();
+        state.payments = payments;
+        state.cachedPaymentID = paymentID; 
+        state.paymentsCachedAt = Date.now();  
     }
 };
 
 const actions = {
     async fetchUsersRequests({ commit }) {
-        if (state.isLoading) return;
         try {
             commit('set-loading', true);
             const response = await mayaClient.get(`/booking/history`);
@@ -60,12 +61,12 @@ const actions = {
     },
 
     async fetchPayments({ commit, state }, paymentID) {
-        if (state.isLoading) return;
-
         const now = Date.now();
-        const cachedAt = state.paymentsCachedAt[paymentID];
 
-        if (state.payments[paymentID] && cachedAt && (now - cachedAt < CACHE_TIME)) {
+        if (
+            state.cachedPaymentID === paymentID &&
+            (now - state.paymentsCachedAt < CACHE_TIME)
+        ) {
             return;
         }
 
