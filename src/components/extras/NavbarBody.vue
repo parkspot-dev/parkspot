@@ -166,7 +166,7 @@
                                         </li>
                                           <li class="dropdown-list">
                                             <a @click="gotoMybookings">
-                                               MyBookings
+                                               My Bookings
                                             </a>
                                         </li>
                                         <li class="dropdown-list">

@@ -1,114 +1,131 @@
 <template>
-    <div class="booking-sidebar">
-        <div class="sidebar-header">
-            <div class="filter-buttons">
-                <button
-                    v-for="tab in tabs"
-                    :key="tab"
-                    @click="changeTab(tab)"
-                    :class="{ active: activeTab === tab }"
-                >
-                    {{ tab }}
-                </button>
-            </div>
-        </div>
-
-        <!-- List of bookings based on active tab -->
-        <div class="booking-list">
-            <div
-                v-for="booking in filteredBookings"
-                :key="booking.BookingID"
-                class="booking-card"
-                @click="selectCard(booking)"
-                :class="{
-                    selected:
-                        selectedBooking &&
-                        selectedBooking.BookingID === booking.BookingID,
-                }"
-            >
-                <div class="card-left">
-                    <img
-                        :src="booking?.SiteDetails?.SiteImageURI"
-                        alt="booking"
-                    />
-                </div>
-                <div class="card-right">
-                    <p class="booking-id">
-                        Booking ID: <strong>{{ booking.BookingID }}</strong>
-                    </p>
-                    <h3>{{ booking?.SiteDetails?.SiteName }}</h3>
-                    <p class="address">{{ booking?.SiteDetails?.Address }}</p>
-                </div>
-            </div>
-        </div>
+  <div class="booking-sidebar">
+    <div class="sidebar-header">
+      <div class="filter-buttons">
+        <button
+          v-for="tab in tabs"
+          :key="tab"
+          @click="changeTab(tab)"
+          :class="{ active: activeTab === tab }"
+        >
+          {{ tab }}
+        </button>
+      </div>
     </div>
+
+    <!-- List of bookings based on active tab -->
+    <div class="booking-list">
+      <div
+        v-for="booking in filteredBookings"
+        :key="booking.BookingID"
+        class="booking-card"
+        @click="selectCard(booking)"
+        :class="{
+          selected:
+            selectedBooking &&
+            selectedBooking.BookingID === booking.BookingID,
+        }"
+      >
+        <div class="card-left">
+          <img :src="booking?.SiteDetails?.SiteImageURI" alt="booking" />
+        </div>
+        <div class="card-right">
+          <p class="booking-id">
+            Booking ID: <strong>{{ booking.BookingID }}</strong>
+          </p>
+          <h3>{{ booking?.SiteDetails?.SiteName }}</h3>
+          <p class="address">{{ booking?.SiteDetails?.Address }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'BookingSidebar',
-    props: {
-        activebookings: Array,
-        pastbookings: Array,
-        requestbookings: Array,
-        selectedBooking: Object,
+  name: 'BookingSidebar',
+  props: {
+    activebookings: Array,
+    pastbookings: Array,
+    requestbookings: Array,
+    selectedBooking: Object,
+  },
+
+  data() {
+    return {
+      tabs: ['Past', 'Active', 'Request'],
+      activeTab: 'Active',
+    };
+  },
+
+  computed: {
+    filteredBookings() {
+      if (this.activeTab === 'Active') return this.activebookings || [];
+      if (this.activeTab === 'Past') return this.pastbookings || [];
+      if (this.activeTab === 'Request') return this.requestbookings || [];
+      return [];
+    },
+  },
+
+  methods: {
+    // User clicks on tab
+    changeTab(tab) {
+      this.activeTab = tab;
+      this.$emit('tab-change', tab); 
+      const firstBooking = this.filteredBookings[0];
+      if (firstBooking) this.selectCard(firstBooking);
+      else this.emitQuery(); 
     },
 
-    data() {
-        return {
-            tabs: ['Past', 'Active', 'Request'],
-            activeTab: 'Past',
-        };
+   
+    selectCard(booking) {
+      this.$emit('select-booking', booking);
+      this.emitQuery(booking.BookingID);
     },
 
-    computed: {
-        filteredBookings() {
-            if (this.activeTab === 'Active') return this.activebookings || [];
-            if (this.activeTab === 'Past') return this.pastbookings || [];
-            if (this.activeTab === 'Request') return this.requestbookings || [];
-            return [];
-        },
+    emitQuery(bookingId = null) {
+      this.$emit('update-query', {
+        tab: this.activeTab,
+        bookingId,
+      });
     },
 
-    methods: {
-        changeTab(tab) {
-            this.activeTab = tab;
-            const firstBooking = this.filteredBookings[0];
-            if (firstBooking) this.selectCard(firstBooking);
-            this.emitQuery();
-        },
 
-        selectCard(booking) {
-            this.$emit('select-booking', booking);
-            this.emitQuery(booking.BookingID);
-        },
+    restoreFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab');
+      const bookingId = params.get('bookingId');
 
-        emitQuery(bookingId = null) {
-            this.$emit('update-query', {
-                tab: this.activeTab,
-                bookingId,
-            });
-        },
+      if (tab && this.tabs.includes(tab)) this.activeTab = tab;
+      this.$nextTick(() => {
+        const booking =
+          this.filteredBookings.find((b) => b.BookingID == bookingId) ||
+          this.filteredBookings[0];
 
-        restoreFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            const tab = params.get('tab');
-            const bookingId = params.get('bookingId');
-
-            if (tab && this.tabs.includes(tab)) this.activeTab = tab;
-
-            const booking =
-                this.filteredBookings.find((b) => b.BookingID == bookingId) ||
-                this.filteredBookings[0];
-
-            if (booking) this.selectCard(booking);
-        },
+        if (booking) this.selectCard(booking);
+        else this.$emit('tab-change', this.activeTab);
+      });
     },
+  },
 
-    mounted() {
-        this.restoreFromUrl();
+  watch: {
+    activebookings() {
+      this.restoreFromUrl();
     },
+    pastbookings() {
+      this.restoreFromUrl();
+    },
+    requestbookings() {
+      this.restoreFromUrl();
+    },
+  },
+
+
+  mounted() {
+    this.restoreFromUrl();
+  },
 };
+
 </script>
 <style scoped lang="scss">
 .booking-sidebar {

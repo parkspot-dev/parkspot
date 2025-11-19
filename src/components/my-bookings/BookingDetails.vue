@@ -1,6 +1,6 @@
 <template>
     <!-- Booking Details Section -->
-    <div class="booking-details" v-if="booking">
+    <div class="booking-details" v-if="booking && booking.SiteDetails && Object.keys(booking.SiteDetails).length > 0">
         <!-- Map Section -->
         <div class="map-section">
             <MapContainer
@@ -187,21 +187,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Empty State -->
-    <div v-else class="empty-state">
-        <img
-            src="https://www.parkspot.in/assets/about.svg"
-            class="default-img"
-            alt="No bookings"
-        />
-        <p class="empty-text">
-            Oops! Looks like you haven’t booked any parking yet.
-        </p>
-        <p class="empty-subtext">
-            Start exploring spots and reserve your first parking now!
-        </p>
     </div>
 </template>
 <script>
@@ -414,7 +399,7 @@ export default {
 .btn {
     font-weight: 700;
     border-radius: var(--border-default);
-    margin: 4px;
+    margin: 12px;
     width: fit-content;
 }
 
@@ -422,18 +407,6 @@ export default {
     width: 280px;
     height: auto;
 }
-
-.empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 80vh;
-    gap: 20px;
-    text-align: center;
-    color: #9ca3af;
-}
-
 .txn-popup {
     width: 90%;
     max-width: 850px;
@@ -537,27 +510,5 @@ export default {
         flex-direction: column;
         gap: 8px;
     }
-}
-
-.empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    height: 80vh;
-    text-align: center;
-    color: var(--parkspot-black);
-}
-
-.empty-text {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--parkspot-black);
-}
-
-.empty-subtext {
-    font-size: 14px;
-    color: var(--parkspot-gray, #6b7280);
 }
 </style>
