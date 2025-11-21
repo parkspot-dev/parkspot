@@ -9,6 +9,7 @@ const state = {
     errorMessage: '',
     isLoading: false,
     searchDate: '',
+    cachePayments: {}, 
 };
 
 const getters = {
@@ -37,11 +38,14 @@ const mutations = {
         state.isLoading = isLoading;
     },
     'set-search-date'(state, text) {
-        state.searchDate = text; 
+        state.searchDate = text;
     },
     'set-payments'(state, payments) {
         state.payments = payments;
     },
+    'set-cache-payment'(state, { paymentID, payments }) {
+        state.cachePayments[paymentID] = payments;
+    }
 };
 
 const actions = {
@@ -55,14 +59,17 @@ const actions = {
             if (response.ErrorCode) {
                 throw new Error(response.DisplayMsg);
             }
+
             const active = (response.ActiveBookings || []).filter(
-                (b) => b.SiteID !== null,
+                (b) => b.SiteID !== null
             );
+
             const past = (response.PastBookings || []).filter(
-                (b) => b.SiteID !== null,
+                (b) => b.SiteID !== null
             );
+
             const requested = (response.RequestedBookings || []).filter(
-                (b) => b.SiteID !== null,
+                (b) => b.SiteID !== null
             );
             commit('set-requests', {
                 ActiveBookings: active,
@@ -77,16 +84,22 @@ const actions = {
     },
 
     async fetchPayments({ commit }, paymentID) {
+        if (state.cachePayments[paymentID]) {
+            commit('set-payments', state.cachePayments[paymentID]);
+            return; 
+        }
         if (state.isLoading) return;
         try {
             commit('set-loading', true);
             const response = await mayaClient.get(
-                `/booking/${paymentID}/payments`,
+                `/booking/${paymentID}/payments`
             );
             if (response.ErrorCode) {
                 throw new Error(response.DisplayMsg);
             }
-            commit('set-payments', response.Payments);
+            const payments = response.Payments;
+            commit('set-payments', payments);
+            commit('set-cache-payment', { paymentID, payments });
         } catch (error) {
             commit('set-error', error.message);
         } finally {
