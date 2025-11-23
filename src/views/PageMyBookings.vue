@@ -1,5 +1,5 @@
 <template>
-    <div class="page-my-booking">
+    <div class="page-my-bookings">
         <h1 class="page-title">My Bookings</h1>
 
         <div class="booking-layout">
@@ -19,13 +19,11 @@
                 <BookingDetails
                     v-if="selectedBooking"
                     :booking="selectedBooking"
+                    :activeTab="activeTab"
                 />
 
                 <div v-else class="empty-state">
-                    <img
-                        src="https://www.parkspot.in/assets/about.svg"
-                        alt="No bookings"
-                    />
+                    <img src="/public/assets/about.svg" alt="No bookings" />
                     <p class="empty-text">{{ emptyTabTitle }}</p>
                     <p class="empty-subtext">{{ emptyTabSubtitle }}</p>
                 </div>
@@ -146,7 +144,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.page-my-booking {
+.page-my-bookings {
     background: #f5f5fb;
     min-height: 100vh;
     padding: 20px;
@@ -154,24 +152,24 @@ export default {
     .page-title {
         font-size: 24px;
         font-weight: 700;
-        color: #1e293b;
+        color: var(--parkspot-black);
         margin-bottom: 20px;
     }
 
     .booking-layout {
+        align-items: flex-start;
         display: flex;
         gap: 20px;
-        align-items: flex-start;
 
         > *:first-child {
-            width: 320px;
             flex-shrink: 0;
+            width: 320px;
         }
 
         > *:last-child {
-            flex: 1;
             display: flex;
             flex-direction: column;
+            flex: 1;
         }
 
         @media (max-width: 992px) {
@@ -183,37 +181,37 @@ export default {
     }
 
     .booking-details-container {
-        flex: 1;
         display: flex;
         flex-direction: column;
+        flex: 1;
 
         .empty-state {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
             background: var(--parkspot-white);
             border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
             height: 85vh;
-            text-align: center;
+            justify-content: center;
             padding: 88px;
+            text-align: center;
 
             img {
-                max-width: 300px;
                 margin-bottom: 20px;
+                max-width: 300px;
             }
 
             .empty-text {
-                font-size: 18px;
-                font-weight: 600;
                 color: #1e293b;
+                font-size: 16px;
+                font-weight: 600;
                 margin-bottom: 8px;
             }
 
             .empty-subtext {
+                color: var(--grey-shade);
                 font-size: 14px;
-                color: #6b7280;
             }
             @media (max-width: 992px) {
                 height: 70vh;
@@ -241,11 +239,11 @@ export default {
                 }
 
                 .empty-text {
-                    font-size: 14px;
+                    font-size: 12px;
                 }
 
                 .empty-subtext {
-                    font-size: 11px;
+                    font-size: 12px;
                 }
             }
         }
