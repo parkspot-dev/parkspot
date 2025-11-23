@@ -20,11 +20,15 @@
                     <h3
                         class="status"
                         :class="{
-                            'status-confirmed': booking.BookingStatus === 1,
-                            'status-cancelled': booking.BookingStatus === 2,
+                            'status-confirmed':
+                                booking.BookingStatus ===
+                                BookingStatus.BookingConfirmed,
+                            'status-cancelled':
+                                booking.BookingStatus ===
+                                BookingStatus.BookingCancelled,
                         }"
                     >
-                        {{ getParkingRequestLabel(booking.BookingStatus) }}
+                        {{ getBookingStatusLabel(booking.BookingStatus) }}
                     </h3>
                 </div>
 
@@ -48,20 +52,14 @@
                         <span>End Time</span>
                         <strong>{{ booking.EndTime }}</strong>
                     </div>
-                    <div class="info-row rent-cycle">
-                        <div class="rent-cycle-label">
-                            <span>Rent Cycle:</span>
-                            <AtomTooltip
-                                :label="`Your payment date is: ${booking.RentCycle}`"
-                            >
-                                <AtomIcon
-                                    :icon="ICON.INFO"
-                                    :size="'is-small'"
-                                    class="info-icon"
-                                />
-                            </AtomTooltip>
-                        </div>
-                        <strong>{{ booking.RentCycle }}</strong>
+
+                    <div v-if="activeTab !== 'Past'" class="btn-container">
+                        <AtomButton
+                            class="cancel-btn"
+                            @click.native="cancelBooking(booking)"
+                        >
+                            Cancel
+                        </AtomButton>
                     </div>
                 </div>
             </div>
@@ -84,9 +82,20 @@
                         <span>Security Deposit</span>
                         <strong>₹{{ booking.Fee.SecurityDeposit }}</strong>
                     </div>
-                    <div class="info-row total">
-                        <span>Total</span>
-                        <strong>₹{{ totalAmount }}</strong>
+                    <div class="info-row rent-cycle">
+                        <div class="rent-cycle-label">
+                            <span>Rent Cycle:</span>
+                            <AtomTooltip
+                                :label="`Your payment date is: ${booking.RentCycle}`"
+                            >
+                                <AtomIcon
+                                    :icon="ICON.INFO"
+                                    :size="'is-small'"
+                                    class="info-icon"
+                                />
+                            </AtomTooltip>
+                        </div>
+                        <strong>{{ booking.RentCycle }}</strong>
                     </div>
 
                     <!-- Show Transaction History Button -->
@@ -178,7 +187,7 @@
                         <AtomButton
                             class="btn"
                             @click.native="
-                                spotDetails(booking.SiteDetails.SiteID)
+                                openSpotDetails(booking.SiteDetails.SiteID)
                             "
                         >
                             Spot Details
@@ -191,13 +200,13 @@
 </template>
 <script>
 import MapContainer from '@/components/extras/MapContainer.vue';
-import { getBookingStatusLabel } from '@/constant/enums';
+import { BookingStatus, getBookingStatusLabel } from '@/constant/enums';
 import AtomTooltip from '@/components/atoms/AtomTooltip.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
-import { ICON } from '@/constant/constant';
+import { DEFAULT_BANGALORE_COORDINATES, ICON } from '@/constant/constant';
 import { mapActions, mapState } from 'vuex';
 import { getPaymentStatusUILabel } from '@/constant/enums';
-import AtomButton from '../atoms/AtomButton.vue';
+import AtomButton from '@/components/atoms/AtomButton.vue';
 import moment from 'moment';
 
 export default {
@@ -208,6 +217,7 @@ export default {
         return {
             ICON,
             showPopup: false,
+            BookingStatus,
         };
     },
     computed: {
@@ -223,24 +233,19 @@ export default {
                       lat: this.booking.SiteDetails.Latitude,
                       lng: this.booking.SiteDetails.Longitude,
                   }
-                : { lat: 12.9716, lng: 77.5946 };
-        },
-        totalAmount() {
-            const f = this.booking?.Fee || {};
-            return (
-                (f.Rent || 0) +
-                (f.ConvenienceFee || 0) +
-                (f.SecurityDeposit || 0)
-            ).toFixed(2);
+                : {
+                      lat: DEFAULT_BANGALORE_COORDINATES.lat,
+                      lng: DEFAULT_BANGALORE_COORDINATES.lng,
+                  };
         },
     },
 
     methods: {
         ...mapActions('myBookings', ['fetchPayments']),
-        getParkingRequestLabel(status) {
+        getBookingStatusLabel(status) {
             return getBookingStatusLabel(status);
         },
-        spotDetails(spotID) {
+        openSpotDetails(spotID) {
             const route = this.$router.resolve({
                 name: 'spot-detail',
                 params: { spotId: spotID },
@@ -256,28 +261,45 @@ export default {
             if (!date) return '';
             return moment(date).format('YYYY-MM-DD');
         },
+        cancelBooking(booking) {
+            const phone = '917488239471';
+
+            const message = `I want to cancel my booking.
+Booking ID: ${booking.BookingID}`;
+
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+            const win = window.open(url, '_blank');
+
+            if (!win) {
+                alert(
+                    `Could not open WhatsApp. Please contact us on 7488239471 to cancel the booking.`,
+                );
+            }
+        },
     },
 
     watch: {
         booking: {
-            handler(value) {
-                if (value) this.fetchPayments(value.BookingID);
+            handler(newBooking) {
+                if (newBooking) this.fetchPayments(newBooking.BookingID);
             },
             immediate: true,
         },
     },
 };
 </script>
+
 <style scoped lang="scss">
 .booking-details {
+    background: var(--parkspot-white);
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     gap: 20px;
     height: 85vh;
     overflow-y: auto;
     padding: 16px;
-    background: var(--parkspot-white);
-    border-radius: 12px;
 }
 
 .details-row {
@@ -287,36 +309,36 @@ export default {
 }
 
 .card {
+    background: var(--card-bg, var(--parkspot-white));
+    border-radius: var(--border-default, 8px);
+    box-shadow: var(--card-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
     display: flex;
     flex-direction: column;
     min-height: 200px;
     padding: 16px;
-    background: var(--card-bg, #fff);
-    border-radius: var(--border-default, 8px);
-    box-shadow: var(--card-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
 }
 
 .card-header {
+    align-items: center;
     display: flex;
     justify-content: space-between;
-    align-items: center;
 }
 
 .card-title {
+    color: var(--parkspot-black);
     font-size: 16px;
     font-weight: 600;
-    color: var(--parkspot-black);
 }
 
 .status {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 4px 10px;
+    background: var(--primary-color);
     border-radius: 20px;
     color: var(--parkspot-black);
-    background: var(--primary-color);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    text-transform: uppercase;
 }
 
 .status-confirmed {
@@ -325,23 +347,23 @@ export default {
 }
 
 .status-cancelled {
-    background: #eb2727;
+    background: var(--parkspot-red);
     color: var(--parkspot-white);
 }
 
 .info-list {
     display: flex;
     flex-direction: column;
+    flex: 1;
     gap: 4px;
     margin-top: 20px;
-    flex: 1;
 }
 
 .info-row {
-    display: flex;
-    justify-content: space-between;
     align-items: flex-start;
+    display: flex;
     gap: 10px;
+    justify-content: space-between;
 }
 
 .info-row span {
@@ -358,20 +380,20 @@ export default {
 }
 
 .map-section {
-    position: relative;
     border-radius: 12px;
     overflow: hidden;
+    position: relative;
 }
 
 .sdp-map {
-    width: 100%;
-    height: 100%;
     border-radius: 12px;
+    height: 100%;
+    width: 100%;
 }
 
 .navigate-link {
-    font-weight: 600;
     color: var(--secondary-color);
+    font-weight: 600;
     text-decoration: none;
 }
 
@@ -380,9 +402,9 @@ export default {
 }
 
 .info-icon {
+    color: var(--parkspot-black);
     cursor: pointer;
     transition: transform 0.2s ease;
-    color: var(--parkspot-black);
 }
 
 .info-icon:hover {
@@ -392,76 +414,77 @@ export default {
 .btn-container {
     display: flex;
     justify-content: center;
-    width: 100%;
     margin-top: auto;
+    width: 100%;
 }
 
 .btn {
-    font-weight: 700;
     border-radius: var(--border-default);
+    font-weight: 700;
     margin: 12px;
     width: fit-content;
 }
 
 .default-img {
-    width: 280px;
     height: auto;
+    width: 280px;
 }
+
 .txn-popup {
-    width: 90%;
-    max-width: 850px;
-    padding: 16px;
+    background: var(--parkspot-white);
     border-radius: 16px;
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
-    background: var(--parkspot-white);
     box-sizing: border-box;
+    max-width: 850px;
     overflow-x: auto;
+    padding: 16px;
+    width: 90%;
 }
 
 .popup-overlay {
-    display: flex;
-    justify-content: center;
     align-items: flex-start;
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
     background: rgba(0, 0, 0, 0.45);
-    padding-top: 60px;
+    display: flex;
+    inset: 0;
+    justify-content: center;
     overflow-y: auto;
+    padding-top: 60px;
+    position: fixed;
+    z-index: 2000;
 }
 
 .popup-header {
+    align-items: center;
     display: flex;
     justify-content: space-between;
-    align-items: center;
     margin-bottom: 14px;
 }
 
 .popup-header h2 {
+    color: var(--parkspot-black);
     font-size: 20px;
     font-weight: 600;
-    color: var(--parkspot-black);
 }
 
 .close-btn {
     background: none;
     border: none;
-    font-size: 26px;
-    cursor: pointer;
     color: var(--parkspot-black);
+    cursor: pointer;
+    font-size: 26px;
 }
 
 .txn-table {
-    width: 100%;
     border-collapse: collapse;
     table-layout: auto;
+    width: 100%;
 }
 
 .txn-table th,
 .txn-table td {
-    padding: 8px 6px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--parkspot-white);
     font-weight: 400;
+    padding: 8px 6px;
     white-space: nowrap;
 }
 
@@ -470,14 +493,20 @@ export default {
 }
 
 .rent-cycle-label {
-    display: flex;
     align-items: center;
+    display: flex;
     gap: 6px;
 }
 
-.total {
-    font-weight: 600;
-    color: var(--parkspot-green);
+.cancel-btn {
+    background: transparent;
+    border-radius: var(--border-default);
+    color: var(--parkspot-red);
+    cursor: pointer;
+    font-weight: 700;
+    margin: 12px;
+    padding: 8px 16px;
+    width: fit-content;
 }
 
 @media (max-width: 768px) {
@@ -487,13 +516,13 @@ export default {
     }
 
     .details-row .card {
-        width: 100%;
         max-width: 400px;
+        width: 100%;
     }
 
     .txn-popup {
-        width: 95%;
         padding: 12px;
+        width: 95%;
     }
 
     .popup-header h2 {
@@ -502,8 +531,8 @@ export default {
 
     .txn-table th,
     .txn-table td {
-        padding: 6px 4px;
         font-size: 12px;
+        padding: 6px 4px;
     }
 
     .btn-container {

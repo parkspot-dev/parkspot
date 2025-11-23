@@ -31,7 +31,7 @@ export const pages = {
     AUTOMATED_PARKING       : "/automated-parking",
     KYC_STATUS_PAGE         : "/internal/users/kyc-status",
     SPOTS_SEARCH            : "/internal/spot-search",
-    MY_BOOKING              : "/profile/my-bookings"
+    MY_BOOKINGS              : "/profile/my-bookings"
 };
 
 export const routes = [
@@ -168,9 +168,9 @@ export const routes = [
         component: () => import('@/views/PageSearchSpotByName.vue')
     },
     {
-        path: pages.MY_BOOKING,
-        name: 'my-booking',
-        component: () => import('@/views/PageMyBooking.vue')
+        path: pages.MY_BOOKINGS,
+        name: 'my-bookings',
+        component: () => import('@/views/PageMyBookings.vue')
     },
     {
         path: pages.APP,

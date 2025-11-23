@@ -38,14 +38,6 @@
                     </p>
                     <h3>{{ booking?.SiteDetails?.SiteName }}</h3>
                     <p class="address">{{ booking?.SiteDetails?.Address }}</p>
-                    <div v-if="activeTab !== 'Past'" class="btn-container">
-                        <AtomButton
-                            class="cancel-btn"
-                            @click.native="cancelBooking(booking)"
-                        >
-                            Cancel
-                        </AtomButton>
-                    </div>
                 </div>
             </div>
         </div>
@@ -86,23 +78,6 @@ export default {
             const firstBooking = this.filteredBookings[0];
             if (firstBooking) this.selectCard(firstBooking);
             else this.emitQuery();
-        },
-
-        cancelBooking(booking) {
-            const phone = '917488239471';
-
-            const message = `I want to cancel my booking.
-Booking ID: ${booking.BookingID}`;
-
-            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-
-            const win = window.open(url, '_blank');
-
-            if (!win) {
-                alert(
-                    `Could not open WhatsApp. Please contact us on 7488239471 to cancel the booking.`,
-                );
-            }
         },
 
         selectCard(booking) {
@@ -152,16 +127,17 @@ Booking ID: ${booking.BookingID}`;
     },
 };
 </script>
+
 <style scoped lang="scss">
 .booking-sidebar {
     background: var(--parkspot-white);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    padding: 16px;
     display: flex;
     flex-direction: column;
     height: 85vh;
     overflow-y: auto;
+    padding: 16px;
 }
 
 .sidebar-header {
@@ -170,30 +146,31 @@ Booking ID: ${booking.BookingID}`;
     gap: 12px;
     margin-bottom: 16px;
 }
+
 .filter-buttons {
-    display: flex;
-    justify-content: space-between;
     background: #f3f4f6;
     border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
     padding: 4px;
 }
 
 .filter-buttons button {
-    flex: 1;
     background: transparent;
-    border: none;
-    font-weight: 500;
-    font-size: 14px;
-    color: var(--parkspot-black);
-    padding: 8px 0;
     border-radius: 6px;
+    border: none;
+    color: var(--parkspot-black);
     cursor: pointer;
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 0;
     transition: 0.2s;
 }
 
 .filter-buttons button.active {
     background: var(--secondary-color);
-    color: #fff;
+    color: var(--parkspot-white);
 }
 
 .booking-list {
@@ -203,15 +180,15 @@ Booking ID: ${booking.BookingID}`;
 }
 
 .booking-card {
+    align-items: center;
+    background: var(--parkspot-white);
+    border-radius: 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
     display: flex;
     gap: 12px;
-    background: #fafafa;
     padding: 10px;
-    border-radius: 10px;
-    cursor: pointer;
     transition: all 0.2s ease;
-    align-items: center;
-    border: 1px solid transparent;
 }
 
 .booking-card.selected {
@@ -219,60 +196,58 @@ Booking ID: ${booking.BookingID}`;
 }
 
 .card-left img {
-    width: 80px;
-    height: 100px;
     border-radius: 6px;
+    height: 100px;
     object-fit: cover;
+    width: 80px;
 }
 
 .card-right {
     flex: 4;
-    text-align: left;
     position: relative;
+    text-align: left;
 }
 
 .booking-id {
-    padding-top: 4px;
+    color: var(--grey-shade);
     font-size: 12px;
-    color: #6b7280;
     margin-bottom: 4px;
+    padding-top: 4px;
 }
 
 .card-right h3 {
+    color: var(--parkspot-black);
     font-size: 14px;
     font-weight: 600;
-    color: #111827;
     margin: 0;
 }
 
 .address {
-    margin-top: 4px;
+    color: var(--parkspot-black);
     font-size: 12px;
-    color: black;
     margin-bottom: 8px;
+    margin-top: 4px;
 }
 
 .status-badge {
-    position: absolute;
-    top: 0;
-    right: 0;
+    border-radius: 4px;
     font-size: 11px;
     font-weight: 600;
     padding: 3px 6px;
-    border-radius: 4px;
+    position: absolute;
+    right: 0;
     text-transform: uppercase;
+    top: 0;
 }
 
 .cancel-btn {
     border-radius: 6px;
-    border: 1px solid #eb2727 !important;
-    border: none;
+    border: 1px solid var(--parkspot-red) !important;
     box-shadow: inset;
-    color: #eb2727;
+    color: var(--parkspot-red);
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
-    padding: 6px 12px;
-    transition: 0.2s ease;
+    padding: 8px 12px;
 }
 </style>

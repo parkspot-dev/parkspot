@@ -463,3 +463,4 @@ export const WHY_CHOOSE_PARKSPOT_SOCIETY_AUTOMATION = [
 ];
 
 export const CITY_OPTIONS = [ "Bengaluru", "Chennai", "Hyderabad", "Kolkata", "Other" ];
+export const DEFAULT_BANGALORE_COORDINATES = { lat: 12.9716, lng: 77.5946 }

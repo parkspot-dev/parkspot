@@ -528,7 +528,7 @@ export default {
             this.$router.push({ name: 'editProfile' });
         },
         gotoMybookings() {
-            this.$router.push({ name: 'my-booking' });
+            this.$router.push({ name: 'my-bookings' });
         },
         
         toggleMobileNav() {

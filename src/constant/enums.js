@@ -58,6 +58,7 @@ export const PaymentStatusUI = Object.freeze({
     Failed: 1,    
     Success: 2,   
 });
+
 const PaymentStatusUILabel = [
     'Pending',   // PaymentNotDefined (0)
     'Pending',   // PaymentPending (1)
@@ -190,10 +191,6 @@ export const BookingStatusLabels = [
 export function getBookingStatusLabel(bookingStatus) {
     return getEnumLabel(BookingStatusLabels, bookingStatus);
 }
-
-export const BookingStatusMap = Object.freeze({
-
-})
 
 export const PaymentPeriodicity = Object.freeze({
     PeriodicityOnce: 0,
