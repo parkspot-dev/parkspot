@@ -17,19 +17,25 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Booking Information:</h3>
-                    <h3
-                        class="status"
-                        :class="{
-                            'status-confirmed':
-                                booking.BookingStatus ===
-                                BookingStatus.BookingConfirmed,
-                            'status-cancelled':
-                                booking.BookingStatus ===
-                                BookingStatus.BookingCancelled,
-                        }"
+                    <AtomTooltip
+                        :label="
+                            getBookingStatusDescription(booking.BookingStatus)
+                        "
                     >
-                        {{ getBookingStatusLabel(booking.BookingStatus) }}
-                    </h3>
+                        <span
+                            class="status"
+                            :class="{
+                                'status-confirmed':
+                                    booking.BookingStatus ===
+                                    BookingStatus.BookingConfirmed,
+                                'status-cancelled':
+                                    booking.BookingStatus ===
+                                    BookingStatus.BookingCancelled,
+                            }"
+                        >
+                            {{ getBookingStatusLabel(booking.BookingStatus) }}
+                        </span>
+                    </AtomTooltip>
                 </div>
 
                 <!-- Booking Details List -->
@@ -98,7 +104,6 @@
                         <strong>{{ booking.RentCycle }}</strong>
                     </div>
 
-                    <!-- Show Transaction History Button -->
                     <div class="btn-container">
                         <AtomButton
                             class="btn"
@@ -108,7 +113,6 @@
                         </AtomButton>
                     </div>
 
-                    <!-- Transaction Popup -->
                     <div v-if="showPopup" class="popup-overlay">
                         <div class="txn-popup">
                             <div class="popup-header">
@@ -121,7 +125,6 @@
                                 </span>
                             </div>
 
-                            <!-- Transaction Table -->
                             <table class="txn-table">
                                 <thead>
                                     <tr>
@@ -182,7 +185,6 @@
                         <strong>{{ booking.SiteDetails.Address }}</strong>
                     </div>
 
-                    <!-- Spot Details Button -->
                     <div class="btn-container">
                         <AtomButton
                             class="btn"
@@ -198,6 +200,7 @@
         </div>
     </div>
 </template>
+
 <script>
 import MapContainer from '@/components/extras/MapContainer.vue';
 import { BookingStatus, getBookingStatusLabel } from '@/constant/enums';
@@ -239,7 +242,6 @@ export default {
                   };
         },
     },
-
     methods: {
         ...mapActions('myBookings', ['fetchPayments']),
         getBookingStatusLabel(status) {
@@ -255,30 +257,32 @@ export default {
         getPaymentStatusUILabel(status) {
             return getPaymentStatusUILabel(status);
         },
-
-        // formatDate to formate the date in 'YYYY-MM-DD' ex: "2024-08-12"
+        getBookingStatusDescription(status) {
+            switch (status) {
+                case this.BookingStatus.BookingConfirmed:
+                    return 'Booking has been comfirmed.';
+                case this.BookingStatus.BookingCancelled:
+                    return 'The Booking has been cancelled by you.';
+                default:
+                    return 'We are in progress to check the availability of the spot. It may take upto 2-3 days for the comfirmation.';
+            }
+        },
         formatDate(date) {
             if (!date) return '';
             return moment(date).format('YYYY-MM-DD');
         },
         cancelBooking(booking) {
             const phone = '917488239471';
-
-            const message = `I want to cancel my booking.
-Booking ID: ${booking.BookingID}`;
-
+            const message = `I want to cancel my booking.\nBooking ID: ${booking.BookingID}`;
             const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-
             const win = window.open(url, '_blank');
-
             if (!win) {
                 alert(
-                    `Could not open WhatsApp. Please contact us on 7488239471 to cancel the booking.`,
+                    'Could not open WhatsApp. Please contact us on 7488239471 to cancel the booking.',
                 );
             }
         },
     },
-
     watch: {
         booking: {
             handler(newBooking) {
@@ -290,7 +294,7 @@ Booking ID: ${booking.BookingID}`;
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .booking-details {
     background: var(--parkspot-white);
     border-radius: 12px;
@@ -416,13 +420,24 @@ Booking ID: ${booking.BookingID}`;
     justify-content: center;
     margin-top: auto;
     width: 100%;
+    gap: 10px;
 }
 
-.btn {
+.btn,
+.cancel-btn {
     border-radius: var(--border-default);
     font-weight: 700;
     margin: 12px;
-    width: fit-content;
+    padding: 8px 16px;
+    width: 180px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: transparent;
+    color: var(--parkspot-red);
+    border: 1px solid var(--parkspot-red);
 }
 
 .default-img {
@@ -496,17 +511,6 @@ Booking ID: ${booking.BookingID}`;
     align-items: center;
     display: flex;
     gap: 6px;
-}
-
-.cancel-btn {
-    background: transparent;
-    border-radius: var(--border-default);
-    color: var(--parkspot-red);
-    cursor: pointer;
-    font-weight: 700;
-    margin: 12px;
-    padding: 8px 16px;
-    width: fit-content;
 }
 
 @media (max-width: 768px) {
