@@ -63,6 +63,7 @@ export default {
     },
 
     mounted() {
+        console.log("helooo",this.spotDetails)
         this.updateMapConfig(this.center);
         this.updateZoomValue(this.zoom);
         this.getMapAccessToken().then(() => this.renderMap());
@@ -209,7 +210,7 @@ export default {
         },
 
         getPsPopup(spot) {
-            const encodedSpotId = encodeURIComponent(spot.ID);
+            const encodedSpotId = encodeURIComponent(spot.ID || spot.SiteID);
             const popupHTML = `
         <style>
             .name {
@@ -250,7 +251,7 @@ export default {
             }
         </style>
         <div>
-            <div class="name">${spot.Name}</div>
+            <div class="name">${spot.Name || spot.SiteName}</div>
             <div class="address"> ${spot.Address}
                 <div>India</div>
             </div>
@@ -266,7 +267,7 @@ export default {
         <div style="margin-top:.5rem"><b>Distance: </b> ${spot.Distance} Km</div>
         <div><b>Rent: </b> &#8377; ${spot.Rate}/- </div>
         <div class="btn-container">
-            <a href="https://www.google.com/maps/search/?api=1&query=${spot.Lat},${spot.Long}" target="_blank">
+            <a href="https://www.google.com/maps/search/?api=1&query=${spot.Lat || spot.Latitude},${spot.Long || spot.Longitude}" target="_blank">
           <button class="btn">
              Navigate
           </button>
