@@ -327,6 +327,14 @@
                                             </router-link>
                                         </p>
                                     </li>
+
+
+                                        <li class="scroll-item">
+                                        <p @click="toggleMobileNav">
+                                            <a @click="gotoMybookings"> My Bookings </a>
+                                        </p>
+                                    </li>
+
                                     <li class="scroll-item">
                                         <p @click="toggleMobileNav">
                                             <a @click="signout"> Sign Out </a>
