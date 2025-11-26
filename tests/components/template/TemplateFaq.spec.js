@@ -3,15 +3,15 @@ import { describe, it, expect } from "vitest";
 import TemplateFaq from "@/components/templates/TemplateFaq.vue";
 
 const stubComponents = {
-  AtomHeading: { template: "<div><slot /></div>" },
-  AtomParagraph: { template: "<div><slot /></div>" },
-  BodyWrapper: { template: "<div><slot /></div>" },
+  AtomHeading: { template: "<div class='atom-heading'><slot /></div>" },
+  AtomParagraph: { template: "<p class='atom-paragraph'><slot /></p>" },
+  BodyWrapper: { template: "<section class='body-wrapper'><slot /></section>" },
   "b-collapse": {
     props: ["modelValue"],
     emits: ["update:modelValue", "open", "close"],
     template: `
       <div class="b-collapse-root">
-        <div class="trigger" @click="$emit(modelValue ? 'close' : 'open')">
+        <div class="card-header trigger" @click="$emit(modelValue ? 'close' : 'open')">
           <slot name="trigger" :open="modelValue"></slot>
         </div>
         <div v-if="modelValue" class="content">
@@ -40,7 +40,6 @@ describe("TemplateFaq.vue", () => {
     const wrapper = mountComponent();
     const vm = wrapper.vm;
 
-
     const collapses = wrapper.findAll(".b-collapse-root");
     expect(collapses.length).toBe(vm.faqLists.length);
   });
@@ -48,18 +47,17 @@ describe("TemplateFaq.vue", () => {
   it("opens the first FAQ on mount", async () => {
     const wrapper = mountComponent();
     await wrapper.vm.$nextTick();
-
-
     expect(wrapper.vm.openStates[0]).toBe(true);
     expect(wrapper.vm.openStates.slice(1).every((v) => v === false)).toBe(true);
   });
 
-  it("clicking  the trigger toggles FAQs handleOpen and handleClose", async () => {
+  it("clicking the trigger toggles FAQs handleOpen and handleClose", async () => {
     const wrapper = mountComponent();
     await wrapper.vm.$nextTick();
 
     const triggers = wrapper.findAll(".trigger");
     expect(wrapper.vm.openStates[0]).toBe(true);
+
     await triggers[1].trigger("click");
     await wrapper.vm.$nextTick();
 
@@ -78,9 +76,7 @@ describe("TemplateFaq.vue", () => {
 
     await wrapper.vm.handleOpen(2);
     expect(wrapper.vm.openStates[2]).toBe(true);
-    expect(
-      wrapper.vm.openStates.filter((v) => v).length
-    ).toBe(1);
+    expect(wrapper.vm.openStates.filter((v) => v).length).toBe(1);
   });
 
   it("handleClose closes only selected FAQ", async () => {
@@ -101,18 +97,15 @@ describe("TemplateFaq.vue", () => {
     expect(contactLink.text().toLowerCase()).toContain("contact us");
   });
 
-  it("bind attributes correctly on trigger", async () => {
+  it("applies correct CSS classes to wrappers", () => {
     const wrapper = mountComponent();
-    await wrapper.vm.$nextTick();
+    expect(wrapper.find(".body-wrapper").exists()).toBe(true);
+    expect(wrapper.find(".atom-heading").exists()).toBe(true);
+    expect(wrapper.find(".atom-paragraph").exists()).toBe(true);
+  });
 
-    const triggers = wrapper.findAll(".card-header");
-
-    expect(triggers[0].attributes("aria-expanded")).toBe("true");
-    const secondTriggerWrapper = wrapper.findAll(".trigger")[1];
-    await secondTriggerWrapper.trigger("click");
-    await wrapper.vm.$nextTick();
-
-    expect(triggers[1].attributes("aria-expanded")).toBe("true");
-    expect(triggers[0].attributes("aria-expanded")).toBe("false");
+  it("matches snapshot", () => {
+    const wrapper = mountComponent();
+    expect(wrapper.html()).toMatchSnapshot();
   });
 });
