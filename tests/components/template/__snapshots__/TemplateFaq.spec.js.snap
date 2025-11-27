@@ -1,146 +1,16 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`TemplateFaq.vue > matches snapshot 1`] = `
-"<section data-v-9012d662="" class="body-wrapper">
-  <div data-v-9012d662="" class="custom-wrapper">
-    <div data-v-9012d662="" class="atom-heading custom-title"> Frequently Asked Questions! </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-0">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-0" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">What is ParkSpot ?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
+exports[`TemplateFaq.vue - Complete Test Suite > renders contact section correctly 1`] = `"<p data-v-9012d662="" class="atom-paragraph mt-5 is-size-5 has-text-weight-semibold"> In case you have more queries, please feel free to <a data-v-9012d662="" href="/contact">contact us.</a></p>"`;
+
+exports[`TemplateFaq.vue - Complete Test Suite > renders first FAQ item structure 1`] = `
+"<div data-v-9012d662="" class="b-collapse-root card card" animation="slide">
+  <div class="card-header" role="button" aria-controls="contentIdForA11y5-0" aria-expanded="false">
+    <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-0" aria-expanded="false">
+      <p data-v-9012d662="" class="card-header-title">What is ParkSpot ?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
     </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-1">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-1" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">Why do I need to add my vehicle number at the time of booking? Is it safe </p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-2">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-2" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">How can your platform help me? How safe is your platform ?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-3">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-3" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">Does ParkSpot support cashless and no contact bookings ?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-4">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-4" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">How can I rent my empty parking space?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-5">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-5" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">What would be the minimum duration to book a parking spot?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-6">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-6" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">How to make the payment for booking a parking spot?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-7">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-7" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">How to reach the booked spot location?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-8">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-8" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">What is the response time for all requests?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-9">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-9" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">Who takes responsibility for car safety?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-10">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-10" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">How reliable is the authentication of vehicle owners?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-11">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-11" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">Are spot owners charged to list their spot on the site in Parkspot?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-12">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-12" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">What is the booking process for Parkspot?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-13">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-13" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">Tell us about Parkspot's smart parking solution.</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-14">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-14" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">Where does Parkspot currently operate?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-15">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-15" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">What types of parking do you offer?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <div data-v-9012d662="" class="b-collapse-root card" animation="slide" aria-id="contentIdForA11y5-16">
-      <div class="card-header trigger">
-        <div data-v-9012d662="" class="card-header" role="button" aria-controls="contentIdForA11y5-16" aria-expanded="false">
-          <p data-v-9012d662="" class="card-header-title">Do you require a security deposit for parking bookings?</p><a data-v-9012d662="" class="card-header-icon"><span data-v-9012d662="" class="icon" icon="menu-down"></span></a>
-        </div>
-      </div>
-      <!--v-if-->
-    </div>
-    <p data-v-9012d662="" class="atom-paragraph mt-5 is-size-5 has-text-weight-semibold"> In case you have more queries, please feel free to <a data-v-9012d662="" href="/contact">contact us.</a></p>
   </div>
-</section>"
+  <!--v-if-->
+</div>"
 `;
+
+exports[`TemplateFaq.vue - Complete Test Suite > renders heading section correctly 1`] = `"<div data-v-9012d662="" class="atom-heading custom-title"> Frequently Asked Questions! </div>"`;
