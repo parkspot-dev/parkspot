@@ -61,15 +61,15 @@ const actions = {
             }
 
             const active = (response.ActiveBookings || []).filter(
-                (b) => b.SiteID !== null
+                (b) => b.SiteDetails !== null
             );
 
             const past = (response.PastBookings || []).filter(
-                (b) => b.SiteID !== null
+                (b) => b.SiteDetails !== null
             );
 
             const requested = (response.RequestedBookings || []).filter(
-                (b) => b.SiteID !== null
+                (b) => b.SiteDetails !== null
             );
             commit('set-requests', {
                 ActiveBookings: active,

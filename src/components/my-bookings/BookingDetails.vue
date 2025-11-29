@@ -18,9 +18,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Booking Information:</h3>
                     <AtomTooltip
-                        :label="
-                            getBookingStatusDescription(booking.BookingStatus)
-                        "
+                        :label="getBookingStatusDescription(booking.BookingStatus)"
                     >
                         <span
                             class="status"
@@ -128,11 +126,11 @@
                             <table class="txn-table">
                                 <thead>
                                     <tr>
-                                        <th>Payment ID</th>
-                                        <th>Transaction ID</th>
-                                        <th>Transaction Date</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
+                                        <th class="txn-center">Payment ID</th>
+                                        <th class="txn-center">Transaction ID</th>
+                                        <th class="txn-center">Transaction Date</th>
+                                        <th class="txn-center">Amount</th>
+                                        <th class="txn-center">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -140,16 +138,25 @@
                                         v-for="p in payments"
                                         :key="p.PaymentID"
                                     >
-                                        <td>{{ p.PaymentID }}</td>
-                                        <td>{{ p.TransactionID || '—' }}</td>
-                                        <td>{{ formatDate(p.CreatedAt) }}</td>
-                                        <td>{{ p.Amount }}</td>
-                                        <td>
-                                            {{
-                                                getPaymentStatusUILabel(
-                                                    p.Status,
-                                                )
-                                            }}
+                                        <td class="txn-center">
+                                            {{ p.PaymentID }}
+                                        </td>
+                                        <td class="txn-center">
+                                            {{ p.TransactionID || '—' }}
+                                        </td>
+                                        <td class="txn-center">
+                                            {{ formatDate(p.CreatedAt) }}
+                                        </td>
+                                        <td class="txn-center">
+                                            {{ p.Amount }}
+                                        </td>
+                                        <td class="txn-center">
+                                            {{ getPaymentStatusUILabel(p.Status) }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="!payments || payments.length === 0">
+                                        <td colspan="5" class="no-data">
+                                            Transaction not found
                                         </td>
                                     </tr>
                                 </tbody>
@@ -260,21 +267,23 @@ export default {
         getBookingStatusDescription(status) {
             switch (status) {
                 case this.BookingStatus.BookingConfirmed:
-                    return 'Booking has been comfirmed.';
+                    return 'Booking has been confirmed.';
                 case this.BookingStatus.BookingCancelled:
-                    return 'The Booking has been cancelled by you.';
+                    return 'The booking has been cancelled.';
                 default:
-                    return 'We are in progress to check the availability of the spot. It may take upto 2-3 days for the comfirmation.';
+                    return 'We are in progress to check the availability of the spot. It may take up to 24–48 hours for the confirmation.';
             }
         },
         formatDate(date) {
             if (!date) return '';
-            return moment(date).format('YYYY-MM-DD');
+            return moment(date).format('DD-MM-YYYY');
         },
         cancelBooking(booking) {
             const phone = '917488239471';
             const message = `I want to cancel my booking.\nBooking ID: ${booking.BookingID}`;
-            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(
+                message,
+            )}`;
             const win = window.open(url, '_blank');
             if (!win) {
                 alert(
@@ -306,10 +315,29 @@ export default {
     padding: 16px;
 }
 
-.details-row {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+.btn,
+.cancel-btn {
+    border-radius: var(--border-default);
+    cursor: pointer;
+    font-weight: 700;
+    margin: 12px;
+    padding: 8px 16px;
+    text-align: center;
+    width: 180px;
+}
+
+.btn-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: auto;
+    width: 100%;
+}
+
+.cancel-btn {
+    background: transparent;
+    border: 1px solid var(--parkspot-red);
+    color: var(--parkspot-red);
 }
 
 .card {
@@ -334,31 +362,39 @@ export default {
     font-weight: 600;
 }
 
-.status {
-    background: var(--primary-color);
-    border-radius: 20px;
+.close-btn {
+    background: none;
+    border: none;
     color: var(--parkspot-black);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    padding: 4px 10px;
-    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 26px;
 }
 
-.status-confirmed {
-    background: var(--parkspot-green);
-    color: var(--parkspot-white);
+.default-img {
+    height: auto;
+    width: 280px;
 }
 
-.status-cancelled {
-    background: var(--parkspot-red);
-    color: var(--parkspot-white);
+.details-row {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+}
+
+.info-icon {
+    color: var(--parkspot-black);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.info-icon:hover {
+    transform: scale(1.1);
 }
 
 .info-list {
     display: flex;
-    flex-direction: column;
     flex: 1;
+    flex-direction: column;
     gap: 4px;
     margin-top: 20px;
 }
@@ -389,12 +425,6 @@ export default {
     position: relative;
 }
 
-.sdp-map {
-    border-radius: 12px;
-    height: 100%;
-    width: 100%;
-}
-
 .navigate-link {
     color: var(--secondary-color);
     font-weight: 600;
@@ -405,67 +435,12 @@ export default {
     text-decoration: underline;
 }
 
-.info-icon {
+.no-data {
     color: var(--parkspot-black);
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.info-icon:hover {
-    transform: scale(1.1);
-}
-
-.btn-container {
-    display: flex;
-    justify-content: center;
-    margin-top: auto;
-    width: 100%;
-    gap: 10px;
-}
-
-.btn,
-.cancel-btn {
-    border-radius: var(--border-default);
-    font-weight: 700;
-    margin: 12px;
-    padding: 8px 16px;
-    width: 180px;
+    font-style: normal;
+    font-weight: 600;
+    padding: 20px 6px;
     text-align: center;
-    cursor: pointer;
-}
-
-.cancel-btn {
-    background: transparent;
-    color: var(--parkspot-red);
-    border: 1px solid var(--parkspot-red);
-}
-
-.default-img {
-    height: auto;
-    width: 280px;
-}
-
-.txn-popup {
-    background: var(--parkspot-white);
-    border-radius: 16px;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
-    box-sizing: border-box;
-    max-width: 850px;
-    overflow-x: auto;
-    padding: 16px;
-    width: 90%;
-}
-
-.popup-overlay {
-    align-items: flex-start;
-    background: rgba(0, 0, 0, 0.45);
-    display: flex;
-    inset: 0;
-    justify-content: center;
-    overflow-y: auto;
-    padding-top: 60px;
-    position: fixed;
-    z-index: 2000;
 }
 
 .popup-header {
@@ -481,12 +456,64 @@ export default {
     font-weight: 600;
 }
 
-.close-btn {
-    background: none;
-    border: none;
+.popup-overlay {
+    align-items: flex-start;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    inset: 0;
+    justify-content: center;
+    overflow-y: auto;
+    padding-top: 60px;
+    position: fixed;
+    z-index: 2000;
+}
+
+.rent-cycle-label {
+    align-items: center;
+    display: flex;
+    gap: 6px;
+}
+
+.sdp-map {
+    border-radius: 12px;
+    height: 100%;
+    width: 100%;
+}
+
+.status {
+    background: var(--primary-color);
+    border-radius: 20px;
     color: var(--parkspot-black);
-    cursor: pointer;
-    font-size: 26px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    text-transform: uppercase;
+}
+
+.status-cancelled {
+    background: var(--parkspot-red);
+    color: var(--parkspot-white);
+}
+
+.status-confirmed {
+    background: var(--parkspot-green);
+    color: var(--parkspot-white);
+}
+
+.txn-center {
+    text-align: center;
+}
+
+.txn-popup {
+    background: var(--parkspot-white);
+    border-radius: 16px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
+    max-width: 850px;
+    overflow-x: auto;
+    padding: 16px;
+    width: 90%;
 }
 
 .txn-table {
@@ -507,13 +534,12 @@ export default {
     font-weight: 600;
 }
 
-.rent-cycle-label {
-    align-items: center;
-    display: flex;
-    gap: 6px;
-}
-
 @media (max-width: 768px) {
+    .btn-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+
     .details-row {
         grid-template-columns: 1fr;
         justify-items: center;
@@ -524,24 +550,19 @@ export default {
         width: 100%;
     }
 
+    .popup-header h2 {
+        font-size: 18px;
+    }
+
     .txn-popup {
         padding: 12px;
         width: 95%;
-    }
-
-    .popup-header h2 {
-        font-size: 18px;
     }
 
     .txn-table th,
     .txn-table td {
         font-size: 12px;
         padding: 6px 4px;
-    }
-
-    .btn-container {
-        flex-direction: column;
-        gap: 8px;
     }
 }
 </style>
