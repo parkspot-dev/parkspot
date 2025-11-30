@@ -1,0 +1,72 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Blog Store - Complete Test Suite > maintains expected structure for first blog 1`] = `
+{
+  "author": "Nikhil Surya Mukhi",
+  "author_img": "/assets/team/nik.jpg",
+  "component": "OrganismEliminatingTrafficPageDesign",
+  "dateTime": "2020-02-11",
+  "desc": "In the recent years all over the globe production 
+                and demand for motor vehicles has increased dramatically.
+                Earlier motor vehicles...",
+  "id": "eliminating-traffic-jams-in-india",
+  "img": "/assets/blog/blog1.jpg",
+  "thumbnail": "/assets/blog/blog1-thumbnail.jpg",
+  "time": "Nov 2, 2020",
+  "title": "Eliminating Traffic jams in India!",
+}
+`;
+
+exports[`Blog Store - Complete Test Suite > matches snapshot for first blog item 1`] = `
+{
+  "author": "Nikhil Surya Mukhi",
+  "author_img": "/assets/team/nik.jpg",
+  "component": "OrganismEliminatingTrafficPageDesign",
+  "dateTime": "2020-02-11",
+  "desc": "In the recent years all over the globe production 
+                and demand for motor vehicles has increased dramatically.
+                Earlier motor vehicles...",
+  "id": "eliminating-traffic-jams-in-india",
+  "img": "/assets/blog/blog1.jpg",
+  "thumbnail": "/assets/blog/blog1-thumbnail.jpg",
+  "time": "Nov 2, 2020",
+  "title": "Eliminating Traffic jams in India!",
+}
+`;
+
+exports[`TemplateBlogPost.vue - Complete Test Suite > maintains article structure snapshot 1`] = `
+"<div data-v-d980275f="">
+  <div data-v-d980275f="" class="header-banner">
+    <div data-v-d980275f="" class="blog-header">
+      <h2 data-v-d980275f="">Parking Blogs</h2>
+      <div data-v-d980275f="" class="blog-nav">
+        <nav data-v-d980275f="" class="breadcrumb" align="is-centered" size="is-small"><span data-v-d980275f="" class="breadcrumb-item" tag="router-link" to="/"></span><span data-v-d980275f="" class="breadcrumb-item" tag="router-link" to="/blog"></span><span data-v-d980275f="" class="breadcrumb-item" tag="router-link" to="/blog" active=""></span></nav>
+      </div>
+    </div>
+  </div>
+  <section data-v-d980275f="" class="body-wrapper">
+    <article data-v-d980275f="" class="article-wrapper" data-aos="fade-up">
+      <header data-v-d980275f="" class="mb-6">
+        <h2 data-v-d980275f="" class="atom-heading mb-2"></h2>
+        <div data-v-d980275f="" class="custom-author">
+          <figure data-v-d980275f="" class="author-img image is-48x48"><img data-v-d980275f="" class="is-rounded" src="/test.jpg" alt="Placeholder image"></figure><!-- <AtomParagraph :variation="'small'"> &nbsp; </AtomParagraph> -->
+          <p data-v-d980275f="" class="atom-paragraph author-name" variation="small"></p>
+          <p data-v-d980275f="" class="atom-paragraph author-timestamp" variation="small"></p>
+        </div>
+      </header><img data-v-d980275f="" class="atom-image mb-4" alt="Test Blog Title" src="/test-image.jpg" ratio="16by9">
+      <testcomponent data-v-d980275f=""></testcomponent>
+    </article>
+  </section>
+</div>"
+`;
+
+exports[`TemplateBlogPost.vue - Complete Test Suite > maintains expected structure for article header 1`] = `
+"<header data-v-d980275f="" class="mb-6">
+  <h2 data-v-d980275f="" class="atom-heading mb-2"></h2>
+  <div data-v-d980275f="" class="custom-author">
+    <figure data-v-d980275f="" class="author-img image is-48x48"><img data-v-d980275f="" class="is-rounded" src="/test.jpg" alt="Placeholder image"></figure><!-- <AtomParagraph :variation="'small'"> &nbsp; </AtomParagraph> -->
+    <p data-v-d980275f="" class="atom-paragraph author-name" variation="small"></p>
+    <p data-v-d980275f="" class="atom-paragraph author-timestamp" variation="small"></p>
+  </div>
+</header>"
+`;

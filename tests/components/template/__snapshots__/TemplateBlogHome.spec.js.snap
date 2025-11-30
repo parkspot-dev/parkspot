@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TemplateBlogHome.vue - Complete Test Suite > matches snapshot for single blog card 1`] = `
+"<div data-v-dccb58de="" class="molecule-blog-card" data-aos="zoom-in-up">
+  <h3>Blog 1</h3>
+</div>"
+`;
