@@ -1,7 +1,29 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`TemplateBlogHome.vue - Complete Test Suite > matches snapshot for single blog card 1`] = `
-"<div data-v-dccb58de="" class="molecule-blog-card" data-aos="zoom-in-up">
-  <h3>Blog 1</h3>
+exports[`TemplateBlogHome.vue - Complete Test Suite > matches snapshot for complete blog list 1`] = `
+"<div data-v-dccb58de="">
+  <div data-v-dccb58de="" class="header-banner">
+    <div class="blog-header">
+      <h1>Parking Blogs</h1>
+      <div class="blog-nav">
+        <b-breadcrumb align="is-centered" size="is-small" class="b-breadcrumb">
+          <b-breadcrumb-item tag="router-link" to="/" class="breadcrumb-item">Home</b-breadcrumb-item>
+          <b-breadcrumb-item tag="router-link" to="/blog" active="" class="breadcrumb-item">Blogs</b-breadcrumb-item>
+        </b-breadcrumb>
+      </div>
+    </div>
+  </div>
+  <section data-v-dccb58de="" class="body-wrapper">
+    <div data-v-dccb58de="" class="blog-container">
+      <div data-v-dccb58de="" class="molecule-blog-card" data-aos="zoom-in-up">
+        <h3>Blog 1</h3>
+        <p>Excerpt 1</p>
+      </div>
+      <div data-v-dccb58de="" class="molecule-blog-card" data-aos="zoom-in-up">
+        <h3>Blog 2</h3>
+        <p>Excerpt 2</p>
+      </div>
+    </div>
+  </section>
 </div>"
 `;
