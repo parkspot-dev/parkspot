@@ -9,11 +9,11 @@ const state = {
     errorMessage: '',
     isLoading: false,
     searchDate: '',
-    cachePayments: {}, 
+    cachePayments: {},
 };
 
 const getters = {
-    allUserRequests: (state) => ({
+    allBookings: (state) => ({
         active: state.activeBookings,
         past: state.pastBookings,
         requested: state.requestedBookings,
@@ -45,11 +45,11 @@ const mutations = {
     },
     'set-cache-payment'(state, { paymentID, payments }) {
         state.cachePayments[paymentID] = payments;
-    }
+    },
 };
 
 const actions = {
-    async fetchUsersRequests({ commit }) {
+    async fetchUserBookings({ commit }) {
         if (state.isLoading) return;
 
         try {
@@ -61,15 +61,15 @@ const actions = {
             }
 
             const active = (response.ActiveBookings || []).filter(
-                (b) => b.SiteDetails !== null
+                (b) => b.SiteDetails !== null,
             );
 
             const past = (response.PastBookings || []).filter(
-                (b) => b.SiteDetails !== null
+                (b) => b.SiteDetails !== null,
             );
 
             const requested = (response.RequestedBookings || []).filter(
-                (b) => b.SiteDetails !== null
+                (b) => b.SiteDetails !== null,
             );
             commit('set-requests', {
                 ActiveBookings: active,
@@ -86,7 +86,7 @@ const actions = {
     async fetchPayments({ commit }, paymentID) {
         if (state.cachePayments[paymentID]) {
             commit('set-payments', state.cachePayments[paymentID]);
-            return; 
+            return;
         }
         if (state.isLoading) return;
         try {

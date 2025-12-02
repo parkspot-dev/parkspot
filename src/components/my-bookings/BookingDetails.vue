@@ -18,7 +18,9 @@
                 <div class="card-header">
                     <h3 class="card-title">Booking Information:</h3>
                     <AtomTooltip
-                        :label="getBookingStatusDescription(booking.BookingStatus)"
+                        :label="
+                            getBookingStatusDescription(booking.BookingStatus)
+                        "
                     >
                         <span
                             class="status"
@@ -127,8 +129,12 @@
                                 <thead>
                                     <tr>
                                         <th class="txn-center">Payment ID</th>
-                                        <th class="txn-center">Transaction ID</th>
-                                        <th class="txn-center">Transaction Date</th>
+                                        <th class="txn-center">
+                                            Transaction ID
+                                        </th>
+                                        <th class="txn-center">
+                                            Transaction Date
+                                        </th>
                                         <th class="txn-center">Amount</th>
                                         <th class="txn-center">Status</th>
                                     </tr>
@@ -151,10 +157,18 @@
                                             {{ p.Amount }}
                                         </td>
                                         <td class="txn-center">
-                                            {{ getPaymentStatusUILabel(p.Status) }}
+                                            {{
+                                                getBookingPaymentStatusLabell(
+                                                    p.Status,
+                                                )
+                                            }}
                                         </td>
                                     </tr>
-                                    <tr v-if="!payments || payments.length === 0">
+                                    <tr
+                                        v-if="
+                                            !payments || payments.length === 0
+                                        "
+                                    >
                                         <td colspan="5" class="no-data">
                                             Transaction not found
                                         </td>
@@ -215,7 +229,7 @@ import AtomTooltip from '@/components/atoms/AtomTooltip.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import { DEFAULT_BANGALORE_COORDINATES, ICON } from '@/constant/constant';
 import { mapActions, mapState } from 'vuex';
-import { getPaymentStatusUILabel } from '@/constant/enums';
+import { getBookingPaymentStatusLabell } from '@/constant/enums';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import moment from 'moment';
 
@@ -261,8 +275,8 @@ export default {
             });
             window.open(route.href);
         },
-        getPaymentStatusUILabel(status) {
-            return getPaymentStatusUILabel(status);
+        getBookingPaymentStatusLabell(status) {
+            return getBookingPaymentStatusLabell(status);
         },
         getBookingStatusDescription(status) {
             switch (status) {

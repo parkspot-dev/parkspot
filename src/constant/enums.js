@@ -52,27 +52,26 @@ export function getPaymentStatusLabel(paymentStatus) {
     return getEnumLabel(PaymentStatusLabel, paymentStatus);
 }
 
-
 export const PaymentStatusUI = Object.freeze({
-    Pending: 0,   
-    Failed: 1,    
-    Success: 2,   
+    Pending: 0,
+    Failed: 1,
+    Success: 2,
 });
 
-const PaymentStatusUILabel = [
-    'Pending',   // PaymentNotDefined (0)
-    'Pending',   // PaymentPending (1)
-    'Pending',   // PaymentIncomplete (2)
-    'Failed',    // PaymentFailed (3)
-    'Failed',    // PaymentUserDropped (4)
-    'Failed',    // PaymentFlagged (5)
-    'Success',   // PaymentSuccess (6)
-    'Failed',    // PaymentCancelled (7)
-    'Failed',    // PaymentVoid (8)
-    'Success',   // PaymentTransferred (9)
-    'Failed',    // PaymentExpired (10)
-    'Success',   // FullRefund (11)
-    'Success',   // PartialRefund (12)
+const BookingPaymentStatusLabel = [
+    'Pending', // PaymentNotDefined (0)
+    'Pending', // PaymentPending (1)
+    'Pending', // PaymentIncomplete (2)
+    'Failed', // PaymentFailed (3)
+    'Failed', // PaymentUserDropped (4)
+    'Failed', // PaymentFlagged (5)
+    'Success', // PaymentSuccess (6)
+    'Failed', // PaymentCancelled (7)
+    'Failed', // PaymentVoid (8)
+    'Success', // PaymentTransferred (9)
+    'Failed', // PaymentExpired (10)
+    'Success', // FullRefund (11)
+    'Success', // PartialRefund (12)
 ];
 
 /**
@@ -80,10 +79,9 @@ const PaymentStatusUILabel = [
  * @param {int} paymentStatus
  * @return {string}: label for UI Payment Status (Success / Pending / Failed)
  */
-export function getPaymentStatusUILabel(paymentStatus) {
-    return PaymentStatusUILabel[paymentStatus];
+export function getBookingPaymentStatusLabell(paymentStatus) {
+    return BookingPaymentStatusLabell[paymentStatus];
 }
-
 
 export const ParkingRequestStatus = Object.freeze({
     RequestStatusNotSet: 0,
