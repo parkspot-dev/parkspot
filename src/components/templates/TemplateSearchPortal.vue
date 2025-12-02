@@ -91,33 +91,34 @@
         </div>
         <div class="filters">
             <div class="filters-label">Filters:</div>
+            <div class="filters-group">
+                <FilterDropdown
+                    :options="requestsFilterOptions"
+                    :searchable="false"
+                    :selectedValue="filters.isExpiring ? 'Expiring' : ''"
+                    @remove="removeExpiringFilter"
+                    @update="handleExpiringRequests"
+                    label="Requests Type"
+                />
 
-            <FilterDropdown
-                :options="requestsFilterOptions"
-                :searchable="false"
-                :selectedValue="filters.isExpiring ? 'Expiring' : ''"
-                @remove="removeExpiringFilter"
-                @update="handleExpiringRequests"
-                label="Requests Type"
-            />
+                <FilterDropdown
+                    :options="agentList.map((agent) => agent.name)"
+                    :searchable="false"
+                    :selectedValue="filters.Agent ? filters.Agent : ''"
+                    @remove="removeAgentFilter"
+                    @update="handleAgentFilter"
+                    label="Agent"
+                />
 
-            <FilterDropdown
-                :options="agentList.map((agent) => agent.name)"
-                :searchable="false"
-                :selectedValue="filters.Agent ? filters.Agent : ''"
-                @remove="removeAgentFilter"
-                @update="handleAgentFilter"
-                label="Agent"
-            />
-
-            <FilterDropdown
-                :options="statusList.map((status) => status.name)"
-                :searchable="false"
-                :selectedValue="filters.Status ? filters.Status : ''"
-                @remove="removeStatusFilter"
-                @update="handleStatusFilter"
-                label="Status"
-            />
+                <FilterDropdown
+                    :options="statusList.map((status) => status.name)"
+                    :searchable="false"
+                    :selectedValue="filters.Status ? filters.Status : ''"
+                    @remove="removeStatusFilter"
+                    @update="handleStatusFilter"
+                    label="Status"
+                />
+            </div>
         </div>
         <b-table
             v-if="isDesktopView"
@@ -1349,6 +1350,42 @@ $portal-font-size: 13px;
     .summary-table th:last-child,
     .summary-table td:last-child {
         width: 30%;
+    }
+}
+
+.filters {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.filters-label {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.filters-group {
+    display: flex;
+    gap: 8px;
+}
+
+.filters-group > * {
+    flex: 0 0 auto;
+}
+
+@media (max-width: 600px) {
+    .filters {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .filters-group {
+        flex-direction: column;
+    }
+
+    .filters-group > * {
+        width: 100%;
     }
 }
 </style>
