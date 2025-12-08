@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TemplateSrp.vue - Complete Test Suite > 9. Maintains expected structure for a single SRP card 1`] = `"<div data-v-81193d03="" class="srp-card">1</div>"`;
