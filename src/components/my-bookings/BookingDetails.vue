@@ -6,7 +6,7 @@
             <MapContainer
                 :key="booking?.BookingID"
                 :center="center"
-                :spotDetails="booking.SiteDetails"
+                :spotDetails="siteDetails"
                 :zoom="13"
                 class="sdp-map"
             />
@@ -242,6 +242,13 @@ export default {
             ICON,
             showPopup: false,
             BookingStatus,
+            siteDetails: {
+                ...this.booking?.SiteDetails,
+                ID: this.booking?.SiteDetails?.SiteID,
+                Long: this.booking?.SiteDetails?.Longitude,
+                Lat: this.booking?.SiteDetails?.Latitude,
+                Name: this.booking?.SiteDetails?.SiteName,
+            },
         };
     },
     computed: {
@@ -265,6 +272,7 @@ export default {
     },
     methods: {
         ...mapActions('myBookings', ['fetchPayments']),
+
         getBookingStatusLabel(status) {
             return getBookingStatusLabel(status);
         },
@@ -309,7 +317,9 @@ export default {
     watch: {
         booking: {
             handler(newBooking) {
-                if (newBooking) this.fetchPayments(newBooking.BookingID);
+                if (newBooking) {
+                    this.fetchPayments(newBooking.BookingID);
+                }
             },
             immediate: true,
         },
