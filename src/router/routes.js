@@ -30,7 +30,8 @@ export const pages = {
     SPOT_REQUESTS           : "/internal/spot-requests",
     AUTOMATED_PARKING       : "/automated-parking",
     KYC_STATUS_PAGE         : "/internal/users/kyc-status",
-    SPOTS_SEARCH            : "/internal/spot-search"
+    SPOTS_SEARCH            : "/internal/spot-search",
+    MY_BOOKINGS              : "/profile/my-bookings"
 };
 
 export const routes = [
@@ -165,6 +166,11 @@ export const routes = [
         path: pages.SPOTS_SEARCH,
         name: 'spot-search',
         component: () => import('@/views/PageSearchSpotByName.vue')
+    },
+    {
+        path: pages.MY_BOOKINGS,
+        name: 'my-bookings',
+        component: () => import('@/views/PageMyBookings.vue')
     },
     {
         path: pages.APP,
