@@ -43,8 +43,8 @@ const mutations = {
     'set-payments'(state, payments) {
         state.payments = payments;
     },
-    'set-cache-payment'(state, { paymentID, payments }) {
-        state.cachePayments[paymentID] = payments;
+    'set-cache-payment'(state, { bookingID, payments }) {
+        state.cachePayments[bookingID] = payments;
     },
 };
 
@@ -83,23 +83,23 @@ const actions = {
         }
     },
 
-    async fetchPayments({ commit }, paymentID) {
-        if (state.cachePayments[paymentID]) {
-            commit('set-payments', state.cachePayments[paymentID]);
+    async fetchPayments({ commit }, bookingID) {
+        if (state.cachePayments[bookingID]) {
+            commit('set-payments', state.cachePayments[bookingID]);
             return;
         }
         if (state.isLoading) return;
         try {
             commit('set-loading', true);
             const response = await mayaClient.get(
-                `/booking/${paymentID}/payments`
+                `/booking/${bookingID}/payments`
             );
             if (response.ErrorCode) {
                 throw new Error(response.DisplayMsg);
             }
             const payments = response.Payments;
             commit('set-payments', payments);
-            commit('set-cache-payment', { paymentID, payments });
+            commit('set-cache-payment', { bookingID, payments });
         } catch (error) {
             commit('set-error', error.message);
         } finally {
