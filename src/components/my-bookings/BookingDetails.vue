@@ -142,10 +142,10 @@
                                 <tbody>
                                     <tr
                                         v-for="p in payments"
-                                        :key="p.PaymentID"
+                                        :key="p.bookingID"
                                     >
                                         <td class="txn-center">
-                                            {{ p.PaymentID }}
+                                            {{ p.bookingID }}
                                         </td>
                                         <td class="txn-center">
                                             {{ p.TransactionID || '—' }}
