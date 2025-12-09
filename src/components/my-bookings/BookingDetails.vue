@@ -243,7 +243,7 @@ export default {
             showPopup: false,
             BookingStatus,
             siteDetails: {
-                ...this.booking?.SiteDetails,
+                Address: this.booking?.SiteDetails?.Address,
                 ID: this.booking?.SiteDetails?.SiteID,
                 Long: this.booking?.SiteDetails?.Longitude,
                 Lat: this.booking?.SiteDetails?.Latitude,
