@@ -466,6 +466,7 @@
                     <div class="cell"><strong> Payment Type </strong></div>
                     <div class="cell"><strong> Status </strong></div>
                     <div class="cell"><strong> Amount </strong></div>
+                    <div class="cell"><strong> Amount ToSo </strong></div>
                     <div class="cell" v-if="isAdmin">
                         <strong> Refund </strong>
                     </div>
@@ -528,6 +529,7 @@
                             </div>
                         </div>
                         <div class="cell">₹ {{ payment.Amount }}</div>
+                        <div class="cell">₹ {{ payment.AmountToSo }}</div>
                         <div class="cell" v-if="isAdmin">
                             <div class="icon-cell">
                                 <img
