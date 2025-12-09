@@ -2,14 +2,14 @@
 
 exports[`TemplateBlogHome.vue - Complete Test Suite > matches snapshot for complete blog list 1`] = `
 "<div data-v-dccb58de="">
-  <div data-v-dccb58de="" class="header-banner">
-    <div class="blog-header">
-      <h1>Parking Blogs</h1>
-      <div class="blog-nav">
-        <b-breadcrumb align="is-centered" size="is-small" class="b-breadcrumb">
-          <b-breadcrumb-item tag="router-link" to="/" class="breadcrumb-item">Home</b-breadcrumb-item>
-          <b-breadcrumb-item tag="router-link" to="/blog" active="" class="breadcrumb-item">Blogs</b-breadcrumb-item>
-        </b-breadcrumb>
+  <div data-v-dccb58de="" class="header-banner-stub">
+    <div data-v-dccb58de="" class="blog-header">
+      <h1 data-v-dccb58de="">Parking Blogs</h1>
+      <div data-v-dccb58de="" class="blog-nav">
+        <ul data-v-dccb58de="" class="b-breadcrumb" align="is-centered" size="is-small">
+          <li data-v-dccb58de="" class="breadcrumb-item"> Home </li>
+          <li data-v-dccb58de="" class="breadcrumb-item"> Blogs </li>
+        </ul>
       </div>
     </div>
   </div>
