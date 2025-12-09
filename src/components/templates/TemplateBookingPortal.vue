@@ -529,7 +529,7 @@
                             </div>
                         </div>
                         <div class="cell">₹ {{ payment.Amount }}</div>
-                        <div class="cell" style="background: yellow">₹ {{ payment.AmountToSo }}</div>
+                        <div class="cell">₹ {{ payment.AmountToSo }}</div>
                         <div class="cell" v-if="isAdmin">
                             <div class="icon-cell">
                                 <img
