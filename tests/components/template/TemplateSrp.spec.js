@@ -117,7 +117,7 @@ describe('TemplateSrp.vue - Complete Test Suite', () => {
         wrapper = mountComponent();
     });
 
-    it('1. Renders main structure and components', () => {
+    it('Renders main structure and components', () => {
         expect(wrapper.find('.srp-container').exists()).toBe(true);
         expect(wrapper.find('.srp-map').exists()).toBe(true);
         expect(wrapper.find('.map-search').exists()).toBe(true);
@@ -126,14 +126,14 @@ describe('TemplateSrp.vue - Complete Test Suite', () => {
         expect(wrapper.text()).toContain(`Spots found: ${MOCK_SPOTS.length}`);
     });
 
-    it('2. Loads center from route query on mounted', () => {
+    it('Loads center from route query on mounted', () => {
         expect(wrapper.vm.center).toEqual([20.0, 10.0]);
         expect(
             mockFilterManagerInstance.loadFiltersFromQuery,
         ).toHaveBeenCalled();
     });
 
-    it('3. Toggles filter container visibility on click', async () => {
+    it('Toggles filter container visibility on click', async () => {
         const filterTrigger = wrapper.find('.filter-dropdown');
         const arrowIcon = wrapper.find('.material-symbols-outlined');
 
@@ -146,14 +146,14 @@ describe('TemplateSrp.vue - Complete Test Suite', () => {
         expect(arrowIcon.classes()).toContain('rotate');
     });
 
-    it('4. Emits "flyToSrp" on SearchInput "changed" event', async () => {
+    it('Emits "flyToSrp" on SearchInput "changed" event', async () => {
         const searchInput = wrapper.find('.map-search');
         await searchInput.trigger('input');
 
         expect(wrapper.emitted('flyToSrp')).toBeTruthy();
     });
 
-    it('5. Emits "details" event on SRP card click', async () => {
+    it('Emits "details" event on SRP card click', async () => {
         const firstCard = wrapper.findAll('.srp-card')[0];
         const spotID = MOCK_SPOTS[0].ID;
 
@@ -163,7 +163,7 @@ describe('TemplateSrp.vue - Complete Test Suite', () => {
         expect(wrapper.emitted('details')[0]).toEqual([spotID]);
     });
 
-    it('6. FilterDropdown events call corresponding FilterManager methods', async () => {
+    it('FilterDropdown events call corresponding FilterManager methods', async () => {
         const filterTrigger = wrapper.find('.filter-dropdown');
         await filterTrigger.trigger('click');
 
@@ -208,7 +208,7 @@ describe('TemplateSrp.vue - Complete Test Suite', () => {
         ).toHaveBeenCalledWith('status', 'new-value');
     });
 
-    it('7. Sort Dropdown calls sortFilteredResults on update', async () => {
+    it('Sort Dropdown calls sortFilteredResults on update', async () => {
         const sortContainer = wrapper.find('.sort-dropdown');
         const sortDropdown = sortContainer
             .findAll('.filter-dropdown-stub')
@@ -223,11 +223,11 @@ describe('TemplateSrp.vue - Complete Test Suite', () => {
         ).toHaveBeenCalledWith('new-value', 'asc');
     });
 
-    it('8. FilterManager is correctly bound', () => {
+    it('FilterManager is correctly bound', () => {
         expect(wrapper.vm.filterManager).toBeDefined();
     });
 
-    it('9. Maintains expected structure for a single SRP card', () => {
+    it(' Maintains expected structure for a single SRP card', () => {
         const firstSrpCard = wrapper.findAll('.srp-card')[0];
         expect(firstSrpCard.html()).toMatchSnapshot();
     });
