@@ -1,16 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { describe, it, expect, vi } from 'vitest';
-
 import TemplateBlogHome from '@/components/templates/TemplateBlogHome.vue';
-const MOCK_APP_LINK = {
-    ANDROID: 'https://mock.android.app',
-    IOS: 'https://mock.ios.app',
-};
-
-vi.mock('@/constant/constant', () => ({
-    APP_LINK: MOCK_APP_LINK,
-}));
-
 const stubComponents = {
     'HeaderBanner': {
         template: '<div class="header-banner-stub"><slot /></div>',
