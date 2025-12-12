@@ -62,7 +62,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('myBookings', ['fetchUsersRequests']),
+        ...mapActions('myBookings', ['fetchUserBookings']),
         onSelectBooking(booking) {
             this.selectedBooking = booking;
             this.emptyTabTitle = '';
@@ -136,7 +136,7 @@ export default {
     },
 
     mounted() {
-        this.fetchUsersRequests().then(() => {
+        this.fetchUserBookings().then(() => {
             this.restoreSelectionFromUrl();
             this.onTabChange(this.activeTab);
         });

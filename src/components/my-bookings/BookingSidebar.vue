@@ -36,7 +36,9 @@
                     <p class="booking-id">
                         Booking ID: <strong>{{ booking.BookingID }}</strong>
                     </p>
-                    <h3 class="siteDetails">{{ booking?.SiteDetails?.SiteName }}</h3>
+                    <h3 class="siteDetails">
+                        {{ booking?.SiteDetails?.SiteName }}
+                    </h3>
                     <p class="address">{{ booking?.SiteDetails?.Address }}</p>
                 </div>
             </div>
@@ -250,19 +252,18 @@ export default {
     font-weight: 600;
     padding: 8px 12px;
 }
-.siteDetails{
-    color: var( --secondary-color) !important;
+.siteDetails {
+    color: var(--secondary-color) !important;
 }
 @media (max-width: 768px) {
-  .booking-list {
-    max-height: calc(5 * 124px);
-    overflow-y: auto;
-  }
+    .booking-list {
+        max-height: calc(5 * 124px);
+        overflow-y: auto;
+    }
 
-  .booking-sidebar {
-    height: auto;
-    max-height: 90vh;
-  }
+    .booking-sidebar {
+        height: auto;
+        max-height: 90vh;
+    }
 }
-
 </style>
