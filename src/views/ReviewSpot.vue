@@ -28,7 +28,7 @@
                             <thead>
                                 <tr>
                                     <th>Spot ID</th>
-                                    <th>Name</th>
+                                    <th>Apartment Name</th>
                                     <th>Address</th>
                                     <th>Latitude</th>
                                     <th>Longitude</th>
@@ -52,7 +52,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        {{ spot.Name }}
+                                        {{ spot.ApartmentName }}
                                     </td>
                                     <td>{{ spot.Address }}</td>
                                     <td>{{ spot.Latitude }}</td>
@@ -74,7 +74,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
+                                    <th>Apartment Name</th>
                                     <th>Address</th>
                                     <th>Latitude</th>
                                     <th>Longitude</th>
@@ -197,11 +197,11 @@
 
                     <!-- Apartment Name -->
                     <div class="form-field">
-                        <label for="apartmentName">Apartment Name:</label>
+                        <label for="ApartmentName">Apartment Name:</label>
                         <input
                             placeholder="Enter apartment name"
                             type="text"
-                            v-model="SO.apartmentName"
+                            v-model="SO.ApartmentName"
                         />
                     </div>
 

@@ -91,11 +91,9 @@
                     <div class="spot-detail-owner-body">
                         <div>
                             <table>
-                                <tr v-if="ownerInfoDetails.ApartmentName">
-                                    <td>Apartment Name</td>
-                                    <td>
-                                        {{ ownerInfoDetails.ApartmentName }}
-                                    </td>
+                                <tr v-if="spotDetails.ApartmentName">
+                                    <td>Apartment</td>
+                                    <td>{{ spotDetails.ApartmentName }}</td>
                                 </tr>
                                 <tr v-if="ownerInfoDetails.FullName">
                                     <td>FullName</td>

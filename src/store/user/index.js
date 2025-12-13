@@ -217,7 +217,7 @@ const actions = {
     async registerSpot({ state }) {
         const req = {
             FullName: state.contactForm.fullname,
-            BuildingName: state.contactForm.apartment,
+            ApartmentName: state.contactForm.ApartmentName,
             MonthlyRent: state.contactForm.expectedRent,
             Mobile: state.contactForm.cno,
             Address: state.contactForm.address,
