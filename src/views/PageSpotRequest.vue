@@ -77,15 +77,15 @@
             </b-table-column>
 
             <b-table-column
-                field="Name"
-                label="Name"
+                field="ApartmentName"
+                label="Apartment"
                 searchable
                 sortable
                 cell-class="has-text-left"
             >
                 <template v-slot="props">
                     <div>
-                        {{ props.row.Name }}
+                        {{ props.row.ApartmentName }}
                     </div>
                 </template>
             </b-table-column>
