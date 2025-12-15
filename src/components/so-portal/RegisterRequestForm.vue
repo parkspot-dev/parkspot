@@ -45,7 +45,7 @@
                 :label="FORM.APARTMENT"
                 :placeholder="FORM_PLACEHOLDERS.APARTMENT"
                 name="apartment"
-                v-model="contactModel.apartment"
+                v-model="contactModel.ApartmentName"
             />
             <FormInput
                 :label="FORM.ADDRESS"
@@ -119,7 +119,13 @@
 </template>
 
 <script>
-import { ADD_INFO, FORM, PARKING_FACILITY, FORM_PLACEHOLDERS, CITY_OPTIONS } from '@/constant/constant';
+import {
+    ADD_INFO,
+    FORM,
+    PARKING_FACILITY,
+    FORM_PLACEHOLDERS,
+    CITY_OPTIONS,
+} from '@/constant/constant';
 import MultiSelectInput from '@/components/global/MultiSelectInput.vue';
 import ImageUpload from '@/components/global/ImageUpload.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
@@ -129,7 +135,7 @@ import SelectInput from '@/components/global/SelectInput.vue';
 import { registerSpotRequestFormSchema } from '@/validationSchemas';
 import { mapMutations } from 'vuex';
 import { ParkingSizeDisplayMap, ParkingSizeLabels } from '@/constant/constant';
-import { Form } from 'vee-validate'; 
+import { Form } from 'vee-validate';
 import { SiteType } from '@/constant/enums';
 
 export default {
@@ -154,21 +160,21 @@ export default {
                 cno: '',
                 email: '',
                 address: '',
-                apartment: '',
+                ApartmentName: '',
                 parkingSize: 0, // Initally Undefined
                 expectedRent: '',
                 facilities: [],
                 mapsLink: '',
                 images: [],
                 isTermsAccepted: false,
-                siteType: SiteType.Register,  // pass as default
-                city: ''
+                siteType: SiteType.Register, // pass as default
+                city: '',
             },
             FORM,
             FORM_PLACEHOLDERS,
             ADD_INFO,
             termData: ADD_INFO.TERMS_DATA,
-            citiesOptions: CITY_OPTIONS
+            citiesOptions: CITY_OPTIONS,
         };
     },
     emits: ['submitForm'],
