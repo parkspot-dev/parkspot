@@ -717,6 +717,28 @@ export default {
             'extractRequetsByAgentName',
             'extractRequetsByStatus',
         ]),
+
+        applyFilters() {
+            this.resetFilterParkingRequests();
+
+            if (this.filters.isExpiring) {
+                this.extractExpiringRequests();
+            }
+
+            if (this.filters.Status) {
+                const statusRow = this.statusList.find(
+                    (item) => item.name === this.filters.Status,
+                );
+                if (statusRow) {
+                    this.extractRequetsByStatus(statusRow.id);
+                }
+            }
+
+            if (this.filters.Agent) {
+                this.extractRequetsByAgentName(this.filters.Agent);
+            }
+        },
+
         getPriority(val) {
             switch (val) {
                 case 1:
@@ -843,17 +865,16 @@ export default {
             url.searchParams.set('isExpiring', true);
             window.history.pushState({}, '', url.toString());
             this.filters.isExpiring = true;
-            this.extractExpiringRequests();
+            this.applyFilters();
         },
 
         handleAgentFilter(agent) {
             const url = new URL(window.location.href);
             url.searchParams.set('agent', agent);
             window.history.pushState({}, '', url.toString());
-            this.filters.Agent = agent;
-            this.extractRequetsByAgentName(agent);
+            this.filters.Agent = agent
+            this.applyFilters();
         },
-
         handleStatusFilter(status) {
             const url = new URL(window.location.href);
             const statusRow = this.statusList.find(
@@ -862,7 +883,7 @@ export default {
             url.searchParams.set('status', statusRow.id);
             window.history.pushState({}, '', url.toString());
             this.filters.Status = status;
-            this.extractRequetsByStatus(statusRow.id);
+            this.applyFilters();
         },
 
         updateSummary(requests) {
@@ -911,26 +932,25 @@ export default {
             const url = new URL(window.location.href);
             url.searchParams.delete('isExpiring');
             window.history.pushState({}, '', url.toString());
-            this.resetFilterParkingRequests();
+            this.applyFilters();
         },
         removeAgentFilter() {
             this.filters.Agent = '';
             const url = new URL(window.location.href);
             url.searchParams.delete('agent');
             window.history.pushState({}, '', url.toString());
-            this.resetFilterParkingRequests();
+            this.applyFilters();
         },
         removeStatusFilter() {
             this.filters.Status = '';
             const url = new URL(window.location.href);
             url.searchParams.delete('status');
             window.history.pushState({}, '', url.toString());
-            this.resetFilterParkingRequests();
+            this.applyFilters();
         },
     },
 };
 </script>
-
 <style lang="scss">
 $portal-font-size: 13px;
 

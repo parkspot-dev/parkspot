@@ -144,7 +144,7 @@ const actions = {
     },
 
     extractRequetsByAgentName({ commit, state }, agentName) {
-        const extractedAgentNameRequests = state.parkingRequests.filter(
+        const extractedAgentNameRequests = state.filteredParkingRequests.filter(
             (requests) => requests.Agent === agentName,
         );
 
@@ -152,7 +152,7 @@ const actions = {
     },
 
     extractRequetsByStatus({ commit, state }, status) {
-        const extractRequestsByStatus = state.parkingRequests.filter(
+        const extractRequestsByStatus = state.filteredParkingRequests.filter(
             (requests) => requests.Status === status,
         );
         commit('set-filterd-parking-requests', extractRequestsByStatus);
