@@ -28,7 +28,7 @@
                             <thead>
                                 <tr>
                                     <th>Spot ID</th>
-                                    <th>Apartment Name</th>
+                                    <th>Apartment</th>
                                     <th>Address</th>
                                     <th>Latitude</th>
                                     <th>Longitude</th>
@@ -74,7 +74,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Apartment Name</th>
+                                    <th>Apartment</th>
                                     <th>Address</th>
                                     <th>Latitude</th>
                                     <th>Longitude</th>
