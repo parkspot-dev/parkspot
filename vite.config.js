@@ -35,7 +35,7 @@ export default defineConfig({
         // Coverage configuration
         coverage: {
             provider: 'v8',  // Use V8's built-in coverage
-            reporter: ['text', 'json-summary', 'html'],  // Multiple reporters
+            reporter: ['text', 'json-summary', 'json', 'html'],  // Multiple reporters
             reportsDirectory: './coverage',  // Output directory
             
             // Files to include in coverage

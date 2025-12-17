@@ -72,6 +72,15 @@ jobs:
           path: coverage/
           retention-days: 14
 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/coverage-final.json
+          fail_ci_if_error: false
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Check coverage thresholds
         run: |
           echo "## 📊 Test Coverage Report" >> $GITHUB_STEP_SUMMARY
@@ -96,52 +105,52 @@ jobs:
           
           # Print to console log (visible in step output)
           echo ""
-          echo "╔════════════════════════════════════════════════════════════╗"
-          echo "║              📊 COVERAGE RESULTS                           ║"
-          echo "╠════════════════════════════════════════════════════════════╣"
-          echo "║  Metric      │ Coverage │ Threshold │ Status              ║"
-          echo "╠══════════════╪══════════╪═══════════╪═════════════════════╣"
+          echo "========================================================"
+          echo "           📊 COVERAGE RESULTS"
+          echo "========================================================"
+          printf "%-12s | %-10s | %-10s | %s\n" "Metric" "Coverage" "Threshold" "Status"
+          echo "------------ | ---------- | ---------- | --------"
           
           FAILED=0
           FAILED_METRICS=""
           
           # Check Lines
           if (( $(echo "$LINES < $COVERAGE_THRESHOLD_LINES" | bc -l) )); then
-            echo "║  Lines       │ ${LINES}%\t   │ ${COVERAGE_THRESHOLD_LINES}%\t     │ ❌ FAILED            ║"
+            printf "%-12s | %-10s | %-10s | %s\n" "Lines" "${LINES}%" "${COVERAGE_THRESHOLD_LINES}%" "❌ FAILED"
             FAILED=1
             FAILED_METRICS="$FAILED_METRICS Lines(${LINES}%<${COVERAGE_THRESHOLD_LINES}%)"
           else
-            echo "║  Lines       │ ${LINES}%\t   │ ${COVERAGE_THRESHOLD_LINES}%\t     │ ✅ Passed            ║"
+            printf "%-12s | %-10s | %-10s | %s\n" "Lines" "${LINES}%" "${COVERAGE_THRESHOLD_LINES}%" "✅ Passed"
           fi
           
           # Check Statements
           if (( $(echo "$STATEMENTS < $COVERAGE_THRESHOLD_STATEMENTS" | bc -l) )); then
-            echo "║  Statements  │ ${STATEMENTS}%\t   │ ${COVERAGE_THRESHOLD_STATEMENTS}%\t     │ ❌ FAILED            ║"
+            printf "%-12s | %-10s | %-10s | %s\n" "Statements" "${STATEMENTS}%" "${COVERAGE_THRESHOLD_STATEMENTS}%" "❌ FAILED"
             FAILED=1
             FAILED_METRICS="$FAILED_METRICS Statements(${STATEMENTS}%<${COVERAGE_THRESHOLD_STATEMENTS}%)"
           else
-            echo "║  Statements  │ ${STATEMENTS}%\t   │ ${COVERAGE_THRESHOLD_STATEMENTS}%\t     │ ✅ Passed            ║"
+            printf "%-12s | %-10s | %-10s | %s\n" "Statements" "${STATEMENTS}%" "${COVERAGE_THRESHOLD_STATEMENTS}%" "✅ Passed"
           fi
           
           # Check Functions
           if (( $(echo "$FUNCTIONS < $COVERAGE_THRESHOLD_FUNCTIONS" | bc -l) )); then
-            echo "║  Functions   │ ${FUNCTIONS}%\t   │ ${COVERAGE_THRESHOLD_FUNCTIONS}%\t     │ ❌ FAILED            ║"
+            printf "%-12s | %-10s | %-10s | %s\n" "Functions" "${FUNCTIONS}%" "${COVERAGE_THRESHOLD_FUNCTIONS}%" "❌ FAILED"
             FAILED=1
             FAILED_METRICS="$FAILED_METRICS Functions(${FUNCTIONS}%<${COVERAGE_THRESHOLD_FUNCTIONS}%)"
           else
-            echo "║  Functions   │ ${FUNCTIONS}%\t   │ ${COVERAGE_THRESHOLD_FUNCTIONS}%\t     │ ✅ Passed            ║"
+            printf "%-12s | %-10s | %-10s | %s\n" "Functions" "${FUNCTIONS}%" "${COVERAGE_THRESHOLD_FUNCTIONS}%" "✅ Passed"
           fi
           
           # Check Branches
           if (( $(echo "$BRANCHES < $COVERAGE_THRESHOLD_BRANCHES" | bc -l) )); then
-            echo "║  Branches    │ ${BRANCHES}%\t   │ ${COVERAGE_THRESHOLD_BRANCHES}%\t     │ ❌ FAILED            ║"
+            printf "%-12s | %-10s | %-10s | %s\n" "Branches" "${BRANCHES}%" "${COVERAGE_THRESHOLD_BRANCHES}%" "❌ FAILED"
             FAILED=1
             FAILED_METRICS="$FAILED_METRICS Branches(${BRANCHES}%<${COVERAGE_THRESHOLD_BRANCHES}%)"
           else
-            echo "║  Branches    │ ${BRANCHES}%\t   │ ${COVERAGE_THRESHOLD_BRANCHES}%\t     │ ✅ Passed            ║"
+            printf "%-12s | %-10s | %-10s | %s\n" "Branches" "${BRANCHES}%" "${COVERAGE_THRESHOLD_BRANCHES}%" "✅ Passed"
           fi
           
-          echo "╚════════════════════════════════════════════════════════════╝"
+          echo "========================================================"
           echo ""
           
           # Write to GitHub Summary
