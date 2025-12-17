@@ -1,40 +1,40 @@
 <template>
-    <Form @submit="submitForm" :validation-schema="contactFormSchema">
+    <Form :validation-schema="contactFormSchema" @submit="submitForm">
         <FormInput
+            v-model="model.fullname"
             :name="'fullname'"
             :label="FORM.FULLNAME"
             :placeholder="FORM_PLACEHOLDERS.FULL_NAME"
-            v-model="model.fullname"
         />
 
         <FormInput
+            v-model="model.email"
             :name="'email'"
             :label="FORM.EMAIL"
             :placeholder="FORM_PLACEHOLDERS.EMAIL"
             type="email"
-            v-model="model.email"
         />
 
         <FormInput
+            v-model="model.cno"
             :name="'cno'"
             :label="FORM.CONTACT_NO"
             :placeholder="FORM_PLACEHOLDERS.CONTACT_NO"
-            v-model="model.cno"
         />
 
         <FormInput
+            v-if="isEnable"
+            v-model="model.addr"
             :name="'addr'"
             :label="FORM.ADDRESS"
             :placeholder="FORM_PLACEHOLDERS.ADDRESS"
-            v-if="isEnable"
-            v-model="model.addr"
         />
 
         <div v-if="textArea">
             <AtomTextarea
+                v-model="FORM_PLACEHOLDERS.MESSAGE"
                 :name="'msg'"
                 :label="FORM.MESSAGE"
-                v-model="FORM_PLACEHOLDERS.MESSAGE"
             />
         </div>
         <button class="send-button" type="submit">

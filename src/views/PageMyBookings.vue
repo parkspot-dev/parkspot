@@ -8,7 +8,7 @@
                 :activebookings="activeBookings"
                 :pastbookings="pastBookings"
                 :requestbookings="requestedBookings"
-                :selectedBooking="selectedBooking"
+                :selected-booking="selectedBooking"
                 @select-booking="onSelectBooking"
                 @update-query="onQueryUpdate"
                 @tab-change="onTabChange"
@@ -19,7 +19,7 @@
                 <BookingDetails
                     v-if="selectedBooking"
                     :booking="selectedBooking"
-                    :activeTab="activeTab"
+                    :active-tab="activeTab"
                 />
 
                 <div v-else class="empty-state">
@@ -122,7 +122,7 @@ export default {
             const tab = params.get('tab') || 'Active';
             const bookingId = params.get('bookingId');
 
-            let list = this.getListForTab(tab);
+            const list = this.getListForTab(tab);
 
             if (!list || list.length === 0) {
                 this.selectedBooking = null;

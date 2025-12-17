@@ -2,11 +2,11 @@
     <div ref="provider" :name="fieldName" :rules="rules" class="custom-wrapper">
         <label class="label"><slot></slot></label>
         <AtomCheckbox
-            @change.native="handleChange"
             :values="values"
             class="mb-5"
+            @change.native="handleChange"
         >
-            <template slot="extra">
+            <template #extra>
                 <slot name="extra"></slot>
             </template>
         </AtomCheckbox>

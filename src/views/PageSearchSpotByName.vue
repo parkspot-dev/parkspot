@@ -3,10 +3,10 @@
         <!-- Search Bar -->
         <div class="search-control mb-4">
             <MoleculeSearchBox
-                :initialValue="searchName"
+                :initial-value="searchName"
+                placeholder="Spot Name"
                 @clear-input="onClearNameInput"
                 @on-search="searchSpotsByName"
-                placeholder="Spot Name"
             ></MoleculeSearchBox>
         </div>
 
@@ -44,7 +44,7 @@
                 label="Spot ID"
                 cell-class="has-text-left"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <div
                         class="cursor-pointer"
                         @click="spotDetails(props.row.SiteID)"
@@ -58,7 +58,7 @@
                 label="Spot Name"
                 cell-class="has-text-left"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <div>{{ props.row.Name }}</div>
                 </template>
             </b-table-column>
@@ -68,7 +68,7 @@
                 label="Address"
                 cell-class="has-text-left"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <div>{{ props.row.Address }}</div>
                 </template>
             </b-table-column>
@@ -180,7 +180,7 @@ export default {
         },
 
         sanitizeName(input) {
-            let sanitized = input.trim();
+            const sanitized = input.trim();
             return sanitized.length > 0 ? sanitized : null;
         },
     },

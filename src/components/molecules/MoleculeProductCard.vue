@@ -21,9 +21,9 @@
                     <div class="content-btn">
                         <AtomIcon
                             class="btn-arrow"
-                            @click.native="onArrowBtn"
                             :icon="'arrow-right'"
                             :size="'is-medium'"
+                            @click.native="onArrowBtn"
                         ></AtomIcon>
                     </div>
                 </div>

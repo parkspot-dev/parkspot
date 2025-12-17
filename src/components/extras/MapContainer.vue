@@ -62,12 +62,6 @@ export default {
         ...mapState('map', ['userCurrentLocation', 'filteredSpots']),
     },
 
-    mounted() {
-        this.updateMapConfig(this.center);
-        this.updateZoomValue(this.zoom);
-        this.getMapAccessToken().then(() => this.renderMap());
-    },
-
     watch: {
         userLocation() {
             this.renderMap();
@@ -76,6 +70,12 @@ export default {
         filteredSpots(newSpots) {
             this.updateMarkers(newSpots);
         },
+    },
+
+    mounted() {
+        this.updateMapConfig(this.center);
+        this.updateZoomValue(this.zoom);
+        this.getMapAccessToken().then(() => this.renderMap());
     },
 
     methods: {

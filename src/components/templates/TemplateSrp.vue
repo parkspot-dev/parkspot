@@ -21,28 +21,28 @@
                 <FilterDropdown
                     :options="distanceFilterOptions"
                     :searchable="false"
-                    :selectedValue="this.filterSelectedValues.distance"
+                    :selected-value="filterSelectedValues.distance"
+                    label="Search Within"
                     @remove="removeFilter('distance')"
                     @update="addFilter('distance', $event)"
-                    label="Search Within"
                 />
 
                 <FilterDropdown
                     :options="rentFilerOptions"
                     :searchable="false"
-                    :selectedValue="filterSelectedValues.rent"
+                    :selected-value="filterSelectedValues.rent"
+                    label="Rent Range"
                     @remove="removeFilter('rent')"
                     @update="addFilter('rent', $event)"
-                    label="Rent Range"
                 />
 
                 <FilterDropdown
                     :options="statusFilterOptions"
                     :searchable="false"
-                    :selectedValue="filterSelectedValues.status"
+                    :selected-value="filterSelectedValues.status"
+                    label="Availability"
                     @remove="removeFilter('status')"
                     @update="handleStatusFilter('status', $event)"
-                    label="Availability"
                 />
             </div>
             <div class="srp-results-heading">
@@ -60,11 +60,11 @@
                         <FilterDropdown
                             :options="sortFilterOptions"
                             :searchable="false"
-                            :selectedValue="selectedSort.name"
+                            :selected-value="selectedSort.name"
                             :removable="false"
+                            label="Select"
                             @remove="removeFilter('rent')"
                             @update="sortFilteredResults($event, 'asc')"
-                            label="Select"
                         />
                     </div>
                 </div>
@@ -81,9 +81,9 @@
         </div>
         <div class="srp-map">
             <MapContainer
-                :center="this.center"
                 :key="reRender"
-                :spotsList="spots"
+                :center="center"
+                :spots-list="spots"
                 class="map-container"
             ></MapContainer>
         </div>
@@ -121,7 +121,6 @@ export default {
         FilterDropdown,
         SelectInput,
     },
-    emits: ['changed', 'flyToSrp', 'details'],
     props: {
         spots: {
             type: Array,
@@ -136,6 +135,7 @@ export default {
             type: Number,
         },
     },
+    emits: ['changed', 'flyToSrp', 'details'],
     data() {
         return {
             center: null,

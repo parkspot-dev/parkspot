@@ -3,35 +3,35 @@
         <div class="preview-row">
             <!-- Uploaded Images preview -->
             <div
+                v-for="(img, index) in uploadImages"
                 :key="index"
                 class="preview-img"
-                v-for="(img, index) in uploadImages"
             >
                 <img :src="img.preview" alt="Preview" />
-                <button @click="deleteImage(index)" class="delete-btn">
+                <button class="delete-btn" @click="deleteImage(index)">
                     <AtomIcon icon="close" />
                 </button>
             </div>
 
             <!-- Dropzone -->
             <div
+                v-if="uploadImages.length < maxImageCount"
                 :class="{ dragging: isDragging }"
+                class="dropzone"
                 @click="triggerFileInput"
                 @dragleave.prevent="handleDragLeave"
                 @dragover.prevent="handleDragOver"
                 @drop.prevent="handleDrop"
-                class="dropzone"
-                v-if="uploadImages.length < maxImageCount"
             >
                 <AtomIcon icon="image-plus" class="image-icon" />
                 <input
-                    @change="handleFileChange"
+                    ref="fileInput"
                     accept="image/png,image/jpeg,.heic"
                     aria-label="Upload images"
                     hidden
                     multiple
-                    ref="fileInput"
                     type="file"
+                    @change="handleFileChange"
                 />
             </div>
         </div>
@@ -155,7 +155,7 @@ export default {
         },
 
         async validateFiles(files) {
-            let validFiles = [];
+            const validFiles = [];
             let invalidFileFound = false;
             let largeFileFound = false;
             let duplicateFound = false;

@@ -3,10 +3,10 @@
         <LoaderModal v-if="isLoading"></LoaderModal>
         <TemplateSpotDetail
             v-else
-            @goToSearchPortal="goToSearchPortal"
-            @changeAvailability="changeAvailability"
-            @changeLastCallDate="changeLastCallDate"
-            @changeRemark="changeRemark"
+            @go-to-search-portal="goToSearchPortal"
+            @change-availability="changeAvailability"
+            @change-last-call-date="changeLastCallDate"
+            @change-remark="changeRemark"
         ></TemplateSpotDetail>
     </div>
 </template>

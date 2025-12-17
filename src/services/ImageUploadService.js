@@ -31,7 +31,7 @@ async function uploadImages(Images, namePrefix) {
 
     const fileObj = img.file || img; 
     const extension = extensionMap[fileObj.type];
-    let modifiedBase = `${baseUrl}/${namePrefix}:${epochTime}${extension}`;
+    const modifiedBase = `${baseUrl}/${namePrefix}:${epochTime}${extension}`;
     const uploadUrl = `${modifiedBase}?${queryParams}`;
     
     // Return fetch promise for each file

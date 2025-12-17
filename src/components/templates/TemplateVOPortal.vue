@@ -57,7 +57,7 @@
                             </div>
                             <p class="sub-heading">Apply for Parking Service</p>
                         </div>
-                        <ParkingRequestForm @onSubmit="onSubmit" />
+                        <ParkingRequestForm @on-submit="onSubmit" />
                     </div>
                 </div>
             </div>

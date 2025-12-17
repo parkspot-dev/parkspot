@@ -49,7 +49,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="menu-item" v-if="isAgent">
+                        <li v-if="isAgent" class="menu-item">
                             <span class="menu-title">Agent Portal</span>
                             <!-- menu dropdown -->
                             <div class="menu-item-dropdown">
@@ -135,7 +135,7 @@
                     <!-- login buttons -->
 
                     <template v-if="isAuthReady">
-                        <div class="login-options" v-if="!user">
+                        <div v-if="!user" class="login-options">
                             <AtomButton
                                 class="login-btn"
                                 @click.native="logInBtn"
@@ -147,7 +147,7 @@
                                 Sign up
                             </AtomButton> -->
                         </div>
-                        <div class="login-options" v-if="user">
+                        <div v-if="user" class="login-options">
                             <div class="user-profile">
                                 <div class="user-pic-wrapper">
                                     <img

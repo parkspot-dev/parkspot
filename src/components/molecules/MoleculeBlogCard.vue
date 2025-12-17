@@ -9,7 +9,8 @@
             ></AtomImage>
         </div>
         <div class="blog-content">
-            <div class="blog-title"
+            <div
+class="blog-title"
                 @click="onBlogClick(blog.id)"
             >
                 <h2 :variation="'large'">
@@ -37,13 +38,13 @@
 import AtomImage from '../atoms/AtomImage.vue';
 export default {
     name: 'MoleculeBlogCard',
+    components: {
+        AtomImage,
+    },
     props: {
         blog: {
             type: Object,
         },
-    },
-    components: {
-        AtomImage,
     },
     emits:['onBtnClick'],
     methods: {

@@ -7,8 +7,8 @@
         <b-carousel-list v-model="test" :data="items" v-bind="al">
             <template #item="list">
                 <MoleculeProductCard
-                    @arrowBtn="onArrowBtn"
                     :items="list"
+                    @arrow-btn="onArrowBtn"
                 ></MoleculeProductCard>
             </template>
         </b-carousel-list>

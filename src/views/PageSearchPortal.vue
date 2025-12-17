@@ -6,17 +6,17 @@
                 <div class="request-search-control">
                     <MoleculeSearchBox
                         placeholder="Mobile"
-                        :initialValue="searchMobile"
+                        :initial-value="searchMobile"
                         @on-search="searchRequestWithMobile"
                         @clear-input="onClearMobileInput"
                     ></MoleculeSearchBox>
                 </div>
                 <TemplateSearchPortal
-                    :parkingRequests="parkingRequests"
-                    :isLoading="loading"
-                    :isSummary="true"
-                    @updateRequest="updateRequest"
-                    @toSrp="toSrp"
+                    :parking-requests="parkingRequests"
+                    :is-loading="loading"
+                    :is-summary="true"
+                    @update-request="updateRequest"
+                    @to-srp="toSrp"
                 ></TemplateSearchPortal>
             </b-tab-item>
 
@@ -24,15 +24,15 @@
                 <p></p>
                 <MoleculeSearchBox
                     placeholder="Lat,Long"
-                    :initialValue="SOLatLngInput"
+                    :initial-value="SOLatLngInput"
                     @on-search="searchRequestWithLatLng"
                     @clear-input="onClearLatLngInput"
                 ></MoleculeSearchBox>
                 <TemplateSearchPortal
-                    :isLoading="loading"
-                    :parkingRequests="interestedVOList"
-                    @toSrp="toSrp"
-                    @updateRequest="updateRequest"
+                    :is-loading="loading"
+                    :parking-requests="interestedVOList"
+                    @to-srp="toSrp"
+                    @update-request="updateRequest"
                 ></TemplateSearchPortal>
             </b-tab-item>
         </b-tabs>
@@ -58,17 +58,17 @@ export default {
             titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
         };
     },
-    mounted() {
-        this.getUserProfile();
-        if (this.isAdmin) {
-            this.getAgents();
-        }
-    },
     data() {
         return {
             isLoading: false,
             VOMobile: this.searchMobile,
         };
+    },
+    mounted() {
+        this.getUserProfile();
+        if (this.isAdmin) {
+            this.getAgents();
+        }
     },
     computed: {
         ...mapState('searchPortal', [

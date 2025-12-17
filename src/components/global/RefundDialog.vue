@@ -1,13 +1,13 @@
 <template>
-    <div class="dialog-overlay" v-if="visible">
+    <div v-if="visible" class="dialog-overlay">
         <div class="dialog-content">
             <div class="refund-row">
                 <label for="refundAmountInput">Refund Amount:</label>
                 <b-input
-                    :max="paymentAmount"
                     id="refundAmountInput"
-                    type="number"
                     v-model="refundAmount"
+                    :max="paymentAmount"
+                    type="number"
                 ></b-input>
             </div>
 
@@ -20,7 +20,7 @@
             </div>
 
             <div class="error-message-container">
-                <p class="error" v-if="refundAmount > paymentAmount">
+                <p v-if="refundAmount > paymentAmount" class="error">
                     Refund amount cannot exceed payment amount.
                 </p>
             </div>
@@ -29,8 +29,8 @@
                 <b-button @click="cancel">Cancel</b-button>
                 <b-button
                     :disabled="refundAmount > paymentAmount"
-                    @click="confirm"
                     type="is-primary"
+                    @click="confirm"
                 >
                     Confirm
                 </b-button>

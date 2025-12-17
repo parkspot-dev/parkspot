@@ -1,35 +1,35 @@
 <template>
     <div ref="observer">
         <MoleculeSelectInput
-            :fieldName="PREFERENCE.PARKING_TYPE"
+            :field-name="PREFERENCE.PARKING_TYPE"
             :list="parkingTypeData"
             :rules="validation.parkingType"
-            @input="updateType"
             :placeholder="'Type of Parking'"
             :label="PREFERENCE.PARKING_TYPE"
+            @input="updateType"
         ></MoleculeSelectInput>
         <MoleculeSelectInput
-            :fieldName="PREFERENCE.DURATION"
+            :field-name="PREFERENCE.DURATION"
             :list="minDurData"
             :rules="validation.minDur"
-            @input="updateMinDur"
             :placeholder="'Minimum duration if any'"
             :label="PREFERENCE.DURATION"
+            @input="updateMinDur"
         ></MoleculeSelectInput>
         <MoleculeNameInput
-            :fieldName="PREFERENCE.MODEL"
+            v-model="model.carModel"
+            :field-name="PREFERENCE.MODEL"
             :placeholder="PREFERENCE.MODEL"
             :rules="validation.carModel"
-            v-model="model.carModel"
             :label="PREFERENCE.MODEL"
         ></MoleculeNameInput>
         <MoleculeCheckbox
-            :fieldName="ADD_INFO.TERMS"
+            :field-name="ADD_INFO.TERMS"
             :rules="validation.terms"
             :values="termData"
             @data="updateTermsData"
         >
-            <template v-slot:extra>
+            <template #extra>
                 <a
                     href="https://www.parkspot.in/terms-and-conditions"
                     target="_blank"

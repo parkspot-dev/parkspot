@@ -45,17 +45,17 @@
         </ul>
         <AtomButton
             v-if="isAvailable"
-            @click.native="onContact"
             class="top-margin"
             :expanded="true"
+            @click.native="onContact"
         >
             Book
         </AtomButton>
         <AtomButton
             v-else
             class="top-margin"
-            @click.native="onContact"
             :expanded="true"
+            @click.native="onContact"
         >
             Notify me
         </AtomButton>

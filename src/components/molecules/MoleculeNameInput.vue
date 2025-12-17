@@ -1,12 +1,12 @@
 <template>
     <div :name="fieldName">
         <AtomInput
-            :modelValue="innerValue"
-            @update:modelValue="innerValue = $event"
+            :model-value="innerValue"
             :placeholder="placeholder"
             :type="inputType"
             :label="label"
             class="mb-1"
+            @update:model-value="innerValue = $event"
         >
         </AtomInput>
     </div>

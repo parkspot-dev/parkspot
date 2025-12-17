@@ -1,6 +1,6 @@
 <template>
     <div class="bg-wrap">
-        <TemplateContactUs @contactUs="fireContact"></TemplateContactUs>
+        <TemplateContactUs @contact-us="fireContact"></TemplateContactUs>
         <LoaderModal v-if="isLoading"></LoaderModal>
     </div>
 </template>

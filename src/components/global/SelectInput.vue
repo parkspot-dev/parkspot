@@ -1,7 +1,7 @@
 <template>
     <div class="select-wrapper">
         <label v-if="label" :for="name" class="label">{{ label }}</label>
-        <select v-model="selectedValue" :id="name">
+        <select :id="name" v-model="selectedValue">
             <option v-for="option in list" :key="option" :value="option">
                 {{ option }}
             </option>

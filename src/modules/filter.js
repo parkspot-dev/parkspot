@@ -102,7 +102,7 @@ export default class FilterManager {
     applyFilters() {
         let filteredSpots = [...this.store.state.map.srpResults];
 
-        for (let filter of this.store.state.map.filters) {
+        for (const filter of this.store.state.map.filters) {
             if (filter.name === 'distance') {
                 filteredSpots = filteredSpots.filter(
                     (srpResult) =>
@@ -149,8 +149,8 @@ export default class FilterManager {
 
         if(field !== 'Recommended') {
             sortedResults.sort((a, b) => {
-                let valueA = field === 'Rent' ? a.Rate : a.Distance;
-                let valueB = field === 'Rent' ? b.Rate : b.Distance;
+                const valueA = field === 'Rent' ? a.Rate : a.Distance;
+                const valueB = field === 'Rent' ? b.Rate : b.Distance;
                 return order === 'asc' ? valueA - valueB : valueB - valueA;
             });
         }

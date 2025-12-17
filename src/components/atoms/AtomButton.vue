@@ -7,8 +7,8 @@
         :inverted="inverted"
         :outlined="outlined"
         :type="type"
-        @click="onClick"
         class="btn-wrapper"
+        @click="onClick"
     >
         <slot></slot>
     </b-button>

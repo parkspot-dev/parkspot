@@ -1,7 +1,7 @@
 <template>
     <div ref="observer">
         <MoleculeCheckbox
-            :fieldName="ADD_INFO.AMENITIES"
+            :field-name="ADD_INFO.AMENITIES"
             :rules="validation.amenities"
             :values="checkboxData"
             @data="updateAmenitiesData"
@@ -9,35 +9,35 @@
             {{ ADD_INFO.AMENITIES }}
         </MoleculeCheckbox>
         <MoleculeSelectInput
-            :fieldName="ADD_INFO.SPOTS"
+            :field-name="ADD_INFO.SPOTS"
             :list="spotData"
             :rules="validation.spot"
-            @input="updateSpot"
             :placeholder="'Please specify the no. of Spot'"
             :label="ADD_INFO.SPOTS"
+            @input="updateSpot"
         ></MoleculeSelectInput>
         <MoleculeSelectInput
-            :fieldName="ADD_INFO.MINIMUM_DURATION"
+            :field-name="ADD_INFO.MINIMUM_DURATION"
             :list="minDurData"
             :rules="validation.minDur"
-            @input="updateMinDur"
             :placeholder="'Minimum duration if any'"
             :label="ADD_INFO.MINIMUM_DURATION"
+            @input="updateMinDur"
         ></MoleculeSelectInput>
         <MoleculeNameInput
-            :fieldName="ADD_INFO.RENT"
+            v-model="model.rent"
+            :field-name="ADD_INFO.RENT"
             :placeholder="ADD_INFO.RENT"
             :rules="validation.rent"
-            v-model="model.rent"
             :label="ADD_INFO.RENT"
         ></MoleculeNameInput>
         <MoleculeCheckbox
-            :fieldName="ADD_INFO.TERMS"
+            :field-name="ADD_INFO.TERMS"
             :rules="validation.terms"
             :values="termData"
             @data="updateTermsData"
         >
-            <template v-slot:extra>
+            <template #extra>
                 <p class="custom-terms">
                     <a
                         href="https://www.parkspot.in/terms-and-conditions"

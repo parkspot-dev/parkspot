@@ -14,7 +14,7 @@
             {{ msg }}
         </p>
         <div class="error-button">
-            <AtomButton @btnClick="homeBtn" :left="'arrow-left'">
+            <AtomButton :left="'arrow-left'" @btn-click="homeBtn">
                 Back Home
             </AtomButton>
         </div>

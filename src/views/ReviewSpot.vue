@@ -5,7 +5,7 @@
             <!-- Spot Images -->
             <ImageGallery
                 :images="spotImages"
-                :locationName="SO.area"
+                :location-name="SO.area"
                 @delete-image="onDeleteImage"
             ></ImageGallery>
 
@@ -42,7 +42,7 @@
                                     <td>
                                         <a
                                             :href="
-                                                this.getSpotDetailURL(
+                                                getSpotDetailURL(
                                                     spot.SiteID,
                                                 )
                                             "
@@ -105,7 +105,7 @@
                                     <td class="center-select">
                                         <SelectInput
                                             :key="spotRequest.$eventID"
-                                            :defaultValue="
+                                            :default-value="
                                                 getSpotRequestStatusLabel(
                                                     spotRequest.Status,
                                                 )
@@ -115,13 +115,13 @@
                                                     (status) => status.name,
                                                 )
                                             "
+                                            name="updateStatus"
                                             @change="
                                                 onStatusUpdate(
                                                     spotRequest,
                                                     $event.target.value,
                                                 )
                                             "
-                                            name="updateStatus"
                                         />
                                     </td>
                                 </tr>
@@ -141,29 +141,29 @@
                     <div class="readonly-field form-field">
                         <label for="spotId">SpotId:</label>
                         <input
+                            v-model="SO.spotId"
                             class="noborder"
                             :disabled="true"
                             type="text"
-                            v-model="SO.spotId"
                         />
                     </div>
                     <!-- user Name(This field is Not allowed to edit) -->
                     <div class="readonly-field form-field">
                         <label for="userName">UserName:</label>
                         <input
+                            v-model="SO.userName"
                             class="noborder"
                             :disabled="true"
                             type="text"
-                            v-model="SO.userName"
                         />
                     </div>
                     <!-- Full name -->
                     <div class="form-field">
                         <label for="fullName">Full Name:</label>
                         <input
+                            v-model="SO.fullName"
                             placeholder="Enter Full Name"
                             type="text"
-                            v-model="SO.fullName"
                         />
                     </div>
                     <!-- Mobile -->
@@ -172,15 +172,15 @@
                             >Mobile:<span style="color: red">*</span></label
                         >
                         <input
-                            @input="validateMobile"
                             id="mobile"
+                            v-model="SO.mobile"
                             maxlength="10"
                             placeholder="Enter SO Mobile number"
                             required
                             type="text"
-                            v-model="SO.mobile"
+                            @input="validateMobile"
                         />
-                        <div class="error" v-if="mobileError">
+                        <div v-if="mobileError" class="error">
                             {{ mobileError }}
                         </div>
                     </div>
@@ -189,9 +189,9 @@
                     <div class="form-field">
                         <label for="email">Email:</label>
                         <input
+                            v-model="SO.email"
                             placeholder="Enter Email"
                             type="email"
-                            v-model="SO.email"
                         />
                     </div>
 
@@ -199,9 +199,9 @@
                     <div class="form-field">
                         <label for="ApartmentName">Apartment Name:</label>
                         <input
+                            v-model="SO.ApartmentName"
                             placeholder="Enter apartment name"
                             type="text"
-                            v-model="SO.ApartmentName"
                         />
                     </div>
 
@@ -209,11 +209,11 @@
                     <div class="form-field">
                         <label for="facilities">Facilities:</label>
                         <MultiSelectInput
+                            v-model="Facilities"
                             :list="facilityOptions"
                             placeholder="Select one or more facilities"
                             name="facilities"
-                            v-model="Facilities"
-                            :showBorder="true"
+                            :show-border="true"
                         />
                     </div>
 
@@ -229,7 +229,7 @@
                                 {{ city }}
                             </option>
                         </select>
-                        <span class="error" v-if="cityError">{{
+                        <span v-if="cityError" class="error">{{
                             cityError
                         }}</span>
                     </div>
@@ -242,14 +242,14 @@
                             ></label
                         >
                         <input
-                            @input="validateLatLong"
                             id="latlong"
+                            v-model="SO.latlong"
                             placeholder="Enter SO latitude, longitude"
                             required
                             type="text"
-                            v-model="SO.latlong"
+                            @input="validateLatLong"
                         />
-                        <span class="error" v-if="latlongError">{{
+                        <span v-if="latlongError" class="error">{{
                             latlongError
                         }}</span>
                     </div>
@@ -257,23 +257,23 @@
                     <!-- Area -->
                     <div class="form-field">
                         <label for="area">Area:</label>
-                        <input type="text" v-model="SO.area" />
+                        <input v-model="SO.area" type="text" />
                     </div>
 
                     <!-- Thumbnail image -->
                     <div class="form-field">
                         <label for="thumbnailImage">Thumbnail Image:</label>
                         <input
-                            type="text"
                             v-model="SO.thumbnailImage"
+                            type="text"
                             readonly
                         />
                         <div class="thumbnail-image-wrapper">
                             <input
-                                @change="handleThumbnailUpload"
-                                accept="image/*"
                                 id="thumbnailImage"
+                                accept="image/*"
                                 type="file"
+                                @change="handleThumbnailUpload"
                             />
                             <img
                                 v-if="SO.thumbnailImage"
@@ -293,9 +293,9 @@
                         <label for="address">Address:</label>
                         <textarea
                             id="address"
+                            v-model="SO.address"
                             placeholder="Enter SO address"
                             rows="2"
-                            v-model="SO.address"
                         ></textarea>
                     </div>
 
@@ -320,9 +320,9 @@
                     <div class="form-field">
                         <label for="totalSlots">Slots:</label>
                         <input
+                            v-model="Rent.totalSlots"
                             placeholder="Enter the total Slots"
                             type="number"
-                            v-model="Rent.totalSlots"
                         />
                     </div>
                     <!-- Base Amount -->
@@ -334,15 +334,15 @@
                             ></label
                         >
                         <input
+                            v-model="Rent.baseAmount"
                             placeholder="Enter the SO charges"
-                            @input="validateBaseAmount"
-                            @blur="validateBaseAmount"
                             required
                             min="1"
                             type="number"
-                            v-model="Rent.baseAmount"
+                            @input="validateBaseAmount"
+                            @blur="validateBaseAmount"
                         />
-                        <div class="error" v-if="baseAmountError">
+                        <div v-if="baseAmountError" class="error">
                             {{ baseAmountError }}
                         </div>
                     </div>
@@ -424,9 +424,9 @@
                     <div class="form-field">
                         <label for="duration">Duration:</label>
                         <input
+                            v-model="Booking.duration"
                             placeholder="Enter Duration(max 50 characters)"
                             type="text"
-                            v-model="Booking.duration"
                         />
                     </div>
                     <!-- Remark -->
@@ -434,10 +434,10 @@
                         <label for="remark">Remark:</label>
                         <textarea
                             id="remark"
+                            v-model="Booking.remark"
                             maxlength="200"
                             placeholder="Enter Remark(max 200 characters)"
                             rows="2"
-                            v-model="Booking.remark"
                         ></textarea>
                     </div>
                 </div>
@@ -447,15 +447,14 @@
             <!-- Update -->
             <div class="button-container">
                 <AtomButton
-                    @click.native="openModal('Save')"
                     class="btn"
                     :class="{ 'btn-disabled': !isFormModified }"
                     :disabled="!isFormModified"
+                    @click.native="openModal('Save')"
                 >
                     Save
                 </AtomButton>
                 <AtomButton
-                    @click.native="openModal('Promote')"
                     class="btn"
                     :class="{
                         'btn-disabled':
@@ -468,6 +467,7 @@
                         Booking.spotrequestStatus !==
                             spotRequestStatusOptions.Verified
                     "
+                    @click.native="openModal('Promote')"
                 >
                     Promote
                 </AtomButton>
@@ -483,10 +483,10 @@
                 }}</AtomHeading>
                 <p>{{ modalContent.message }}</p>
                 <div class="modal-actions">
-                    <AtomButton @click.native="confirmAction" class="btn">
+                    <AtomButton class="btn" @click.native="confirmAction">
                         {{ modalContent.action }}
                     </AtomButton>
-                    <AtomButton @click.native="closeModal" class="btn">
+                    <AtomButton class="btn" @click.native="closeModal">
                         Cancel
                     </AtomButton>
                 </div>

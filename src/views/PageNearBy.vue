@@ -1,6 +1,6 @@
 <template>
     <TemplateNearBy
-        :nearByLocation="nearByLocation"
+        :near-by-location="nearByLocation"
         :spots="spots"
         @details="spotDetails"
     ></TemplateNearBy>

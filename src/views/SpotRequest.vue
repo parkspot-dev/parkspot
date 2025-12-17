@@ -5,7 +5,7 @@
     />
     <reviewSpot
       v-else
-      :requestId="requestId"
+      :request-id="requestId"
     />
   </div>
 </template>

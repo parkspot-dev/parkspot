@@ -2,11 +2,11 @@
     <section>
         <b-field>
             <b-upload
-                @input="upload($event)"
                 :value="dropFiles"
                 multiple
                 drag-drop
                 expanded
+                @input="upload($event)"
             >
                 <section class="section">
                     <div class="content has-text-centered">
