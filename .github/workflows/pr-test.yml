@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - master
-      - main
     types: [opened, synchronize, reopened]
 
 env:
@@ -95,39 +94,80 @@ jobs:
           FUNCTIONS=$(jq -r '.total.functions.pct' coverage/coverage-summary.json)
           BRANCHES=$(jq -r '.total.branches.pct' coverage/coverage-summary.json)
           
-          echo "| Metric | Coverage | Threshold | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|--------|----------|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          # Print to console log (visible in step output)
+          echo ""
+          echo "╔════════════════════════════════════════════════════════════╗"
+          echo "║              📊 COVERAGE RESULTS                           ║"
+          echo "╠════════════════════════════════════════════════════════════╣"
+          echo "║  Metric      │ Coverage │ Threshold │ Status              ║"
+          echo "╠══════════════╪══════════╪═══════════╪═════════════════════╣"
           
           FAILED=0
+          FAILED_METRICS=""
           
           # Check Lines
           if (( $(echo "$LINES < $COVERAGE_THRESHOLD_LINES" | bc -l) )); then
-            echo "| Lines | ${LINES}% | ${COVERAGE_THRESHOLD_LINES}% | ❌ |" >> $GITHUB_STEP_SUMMARY
+            echo "║  Lines       │ ${LINES}%\t   │ ${COVERAGE_THRESHOLD_LINES}%\t     │ ❌ FAILED            ║"
             FAILED=1
+            FAILED_METRICS="$FAILED_METRICS Lines(${LINES}%<${COVERAGE_THRESHOLD_LINES}%)"
           else
-            echo "| Lines | ${LINES}% | ${COVERAGE_THRESHOLD_LINES}% | ✅ |" >> $GITHUB_STEP_SUMMARY
+            echo "║  Lines       │ ${LINES}%\t   │ ${COVERAGE_THRESHOLD_LINES}%\t     │ ✅ Passed            ║"
           fi
           
           # Check Statements
           if (( $(echo "$STATEMENTS < $COVERAGE_THRESHOLD_STATEMENTS" | bc -l) )); then
-            echo "| Statements | ${STATEMENTS}% | ${COVERAGE_THRESHOLD_STATEMENTS}% | ❌ |" >> $GITHUB_STEP_SUMMARY
+            echo "║  Statements  │ ${STATEMENTS}%\t   │ ${COVERAGE_THRESHOLD_STATEMENTS}%\t     │ ❌ FAILED            ║"
             FAILED=1
+            FAILED_METRICS="$FAILED_METRICS Statements(${STATEMENTS}%<${COVERAGE_THRESHOLD_STATEMENTS}%)"
           else
-            echo "| Statements | ${STATEMENTS}% | ${COVERAGE_THRESHOLD_STATEMENTS}% | ✅ |" >> $GITHUB_STEP_SUMMARY
+            echo "║  Statements  │ ${STATEMENTS}%\t   │ ${COVERAGE_THRESHOLD_STATEMENTS}%\t     │ ✅ Passed            ║"
           fi
           
           # Check Functions
           if (( $(echo "$FUNCTIONS < $COVERAGE_THRESHOLD_FUNCTIONS" | bc -l) )); then
-            echo "| Functions | ${FUNCTIONS}% | ${COVERAGE_THRESHOLD_FUNCTIONS}% | ❌ |" >> $GITHUB_STEP_SUMMARY
+            echo "║  Functions   │ ${FUNCTIONS}%\t   │ ${COVERAGE_THRESHOLD_FUNCTIONS}%\t     │ ❌ FAILED            ║"
             FAILED=1
+            FAILED_METRICS="$FAILED_METRICS Functions(${FUNCTIONS}%<${COVERAGE_THRESHOLD_FUNCTIONS}%)"
           else
-            echo "| Functions | ${FUNCTIONS}% | ${COVERAGE_THRESHOLD_FUNCTIONS}% | ✅ |" >> $GITHUB_STEP_SUMMARY
+            echo "║  Functions   │ ${FUNCTIONS}%\t   │ ${COVERAGE_THRESHOLD_FUNCTIONS}%\t     │ ✅ Passed            ║"
           fi
           
           # Check Branches
           if (( $(echo "$BRANCHES < $COVERAGE_THRESHOLD_BRANCHES" | bc -l) )); then
-            echo "| Branches | ${BRANCHES}% | ${COVERAGE_THRESHOLD_BRANCHES}% | ❌ |" >> $GITHUB_STEP_SUMMARY
+            echo "║  Branches    │ ${BRANCHES}%\t   │ ${COVERAGE_THRESHOLD_BRANCHES}%\t     │ ❌ FAILED            ║"
             FAILED=1
+            FAILED_METRICS="$FAILED_METRICS Branches(${BRANCHES}%<${COVERAGE_THRESHOLD_BRANCHES}%)"
+          else
+            echo "║  Branches    │ ${BRANCHES}%\t   │ ${COVERAGE_THRESHOLD_BRANCHES}%\t     │ ✅ Passed            ║"
+          fi
+          
+          echo "╚════════════════════════════════════════════════════════════╝"
+          echo ""
+          
+          # Write to GitHub Summary
+          echo "| Metric | Coverage | Threshold | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|----------|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          
+          if (( $(echo "$LINES < $COVERAGE_THRESHOLD_LINES" | bc -l) )); then
+            echo "| Lines | ${LINES}% | ${COVERAGE_THRESHOLD_LINES}% | ❌ |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Lines | ${LINES}% | ${COVERAGE_THRESHOLD_LINES}% | ✅ |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if (( $(echo "$STATEMENTS < $COVERAGE_THRESHOLD_STATEMENTS" | bc -l) )); then
+            echo "| Statements | ${STATEMENTS}% | ${COVERAGE_THRESHOLD_STATEMENTS}% | ❌ |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Statements | ${STATEMENTS}% | ${COVERAGE_THRESHOLD_STATEMENTS}% | ✅ |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if (( $(echo "$FUNCTIONS < $COVERAGE_THRESHOLD_FUNCTIONS" | bc -l) )); then
+            echo "| Functions | ${FUNCTIONS}% | ${COVERAGE_THRESHOLD_FUNCTIONS}% | ❌ |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Functions | ${FUNCTIONS}% | ${COVERAGE_THRESHOLD_FUNCTIONS}% | ✅ |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if (( $(echo "$BRANCHES < $COVERAGE_THRESHOLD_BRANCHES" | bc -l) )); then
+            echo "| Branches | ${BRANCHES}% | ${COVERAGE_THRESHOLD_BRANCHES}% | ❌ |" >> $GITHUB_STEP_SUMMARY
           else
             echo "| Branches | ${BRANCHES}% | ${COVERAGE_THRESHOLD_BRANCHES}% | ✅ |" >> $GITHUB_STEP_SUMMARY
           fi
@@ -135,17 +175,24 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           
           if [ $FAILED -eq 1 ]; then
+            echo ""
+            echo "❌ COVERAGE CHECK FAILED!"
+            echo "   Failed thresholds:$FAILED_METRICS"
+            echo ""
             echo "### ❌ Coverage thresholds not met!" >> $GITHUB_STEP_SUMMARY
+            echo "**Failed:**$FAILED_METRICS" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
             echo "Please add more tests to improve coverage." >> $GITHUB_STEP_SUMMARY
             exit 1
           else
+            echo "✅ All coverage thresholds met!"
             echo "### ✅ All coverage thresholds met!" >> $GITHUB_STEP_SUMMARY
           fi
 
   build:
     name: 🏗️ Build Verification
     runs-on: ubuntu-latest
-    # No 'needs' - runs in parallel with lint and test
+    # No 'needs' - runs in parallel with lint
 
     steps:
       - name: Checkout repository
