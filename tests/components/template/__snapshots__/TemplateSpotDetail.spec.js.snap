@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TemplateSpotDetail.vue > keeps spot header html stable 1`] = `
+"<div data-v-103d742e="" class="spot-detail-main-description">
+  <div data-v-103d742e="" class="title-container">
+    <h1 data-v-103d742e="">Test Spot</h1>
+  </div>
+  <div data-v-103d742e="">
+    <p data-v-103d742e="">Address:</p>
+    <p data-v-103d742e="">C-51 Shyam Park Extension</p>
+    <p data-v-103d742e="">Ghaziabad</p>
+    <p data-v-103d742e="">Uttar Pradesh</p>
+  </div>
+</div>"
+`;
