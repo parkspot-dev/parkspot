@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - master
+      - main
     types: [opened, synchronize, reopened]
 
 env:
@@ -74,23 +75,31 @@ jobs:
 
       - name: Check coverage thresholds
         run: |
-          if [ ! -f coverage/coverage-summary.json ]; then
-            echo "❌ Coverage summary not found!"
-            exit 1
-          fi
-
-          LINES=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
-          STATEMENTS=$(cat coverage/coverage-summary.json | jq -r '.total.statements.pct')
-          FUNCTIONS=$(cat coverage/coverage-summary.json | jq -r '.total.functions.pct')
-          BRANCHES=$(cat coverage/coverage-summary.json | jq -r '.total.branches.pct')
-
           echo "## 📊 Test Coverage Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Check if coverage file exists
+          if [ ! -f coverage/coverage-summary.json ]; then
+            echo "❌ **Coverage summary not found!**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Make sure your vite.config.js has:" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`js" >> $GITHUB_STEP_SUMMARY
+            echo "coverage: { reporter: ['json-summary'] }" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+          
+          # Parse coverage values
+          LINES=$(jq -r '.total.lines.pct' coverage/coverage-summary.json)
+          STATEMENTS=$(jq -r '.total.statements.pct' coverage/coverage-summary.json)
+          FUNCTIONS=$(jq -r '.total.functions.pct' coverage/coverage-summary.json)
+          BRANCHES=$(jq -r '.total.branches.pct' coverage/coverage-summary.json)
+          
           echo "| Metric | Coverage | Threshold | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|--------|----------|-----------|--------|" >> $GITHUB_STEP_SUMMARY
-
+          
           FAILED=0
-
+          
           # Check Lines
           if (( $(echo "$LINES < $COVERAGE_THRESHOLD_LINES" | bc -l) )); then
             echo "| Lines | ${LINES}% | ${COVERAGE_THRESHOLD_LINES}% | ❌ |" >> $GITHUB_STEP_SUMMARY
@@ -98,7 +107,7 @@ jobs:
           else
             echo "| Lines | ${LINES}% | ${COVERAGE_THRESHOLD_LINES}% | ✅ |" >> $GITHUB_STEP_SUMMARY
           fi
-
+          
           # Check Statements
           if (( $(echo "$STATEMENTS < $COVERAGE_THRESHOLD_STATEMENTS" | bc -l) )); then
             echo "| Statements | ${STATEMENTS}% | ${COVERAGE_THRESHOLD_STATEMENTS}% | ❌ |" >> $GITHUB_STEP_SUMMARY
@@ -106,7 +115,7 @@ jobs:
           else
             echo "| Statements | ${STATEMENTS}% | ${COVERAGE_THRESHOLD_STATEMENTS}% | ✅ |" >> $GITHUB_STEP_SUMMARY
           fi
-
+          
           # Check Functions
           if (( $(echo "$FUNCTIONS < $COVERAGE_THRESHOLD_FUNCTIONS" | bc -l) )); then
             echo "| Functions | ${FUNCTIONS}% | ${COVERAGE_THRESHOLD_FUNCTIONS}% | ❌ |" >> $GITHUB_STEP_SUMMARY
@@ -114,7 +123,7 @@ jobs:
           else
             echo "| Functions | ${FUNCTIONS}% | ${COVERAGE_THRESHOLD_FUNCTIONS}% | ✅ |" >> $GITHUB_STEP_SUMMARY
           fi
-
+          
           # Check Branches
           if (( $(echo "$BRANCHES < $COVERAGE_THRESHOLD_BRANCHES" | bc -l) )); then
             echo "| Branches | ${BRANCHES}% | ${COVERAGE_THRESHOLD_BRANCHES}% | ❌ |" >> $GITHUB_STEP_SUMMARY
@@ -122,9 +131,9 @@ jobs:
           else
             echo "| Branches | ${BRANCHES}% | ${COVERAGE_THRESHOLD_BRANCHES}% | ✅ |" >> $GITHUB_STEP_SUMMARY
           fi
-
+          
           echo "" >> $GITHUB_STEP_SUMMARY
-
+          
           if [ $FAILED -eq 1 ]; then
             echo "### ❌ Coverage thresholds not met!" >> $GITHUB_STEP_SUMMARY
             echo "Please add more tests to improve coverage." >> $GITHUB_STEP_SUMMARY
@@ -136,7 +145,7 @@ jobs:
   build:
     name: 🏗️ Build Verification
     runs-on: ubuntu-latest
-    # No 'needs' - runs in parallel with lint
+    # No 'needs' - runs in parallel with lint and test
 
     steps:
       - name: Checkout repository
