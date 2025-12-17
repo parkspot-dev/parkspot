@@ -44,7 +44,7 @@ jobs:
   test:
     name: 🧪 Unit Tests & Coverage
     runs-on: ubuntu-latest
-    needs: lint
+    needs: build  # Only run tests if build passes
 
     steps:
       - name: Checkout repository
@@ -136,7 +136,7 @@ jobs:
   build:
     name: 🏗️ Build Verification
     runs-on: ubuntu-latest
-    needs: lint
+    # No 'needs' - runs in parallel with lint
 
     steps:
       - name: Checkout repository
