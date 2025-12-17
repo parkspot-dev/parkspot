@@ -5,8 +5,8 @@
                 <button
                     v-for="tab in tabs"
                     :key="tab"
-                    @click="changeTab(tab)"
                     :class="{ active: activeTab === tab }"
+                    @click="changeTab(tab)"
                 >
                     {{ tab }}
                 </button>
@@ -19,12 +19,12 @@
                 v-for="booking in filteredBookings"
                 :key="booking.BookingID"
                 class="booking-card"
-                @click="selectCard(booking)"
                 :class="{
                     selected:
                         selectedBooking &&
                         selectedBooking.BookingID === booking.BookingID,
                 }"
+                @click="selectCard(booking)"
             >
                 <div class="card-left">
                     <img
@@ -72,6 +72,22 @@ export default {
         },
     },
 
+    watch: {
+        activebookings() {
+            this.restoreFromUrl();
+        },
+        pastbookings() {
+            this.restoreFromUrl();
+        },
+        requestbookings() {
+            this.restoreFromUrl();
+        },
+    },
+
+    mounted() {
+        this.restoreFromUrl();
+    },
+
     methods: {
         // User clicks on tab
         changeTab(tab) {
@@ -110,22 +126,6 @@ export default {
                 else this.$emit('tab-change', this.activeTab);
             });
         },
-    },
-
-    watch: {
-        activebookings() {
-            this.restoreFromUrl();
-        },
-        pastbookings() {
-            this.restoreFromUrl();
-        },
-        requestbookings() {
-            this.restoreFromUrl();
-        },
-    },
-
-    mounted() {
-        this.restoreFromUrl();
     },
 };
 </script>

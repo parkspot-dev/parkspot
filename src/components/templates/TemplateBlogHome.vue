@@ -19,11 +19,11 @@
         <BodyWrapper>
             <div class="blog-container">
                 <MoleculeBlogCard
-                    :key="blog.id"
                     v-for="blog in blogs"
+                    :key="blog.id"
                     :blog="blog"
-                    @onBtnClick="onBlogClick"
                     data-aos="zoom-in-up"
+                    @on-btn-click="onBlogClick"
                 ></MoleculeBlogCard>
             </div>
         </BodyWrapper>

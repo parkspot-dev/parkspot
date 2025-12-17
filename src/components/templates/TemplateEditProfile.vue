@@ -1,7 +1,7 @@
 <template>
     <BodyWrapper>
         <LoaderModal v-if="!user"></LoaderModal>
-        <div class="edit-profile-main" v-else>
+        <div v-else class="edit-profile-main">
             <div class="profile-group-head">
                 <div class="user-avatar">
                     <img :src="user.photoURL" alt="profile pic" />

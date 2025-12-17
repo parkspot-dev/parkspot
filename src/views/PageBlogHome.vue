@@ -1,7 +1,7 @@
 <template>
     <TemplateBlogHome
         :blogs="blogs"
-        @onBlogClick="onBlogClick"
+        @on-blog-click="onBlogClick"
     ></TemplateBlogHome>
 </template>
 

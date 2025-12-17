@@ -4,25 +4,25 @@
             <div class="expiring-request">
                 <span class="material-symbols-outlined"> report </span>
                 <div>
-                    There are {{ this.expiringRequestsCount }}
+                    There are {{ expiringRequestsCount }}
                     <span class="hyperlink" @click="handleExpiringRequests"
                         >expiring requests</span
                     >
                 </div>
             </div>
-            <div class="summary" v-if="isSummary">
+            <div v-if="isSummary" class="summary">
                 <div class="so-btn">
                     <AtomButton @click.native="showSummary">
                         {{ summary.btn }} Summary
                     </AtomButton>
                 </div>
                 <br />
-                <div class="so-summary" v-show="summary.show">
+                <div v-show="summary.show" class="so-summary">
                     <span class="close-button">
                         <AtomIcon
-                            @click.native="showSummary"
                             :icon="'close'"
                             size=""
+                            @click.native="showSummary"
                         />
                     </span>
                     <div class="summary-layout">
@@ -95,28 +95,28 @@
                 <FilterDropdown
                     :options="requestsFilterOptions"
                     :searchable="false"
-                    :selectedValue="filters.isExpiring ? 'Expiring' : ''"
+                    :selected-value="filters.isExpiring ? 'Expiring' : ''"
+                    label="Requests Type"
                     @remove="removeExpiringFilter"
                     @update="handleExpiringRequests"
-                    label="Requests Type"
                 />
 
                 <FilterDropdown
                     :options="agentList.map((agent) => agent.name)"
                     :searchable="false"
-                    :selectedValue="filters.Agent ? filters.Agent : ''"
+                    :selected-value="filters.Agent ? filters.Agent : ''"
+                    label="Agent"
                     @remove="removeAgentFilter"
                     @update="handleAgentFilter"
-                    label="Agent"
                 />
 
                 <FilterDropdown
                     :options="statusList.map((status) => status.name)"
                     :searchable="false"
-                    :selectedValue="filters.Status ? filters.Status : ''"
+                    :selected-value="filters.Status ? filters.Status : ''"
+                    label="Status"
                     @remove="removeStatusFilter"
                     @update="handleStatusFilter"
-                    label="Status"
                 />
             </div>
         </div>
@@ -135,14 +135,14 @@
             height="800"
         >
             <b-table-column
+                v-slot="props"
                 field="ID"
                 label="ID"
                 width="40"
                 numeric
-                v-slot="props"
                 sortable
-                headerClass="id-column-parent"
-                cellClass="id-column-parent"
+                header-class="id-column-parent"
+                cell-class="id-column-parent"
             >
                 <div class="id-column">
                     {{ props.row.ID }}
@@ -164,15 +164,15 @@
             >
                 <template #searchable="{ filters }">
                     <AtomDatePicker
-                        :assignedDate="filters.UpdatedAt"
+                        :assigned-date="filters.UpdatedAt"
+                        placeholder="Filter by Updated Date"
                         @changed="
                             (date) => (filters.UpdatedAt = formatDate(date))
                         "
-                        placeholder="Filter by Updated Date"
                     />
                 </template>
 
-                <template v-slot="{ row }">
+                <template #default="{ row }">
                     <div class="date-column">
                         <p class="tag">UpdatedAt:</p>
                         <strong>{{ getFormattedDate(row.UpdatedAt) }}</strong>
@@ -184,9 +184,9 @@
             </b-table-column>
 
             <b-table-column
+                v-slot="props"
                 field="Priority"
                 label="Priority"
-                v-slot="props"
                 sortable
             >
                 <span
@@ -202,9 +202,9 @@
             </b-table-column>
 
             <b-table-column
+                v-slot="props"
                 field="contact"
                 label="Contact Details"
-                v-slot="props"
             >
                 <div class="contact-column">
                     <div class="primary">
@@ -219,8 +219,8 @@
                             }}</strong>
                             <button
                                 v-else
-                                @click="onConnect(props.row)"
                                 class="btn px-2"
+                                @click="onConnect(props.row)"
                             >
                                 Connect
                             </button>
@@ -257,9 +257,9 @@
             </b-table-column>
 
             <b-table-column
+                v-slot="props"
                 field="comments"
                 label="Comments"
-                v-slot="props"
                 width="10px"
             >
                 <div class="comment-wrapper">
@@ -267,16 +267,16 @@
                         {{ props.row.Comments }}
                     </div>
                     <AtomTextarea
+                        v-model="newCommentMap[props.row.ID]"
                         :maxlength="3000"
-                        :rowNo="4"
+                        :row-no="4"
                         :size="'is-small'"
                         :placeholder="'Add new comment...'"
+                        class="comment-width"
                         @changed="
                             onCommentUpdate(props.row, oldComments, $event)
                         "
                         @mousedown="storeOldComment(props.row)"
-                        class="comment-width"
-                        v-model="newCommentMap[props.row.ID]"
                     ></AtomTextarea>
                 </div>
             </b-table-column>
@@ -291,15 +291,15 @@
                 <template #searchable="props">
                     <!-- TODO: Remove AtomSelectInput completely from all files. Use Global Select Input -->
                     <AtomSelectInput
+                        v-model="props.filters['Agent']"
                         :list="agentList"
                         :size="'is-small'"
                         label=""
                         placeholder="Agent"
-                        v-model="props.filters['Agent']"
                     >
                     </AtomSelectInput>
                 </template>
-                <template v-slot="props">
+                <template #default="props">
                     <div class="status-column">
                         <div class="status-part">
                             <span class="tag my-status">
@@ -307,20 +307,20 @@
                             </span>
                             <AtomSelectInput
                                 v-if="isAdmin"
+                                v-model="props.row.Agent"
                                 :list="agentList"
                                 :size="'is-small'"
-                                @change="onAgentUpdate(props.row, $event)"
                                 label=""
                                 placeholder="Select Agent"
-                                v-model="props.row.Agent"
+                                @change="onAgentUpdate(props.row, $event)"
                             >
                             </AtomSelectInput>
                             <button
                                 v-else
+                                class="btn"
                                 @click="
                                     onAgentUpdate(props.row, agentList[0].id)
                                 "
-                                class="btn"
                             >
                                 Assign to me
                             </button>
@@ -338,15 +338,15 @@
             >
                 <template #searchable="props">
                     <AtomSelectInput
+                        v-model="props.filters['Status']"
                         :list="statusList"
                         :size="'is-small'"
                         class="column-width"
                         placeholder="Select Status"
-                        v-model="props.filters['Status']"
                     >
                     </AtomSelectInput>
                 </template>
-                <template v-slot="props">
+                <template #default="props">
                     <div class="status-column">
                         <div class="status-part">
                             <span class="tag my-status">
@@ -354,12 +354,12 @@
                             </span>
                             <AtomSelectInput
                                 :key="props.row.ID"
+                                v-model="props.row.Status"
                                 :list="statusList"
                                 :size="'is-small'"
-                                @change="onStatusUpdate(props.row, $event)"
                                 class="column-width"
                                 placeholder="Select Status"
-                                v-model="props.row.Status"
+                                @change="onStatusUpdate(props.row, $event)"
                             >
                             </AtomSelectInput>
                         </div>
@@ -381,12 +381,12 @@
                                 </b>
                             </span>
                             <AtomDatePicker
-                                :assignedDate="props.row.NextCall"
+                                :assigned-date="props.row.NextCall"
                                 :size="'is-small'"
+                                class="column-width"
                                 @changed="
                                     (date) => onDateUpdate(props.row, date)
                                 "
-                                class="column-width"
                             >
                             </AtomDatePicker>
                         </div>
@@ -394,7 +394,7 @@
                 </template>
             </b-table-column>
 
-            <b-table-column field="lat_lng" label="Lat/Lng" v-slot="props">
+            <b-table-column v-slot="props" field="lat_lng" label="Lat/Lng">
                 <div class="lat-lng-column">
                     <div class="lat-lng-link">
                         <a
@@ -415,7 +415,7 @@
                         <p>LatLng:</p>
                         <AtomInput
                             :size="'is-small'"
-                            :modelValue="`${props.row.Latitude.toFixed(6)}, ${props.row.Longitude.toFixed(6)}`"
+                            :model-value="`${props.row.Latitude.toFixed(6)}, ${props.row.Longitude.toFixed(6)}`"
                             @change="
                                 updateLatLng(props.row, $event.target.value)
                             "
@@ -435,18 +435,18 @@
             <div v-else>
                 <MobileView
                     v-if="!isEmpty"
-                    :parkingRequests="parkingRequests"
-                    :isEmpty="isEmpty"
-                    :isAdmin="isAdmin"
-                    :newCommentMap="newCommentMap"
-                    :statusList="statusList"
-                    :agentList="agentList"
-                    :getFormattedDate="getFormattedDate"
-                    :getPriority="getPriority"
-                    :isCallDelayed="isCallDelayed"
-                    :toSrp="toSrp"
-                    :storeOldComment="storeOldComment"
-                    :oldComments="oldComments"
+                    :parking-requests="parkingRequests"
+                    :is-empty="isEmpty"
+                    :is-admin="isAdmin"
+                    :new-comment-map="newCommentMap"
+                    :status-list="statusList"
+                    :agent-list="agentList"
+                    :get-formatted-date="getFormattedDate"
+                    :get-priority="getPriority"
+                    :is-call-delayed="isCallDelayed"
+                    :to-srp="toSrp"
+                    :store-old-comment="storeOldComment"
+                    :old-comments="oldComments"
                     @connect="onConnect"
                     @comment-update="onCommentUpdate"
                     @agent-update="onAgentUpdate"
@@ -463,32 +463,32 @@
     <div v-if="isOpen" class="popup-container">
         <div class="popup">
             <div class="mobile">
-                Contact With {{ this.selectedRow.Name }} on
-                <span>{{ this.selectedRow.Mobile }}</span>
+                Contact With {{ selectedRow.Name }} on
+                <span>{{ selectedRow.Mobile }}</span>
             </div>
             <div>Change Status</div>
             <SelectInput
                 :key="selectedRow.id"
-                :defaultValue="defaultStatus"
+                :default-value="defaultStatus"
                 :list="statusList.map((status) => status.name)"
-                @change="onStatusUpdate(selectedRow, $event.target.value)"
                 name="updateStatus"
+                @change="onStatusUpdate(selectedRow, $event.target.value)"
             />
             <div>Previous Comments</div>
             <AtomTextarea
+                v-model="selectedRow.Comments"
                 :maxlength="1000"
-                :readOnly="true"
-                :rowNo="8"
+                :read-only="true"
+                :row-no="8"
                 :size="'is-small'"
                 class="comment-width"
-                v-model="selectedRow.Comments"
             ></AtomTextarea>
             <div class="note">
                 <div>Add Note</div>
                 <AtomInput
+                    v-model="newComment"
                     :placeholder="'Type here...'"
                     @mousedown="storeOldComment(selectedRow)"
-                    v-model="newComment"
                 >
                 </AtomInput>
                 <div v-if="newComment.length < 3" class="error">
@@ -498,6 +498,7 @@
                     <span
                         v-for="(tag, index) in FREQUENT_COMMENTS"
                         :key="index"
+                        class="tag"
                         @click="
                             onCommentUpdate(
                                 selectedRow,
@@ -505,7 +506,6 @@
                                 `${selectedRow.Comments}\n${tag}`,
                             )
                         "
-                        class="tag"
                     >
                         {{ tag }}
                     </span>
@@ -514,6 +514,7 @@
 
             <button
                 :disabled="!newComment || newComment.length < 3"
+                class="btn"
                 @click="
                     onCommentUpdate(
                         selectedRow,
@@ -521,7 +522,6 @@
                         newComment,
                     )
                 "
-                class="btn"
             >
                 Update
             </button>
@@ -585,32 +585,6 @@ export default {
             return this.windowWidth > 768 || this.forceDesktop;
         },
     },
-    mounted() {
-        if (this.userProfile && !this.isAdmin) {
-            // If not an admin then agentList will only contain 'NA' and user Fullname
-            const agents = [{ id: 0, FullName: this.userProfile?.FullName }];
-            this.setAgents(agents);
-        }
-
-        if (this.parkingRequests && this.parkingRequests.length > 0) {
-            this.updateSummary(this.parkingRequests);
-        }
-
-        if (typeof window !== 'undefined') {
-            this.windowWidth = window.innerWidth;
-            window.addEventListener('resize', this.updateWidth);
-
-            const ua = navigator.userAgent.toLowerCase();
-            this.isMobileDevice =
-                ua.includes('android') || ua.includes('iphone');
-        }
-    },
-
-    beforeUnmount() {
-        if (typeof window !== 'undefined') {
-            window.removeEventListener('resize', this.updateWidth);
-        }
-    },
 
     watch: {
         parkingRequests(newRequests) {
@@ -637,6 +611,32 @@ export default {
                 }
             }
         },
+    },
+    mounted() {
+        if (this.userProfile && !this.isAdmin) {
+            // If not an admin then agentList will only contain 'NA' and user Fullname
+            const agents = [{ id: 0, FullName: this.userProfile?.FullName }];
+            this.setAgents(agents);
+        }
+
+        if (this.parkingRequests && this.parkingRequests.length > 0) {
+            this.updateSummary(this.parkingRequests);
+        }
+
+        if (typeof window !== 'undefined') {
+            this.windowWidth = window.innerWidth;
+            window.addEventListener('resize', this.updateWidth);
+
+            const ua = navigator.userAgent.toLowerCase();
+            this.isMobileDevice =
+                ua.includes('android') || ua.includes('iphone');
+        }
+    },
+
+    beforeUnmount() {
+        if (typeof window !== 'undefined') {
+            window.removeEventListener('resize', this.updateWidth);
+        }
     },
 
     data() {

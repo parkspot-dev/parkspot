@@ -3,13 +3,13 @@
         <b-field :label="label" :message="errorMessage" :type="errorType">
             <b-input
                 :id="id"
+                v-model="inputValue"
                 :disabled="disabled"
                 :type="type"
-                v-model="inputValue"
                 :placeholder="placeholder"
+                :size="size"
                 @focus="onFocus($event.target.value)"
                 @blur="onChange($event.target.value)"
-                :size="size"
             ></b-input>
         </b-field>
     </component>

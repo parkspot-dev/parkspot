@@ -1,12 +1,12 @@
 <template>
     <!-- Booking Details Section -->
-    <div class="booking-details" v-if="booking">
+    <div v-if="booking" class="booking-details">
         <!-- Map Section -->
         <div class="map-section">
             <MapContainer
                 :key="booking?.BookingID"
                 :center="center"
-                :spotDetails="siteDetails"
+                :spot-details="siteDetails"
                 :zoom="13"
                 class="sdp-map"
             />

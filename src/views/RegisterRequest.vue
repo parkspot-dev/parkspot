@@ -5,70 +5,75 @@
             <!-- Name -->
             <div class="form-group">
                 <label for="Name">Name:</label>
-                <input id="Name" placeholder="Enter VO name" type="text" v-model="formData.Name" />
+                <input id="Name" v-model="formData.Name" placeholder="Enter VO name" type="text" />
             </div>
 
             <!-- Mobile (Compulsory) -->
             <div class="form-group">
                 <label for="Mobile">Mobile: <span>*</span></label>
-                <input id="Mobile" @input="validateMobile" maxlength="10" placeholder="Enter VO mobile number"
-                    required type="text" v-model="formData.Mobile" />
-                <span class="error" v-if="mobileError">{{ mobileError }}</span>
+                <input
+id="Mobile" v-model="formData.Mobile" maxlength="10" placeholder="Enter VO mobile number"
+                    required type="text" @input="validateMobile" />
+                <span v-if="mobileError" class="error">{{ mobileError }}</span>
             </div>
 
             <!-- Latitude (Compulsory) -->
             <div class="form-group">
                 <label for="Latitude">Latitude: <span>*</span></label>
-                <input id="Latitude" @input="validateLatitude" placeholder="Enter VO latitude" required step="any"
-                    type="number" v-model="formData.Latitude" />
-                <span class="error" v-if="latitudeError">{{ latitudeError }}</span>
+                <input
+id="Latitude" v-model="formData.Latitude" placeholder="Enter VO latitude" required step="any"
+                    type="number" @input="validateLatitude" />
+                <span v-if="latitudeError" class="error">{{ latitudeError }}</span>
             </div>
 
             <!-- Longitude (Compulsory) -->
             <div class="form-group">
                 <label for="Longitude">Longitude: <span>*</span></label>
-                <input id="Longitude" @input="validateLongitude" placeholder="Enter VO longitude" required step="any"
-                    type="number" v-model="formData.Longitude" />
-                <span class="error" v-if="longitudeError">{{ longitudeError }}</span>
+                <input
+id="Longitude" v-model="formData.Longitude" placeholder="Enter VO longitude" required step="any"
+                    type="number" @input="validateLongitude" />
+                <span v-if="longitudeError" class="error">{{ longitudeError }}</span>
             </div>
 
             <!-- City -->
             <div class="form-group">
                 <label for="City">City:</label>
-                <input id="City" placeholder="Enter city" type="text" v-model="formData.City" />
+                <input id="City" v-model="formData.City" placeholder="Enter city" type="text" />
             </div>
 
             <!-- Email -->
             <div class="form-group">
                 <label for="Email">Email:</label>
-                <input id="Email" placeholder="Enter email" type="email" v-model="formData.Email" />
+                <input id="Email" v-model="formData.Email" placeholder="Enter email" type="email" />
             </div>
 
             <!-- Car -->
             <div class="form-group">
                 <label for="Car">Car:</label>
-                <input id="Car" placeholder="Enter car details" type="text" v-model="formData.Car" />
+                <input id="Car" v-model="formData.Car" placeholder="Enter car details" type="text" />
             </div>
 
             <!-- Address -->
             <div class="form-group">
                 <label for="Address">Address:</label>
-                <input id="Address" placeholder="Enter VO address" type="text" v-model="formData.Address" />
+                <input id="Address" v-model="formData.Address" placeholder="Enter VO address" type="text" />
             </div>
 
             <!-- Duration -->
             <div class="form-group">
                 <label for="Duration">Duration:</label>
-                <input id="Duration" @input="validateDuration" placeholder="Enter duration (e.g., '2 hours')"
-                    type="text" v-model="formData.Duration" />
-                <span class="error" v-if="durationError">{{ durationError }}</span>
+                <input
+id="Duration" v-model="formData.Duration" placeholder="Enter duration (e.g., '2 hours')"
+                    type="text" @input="validateDuration" />
+                <span v-if="durationError" class="error">{{ durationError }}</span>
             </div>
 
             <!-- Remark -->
             <div class="form-group">
                 <label for="Remark">Remark:</label>
-                <textarea id="Remark" @input="validateRemark" placeholder="Enter remark"
-                    v-model="formData.Remark"></textarea>
+                <textarea
+id="Remark" v-model="formData.Remark" placeholder="Enter remark"
+                    @input="validateRemark"></textarea>
                 <span v-if="remarkError" class="error">{{ remarkError }}</span>
             </div>
 

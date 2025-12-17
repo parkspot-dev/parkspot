@@ -1,5 +1,5 @@
 <template>
-    <TemplateError @homeBtn="homeBtn" :msg="msg"></TemplateError>
+    <TemplateError :msg="msg" @home-btn="homeBtn"></TemplateError>
 </template>
 
 <script>

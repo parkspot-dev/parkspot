@@ -29,7 +29,26 @@ export default defineConfig({
     },
     test: {
         globals: true,
-        environment: 'jsdom', // Simulate a browser environment
-        // setupFiles: './vitest.setup.js' // Optional setup file
+        environment: 'jsdom',
+        // setupFiles: './vitest.setup.js',
+        
+        // Coverage configuration
+        coverage: {
+            provider: 'v8',  // Use V8's built-in coverage
+            reporter: ['text', 'json-summary', 'json', 'html'],  // Multiple reporters
+            reportsDirectory: './coverage',  // Output directory
+            
+            // Files to include in coverage
+            include: ['src/**/*.{js,vue}'],
+            
+            // Files to exclude from coverage
+            exclude: [
+                'node_modules/**',
+                'tests/**',
+                'src/main.js',  // Entry point
+                '**/*.spec.js',
+                '**/*.test.js',
+            ],
+        },
     },
 });

@@ -2,7 +2,7 @@
     <div class="main-box">
         <div class="search-box">
             <SearchInput class="search-input"></SearchInput>
-            <AtomButton class="btn" @click.native="flyToSrp" :withSearch="true">
+            <AtomButton class="btn" :with-search="true" @click.native="flyToSrp">
                 Search now
             </AtomButton>
         </div>
@@ -12,9 +12,9 @@
             >
             <div class="cards-row">
                 <TopSearchesCard
-                    :item="item"
-                    :key="item.id"
                     v-for="item in items"
+                    :key="item.id"
+                    :item="item"
                 />
             </div>
         </div>

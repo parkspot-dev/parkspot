@@ -1,14 +1,14 @@
 <template>
     <b-field :label="label">
         <b-input
+            v-model="inputValue"
             :maxlength="maxlength"
             :placeholder="placeholder"
             :readonly="readOnly"
             :rows="rowNo"
             :size="size"
-            @blur="onChange($event.target.value)"
             type="textarea"
-            v-model="inputValue"
+            @blur="onChange($event.target.value)"
         ></b-input>
     </b-field>
 </template>

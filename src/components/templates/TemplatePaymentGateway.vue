@@ -1,9 +1,9 @@
 <template>
     <BodyWrapper>
         <MoleculePaymentCard
-            v-if="!this.status"
-            :bookingDetails="bookingDetails"
-            :paymentMode="paymentMode"
+            v-if="!status"
+            :booking-details="bookingDetails"
+            :payment-mode="paymentMode"
         >
         </MoleculePaymentCard>
     </BodyWrapper>

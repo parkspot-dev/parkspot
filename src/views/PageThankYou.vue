@@ -1,5 +1,5 @@
 <template>
-    <TemplateThankYou @homeBtn="homeBtn" :msg="msg"></TemplateThankYou>
+    <TemplateThankYou :msg="msg" @home-btn="homeBtn"></TemplateThankYou>
 </template>
 
 <script>

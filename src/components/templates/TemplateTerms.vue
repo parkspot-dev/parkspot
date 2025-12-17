@@ -294,8 +294,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="submission-documents"
+                            :variation="'large'"
                         >
                             Submission of Documents:
                         </AtomParagraph>
@@ -319,8 +319,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="accuracy-information"
+                            :variation="'large'"
                         >
                             Accuracy of Information:
                         </AtomParagraph>
@@ -337,8 +337,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="confidentiality"
+                            :variation="'large'"
                         >
                             Confidentiality:
                         </AtomParagraph>
@@ -355,8 +355,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="verification-process"
+                            :variation="'large'"
                         >
                             Verification Process:
                         </AtomParagraph>
@@ -373,8 +373,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="suspension-services"
+                            :variation="'large'"
                         >
                             Suspension of Services:
                         </AtomParagraph>
@@ -401,8 +401,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="digital-management"
+                            :variation="'large'"
                         >
                             Digital Management:
                         </AtomParagraph>
@@ -422,8 +422,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="subletting-assignment"
+                            :variation="'large'"
                         >
                             Subletting & Assignment:
                         </AtomParagraph>
@@ -442,8 +442,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="booking-conditions"
+                            :variation="'large'"
                         >
                             Booking Conditions:
                         </AtomParagraph>
@@ -471,7 +471,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <AtomParagraph :variation="'large'" id="cancellation">
+                        <AtomParagraph id="cancellation" :variation="'large'">
                             Cancellation:
                         </AtomParagraph>
                         <ul class="pl-6" style="list-style-type: disc">
@@ -489,8 +489,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="landlord-cooperation"
+                            :variation="'large'"
                         >
                             Landlord Cooperation in Unfortunate Events:
                         </AtomParagraph>
@@ -511,7 +511,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <AtomParagraph :variation="'large'" id="prepaid-rent">
+                        <AtomParagraph id="prepaid-rent" :variation="'large'">
                             Prepaid Rent and Service Fee:
                         </AtomParagraph>
                         <ul class="pl-6" style="list-style-type: disc">
@@ -537,8 +537,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="listing-creation"
+                            :variation="'large'"
                         >
                             Listing Creation:
                         </AtomParagraph>
@@ -555,8 +555,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="ownership-authentication"
+                            :variation="'large'"
                         >
                             Ownership Authentication:
                         </AtomParagraph>
@@ -572,8 +572,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="documentation-requirement"
+                            :variation="'large'"
                         >
                             Documentation Requirement:
                         </AtomParagraph>
@@ -590,8 +590,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="termination-services"
+                            :variation="'large'"
                         >
                             Termination of Services:
                         </AtomParagraph>
@@ -608,8 +608,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="customer-referral"
+                            :variation="'large'"
                         >
                             Customer Referral Restriction:
                         </AtomParagraph>
@@ -626,8 +626,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="monthly-service"
+                            :variation="'large'"
                         >
                             Monthly Service Fee:
                         </AtomParagraph>
@@ -647,7 +647,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <AtomParagraph :variation="'large'" id="rent-handling">
+                        <AtomParagraph id="rent-handling" :variation="'large'">
                             Rent Handling:
                         </AtomParagraph>
                         <ul class="pl-6" style="list-style-type: disc">
@@ -665,7 +665,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <AtomParagraph :variation="'large'" id="refund">
+                        <AtomParagraph id="refund" :variation="'large'">
                             Refund :
                         </AtomParagraph>
                         <ul class="pl-6" style="list-style-type: disc">
@@ -682,8 +682,8 @@
 
                     <div class="mb-3">
                         <AtomParagraph
-                            :variation="'large'"
                             id="cancellation-policies"
+                            :variation="'large'"
                         >
                             Cancellation Policies :
                         </AtomParagraph>
@@ -698,7 +698,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <AtomParagraph :variation="'large'" id="changes">
+                        <AtomParagraph id="changes" :variation="'large'">
                             Changes to These Terms and Conditions :
                         </AtomParagraph>
                         <ul class="pl-6" style="list-style-type: disc">
@@ -737,6 +737,19 @@ export default {
             activeSection: '',
         };
     },
+    mounted() {
+        if (window.location.hash) {
+            this.$nextTick(() => {
+                // TODO: Use requestAnimationFrame for optimization instead of setTimeout
+                setTimeout(() => {
+                    const scrollActiveSection = window.location.hash.slice(1);
+                    if (scrollActiveSection) {
+                        this.scrollTo(scrollActiveSection);
+                    }
+                }, 300);
+            });
+        }
+    },
     methods: {
         scrollTo(id) {
             const element = document.getElementById(id);
@@ -753,19 +766,6 @@ export default {
                 this.activeSection = id;
             }
         },
-    },
-    mounted() {
-        if (window.location.hash) {
-            this.$nextTick(() => {
-                // TODO: Use requestAnimationFrame for optimization instead of setTimeout
-                setTimeout(() => {
-                    const scrollActiveSection = window.location.hash.slice(1);
-                    if (scrollActiveSection) {
-                        this.scrollTo(scrollActiveSection);
-                    }
-                }, 300);
-            });
-        }
     },
 };
 </script>

@@ -25,9 +25,9 @@
             </AtomHeading>
             <div class="cards-grid">
                 <div
-                    class="card"
                     v-for="(service, index) in whyChooseUsOptions"
                     :key="index"
+                    class="card"
                 >
                     <h3>{{ service.title }}</h3>
                     <p>{{ service.description }}</p>
@@ -43,7 +43,7 @@
         </section>
 
         <!-- Registration Form Section -->
-        <section class="form-section" id="register">
+        <section id="register" class="form-section">
             <div>
                 <h3>Interested in Automated Parking?</h3>
                 <p>
@@ -54,35 +54,35 @@
             <!-- Right Side Form -->
             <div class="form-container">
                 <Form
-                    @submit="handleSubmit"
                     :validation-schema="contactFormSchema"
+                    @submit="handleSubmit"
                 >
                     <FormInput
+                        v-model="model.fullname"
                         :label="FORM.FULLNAME"
                         :placeholder="FORM_PLACEHOLDERS.FULL_NAME"
                         name="fullname"
-                        v-model="model.fullname"
                     />
 
                     <FormInput
+                        v-model="model.email"
                         :label="FORM.EMAIL"
                         :placeholder="FORM_PLACEHOLDERS.EMAIL"
                         name="email"
-                        v-model="model.email"
                     />
 
                     <FormInput
+                        v-model="model.cno"
                         :label="FORM.CONTACT_NO"
                         :placeholder="FORM_PLACEHOLDERS.CONTACT_NO"
                         name="cno"
-                        v-model="model.cno"
                     />
 
                     <FormInput
+                        v-model="model.address"
                         :label="FORM.ADDRESS"
                         :placeholder="FORM_PLACEHOLDERS.ADDRESS"
                         name="addr"
-                        v-model="model.address"
                     />
 
                     <button class="send-button" type="submit">

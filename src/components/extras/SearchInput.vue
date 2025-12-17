@@ -2,25 +2,25 @@
     <section>
         <b-field :label="label">
             <b-autocomplete
+                ref="autocomplete"
                 v-model="search"
                 :data="filteredLocationName"
-                ref="autocomplete"
                 placeholder="e.g. Bengaluru, Hyderabad, Chennai..."
                 field="place_name"
                 icon="magnify"
                 :loading="isFetching"
-                @typing="getAsyncData"
-                @select="onSelect"
                 keep-first
                 :open-on-focus="true"
+                @typing="getAsyncData"
+                @select="onSelect"
                 @click.native="addRecentSearches()"
             >
                 <template #default="props">
                     <div class="media">
                         <!-- fromLS should be renamed -->
                         <div
-                            class="media-left custom-color"
                             v-show="props.option.fromLS"
+                            class="media-left custom-color"
                         >
                             <AtomIcon :icon="'history'"> </AtomIcon>
                         </div>

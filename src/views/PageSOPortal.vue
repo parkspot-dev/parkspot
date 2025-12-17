@@ -1,7 +1,7 @@
 <template>
     <section class="custom-bg">
         <div class="bg-decor"></div>
-        <TemplateSOPortal @finalSubmit="onFinalSubmit"></TemplateSOPortal>
+        <TemplateSOPortal @final-submit="onFinalSubmit"></TemplateSOPortal>
         <LoaderModal v-if="isLoading"></LoaderModal>
     </section>
 </template>

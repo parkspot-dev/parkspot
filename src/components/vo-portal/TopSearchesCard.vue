@@ -11,9 +11,9 @@
                 <router-link :to="{ path: item.path }" class="content-btn">
                     <AtomIcon
                         class="btn-arrow"
-                        @click.native="onArrowBtn"
                         :icon="'arrow-right'"
                         :size="'is-medium'"
+                        @click.native="onArrowBtn"
                     ></AtomIcon>
                 </router-link>
             </div>

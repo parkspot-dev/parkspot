@@ -20,8 +20,8 @@
             <div
                 v-for="(option, index) in filteredOptions"
                 :key="index"
-                @click="updateSelectedOptions(option)"
                 class="dropdown-item"
+                @click="updateSelectedOptions(option)"
             >
                 <div>{{ option }}</div>
             </div>
@@ -57,6 +57,14 @@ export default {
             return this.options;
         },
     },
+
+    mounted() {
+        document.addEventListener('click', this.handleClickOutside);
+    },
+
+    beforeUnmount() {
+        document.removeEventListener('click', this.handleClickOutside);
+    },
     methods: {
         toggleDropdown() {
             this.isOpen = !this.isOpen;
@@ -80,14 +88,6 @@ export default {
                 this.isOpen = false;
             }
         },
-    },
-
-    mounted() {
-        document.addEventListener('click', this.handleClickOutside);
-    },
-
-    beforeUnmount() {
-        document.removeEventListener('click', this.handleClickOutside);
     },
 };
 </script>

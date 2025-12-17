@@ -285,7 +285,7 @@ const actions = {
     },
 
     async getUserProfile({ commit }) {
-        let userProfile = JSON.parse(
+        const userProfile = JSON.parse(
             localStorage.getItem('UserProfile') || '{}',
         );
         if (Object.keys(userProfile).length !== 0) {

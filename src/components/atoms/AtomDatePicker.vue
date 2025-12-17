@@ -6,9 +6,9 @@
             :enable-time-picker="false"
             :format="format"
             :model-value="date"
-            @update:model-value="onChange"
             class="date-picker"
             placeholder="Click to select..."
+            @update:model-value="onChange"
         />
     </b-field>
 </template>

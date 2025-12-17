@@ -26,37 +26,37 @@
                 <!-- Right Side Form -->
                 <div class="form-container">
                     <Form
-                        @submit="handleSubmit"
                         :validation-schema="contactFormSchema"
+                        @submit="handleSubmit"
                     >
                         <h3>Schedule a Call</h3>
 
                         <FormInput
+                            v-model="model.fullname"
                             name="fullname"
                             :label="FORM.FULLNAME"
                             :placeholder="FORM_PLACEHOLDERS.FULL_NAME"
-                            v-model="model.fullname"
                         />
 
                         <FormInput
+                            v-model="model.cno"
                             name="cno"
                             :label="FORM.CONTACT_NO"
                             :placeholder="FORM_PLACEHOLDERS.CONTACT_NO"
-                            v-model="model.cno"
                         />
 
                         <FormInput
+                            v-model="model.address"
                             name="addr"
                             :label="FORM.ADDRESS"
                             :placeholder="FORM_PLACEHOLDERS.ADDRESS"
-                            v-model="model.address"
                         />
 
                         <FormInput
+                            v-model="model.carModel"
                             name="carModel"
                             :label="FORM.CAR_MODEL"
                             :placeholder="FORM_PLACEHOLDERS.CAR_MODEL"
-                            v-model="model.carModel"
                         />
 
                         <div class="btn-wrapper">
@@ -68,7 +68,7 @@
                 </div>
             </div>
         </div>
-        <TemplateOurProducts @arrowBtn="onArrowBtn"></TemplateOurProducts>
+        <TemplateOurProducts @arrow-btn="onArrowBtn"></TemplateOurProducts>
         <PageAbout></PageAbout>
         <TestimonialSection></TestimonialSection>
         <PageContactUs></PageContactUs>
