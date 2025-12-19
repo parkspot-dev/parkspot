@@ -13,11 +13,11 @@
 import { ref, defineProps } from 'vue';
 
 const props = defineProps({
-    label: { type: String, required: false },
-    list: { type: Array, required: true },
+    label: { type: String, required: false, default : '' },
+    list: { type: Array, required: true},
     name: { type: String, required: true },
-    modelValue: { type: [String, Number], required: false },
-    defaultValue: { type: [String, Number], required: false },
+    modelValue: { type: [String, Number], required: false, default: null },
+    defaultValue: { type: [String, Number], required: false, default: null },
 });
 
 const selectedValue = ref(

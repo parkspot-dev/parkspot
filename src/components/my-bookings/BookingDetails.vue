@@ -62,7 +62,7 @@
                     <div v-if="activeTab !== 'Past'" class="btn-container">
                         <AtomButton
                             class="cancel-btn"
-                            @click.native="cancelBooking(booking)"
+                            @click="cancelBooking(booking)"
                         >
                             Cancel
                         </AtomButton>
@@ -107,7 +107,7 @@
                     <div class="btn-container">
                         <AtomButton
                             class="btn"
-                            @click.native="showPopup = true"
+                            @click="showPopup = true"
                         >
                             Show History
                         </AtomButton>
@@ -209,7 +209,7 @@
                     <div class="btn-container">
                         <AtomButton
                             class="btn"
-                            @click.native="
+                            @click="
                                 openSpotDetails(booking.SiteDetails.SiteID)
                             "
                         >
@@ -236,7 +236,16 @@ import moment from 'moment';
 export default {
     name: 'BookingDetails',
     components: { MapContainer, AtomTooltip, AtomIcon, AtomButton },
-    props: { booking: Object, activeTab: String },
+    props: { 
+        booking: {
+            type:Object,
+            required:true,
+        },
+        activeTab: {
+            type: String,
+            required: true,
+        }
+     },
     data() {
         return {
             ICON,
@@ -268,6 +277,16 @@ export default {
                       lat: DEFAULT_BANGALORE_COORDINATES.lat,
                       lng: DEFAULT_BANGALORE_COORDINATES.lng,
                   };
+        },
+    },
+    watch: {
+        booking: {
+            handler(newBooking) {
+                if (newBooking) {
+                    this.fetchPayments(newBooking.BookingID);
+                }
+            },
+            immediate: true,
         },
     },
     methods: {
@@ -312,16 +331,6 @@ export default {
                     'Could not open WhatsApp. Please contact us on 7488239471 to cancel the booking.',
                 );
             }
-        },
-    },
-    watch: {
-        booking: {
-            handler(newBooking) {
-                if (newBooking) {
-                    this.fetchPayments(newBooking.BookingID);
-                }
-            },
-            immediate: true,
         },
     },
 };

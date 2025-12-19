@@ -44,7 +44,10 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 
 const props = defineProps({
-    label: String,
+    label: {
+        type:String,
+        default: '',
+    },
     name: { type: String, required: true },
     modelValue: {
         type: Array,

@@ -17,7 +17,10 @@ export default {
     name: 'MoleculeFeatureBody',
     components: {},
     props: {
-        featuresTitle: String,
+        featuresTitle: {
+            type: String,
+            default : '',
+        }
     },
     data() {
         return {

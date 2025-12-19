@@ -44,9 +44,13 @@ import { ref, watch } from 'vue';
 
 export default {
     props: {
-        paymentAmount: Number,
+        paymentAmount: {
+            type: Number,
+            required: true,
+        },
         visible: Boolean,
     },
+    emits : ['cancel','confirm'],
     setup(props, { emit }) {
         const isSecurityDeposit = ref(false);
         const refundAmount = ref(props.paymentAmount);

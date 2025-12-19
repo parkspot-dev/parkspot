@@ -44,6 +44,7 @@ export default {
     props: {
         blog: {
             type: Object,
+            default : () => ({}),
         },
     },
     emits:['onBtnClick'],

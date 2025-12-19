@@ -35,7 +35,7 @@
                 </a>
             </div> -->
             <div class="card-btn">
-                <AtomButton @click.native="payNow"> Pay Now </AtomButton>
+                <AtomButton @click="payNow"> Pay Now </AtomButton>
             </div>
         </div>
 
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+/* global Cashfree */
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 export default {
@@ -60,9 +61,11 @@ export default {
     props: {
         bookingDetails: {
             type: Object,
+            required: true,
         },
         paymentMode: {
             type: Object,
+            required: true,
         },
     },
     methods: {

@@ -44,6 +44,7 @@ export default {
             default: '',
         },
     },
+    emits : ['update:modelValue'],
     setup(props) {
         const { errorMessage, value } = useField(props.name);
         return { errorMessage, value };

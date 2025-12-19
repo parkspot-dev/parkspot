@@ -38,8 +38,12 @@ const props = defineProps({
     },
     label: {
         type: String,
+        default : '',
     },
-    modelValue: [String, Number, Object, Boolean, null],
+    modelValue: {
+        type: [String, Number, Object, Boolean, null],
+        default: null,
+    },
     size: {
         type: String,
         default: null,

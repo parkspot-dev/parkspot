@@ -62,6 +62,7 @@ export default {
     props: {
         spot: {
             type: Object,
+            required: true,
         },
     },
     emits: ['on-details'],

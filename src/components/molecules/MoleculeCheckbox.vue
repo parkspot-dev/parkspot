@@ -4,7 +4,7 @@
         <AtomCheckbox
             :values="values"
             class="mb-5"
-            @change.native="handleChange"
+            @change="handleChange"
         >
             <template #extra>
                 <slot name="extra"></slot>
@@ -32,6 +32,7 @@ export default {
         },
         values: {
             type: Array,
+            default: () => [],
         },
     },
     emits: ['data'],

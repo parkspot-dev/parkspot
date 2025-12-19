@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="divider-line"></div>
-        <p class="testimonial-text" v-html="formattedQuote"></p>
+        <p class="testimonial-text">{{ formattedQuote }}</p>
         <a
             v-if="item.link"
             :href="item.link"
