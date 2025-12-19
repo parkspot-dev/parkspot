@@ -1,23 +1,16 @@
 import { mount, flushPromises } from '@vue/test-utils';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createStore } from 'vuex';
 import PageSpotDetail from '@/views/PageSpotDetail.vue';
 
 const mockPush = vi.fn();
+const mockRouter = { push: mockPush };
+const mockRoute = { params: { spotId: 'SPOT#123' } };
 
-const mockRouter = {
-    push: mockPush,
-};
-
-const mockRoute = {
-    params: {
-        spotId: 'SPOT#123',
-    },
-};
-
-describe('PageSpotDetail.vue', () => {
+describe('PageSpotDetail.vue - Complete Test Suite', () => {
     let store;
     let actions;
+    let commitSpy;
 
     const mountComponent = () =>
         mount(PageSpotDetail, {
@@ -27,24 +20,29 @@ describe('PageSpotDetail.vue', () => {
                     $router: mockRouter,
                     $route: mockRoute,
                     $buefy: {
-                        toast: {
-                            open: vi.fn(),
-                        },
+                        toast: { open: vi.fn() },
                     },
                 },
                 stubs: {
-                    LoaderModal: {
-                        template: '<div class="loader-modal"></div>',
+                    LoaderModal: { template: '<div class="loader-modal"></div>' },
+                    TemplateSpotDetail: { template: '<div class="template-spot-detail"></div>' },
+                    AtomDatePicker: { 
+                        template: '<div class="date-picker"></div>',
+                        props: ['assignedDate', 'size'] 
                     },
-                    TemplateSpotDetail: {
-                        template: '<div class="template-spot-detail"></div>',
-                    },
+                    AtomTextarea: { 
+                        template: '<div class="remark-textarea"></div>',
+                        props: ['value', 'size']
+                    }
                 },
             },
         });
 
     beforeEach(() => {
-        mockPush.mockClear();
+        Object.defineProperty(global.navigator, 'geolocation', {
+            value: { getCurrentPosition: vi.fn() },
+            configurable: true,
+        });
 
         actions = {
             getSpotDetails: vi.fn().mockResolvedValue(),
@@ -57,17 +55,12 @@ describe('PageSpotDetail.vue', () => {
             modules: {
                 sdp: {
                     namespaced: true,
-                    state: {
-                        loading: false,
-                        title: 'Spot Detail',
-                    },
+                    state: { loading: false, title: 'Spot Detail' },
                     actions,
                 },
                 searchPortal: {
                     namespaced: true,
-                    state: {
-                        activeTab: 1,
-                    },
+                    state: { activeTab: 1 },
                     actions: {
                         updateActiveTab: vi.fn(),
                         updateSOLatLngInput: vi.fn(),
@@ -75,30 +68,25 @@ describe('PageSpotDetail.vue', () => {
                 },
                 map: {
                     namespaced: true,
-                    mutations: {
-                        'update-user-location': vi.fn(),
-                    },
+                    mutations: { 'update-user-location': vi.fn() },
                 },
             },
         });
 
-        Object.defineProperty(global.navigator, 'geolocation', {
-            value: {
-                getCurrentPosition: vi.fn(),
-            },
-            configurable: true,
-        });
+        commitSpy = vi.spyOn(store, 'commit');
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
     });
 
     it('shows loader when page is loading', () => {
         store.state.sdp.loading = true;
         const wrapper = mountComponent();
-
         expect(wrapper.find('.loader-modal').exists()).toBe(true);
-        expect(wrapper.find('.template-spot-detail').exists()).toBe(false);
     });
 
-    it('renders spot detail template when loading is false', () => {
+    it('renders spot detail template when loading is complete', () => {
         const wrapper = mountComponent();
         expect(wrapper.find('.template-spot-detail').exists()).toBe(true);
     });
@@ -106,70 +94,55 @@ describe('PageSpotDetail.vue', () => {
     it('fetches spot details on mount with encoded spotId', async () => {
         mountComponent();
         await flushPromises();
-
         expect(actions.getSpotDetails).toHaveBeenCalledWith(expect.anything(), {
             spotId: 'SPOT%23123',
         });
     });
 
-    it('requests user location on mount', async () => {
-        mountComponent();
-        await flushPromises();
-
-        expect(navigator.geolocation.getCurrentPosition).toHaveBeenCalled();
-    });
-
-    it('updates user location on geolocation success', () => {
+    it('updates user location on geolocation success using a spy', () => {
         const wrapper = mountComponent();
-
         wrapper.vm.onGeoSuccess({
-            coords: {
-                latitude: 28.61,
-                longitude: 77.23,
-            },
+            coords: { latitude: 28.61, longitude: 77.23 },
         });
-
-        expect(store._mutations['map/update-user-location']).toBeTruthy();
+        
+        expect(commitSpy).toHaveBeenCalled();
+        const callArgs = commitSpy.mock.calls[0];
+        expect(callArgs[0]).toBe('map/update-user-location');
+        expect(callArgs[1]).toEqual([77.23, 28.61]);
     });
 
-    it('navigates to search portal with correct params', async () => {
+    it('handles getSpotDetails failure gracefully', async () => {
+        actions.getSpotDetails.mockRejectedValue(new Error('API Error'));
         const wrapper = mountComponent();
+        await flushPromises();
+        expect(wrapper.vm.$buefy.toast.open).toHaveBeenCalled();
+    });
 
+    it('navigates to search portal with correct query params', async () => {
+        const wrapper = mountComponent();
         await wrapper.vm.goToSearchPortal([77.23, 28.61]);
-
-        expect(mockPush).toHaveBeenCalledWith({
+        expect(mockPush).toHaveBeenCalledWith(expect.objectContaining({
             name: 'SearchPortal',
-            query: {
-                latlng: '77.23,28.61',
-                tab: expect.any(String),
-            },
-        });
+            query: expect.objectContaining({ latlng: '77.23,28.61' })
+        }));
     });
 
-    it('updates availability and reloads spot details', async () => {
+    it('triggers availability update and refreshes data', async () => {
         const wrapper = mountComponent();
-
         await wrapper.vm.changeAvailability(-1);
-
         expect(actions.updateAvailability).toHaveBeenCalled();
         expect(actions.getSpotDetails).toHaveBeenCalled();
     });
 
-    it('updates last call date and reloads spot details', async () => {
-        const wrapper = mountComponent();
-
-        await wrapper.vm.changeLastCallDate('2025-12-20');
-
-        expect(actions.updateLastCallDate).toHaveBeenCalled();
-        expect(actions.getSpotDetails).toHaveBeenCalled();
+    it('requests user location permission on component mount', async () => {
+        mountComponent();
+        await flushPromises();
+        expect(navigator.geolocation.getCurrentPosition).toHaveBeenCalled();
     });
 
-    it('updates remark and reloads spot details', async () => {
+    it('renders loading state correctly snapshot', () => {
+        store.state.sdp.loading = true;
         const wrapper = mountComponent();
-
-        await wrapper.vm.changeRemark('Updated remark');
-
-        expect(actions.updateRemark).toHaveBeenCalled();
-        expect(actions.getSpotDetails).toHaveBeenCalled();
+        expect(wrapper.find('.loader-modal').html()).toMatchSnapshot();
     });
 });

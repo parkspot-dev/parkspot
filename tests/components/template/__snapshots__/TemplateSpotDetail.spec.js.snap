@@ -13,3 +13,13 @@ exports[`TemplateSpotDetail.vue > keeps spot header html stable 1`] = `
   </div>
 </div>"
 `;
+
+exports[`TemplateSpotDetail.vue > matches snapshot for first facility item 1`] = `
+"<div data-v-103d742e="" class="facility-card"><span data-v-103d742e="" class="material-symbols-outlined">cctv_icon</span>
+  <div data-v-103d742e="" class="facility-text">
+    <div data-v-103d742e="">CCTV</div>
+  </div>
+</div>"
+`;
+
+exports[`TemplateSpotDetail.vue > matches snapshot for title section 1`] = `"<h1 data-v-103d742e="">Test Spot</h1>"`;

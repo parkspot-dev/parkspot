@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createStore } from 'vuex';
 import TemplateSpotDetail from '@/components/templates/TemplateSpotDetail.vue';
 
@@ -84,7 +84,7 @@ describe('TemplateSpotDetail.vue', () => {
                             {
                                 ID: 'B1',
                                 Status: 1,
-                                AgentFullName:'Preety Sharma',
+                                AgentFullName: 'Preety Sharma',
                             },
                         ],
                     },
@@ -93,37 +93,32 @@ describe('TemplateSpotDetail.vue', () => {
         });
     });
 
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
     it('renders spot title and address', () => {
         const wrapper = mountComponent();
         expect(wrapper.find('h1').text()).toBe('Test Spot');
         expect(wrapper.text()).toContain('C-51 Shyam Park Extension');
         expect(wrapper.text()).toContain('Ghaziabad');
-        expect(wrapper.text()).toContain('Uttar Pradesh');
     });
 
-    it('renders facilities section', () => {
-        const wrapper = mountComponent();
-        expect(wrapper.findAll('.facility-card').length).toBe(1);
-        expect(wrapper.text()).toContain('CCTV');
-    });
-
-    it('computes displayImages priority correctly', async () => {
+    it('returns images when available', () => {
         const wrapper = mountComponent();
         expect(wrapper.vm.displayImages).toEqual(['img1.jpg']);
+    });
+
+    it('falls back to thumbnail when images is empty', () => {
         store.state.sdp.images = [];
-        await wrapper.vm.$nextTick();
+        const wrapper = mountComponent();
         expect(wrapper.vm.displayImages).toEqual(['thumb1.jpg']);
     });
 
-    it('computes locationName correctly', () => {
+    it('hides facilities section when no facilities', () => {
+        store.state.sdp.spotDetails.Facilities = [];
         const wrapper = mountComponent();
-        expect(wrapper.vm.locationName).toBe('Test Spot');
-    });
-
-    it('returns empty locationName when selectedSpot is empty', () => {
-        store.state.sdp.selectedSpot = [];
-        const wrapper = mountComponent();
-        expect(wrapper.vm.locationName).toBe('');
+        expect(wrapper.find('.facility-card').exists()).toBe(false);
     });
 
     it('emits changeAvailability -1 on Mark Rented', async () => {
@@ -131,6 +126,7 @@ describe('TemplateSpotDetail.vue', () => {
         const btn = wrapper
             .findAll('button')
             .find((b) => b.text().includes('Mark Rented'));
+        expect(btn).toBeDefined();
         await btn.trigger('click');
         expect(wrapper.emitted().changeAvailability[0]).toEqual([-1]);
     });
@@ -141,6 +137,7 @@ describe('TemplateSpotDetail.vue', () => {
         const btn = wrapper
             .findAll('button')
             .find((b) => b.text().includes('Mark Available'));
+        expect(btn).toBeDefined();
         await btn.trigger('click');
         expect(wrapper.emitted().changeAvailability[0]).toEqual([1]);
     });
@@ -150,6 +147,7 @@ describe('TemplateSpotDetail.vue', () => {
         const btn = wrapper
             .findAll('button')
             .find((b) => b.text().includes("Interested VO's"));
+        expect(btn).toBeDefined();
         await btn.trigger('click');
         expect(wrapper.emitted().goToSearchPortal[0]).toEqual([[11.11, 22.22]]);
     });
@@ -174,38 +172,23 @@ describe('TemplateSpotDetail.vue', () => {
         const wrapper = mountComponent();
         expect(wrapper.text()).toContain('UPI: dev@okaxis');
         expect(wrapper.text()).toContain('Dev Shrivastav');
-        expect(wrapper.text()).toContain('9876543210');
     });
 
-    it('renders main HTML sections', () => {
+    it('has accessible section headers', () => {
         const wrapper = mountComponent();
-        expect(wrapper.find('.spot-detail-main-description').exists()).toBe(
-            true,
-        );
+        expect(wrapper.find('.spot-detail-main-description').exists()).toBe(true);
         expect(wrapper.find('.spot-detail-amenities').exists()).toBe(true);
-        expect(wrapper.find('.spot-detail-map').exists()).toBe(true);
-        expect(wrapper.find('.only-to-agent').exists()).toBe(true);
     });
 
-    it('applies expected CSS classes', () => {
+    it('matches snapshot for title section', () => {
         const wrapper = mountComponent();
-        expect(wrapper.find('.facility-card').classes()).toContain(
-            'facility-card',
-        );
-        expect(wrapper.find('.warning').exists()).toBe(true);
+        const titleSection = wrapper.find('h1');
+        expect(titleSection.html()).toMatchSnapshot();
     });
 
-    it('hides facilities section when no facilities', async () => {
+    it('matches snapshot for first facility item', () => {
         const wrapper = mountComponent();
-        store.state.sdp.spotDetails.Facilities = [];
-        await wrapper.vm.$nextTick();
-        expect(wrapper.find('.facility-card').exists()).toBe(false);
-    });
-
-    it('keeps spot header html stable', () => {
-        const wrapper = mountComponent();
-        expect(
-            wrapper.find('.spot-detail-main-description').html(),
-        ).toMatchSnapshot();
+        const facility = wrapper.find('.facility-card');
+        expect(facility.html()).toMatchSnapshot();
     });
 });

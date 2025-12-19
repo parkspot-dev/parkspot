@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PageSpotDetail.vue - Complete Test Suite > renders loading state correctly snapshot 1`] = `"<div class="loader-modal"></div>"`;
