@@ -2,7 +2,7 @@
     <section>
         <!-- payment link button -->
         <div class="payment-link-btn-wrapper">
-            <AtomButton @click.native="getPaymentLink">
+            <AtomButton @click="getPaymentLink">
                 Generate Payment Link
             </AtomButton>
         </div>
@@ -14,7 +14,7 @@
                 <AtomIcon
                     class="copy-icon"
                     :icon="'content-copy'"
-                    @click.native="copyUrl"
+                    @click="copyUrl"
                 ></AtomIcon>
             </AtomTooltip>
         </div>
@@ -27,7 +27,7 @@
                         <AtomIcon
                             :icon="'pencil'"
                             size=""
-                            @click.native="enableEdit('Booking Details')"
+                            @click="enableEdit('Booking Details')"
                         >
                         </AtomIcon>
                     </span>
@@ -35,7 +35,7 @@
                         <AtomIcon
                             :icon="'content-save-outline'"
                             size=""
-                            @click.native="saveField"
+                            @click="saveField"
                         >
                         </AtomIcon>
                     </span>
@@ -43,7 +43,7 @@
                         <AtomIcon
                             :icon="'close'"
                             size=""
-                            @click.native="cancelField"
+                            @click="cancelField"
                         >
                         </AtomIcon>
                     </span>
@@ -220,7 +220,7 @@
                         <AtomIcon
                             :icon="'pencil'"
                             size=""
-                            @click.native="enableEdit('Rent Details')"
+                            @click="enableEdit('Rent Details')"
                         >
                         </AtomIcon>
                     </span>
@@ -228,7 +228,7 @@
                         <AtomIcon
                             :icon="'content-save-outline'"
                             size=""
-                            @click.native="saveField"
+                            @click="saveField"
                         >
                         </AtomIcon>
                     </span>
@@ -236,7 +236,7 @@
                         <AtomIcon
                             :icon="'close'"
                             size=""
-                            @click.native="cancelField"
+                            @click="cancelField"
                         >
                         </AtomIcon>
                     </span>
@@ -521,7 +521,7 @@
                                     :icon="'refresh'"
                                     type="primary"
                                     size="is-small"
-                                    @click.native="
+                                    @click="
                                         refreshPaymentStatus(payment.PaymentID)
                                     "
                                 >
@@ -601,6 +601,7 @@ export default {
         RefundDialog,
         SelectInput,
     },
+    emits: ['payment-link', 'refresh-payment-status', 'update-booking-details'],
     setup() {
         return { RefundIcon };
     },
@@ -619,22 +620,6 @@ export default {
             soChargesValidationError: '',
             KYCStatus
         };
-    },
-    watch: {
-        '$store.state.bookingPortal.bookingDetails'(val) {
-            this.currBookingDetails = cloneDeep(val); // make a local copy of bookingDetails
-        },
-        '$store.state.bookingPortal.successMessage'(message) {
-            if (message) {
-                this.showSuccessMessage();
-                setTimeout(() => {
-                    this.$store.commit('bookingPortal/set-isField-updated', '');
-                }, 2000);
-            }
-        },
-    },
-    beforeMount() {
-        this.currBookingDetails = cloneDeep(this.bookingDetails); // make a local copy of bookingDetails
     },
     computed: {
         ...mapState('bookingPortal', [
@@ -675,6 +660,29 @@ export default {
             const rent = this.currBookingDetails?.Booking?.Rent;
             return rent && rent > 0;
         },
+    },
+    watch: {
+        '$store.state.bookingPortal.bookingDetails'(val) {
+            this.currBookingDetails = cloneDeep(val); // make a local copy of bookingDetails
+        },
+        '$store.state.bookingPortal.successMessage'(message) {
+            if (message) {
+                this.showSuccessMessage();
+                setTimeout(() => {
+                    this.$store.commit('bookingPortal/set-isField-updated', '');
+                }, 2000);
+            }
+        },
+        status(newStatus) {
+            if (newStatus === 'error') {
+                this.alertError(this.statusMessage);
+            } else if (newStatus === 'success') {
+                this.alertSuccess(this.statusMessage);
+            }
+        },
+    },
+    beforeMount() {
+        this.currBookingDetails = cloneDeep(this.bookingDetails); // make a local copy of bookingDetails
     },
     mounted() {
         this.getUserProfile();
@@ -888,10 +896,6 @@ export default {
             };
             this.createRefund(refundRequest);
         },
-        updatePaymentType(value, paymentId) {
-            const paymentType = this.paymentTypeLabels.indexOf(value);
-            this.changePaymentType({ paymentID: paymentId, paymentType });
-        },
         alertError(msg) {
             this.$buefy.dialog.alert({
                 ariaModal: true,
@@ -939,15 +943,6 @@ export default {
         getKYCStatusLabel(kycStatus) {
             return getKYCStatusLabel(kycStatus)
         }
-    },
-    watch: {
-        status(newStatus) {
-            if (newStatus === 'error') {
-                this.alertError(this.statusMessage);
-            } else if (newStatus === 'success') {
-                this.alertSuccess(this.statusMessage);
-            }
-        },
     },
 };
 </script>

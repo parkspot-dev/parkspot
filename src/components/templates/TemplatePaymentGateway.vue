@@ -21,9 +21,11 @@ export default {
     props: {
         bookingDetails: {
             type: Object,
+            default: () => ({}),
         },
         paymentMode: {
             type: Object,
+            default: () => ({}),
         },
         status: Boolean,
     },

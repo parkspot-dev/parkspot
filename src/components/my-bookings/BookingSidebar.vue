@@ -50,11 +50,24 @@
 export default {
     name: 'BookingSidebar',
     props: {
-        activebookings: Array,
-        pastbookings: Array,
-        requestbookings: Array,
-        selectedBooking: Object,
+        activebookings: {
+            type: Array,
+            default: () => [],
+        },
+        pastbookings: {
+            type: Array,
+            default: () => [],
+        },
+        requestbookings: {
+            type: Array,
+            default: () => [],
+        },
+        selectedBooking: {
+            type: Object,
+            default: () => ({}),
+        },
     },
+    emits: ['tab-change', 'select-booking', 'update-query'],
 
     data() {
         return {

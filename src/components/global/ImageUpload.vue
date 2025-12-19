@@ -178,8 +178,7 @@ export default {
                     this.isLoading = true;
                     try {
                         file = await ImageUploadService.convertHEICtoJPEG(file);
-                    } catch (error) {
-                        console.log(error);
+                    } catch{
                         this.showDangerToast(
                             'Unable to upload file. Please try again',
                         );

@@ -178,8 +178,9 @@ export default {
         isCallDelayed: { type: Function, required: true },
         toSrp: { type: Function, required: true },
         storeOldComment: { type: Function, required: true },
-        oldComments: { type: null },
+        oldComments: { type: null, default: null},
     },
+    emits: ['connect', 'comment-update', 'agent-update', 'status-update', 'date-update', 'latlng-update', 'oldComments']
 };
 </script>
 <style>

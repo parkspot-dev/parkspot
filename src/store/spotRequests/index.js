@@ -41,7 +41,7 @@ const actions = {
             commit('set-loading', false);
     },
 
-    async updateStatus({}, spotData) {
+    async updateStatus(_, spotData) {
           const FieldMask = ['Status']
           const spotRequest = {...spotData, FieldMask};
           return await mayaClient.patch('/owner/spot-request', spotRequest);

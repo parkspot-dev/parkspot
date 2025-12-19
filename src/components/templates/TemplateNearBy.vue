@@ -61,11 +61,14 @@ export default {
     props: {
         nearByLocation: {
             type: String,
+            default: '',
         },
         spots: {
             type: Array,
+            default: () => [],
         },
     },
+    emits: ['details'],
     data() {
         return {};
     },

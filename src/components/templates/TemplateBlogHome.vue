@@ -44,8 +44,10 @@ export default {
     props: {
         blogs: {
             type: Array,
+            default: () => [],
         },
     },
+    emits: ['onBlogClick'],
     data() {
         return {};
     },

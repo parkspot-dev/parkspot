@@ -12,7 +12,7 @@
             </div>
             <div v-if="isSummary" class="summary">
                 <div class="so-btn">
-                    <AtomButton @click.native="showSummary">
+                    <AtomButton @click="showSummary">
                         {{ summary.btn }} Summary
                     </AtomButton>
                 </div>
@@ -22,7 +22,7 @@
                         <AtomIcon
                             :icon="'close'"
                             size=""
-                            @click.native="showSummary"
+                            @click="showSummary"
                         />
                     </span>
                     <div class="summary-layout">
@@ -561,6 +561,7 @@ export default {
     props: {
         parkingRequests: {
             type: Array,
+            default: () => [],
         },
         isLoading: {
             type: Boolean,
@@ -571,6 +572,74 @@ export default {
         },
     },
     emits: ['updateRequest', 'toSrp'],
+    data() {
+        return {
+            // filters were declared explicitly to use in v-model else they have no use
+            filters: {
+                Agent: '',
+                Status: '',
+                UpdatedAt: null,
+                isExpiring: false,
+            },
+            isEmpty: false,
+            isBordered: false,
+            isStriped: false,
+            isNarrowed: false,
+            isHoverable: false,
+            isFocusable: false,
+            hasMobileCards: true,
+
+            statusList: [
+                { id: 0, name: 'StatusNotSet' },
+                { id: 1, name: 'Registered' },
+                { id: 2, name: 'Processing' },
+                { id: 3, name: 'SpotSuggested' },
+                { id: 4, name: 'SpotAccepted' },
+                { id: 5, name: 'SpotDenied' },
+                { id: 6, name: 'Archive' },
+            ],
+
+            model: {
+                comments: '',
+                agent: '',
+                status: '',
+                nextCall: '',
+            },
+
+            summary: {
+                btn: 'Show',
+                show: false,
+                totalRequest: 0,
+                high: 0,
+                medium: 0,
+                low: 0,
+                agent: [0, 0, 0, 0],
+                status: [0, 0, 0, 0, 0, 0],
+                today: 0,
+                yesterday: 0,
+            },
+            showSecondaryDetails: {
+                ID: 0,
+                isShow: false,
+            },
+            oldComments: '',
+            isOpen: false,
+            selectedRow: {},
+            newComment: '',
+            defaultStatus: '',
+            FREQUENT_COMMENTS: FREQUENT_COMMENTS,
+            newCommentMap: {},
+            requestsFilterOptions: ['Expiring'],
+            windowWidth: 0,
+            forceDesktop: false,
+            isMobileDevice: false,
+            QUERY_PARAMS: {
+                AGENT: 'agent',
+                STATUS: 'status',
+                IS_EXPIRING: 'isExpiring',
+            },
+        };
+    },
     computed: {
         ...mapState('searchPortal', [
             'agentList',
@@ -639,75 +708,7 @@ export default {
         }
     },
 
-    data() {
-        return {
-            // filters were declared explicitly to use in v-model else they have no use
-            filters: {
-                Agent: '',
-                Status: '',
-                UpdatedAt: null,
-                isExpiring: false,
-            },
-            isEmpty: false,
-            isBordered: false,
-            isStriped: false,
-            isNarrowed: false,
-            isHoverable: false,
-            isFocusable: false,
-            hasMobileCards: true,
-
-            statusList: [
-                { id: 0, name: 'StatusNotSet' },
-                { id: 1, name: 'Registered' },
-                { id: 2, name: 'Processing' },
-                { id: 3, name: 'SpotSuggested' },
-                { id: 4, name: 'SpotAccepted' },
-                { id: 5, name: 'SpotDenied' },
-                { id: 6, name: 'Archive' },
-            ],
-
-            model: {
-                comments: '',
-                agent: '',
-                status: '',
-                nextCall: '',
-            },
-
-            summary: {
-                btn: 'Show',
-                show: false,
-                totalRequest: 0,
-                high: 0,
-                medium: 0,
-                low: 0,
-                agent: [0, 0, 0, 0],
-                status: [0, 0, 0, 0, 0, 0],
-                today: 0,
-                yesterday: 0,
-                agent: {},
-            },
-            showSecondaryDetails: {
-                ID: 0,
-                isShow: false,
-            },
-            oldComments: '',
-            isOpen: false,
-            selectedRow: {},
-            newComment: '',
-            defaultStatus: '',
-            FREQUENT_COMMENTS: FREQUENT_COMMENTS,
-            newCommentMap: {},
-            requestsFilterOptions: ['Expiring'],
-            windowWidth: 0,
-            forceDesktop: false,
-            isMobileDevice: false,
-            QUERY_PARAMS: {
-                AGENT: 'agent',
-                STATUS: 'status',
-                IS_EXPIRING: 'isExpiring',
-            },
-        };
-    },
+    
     methods: {
         ...mapActions('searchPortal', [
             'getAgents',
