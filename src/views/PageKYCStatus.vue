@@ -161,7 +161,7 @@
 <script>
 import { getKYCStatusLabel, KYCStatusLabel, KYCStatus } from '@/constant/enums';
 import { mapState, mapActions } from 'vuex';
-import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
+// import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import SelectInput from '@/components/global/SelectInput.vue';
 import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
@@ -169,7 +169,6 @@ import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
 export default {
     name: 'KYCStatusPage',
     components: {
-        AtomSelectInput,
         LoaderModal,
         MoleculeSearchBox,
         SelectInput,
@@ -191,6 +190,13 @@ export default {
             'users',
             'searchMobile',
         ]),
+    },
+    watch: {
+        hasError(error) {
+            if (error) {
+                this.alertError(this.errorMessage);
+            }
+        },
     },
     mounted() {
         this.fetchKycPendingUsers();
@@ -300,13 +306,6 @@ export default {
         openImage(url) {
             this.selectedImage = url;
             this.showImageModal = true;
-        },
-    },
-    watch: {
-        hasError(error) {
-            if (error) {
-                this.alertError(this.errorMessage);
-            }
         },
     },
 };

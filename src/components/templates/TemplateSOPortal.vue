@@ -58,7 +58,7 @@
         </div>
 
         <!-- Additional Sections -->
-        <Whats_Next :heading="`What's next?`" :steps="What_Next" />
+        <WhatsNext :heading="`What's next?`" :steps="What_Next" />
         <TestimonialSection />
     </div>
 </template>
@@ -67,7 +67,7 @@
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import RegisterRequestForm from '@/components/so-portal/RegisterRequestForm.vue';
-import Whats_Next from '@/components/global/Whats_Next.vue';
+import { WhatsNext} from '@/components/global/Whats_Next.vue';
 import TestimonialSection from '@/components/global/TestimonialSection.vue';
 import {
     PAGE_TITLE,
@@ -81,7 +81,7 @@ export default {
         AtomHeading,
         AtomIcon,
         RegisterRequestForm,
-        Whats_Next,
+        WhatsNext,
         TestimonialSection,
     },
     emits: ['finalSubmit'],
@@ -95,7 +95,7 @@ export default {
         return {
             isLoading: false,
             JOINING_BENEFITS: JOINING_BENEFITS_SO,
-            What_Next: WHAT_NEXT_SO,
+            WhatsNext: WHAT_NEXT_SO,
         };
     },
     methods: {

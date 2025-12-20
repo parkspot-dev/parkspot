@@ -40,6 +40,14 @@ export default {
             currentPage: 1,
         };
     },
+    computed: {
+        ...mapGetters({
+            paginatedSrpResults: 'map/getPaginateSrpResults',
+            totalPages: 'map/getTotalPages',
+            LocDetails: 'map/getLocDetails',
+        }),
+        ...mapState('map', ['srpResults', 'filteredSrpResults']),
+    },
     watch: {
         $route: {
             handler: function (to) {
@@ -50,14 +58,6 @@ export default {
             deep: true,
             immediate: true,
         },
-    },
-    computed: {
-        ...mapGetters({
-            paginatedSrpResults: 'map/getPaginateSrpResults',
-            totalPages: 'map/getTotalPages',
-            LocDetails: 'map/getLocDetails',
-        }),
-        ...mapState('map', ['srpResults', 'filteredSrpResults']),
     },
 
     async mounted() {
