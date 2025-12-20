@@ -91,10 +91,7 @@
 </template>
 
 <script>
-// import PaginationBody from '../extras/PaginationBody.vue';
 import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
-// import AtomRadioButton from '../atoms/AtomRadioButton.vue';
-// import AtomCheckbox from '../atoms/AtomCheckbox.vue';
 import MapContainer from '../extras/MapContainer.vue';
 import SearchInput from '../extras/SearchInput.vue';
 import { mapState } from 'vuex';
@@ -107,7 +104,6 @@ import {
     STATUS_FILTER_OPTIONS,
 } from '@/constant/constant';
 import FilterManager from '@/modules/filter';
-// import SelectInput from '../global/SelectInput.vue';
 export default {
     name: 'TemplateSrp',
     directives: {

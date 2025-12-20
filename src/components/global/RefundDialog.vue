@@ -48,7 +48,9 @@ export default {
             type: Number,
             required: true,
         },
-        visible: Boolean,
+        visible: {
+            type: Boolean,
+        },
     },
     emits : ['cancel','confirm'],
     setup(props, { emit }) {
@@ -160,4 +162,4 @@ export default {
         margin-bottom: 16px;
     }
 }
-</style>
+</style> 

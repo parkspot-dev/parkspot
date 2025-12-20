@@ -162,12 +162,12 @@
                 centered
                 sortable
             >
-                <template #searchable="{ filters }">
+                <template #searchable="{ filters: filter }">
                     <AtomDatePicker
-                        :assigned-date="filters.UpdatedAt"
+                        :assigned-date="filter.UpdatedAt"
                         placeholder="Filter by Updated Date"
                         @changed="
-                            (date) => (filters.UpdatedAt = formatDate(date))
+                            (date) => (filter.UpdatedAt = formatDate(date))
                         "
                     />
                 </template>
