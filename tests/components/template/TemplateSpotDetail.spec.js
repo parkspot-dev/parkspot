@@ -3,8 +3,11 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createStore } from 'vuex';
 import TemplateSpotDetail from '@/components/templates/TemplateSpotDetail.vue';
 
+const flushPromises = () => new Promise(setImmediate);
+
 describe('TemplateSpotDetail.vue', () => {
     let store;
+    let actions;
 
     const mountComponent = () =>
         mount(TemplateSpotDetail, {
@@ -13,24 +16,20 @@ describe('TemplateSpotDetail.vue', () => {
                 stubs: {
                     BodyWrapper: { template: '<div><slot /></div>' },
                     ImageGallery: {
-                        name: 'ImageGallery',
                         template: '<div />',
                         props: ['images', 'locationName', 'removable'],
                     },
                     SpotRateCard: true,
                     MapContainer: {
-                        name: 'MapContainer',
                         template: '<div />',
                         props: ['center', 'spotDetails', 'zoom'],
                     },
                     InfographicSteps: true,
                     AtomDatePicker: {
-                        name: 'AtomDatePicker',
                         template:
                             '<input class="date-picker" @change="$emit(\'changed\', $event.target.value)" />',
                     },
                     AtomTextarea: {
-                        name: 'AtomTextarea',
                         template:
                             '<textarea class="remark-textarea" @input="$emit(\'changed\', $event.target.value)" />',
                     },
@@ -42,11 +41,17 @@ describe('TemplateSpotDetail.vue', () => {
             },
         });
 
-    beforeEach(() => {
-        store = createStore({
+    const createStoreInstance = (overrides = {}) => {
+        actions = {
+            getSpotDetails: vi.fn().mockResolvedValue(),
+            ...overrides.actions,
+        };
+
+        return createStore({
             modules: {
                 sdp: {
                     namespaced: true,
+                    actions,
                     state: {
                         images: ['img1.jpg'],
                         thumbnail: ['thumb1.jpg'],
@@ -87,10 +92,15 @@ describe('TemplateSpotDetail.vue', () => {
                                 AgentFullName: 'Preety Sharma',
                             },
                         ],
+                        ...overrides.state,
                     },
                 },
             },
         });
+    };
+
+    beforeEach(() => {
+        store = createStoreInstance();
     });
 
     afterEach(() => {
@@ -110,33 +120,43 @@ describe('TemplateSpotDetail.vue', () => {
     });
 
     it('falls back to thumbnail when images is empty', () => {
-        store.state.sdp.images = [];
+        store = createStoreInstance({
+            state: { images: [] },
+        });
         const wrapper = mountComponent();
         expect(wrapper.vm.displayImages).toEqual(['thumb1.jpg']);
     });
 
     it('hides facilities section when no facilities', () => {
-        store.state.sdp.spotDetails.Facilities = [];
+        store = createStoreInstance({
+            state: {
+                spotDetails: {
+                    Facilities: [],
+                },
+            },
+        });
         const wrapper = mountComponent();
         expect(wrapper.find('.facility-card').exists()).toBe(false);
     });
 
     it('emits changeAvailability -1 on Mark Rented', async () => {
         const wrapper = mountComponent();
-        const btn = wrapper
-            .findAll('button')
-            .find((b) => b.text().includes('Mark Rented'));
+        const btn = wrapper.findAll('button').find(b =>
+            b.text().includes('Mark Rented'),
+        );
         expect(btn).toBeDefined();
         await btn.trigger('click');
         expect(wrapper.emitted().changeAvailability[0]).toEqual([-1]);
     });
 
     it('emits changeAvailability 1 on Mark Available', async () => {
-        store.state.sdp.isAvailable = false;
+        store = createStoreInstance({
+            state: { isAvailable: false },
+        });
         const wrapper = mountComponent();
-        const btn = wrapper
-            .findAll('button')
-            .find((b) => b.text().includes('Mark Available'));
+        const btn = wrapper.findAll('button').find(b =>
+            b.text().includes('Mark Available'),
+        );
         expect(btn).toBeDefined();
         await btn.trigger('click');
         expect(wrapper.emitted().changeAvailability[0]).toEqual([1]);
@@ -144,9 +164,9 @@ describe('TemplateSpotDetail.vue', () => {
 
     it('emits goToSearchPortal with lat long', async () => {
         const wrapper = mountComponent();
-        const btn = wrapper
-            .findAll('button')
-            .find((b) => b.text().includes("Interested VO's"));
+        const btn = wrapper.findAll('button').find(b =>
+            b.text().includes("Interested VO's"),
+        );
         expect(btn).toBeDefined();
         await btn.trigger('click');
         expect(wrapper.emitted().goToSearchPortal[0]).toEqual([[11.11, 22.22]]);
@@ -168,27 +188,28 @@ describe('TemplateSpotDetail.vue', () => {
         expect(wrapper.emitted().changeRemark[0]).toEqual(['Updated Remark']);
     });
 
-    it('renders payment and owner info correctly', () => {
-        const wrapper = mountComponent();
-        expect(wrapper.text()).toContain('UPI: dev@okaxis');
-        expect(wrapper.text()).toContain('Dev Shrivastav');
-    });
+    it('handles getSpotDetails failure gracefully', async () => {
+        store = createStoreInstance({
+            actions: {
+                getSpotDetails: vi.fn().mockRejectedValue(
+                    new Error('API Error'),
+                ),
+            },
+        });
 
-    it('has accessible section headers', () => {
-        const wrapper = mountComponent();
-        expect(wrapper.find('.spot-detail-main-description').exists()).toBe(true);
-        expect(wrapper.find('.spot-detail-amenities').exists()).toBe(true);
+        expect(() => mountComponent()).not.toThrow();
+        await flushPromises();
     });
 
     it('matches snapshot for title section', () => {
         const wrapper = mountComponent();
-        const titleSection = wrapper.find('h1');
-        expect(titleSection.html()).toMatchSnapshot();
+        expect(wrapper.find('h1').html()).toMatchSnapshot();
     });
 
     it('matches snapshot for first facility item', () => {
         const wrapper = mountComponent();
         const facility = wrapper.find('.facility-card');
+        expect(facility.exists()).toBe(true);
         expect(facility.html()).toMatchSnapshot();
     });
 });

@@ -25,15 +25,17 @@ describe('PageSpotDetail.vue - Complete Test Suite', () => {
                 },
                 stubs: {
                     LoaderModal: { template: '<div class="loader-modal"></div>' },
-                    TemplateSpotDetail: { template: '<div class="template-spot-detail"></div>' },
-                    AtomDatePicker: { 
-                        template: '<div class="date-picker"></div>',
-                        props: ['assignedDate', 'size'] 
+                    TemplateSpotDetail: {
+                        template: '<div class="template-spot-detail"></div>',
                     },
-                    AtomTextarea: { 
+                    AtomDatePicker: {
+                        template: '<div class="date-picker"></div>',
+                        props: ['assignedDate', 'size'],
+                    },
+                    AtomTextarea: {
                         template: '<div class="remark-textarea"></div>',
-                        props: ['value', 'size']
-                    }
+                        props: ['value', 'size'],
+                    },
                 },
             },
         });
@@ -68,11 +70,12 @@ describe('PageSpotDetail.vue - Complete Test Suite', () => {
                 },
                 map: {
                     namespaced: true,
-                    mutations: { 'update-user-location': vi.fn() },
+                    mutations: {
+                        'update-user-location': vi.fn(),
+                    },
                 },
             },
         });
-
         commitSpy = vi.spyOn(store, 'commit');
     });
 
@@ -94,37 +97,56 @@ describe('PageSpotDetail.vue - Complete Test Suite', () => {
     it('fetches spot details on mount with encoded spotId', async () => {
         mountComponent();
         await flushPromises();
-        expect(actions.getSpotDetails).toHaveBeenCalledWith(expect.anything(), {
-            spotId: 'SPOT%23123',
-        });
+        expect(actions.getSpotDetails).toHaveBeenCalledWith(
+            expect.anything(),
+            { spotId: 'SPOT%23123' },
+        );
     });
 
-    it('updates user location on geolocation success using a spy', () => {
+    it('updates user location on geolocation success using commit spy', () => {
         const wrapper = mountComponent();
         wrapper.vm.onGeoSuccess({
             coords: { latitude: 28.61, longitude: 77.23 },
         });
-        
-        expect(commitSpy).toHaveBeenCalled();
-        const callArgs = commitSpy.mock.calls[0];
-        expect(callArgs[0]).toBe('map/update-user-location');
-        expect(callArgs[1]).toEqual([77.23, 28.61]);
+
+        const call = commitSpy.mock.calls.find(
+            ([type]) => type === 'map/update-user-location',
+        );
+        expect(call).toBeDefined();
+        expect(call[1]).toEqual([77.23, 28.61]);
     });
 
     it('handles getSpotDetails failure gracefully', async () => {
-        actions.getSpotDetails.mockRejectedValue(new Error('API Error'));
+        actions.getSpotDetails.mockRejectedValueOnce({
+            DisplayMsg: 'API Error',
+        });
+
         const wrapper = mountComponent();
         await flushPromises();
-        expect(wrapper.vm.$buefy.toast.open).toHaveBeenCalled();
+        expect(wrapper.vm.$buefy.toast.open).toHaveBeenCalledWith(
+            expect.objectContaining({
+                message: 'Something went wrong!',
+                type: 'is-danger',
+            }),
+        );
+
+        expect(mockPush).toHaveBeenCalledWith({
+            name: 'error',
+            params: { msg: 'API Error' },
+        });
     });
 
     it('navigates to search portal with correct query params', async () => {
         const wrapper = mountComponent();
         await wrapper.vm.goToSearchPortal([77.23, 28.61]);
-        expect(mockPush).toHaveBeenCalledWith(expect.objectContaining({
-            name: 'SearchPortal',
-            query: expect.objectContaining({ latlng: '77.23,28.61' })
-        }));
+        expect(mockPush).toHaveBeenCalledWith(
+            expect.objectContaining({
+                name: 'SearchPortal',
+                query: expect.objectContaining({
+                    latlng: '77.23,28.61',
+                }),
+            }),
+        );
     });
 
     it('triggers availability update and refreshes data', async () => {
