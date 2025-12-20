@@ -1,79 +1,104 @@
 import { mount } from '@vue/test-utils';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
 import TemplateBlogPost from '@/components/templates/TemplateBlogPost.vue';
 
+let wrapper;
+
 const stubComponents = {
-    'HeaderBanner': {
+    HeaderBanner: {
         template: `
-      <div class='header-banner'>
-        <h2>Test Blog Title</h2>
-        <nav class='breadcrumb'>
-          <span class='breadcrumb-item'>Home</span>
-          <span class='breadcrumb-item'>Blogs</span>
-        </nav>
-      </div>
-    `,
+            <div class="header-banner">
+                <h2 class="atom-heading">Test Blog Title</h2>
+                <nav class="breadcrumb">
+                    <span class="breadcrumb-item">Home</span>
+                    <span class="breadcrumb-item">Blogs</span>
+                </nav>
+            </div>
+        `,
     },
-    'AtomHeading': {
-        template: "<h2 class='atom-heading'>Test Blog Title</h2>",
+    AtomHeading: {
+        template: "<h2 class='atom-heading'><slot /></h2>",
     },
-    'AtomParagraph': { template: "<p class='atom-paragraph'>Test Author</p>" },
-    'AtomImage': {
-        template:
-            "<img class='atom-image' src='/test.jpg' alt='Test Blog Title'/>",
+    AtomParagraph: {
+        template: "<p class='atom-paragraph'><slot /></p>",
     },
-    'BodyWrapper': {
-        template:
-            "<article class='body-wrapper article-wrapper'><slot /></article>",
+    AtomImage: {
+        template: "<img class='atom-image' :src='src' :alt='alt' />",
+        props: ['src', 'alt'],
     },
-    'b-breadcrumb': { template: "<nav class='breadcrumb'><slot /></nav>" },
-    'b-breadcrumb-item': { template: "<span class='breadcrumb-item'></span>" },
+    BodyWrapper: {
+        template: "<article class='body-wrapper article-wrapper'><slot /></article>",
+    },
+    'b-breadcrumb': {
+        template: "<nav class='breadcrumb'><slot /></nav>",
+    },
+    'b-breadcrumb-item': {
+        template: "<span class='breadcrumb-item'><slot /></span>",
+    },
 };
 
-describe('TemplateBlogPost.vue - Complete Test Suite', () => {
-    const mockBlog = {
-        title: 'Test Blog Title',
-        author: 'Test Author',
-        author_img: '/test.jpg',
-        time: 'Jan 1, 2025',
-        img: '/test-image.jpg',
-    };
+const mockBlog = {
+    title: 'Test Blog Title',
+    author: 'Test Author',
+    author_img: '/test.jpg',
+    time: 'Jan 1, 2025',
+    img: '/test-image.jpg',
+};
 
-    const mountComponent = () =>
-        mount(TemplateBlogPost, {
-            props: { blog: mockBlog },
-            global: { stubs: stubComponents },
-        });
+const mountComponent = () => {
+    wrapper = mount(TemplateBlogPost, {
+        props: { blog: mockBlog },
+        global: {
+            stubs: stubComponents,
+        },
+    });
 
-    it('renders main components', () => {
+    return wrapper;
+};
+
+afterEach(() => {
+    wrapper?.unmount();
+});
+
+describe('TemplateBlogPost.vue ,Complete Test Suite', () => {
+    it('renders main layout components', () => {
         const wrapper = mountComponent();
+
         expect(wrapper.find('.header-banner').exists()).toBe(true);
         expect(wrapper.find('.article-wrapper').exists()).toBe(true);
         expect(wrapper.find('.atom-image').exists()).toBe(true);
         expect(wrapper.find('.custom-author').exists()).toBe(true);
     });
 
-    it('displays blog title and author', () => {
+    it('renders blog title correctly', () => {
         const wrapper = mountComponent();
-        expect(wrapper.text()).toContain('Test Blog Title');
-        expect(wrapper.text()).toContain('Test Author');
+
+        expect(wrapper.find('.atom-heading').text()).toBe(mockBlog.title);
     });
 
-    it('passes image props correctly', () => {
+    it('renders blog author correctly', () => {
+        const wrapper = mountComponent();
+
+        expect(wrapper.find('.atom-paragraph').text()).toBe(mockBlog.author);
+    });
+
+    it('passes image alt attribute correctly', () => {
         const wrapper = mountComponent();
         const img = wrapper.find('.atom-image');
-        expect(img.attributes('alt')).toBe('Test Blog Title');
+
+        expect(img.attributes('alt')).toBe(mockBlog.title);
     });
 
-    it('has proper breadcrumb structure', () => {
+    it('renders breadcrumb navigation items', () => {
         const wrapper = mountComponent();
+
         expect(wrapper.find('.breadcrumb').exists()).toBe(true);
         expect(wrapper.findAll('.breadcrumb-item').length).toBeGreaterThan(1);
     });
 
-    it('matches snapshot for header banner', () => {
+    it('matches snapshot for header banner content', () => {
         const wrapper = mountComponent();
-        const header = wrapper.find('.header-banner');
-        expect(header.html()).toMatchSnapshot();
+
+        expect(wrapper.find('.header-banner').text()).toMatchSnapshot();
     });
 });

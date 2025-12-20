@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import blogStore from '@/store/blog/index.js';
+
 const INITIAL_STATE = JSON.parse(JSON.stringify(blogStore.state));
 const { getters, mutations } = blogStore;
 
@@ -13,7 +14,7 @@ describe('Blog Store - Complete Test Suite', () => {
 
     it('state has complete blogs array', () => {
         expect(Array.isArray(state.blogs)).toBe(true);
-        expect(state.blogs.length).toBe(14);
+        expect(state.blogs.length).toBe(14); // Current blog count as of Dec 2024
         expect(state.blogs[0].title).toBe('Eliminating Traffic jams in India!');
     });
 
@@ -47,12 +48,9 @@ describe('Blog Store - Complete Test Suite', () => {
 
     it('selectedBlog mutation sets flag correctly and resets others', () => {
         state.blogs[0].flag = true;
-
         mutations.selectedBlog(state, { id: 'no-parking' });
-
         expect(state.blogs[2].flag).toBe(true);
         expect(state.blogs[0].flag).toBe(false);
-
         const selectedCount = state.blogs.filter((b) => b.flag).length;
         expect(selectedCount).toBe(1);
     });

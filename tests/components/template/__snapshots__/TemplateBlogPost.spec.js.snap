@@ -1,8 +1,16 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`TemplateBlogPost.vue  ,Complete Test Suite > matches snapshot for header banner content 1`] = `"Test Blog TitleHomeBlogs"`;
+
+exports[`TemplateBlogPost.vue  Complete Test Suite > matches snapshot for header banner content 1`] = `"Test Blog TitleHomeBlogs"`;
+
+exports[`TemplateBlogPost.vue ,Complete Test Suite > matches snapshot for header banner content 1`] = `"Test Blog TitleHomeBlogs"`;
+
 exports[`TemplateBlogPost.vue - Complete Test Suite > matches snapshot for header banner 1`] = `
 "<div data-v-d980275f="" class="header-banner">
   <h2>Test Blog Title</h2>
   <nav class="breadcrumb"><span class="breadcrumb-item">Home</span><span class="breadcrumb-item">Blogs</span></nav>
 </div>"
 `;
+
+exports[`TemplateBlogPost.vue - Complete Test Suite > matches snapshot for header banner content 1`] = `"Test Blog TitleHomeBlogs"`;
