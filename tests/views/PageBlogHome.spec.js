@@ -70,9 +70,7 @@ describe('PageBlogHome.vue - Complete Test Suite', () => {
     it('navigates to mainBlog on blog click', async () => {
         const wrapper = mountComponent();
         const router = wrapper.vm.$router;
-
         await wrapper.find('.blog-click').trigger('click');
-
         expect(router.push).toHaveBeenCalledWith({
             name: 'mainBlog',
             params: { id: 1 },

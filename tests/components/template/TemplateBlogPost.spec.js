@@ -63,7 +63,6 @@ afterEach(() => {
 describe('TemplateBlogPost.vue ,Complete Test Suite', () => {
     it('renders main layout components', () => {
         const wrapper = mountComponent();
-
         expect(wrapper.find('.header-banner').exists()).toBe(true);
         expect(wrapper.find('.article-wrapper').exists()).toBe(true);
         expect(wrapper.find('.atom-image').exists()).toBe(true);
@@ -72,33 +71,28 @@ describe('TemplateBlogPost.vue ,Complete Test Suite', () => {
 
     it('renders blog title correctly', () => {
         const wrapper = mountComponent();
-
         expect(wrapper.find('.atom-heading').text()).toBe(mockBlog.title);
     });
 
     it('renders blog author correctly', () => {
         const wrapper = mountComponent();
-
         expect(wrapper.find('.atom-paragraph').text()).toBe(mockBlog.author);
     });
 
     it('passes image alt attribute correctly', () => {
         const wrapper = mountComponent();
         const img = wrapper.find('.atom-image');
-
         expect(img.attributes('alt')).toBe(mockBlog.title);
     });
 
     it('renders breadcrumb navigation items', () => {
         const wrapper = mountComponent();
-
         expect(wrapper.find('.breadcrumb').exists()).toBe(true);
         expect(wrapper.findAll('.breadcrumb-item').length).toBeGreaterThan(1);
     });
 
     it('matches snapshot for header banner content', () => {
         const wrapper = mountComponent();
-
-        expect(wrapper.find('.header-banner').text()).toMatchSnapshot();
+        expect(wrapper.find('.header-banner').html()).toMatchSnapshot();
     });
 });

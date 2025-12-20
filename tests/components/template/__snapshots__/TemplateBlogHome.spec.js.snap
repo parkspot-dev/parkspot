@@ -1,54 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[` Complete Test Suite > matches snapshot for blog home content 1`] = `"Blog 1Excerpt 1Blog 2Excerpt 2"`;
-
-exports[`TemplateBlogHome.vue , Complete Test Suite > matches snapshot for blog home content 1`] = `"Blog 1Excerpt 1Blog 2Excerpt 2"`;
-
-exports[`TemplateBlogHome.vue - Complete Test Suite > matches snapshot for blog container 1`] = `
-"<section data-v-dccb58de="" class="body-wrapper">
-  <div data-v-dccb58de="" class="blog-container">
-    <div data-v-dccb58de="" class="molecule-blog-card" data-aos="zoom-in-up">
-      <h3>Blog 1</h3>
-      <p>Excerpt 1</p>
-    </div>
-    <div data-v-dccb58de="" class="molecule-blog-card" data-aos="zoom-in-up">
-      <h3>Blog 2</h3>
-      <p>Excerpt 2</p>
-    </div>
+exports[`TemplateBlogHome.vue , Complete Test Suite > matches snapshot for blog list section 1`] = `
+"<div data-v-dccb58de="" class="blog-container">
+  <div data-v-dccb58de="" class="molecule-blog-card" data-aos="zoom-in-up">
+    <h3>Blog 1</h3>
+    <p>Excerpt 1</p>
   </div>
-</section>"
-`;
-
-exports[`TemplateBlogHome.vue - Complete Test Suite > matches snapshot for blog home content 1`] = `"Blog 1Excerpt 1Blog 2Excerpt 2"`;
-
-exports[`TemplateBlogHome.vue - Complete Test Suite > matches snapshot for complete blog list 1`] = `
-"<div data-v-dccb58de="">
-  <div data-v-dccb58de="" class="header-banner-stub">
-    <div data-v-dccb58de="" class="blog-header">
-      <h1 data-v-dccb58de="">Parking Blogs</h1>
-      <div data-v-dccb58de="" class="blog-nav">
-        <ul data-v-dccb58de="" class="b-breadcrumb" align="is-centered" size="is-small">
-          <li data-v-dccb58de="" class="breadcrumb-item"> Home </li>
-          <li data-v-dccb58de="" class="breadcrumb-item"> Blogs </li>
-        </ul>
-      </div>
-    </div>
+  <div data-v-dccb58de="" class="molecule-blog-card" data-aos="zoom-in-up">
+    <h3>Blog 2</h3>
+    <p>Excerpt 2</p>
   </div>
-  <section data-v-dccb58de="" class="body-wrapper">
-    <div data-v-dccb58de="" class="blog-container">
-      <div data-v-dccb58de="" class="molecule-blog-card" data-aos="zoom-in-up">
-        <h3>Blog 1</h3>
-        <p>Excerpt 1</p>
-      </div>
-      <div data-v-dccb58de="" class="molecule-blog-card" data-aos="zoom-in-up">
-        <h3>Blog 2</h3>
-        <p>Excerpt 2</p>
-      </div>
-    </div>
-  </section>
 </div>"
 `;
-
-exports[`TemplateBlogHome.vue -> Complete Test Suite > matches snapshot for blog home content 1`] = `"Blog 1Excerpt 1Blog 2Excerpt 2"`;
-
-exports[`TemplateBlogHome.vue Complete Test Suite > matches snapshot for blog home content 1`] = `"Blog 1Excerpt 1Blog 2Excerpt 2"`;

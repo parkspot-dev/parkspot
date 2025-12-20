@@ -1,14 +1,15 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import blogStore from '@/store/blog/index.js';
 
-const INITIAL_STATE = JSON.parse(JSON.stringify(blogStore.state));
 const { getters, mutations } = blogStore;
 
 describe('Blog Store - Complete Test Suite', () => {
     let state;
 
     beforeEach(() => {
-        state = JSON.parse(JSON.stringify(INITIAL_STATE));
+        state = {
+            blogs: blogStore.state.blogs.map(blog => ({ ...blog })),
+        };
         vi.clearAllMocks();
     });
 
@@ -36,7 +37,7 @@ describe('Blog Store - Complete Test Suite', () => {
 
     it('getBlogById returns correct blog', () => {
         const blog = getters.getBlogById(state)(
-            'eliminating-traffic-jams-in-india',
+            'eliminating-traffic-jams-in-india'
         );
         expect(blog.title).toBe('Eliminating Traffic jams in India!');
     });
@@ -51,7 +52,7 @@ describe('Blog Store - Complete Test Suite', () => {
         mutations.selectedBlog(state, { id: 'no-parking' });
         expect(state.blogs[2].flag).toBe(true);
         expect(state.blogs[0].flag).toBe(false);
-        const selectedCount = state.blogs.filter((b) => b.flag).length;
+        const selectedCount = state.blogs.filter(b => b.flag).length;
         expect(selectedCount).toBe(1);
     });
 

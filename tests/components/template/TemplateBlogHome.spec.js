@@ -5,17 +5,17 @@ import TemplateBlogHome from '@/components/templates/TemplateBlogHome.vue';
 let wrapper;
 
 const stubComponents = {
-    'HeaderBanner': {
+    HeaderBanner: {
         template: `
             <div class="header-banner-stub">
                 <h1>Parking Blogs</h1>
             </div>
         `,
     },
-    'BodyWrapper': {
+    BodyWrapper: {
         template: "<section class='body-wrapper'><slot /></section>",
     },
-    'MoleculeBlogCard': {
+    MoleculeBlogCard: {
         props: ['blog'],
         template: `
             <div
@@ -48,9 +48,6 @@ const mountComponent = (blogs = mockBlogs) => {
                 'router-link': true,
                 ...stubComponents,
             },
-            mocks: {
-                $router: { push: vi.fn() },
-            },
         },
     });
 
@@ -71,16 +68,15 @@ describe('TemplateBlogHome.vue , Complete Test Suite', () => {
 
     it('renders blog titles correctly', () => {
         const wrapper = mountComponent();
-        expect(wrapper.findAll('.molecule-blog-card')[0].text()).toContain(
-            mockBlogs[0].title,
-        );
+        expect(wrapper.findAll('.molecule-blog-card')[0].text())
+            .toContain(mockBlogs[0].title);
     });
 
-    it('emits blog click event', async () => {
+    it('emits onBlogClick event when blog card is clicked', async () => {
         const wrapper = mountComponent();
         await wrapper.find('.molecule-blog-card').trigger('click');
-
         expect(wrapper.emitted('onBlogClick')).toBeTruthy();
+        expect(wrapper.emitted('onBlogClick')[0][0]).toEqual(mockBlogs[0]);
     });
 
     it('handles empty blogs array', () => {
@@ -88,8 +84,8 @@ describe('TemplateBlogHome.vue , Complete Test Suite', () => {
         expect(wrapper.findAll('.molecule-blog-card').length).toBe(0);
     });
 
-    it('matches snapshot for blog home content', () => {
+    it('matches snapshot for blog list section', () => {
         const wrapper = mountComponent();
-        expect(wrapper.find('.body-wrapper').text()).toMatchSnapshot();
+        expect(wrapper.find('.blog-container').html()).toMatchSnapshot();
     });
 });
