@@ -58,7 +58,7 @@
         </div>
 
         <!-- Additional Sections -->
-        <WhatsNext :heading="`What's next?`" :steps="whatsNext" />
+        <WhatsNext :heading="`What's next?`" :steps="whatsNextSteps" />
         <TestimonialSection />
     </div>
 </template>
@@ -95,7 +95,7 @@ export default {
         return {
             isLoading: false,
             JOINING_BENEFITS: JOINING_BENEFITS_SO,
-            whatsNext: WHAT_NEXT_SO,
+            whatsNextSteps: WHAT_NEXT_SO,
         };
     },
     methods: {
