@@ -1,9 +1,10 @@
-import { mount } from '@vue/test-utils';
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { mount, flushPromises } from '@vue/test-utils';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createStore } from 'vuex';
 import PageBlogPost from '@/views/PageBlogPost.vue';
 
 let wrapper;
+let routerPush;
 
 const mockBlog = {
     id: 'test-blog',
@@ -24,18 +25,15 @@ const store = createStore({
         user: {
             namespaced: true,
             actions: {
-                onlyContact: vi.fn(() => Promise.resolve()),
+                onlyContact: vi.fn().mockResolvedValue(),
             },
         },
     },
 });
 
-const waitForAsync = async (wrapper) => {
-    await Promise.resolve();
-    await wrapper.vm.$nextTick();
-};
-
 const mountComponent = () => {
+    routerPush = vi.fn();
+
     wrapper = mount(PageBlogPost, {
         global: {
             plugins: [store],
@@ -55,12 +53,10 @@ const mountComponent = () => {
             },
             mocks: {
                 $route: {
-                    params: {
-                        id: 'test-blog',
-                    },
+                    params: { id: 'test-blog' },
                 },
                 $router: {
-                    push: vi.fn(),
+                    push: routerPush,
                 },
                 $buefy: {
                     toast: {
@@ -70,43 +66,42 @@ const mountComponent = () => {
             },
         },
     });
-
-    return wrapper;
 };
 
-afterEach(() => {
-    wrapper?.unmount();
-});
-
 describe('PageBlogPost.vue - Complete Test Suite', () => {
+    beforeEach(() => {
+        mountComponent();
+    });
+
+    afterEach(() => {
+        wrapper?.unmount();
+        vi.restoreAllMocks();
+    });
+
     it('renders TemplateBlogPost and PageContactUs', async () => {
-        const wrapper = mountComponent();
-        await waitForAsync(wrapper);
+        await flushPromises();
         expect(wrapper.find('.template-blog-post').exists()).toBe(true);
         expect(wrapper.find('.page-contact-us').exists()).toBe(true);
     });
 
     it('fetches blog data using route param', () => {
-        const wrapper = mountComponent();
         expect(wrapper.vm.blog).toEqual(mockBlog);
     });
 
     it('fetches blog content on mount', async () => {
-        const wrapper = mountComponent();
-        await waitForAsync(wrapper);
+        await flushPromises();
         expect(wrapper.find('.blog-content').text()).toBe('Mock blog content');
     });
 
     it('sets page title from route param', async () => {
-        const wrapper = mountComponent();
-        await waitForAsync(wrapper);
+        await flushPromises();
         expect(wrapper.vm.title).toBe('test-blog');
     });
 
     it('fires contact action and navigates on success', async () => {
-        const wrapper = mountComponent();
-        const router = wrapper.vm.$router;
         await wrapper.vm.fireContact();
-        expect(router.push).toHaveBeenCalledWith({ name: 'thankYou' });
+        expect(routerPush).toHaveBeenCalledWith({
+            name: 'thankYou',
+        });
     });
 });

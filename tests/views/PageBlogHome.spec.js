@@ -1,9 +1,10 @@
 import { mount } from '@vue/test-utils';
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createStore } from 'vuex';
 import PageBlogHome from '@/views/PageBlogHome.vue';
 
 let wrapper;
+let routerPush;
 
 const mockBlogs = [
     { id: 1, title: 'Test Blog 1' },
@@ -16,13 +17,16 @@ const store = createStore({
             namespaced: true,
             getters: {
                 getAllBlogs: () => mockBlogs,
-                getBlogById: () => (id) => mockBlogs.find((b) => b.id === id),
+                getBlogById: () => (id) =>
+                    mockBlogs.find((b) => b.id === id),
             },
         },
     },
 });
 
 const mountComponent = () => {
+    routerPush = vi.fn();
+
     wrapper = mount(PageBlogHome, {
         global: {
             plugins: [store],
@@ -43,35 +47,34 @@ const mountComponent = () => {
             },
             mocks: {
                 $router: {
-                    push: vi.fn(),
+                    push: routerPush,
                 },
             },
         },
     });
-
-    return wrapper;
 };
 
-afterEach(() => {
-    wrapper?.unmount();
-});
-
 describe('PageBlogHome.vue - Complete Test Suite', () => {
+    beforeEach(() => {
+        mountComponent();
+    });
+
+    afterEach(() => {
+        wrapper?.unmount();
+        vi.restoreAllMocks();
+    });
+
     it('renders TemplateBlogHome', () => {
-        const wrapper = mountComponent();
         expect(wrapper.find('.template-blog-home').exists()).toBe(true);
     });
 
     it('provides blogs data to the page', () => {
-        const wrapper = mountComponent();
         expect(wrapper.vm.blogs).toEqual(mockBlogs);
     });
 
     it('navigates to mainBlog on blog click', async () => {
-        const wrapper = mountComponent();
-        const router = wrapper.vm.$router;
         await wrapper.find('.blog-click').trigger('click');
-        expect(router.push).toHaveBeenCalledWith({
+        expect(routerPush).toHaveBeenCalledWith({
             name: 'mainBlog',
             params: { id: 1 },
         });
