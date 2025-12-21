@@ -11,6 +11,7 @@ describe('PageSpotDetail.vue - Complete Test Suite', () => {
     let store;
     let actions;
     let commitSpy;
+    let wrapper;
 
     const mountComponent = () =>
         mount(PageSpotDetail, {
@@ -24,7 +25,9 @@ describe('PageSpotDetail.vue - Complete Test Suite', () => {
                     },
                 },
                 stubs: {
-                    LoaderModal: { template: '<div class="loader-modal"></div>' },
+                    LoaderModal: {
+                        template: '<div class="loader-modal"></div>',
+                    },
                     TemplateSpotDetail: {
                         template: '<div class="template-spot-detail"></div>',
                     },
@@ -76,35 +79,39 @@ describe('PageSpotDetail.vue - Complete Test Suite', () => {
                 },
             },
         });
+
         commitSpy = vi.spyOn(store, 'commit');
     });
 
     afterEach(() => {
+        wrapper?.unmount();
         vi.restoreAllMocks();
     });
 
-    it('shows loader when page is loading', () => {
+    it('shows loader and hides content when loading', () => {
         store.state.sdp.loading = true;
-        const wrapper = mountComponent();
+        wrapper = mountComponent();
         expect(wrapper.find('.loader-modal').exists()).toBe(true);
+        expect(wrapper.find('.template-spot-detail').exists()).toBe(false);
     });
 
-    it('renders spot detail template when loading is complete', () => {
-        const wrapper = mountComponent();
+    it('shows content and hides loader when loaded', () => {
+        store.state.sdp.loading = false;
+        wrapper = mountComponent();
+        expect(wrapper.find('.loader-modal').exists()).toBe(false);
         expect(wrapper.find('.template-spot-detail').exists()).toBe(true);
     });
 
     it('fetches spot details on mount with encoded spotId', async () => {
-        mountComponent();
+        wrapper = mountComponent();
         await flushPromises();
-        expect(actions.getSpotDetails).toHaveBeenCalledWith(
-            expect.anything(),
-            { spotId: 'SPOT%23123' },
-        );
+        expect(actions.getSpotDetails).toHaveBeenCalledWith(expect.anything(), {
+            spotId: 'SPOT%23123',
+        });
     });
 
     it('updates user location on geolocation success using commit spy', () => {
-        const wrapper = mountComponent();
+        wrapper = mountComponent();
         wrapper.vm.onGeoSuccess({
             coords: { latitude: 28.61, longitude: 77.23 },
         });
@@ -112,6 +119,7 @@ describe('PageSpotDetail.vue - Complete Test Suite', () => {
         const call = commitSpy.mock.calls.find(
             ([type]) => type === 'map/update-user-location',
         );
+
         expect(call).toBeDefined();
         expect(call[1]).toEqual([77.23, 28.61]);
     });
@@ -121,8 +129,9 @@ describe('PageSpotDetail.vue - Complete Test Suite', () => {
             DisplayMsg: 'API Error',
         });
 
-        const wrapper = mountComponent();
+        wrapper = mountComponent();
         await flushPromises();
+
         expect(wrapper.vm.$buefy.toast.open).toHaveBeenCalledWith(
             expect.objectContaining({
                 message: 'Something went wrong!',
@@ -137,7 +146,7 @@ describe('PageSpotDetail.vue - Complete Test Suite', () => {
     });
 
     it('navigates to search portal with correct query params', async () => {
-        const wrapper = mountComponent();
+        wrapper = mountComponent();
         await wrapper.vm.goToSearchPortal([77.23, 28.61]);
         expect(mockPush).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -150,21 +159,15 @@ describe('PageSpotDetail.vue - Complete Test Suite', () => {
     });
 
     it('triggers availability update and refreshes data', async () => {
-        const wrapper = mountComponent();
+        wrapper = mountComponent();
         await wrapper.vm.changeAvailability(-1);
         expect(actions.updateAvailability).toHaveBeenCalled();
         expect(actions.getSpotDetails).toHaveBeenCalled();
     });
 
     it('requests user location permission on component mount', async () => {
-        mountComponent();
+        wrapper = mountComponent();
         await flushPromises();
         expect(navigator.geolocation.getCurrentPosition).toHaveBeenCalled();
-    });
-
-    it('renders loading state correctly snapshot', () => {
-        store.state.sdp.loading = true;
-        const wrapper = mountComponent();
-        expect(wrapper.find('.loader-modal').html()).toMatchSnapshot();
     });
 });
