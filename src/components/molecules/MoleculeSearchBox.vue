@@ -18,8 +18,8 @@
         </div>
         <AtomButton
             class="search-button"
-            @click.native="emitSearchEvent"
             left="magnify"
+            @click.native="emitSearchEvent"
             >Search
         </AtomButton>
     </div>

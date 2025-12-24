@@ -2,10 +2,10 @@
     <section>
         <div class="block">
             <b-radio
+                v-for="value in values"
                 :key="value"
                 :value="currentSelectedRadio"
                 name="name"
-                v-for="value in values"
                 :native-value="value"
                 :size="size"
             >

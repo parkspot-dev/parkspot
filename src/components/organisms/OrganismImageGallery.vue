@@ -11,9 +11,9 @@
                         :data-sub-html="`<h4>Photo by - <a href='https://www.parkspot.in'>Parkspot</a></h4><p>Location - ${locationName}</p>`"
                     >
                         <button
-                            v-if="this.removable && this.images && this.images.length > 0"
-                            @click.prevent.stop="removeImage(index)"
+                            v-if="removable && images && images.length > 0"
                             class="delete-btn"
+                            @click.prevent.stop="removeImage(index)"
                         >
                             <AtomIcon icon="close" />
                         </button>
@@ -68,11 +68,11 @@ export default {
             displayImages: [Parkspot_Image],
         };
     },
-    mounted() {
-        this.updateImages();
-    },
     watch: {
         images: 'updateImages',
+    },
+    mounted() {
+        this.updateImages();
     },
     methods: {
         updateImages() {

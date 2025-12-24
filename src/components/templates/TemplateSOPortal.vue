@@ -52,7 +52,7 @@
                     <div class="divider"><span>OR</span></div>
 
                     <p class="sub-heading">Register your Parking Spot</p>
-                    <RegisterRequestForm @submitForm="submitForm" />
+                    <RegisterRequestForm @submit-form="submitForm" />
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@
             <p></p>
             <MoleculeSearchBox
                 placeholder="Booking ID"
-                :initialValue="searchText"
+                :initial-value="searchText"
                 @on-search="searchBooking"
                 @clear-input="onClearInput"
             ></MoleculeSearchBox>
@@ -20,7 +20,7 @@
         </TemplateBookingPortal>
         <ActiveBookings
             v-else
-            :activeBookings="activeBookings"
+            :active-bookings="activeBookings"
         ></ActiveBookings>
     </div>
 </template>

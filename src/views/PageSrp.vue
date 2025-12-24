@@ -5,10 +5,10 @@
             v-if="srpResults && srpResults.length > 0"
             :spots="filteredSrpResults"
             :totals="totalPages"
-            :currentPage="currentPage"
-            :reRender="reRender"
+            :current-page="currentPage"
+            :re-render="reRender"
             @changed="onPageChange"
-            @flyToSrp="flyToSrp"
+            @fly-to-srp="flyToSrp"
             @details="spotDetails"
             @filter="onFilter"
         ></TemplateSrp>

@@ -1,15 +1,15 @@
 <template>
     <b-field :label="label" :type="errorType" :message="errorMessage">
         <b-select
+            v-model="innerValue"
             :placeholder="placeholder"
             :size="size"
             expanded
-            v-model="innerValue"
         >
             <option value="" disabled>
                 {{ placeholder }}
             </option>
-            <option v-for="option in list" :value="option.id" :key="option.id">
+            <option v-for="option in list" :key="option.id" :value="option.id">
                 {{ option.name }}
             </option>
         </b-select>

@@ -63,11 +63,11 @@
                         <p><b>Comments: </b></p>
                         <div class="previous-comments">{{ row.Comments }}</div>
                         <AtomTextarea
+                            v-model="newCommentMap[row.ID]"
                             :maxlength="3000"
-                            :rowNo="3"
+                            :row-no="3"
                             size="is-small"
                             placeholder="Add new comment..."
-                            v-model="newCommentMap[row.ID]"
                             @mousedown="storeOldComment(row)"
                             @changed="
                                 $emit(
@@ -84,15 +84,15 @@
                         <p><b>Agent:</b> {{ row.Agent }}</p>
                         <AtomSelectInput
                             v-if="isAdmin"
+                            v-model="row.Agent"
                             :list="agentList"
                             size="is-small"
                             @change="$emit('agent-update', row, $event)"
-                            v-model="row.Agent"
                         />
                         <button
                             v-else
-                            @click="$emit('agent-update', row, agentList[0].id)"
                             class="btn"
+                            @click="$emit('agent-update', row, agentList[0].id)"
                         >
                             Assign to me
                         </button>
@@ -101,9 +101,9 @@
                     <div class="status-section">
                         <p><b>Status:</b> {{ statusList[row.Status].name }}</p>
                         <AtomSelectInput
+                            v-model="row.Status"
                             :list="statusList"
                             size="is-small"
-                            v-model="row.Status"
                             @change="$emit('status-update', row, $event)"
                         />
                         <p>
@@ -121,7 +121,7 @@
                             </span>
                         </p>
                         <AtomDatePicker
-                            :assignedDate="row.NextCall"
+                            :assigned-date="row.NextCall"
                             size="is-small"
                             @changed="(date) => $emit('date-update', row, date)"
                         />
@@ -137,7 +137,7 @@
                         </a>
                         <AtomInput
                             size="is-small"
-                            :modelValue="`${row.Latitude.toFixed(6)}, ${row.Longitude.toFixed(6)}`"
+                            :model-value="`${row.Latitude.toFixed(6)}, ${row.Longitude.toFixed(6)}`"
                             @change="
                                 $emit('latlng-update', row, $event.target.value)
                             "

@@ -4,12 +4,12 @@
             <AtomIcon :icon="ICON.INFO" :size="'is-small'"></AtomIcon>
         </AtomTooltip>
         <AtomSelectInput
-            :errorMessage="errors"
-            :errorType="{ 'is-danger': errors[0], 'is-success': valid }"
+            v-model="innerValue"
+            :error-message="errors"
+            :error-type="{ 'is-danger': errors[0], 'is-success': valid }"
             :list="list"
             :placeholder="placeholder"
             :label="label"
-            v-model="innerValue"
             class="mb-5"
         ></AtomSelectInput>
     </div>

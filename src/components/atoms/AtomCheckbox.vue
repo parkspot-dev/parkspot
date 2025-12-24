@@ -4,10 +4,10 @@
             v-for="value in values"
             :key="value"
             v-model="checkboxGroup"
-            @change="handleCheckboxChange"
             :native-value="value"
             :size="size"
             type="box-color"
+            @change="handleCheckboxChange"
         >
             {{ value }}
             <slot name="extra"></slot>

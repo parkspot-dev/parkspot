@@ -225,7 +225,7 @@ const actions = {
         commit('update-map-zoom', zoomValue);
     },
 
-    //Update filter Array
+    // Update filter Array
     updateFilter({ commit }, { name, value }) {
         if (!name || !value || typeof value !== 'object') {
             console.error('Invalid filter data', { name, value });

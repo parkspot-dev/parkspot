@@ -11,19 +11,19 @@
             <div class="summary">
                 <div class="so-btn">
                     <AtomButton
-                        @click.native="showSummary"
                         v-show="!summary.show"
+                        @click.native="showSummary"
                     >
                         {{ summary.btn }} Summary
                     </AtomButton>
                 </div>
                 <br />
-                <div class="so-summary" v-show="summary.show">
+                <div v-show="summary.show" class="so-summary">
                     <span class="close-button">
                         <AtomIcon
-                            @click.native="showSummary"
                             :icon="'close'"
                             size=""
+                            @click.native="showSummary"
                         >
                         </AtomIcon>
                     </span>
@@ -69,7 +69,7 @@
                 cell-class="has-text-left"
                 width="20"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <a :href="RequestDetailURL(props.row.ID)">
                         <div>{{ props.row.ID }}</div>
                     </a>
@@ -77,15 +77,15 @@
             </b-table-column>
 
             <b-table-column
-                field="Name"
-                label="Name"
+                field="ApartmentName"
+                label="Apartment"
                 searchable
                 sortable
                 cell-class="has-text-left"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <div>
-                        {{ props.row.Name }}
+                        {{ props.row.ApartmentName }}
                     </div>
                 </template>
             </b-table-column>
@@ -97,7 +97,7 @@
                 sortable
                 cell-class="has-text-left"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <div>
                         {{ props.row.Address }}
                     </div>
@@ -115,24 +115,24 @@
             >
                 <template #searchable="props">
                     <AtomSelectInput
+                        v-model="props.filters['Status']"
                         :size="'is-small'"
                         :list="spotRequestStatusList"
                         class="column-width"
-                        v-model="props.filters['Status']"
                     >
                     </AtomSelectInput>
                 </template>
-                <template v-slot="props">
+                <template #default="props">
                     <SelectInput
                         :key="props.row.ID"
-                        :defaultValue="
+                        :default-value="
                             getSpotRequestStatusLabel(props.row.Status)
                         "
                         :list="
                             spotRequestStatusList.map((status) => status.name)
                         "
-                        @change="onStatusUpdate(props.row, $event.target.value)"
                         name="updateStatus"
+                        @change="onStatusUpdate(props.row, $event.target.value)"
                     />
                 </template>
             </b-table-column>
@@ -144,7 +144,7 @@
                 searchable
                 cell-class="has-text-left"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <div>
                         {{ props.row.Remark }}
                     </div>
@@ -157,7 +157,7 @@
                 sortable
                 cell-class="has-text-left"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <div>
                         {{
                             props.row.LastCallDate

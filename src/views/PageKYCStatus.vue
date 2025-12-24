@@ -3,10 +3,10 @@
         <!-- Search Bar -->
         <div class="search-control">
             <MoleculeSearchBox
-                :initialValue="searchMobile"
+                :initial-value="searchMobile"
+                placeholder="Mobile"
                 @clear-input="onClearMobileInput"
                 @on-search="searchUsersWithMobile"
-                placeholder="Mobile"
             ></MoleculeSearchBox>
         </div>
         <!-- Loading modal displayed during data fetch -->
@@ -30,7 +30,7 @@
                 label="Full Name"
                 cell-class="has-text-left"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <div>
                         {{ props.row.FullName }}
                     </div>
@@ -43,7 +43,7 @@
                 searchable
                 cell-class="has-text-left"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <div>
                         {{ props.row.Mobile }}
                     </div>
@@ -55,7 +55,7 @@
                 label="Identity Document"
                 cell-class="has-text-left"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <div>
                         {{ props.row.IdentityDocument }}
                     </div>
@@ -67,7 +67,7 @@
                 label="ID Proof Document View"
                 cell-class="has-text-left"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <div
                         v-if="props.row.IDProofURLs.length > 0"
                         class="documents-preview"
@@ -96,7 +96,7 @@
                 label="Ownership Document"
                 cell-class="has-text-left"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <div>
                         {{ props.row.OwnershipDocument }}
                     </div>
@@ -108,7 +108,7 @@
                 label="Ownership Proof Document View"
                 cell-class="has-text-left"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <div
                         v-if="props.row.OwnershipProofURLs.length > 0"
                         class="documents-preview"
@@ -138,14 +138,14 @@
                 label="KYC Status"
                 width="150px"
             >
-                <template v-slot="props">
+                <template #default="props">
                     <SelectInput
                         :key="props.row.ID"
-                        :defaultValue="getKYCStatusLabel(props.row.KYCStatus)"
+                        :default-value="getKYCStatusLabel(props.row.KYCStatus)"
                         :list="KYCStatusLabel"
-                        @change="onStatusUpdate(props.row, $event.target.value)"
                         class="select"
                         name="updateKYCStatus"
+                        @change="onStatusUpdate(props.row, $event.target.value)"
                     />
                 </template>
             </b-table-column>

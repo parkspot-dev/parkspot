@@ -1,6 +1,6 @@
 <template>
     <div class="home-card">
-        <b-tabs @update:modelValue="onChange" v-model="activeTabValue">
+        <b-tabs v-model="activeTabValue" @update:model-value="onChange">
             <b-tab-item value="VO">
                 <template #header>
                     <div class="header-tab-btn">
@@ -61,14 +61,14 @@ import { mapGetters } from 'vuex';
 import { getCoordinate } from '../../includes/LatLng';
 export default {
     name: 'HomeCard',
+    components: {
+        SearchInput,
+        AtomButton,
+    },
     data() {
         return {
             activeTabValue: 'VO',
         };
-    },
-    components: {
-        SearchInput,
-        AtomButton,
     },
     computed: {
         ...mapGetters({

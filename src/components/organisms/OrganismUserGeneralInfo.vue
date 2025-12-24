@@ -6,33 +6,33 @@
         </div>
         <Form
             :validation-schema="editProfileFormSchema"
-            @submit="saveProfile"
             class="form-container"
+            @submit="saveProfile"
         >
             <FormInput
+                v-model="userProfile.FullName"
                 :label="'Full Name'"
                 :placeholder="'Full Name'"
                 :name="'fullname'"
-                v-model="userProfile.FullName"
             />
             <FormInput
+                v-model="userProfile.EmailID"
                 :label="'Email'"
                 :placeholder="'Email'"
                 :name="'email'"
                 type="email"
-                v-model="userProfile.EmailID"
             />
             <FormInput
+                v-model="userProfile.Mobile"
                 :label="'Contact No.'"
                 :placeholder="'Contact No.'"
                 :name="'cno'"
-                v-model="userProfile.Mobile"
             />
             <RadioInput
                 v-if="getUserType"
+                v-model="userType"
                 :values="userTypeData"
                 label="What is you are looking for?"
-                v-model="userType"
             />
 
             <button class="send-button" type="submit">Save Profile</button>

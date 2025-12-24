@@ -5,94 +5,94 @@
     >
         <div class="form-row">
             <FormInput
+                v-model="contactModel.fullname"
                 :label="FORM.FULLNAME"
                 :placeholder="FORM_PLACEHOLDERS.FULL_NAME"
                 name="fullname"
                 required
-                v-model="contactModel.fullname"
             />
             <FormInput
+                v-model="contactModel.cno"
                 :label="FORM.CONTACT_NO"
                 :placeholder="FORM_PLACEHOLDERS.CONTACT_NO"
                 name="cno"
                 required
                 type="tel"
-                v-model="contactModel.cno"
             />
         </div>
 
         <div class="form-row">
             <FormInput
+                v-model="contactModel.email"
                 :label="FORM.EMAIL"
                 :placeholder="FORM_PLACEHOLDERS.EMAIL"
                 name="email"
                 required
                 type="email"
-                v-model="contactModel.email"
             />
 
             <FormInput
+                v-model="contactModel.mapsLink"
                 :label="FORM.GOOGLE_MAP_LINK"
                 name="mapsLink"
                 :placeholder="FORM_PLACEHOLDERS.GOOGLE_MAP_LINK"
                 type="url"
-                v-model="contactModel.mapsLink"
             />
         </div>
 
         <div class="form-row">
             <FormInput
+                v-model="contactModel.ApartmentName"
                 :label="FORM.APARTMENT"
                 :placeholder="FORM_PLACEHOLDERS.APARTMENT"
                 name="apartment"
-                v-model="contactModel.ApartmentName"
             />
             <FormInput
+                v-model="contactModel.address"
                 :label="FORM.ADDRESS"
                 :placeholder="FORM_PLACEHOLDERS.ADDRESS"
                 name="address"
                 required
-                v-model="contactModel.address"
             />
         </div>
 
         <div class="form-row">
             <div class="form-column">
                 <FormInput
+                    v-model="contactModel.expectedRent"
                     :label="FORM.BASEAMOUNT"
                     min="0"
                     name="expectedRent"
                     :placeholder="FORM_PLACEHOLDERS.BASE_AMOUNT"
                     type="number"
-                    v-model="contactModel.expectedRent"
                 />
             </div>
             <SelectInput
+                v-model="parkingSizeLabel"
                 :list="parkingSizeLabels"
-                @change="updateParkingSizeLabel"
                 label="Parking Size"
                 name="parkingSize"
-                v-model="parkingSizeLabel"
+                @change="updateParkingSizeLabel"
             />
         </div>
 
         <div class="form-row">
             <div>
                 <MultiSelectInput
+                    v-model="contactModel.facilities"
                     :list="facilityOptions"
                     placeholder="Select one or more facilities"
                     label="Facilities"
                     name="facilities"
-                    v-model="contactModel.facilities"
                 />
             </div>
 
             <SelectInput
+                v-model="contactModel.city"
                 :list="citiesOptions"
-                @change="updateSelectedCity"
                 label="Select City"
                 name="city"
-                v-model="contactModel.city"
+                @change="updateSelectedCity"
             />
         </div>
 
@@ -102,8 +102,8 @@
                 <ImageUpload v-model:images="contactModel.images" />
             </div>
         </div>
-        <CheckboxInput :label="termData" @update="updateTermsData" name="terms">
-            <template v-slot:extra>
+        <CheckboxInput :label="termData" name="terms" @update="updateTermsData">
+            <template #extra>
                 <a
                     href="https://www.parkspot.in/terms-and-conditions"
                     target="_blank"
@@ -149,6 +149,7 @@ export default {
         ImageUpload,
         MultiSelectInput,
     },
+    emits: ['submitForm'],
     data() {
         return {
             registerSpotRequestFormSchema,
@@ -177,7 +178,6 @@ export default {
             citiesOptions: CITY_OPTIONS,
         };
     },
-    emits: ['submitForm'],
     methods: {
         ...mapMutations({
             updateContact: 'user/update-contact',

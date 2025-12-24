@@ -10,9 +10,9 @@
             <div class="swiper-wrapper">
                 <!-- Slides -->
                 <div
-                    class="swiper-slide"
                     v-for="(item, i) in items"
                     :key="i"
+                    class="swiper-slide"
                 >
                     <TestimonialCard :item="item"></TestimonialCard>
                 </div>
@@ -43,16 +43,16 @@ import TestimonialCard from './TestimonialCard.vue';
 
 export default {
     name: 'TestimonialSection',
+    components: {
+        AtomHeading,
+        AtomParagraph,
+        TestimonialCard,
+    },
         props: {
         testimonials: {
             type: Array,
             default: () => [],
         },
-    },
-    components: {
-        AtomHeading,
-        AtomParagraph,
-        TestimonialCard,
     },
     setup(props) {
         console.log("props",props);

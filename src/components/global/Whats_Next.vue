@@ -3,9 +3,9 @@
         <AtomHeading :level="'h2'" class="heading">{{ heading }}</AtomHeading>
         <section class="features-section">
             <div
+                v-for="(feature, index) in steps"
                 :key="index"
                 class="feature-wrapper"
-                v-for="(feature, index) in steps"
             >
                 <div class="feature-card">
                     <span class="material-symbols-outlined feature-icon">
@@ -14,8 +14,8 @@
                     <h3 class="feature-title">{{ feature.description }}</h3>
                 </div>
                 <div
-                    class="material-symbols-outlined arrow-icon"
                     v-if="index < steps.length - 1"
+                    class="material-symbols-outlined arrow-icon"
                 >
                     double_arrow
                 </div>
@@ -28,7 +28,7 @@
 import AtomHeading from '../atoms/AtomHeading.vue';
 
 export default {
-    name: 'Whats_Next',
+    name: 'WhatsNext',
     components: {
         AtomHeading,
     },

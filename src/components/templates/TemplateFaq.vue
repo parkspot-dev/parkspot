@@ -8,12 +8,12 @@
             <b-collapse
                 v-for="(faq, index) in faqLists"
                 :key="index"
+                v-model="openStates[index]"
                 class="card"
                 animation="slide"
-                v-model="openStates[index]"
+                :aria-id="'contentIdForA11y5-' + index"
                 @open="handleOpen(index)"
                 @close="handleClose(index)"
-                :aria-id="'contentIdForA11y5-' + index"
             >
                 <template #trigger="{ open }">
                     <div

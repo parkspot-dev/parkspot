@@ -3,36 +3,36 @@
         class="select-wrapper custom-multi-select"
         :class="{ border: showBorder }"
     >
-        <label :for="name" class="label" v-if="label">{{ label }}</label>
+        <label v-if="label" :for="name" class="label">{{ label }}</label>
 
         <div class="selected-items" @click="focusInput">
-            <span :key="index" class="tag" v-for="(item, index) in selected">
+            <span v-for="(item, index) in selected" :key="index" class="tag">
                 {{ getOptionLabel(item) }}
                 <button @click.stop="removeSelection(item)">×</button>
             </span>
             <input
                 :id="name"
+                ref="searchInput"
                 :placeholder="selected.length === 0 ? placeholder : ''"
+                type="text"
                 @focus="isOpen = true"
                 @input="filterOptions"
-                ref="searchInput"
-                type="text"
             />
         </div>
-        <div class="dropdown-container" v-if="isOpen">
-            <ul class="options-list" v-if="isOpen && filteredOptions.length">
+        <div v-if="isOpen" class="dropdown-container">
+            <ul v-if="isOpen && filteredOptions.length" class="options-list">
                 <li
-                    :class="{ selected: isSelected(option) }"
-                    :key="index"
-                    @click="toggleSelection(option)"
                     v-for="(option, index) in filteredOptions"
+                    :key="index"
+                    :class="{ selected: isSelected(option) }"
+                    @click="toggleSelection(option)"
                 >
                     {{ getOptionLabel(option) }}
                 </li>
             </ul>
             <ul
-                class="options-list"
                 v-else-if="isOpen && !filteredOptions.length"
+                class="options-list"
             >
                 <li>No options found</li>
             </ul>

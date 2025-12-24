@@ -1,58 +1,58 @@
 <template>
     <Form
         :validation-schema="parkingRequestFormSchema"
-        @submit="submitForm"
         class="form-container"
+        @submit="submitForm"
     >
         <div class="form-row">
             <FormInput
+                v-model="contactModel.fullname"
                 :label="FORM.FULLNAME"
                 :placeholder="FORM_PLACEHOLDERS.FULL_NAME"
                 :name="'fullname'"
-                v-model="contactModel.fullname"
             />
 
             <FormInput
+                v-model="contactModel.cno"
                 :label="FORM.CONTACT_NO"
                 :placeholder="FORM_PLACEHOLDERS.CONTACT_NO"
                 :name="'cno'"
-                v-model="contactModel.cno"
             />
         </div>
         <FormInput
+            v-model="contactModel.email"
             :label="FORM.EMAIL"
             :placeholder="FORM_PLACEHOLDERS.EMAIL"
             :name="'email'"
             type="email"
-            v-model="contactModel.email"
         />
         <div class="form-row">
             <SelectInput
+                v-model="preferenceModel.spot"
                 :label="PREFERENCE.PARKING_TYPE"
                 :list="parkingTypeData"
-                @change="updateType"
                 class="parking-type-input"
                 name="parkingType"
-                v-model="preferenceModel.spot"
+                @change="updateType"
             />
 
             <SelectInput
+                v-model="preferenceModel.minDur"
                 :label="PREFERENCE.DURATION"
                 :list="minDurData"
-                @change="updateMinDur"
                 class="min-duration-input"
                 name="minDur"
-                v-model="preferenceModel.minDur"
+                @change="updateMinDur"
             />
         </div>
         <FormInput
+            v-model="preferenceModel.carModel"
             :label="FORM.CAR_MODEL"
             :placeholder="FORM_PLACEHOLDERS.CAR_MODEL"
             :name="'carModel'"
-            v-model="preferenceModel.carModel"
         />
-        <CheckboxInput :label="termData" @update="updateTermsData" name="terms">
-            <template v-slot:extra>
+        <CheckboxInput :label="termData" name="terms" @update="updateTermsData">
+            <template #extra>
                 <a
                     href="https://www.parkspot.in/terms-and-conditions"
                     target="_blank"
@@ -84,6 +84,7 @@ export default {
         FormInput,
         SelectInput,
     },
+    emits: ['onSubmit'],
     data() {
         return {
             parkingRequestFormSchema,
@@ -114,7 +115,6 @@ export default {
             isEnable: false,
         };
     },
-    emits: ['onSubmit'],
     methods: {
         ...mapMutations({
             updateContact: 'user/update-contact',

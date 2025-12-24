@@ -4,7 +4,7 @@
             <!-- image gallery -->
             <ImageGallery
                 :images="displayImages"
-                :locationName="locationName"
+                :location-name="locationName"
                 :removable="false"
             ></ImageGallery>
             <!-- Rate Card Organism -->
@@ -66,7 +66,7 @@
                 </div>
                 <MapContainer
                     :center="center"
-                    :spotDetails="selectedSpot[0]"
+                    :spot-details="selectedSpot[0]"
                     :zoom="13"
                     class="sdp-map"
                 ></MapContainer>
@@ -85,7 +85,7 @@
 
             <!-- only for agents -->
             <div class="only-to-agent">
-                <div class="spot-detail-owner" v-if="ownerInfoDetails.UserName">
+                <div v-if="ownerInfoDetails.UserName" class="spot-detail-owner">
                     <hr style="width: 100%" />
                     <h2>Owner Info Details</h2>
                     <div class="spot-detail-owner-body">
@@ -131,7 +131,7 @@
                                     <td>Last Call Date</td>
                                     <td>
                                         <AtomDatePicker
-                                            :assignedDate="
+                                            :assigned-date="
                                                 spotDetails.LastCallDate
                                             "
                                             :size="'is-small'"
@@ -147,9 +147,9 @@
                                     <td>Remark</td>
                                     <td>
                                         <AtomTextarea
-                                            :rowNo="2"
-                                            @changed="changeRemark"
                                             v-model="spotDetails.Remark"
+                                            :row-no="2"
+                                            @changed="changeRemark"
                                         />
                                     </td>
                                 </tr>
@@ -176,14 +176,14 @@
                                     Interested VO's
                                 </AtomButton>
                             </div>
-                            <div class="goto-btn" v-if="isAvailable">
+                            <div v-if="isAvailable" class="goto-btn">
                                 <AtomButton
                                     @click.native="changeAvailability(-1)"
                                 >
                                     Mark Rented
                                 </AtomButton>
                             </div>
-                            <div class="goto-btn" v-if="!isAvailable">
+                            <div v-if="!isAvailable" class="goto-btn">
                                 <AtomButton
                                     @click.native="changeAvailability(1)"
                                 >
@@ -213,7 +213,7 @@
                                     <td>
                                         <a
                                             :href="
-                                                this.getBookingDetailURL(
+                                                getBookingDetailURL(
                                                     booking.ID,
                                                 )
                                             "
@@ -289,16 +289,16 @@ export default {
         AtomDatePicker,
         AtomTextarea,
     },
-    data() {
-        return {
-            BookingStatus: BookingStatus,
-        };
-    },
     props: {
         isAdmin: {
             type: Boolean,
             default: false,
         },
+    },
+    data() {
+        return {
+            BookingStatus: BookingStatus,
+        };
     },
     computed: {
         ...mapState('sdp', [

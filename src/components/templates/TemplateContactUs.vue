@@ -5,9 +5,9 @@
             <div class="column is-half contact-form" data-aos="slide-up">
                 <div class="card card-padding">
                     <OrganismContactForm
-                        :textArea="true"
-                        :formSubmitted="formSubmitted"
-                        @submitForm="submitForm"
+                        :text-area="true"
+                        :form-submitted="formSubmitted"
+                        @submit-form="submitForm"
                     ></OrganismContactForm>
                 </div>
             </div>

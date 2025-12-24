@@ -1,8 +1,8 @@
 <template>
     <section>
         <b-pagination
-            :total="totals"
             v-model="currentPage"
+            :total="totals"
             :size="'is-medium'"
             :per-page="3"
             :range-before="1"

@@ -13,11 +13,11 @@
             height="500"
         >
             <b-table-column
+                v-slot="props"
                 field="ID"
                 label="ID"
                 numeric
                 sortable
-                v-slot="props"
                 width="56"
             >
                 <div>
@@ -30,12 +30,12 @@
             </b-table-column>
 
             <b-table-column
+                v-slot="props"
                 cell-class="has-text-left"
                 field="Name"
                 label="VO Name"
                 searchable
                 sortable
-                v-slot="props"
                 width="168"
             >
                 <div>
@@ -44,12 +44,12 @@
             </b-table-column>
 
             <b-table-column
+                v-slot="props"
                 cell-class="has-text-left"
                 field="Mobile"
                 label="VO Mobile"
                 searchable
                 sortable
-                v-slot="props"
                 width="132"
             >
                 <div>
@@ -58,12 +58,12 @@
             </b-table-column>
 
             <b-table-column
+                v-slot="props"
                 cell-class="has-text-left"
                 field="SOContactDetails.FullName"
                 label="SO Name"
                 searchable
                 sortable
-                v-slot="props"
                 width="112"
             >
                 <div>
@@ -72,12 +72,12 @@
             </b-table-column>
 
             <b-table-column
+                v-slot="props"
                 cell-class="has-text-left"
                 field="SOContactDetails.Mobile"
                 label="SO Mobile"
                 searchable
                 sortable
-                v-slot="props"
                 width="132"
             >
                 <div>
@@ -86,11 +86,11 @@
             </b-table-column>
 
             <b-table-column
+                v-slot="props"
                 cell-class="has-text-left"
                 field="SiteID"
                 label="SiteID"
                 sortable
-                v-slot="props"
             >
                 <div>
                     <a :href="sdpURL(props.row.SiteID)" target="_blank">
@@ -102,11 +102,11 @@
             </b-table-column>
 
             <b-table-column
+                v-slot="props"
                 cell-class="has-text-left"
                 field="Status"
                 label="Status"
                 sortable
-                v-slot="props"
                 width="100"
             >
                 <div>
@@ -115,11 +115,11 @@
             </b-table-column>
 
             <b-table-column
+                v-slot="props"
                 field="Rent"
                 label="Rent"
                 numeric
                 sortable
-                v-slot="props"
                 width="60"
             >
                 <div>
@@ -127,11 +127,11 @@
                 </div>
             </b-table-column>
             <b-table-column
+                v-slot="props"
                 cell-class="has-text-left"
                 field="PaymentPeriod"
                 label="Periodicity"
                 sortable
-                v-slot="props"
                 width="112"
             >
                 <div>

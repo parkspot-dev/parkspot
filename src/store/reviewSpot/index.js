@@ -336,7 +336,7 @@ const actions = {
             EmailID: state.SO.email,
             EndDate: state.Booking.endDate,
             FullName: state.SO.fullName,
-            Name: state.SO.ApartmentName,
+            ApartmentName: state.SO.ApartmentName,
             ID: state.SO.spotId,
             LastCallDate: state.Booking.lastCallDate,
             Latitude: latitude,
@@ -385,7 +385,7 @@ const actions = {
                     case 'fullName':
                         return 'FullName';
                     case 'ApartmentName':
-                        return 'Name';
+                        return 'ApartmentName';
                     case 'lastCallDate':
                         return 'LastCallDate';
                     case 'duration':

@@ -3,8 +3,8 @@
         <div class="bg-decor"></div>
 
         <TemplatePaymentGateway
-            :bookingDetails="bookingDetails"
-            :paymentMode="paymentMode"
+            :booking-details="bookingDetails"
+            :payment-mode="paymentMode"
             :status="status"
         >
         </TemplatePaymentGateway>

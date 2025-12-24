@@ -1,6 +1,6 @@
 <template>
     <div ref="provider" :name="fieldName" :rules="rules">
-        <AtomUpload @uploadFiles="handleUpload" class="mb-5"></AtomUpload>
+        <AtomUpload class="mb-5" @upload-files="handleUpload"></AtomUpload>
         <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
     </div>
 </template>

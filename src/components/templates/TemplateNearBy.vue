@@ -18,9 +18,9 @@
             </AtomHeading>
             <div class="columns mb-6">
                 <MoleculeSRPCard
-                    class="column"
-                    :key="spot.ID"
                     v-for="spot in spots"
+                    :key="spot.ID"
+                    class="column"
                     :spot="spot"
                     @on-details="details"
                 ></MoleculeSRPCard>

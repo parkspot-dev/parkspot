@@ -2,12 +2,12 @@
     <div>
         <label class="label" :for="name">{{ label }}</label>
         <Field
+            v-bind="$attrs"
+            v-model="inputValue"
             :name="name"
             :placeholder="placeholder"
             :type="type"
             class="input"
-            v-bind="$attrs"
-            v-model="inputValue"
         />
         <ErrorMessage :name="name" class="error" />
     </div>

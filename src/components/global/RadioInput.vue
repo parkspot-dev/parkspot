@@ -5,8 +5,8 @@
             <b-radio
                 v-for="option in values"
                 :key="option"
-                :native-value="option"
                 v-model="selectedValue"
+                :native-value="option"
             >
                 {{ option }}
             </b-radio>
