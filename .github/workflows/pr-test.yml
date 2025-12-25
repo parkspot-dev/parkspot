@@ -41,167 +41,10 @@ jobs:
           echo "## ✅ Linting Passed" >> $GITHUB_STEP_SUMMARY
           echo "No linting errors found." >> $GITHUB_STEP_SUMMARY
 
-  test:
-    name: 🧪 Unit Tests & Coverage
-    runs-on: ubuntu-latest
-    needs: build  # Only run tests if build passes
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run unit tests
-        run: npm run test:unit
-
-      - name: Run test coverage
-        run: npm run coverage
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage/
-          retention-days: 14
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          files: ./coverage/coverage-final.json
-          fail_ci_if_error: false
-          verbose: true
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Check coverage thresholds
-        run: |
-          echo "## 📊 Test Coverage Report" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          # Check if coverage file exists
-          if [ ! -f coverage/coverage-summary.json ]; then
-            echo "❌ **Coverage summary not found!**" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "Make sure your vite.config.js has:" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`js" >> $GITHUB_STEP_SUMMARY
-            echo "coverage: { reporter: ['json-summary'] }" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
-          
-          # Parse coverage values
-          LINES=$(jq -r '.total.lines.pct' coverage/coverage-summary.json)
-          STATEMENTS=$(jq -r '.total.statements.pct' coverage/coverage-summary.json)
-          FUNCTIONS=$(jq -r '.total.functions.pct' coverage/coverage-summary.json)
-          BRANCHES=$(jq -r '.total.branches.pct' coverage/coverage-summary.json)
-          
-          # Print to console log (visible in step output)
-          echo ""
-          echo "========================================================"
-          echo "           📊 COVERAGE RESULTS"
-          echo "========================================================"
-          printf "%-12s | %-10s | %-10s | %s\n" "Metric" "Coverage" "Threshold" "Status"
-          echo "------------ | ---------- | ---------- | --------"
-          
-          FAILED=0
-          FAILED_METRICS=""
-          
-          # Check Lines
-          if (( $(echo "$LINES < $COVERAGE_THRESHOLD_LINES" | bc -l) )); then
-            printf "%-12s | %-10s | %-10s | %s\n" "Lines" "${LINES}%" "${COVERAGE_THRESHOLD_LINES}%" "❌ FAILED"
-            FAILED=1
-            FAILED_METRICS="$FAILED_METRICS Lines(${LINES}%<${COVERAGE_THRESHOLD_LINES}%)"
-          else
-            printf "%-12s | %-10s | %-10s | %s\n" "Lines" "${LINES}%" "${COVERAGE_THRESHOLD_LINES}%" "✅ Passed"
-          fi
-          
-          # Check Statements
-          if (( $(echo "$STATEMENTS < $COVERAGE_THRESHOLD_STATEMENTS" | bc -l) )); then
-            printf "%-12s | %-10s | %-10s | %s\n" "Statements" "${STATEMENTS}%" "${COVERAGE_THRESHOLD_STATEMENTS}%" "❌ FAILED"
-            FAILED=1
-            FAILED_METRICS="$FAILED_METRICS Statements(${STATEMENTS}%<${COVERAGE_THRESHOLD_STATEMENTS}%)"
-          else
-            printf "%-12s | %-10s | %-10s | %s\n" "Statements" "${STATEMENTS}%" "${COVERAGE_THRESHOLD_STATEMENTS}%" "✅ Passed"
-          fi
-          
-          # Check Functions
-          if (( $(echo "$FUNCTIONS < $COVERAGE_THRESHOLD_FUNCTIONS" | bc -l) )); then
-            printf "%-12s | %-10s | %-10s | %s\n" "Functions" "${FUNCTIONS}%" "${COVERAGE_THRESHOLD_FUNCTIONS}%" "❌ FAILED"
-            FAILED=1
-            FAILED_METRICS="$FAILED_METRICS Functions(${FUNCTIONS}%<${COVERAGE_THRESHOLD_FUNCTIONS}%)"
-          else
-            printf "%-12s | %-10s | %-10s | %s\n" "Functions" "${FUNCTIONS}%" "${COVERAGE_THRESHOLD_FUNCTIONS}%" "✅ Passed"
-          fi
-          
-          # Check Branches
-          if (( $(echo "$BRANCHES < $COVERAGE_THRESHOLD_BRANCHES" | bc -l) )); then
-            printf "%-12s | %-10s | %-10s | %s\n" "Branches" "${BRANCHES}%" "${COVERAGE_THRESHOLD_BRANCHES}%" "❌ FAILED"
-            FAILED=1
-            FAILED_METRICS="$FAILED_METRICS Branches(${BRANCHES}%<${COVERAGE_THRESHOLD_BRANCHES}%)"
-          else
-            printf "%-12s | %-10s | %-10s | %s\n" "Branches" "${BRANCHES}%" "${COVERAGE_THRESHOLD_BRANCHES}%" "✅ Passed"
-          fi
-          
-          echo "========================================================"
-          echo ""
-          
-          # Write to GitHub Summary
-          echo "| Metric | Coverage | Threshold | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|--------|----------|-----------|--------|" >> $GITHUB_STEP_SUMMARY
-          
-          if (( $(echo "$LINES < $COVERAGE_THRESHOLD_LINES" | bc -l) )); then
-            echo "| Lines | ${LINES}% | ${COVERAGE_THRESHOLD_LINES}% | ❌ |" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "| Lines | ${LINES}% | ${COVERAGE_THRESHOLD_LINES}% | ✅ |" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          if (( $(echo "$STATEMENTS < $COVERAGE_THRESHOLD_STATEMENTS" | bc -l) )); then
-            echo "| Statements | ${STATEMENTS}% | ${COVERAGE_THRESHOLD_STATEMENTS}% | ❌ |" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "| Statements | ${STATEMENTS}% | ${COVERAGE_THRESHOLD_STATEMENTS}% | ✅ |" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          if (( $(echo "$FUNCTIONS < $COVERAGE_THRESHOLD_FUNCTIONS" | bc -l) )); then
-            echo "| Functions | ${FUNCTIONS}% | ${COVERAGE_THRESHOLD_FUNCTIONS}% | ❌ |" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "| Functions | ${FUNCTIONS}% | ${COVERAGE_THRESHOLD_FUNCTIONS}% | ✅ |" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          if (( $(echo "$BRANCHES < $COVERAGE_THRESHOLD_BRANCHES" | bc -l) )); then
-            echo "| Branches | ${BRANCHES}% | ${COVERAGE_THRESHOLD_BRANCHES}% | ❌ |" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "| Branches | ${BRANCHES}% | ${COVERAGE_THRESHOLD_BRANCHES}% | ✅ |" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          if [ $FAILED -eq 1 ]; then
-            echo ""
-            echo "❌ COVERAGE CHECK FAILED!"
-            echo "   Failed thresholds:$FAILED_METRICS"
-            echo ""
-            echo "### ❌ Coverage thresholds not met!" >> $GITHUB_STEP_SUMMARY
-            echo "**Failed:**$FAILED_METRICS" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "Please add more tests to improve coverage." >> $GITHUB_STEP_SUMMARY
-            exit 1
-          else
-            echo "✅ All coverage thresholds met!"
-            echo "### ✅ All coverage thresholds met!" >> $GITHUB_STEP_SUMMARY
-          fi
-
   build:
     name: 🏗️ Build Verification
     runs-on: ubuntu-latest
-    # No 'needs' - runs in parallel with lint
+    # Runs in parallel with lint
 
     steps:
       - name: Checkout repository
@@ -237,10 +80,151 @@ jobs:
             echo "**Build size:** ${SIZE}" >> $GITHUB_STEP_SUMMARY
           fi
 
+  test:
+    name: 🧪 Unit Tests
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+      - name: Test summary
+        if: success()
+        run: |
+          echo "## ✅ Unit Tests Passed" >> $GITHUB_STEP_SUMMARY
+          echo "All unit tests completed successfully." >> $GITHUB_STEP_SUMMARY
+
+  coverage:
+    name: 📊 Test Coverage
+    runs-on: ubuntu-latest
+    needs: test  # Only run coverage if tests pass
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run test coverage
+        run: npm run coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 14
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/coverage-final.json
+          fail_ci_if_error: false
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Check coverage thresholds
+        run: |
+          # Check if coverage file exists
+          if [ ! -f coverage/coverage-summary.json ]; then
+            echo "## ❌ Coverage summary not found!" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Make sure your vite.config.js has:" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`js" >> $GITHUB_STEP_SUMMARY
+            echo "coverage: { reporter: ['json-summary'] }" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+          
+          # Define check function
+          check_threshold() {
+            local name=$1 value=$2 threshold=$3
+            local status="✅" console_status="✅ Passed"
+            if (( $(echo "$value < $threshold" | bc -l) )); then
+              status="❌"
+              console_status="❌ FAILED"
+              FAILED=1
+              FAILED_METRICS="$FAILED_METRICS $name(${value}%<${threshold}%)"
+            fi
+            printf "%-12s | %-10s | %-10s | %s\n" "$name" "${value}%" "${threshold}%" "$console_status"
+            echo "| $name | ${value}% | ${threshold}% | $status |" >> /tmp/coverage_table.md
+          }
+          
+          # Parse coverage values
+          LINES=$(jq -r '.total.lines.pct' coverage/coverage-summary.json)
+          STATEMENTS=$(jq -r '.total.statements.pct' coverage/coverage-summary.json)
+          FUNCTIONS=$(jq -r '.total.functions.pct' coverage/coverage-summary.json)
+          BRANCHES=$(jq -r '.total.branches.pct' coverage/coverage-summary.json)
+          
+          FAILED=0
+          FAILED_METRICS=""
+          
+          # Initialize summary table
+          echo "| Metric | Coverage | Threshold | Status |" > /tmp/coverage_table.md
+          echo "|--------|----------|-----------|--------|" >> /tmp/coverage_table.md
+          
+          # Print console header
+          echo ""
+          echo "========================================================"
+          echo "           📊 COVERAGE RESULTS"
+          echo "========================================================"
+          printf "%-12s | %-10s | %-10s | %s\n" "Metric" "Coverage" "Threshold" "Status"
+          echo "------------ | ---------- | ---------- | --------"
+          
+          # Check all thresholds
+          check_threshold "Lines" "$LINES" "$COVERAGE_THRESHOLD_LINES"
+          check_threshold "Statements" "$STATEMENTS" "$COVERAGE_THRESHOLD_STATEMENTS"
+          check_threshold "Functions" "$FUNCTIONS" "$COVERAGE_THRESHOLD_FUNCTIONS"
+          check_threshold "Branches" "$BRANCHES" "$COVERAGE_THRESHOLD_BRANCHES"
+          
+          echo "========================================================"
+          echo ""
+          
+          # Write to GitHub Summary
+          echo "## 📊 Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          cat /tmp/coverage_table.md >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ $FAILED -eq 1 ]; then
+            echo "❌ COVERAGE CHECK FAILED!"
+            echo "   Failed thresholds:$FAILED_METRICS"
+            echo ""
+            echo "### ❌ Coverage thresholds not met!" >> $GITHUB_STEP_SUMMARY
+            echo "**Failed:**$FAILED_METRICS" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Please add more tests to improve coverage." >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "✅ All coverage thresholds met!"
+            echo "### ✅ All coverage thresholds met!" >> $GITHUB_STEP_SUMMARY
+          fi
+
   status-check:
     name: ✅ PR Status
     runs-on: ubuntu-latest
-    needs: [lint, test, build]
+    needs: [lint, build, test, coverage]
     if: always()
 
     steps:
@@ -250,28 +234,24 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
-
-          if [ "${{ needs.lint.result }}" == "success" ]; then
-            echo "| 🔍 Lint | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "| 🔍 Lint | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          if [ "${{ needs.test.result }}" == "success" ]; then
-            echo "| 🧪 Tests & Coverage | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "| 🧪 Tests & Coverage | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          if [ "${{ needs.build.result }}" == "success" ]; then
-            echo "| 🏗️ Build | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "| 🏗️ Build | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
-          fi
+          
+          # Function to check and report job status
+          report_status() {
+            local job_name=$1 job_icon=$2 job_result=$3
+            if [ "$job_result" == "success" ]; then
+              echo "| $job_icon $job_name | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "| $job_icon $job_name | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+            fi
+          }
+          
+          report_status "Lint" "🔍" "${{ needs.lint.result }}"
+          report_status "Build" "🏗️" "${{ needs.build.result }}"
+          report_status "Unit Tests" "🧪" "${{ needs.test.result }}"
+          report_status "Coverage" "📊" "${{ needs.coverage.result }}"
 
       - name: Fail if any job failed
-        if: ${{ needs.lint.result == 'failure' || needs.test.result == 'failure' || needs.build.result == 'failure' }}
+        if: contains(needs.*.result, 'failure')
         run: |
           echo "One or more checks failed. Please review the errors above."
           exit 1
-
