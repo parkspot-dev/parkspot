@@ -7,7 +7,12 @@
 <script>
 export default {
     name: 'ExampleComponent',
-    props: ['messages'],
+    props: {
+        messages : {
+            type: String,
+            default: '',
+        }
+    },
 };
 </script>
 

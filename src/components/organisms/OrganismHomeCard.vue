@@ -12,7 +12,7 @@
                     <div class="card-main-body">
                         <h2 class="title">Search parking spot in seconds</h2>
                         <SearchInput class="search-input"></SearchInput>
-                        <AtomButton class="btn" @click.native="flyToSrp">
+                        <AtomButton class="btn" @click="flyToSrp">
                             Search now
                         </AtomButton>
                     </div>
@@ -39,7 +39,7 @@
                                 platform.
                             </p>
                         </div>
-                        <AtomButton class="btn mb-5" @click.native="contactUs">
+                        <AtomButton class="btn mb-5" @click="contactUs">
                             Get started
                         </AtomButton>
                         <div class="learn-more">
@@ -65,6 +65,7 @@ export default {
         SearchInput,
         AtomButton,
     },
+    emits: ['changed'],
     data() {
         return {
             activeTabValue: 'VO',

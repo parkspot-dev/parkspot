@@ -1,5 +1,5 @@
 <template>
-    <Form
+    <VeeForm
         :validation-schema="parkingRequestFormSchema"
         class="form-container"
         @submit="submitForm"
@@ -63,12 +63,12 @@
         <button class="send-button" type="submit">
             Submit <AtomIcon class="btn-icon" :icon="'send-outline'"></AtomIcon>
         </button>
-    </Form>
+    </VeeForm>
 </template>
 
 <script>
 import { ADD_INFO, PREFERENCE, FORM, FORM_PLACEHOLDERS } from '@/constant/constant';
-import { Form } from 'vee-validate';
+import { Form as VeeForm } from 'vee-validate';
 import { mapMutations } from 'vuex';
 import { parkingRequestFormSchema } from '@/validationSchemas';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
@@ -80,7 +80,7 @@ export default {
     components: {
         AtomIcon,
         CheckboxInput,
-        Form,
+        VeeForm,
         FormInput,
         SelectInput,
     },

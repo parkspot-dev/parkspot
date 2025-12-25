@@ -18,8 +18,6 @@
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import OrganismHomeCard from '../organisms/OrganismHomeCard.vue';
-import carImage from '/assets/home-car-owner.jpg';
-import spotImage from '/assets/home-spot-owner.jpg';
 
 export default {
     name: 'TemplateHomeBanner',

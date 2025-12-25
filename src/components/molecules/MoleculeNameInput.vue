@@ -21,7 +21,8 @@ export default {
     },
     props: {
         modelValue: {
-            type: null,
+            type: String,
+            default: '',
         },
         placeholder: {
             type: String,
@@ -33,6 +34,7 @@ export default {
         },
         inputType: {
             type: String,
+            default: 'text',
         },
         /**
          * Name of the input field required
@@ -44,8 +46,10 @@ export default {
         },
         label: {
             type: String,
+            default: '',
         },
     },
+    emits: ['update:modelValue'],
     data() {
         return {
             innerValue: '',

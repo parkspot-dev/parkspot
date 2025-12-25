@@ -149,7 +149,10 @@ import {
 } from '@/constant/enums';
 export default {
     props: {
-        activeBookings: Array,
+        activeBookings: {
+            type : Array,
+            default : () => [],
+        }
     },
     methods: {
         sdpURL(siteId) {

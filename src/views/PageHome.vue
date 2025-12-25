@@ -25,7 +25,7 @@
 
                 <!-- Right Side Form -->
                 <div class="form-container">
-                    <Form
+                    <VeeForm
                         :validation-schema="contactFormSchema"
                         @submit="handleSubmit"
                     >
@@ -64,7 +64,7 @@
                                 Submit <AtomIcon class="btn-icon" :icon="'send-outline'"></AtomIcon>
                             </button>
                         </div>
-                    </Form>
+                    </VeeForm>
                 </div>
             </div>
         </div>
@@ -77,7 +77,7 @@
 <script>
 import { CAR_WASH_SERVICES } from '@/constant/constant';
 import { contactFormSchema } from '@/validationSchemas';
-import { Form } from 'vee-validate';
+import { Form as VeeForm } from 'vee-validate';
 import { mapActions, mapMutations } from 'vuex';
 import { PAGE_TITLE, FORM, FORM_PLACEHOLDERS } from '@/constant/constant';
 import FormInput from '@/components/global/FormInput.vue';
@@ -92,7 +92,7 @@ export default {
     name: 'PageHome',
     components: {
         AtomIcon,
-        Form,
+        VeeForm,
         FormInput,
         PageAbout,
         PageContactUs,

@@ -1,5 +1,5 @@
 <template>
-    <Form :validation-schema="contactFormSchema" @submit="submitForm">
+    <VeeForm :validation-schema="contactFormSchema" @submit="submitForm">
         <FormInput
             v-model="model.fullname"
             :name="'fullname'"
@@ -40,13 +40,13 @@
         <button class="send-button" type="submit">
             Submit <AtomIcon class="btn-icon" :icon="'send-outline'"></AtomIcon>
         </button>
-    </Form>
+    </VeeForm>
 </template>
 
 <script>
 import { contactFormSchema } from '@/validationSchemas';
 import { FORM, FORM_PLACEHOLDERS } from '@/constant/constant';
-import { Form } from 'vee-validate';
+import { Form as VeeForm } from 'vee-validate';
 import { mapMutations } from 'vuex';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import AtomTextarea from '@/components/atoms/AtomTextarea.vue';
@@ -56,7 +56,7 @@ export default {
     name: 'OrganismContactForm',
     components: {
         AtomTextarea,
-        Form,
+        VeeForm,
         FormInput,
         AtomIcon,
     },

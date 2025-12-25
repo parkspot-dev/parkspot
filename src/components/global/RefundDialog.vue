@@ -44,9 +44,15 @@ import { ref, watch } from 'vue';
 
 export default {
     props: {
-        paymentAmount: Number,
-        visible: Boolean,
+        paymentAmount: {
+            type: Number,
+            required: true,
+        },
+        visible: {
+            type: Boolean,
+        },
     },
+    emits : ['cancel','confirm'],
     setup(props, { emit }) {
         const isSecurityDeposit = ref(false);
         const refundAmount = ref(props.paymentAmount);
@@ -156,4 +162,4 @@ export default {
         margin-bottom: 16px;
     }
 }
-</style>
+</style> 

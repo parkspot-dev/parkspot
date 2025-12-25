@@ -101,7 +101,7 @@ export default {
                         this.paymentMode = { ...data.Payment };
                     }
                 }
-            } catch (exception) {
+            } catch {
                 this.status = !this.status;
                 this.getStatus();
             }

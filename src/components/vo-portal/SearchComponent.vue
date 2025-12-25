@@ -2,7 +2,7 @@
     <div class="main-box">
         <div class="search-box">
             <SearchInput class="search-input"></SearchInput>
-            <AtomButton class="btn" :with-search="true" @click.native="flyToSrp">
+            <AtomButton class="btn" :with-search="true" @click="flyToSrp">
                 Search now
             </AtomButton>
         </div>
@@ -38,16 +38,17 @@ export default {
         TopSearchesCard,
     },
 
-    computed: {
-        ...mapGetters({
-            LocDetails: 'map/getLocDetails',
-        }),
-    },
     data() {
         return {
             // TODO: Fetch dynamically from Firebase
             items: TOP_SEARCH_PLACES
         };
+    },
+
+    computed: {
+        ...mapGetters({
+            LocDetails: 'map/getLocDetails',
+        }),
     },
 
     methods: {

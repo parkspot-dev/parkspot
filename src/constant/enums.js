@@ -79,8 +79,8 @@ const BookingPaymentStatusLabel = [
  * @param {int} paymentStatus
  * @return {string}: label for UI Payment Status (Success / Pending / Failed)
  */
-export function getBookingPaymentStatusLabell(paymentStatus) {
-    return BookingPaymentStatusLabell[paymentStatus];
+export function getBookingPaymentStatusLabel(paymentStatus) {
+    return BookingPaymentStatusLabel[paymentStatus];
 }
 
 export const ParkingRequestStatus = Object.freeze({

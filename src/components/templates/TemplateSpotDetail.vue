@@ -166,7 +166,7 @@
                         <div class="btn-group">
                             <div class="goto-btn">
                                 <AtomButton
-                                    @click.native="
+                                    @click="
                                         goToInterestedVO([
                                             spotDetails.Lat,
                                             spotDetails.Long,
@@ -178,14 +178,14 @@
                             </div>
                             <div v-if="isAvailable" class="goto-btn">
                                 <AtomButton
-                                    @click.native="changeAvailability(-1)"
+                                    @click="changeAvailability(-1)"
                                 >
                                     Mark Rented
                                 </AtomButton>
                             </div>
                             <div v-if="!isAvailable" class="goto-btn">
                                 <AtomButton
-                                    @click.native="changeAvailability(1)"
+                                    @click="changeAvailability(1)"
                                 >
                                     Mark Available
                                 </AtomButton>
@@ -295,6 +295,7 @@ export default {
             default: false,
         },
     },
+    emits: ['goToSearchPortal', 'changeAvailability', 'changeLastCallDate', 'changeRemark'],
     data() {
         return {
             BookingStatus: BookingStatus,
@@ -327,7 +328,6 @@ export default {
             }
         },
     },
-    emits: ['goToSearchPortal', 'changeAvailability', 'changeLastCallDate'],
     methods: {
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);

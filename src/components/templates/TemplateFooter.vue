@@ -340,9 +340,6 @@ export default {
         AtomIcon,
         // AtomImage,
     },
-    computed: {
-        ...mapState('config', ['helplineNumber', 'helplineRef']),
-    },
     data() {
         return {
             psfooterImg: '/assets/psfooterlogo.png',
@@ -350,6 +347,10 @@ export default {
             iosAppLinkImg: '/assets/apple-store.svg',
         };
     },
+    computed: {
+        ...mapState('config', ['helplineNumber', 'helplineRef']),
+    },
+    
 };
 </script>
 

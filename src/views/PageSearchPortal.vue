@@ -64,12 +64,6 @@ export default {
             VOMobile: this.searchMobile,
         };
     },
-    mounted() {
-        this.getUserProfile();
-        if (this.isAdmin) {
-            this.getAgents();
-        }
-    },
     computed: {
         ...mapState('searchPortal', [
             'activeTab',
@@ -106,6 +100,19 @@ export default {
                 this.updateSOLatLngInput(LatLng);
             },
         },
+    },
+    watch: {
+        hasError(error) {
+            if (error) {
+                this.alertError(this.errorMessage);
+            }
+        },
+    },
+    mounted() {
+        this.getUserProfile();
+        if (this.isAdmin) {
+            this.getAgents();
+        }
     },
     async created() {
         const tab = this.$route.query['tab'];
@@ -286,13 +293,6 @@ export default {
             }
 
             return sanitized;
-        },
-    },
-    watch: {
-        hasError(error) {
-            if (error) {
-                this.alertError(this.errorMessage);
-            }
         },
     },
 };

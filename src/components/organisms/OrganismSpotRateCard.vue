@@ -47,7 +47,7 @@
             v-if="isAvailable"
             class="top-margin"
             :expanded="true"
-            @click.native="onContact"
+            @click="onContact"
         >
             Book
         </AtomButton>
@@ -55,7 +55,7 @@
             v-else
             class="top-margin"
             :expanded="true"
-            @click.native="onContact"
+            @click="onContact"
         >
             Notify me
         </AtomButton>

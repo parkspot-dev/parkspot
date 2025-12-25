@@ -21,6 +21,7 @@ export default {
     props: {
         featureHeading: {
             type: String,
+            required: true,
         },
     },
 };

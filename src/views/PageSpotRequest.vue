@@ -12,7 +12,7 @@
                 <div class="so-btn">
                     <AtomButton
                         v-show="!summary.show"
-                        @click.native="showSummary"
+                        @click="showSummary"
                     >
                         {{ summary.btn }} Summary
                     </AtomButton>
@@ -23,7 +23,7 @@
                         <AtomIcon
                             :icon="'close'"
                             size=""
-                            @click.native="showSummary"
+                            @click="showSummary"
                         >
                         </AtomIcon>
                     </span>
@@ -222,6 +222,19 @@ export default {
         ]),
     },
 
+    watch: {
+        spotRequests(newRequests) {
+            if (newRequests && newRequests.length > 0) {
+                this.updateSummary(newRequests);
+            }
+        },
+        hasError(error) {
+            if (error) {
+                this.alertError(this.errorMessage);
+            }
+        },
+    },
+
     mounted() {
         this.fetchSpotRequests();
     },
@@ -302,18 +315,6 @@ export default {
                 });
             } else {
                 this.alertError('Invalid status selected.');
-            }
-        },
-    },
-    watch: {
-        spotRequests(newRequests) {
-            if (newRequests && newRequests.length > 0) {
-                this.updateSummary(newRequests);
-            }
-        },
-        hasError(error) {
-            if (error) {
-                this.alertError(this.errorMessage);
             }
         },
     },

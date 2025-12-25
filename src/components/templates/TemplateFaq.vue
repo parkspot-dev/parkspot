@@ -40,6 +40,7 @@
                     </div>
                 </template>
                 <div class="card-content">
+                    <!-- eslint-disable-next-line vue/no-v-html --> 
                     <div class="content" v-html="faq.answer"></div>
                 </div>
             </b-collapse>
@@ -163,7 +164,7 @@ export default {
             {
                 question: `How reliable is the authentication of vehicle owners?`,
                 answer: `Rest assured, we prioritize authenticity. Our stringent KYC process for\
-                        individuals and thorough verification of car documents during the booking process\ 
+                        individuals and thorough verification of car documents during the booking process 
                         guarantee the reliability of vehicle owners..`,
             },
 

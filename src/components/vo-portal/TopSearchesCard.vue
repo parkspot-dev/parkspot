@@ -13,7 +13,7 @@
                         class="btn-arrow"
                         :icon="'arrow-right'"
                         :size="'is-medium'"
-                        @click.native="onArrowBtn"
+                        @click="onArrowBtn"
                     ></AtomIcon>
                 </router-link>
             </div>

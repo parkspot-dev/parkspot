@@ -1,5 +1,5 @@
 <template>
-    <Form
+    <VeeForm
         :validation-schema="registerSpotRequestFormSchema"
         @submit="submitForm"
     >
@@ -115,7 +115,7 @@
             Submit
             <AtomIcon class="btn-icon" icon="send-outline" />
         </button>
-    </Form>
+    </VeeForm>
 </template>
 
 <script>
@@ -135,7 +135,7 @@ import SelectInput from '@/components/global/SelectInput.vue';
 import { registerSpotRequestFormSchema } from '@/validationSchemas';
 import { mapMutations } from 'vuex';
 import { ParkingSizeDisplayMap, ParkingSizeLabels } from '@/constant/constant';
-import { Form } from 'vee-validate';
+import { Form as VeeForm } from 'vee-validate';
 import { SiteType } from '@/constant/enums';
 
 export default {
@@ -143,7 +143,7 @@ export default {
     components: {
         AtomIcon,
         CheckboxInput,
-        Form,
+        VeeForm,
         FormInput,
         SelectInput,
         ImageUpload,

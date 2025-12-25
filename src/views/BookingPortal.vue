@@ -45,6 +45,23 @@ export default {
             bookingID: this.searchText,
         };
     },
+    computed: {
+        ...mapState('bookingPortal', [
+            'hasError',
+            'errorMessage',
+            'isLoading',
+            'bookingDetails',
+            'activeBookings',
+            'searchText',
+        ]),
+    },
+    watch: {
+        hasError(error) {
+            if (error) {
+                this.alertError(this.errorMessage);
+            }
+        },
+    },
     async created() {
         if (this.$route.query['bookingId'] != undefined) {
             const bookingId = this.$route.query['bookingId'];
@@ -56,16 +73,6 @@ export default {
             this.resetBookingDetails();
             this.getActiveBooking();
         }
-    },
-    computed: {
-        ...mapState('bookingPortal', [
-            'hasError',
-            'errorMessage',
-            'isLoading',
-            'bookingDetails',
-            'activeBookings',
-            'searchText',
-        ]),
     },
 
     methods: {
@@ -108,13 +115,6 @@ export default {
                 ariaRole: 'alertdialog',
                 ariaModal: true,
             });
-        },
-    },
-    watch: {
-        hasError(error) {
-            if (error) {
-                this.alertError(this.errorMessage);
-            }
         },
     },
 };

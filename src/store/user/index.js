@@ -47,7 +47,7 @@ const mutations = {
     'update-user-profile'(state, userProfile) {
         userProfile['UserName'] = '';
         state.userProfile = userProfile;
-        if (userProfile && !userProfile.hasOwnProperty('ErrorCode')) {
+        if (userProfile && !Object.prototype.hasOwnProperty.call(userProfile, 'ErrorCode')) {
             localStorage.setItem('UserProfile', JSON.stringify(userProfile));
         }
     },
@@ -227,7 +227,6 @@ const actions = {
             Remark: '',
             MapLink: state.contactForm.mapLink,
             SpotImages: state.contactForm.images,
-            ServicesAvailable: state.contactForm.facilities,
             SiteType: state.contactForm.siteType,
             City: state.contactForm.city,
         };

@@ -138,7 +138,7 @@
                         <div v-if="!user" class="login-options">
                             <AtomButton
                                 class="login-btn"
-                                @click.native="logInBtn"
+                                @click="logInBtn"
                             >
                                 Log in
                             </AtomButton>
@@ -287,7 +287,7 @@
                                     <div v-if="!user">
                                         <AtomButton
                                             class="menu-mobile-btn"
-                                            @click.native="logInBtn"
+                                            @click="logInBtn"
                                         >
                                             Log in
                                         </AtomButton>
@@ -345,7 +345,7 @@
                                     <div v-if="!user">
                                         <AtomButton
                                             class="menu-mobile-btn"
-                                            @click.native="logInBtn"
+                                            @click="logInBtn"
                                         >
                                             Log in
                                         </AtomButton>
@@ -517,6 +517,9 @@ export default {
         }),
         ...mapState('config', ['helplineNumber', 'helplineRef']),
     },
+    mounted() {
+        this.getUserProfile();
+    },
     methods: {
         ...mapMutations('user', {
             updateLoginModal: 'update-login-Modal',
@@ -550,9 +553,6 @@ export default {
         backToMainScroll() {
             this.activeSlide = 0; // making main slide active
         },
-    },
-    mounted() {
-        this.getUserProfile();
     },
 };
 </script>

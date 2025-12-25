@@ -28,7 +28,7 @@
 <script>
 import 'lightgallery.js';
 import 'lightgallery.js/dist/css/lightgallery.css';
-import Parkspot_Image from '../../../public/assets/Parkspot_default.png';
+import ParkspotImage from '../../../public/assets/Parkspot_default.png';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 export default {
     name: 'ImageGallery',
@@ -62,10 +62,11 @@ export default {
             default: true
         }
     },
+    emits: ['delete-image'],
     data() {
         return {
             imageSize: '',
-            displayImages: [Parkspot_Image],
+            displayImages: [ParkspotImage],
         };
     },
     watch: {
@@ -77,7 +78,7 @@ export default {
     methods: {
         updateImages() {
             this.displayImages =
-                this.images.length > 0 ? this.images : [Parkspot_Image];
+                this.images.length > 0 ? this.images : [ParkspotImage];
             this.setImageSize();
             this.$nextTick(() => {
                 const el = document.getElementById('lightgallery');
