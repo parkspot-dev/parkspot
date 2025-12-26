@@ -1212,7 +1212,6 @@ export default {
     cursor: not-allowed;
     color: var(--parkspot-grey) !important;
     opacity: 0.5;
-    pointer-events: none;
 }
 
 .disabled * {
