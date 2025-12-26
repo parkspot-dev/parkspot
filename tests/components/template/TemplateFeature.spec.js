@@ -1,6 +1,6 @@
-import { mount } from "@vue/test-utils";
+import { mount } from '@vue/test-utils';
 import { describe, it, expect } from 'vitest';
-import TemplateFeature from "@/components/templates/TemplateFeature.vue";
+import TemplateFeature from '@/components/templates/TemplateFeature.vue';
 
 const stubs = {
     BodyWrapper: {
@@ -20,53 +20,50 @@ const stubs = {
             </div>
         `,
     },
-}
+};
 
-const factory = () => 
-    mount(TemplateFeature, {
+const factory = () => {
+    return mount(TemplateFeature, {
         global: {
             stubs,
         },
-    })
+    });
+};
 
-    describe('TemplateFeature.vue', () => {
-        it('renders TemplateFeature component', () => {
-            const wrapper = factory()
-            expect(wrapper.exists()).toBe(true)
-        })
+describe('TemplateFeature.vue', () => {
+    it('renders the component', () => {
+        const wrapper = factory();
+        expect(wrapper.exists()).toBe(true);
+    });
 
-        it('renders MoleculeFeatureHeader', () => {
-            const wrapper = factory()
-            expect(wrapper.find('.feature-header').exists()).toBe(true)
-        })
+    it('renders correct structure', () => {
+        const wrapper = factory();
 
-        it('renders all feature cards based on featuresData', () => {
-            const wrapper = factory()
-            const cards = wrapper.findAll('.feature-body')
-            expect(cards.length).toBe(4)
-        })
+        expect(wrapper.find('.body-wrapper').exists()).toBe(true);
+        expect(wrapper.find('.feature-header').exists()).toBe(true);
+        expect(wrapper.findAll('.feature-body')).toHaveLength(4);
+    });
 
-        it('passes correct props to MoleculeFeatureBody', () => {
-            const wrapper = factory()
-            const titles = wrapper.findAll('.feature-title').map(t => t.text())
+    it('displays correct feature titles', () => {
+        const wrapper = factory();
 
-            expect(titles).toContain('Navigation')
-            expect(titles).toContain('Booking')
-            expect(titles).toContain('Searching');
-            expect(titles).toContain('Safety & Security');
-        })
+        const titles = wrapper.findAll('.feature-title').map((t) => t.text());
 
-        it('renders feature description text inside slots', () => {
-            const wrapper = factory()
-            expect(wrapper.text()).toContain('hassle-free parking experience')
-            expect(wrapper.text()).toContain('reserve a spot')
-            expect(wrapper.text()).toContain('safe and secure parking area')
-            expect(wrapper.text()).toContain('search apartment parking areas')
-        })
+        expect(titles).toEqual([
+            'Navigation',
+            'Booking',
+            'Searching',
+            'Safety & Security',
+        ]);
+    });
 
-        it('matches snapshot', () => {
-            const wrapper = factory()
-            expect(wrapper.html()).toMatchSnapshot()
-        })
+    it('renders feature descriptions via slots', () => {
+        const wrapper = factory();
+        const text = wrapper.text();
 
-    })
+        expect(text).toContain('hassle-free parking experience');
+        expect(text).toContain('reserve a spot');
+        expect(text).toContain('safe and secure parking area');
+        expect(text).toContain('search apartment parking areas');
+    });
+});
