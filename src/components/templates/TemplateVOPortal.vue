@@ -74,7 +74,7 @@ import BodyWrapper from '../extras/BodyWrapper.vue';
 import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
 import SearchComponent from '../vo-portal/SearchComponent.vue';
 import TestimonialSection from '../global/TestimonialSection.vue';
-import  WhatsNext  from '../global/Whats_Next.vue';
+import WhatsNext from '../global/Whats_Next.vue';
 import { WHAT_NEXT_VO } from '../../constant/constant';
 import { JOINING_BENEFITS_VO } from '../../constant/constant';
 

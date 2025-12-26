@@ -302,7 +302,7 @@ export default {
             });
             window.open(route.href);
         },
-        getBookingPaymentStatusLabell(status) {
+        getBookingPaymentStatusLabel(status) {
             return getBookingPaymentStatusLabel(status);
         },
         getBookingStatusDescription(status) {
