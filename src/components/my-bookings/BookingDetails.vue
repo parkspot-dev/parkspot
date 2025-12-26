@@ -229,7 +229,7 @@ import AtomTooltip from '@/components/atoms/AtomTooltip.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import { DEFAULT_BANGALORE_COORDINATES, ICON } from '@/constant/constant';
 import { mapActions, mapState } from 'vuex';
-import { getBookingPaymentStatusLabell } from '@/constant/enums';
+import { getBookingPaymentStatusLabel } from '@/constant/enums';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import moment from 'moment';
 
@@ -302,8 +302,8 @@ export default {
             });
             window.open(route.href);
         },
-        getBookingPaymentStatusLabell(status) {
-            return getBookingPaymentStatusLabell(status);
+        getBookingPaymentStatusLabel(status) {
+            return getBookingPaymentStatusLabel(status);
         },
         getBookingStatusDescription(status) {
             switch (status) {
