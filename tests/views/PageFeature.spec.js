@@ -13,7 +13,9 @@ const stubs = {
 
 const factory = () => {
     return shallowMount(PageFeature, {
-        stubs,
+        global: {
+            stubs,
+        },
     });
 };
 
@@ -30,7 +32,7 @@ describe('PageFeature.vue', () => {
 
     it('renders TemplateFeature component (stubbed)', () => {
         const wrapper = factory();
-        expect(wrapper.findComponent({ name : 'TemplateFeature' }).exists()).toBe(true);
+        expect(wrapper.findComponent({ name: 'TemplateFeature' }).exists()).toBe(true);
     });
 
     it('has correct component name', () => {
