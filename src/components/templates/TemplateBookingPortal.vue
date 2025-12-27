@@ -42,14 +42,11 @@
                         class="save-icon"
                         :class="{ disabled: editField !== 'Booking Details' }"
                     >
-                        <AtomIcon
-                            @click.native="
-                                editField === 'Booking Details' && saveField()
-                            "
-                            :icon="'content-save-outline'"
+                        <AtomIcon:icon="'content-save-outline'"
                             size=""
-                            @click="saveField"
-                        >
+                            @click="
+                                editField === 'Booking Details' && saveField()
+                            ">
                         </AtomIcon>
                     </span>
                     <span
@@ -57,12 +54,11 @@
                         :class="{ disabled: editField !== 'Booking Details' }"
                     >
                         <AtomIcon
-                            @click.native="
-                                editField === 'Booking Details' && cancelField()
-                            "
                             :icon="'close'"
                             size=""
-                            @click="cancelField"
+                            @click="
+                                editField === 'Booking Details' && cancelField()
+                            "
                         >
                         </AtomIcon>
                     </span>
