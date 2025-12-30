@@ -1,0 +1,69 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PageSearchPortal.vue  Final Coverage Tests > matches snapshot for stable layout 1`] = `
+"<div data-v-4028ec5b="" class="search-portal-root"> &gt; <div data-v-4028ec5b="" modelvalue="0">
+    <div data-v-4028ec5b="" label="Parking Request (VO/SO)">
+      <div data-v-4028ec5b="" class="request-search-control">
+        <molecule-search-box-stub data-v-4028ec5b="" placeholder="Mobile" initialvalue=""></molecule-search-box-stub>
+      </div>
+      <template-search-portal-stub data-v-4028ec5b="" parkingrequests="" isloading="false" issummary="true"></template-search-portal-stub>
+    </div>
+    <div data-v-4028ec5b="" label="Interested Request(VO)">
+      <p data-v-4028ec5b=""></p>
+      <molecule-search-box-stub data-v-4028ec5b="" placeholder="Lat,Long" initialvalue=""></molecule-search-box-stub>
+      <template-search-portal-stub data-v-4028ec5b="" parkingrequests="" isloading="false" issummary="false"></template-search-portal-stub>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`PageSearchPortal.vue > matches snapshot for stable layout 1`] = `
+"<div data-v-4028ec5b="" class="search-portal-root"> &gt; <div data-v-4028ec5b="" modelvalue="0">
+    <div data-v-4028ec5b="" label="Parking Request (VO/SO)">
+      <div data-v-4028ec5b="" class="request-search-control">
+        <molecule-search-box-stub data-v-4028ec5b="" placeholder="Mobile" initialvalue=""></molecule-search-box-stub>
+      </div>
+      <template-search-portal-stub data-v-4028ec5b="" parkingrequests="" isloading="false" issummary="true"></template-search-portal-stub>
+    </div>
+    <div data-v-4028ec5b="" label="Interested Request(VO)">
+      <p data-v-4028ec5b=""></p>
+      <molecule-search-box-stub data-v-4028ec5b="" placeholder="Lat,Long" initialvalue=""></molecule-search-box-stub>
+      <template-search-portal-stub data-v-4028ec5b="" parkingrequests="" isloading="false" issummary="false"></template-search-portal-stub>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`PageSearchPortal.vue - Complete Test Suite > matches snapshot for root container 1`] = `
+"<div data-v-4028ec5b="" class="search-portal-root"> &gt; <div data-v-4028ec5b="" modelvalue="0">
+    <div data-v-4028ec5b="" label="Parking Request (VO/SO)">
+      <div data-v-4028ec5b="" class="request-search-control">
+        <molecule-search-box-stub data-v-4028ec5b="" placeholder="Mobile" initialvalue=""></molecule-search-box-stub>
+      </div>
+      <template-search-portal-stub data-v-4028ec5b="" parkingrequests="" isloading="false" issummary="true"></template-search-portal-stub>
+    </div>
+    <div data-v-4028ec5b="" label="Interested Request(VO)">
+      <p data-v-4028ec5b=""></p>
+      <molecule-search-box-stub data-v-4028ec5b="" placeholder="Lat,Long" initialvalue=""></molecule-search-box-stub>
+      <template-search-portal-stub data-v-4028ec5b="" parkingrequests="" isloading="false" issummary="false"></template-search-portal-stub>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`PageSearchPortal.vue – Final Coverage Tests > matches snapshot for stable layout 1`] = `
+"<div data-v-4028ec5b="" class="search-portal-root"> &gt; <div data-v-4028ec5b="" modelvalue="0">
+    <div data-v-4028ec5b="" label="Parking Request (VO/SO)">
+      <div data-v-4028ec5b="" class="request-search-control">
+        <molecule-search-box-stub data-v-4028ec5b="" placeholder="Mobile" initialvalue=""></molecule-search-box-stub>
+      </div>
+      <template-search-portal-stub data-v-4028ec5b="" parkingrequests="" isloading="false" issummary="true"></template-search-portal-stub>
+    </div>
+    <div data-v-4028ec5b="" label="Interested Request(VO)">
+      <p data-v-4028ec5b=""></p>
+      <molecule-search-box-stub data-v-4028ec5b="" placeholder="Lat,Long" initialvalue=""></molecule-search-box-stub>
+      <template-search-portal-stub data-v-4028ec5b="" parkingrequests="" isloading="false" issummary="false"></template-search-portal-stub>
+    </div>
+  </div>
+</div>"
+`;
