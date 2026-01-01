@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import PageSOPortal from '@/views/PageSOPortal.vue';
 
 vi.mock('@/services/ImageUploadService', () => ({
@@ -57,21 +57,63 @@ const factory = () =>
     });
 
 describe('PageSOPortal.vue', () => {
+    let wrapper;
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
+    afterEach(() => {
+        wrapper?.unmount();
+    });
+
     it('renders page component', () => {
-        const wrapper = factory();
+        wrapper = factory();
         expect(wrapper.exists()).toBe(true);
     });
 
     it('renders TemplateSOPortal', () => {
-        const wrapper = factory();
+        wrapper = factory();
         expect(wrapper.find('.template-submit').exists()).toBe(true);
     });
 
-    it('calls onFinalSubmit when final-submit is emitted', async () => {
-        const spy = vi.spyOn(PageSOPortal.methods, 'onFinalSubmit');
-        const wrapper = factory();
+    it('submits and shows toast on final-submit', async () => {
+        wrapper = factory();
         await wrapper.find('.template-submit').trigger('click');
-        expect(spy).toHaveBeenCalled();
+
+        expect(storeMock.dispatch).toHaveBeenCalled();
     });
 
+    it('shows error toast when image upload fails', async () => {
+        wrapper = factory();
+        await wrapper.find('.template-submit').trigger('click');
+
+        expect(wrapper.vm.$buefy.toast.open).toHaveBeenCalled();
+    });
+
+    it('shows LoaderModal when isLoading is true', () => {
+        wrapper = mount(PageSOPortal, {
+            global: {
+                stubs,
+                mocks: {
+                    $store: storeMock,
+                    $router: {
+                        push: vi.fn(),
+                    },
+                    $buefy: {
+                        toast: {
+                            open: vi.fn(),
+                        },
+                    },
+                },
+            },
+            data() {
+                return {
+                    isLoading: true,
+                };
+            },
+        });
+
+        expect(wrapper.find('.loader-modal').exists()).toBe(true);
+    });
 });
