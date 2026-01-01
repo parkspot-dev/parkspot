@@ -42,11 +42,13 @@
                         class="save-icon"
                         :class="{ disabled: editField !== 'Booking Details' }"
                     >
-                        <AtomIcon:icon="'content-save-outline'"
+                        <AtomIcon
+                            :icon="'content-save-outline'"
                             size=""
                             @click="
                                 editField === 'Booking Details' && saveField()
-                            ">
+                            "
+                        >
                         </AtomIcon>
                     </span>
                     <span
@@ -253,7 +255,7 @@
                         <AtomIcon
                             :icon="'content-save-outline'"
                             size=""
-                            @click="saveField"
+                            @click="editField === 'Rent Details' && saveField()"
                         >
                         </AtomIcon>
                     </span>
