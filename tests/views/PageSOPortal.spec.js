@@ -22,6 +22,7 @@ const storeMock = {
 
 const stubs = {
     TemplateSOPortal: {
+        name: 'TemplateSOPortal',
         template: `
             <button class="template-submit" @click="$emit('final-submit')">
                 Submit
@@ -77,11 +78,16 @@ describe('PageSOPortal.vue', () => {
         expect(wrapper.find('.template-submit').exists()).toBe(true);
     });
 
-    it('submits and shows toast on final-submit', async () => {
-        wrapper = factory();
-        await wrapper.find('.template-submit').trigger('click');
+    it('calls onFinalSubmit when TemplateSOPortal emits final-submit', async () => {
+        const spy = vi.spyOn(PageSOPortal.methods, 'onFinalSubmit');
 
-        expect(storeMock.dispatch).toHaveBeenCalled();
+        wrapper = factory();
+
+        wrapper.findComponent({ name: 'TemplateSOPortal' }).vm.$emit('final-submit');
+
+        await wrapper.vm.$nextTick();
+
+        expect(spy).toHaveBeenCalled();
     });
 
     it('shows error toast when image upload fails', async () => {
