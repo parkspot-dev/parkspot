@@ -23,7 +23,14 @@
             <div class="card-top">
                 <h3 class="sub-heading">Booking Details</h3>
                 <div class="action-group">
-                    <span class="edit-icon">
+                    <span
+                        class="edit-icon"
+                        :class="{
+                            disabled:
+                                editField !== null &&
+                                editField !== 'Booking Details',
+                        }"
+                    >
                         <AtomIcon
                             :icon="'pencil'"
                             size=""
@@ -31,19 +38,29 @@
                         >
                         </AtomIcon>
                     </span>
-                    <span class="save-icon">
+                    <span
+                        class="save-icon"
+                        :class="{ disabled: editField !== 'Booking Details' }"
+                    >
                         <AtomIcon
                             :icon="'content-save-outline'"
                             size=""
-                            @click="saveField"
+                            @click="
+                                editField === 'Booking Details' && saveField()
+                            "
                         >
                         </AtomIcon>
                     </span>
-                    <span class="cancel-icon">
+                    <span
+                        class="cancel-icon"
+                        :class="{ disabled: editField !== 'Booking Details' }"
+                    >
                         <AtomIcon
                             :icon="'close'"
                             size=""
-                            @click="cancelField"
+                            @click="
+                                editField === 'Booking Details' && cancelField()
+                            "
                         >
                         </AtomIcon>
                     </span>
@@ -201,8 +218,7 @@
                             {{
                                 getAgentName(
                                     agents,
-                                    currBookingDetails.Booking
-                                        .AgentUserName,
+                                    currBookingDetails.Booking.AgentUserName,
                                 )
                             }}
                         </p>
@@ -216,7 +232,14 @@
             <div class="card-top">
                 <h3 class="sub-heading">Rent Details</h3>
                 <div class="action-group">
-                    <span class="edit-icon">
+                    <span
+                        class="edit-icon"
+                        :class="{
+                            disabled:
+                                editField !== null &&
+                                editField !== 'Rent Details',
+                        }"
+                    >
                         <AtomIcon
                             :icon="'pencil'"
                             size=""
@@ -224,20 +247,24 @@
                         >
                         </AtomIcon>
                     </span>
-                    <span class="save-icon">
+
+                    <span
+                        class="save-icon"
+                        :class="{ disabled: editField !== 'Rent Details' }"
+                    >
                         <AtomIcon
                             :icon="'content-save-outline'"
                             size=""
-                            @click="saveField"
+                            @click="editField === 'Rent Details' && saveField()"
                         >
                         </AtomIcon>
                     </span>
-                    <span class="cancel-icon">
-                        <AtomIcon
-                            :icon="'close'"
-                            size=""
-                            @click="cancelField"
-                        >
+
+                    <span
+                        class="cancel-icon"
+                        :class="{ disabled: editField !== 'Rent Details' }"
+                    >
+                        <AtomIcon :icon="'close'" size="" @click="cancelField">
                         </AtomIcon>
                     </span>
                 </div>
@@ -440,12 +467,21 @@
                             {{ currBookingDetails.Booking.EmailID }}
                         </p>
                         <p>
-                            <span v-if="currBookingDetails.Booking.VOKYCStatus === KYCStatus.NotSet" ></span>
+                            <span
+                                v-if="
+                                    currBookingDetails.Booking.VOKYCStatus ===
+                                    KYCStatus.NotSet
+                                "
+                            ></span>
                             <router-link
                                 v-else
                                 :to="`/internal/users/kyc-status?mobile=${currBookingDetails.Booking.Mobile}`"
                             >
-                                {{ getKYCStatusLabel(currBookingDetails.Booking.VOKYCStatus) }}
+                                {{
+                                    getKYCStatusLabel(
+                                        currBookingDetails.Booking.VOKYCStatus,
+                                    )
+                                }}
                             </router-link>
                         </p>
                     </div>
@@ -618,7 +654,7 @@ export default {
             toolTipLabel: 'Copy payment url!',
             rentValidationError: '',
             soChargesValidationError: '',
-            KYCStatus
+            KYCStatus,
         };
     },
     computed: {
@@ -673,7 +709,7 @@ export default {
                 }, 2000);
             }
         },
-        status(newStatus) {
+        'status'(newStatus) {
             if (newStatus === 'error') {
                 this.alertError(this.statusMessage);
             } else if (newStatus === 'success') {
@@ -941,8 +977,8 @@ export default {
             }
         },
         getKYCStatusLabel(kycStatus) {
-            return getKYCStatusLabel(kycStatus)
-        }
+            return getKYCStatusLabel(kycStatus);
+        },
     },
 };
 </script>
@@ -1169,5 +1205,14 @@ export default {
     .is-danger {
         border-color: var(--parkspot-red, #ff3860);
     }
+}
+.disabled {
+    cursor: not-allowed;
+    color: var(--parkspot-grey) !important;
+    opacity: 0.5;
+}
+
+.disabled * {
+    fill: var(--parkspot-grey) !important;
 }
 </style>
