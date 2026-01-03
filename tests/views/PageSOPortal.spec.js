@@ -34,7 +34,7 @@ const stubs = {
     },
 };
 
-const factory = () =>
+const factory = (dataOverrides = {}) =>
     mount(PageSOPortal, {
         global: {
             stubs,
@@ -53,6 +53,7 @@ const factory = () =>
         data() {
             return {
                 isLoading: false,
+                ...dataOverrides,
             };
         },
     });
@@ -75,50 +76,19 @@ describe('PageSOPortal.vue', () => {
 
     it('renders TemplateSOPortal', () => {
         wrapper = factory();
-        expect(wrapper.find('.template-submit').exists()).toBe(true);
+        expect(wrapper.findComponent({ name: 'TemplateSOPortal' }).exists()).toBe(true);
     });
 
-    it('calls onFinalSubmit when TemplateSOPortal emits final-submit', async () => {
-        const spy = vi.spyOn(PageSOPortal.methods, 'onFinalSubmit');
-
+    it('handles final-submit and shows error toast when image upload fails', async () => {
         wrapper = factory();
 
-        wrapper.findComponent({ name: 'TemplateSOPortal' }).vm.$emit('final-submit');
-
-        await wrapper.vm.$nextTick();
-
-        expect(spy).toHaveBeenCalled();
-    });
-
-    it('shows error toast when image upload fails', async () => {
-        wrapper = factory();
         await wrapper.find('.template-submit').trigger('click');
 
         expect(wrapper.vm.$buefy.toast.open).toHaveBeenCalled();
     });
 
     it('shows LoaderModal when isLoading is true', () => {
-        wrapper = mount(PageSOPortal, {
-            global: {
-                stubs,
-                mocks: {
-                    $store: storeMock,
-                    $router: {
-                        push: vi.fn(),
-                    },
-                    $buefy: {
-                        toast: {
-                            open: vi.fn(),
-                        },
-                    },
-                },
-            },
-            data() {
-                return {
-                    isLoading: true,
-                };
-            },
-        });
+        wrapper = factory({ isLoading: true });
 
         expect(wrapper.find('.loader-modal').exists()).toBe(true);
     });
