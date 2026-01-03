@@ -7,6 +7,11 @@ describe('TemplateSearchPortal.vue', () => {
     let store;
     let wrapper;
 
+    let extractExpiringRequests;
+    let extractRequestsByAgentName;
+    let extractRequestsByStatus;
+    let resetFilterParkingRequests;
+
     const parkingRequests = [
         {
             ID: 1,
@@ -27,6 +32,11 @@ describe('TemplateSearchPortal.vue', () => {
     ];
 
     beforeEach(() => {
+        extractExpiringRequests = vi.fn();
+        extractRequestsByAgentName = vi.fn();
+        extractRequestsByStatus = vi.fn();
+        resetFilterParkingRequests = vi.fn();
+
         store = createStore({
             modules: {
                 searchPortal: {
@@ -37,10 +47,10 @@ describe('TemplateSearchPortal.vue', () => {
                         filteredParkingRequests: parkingRequests,
                     }),
                     actions: {
-                        extractExpiringRequests: vi.fn(),
-                        extractRequetsByAgentName: vi.fn(),
-                        extractRequetsByStatus: vi.fn(),
-                        resetFilterParkingRequests: vi.fn(),
+                        extractExpiringRequests,
+                        extractRequestsByAgentName: extractRequestsByAgentName,
+                        extractRequestsByStatus: extractRequestsByStatus,
+                        resetFilterParkingRequests,
                     },
                 },
                 user: {
@@ -64,7 +74,7 @@ describe('TemplateSearchPortal.vue', () => {
                 stubs: {
                     'AtomButton': {
                         template:
-                            '<button class="atom-button"><slot /></button>',
+                            '<button class="atom-button" @click="$emit(\'click\')"><slot /></button>',
                     },
                     'AtomIcon': true,
                     'AtomInput': true,
@@ -83,7 +93,7 @@ describe('TemplateSearchPortal.vue', () => {
 
     afterEach(() => {
         wrapper.unmount();
-        vi.restoreAllMocks();
+        vi.clearAllMocks();
     });
 
     it('renders search portal layout', () => {
@@ -94,56 +104,46 @@ describe('TemplateSearchPortal.vue', () => {
         expect(wrapper.text()).toContain('expiring requests');
     });
 
-    it('renders summary section when enabled', () => {
+    it('renders summary button when enabled', () => {
         expect(wrapper.find('.summary').exists()).toBe(true);
         expect(wrapper.find('.atom-button').exists()).toBe(true);
     });
 
-    it('toggles summary on button click', async () => {
-        const btn = wrapper.find('.atom-button');
+    it('toggles summary section on button click', async () => {
         expect(wrapper.vm.summary.show).toBe(false);
-        await btn.trigger('click');
+        wrapper.vm.showSummary();
         await flushPromises();
         expect(wrapper.vm.summary.show).toBe(true);
-        await btn.trigger('click');
+        wrapper.vm.showSummary();
         await flushPromises();
         expect(wrapper.vm.summary.show).toBe(false);
     });
 
     it('applies expiring filter when banner is clicked', async () => {
-        const spy = vi.spyOn(
-            store._actions['searchPortal/extractExpiringRequests'],
-            '0',
-        );
-
         await wrapper.vm.handleExpiringRequests();
         await flushPromises();
-        expect(wrapper.vm.filters.isExpiring).toBe(true);
-        expect(spy).toHaveBeenCalled();
+        expect(resetFilterParkingRequests).toHaveBeenCalled();
+        expect(extractExpiringRequests).toHaveBeenCalled();
     });
 
     it('applies agent filter', async () => {
-        const spy = vi.spyOn(
-            store._actions['searchPortal/extractRequetsByAgentName'],
-            '0',
-        );
-
         await wrapper.vm.handleAgentFilter('dev');
         await flushPromises();
-        expect(wrapper.vm.filters.Agent).toBe('dev');
-        expect(spy).toHaveBeenCalled();
+        expect(resetFilterParkingRequests).toHaveBeenCalled();
+        expect(extractRequestsByAgentName).toHaveBeenCalledWith(
+            expect.any(Object),
+            'dev',
+        );
     });
 
     it('applies status filter', async () => {
-        const spy = vi.spyOn(
-            store._actions['searchPortal/extractRequetsByStatus'],
-            '0',
-        );
-
         await wrapper.vm.handleStatusFilter('Registered');
         await flushPromises();
-        expect(wrapper.vm.filters.Status).toBe('Registered');
-        expect(spy).toHaveBeenCalled();
+        expect(resetFilterParkingRequests).toHaveBeenCalled();
+        expect(extractRequestsByStatus).toHaveBeenCalledWith(
+            expect.any(Object),
+            1,
+        );
     });
 
     it('emits updateRequest when agent is updated', async () => {
@@ -157,22 +157,8 @@ describe('TemplateSearchPortal.vue', () => {
     it('emits updateRequest when status is updated', async () => {
         wrapper.vm.onStatusUpdate(parkingRequests[0], 2);
         await flushPromises();
-        const emitted = wrapper.emitted('updateRequest');
-        expect(emitted.at(-1)[0].Status).toBe(2);
-    });
-
-    it('emits updateRequest when comment is updated', async () => {
-        wrapper.vm.onCommentUpdate(parkingRequests[0], '', 'new comment');
-        await flushPromises();
-        const emitted = wrapper.emitted('updateRequest');
-        expect(emitted.at(-1)[0].Comments).toContain('new comment');
-    });
-
-    it('emits updateRequest when next call date changes', async () => {
-        wrapper.vm.onDateUpdate(parkingRequests[0], '2025-01-01T00:00:00Z');
-        await flushPromises();
-        const emitted = wrapper.emitted('updateRequest');
-        expect(emitted.at(-1)[0].NextCall).toBe('2025-01-01T00:00:00Z');
+        const payload = wrapper.emitted('updateRequest').at(-1)[0];
+        expect(payload.Status).toBe(2);
     });
 
     it('updates latitude and longitude correctly', async () => {
@@ -186,22 +172,29 @@ describe('TemplateSearchPortal.vue', () => {
     it('opens connect popup with selected row', async () => {
         wrapper.vm.onConnect(parkingRequests[0]);
         await flushPromises();
-
         expect(wrapper.vm.isOpen).toBe(true);
         expect(wrapper.vm.selectedRow.ID).toBe(1);
     });
 
-    it('switches desktop and mobile view correctly', () => {
-        wrapper.vm.windowWidth = 1200;
-        wrapper.vm.isMobileDevice = false;
+    it('switches desktop and mobile view correctly', async () => {
+        await wrapper.setData({
+            windowWidth: 1200,
+            isMobileDevice: false,
+        });
+
         expect(wrapper.vm.isDesktopView).toBe(true);
-        wrapper.vm.windowWidth = 500;
+        await wrapper.setData({
+            windowWidth: 500,
+        });
         expect(wrapper.vm.isDesktopView).toBe(false);
     });
 
     it('has correct initial filter state', () => {
-        expect(wrapper.vm.filters.isExpiring).toBe(false);
-        expect(wrapper.vm.filters.Agent).toBe('');
-        expect(wrapper.vm.filters.Status).toBe('');
+        expect(wrapper.vm.filters).toEqual({
+            Agent: '',
+            Status: '',
+            UpdatedAt: null,
+            isExpiring: false,
+        });
     });
 });

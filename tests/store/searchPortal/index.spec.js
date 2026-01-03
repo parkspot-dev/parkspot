@@ -106,31 +106,31 @@ describe('SearchPortal Store', () => {
         ];
 
         actions.extractExpiringRequests({ state, commit });
-        expect(commit).toHaveBeenCalledWith('set-filterd-parking-requests', [
+        expect(commit).toHaveBeenCalledWith('set-filtered-parking-requests', [
             { id: 1, IsExpiring: true },
         ]);
     });
 
-    it('extractRequetsByAgentName commits filtered agent requests', () => {
+    it('extractRequestsByAgentName commits filtered agent requests', () => {
         state.filteredParkingRequests = [
             { id: 1, Agent: 'Dev' },
             { id: 2, Agent: 'Amit' },
         ];
 
-        actions.extractRequetsByAgentName({ state, commit }, 'Dev');
-        expect(commit).toHaveBeenCalledWith('set-filterd-parking-requests', [
+        actions.extractRequestsByAgentName({ state, commit }, 'Dev');
+        expect(commit).toHaveBeenCalledWith('set-filtered-parking-requests', [
             { id: 1, Agent: 'Dev' },
         ]);
     });
 
-    it('extractRequetsByStatus commits filtered status requests', () => {
+    it('extractRequestsByStatus commits filtered status requests', () => {
         state.filteredParkingRequests = [
             { id: 1, Status: 'OPEN' },
             { id: 2, Status: 'CLOSED' },
         ];
 
-        actions.extractRequetsByStatus({ state, commit }, 'OPEN');
-        expect(commit).toHaveBeenCalledWith('set-filterd-parking-requests', [
+        actions.extractRequestsByStatus({ state, commit }, 'OPEN');
+        expect(commit).toHaveBeenCalledWith('set-filtered-parking-requests', [
             { id: 1, Status: 'OPEN' },
         ]);
     });
@@ -138,7 +138,7 @@ describe('SearchPortal Store', () => {
     it('resetFilterParkingRequests resets filtered list', () => {
         state.parkingRequests = [{ id: 99 }];
         actions.resetFilterParkingRequests({ state, commit });
-        expect(commit).toHaveBeenCalledWith('set-filterd-parking-requests', [
+        expect(commit).toHaveBeenCalledWith('set-filtered-parking-requests', [
             { id: 99 },
         ]);
     });

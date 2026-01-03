@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 import PageSearchPortal from '@/views/PageSearchPortal.vue';
@@ -73,20 +73,23 @@ const mountPage = (store, mocks = {}) =>
 
 describe('PageSearchPortal.vue', () => {
     let wrapper;
+    let store;
 
-    afterEach(() => {
-        wrapper?.unmount();
+    beforeEach(() => {
+        store = createStoreMock();
         vi.clearAllMocks();
     });
 
+    afterEach(() => {
+        wrapper?.unmount();
+    });
+
     it('renders search portal root', () => {
-        const store = createStoreMock();
         wrapper = mountPage(store);
         expect(wrapper.find('.search-portal-root').exists()).toBe(true);
     });
 
     it('sanitizeMobile works correctly', () => {
-        const store = createStoreMock();
         wrapper = mountPage(store);
         expect(wrapper.vm.sanitizeMobile('+91-9876543210')).toBe('9876543210');
         expect(wrapper.vm.sanitizeMobile('123')).toBe(null);
@@ -94,7 +97,6 @@ describe('PageSearchPortal.vue', () => {
 
     it('navigates for valid mobile number', () => {
         const push = vi.fn();
-        const store = createStoreMock();
         wrapper = mountPage(store, { $router: { push } });
         wrapper.vm.searchRequestWithMobile('9876543210');
         expect(push).toHaveBeenCalled();
@@ -102,7 +104,6 @@ describe('PageSearchPortal.vue', () => {
 
     it('shows alert for invalid mobile number', () => {
         const alert = vi.fn();
-        const store = createStoreMock();
         wrapper = mountPage(store, {
             $buefy: { dialog: { alert } },
         });
@@ -113,7 +114,6 @@ describe('PageSearchPortal.vue', () => {
 
     it('shows alert when hasError changes to true', async () => {
         const alert = vi.fn();
-        const store = createStoreMock();
         wrapper = mountPage(store, {
             $buefy: { dialog: { alert } },
         });
@@ -126,7 +126,6 @@ describe('PageSearchPortal.vue', () => {
 
     it('updates route when activeTabView changes', async () => {
         const push = vi.fn();
-        const store = createStoreMock();
         wrapper = mountPage(store, { $router: { push } });
         wrapper.vm.activeTabView = 1;
         await wrapper.vm.$nextTick();
@@ -135,7 +134,7 @@ describe('PageSearchPortal.vue', () => {
 
     it('handleConfirm navigates back', () => {
         const push = vi.fn();
-        const store = createStoreMock({
+        store = createStoreMock({
             searchPortal: {
                 searchMobile: '9876543210',
                 SOLatLngInput: '12,77',
