@@ -852,29 +852,30 @@ export default {
                 }
             }
 
-            this.editField = null;
-
-            // Remove Payments field from currentBookingDetails.Booking object
-            delete this.initialActiveBookingDetails.Payments;
-
-            // Iterate through the loop to check for updated fields.
             const updatedArray = [];
-            for (const key in this.initialActiveBookingDetails) {
+            const initialData = cloneDeep(this.initialActiveBookingDetails);
+            delete initialData.Payments;
+
+            for (const key in initialData) {
                 if (
-                    !updatedArray.includes(key) &&
                     !this.onCompare(
-                        this.initialActiveBookingDetails[key],
+                        initialData[key],
                         this.currBookingDetails.Booking[key],
                     )
                 ) {
                     updatedArray.push(key);
                 }
             }
-            this.setUpdatedFields(updatedArray);
-            this.$emit(
-                'update-booking-details',
-                this.currBookingDetails.Booking,
-            );
+
+            if (updatedArray.length > 0) {
+                this.setUpdatedFields(updatedArray);
+                this.$emit(
+                    'update-booking-details',
+                    this.currBookingDetails.Booking,
+                );
+            }
+
+            this.editField = null;
         },
 
         cancelField() {
