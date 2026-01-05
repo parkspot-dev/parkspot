@@ -60,18 +60,18 @@ const factory = (props = {}) =>
         },
     });
 
-let wrapper;
-
-beforeEach(() => {
-    wrapper = factory();
-});
-
-afterEach(() => {
-    wrapper.unmount();
-    vi.clearAllMocks();
-});
 
 describe('ActiveBookings.vue', () => {
+    let wrapper;
+
+    beforeEach(() => {
+        wrapper = factory();
+    });
+
+    afterEach(() => {
+        wrapper.unmount();
+        vi.clearAllMocks();
+    });
     it('renders component', () => {
         expect(wrapper.exists()).toBe(true);
     });
