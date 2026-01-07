@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import PageSpotRequest from "@/views/PageSpotRequest.vue";
 import { createStore } from "vuex";
 
@@ -81,23 +81,24 @@ const globalStubs = {
 };
 
 
-const store = createStore({
-    modules: {
-        spotRequests: {
-            namespaced: true,
-            state: () => ({
-                isLoading: false,
-                hasError: false,
-                errorMessage: '',
-                spotRequests: [],
-            }),
-            actions: {
-                fetchSpotRequests,
-                updateStatus,
+const createStoreMock = () =>
+    createStore({
+        modules: {
+            spotRequests: {
+                namespaced: true,
+                state: () => ({
+                    isLoading: false,
+                    hasError: false,
+                    errorMessage: '',
+                    spotRequests: [],
+                }),
+                actions: {
+                    fetchSpotRequests,
+                    updateStatus,
+                },
             },
         },
-    },
-});
+    });
 
 const buefyMock = {
     dialog: {
@@ -108,8 +109,10 @@ const buefyMock = {
     },
 };
 
-const factory = (customState ={}) =>
-    mount(PageSpotRequest, {
+let wrapper;
+
+const factory = () => {
+    wrapper = mount(PageSpotRequest, {
         global: {
             stubs: globalStubs,
             mocks: {
@@ -117,18 +120,24 @@ const factory = (customState ={}) =>
                 $router: {push: vi.fn()},
                 $route: {path: '/spot/requests'},
             },
-            plugins: [store],
+            plugins: [createStoreMock()],
         },
     });
 
+    return wrapper;
+};
 
 describe('PageSpotRequest.vue', () => {
     beforeEach(() => {
         vi.clearAllMocks();
     });
 
-    it('renders compnent', () => {
-        const wrapper = factory();
+    afterEach(() => {
+        wrapper?.unmount();
+    });
+
+    it('renders component', () => {
+        wrapper = factory();
         expect(wrapper.exists()).toBe(true);
     });
 
@@ -138,7 +147,7 @@ describe('PageSpotRequest.vue', () => {
     });
 
     it('shows loader when isLoading is true', async () => {
-        const wrapper = factory();
+        wrapper = factory();
 
         wrapper.vm.$store.state.spotRequests.isLoading = true;
         await wrapper.vm.$nextTick();
@@ -147,7 +156,7 @@ describe('PageSpotRequest.vue', () => {
     });
 
     it('toggles summary visibility', () => {
-        const wrapper = factory();
+        wrapper = factory();
 
         expect(wrapper.vm.summary.show).toBe(false);
         wrapper.vm.showSummary();
@@ -156,8 +165,8 @@ describe('PageSpotRequest.vue', () => {
         expect(wrapper.vm.summary.show).toBe(false);
     });
 
-    it('updated summary counts correctly', () => {
-        const wrapper = factory();
+    it('updates summary counts correctly', () => {
+        wrapper = factory();
         
         const data = [
             {Status: 1},
@@ -174,7 +183,7 @@ describe('PageSpotRequest.vue', () => {
     });
 
     it('searchSpotRequest with valid numeric ID', () => {
-        const wrapper = factory();
+        wrapper = factory();
         wrapper.vm.searchSpotRequest('123');
 
         expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
@@ -184,27 +193,27 @@ describe('PageSpotRequest.vue', () => {
     });
 
     it('searchSpotRequest with invalid ID shows error', () => {
-        const wrapper = factory();
+        wrapper = factory();
         wrapper.vm.searchSpotRequest('abc');
 
         expect(buefyMock.dialog.alert).toHaveBeenCalled();
     });
 
-    it('formats date corretly', () => {
-        const wrapper = factory();
+    it('formats date correctly', () => {
+        wrapper = factory();
         const formatted = wrapper.vm.formatDate('2025-01-04T12:34:56Z');
         expect(formatted).toContain('2025');
     });
 
     it('creates correct request detail URL', () => {
-        const wrapper = factory();
+        wrapper = factory();
         const url = wrapper.vm.RequestDetailURL(99);
 
         expect(url).toBe('/spot/requests/?requestId=99');
     });
 
     it('updates status successfully', async () => {
-        const wrapper = factory();
+        wrapper = factory();
         const row = {ID: 1, Status: 1};
 
         await wrapper.vm.onStatusUpdate(row, 'Processing');
@@ -214,7 +223,7 @@ describe('PageSpotRequest.vue', () => {
     });
 
     it('shows error on invalid status update', async () => {
-        const wrapper = factory();
+        wrapper = factory();
         const row = {ID: 1, Status: 1};
 
         await wrapper.vm.onStatusUpdate(row, 'InvalidStatus');
@@ -223,7 +232,7 @@ describe('PageSpotRequest.vue', () => {
     });
 
     it('shows error dialog when hasError becomes true', async () => {
-        const wrapper = factory();
+        wrapper = factory();
         wrapper.vm.$store.state.spotRequests.hasError = true;
         await wrapper.vm.$nextTick();
 
