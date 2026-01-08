@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach,afterEach, vi } from "vitest";
 import { createStore } from "vuex";
 import TemplateBookingPortal from "@/components/templates/TemplateBookingPortal.vue";
 
@@ -97,14 +97,24 @@ const globalConfig = (store) => ({
     },
 });
 
+let store;
+let wrapper;
+
+const factory = () => {
+    store = createVuexStore();
+    wrapper = mount(TemplateBookingPortal, globalConfig(store));
+    return wrapper;
+};
 
 describe('TemplateBookingPortal.vue', () => {
-    let store;
-    let wrapper;
 
     beforeEach(() => {
-        store = createVuexStore();
-        wrapper = mount(TemplateBookingPortal, globalConfig(store));
+        factory();
+    });
+
+    afterEach(() => {
+        wrapper?.unmount();
+        vi.clearAllMocks();
     });
 
     it('renders component properly', () => {
