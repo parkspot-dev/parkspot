@@ -2,6 +2,7 @@ import { mount } from "@vue/test-utils";
 import { describe, it, expect, beforeEach,afterEach, vi } from "vitest";
 import { createStore } from "vuex";
 import TemplateBookingPortal from "@/components/templates/TemplateBookingPortal.vue";
+import { PaymentStatus } from "@/constant/enums";
 
 const bookingDetailsMock = {
     Booking: {
@@ -167,5 +168,64 @@ describe('TemplateBookingPortal.vue', () => {
         await wrapper.vm.saveField();
 
         expect(wrapper.emitted('update-booking-details')).toBeFalsy();
+    });
+
+    it('updates currBookingDetails when store bookingDetails changes', async () => {
+        store.state.bookingPortal.bookingDetails = {
+            ...bookingDetailsMock,
+            Booking: {
+                ...bookingDetailsMock.Booking,
+                Remark: 'Updated',
+            },
+        };
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.currBookingDetails.Booking.Remark).toBe('Updated');
+    });
+
+    it('shows error dialog when status is error', async () => {
+        store.state.bookingPortal.status = 'success';
+        store.state.bookingPortal.statusMessage = 'Success!';
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.$buefy.dialog.alert).toHaveBeenCalled();
+    });
+
+    it('formats date correctly', () => {
+        expect(wrapper.vm.getFormattedDate('2024-01-01T00:00:00Z')).toContain(
+            '2024',
+        );
+    });
+
+    it('returns -- for default invalid date', () => {
+        expect(wrapper.vm.getFormattedDate('0001-01-01T00:00:00Z')).toBe('--');
+    });
+
+    it('returns correct payment class', () => {
+        expect(wrapper.vm.getPaymentClass(PaymentStatus.PaymentPending)).toBe('payment-pending');
+
+        expect(wrapper.vm.getPaymentClass(PaymentStatus.PaymentIncomplete)).toBe('payment-pending');
+
+        expect(wrapper.vm.getPaymentClass(PaymentStatus.PaymentSuccess)).toBe('payment-success');
+
+        expect(wrapper.vm.getPaymentClass(999)).toBe('payment-failed');
+    });
+
+    it('resets data on cancelField', async () => {
+        await wrapper.vm.enableEdit('Booking Details');
+        wrapper.vm.currBookingDetails.Booking.Remark = 'Changed';
+
+        wrapper.vm.cancelField();
+
+        expect(wrapper.vm.editField).toBe(null);
+        expect(wrapper.vm.currBookingDetails.Booking.Remark).toBe(
+            bookingDetailsMock.Booking.Remark,
+        );
+    });
+
+    it('dispatches changePaymentType', () => {
+        wrapper.vm.updatePaymentType('UPI', 55);
+
+        expect(store._actions['bookingPortal/changePaymentType']).toBeTruthy();
     });
 });
