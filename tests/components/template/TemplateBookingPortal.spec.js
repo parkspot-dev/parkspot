@@ -121,12 +121,12 @@ describe('TemplateBookingPortal.vue', () => {
     let store;
 
     beforeEach(() => {
+        vi.clearAllMocks();
         ({ wrapper, store } = factory(true));
     });
 
     afterEach(() => {
         wrapper?.unmount();
-        vi.clearAllMocks();
     });
 
     it('renders component properly', () => {
@@ -239,19 +239,23 @@ describe('TemplateBookingPortal.vue', () => {
         expect(wrapper.vm.currBookingDetails.Booking.Remark).toBe(bookingDetailsMock.Booking.Remark);
     });
 
-    it('dispatches changePaymentType when user is admin', () => {
+    it('dispatches changePaymentType with correct mapped payment type', () => {
         const spy = vi.spyOn(store, 'dispatch');
 
-        wrapper.vm.updatePaymentType('UPI', 55);
+        const paymentTypeValue = 'UPI';
+        const expectedIndex =
+            wrapper.vm.paymentTypeLabels.indexOf(paymentTypeValue);
+
+        wrapper.vm.updatePaymentType(paymentTypeValue, 55);
 
         expect(spy).toHaveBeenCalledWith('bookingPortal/changePaymentType', {
-            paymentType: -1,
             paymentID: 55,
+            paymentType: expectedIndex,
         });
     });
 
+
     it('does not show payment type SelectInput for non-admin user', async () => {
-        wrapper.unmount();
         ({ wrapper, store } = factory(false));
 
         store.state.bookingPortal.bookingDetails = {
