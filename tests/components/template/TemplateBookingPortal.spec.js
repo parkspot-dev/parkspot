@@ -1,8 +1,8 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect, beforeEach,afterEach, vi } from "vitest";
-import { createStore } from "vuex";
-import TemplateBookingPortal from "@/components/templates/TemplateBookingPortal.vue";
-import { PaymentStatus } from "@/constant/enums";
+import { mount } from '@vue/test-utils';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { createStore } from 'vuex';
+import TemplateBookingPortal from '@/components/templates/TemplateBookingPortal.vue';
+import { PaymentStatus } from '@/constant/enums';
 
 const bookingDetailsMock = {
     Booking: {
@@ -30,8 +30,20 @@ const bookingDetailsMock = {
     Payments: [],
 };
 
+const paymentsMock = [
+    {
+        PaymentID: 1,
+        Type: 0,
+        Status: PaymentStatus.PaymentSuccess,
+        Amount: 500,
+        AmountToSo: 400,
+        CreatedAt: '2024-01-01T00:00:00Z',
+        SucceededAt: '2024-01-01T00:00:00Z',
+        TransferredAt: '2024-01-01T00:00:00Z',
+    },
+];
 
-const createVuexStore = () =>
+const createVuexStore = (isAdmin = true) =>
     createStore({
         modules: {
             bookingPortal: {
@@ -57,7 +69,7 @@ const createVuexStore = () =>
             user: {
                 namespaced: true,
                 state: () => ({
-                    isAdmin: true,
+                    isAdmin,
                 }),
                 actions: {
                     getUserProfile: vi.fn(),
@@ -67,50 +79,49 @@ const createVuexStore = () =>
     });
 
 
-const globalConfig = (store) => ({
-    global: {
-        plugins: [store],
-        stubs: {
-            AtomButton: {
-                template: `<button @click="$emit('click')"><slot /></button>`,
+const factory = (isAdmin = true) => {
+    const store = createVuexStore(isAdmin);
+    const wrapper = mount(TemplateBookingPortal, {
+        global: {
+            plugins: [store],
+            stubs: {
+                AtomButton: {
+                    template: `<button @click="$emit('click')"><slot /></button>`,
+                },
+                AtomIcon: {
+                    template: `<span @click="$emit('click')"></span>`,
+                },
+                AtomTooltip: true,
+                AtomDatePicker: true,
+                AtomInput: { template: `<input />` },
+                RefundDialog: true,
+                SelectInput: {
+                    name: 'SelectInput',
+                    template: `<select></select>`,
+                },
+                RouterLink: true,
             },
-            AtomIcon: {
-                template: `<span class="icon" @click="$emit('click')"></span>`,
+            mocks: {
+                $router: {
+                    resolve: () => ({ href: '/spot/SITE123' }),
+                },
+                $buefy: {
+                    toast: { open: vi.fn() },
+                    dialog: { alert: vi.fn() },
+                },
             },
-            AtomTooltip: true,
-            AtomDatePicker: true,
-            AtomInput: {
-                template: `<input />`,
-            },
-            RefundDialog: true,
-            SelectInput: true,
-            RouterLink: true,
         },
-        mocks: {
-            $router: {
-                resolve: () => ({href: '/spot/SITE123'}),
-            },
-            $buefy: {
-                toast: {open: vi.fn()},
-                dialog: {alert: vi.fn()},
-            },
-        },
-    },
-});
+    });
 
-let store;
-let wrapper;
-
-const factory = () => {
-    store = createVuexStore();
-    wrapper = mount(TemplateBookingPortal, globalConfig(store));
-    return wrapper;
+    return { wrapper, store };
 };
 
 describe('TemplateBookingPortal.vue', () => {
+    let wrapper;
+    let store;
 
     beforeEach(() => {
-        factory();
+        ({ wrapper, store } = factory(true));
     });
 
     afterEach(() => {
@@ -127,9 +138,8 @@ describe('TemplateBookingPortal.vue', () => {
         expect(wrapper.text()).toContain('SITE123');
     });
 
-    it('emits payment-link event when generate payment link button is clicked', async () => {
-        const button = wrapper.find('button');
-        await button.trigger('click');
+    it('emits payment-link event when getPaymentLink is called', () => {
+        wrapper.vm.getPaymentLink();
 
         expect(wrapper.emitted('payment-link')).toBeTruthy();
         expect(wrapper.emitted('payment-link')[0][0]).toEqual({
@@ -149,7 +159,9 @@ describe('TemplateBookingPortal.vue', () => {
         await wrapper.vm.saveField();
 
         expect(wrapper.emitted('update-booking-details')).toBeTruthy();
-        expect(wrapper.emitted('update-booking-details')[0][0]).toEqual(bookingDetailsMock.Booking);
+        expect(wrapper.emitted('update-booking-details')[0][0]).toEqual(
+            bookingDetailsMock.Booking,
+        );
     });
 
     it('shows validation error when rent is invalid', async () => {
@@ -184,17 +196,25 @@ describe('TemplateBookingPortal.vue', () => {
     });
 
     it('shows error dialog when status is error', async () => {
+        store.state.bookingPortal.status = 'error';
+        store.state.bookingPortal.statusMessage = 'Something went wrong';
+
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.$buefy.dialog.alert).toHaveBeenCalled();
+    });
+
+    it('shows success dialog when status is success', async () => {
         store.state.bookingPortal.status = 'success';
-        store.state.bookingPortal.statusMessage = 'Success!';
+        store.state.bookingPortal.statusMessage = 'Success';
+
         await wrapper.vm.$nextTick();
 
         expect(wrapper.vm.$buefy.dialog.alert).toHaveBeenCalled();
     });
 
     it('formats date correctly', () => {
-        expect(wrapper.vm.getFormattedDate('2024-01-01T00:00:00Z')).toContain(
-            '2024',
-        );
+        expect(wrapper.vm.getFormattedDate('2025-01-01T00:00:00Z')).toContain('2025');
     });
 
     it('returns -- for default invalid date', () => {
@@ -203,11 +223,8 @@ describe('TemplateBookingPortal.vue', () => {
 
     it('returns correct payment class', () => {
         expect(wrapper.vm.getPaymentClass(PaymentStatus.PaymentPending)).toBe('payment-pending');
-
         expect(wrapper.vm.getPaymentClass(PaymentStatus.PaymentIncomplete)).toBe('payment-pending');
-
         expect(wrapper.vm.getPaymentClass(PaymentStatus.PaymentSuccess)).toBe('payment-success');
-
         expect(wrapper.vm.getPaymentClass(999)).toBe('payment-failed');
     });
 
@@ -218,14 +235,31 @@ describe('TemplateBookingPortal.vue', () => {
         wrapper.vm.cancelField();
 
         expect(wrapper.vm.editField).toBe(null);
-        expect(wrapper.vm.currBookingDetails.Booking.Remark).toBe(
-            bookingDetailsMock.Booking.Remark,
-        );
+        expect(wrapper.vm.currBookingDetails.Booking.Remark).toBe(bookingDetailsMock.Booking.Remark);
     });
 
-    it('dispatches changePaymentType', () => {
+    it('dispatches changePaymentType when user is admin', () => {
+        const spy = vi.spyOn(store, 'dispatch');
+
         wrapper.vm.updatePaymentType('UPI', 55);
 
-        expect(store._actions['bookingPortal/changePaymentType']).toBeTruthy();
+        expect(spy).toHaveBeenCalledWith('bookingPortal/changePaymentType', {
+            paymentType: -1,
+            paymentID: 55,
+        });
+    });
+
+    it('does not show payment type SelectInput for non-admin user', async () => {
+        wrapper.unmount();
+        ({ wrapper, store } = factory(false));
+
+        store.state.bookingPortal.bookingDetails = {
+            ...bookingDetailsMock,
+            Payments: paymentsMock,
+        };
+
+        await wrapper.vm.$nextTick();
+        expect(wrapper.findComponent({ name: 'SelectInput' }).exists()).toBe(false);
+        expect(wrapper.text()).toContain(wrapper.vm.getPaymentTypeLabel(paymentsMock[0].Type));
     });
 });
