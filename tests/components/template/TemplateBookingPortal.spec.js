@@ -154,13 +154,14 @@ describe('TemplateBookingPortal.vue', () => {
         expect(wrapper.vm.editField).toBe('Booking Details');
     });
 
-    it('emits update-booking-details on save', async () => {
+    it('emits update-booking-details on save when data is changed', async () => {
         await wrapper.vm.enableEdit('Booking Details');
+        wrapper.vm.currBookingDetails.Booking.Remark = 'Updated remark';
         await wrapper.vm.saveField();
 
         expect(wrapper.emitted('update-booking-details')).toBeTruthy();
-        expect(wrapper.emitted('update-booking-details')[0][0]).toEqual(
-            bookingDetailsMock.Booking,
+        expect(wrapper.emitted('update-booking-details')[0][0].Remark).toBe(
+            'Updated remark',
         );
     });
 
