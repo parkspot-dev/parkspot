@@ -26,6 +26,8 @@ let store;
 let actions;
 
 beforeEach(() => {
+    vi.clearAllMocks();
+    
     actions = {
         fetchKycPendingUsers: vi.fn(),
         updateStatus: vi.fn(),
@@ -44,7 +46,7 @@ beforeEach(() => {
                         {
                             ID: 1,
                             FullName: 'Test User',
-                            Mobile: '1234567890',
+                            Mobile: '9876543210',
                             KYCStatus: 0,
                             IDProofURLs: ['front.jpg'],
                             OwnershipProofURLs: [],
@@ -124,22 +126,22 @@ describe('PageKYCStatus.vue', () => {
         expect(wrapper.find('.loader-modal').exists()).toBe(true);
     });
 
-    it('searches user by mobile ans updates route', async () => {
+    it('searches user by mobile and updates route', async () => {
         const wrapper = factory();
         await wrapper.find('.search-btn').trigger('click');
 
-        expect(actions.updateMobileInput).toHaveBeenCalled(
+        expect(actions.updateMobileInput).toHaveBeenCalledWith(
             expect.anything(),
-            '1234567890'
+            '9876543210',
         );
         expect(routerMock.push).toHaveBeenCalled();
     });
 
     it('clears mobile input and resets route', async () => {
-        const wrapper = factory({ query: { mobile: '1234567890' } });
+        const wrapper = factory({ query: { mobile: '9876543210' } });
         await wrapper.find('.clear-btn').trigger('click');
 
-        expect(actions.updateMobileInput).toHaveBeenCalled(
+        expect(actions.updateMobileInput).toHaveBeenCalledWith(
             expect.anything(),
             ''
         );
@@ -155,7 +157,12 @@ describe('PageKYCStatus.vue', () => {
         );
 
         expect(actions.updateStatus).toHaveBeenCalled();
-        expect(buefyMock.toast.open).toHaveBeenCalled();
+        expect(buefyMock.toast.open).toHaveBeenCalledWith(
+            expect.objectContaining({
+                message: expect.stringContaining('KYC Status updated'),
+                type: 'is-success',
+            }),
+        );
     });
 
     it('open image preview modal', async () => {
@@ -174,6 +181,10 @@ describe('PageKYCStatus.vue', () => {
         store.state.kycStatusPortal.errorMessage = 'Some error';
         await wrapper.vm.$nextTick();
 
-        expect(buefyMock.dialog.alert).toHaveBeenCalled();
+        expect(buefyMock.dialog.alert).toHaveBeenCalledWith(
+            expect.objectContaining({
+                message: 'Some error',
+            }),
+        );
     });
 });
