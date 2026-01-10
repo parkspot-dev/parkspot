@@ -22,19 +22,19 @@ const stubs = {
     },
 };
 
-beforeEach(() => {
-    wrapper = mount(TemplateContactUs, {
-        global: {
-            stubs,
-        },
-    });
-});
-
-afterEach(() => {
-    wrapper?.unmount();
-});
-
 describe('TemplateContactUs.vue', () => {
+    beforeEach(() => {
+        wrapper = mount(TemplateContactUs, {
+            global: {
+                stubs,
+            },
+        });
+    });
+
+    afterEach(() => {
+        wrapper?.unmount();
+    });
+
     it('renders contact us and contact form components', () => {
         expect(wrapper.find('.contact-us').exists()).toBe(true);
         expect(wrapper.find('.submit-btn').exists()).toBe(true);
