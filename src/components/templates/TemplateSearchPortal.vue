@@ -667,7 +667,7 @@ export default {
             if (this.$route.query[this.QUERY_PARAMS.AGENT]) {
                 const agentName = this.$route.query['agent'];
                 this.filters.Agent = agentName;
-                this.extractRequetsByAgentName(agentName);
+                this.extractRequestsByAgentName(agentName);
             }
             if (this.$route.query[this.QUERY_PARAMS.STATUS]) {
                 const statusId = parseInt(this.$route.query['status']);
@@ -676,7 +676,7 @@ export default {
                 );
                 this.filters.Status = statusRow.name;
                 if (statusRow) {
-                    this.extractRequetsByStatus(statusRow.id);
+                    this.extractRequestsByStatus(statusRow.id);
                 }
             }
         },
@@ -715,8 +715,8 @@ export default {
             'setAgents',
             'extractExpiringRequests',
             'resetFilterParkingRequests',
-            'extractRequetsByAgentName',
-            'extractRequetsByStatus',
+            'extractRequestsByAgentName',
+            'extractRequestsByStatus',
         ]),
 
         applyFilters() {
@@ -731,12 +731,12 @@ export default {
                     (item) => item.name === this.filters.Status,
                 );
                 if (statusRow) {
-                    this.extractRequetsByStatus(statusRow.id);
+                    this.extractRequestsByStatus(statusRow.id);
                 }
             }
 
             if (this.filters.Agent) {
-                this.extractRequetsByAgentName(this.filters.Agent);
+                this.extractRequestsByAgentName(this.filters.Agent);
             }
         },
 
