@@ -13,18 +13,20 @@ describe('PageHome.vue', () => {
     const toastOpen = vi.fn()
 
     beforeEach(() => {
+        vi.clearAllMocks()
+
         store = createStore({
             modules: {
                 user: {
                     namespaced: true,
                     actions: {
-                        onlyContact
+                        onlyContact,
                     },
                     mutations: {
-                        'update-contact': updateContact
-                    }
-                }
-            }
+                        'update-contact': updateContact,
+                    },
+                },
+            },
         })
 
         wrapper = mount(PageHome, {
@@ -33,8 +35,8 @@ describe('PageHome.vue', () => {
                 mocks: {
                     $router: { push },
                     $buefy: {
-                        toast: { open: toastOpen }
-                    }
+                        toast: { open: toastOpen },
+                    },
                 },
                 stubs: {
                     TemplateHomeBanner: true,
@@ -44,20 +46,19 @@ describe('PageHome.vue', () => {
                     TestimonialSection: true,
                     AtomIcon: true,
                     TemplateOurProducts: {
-                        template: `<button data-testid="arrow" @click="$emit('arrow-btn')" />`
+                        template: `<button data-testid="arrow" @click="$emit('arrow-btn')" />`,
                     },
                     VeeForm: {
-                        template: `<form data-testid="form" @submit.prevent="$emit('submit')"><slot /></form>`
+                        template: `<form data-testid="form" @submit.prevent="$emit('submit')"><slot /></form>`,
                     },
-                    FormInput: true
-                }
-            }
+                    FormInput: true,
+                },
+            },
         })
     })
 
     afterEach(() => {
-        wrapper.unmount()
-        vi.clearAllMocks()
+        wrapper?.unmount()
     })
 
     it('renders car wash section', () => {
@@ -94,8 +95,16 @@ describe('PageHome.vue', () => {
         expect(push).toHaveBeenCalledWith({ name: 'thankYou' })
     })
 
-    it('resets loading state after submit', async () => {
-        await wrapper.find('[data-testid="form"]').trigger('submit')
+    it('sets loading state during form submission', async () => {
+        let resolvePromise
+        onlyContact.mockImplementationOnce(
+            () => new Promise((r) => { resolvePromise = r })
+        )
+
+        wrapper.find('[data-testid="form"]').trigger('submit')
+        await wrapper.vm.$nextTick()
+        expect(wrapper.vm.isLoading).toBe(true)
+        resolvePromise()
         await flushPromises()
         expect(wrapper.vm.isLoading).toBe(false)
     })
@@ -104,7 +113,12 @@ describe('PageHome.vue', () => {
         onlyContact.mockRejectedValueOnce(new Error('fail'))
         await wrapper.find('[data-testid="form"]').trigger('submit')
         await flushPromises()
-        expect(toastOpen).toHaveBeenCalled()
+        expect(toastOpen).toHaveBeenCalledWith(
+            expect.objectContaining({
+                type: 'is-danger',
+                message: expect.any(String),
+            })
+        )
         expect(push).toHaveBeenCalledWith({ name: 'Home' })
     })
 })
