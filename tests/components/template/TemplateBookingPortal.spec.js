@@ -51,7 +51,7 @@ const createVuexStore = (isAdmin = true) =>
                 state: () => ({
                     bookingDetails: bookingDetailsMock,
                     initialActiveBookingDetails: bookingDetailsMock.Booking,
-                    agents: [],
+                    agents: [{UserName: 'agent1', FullName: 'Agent One'}],
                     paymentDetails: null,
                     status: '',
                     statusMessage: '',
@@ -266,5 +266,94 @@ describe('TemplateBookingPortal.vue', () => {
         await wrapper.vm.$nextTick();
         expect(wrapper.findComponent({ name: 'SelectInput' }).exists()).toBe(false);
         expect(wrapper.text()).toContain(wrapper.vm.getPaymentTypeLabel(paymentsMock[0].Type));
+    }); 
+    
+    it('copies payment url and updates tooltip label', async () => {
+        Object.assign(navigator, {
+            clipboard: {
+                writeText: vi.fn().mockResolvedValue(),
+            },
+        });
+
+        store.state.bookingPortal.paymentDetails = {
+            PayUrl: 'https://pay.test',
+        };
+
+        await wrapper.vm.copyUrl();
+
+        expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+            'https://pay.test',
+        );
+        expect(wrapper.vm.toolTipLabel).toBe('Copied!!');
     });
+
+    it('emits refresh-payment-status event', () => {
+        wrapper.vm.refreshPaymentStatus(123);
+
+        expect(wrapper.emitted('refresh-payment-status')).toBeTruthy();
+        expect(wrapper.emitted('refresh-payment-status')[0]).toEqual([123]);
+    });
+
+    it('validates rent input correctly', () => {
+        wrapper.vm.currBookingDetails.Booking.Rent = 0;
+        wrapper.vm.validateRentInput();
+
+        expect(wrapper.vm.rentValidationError).toBeTruthy();
+
+        wrapper.vm.currBookingDetails.Booking.Rent = 100;
+        wrapper.vm.validateRentInput();
+
+        expect(wrapper.vm.rentValidationError).toBe('');
+    });
+
+    it('validates SO charges input correctly', () => {
+        wrapper.vm.currBookingDetails.Booking.Rent = 100;
+        wrapper.vm.currBookingDetails.Booking.BaseAmount = 200;
+
+        wrapper.vm.validateSOChargesInput();
+        expect(wrapper.vm.soChargesValidationError).toBeTruthy();
+
+        wrapper.vm.currBookingDetails.Booking.BaseAmount = 50;
+        wrapper.vm.validateSOChargesInput();
+
+        expect(wrapper.vm.soChargesValidationError).toBe('');
+    });
+
+    it('opens and closes refund dialog', () => {
+        wrapper.vm.openRefundDialog(10, 500);
+
+        expect(wrapper.vm.refundDialogVisible).toBe(true);
+        expect(wrapper.vm.paymentID).toBe(10);
+        expect(wrapper.vm.selectedPaymentAmount).toBe(500);
+
+        wrapper.vm.closeRefundDialog();
+        expect(wrapper.vm.refundDialogVisible).toBe(false);
+    });
+
+    it('dispatches createRefund on refund confirmation', () => {
+        const spy = vi.spyOn(store, 'dispatch');
+
+        wrapper.vm.paymentID = 99;
+        wrapper.vm.handleRefundConfirm({
+            refundAmount: '100',
+            isSecurityDeposit: true,
+        });
+
+        expect(spy).toHaveBeenCalledWith('bookingPortal/createRefund', {
+            PaymentID: 99,
+            Amount: 100,
+            IsRefundingSecurity: true,
+        });
+    });
+
+    
+    it('computed selectedAgent getter and seter work correctly', () => {
+        expect(wrapper.vm.selectedAgent).toBe(0);
+
+        wrapper.vm.selectedAgent = 0;
+        expect(wrapper.vm.currBookingDetails.Booking.AgentUserName).toBe(
+            'agent1',
+        );
+    });
+
 });
