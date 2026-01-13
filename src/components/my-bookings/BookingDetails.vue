@@ -105,10 +105,7 @@
                     </div>
 
                     <div class="btn-container">
-                        <AtomButton
-                            class="btn"
-                            @click="showPopup = true"
-                        >
+                        <AtomButton class="btn" @click="showPopup = true">
                             Show History
                         </AtomButton>
                     </div>
@@ -140,7 +137,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr v-if="hasError">
+                                        <td colspan="5" class="no-data">
+                                            {{ errorMessage }}
+                                        </td>
+                                    </tr>
+
                                     <tr
+                                        v-else-if="payments && payments.length"
                                         v-for="p in payments"
                                         :key="p.bookingID"
                                     >
@@ -158,17 +162,14 @@
                                         </td>
                                         <td class="txn-center">
                                             {{
-                                                getBookingPaymentStatusLabell(
+                                                getBookingPaymentStatusLabel(
                                                     p.Status,
                                                 )
                                             }}
                                         </td>
                                     </tr>
-                                    <tr
-                                        v-if="
-                                            !payments || payments.length === 0
-                                        "
-                                    >
+
+                                    <tr v-else>
                                         <td colspan="5" class="no-data">
                                             Transaction not found
                                         </td>
@@ -209,9 +210,7 @@
                     <div class="btn-container">
                         <AtomButton
                             class="btn"
-                            @click="
-                                openSpotDetails(booking.SiteDetails.SiteID)
-                            "
+                            @click="openSpotDetails(booking.SiteDetails.SiteID)"
                         >
                             Spot Details
                         </AtomButton>
@@ -236,16 +235,16 @@ import moment from 'moment';
 export default {
     name: 'BookingDetails',
     components: { MapContainer, AtomTooltip, AtomIcon, AtomButton },
-    props: { 
+    props: {
         booking: {
-            type:Object,
-            required:true,
+            type: Object,
+            required: true,
         },
         activeTab: {
             type: String,
             required: true,
-        }
-     },
+        },
+    },
     data() {
         return {
             ICON,

@@ -38,6 +38,12 @@ describe('BookingSidebar.vue', () => {
         },
     ];
 
+    const mockURLParams = (params = {}) => {
+        vi.spyOn(window, 'URLSearchParams').mockImplementation(() => ({
+            get: (key) => params[key] ?? null,
+        }));
+    };
+
     const mountComponent = (props = {}) => {
         wrapper = mount(BookingSidebar, {
             props: {
@@ -100,14 +106,7 @@ describe('BookingSidebar.vue', () => {
     });
 
     it('restoreFromUrl selects booking when bookingId matches', async () => {
-        vi.spyOn(window, 'URLSearchParams').mockImplementation(() => ({
-            get: (key) => {
-                if (key === 'tab') return 'Past';
-                if (key === 'bookingId') return '201';
-                return null;
-            },
-        }));
-
+        mockURLParams({ tab: 'Past', bookingId: '201' });
         mountComponent();
         await wrapper.vm.$nextTick();
         const emits = wrapper.emitted('select-booking');
@@ -115,28 +114,16 @@ describe('BookingSidebar.vue', () => {
     });
 
     it('restoreFromUrl falls back when bookingId not found', async () => {
-        vi.spyOn(window, 'URLSearchParams').mockImplementation(() => ({
-            get: (key) => {
-                if (key === 'tab') return 'Request';
-                if (key === 'bookingId') return '999';
-                return null;
-            },
-        }));
+        mockURLParams({ tab: 'Request', bookingId: '999' });
 
         mountComponent();
-
         await wrapper.vm.$nextTick();
         const emits = wrapper.emitted('select-booking');
         expect(emits[emits.length - 1][0].BookingID).toBe(301);
     });
 
     it('restoreFromUrl emits tab-change when no booking exists', async () => {
-        vi.spyOn(window, 'URLSearchParams').mockImplementation(() => ({
-            get: (key) => {
-                if (key === 'tab') return 'Active';
-                return null;
-            },
-        }));
+        mockURLParams({ tab: 'Active' });
 
         mountComponent({
             activebookings: [],
@@ -146,9 +133,8 @@ describe('BookingSidebar.vue', () => {
     });
 
     it('watchers trigger restoreFromUrl on prop change', async () => {
-        vi.spyOn(window, 'URLSearchParams').mockImplementation(() => ({
-            get: () => null,
-        }));
+        mockURLParams({});
+
         mountComponent();
         await wrapper.setProps({
             activebookings: [],

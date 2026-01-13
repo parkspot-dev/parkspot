@@ -1,6 +1,7 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createStore } from 'vuex';
+import * as enums from '@/constant/enums';
 import BookingDetails from '@/components/my-bookings/BookingDetails.vue';
 import { BookingStatus } from '@/constant/enums';
 
@@ -72,7 +73,6 @@ describe('BookingDetails.vue', () => {
                             href: '/spot-detail/SITE_1',
                         })),
                     },
-                    getBookingPaymentStatusLabell: vi.fn(() => 'Success'),
                 },
             },
         });
@@ -141,6 +141,10 @@ describe('BookingDetails.vue', () => {
     });
 
     it('renders transaction details when payments exist', async () => {
+        vi.spyOn(enums, 'getBookingPaymentStatusLabel').mockReturnValue(
+            'Success',
+        );
+
         mountComponent({
             payments: [
                 {
@@ -193,5 +197,14 @@ describe('BookingDetails.vue', () => {
         wrapper.vm.cancelBooking(bookingMock);
         expect(alertSpy).toHaveBeenCalled();
         alertSpy.mockRestore();
+    });
+
+    it('shows error message when hasError is true', async () => {
+        mountComponent();
+        store.state.myBookings.hasError = true;
+        store.state.myBookings.errorMessage = 'Failed to load payments';
+        await wrapper.vm.$nextTick();
+        await openHistoryPopup();
+        expect(wrapper.text()).toContain('Failed to load payments');
     });
 });
