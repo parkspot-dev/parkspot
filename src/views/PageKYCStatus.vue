@@ -240,6 +240,7 @@ export default {
             if (labelId != null) {
                 row['KYCStatus'] = labelId;
                 await this.updateStatus({ userData: row });
+                this.$store.commit('kycStatusPortal/set-users', []);
                 this.$buefy.toast.open({
                     message: `KYC Status updated to ${getKYCStatusLabel(labelId)}`,
                     type: 'is-success',
@@ -248,6 +249,8 @@ export default {
             } else {
                 this.alertError('Invalid status selected.');
             }
+
+            this.fetchKycPendingUsers();
         },
 
         async searchUsersWithMobile(userMobile) {
@@ -267,6 +270,9 @@ export default {
                 } else {
                     // Update Search Text with voMobile
                     this.updateMobileInput(sanitizeMobileNumber);
+
+                    this.$store.commit('kycStatusPortal/set-users', []);
+
                     this.$router.push({
                         path: this.$route.path,
                         query: {
@@ -281,10 +287,12 @@ export default {
         async onClearMobileInput() {
             if (this.$route.query.mobile) {
                 this.updateMobileInput('');
+                this.$store.commit('kycStatusPortal/set-users', []);
                 this.$router.push({
                     name: 'kyc-status',
                 });
             }
+            this.fetchKycPendingUsers();
         },
 
         // Sanitize mobile number
