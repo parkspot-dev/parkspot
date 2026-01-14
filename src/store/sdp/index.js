@@ -88,10 +88,11 @@ const actions = {
                 Long: res.Site.Long,
                 Rate: res.Site.Rate,
                 Distance: 0, // res.Site.Distance
+                SlotsAvailable: res.Site.SlotsAvailable > 0 ? true : false,
             };
             commit('update-map-center', [spot.Long, spot.Lat]);
             commit('update-selected-spot', spot);
-            commit('update-is-available', res.Site['SlotsAvailable']);
+              commit('update-is-available', res.Site['SlotsAvailable']);
             commit('update-loading', false);
             commit('update-image', res.Site['SiteImages']);
             commit('update-thumbnail-image', res.Site['SiteImageURI']);
