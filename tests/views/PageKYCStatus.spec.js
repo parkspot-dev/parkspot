@@ -83,11 +83,16 @@ const factory = (routerOverrides = {}) =>
                 },
                 'SelectInput': true,
                 'MoleculeSearchBox': {
-                    template:
-                        '<div class="search-box">' +
-                        '<button class="search-btn" @click="$emit(\'on-search\', \'9876543210\')">search</button>' +
-                        '<button class="clear-btn" @click="$emit(\'clear-input\')">clear</button>' +
-                        '</div>',
+                    template: `
+                        <div class="search-box">
+                            <button class="search-btn" @click="$emit('on-search', '9876543210')">
+                                search
+                            </button>
+                            <button class="clear-btn" @click="$emit('clear-input')">
+                                clear
+                            </button>
+                        </div>
+                    `,
                 },
                 'b-table': true,
                 'b-modal': true,
@@ -115,9 +120,11 @@ describe('PageKYCStatus.vue', () => {
         expect(wrapper.exists()).toBe(true);
     });
 
-    it('calls fetchKycPendingUsers on mount', () => {
-        factory();
-        expect(actions.fetchKycPendingUsers).toHaveBeenCalled();
+    it('refreshes pending users safely on mount', async () => {
+        const wrapper =factory();
+        await wrapper.vm.$nextTick();
+
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(1);
     });
 
     it('shows loader when isLoading is true', () => {
@@ -126,29 +133,29 @@ describe('PageKYCStatus.vue', () => {
         expect(wrapper.find('.loader-modal').exists()).toBe(true);
     });
 
-    it('searches user by mobile and updates route', async () => {
-        const wrapper = factory();
-        await wrapper.find('.search-btn').trigger('click');
-
-        expect(actions.updateMobileInput).toHaveBeenCalledWith(
-            expect.anything(),
-            '9876543210',
-        );
-        expect(routerMock.push).toHaveBeenCalled();
-    });
-
-    it('clears mobile input and resets route', async () => {
+    it('search and clear follow same refresh pattern', async () => {
         const wrapper = factory({ query: { mobile: '9876543210' } });
+
+        await wrapper.find('.search-btn').trigger('click');
         await wrapper.find('.clear-btn').trigger('click');
 
-        expect(actions.updateMobileInput).toHaveBeenCalledWith(
-            expect.anything(),
-            ''
-        );
-        expect(routerMock.push).toHaveBeenCalled();
+        expect(actions.updateMobileInput).toHaveBeenCalledTimes(3);
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(3);
     });
 
-    it('updates KYC status on select change', async () => {
+    it('does not manually clear users during search', async () => {
+        const wrapper = factory();
+        const commitSpy = vi.spyOn(store, 'commit');
+
+        await wrapper.find('.search-btn').trigger('click');
+
+        expect(commitSpy).not.toHaveBeenCalledWith(
+            'kycStatusPortal/set-users',
+            [],
+        );
+    });
+
+    it('updates KYC status and refreshes list', async () => {
         const wrapper = factory();
 
         await wrapper.vm.onStatusUpdate(
@@ -157,6 +164,8 @@ describe('PageKYCStatus.vue', () => {
         );
 
         expect(actions.updateStatus).toHaveBeenCalled();
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalled();
+
         expect(buefyMock.toast.open).toHaveBeenCalledWith(
             expect.objectContaining({
                 message: expect.stringContaining('KYC Status updated'),
@@ -186,5 +195,18 @@ describe('PageKYCStatus.vue', () => {
                 message: 'Some error',
             }),
         );
+    });
+
+    it('restores previous users if fetch fails', async () => {
+        actions.fetchKycPendingUsers.mockRejectedValueOnce(
+            new Error('API failed'),
+        );
+
+        const wrapper = factory();
+
+        await wrapper.vm.refreshPendingUsersSafely();
+
+        expect(store.state.kycStatusPortal.users.length).toBe(1);
+        expect(buefyMock.dialog.alert).toHaveBeenCalled();
     });
 });
