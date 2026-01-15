@@ -108,7 +108,7 @@ export default {
 
 @media only screen and (max-width: 1000px) {
     .contact-us {
-        padding: 2rem;
+        padding: 0rem 1rem 1rem;
     }
 }
 .options {
