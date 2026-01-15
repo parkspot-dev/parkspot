@@ -114,8 +114,12 @@
                 <div class="mobile-phone-link">
                     <p>
                         <a :href="helplineRef">
-                            <b-icon icon="phone" size="is-small"> </b-icon>
-                            {{ helplineNumber }}
+                            <img 
+                                src="@/assets/backup/img/whatsapp-icon.svg" width="20px"
+                            />
+                            <a href="https://wa.me/918789844160">
+                                {{ helplineNumber }}
+                            </a>
                         </a>
                     </p>
                 </div>
@@ -124,10 +128,13 @@
                     <ul>
                         <li>
                             <p>
-                                <a :href="helplineRef">
-                                    <b-icon icon="phone" size="is-small">
-                                    </b-icon>
-                                    {{ helplineNumber }}
+                                <a :href="helplineRef" >
+                                    <img 
+                                        src="@/assets/backup/img/whatsapp-icon.svg" width="18px" 
+                                    />
+                                    <a href="https://wa.me/918789844160">
+                                        {{ helplineNumber }}
+                                    </a>
                                 </a>
                             </p>
                         </li>
@@ -555,7 +562,7 @@ export default {
         },
     },
 };
-</script>
+</script> 
 
 <style lang="scss" src="./navbar.scss">
 .mobile-phone-link {
