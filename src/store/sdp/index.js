@@ -92,7 +92,7 @@ const actions = {
             };
             commit('update-map-center', [spot.Long, spot.Lat]);
             commit('update-selected-spot', spot);
-              commit('update-is-available', res.Site['SlotsAvailable']);
+            commit('update-is-available', res.Site['SlotsAvailable']);
             commit('update-loading', false);
             commit('update-image', res.Site['SiteImages']);
             commit('update-thumbnail-image', res.Site['SiteImageURI']);
