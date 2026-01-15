@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { createStore } from "vuex";
 import MapContainer from "@/components/extras/MapContainer.vue";
 import mapboxgl from 'mapbox-gl';
+import { flushPromises } from "@vue/test-utils";
 
 
 vi.mock('mapbox-gl', () => {
@@ -68,6 +69,9 @@ describe('MapContainer.vue', () => {
                     },
                     mutations: {
                         'update-map-config': vi.fn(),
+                        setFilteredSpots(state, spots){
+                            state.filteredSpots = spots;
+                        },
                     },
                     actions: {
                         updateUsersCurrentLocation: vi.fn(),
@@ -87,7 +91,8 @@ describe('MapContainer.vue', () => {
             },
         });
 
-        await Promise.resolve();
+        await flushPromises();
+        await wrapper.vm.$nextTick();
     });
 
     afterEach(() => {
@@ -96,7 +101,7 @@ describe('MapContainer.vue', () => {
     });
 
 
-    it('renders map contaiiner', () => {
+    it('renders map container', () => {
         expect(wrapper.find('#map').exists()).toBe(true);
     });
 
@@ -111,17 +116,17 @@ describe('MapContainer.vue', () => {
     it('calls updateMarkers when filteredSpots changes', async () => {
         const spy = vi.spyOn(wrapper.vm, 'updateMarkers');
 
-        store.state.map.filteredSpots = [
+        store.commit('map/setFilteredSpots', [
             {
-            ID: '1',
-            Name: 'Test Spot',
-            Address: 'Test Address',
-            Lat: 12.9,
-            Long: 77.6,
-            Rate: 100,
-            Distance: 1,
-            }
-        ];
+                ID: '1',
+                Name: 'Test Spot',
+                Address: 'Test Address',
+                Lat: 12.9,
+                Long: 77.6,
+                Rate: 100,
+                Distance: 1,
+            },
+        ]);
 
         await wrapper.vm.$nextTick();
 
