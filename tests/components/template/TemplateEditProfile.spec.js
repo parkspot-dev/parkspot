@@ -1,26 +1,31 @@
 import { mount } from '@vue/test-utils';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createStore } from 'vuex';
-import TemplateUserProfile from '@/components/templates/TemplateEditProfile.vue';
+import TemplateEditProfile from '@/components/templates/TemplateEditProfile.vue';
+describe('TemplateEditProfile.vue', () => {
 
-describe('TemplateUserProfile.vue', () => {
     let wrapper;
     let store;
 
-    const createVuexStore = (userState) =>
+    const createVuexStore = () =>
         createStore({
             modules: {
                 user: {
                     namespaced: true,
                     state: () => ({
-                        user: userState,
+                        user: null,
                     }),
+                    mutations: {
+                        SET_USER(state, user) {
+                            state.user = user;
+                        },
+                    },
                 },
             },
         });
 
     const mountComponent = () =>
-        mount(TemplateUserProfile, {
+        mount(TemplateEditProfile, {
             global: {
                 plugins: [store],
                 stubs: {
@@ -39,6 +44,7 @@ describe('TemplateUserProfile.vue', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
+        store = createVuexStore();
     });
 
     afterEach(() => {
@@ -47,10 +53,7 @@ describe('TemplateUserProfile.vue', () => {
 
     describe('when user is not available', () => {
         it('shows loader modal', () => {
-            store = createVuexStore(null);
-
             wrapper = mountComponent();
-
             expect(wrapper.find('[data-testid="loader-modal"]').exists()).toBe(true);
             expect(wrapper.find('.edit-profile-main').exists()).toBe(false);
         });
@@ -62,9 +65,10 @@ describe('TemplateUserProfile.vue', () => {
             photoURL: 'https://example.com/avatar.png',
         };
 
-        beforeEach(() => {
-            store = createVuexStore(userMock);
+        beforeEach(async () => {
             wrapper = mountComponent();
+            store.commit('user/SET_USER', userMock);
+            await wrapper.vm.$nextTick();
         });
 
         it('renders profile container', () => {
@@ -85,9 +89,22 @@ describe('TemplateUserProfile.vue', () => {
         });
 
         it('renders OrganismUserGeneralInfo component by default', () => {
-            expect(
-                wrapper.find('[data-testid="user-general-info"]').exists()
-            ).toBe(true);
+            expect(wrapper.find('[data-testid="user-general-info"]').exists()).toBe(true);
+        });
+    });
+
+    describe('when user data is invalid', () => {
+        it('renders gracefully without crashing', async () => {
+            const invalidUser = {
+                displayName: null,
+                photoURL: null,
+            };
+
+            wrapper = mountComponent();
+            store.commit('user/SET_USER', invalidUser);
+            await wrapper.vm.$nextTick();
+            expect(wrapper.find('.edit-profile-main').exists()).toBe(true);
+            expect(wrapper.find('img').exists()).toBe(true);
         });
     });
 });

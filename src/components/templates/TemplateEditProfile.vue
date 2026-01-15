@@ -26,7 +26,7 @@ import OrganismUserGeneralInfo from '../organisms/OrganismUserGeneralInfo.vue';
 import LoaderModal from '../extras/LoaderModal.vue';
 import { mapState } from 'vuex';
 export default {
-    name: 'TemplateUserProfile',
+    name: 'TemplateEditProfile',
     components: {
         BodyWrapper,
         OrganismUserGeneralInfo,

@@ -22,7 +22,8 @@ describe('PageEditProfile.vue', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        getUserProfileMock = vi.fn();
+        getUserProfileMock = vi.fn(() => Promise.resolve());
+
         store = createStore({
             modules: {
                 user: {
@@ -42,12 +43,21 @@ describe('PageEditProfile.vue', () => {
     it('renders TemplateEditProfile component', () => {
         wrapper = mountComponent();
         expect(
-            wrapper.find('[data-testid="template-edit-profile"]').exists()
+            wrapper.find('[data-testid="template-edit-profile"]').exists(),
         ).toBe(true);
     });
 
     it('dispatches getUserProfile action on mount', () => {
         wrapper = mountComponent();
         expect(getUserProfileMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('handles getUserProfile failure gracefully', async () => {
+        getUserProfileMock.mockRejectedValueOnce(new Error('Network error'));
+
+        wrapper = mountComponent();
+
+        expect(getUserProfileMock).toHaveBeenCalledTimes(1);
+        expect(wrapper.exists()).toBe(true);
     });
 });
