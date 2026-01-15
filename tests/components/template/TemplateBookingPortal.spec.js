@@ -51,7 +51,10 @@ const createVuexStore = (isAdmin = true) =>
                 state: () => ({
                     bookingDetails: bookingDetailsMock,
                     initialActiveBookingDetails: bookingDetailsMock.Booking,
-                    agents: [{UserName: 'agent1', FullName: 'Agent One'}],
+                    agents: [
+                        { UserName: 'agent1', FullName: 'Agent One' },
+                        { UserName: 'agent2', FullName: 'Agent Two' },
+                    ],
                     paymentDetails: null,
                     status: '',
                     statusMessage: '',
@@ -119,13 +122,16 @@ const factory = (isAdmin = true) => {
 describe('TemplateBookingPortal.vue', () => {
     let wrapper;
     let store;
+    let originalClipboard;
 
     beforeEach(() => {
         vi.clearAllMocks();
+        originalClipboard = navigator.clipboard;
         ({ wrapper, store } = factory(true));
     });
 
     afterEach(() => {
+        navigator.clipboard = originalClipboard;
         wrapper?.unmount();
     });
 
@@ -269,11 +275,9 @@ describe('TemplateBookingPortal.vue', () => {
     }); 
     
     it('copies payment url and updates tooltip label', async () => {
-        Object.assign(navigator, {
-            clipboard: {
-                writeText: vi.fn().mockResolvedValue(),
-            },
-        });
+        navigator.clipboard = {
+            writeText: vi.fn().mockResolvedValue(),
+        };
 
         store.state.bookingPortal.paymentDetails = {
             PayUrl: 'https://pay.test',
@@ -294,7 +298,7 @@ describe('TemplateBookingPortal.vue', () => {
         expect(wrapper.emitted('refresh-payment-status')[0]).toEqual([123]);
     });
 
-    it('validates rent input correctly', () => {
+    it('clears validation errors when valid input is provided', () => {
         wrapper.vm.currBookingDetails.Booking.Rent = 0;
         wrapper.vm.validateRentInput();
 
@@ -335,25 +339,27 @@ describe('TemplateBookingPortal.vue', () => {
 
         wrapper.vm.paymentID = 99;
         wrapper.vm.handleRefundConfirm({
-            refundAmount: '100',
+            refundAmount: '100.50',
             isSecurityDeposit: true,
         });
 
         expect(spy).toHaveBeenCalledWith('bookingPortal/createRefund', {
             PaymentID: 99,
-            Amount: 100,
+            Amount: 100.5,
             IsRefundingSecurity: true,
         });
     });
-
     
-    it('computed selectedAgent getter and seter work correctly', () => {
+    it('computed selectedAgent getter and setter work correctly', async () => {
         expect(wrapper.vm.selectedAgent).toBe(0);
 
-        wrapper.vm.selectedAgent = 0;
+        wrapper.vm.selectedAgent = 1;
+        await wrapper.vm.$nextTick();
+
         expect(wrapper.vm.currBookingDetails.Booking.AgentUserName).toBe(
-            'agent1',
+            'agent2',
         );
+        expect(wrapper.vm.selectedAgent).toBe(1);
     });
 
 });
