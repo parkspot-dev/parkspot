@@ -88,6 +88,7 @@ const actions = {
                 Long: res.Site.Long,
                 Rate: res.Site.Rate,
                 Distance: 0, // res.Site.Distance
+                SlotsAvailable: res.Site.SlotsAvailable > 0 ? true : false,
             };
             commit('update-map-center', [spot.Long, spot.Lat]);
             commit('update-selected-spot', spot);
