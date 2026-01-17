@@ -105,6 +105,7 @@ describe('MyBookings Store - Complete Test Suite', () => {
         });
 
         await actions.fetchUserBookings({ commit });
+        expect(mayaClient.get).toHaveBeenCalled();
         expect(state.activeBookings.length).toBe(1);
         expect(state.pastBookings.length).toBe(1);
         expect(state.requestedBookings.length).toBe(1);
@@ -118,14 +119,16 @@ describe('MyBookings Store - Complete Test Suite', () => {
         });
 
         await actions.fetchUserBookings({ commit });
+        expect(mayaClient.get).toHaveBeenCalled();
         expect(state.hasError).toBe(true);
         expect(state.errorMessage).toBe('API failed');
     });
 
     it('fetchPayments uses cache when available', async () => {
         state.cachePayments.B1 = [{ id: 30 }];
-        await actions.fetchPayments({ commit }, 'B1');
+        await actions.fetchPayments({ commit }, 'B1')
         expect(state.payments).toEqual([{ id: 30 }]);
+        expect(mayaClient.get).not.toHaveBeenCalled();
     });
 
     it('fetchPayments success flow', async () => {
@@ -134,6 +137,7 @@ describe('MyBookings Store - Complete Test Suite', () => {
         });
 
         await actions.fetchPayments({ commit }, 'B2');
+        expect(mayaClient.get).toHaveBeenCalled();
         expect(state.payments).toEqual([{ id: 40 }]);
         expect(state.cachePayments.B2).toEqual([{ id: 40 }]);
     });
@@ -145,6 +149,7 @@ describe('MyBookings Store - Complete Test Suite', () => {
         });
 
         await actions.fetchPayments({ commit }, 'B3');
+        expect(mayaClient.get).toHaveBeenCalled();
         expect(state.hasError).toBe(true);
         expect(state.errorMessage).toBe('Payment error');
     });

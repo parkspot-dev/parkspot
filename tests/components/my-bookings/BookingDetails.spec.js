@@ -13,7 +13,7 @@ describe('BookingDetails.vue', () => {
     const bookingMock = {
         BookingID: 101,
         BookingStatus: BookingStatus.BookingConfirmed,
-        VehicleNumber: 'Up14gu8447',
+        VehicleNumber: 'UP14GU8447',
         StartTime: '10:00 AM',
         EndTime: '12:00 PM',
         RentCycle: '05-02-2026',
@@ -31,7 +31,12 @@ describe('BookingDetails.vue', () => {
         },
     };
 
-    const mountComponent = ({ payments = [], activeTab = 'Active' } = {}) => {
+    const mountComponent = ({
+        payments = [],
+        activeTab = 'Active',
+        hasError = false,
+        errorMessage = '',
+    } = {}) => {
         fetchPaymentsMock = vi.fn();
 
         store = createStore({
@@ -40,8 +45,8 @@ describe('BookingDetails.vue', () => {
                     namespaced: true,
                     state: () => ({
                         isLoading: false,
-                        hasError: false,
-                        errorMessage: '',
+                        hasError,
+                        errorMessage,
                         payments,
                     }),
                     actions: {
@@ -108,15 +113,16 @@ describe('BookingDetails.vue', () => {
         expect(wrapper.text()).toContain('Bangalore');
     });
 
-    it('dispatches fetchPayments when booking is mounted', async () => {
+    it('dispatches fetchPayments when component is mounted', async () => {
         mountComponent();
         await flushPromises();
         expect(fetchPaymentsMock).toHaveBeenCalledTimes(1);
-        expect(fetchPaymentsMock.mock.calls[0][1]).toBe(101);
+        expect(fetchPaymentsMock).toHaveBeenCalledWith(expect.any(Object), 101);
     });
 
     it('fetches payments again when booking id changes', async () => {
         mountComponent();
+
         await wrapper.setProps({
             booking: { ...bookingMock, BookingID: 202 },
         });
@@ -141,9 +147,9 @@ describe('BookingDetails.vue', () => {
     });
 
     it('renders transaction details when payments exist', async () => {
-        vi.spyOn(enums, 'getBookingPaymentStatusLabel').mockReturnValue(
-            'Success',
-        );
+        const statusLabelSpy = vi
+            .spyOn(enums, 'getBookingPaymentStatusLabel')
+            .mockReturnValue('Success');
 
         mountComponent({
             payments: [
@@ -161,6 +167,7 @@ describe('BookingDetails.vue', () => {
         expect(wrapper.text()).toContain('TXN123');
         expect(wrapper.text()).toContain('610');
         expect(wrapper.text()).toContain('Success');
+        expect(statusLabelSpy).toHaveBeenCalledWith(1);
     });
 
     it('renders table headers inside transaction popup', async () => {
@@ -174,7 +181,7 @@ describe('BookingDetails.vue', () => {
         expect(wrapper.find('.cancel-btn').exists()).toBe(false);
     });
 
-    it('opens spot details when spot details action is triggered', () => {
+    it('opens spot details when openSpotDetails is called', () => {
         mountComponent();
         const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
         wrapper.vm.openSpotDetails('SITE_1');
@@ -182,7 +189,7 @@ describe('BookingDetails.vue', () => {
         openSpy.mockRestore();
     });
 
-    it('opens WhatsApp when cancel booking is triggered', () => {
+    it('opens WhatsApp when cancelBooking is triggered', () => {
         mountComponent();
         const openSpy = vi.spyOn(window, 'open').mockReturnValue({});
         wrapper.vm.cancelBooking(bookingMock);
@@ -200,10 +207,11 @@ describe('BookingDetails.vue', () => {
     });
 
     it('shows error message when hasError is true', async () => {
-        mountComponent();
-        store.state.myBookings.hasError = true;
-        store.state.myBookings.errorMessage = 'Failed to load payments';
-        await wrapper.vm.$nextTick();
+        mountComponent({
+            hasError: true,
+            errorMessage: 'Failed to load payments',
+        });
+
         await openHistoryPopup();
         expect(wrapper.text()).toContain('Failed to load payments');
     });
