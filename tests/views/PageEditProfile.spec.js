@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount, flushPromises } from '@vue/test-utils';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createStore } from 'vuex';
 import PageEditProfile from '@/views/PageEditProfile.vue';
@@ -22,7 +22,10 @@ describe('PageEditProfile.vue', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        getUserProfileMock = vi.fn(() => Promise.resolve());
+
+        getUserProfileMock = vi.fn(() =>
+            Promise.resolve({ id: 1, name: 'Dev' }),
+        );
 
         store = createStore({
             modules: {
@@ -40,24 +43,32 @@ describe('PageEditProfile.vue', () => {
         wrapper?.unmount();
     });
 
-    it('renders TemplateEditProfile component', () => {
+    it('dispatches getUserProfile action on mount', async () => {
         wrapper = mountComponent();
+        await flushPromises();
+        expect(getUserProfileMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('renders TemplateEditProfile on success', async () => {
+        wrapper = mountComponent();
+        await flushPromises();
         expect(
             wrapper.find('[data-testid="template-edit-profile"]').exists(),
         ).toBe(true);
     });
 
-    it('dispatches getUserProfile action on mount', () => {
+    it('does not crash when getUserProfile fails', async () => {
+        getUserProfileMock.mockRejectedValueOnce(new Error('Network error'));
         wrapper = mountComponent();
+        await flushPromises();
         expect(getUserProfileMock).toHaveBeenCalledTimes(1);
+        expect(wrapper.exists()).toBe(true);
     });
 
-    it('handles getUserProfile failure gracefully', async () => {
+    it('does not crash on network error', async () => {
         getUserProfileMock.mockRejectedValueOnce(new Error('Network error'));
-
         wrapper = mountComponent();
-
-        expect(getUserProfileMock).toHaveBeenCalledTimes(1);
+        await flushPromises();
         expect(wrapper.exists()).toBe(true);
     });
 });
