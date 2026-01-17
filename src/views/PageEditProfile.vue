@@ -25,7 +25,7 @@ export default {
     async mounted() {
         try {
             await this.getUserProfile();
-        } catch (error) {
+        } catch {
             this.hasError = true;
         }
     },
