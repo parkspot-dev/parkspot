@@ -126,12 +126,14 @@ describe('TemplateBookingPortal.vue', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        originalClipboard = navigator.clipboard;
+        global.navigator.clipboard = {
+            writeText: vi.fn().mockResolvedValue(),
+        };
         ({ wrapper, store } = factory(true));
     });
 
     afterEach(() => {
-        navigator.clipboard = originalClipboard;
+        delete global.navigator.clipboard;
         wrapper?.unmount();
     });
 
@@ -275,17 +277,13 @@ describe('TemplateBookingPortal.vue', () => {
     }); 
     
     it('copies payment url and updates tooltip label', async () => {
-        navigator.clipboard = {
-            writeText: vi.fn().mockResolvedValue(),
-        };
-
         store.state.bookingPortal.paymentDetails = {
             PayUrl: 'https://pay.test',
         };
 
         await wrapper.vm.copyUrl();
 
-        expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+        expect(global.navigator.clipboard.writeText).toHaveBeenCalledWith(
             'https://pay.test',
         );
         expect(wrapper.vm.toolTipLabel).toBe('Copied!!');
@@ -302,7 +300,9 @@ describe('TemplateBookingPortal.vue', () => {
         wrapper.vm.currBookingDetails.Booking.Rent = 0;
         wrapper.vm.validateRentInput();
 
-        expect(wrapper.vm.rentValidationError).toBeTruthy();
+        expect(wrapper.vm.rentValidationError).toBe(
+            'Rent must be greater than zero',
+        );
 
         wrapper.vm.currBookingDetails.Booking.Rent = 100;
         wrapper.vm.validateRentInput();
