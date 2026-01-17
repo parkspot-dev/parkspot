@@ -133,11 +133,16 @@ describe('PageKYCStatus.vue', () => {
         expect(wrapper.find('.loader-modal').exists()).toBe(true);
     });
 
-    it('search and clear follow same refresh pattern', async () => {
+    it('calls refreshPendingUsersSafely on search and clear actions', async () => {
         const wrapper = factory({ query: { mobile: '9876543210' } });
 
         await wrapper.find('.search-btn').trigger('click');
         await wrapper.find('.clear-btn').trigger('click');
+
+        // updateMobileInput is expected to be called 3 times:
+        // 1) during component creation to initialize state from route
+        // 2) when searching with a mobile number
+        // 3) when clearing the search input
 
         expect(actions.updateMobileInput).toHaveBeenCalledTimes(3);
         expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(3);
@@ -202,11 +207,12 @@ describe('PageKYCStatus.vue', () => {
             new Error('API failed'),
         );
 
+        const initialUsers = [...store.state.kycStatusPortal.users];
         const wrapper = factory();
 
         await wrapper.vm.refreshPendingUsersSafely();
 
-        expect(store.state.kycStatusPortal.users.length).toBe(1);
+        expect(store.state.kycStatusPortal.users).toEqual(initialUsers);
         expect(buefyMock.dialog.alert).toHaveBeenCalled();
     });
 });
