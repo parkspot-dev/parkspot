@@ -147,8 +147,10 @@ describe('TemplateBookingPortal.vue', () => {
     it('emits payment-link event when getPaymentLink is called', () => {
         wrapper.vm.getPaymentLink();
 
-        expect(wrapper.emitted('payment-link')).toBeTruthy();
-        expect(wrapper.emitted('payment-link')[0][0]).toEqual({
+        const emitted = wrapper.emitted('payment-link');
+
+        expect(emitted).toHaveLength(1);
+        expect(emitted[0][0]).toEqual({
             BookingID: '101',
             Discount: 0.0,
             Promocode: '',
@@ -165,10 +167,12 @@ describe('TemplateBookingPortal.vue', () => {
         wrapper.vm.currBookingDetails.Booking.Remark = 'Updated remark';
         await wrapper.vm.saveField();
 
-        expect(wrapper.emitted('update-booking-details')).toBeTruthy();
-        expect(wrapper.emitted('update-booking-details')[0][0].Remark).toBe(
-            'Updated remark',
-        );
+        const emitted = wrapper.emitted('update-booking-details');
+
+        expect(emitted).toHaveLength(1);
+        expect(emitted[0][0]).toMatchObject({
+            Remark: 'Updated remark',
+        });
     });
 
     it('shows validation error when rent is invalid', async () => {
@@ -177,7 +181,7 @@ describe('TemplateBookingPortal.vue', () => {
         await wrapper.vm.enableEdit('Rent Details');
         await wrapper.vm.saveField();
 
-        expect(wrapper.vm.rentValidationError).toBeTruthy();
+        expect(wrapper.vm.rentValidationError).toBe('Rent must be greater than zero');
     });
 
     it('does not emit update-booking-details if rent validation fails', async () => {
@@ -300,10 +304,10 @@ describe('TemplateBookingPortal.vue', () => {
         expect(wrapper.vm.toolTipLabel).toBe('Copied!!');
     });
 
-    it('emits refresh-payment-status event', () => {
+    it('emits refresh-payment-status event with correct payment id', () => {
         wrapper.vm.refreshPaymentStatus(123);
 
-        expect(wrapper.emitted('refresh-payment-status')).toBeTruthy();
+        expect(wrapper.emitted('refresh-payment-status')).toHaveLength(1);
         expect(wrapper.emitted('refresh-payment-status')[0]).toEqual([123]);
     });
 
@@ -326,7 +330,7 @@ describe('TemplateBookingPortal.vue', () => {
         wrapper.vm.currBookingDetails.Booking.BaseAmount = 200;
 
         wrapper.vm.validateSOChargesInput();
-        expect(wrapper.vm.soChargesValidationError).toBeTruthy();
+        expect(wrapper.vm.soChargesValidationError).toBe('SO Charges cannot be greater than Rent amount');
 
         wrapper.vm.currBookingDetails.Booking.BaseAmount = 50;
         wrapper.vm.validateSOChargesInput();
@@ -395,5 +399,51 @@ describe('TemplateBookingPortal.vue', () => {
             `https://www.parkspot.in/internal/search-portal?tab=parking-request&mobile=${bookingDetailsMock.Booking.Mobile}`,
         );
         expect(mobileLink.attributes('target')).toBe('_blank');
+    });
+
+    it('renders span instead of KYC link when KYC status is NotSet', async () => {
+        store.state.bookingPortal.bookingDetails = {
+            ...bookingDetailsMock,
+            Booking: {
+                ...bookingDetailsMock.Booking,
+                VOKYCStatus: wrapper.vm.KYCStatus.NotSet,
+            },
+        };
+
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.find('a.kyc-link').exists()).toBe(false);
+    });
+
+    it('uses fallback # URL when mobile number is missing', async () => {
+        store.state.bookingPortal.bookingDetails = {
+            ...bookingDetailsMock,
+            Booking: {
+                ...bookingDetailsMock.Booking,
+                Mobile: '',
+            },
+        };
+
+        await wrapper.vm.$nextTick();
+
+        const mobileLink = wrapper.find('a.mobile-link');
+
+        expect(mobileLink.exists()).toBe(true);
+        expect(mobileLink.attributes('href')).toBe('#');
+    });
+
+    it('renders fallback text "View KYC" when KYC label is falsy', async () => {
+        store.state.bookingPortal.bookingDetails = {
+            ...bookingDetailsMock,
+            Booking: {
+                ...bookingDetailsMock.Booking,
+                VOKYCStatus: -1, // invalid enum
+            },
+        };
+        await wrapper.vm.$nextTick();
+        const kycLink = wrapper.find('a.kyc-link');
+
+        expect(kycLink.exists()).toBe(true);
+        expect(kycLink.text()).toBe('View KYC');
     });
 });
