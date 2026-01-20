@@ -203,7 +203,7 @@ export default {
             summary: {
                 btn: 'Show',
                 show: false,
-                status: [0, 0, 0, 0, 0, 0, 0], // Array to hold counts for each status
+                status: {},
             },
         };
     },
@@ -285,7 +285,7 @@ export default {
         },
 
         updateSummary(requests) {
-            this.summary.status = [];
+            this.summary.status = {};
 
             requests.forEach((request) => {
                 if (request.Status != null) {
