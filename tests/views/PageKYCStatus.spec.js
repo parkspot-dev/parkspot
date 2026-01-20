@@ -1,8 +1,8 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect,vi, beforeEach } from "vitest";
-import { createStore } from "vuex";
-import PageKYCStatus from "@/views/PageKYCStatus.vue";
-
+import { mount } from '@vue/test-utils';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { createStore } from 'vuex';
+import PageKYCStatus from '@/views/PageKYCStatus.vue';
+import { flushPromises } from '@vue/test-utils';
 
 vi.mock('@/constant/enums', () => ({
     KYCStatusLabel: ['PENDING', 'APPROVED', 'REJECTED'],
@@ -21,13 +21,12 @@ vi.mock('@/constant/enums', () => ({
     },
 }));
 
-
 let store;
 let actions;
 
 beforeEach(() => {
     vi.clearAllMocks();
-    
+
     actions = {
         fetchKycPendingUsers: vi.fn(),
         updateStatus: vi.fn(),
@@ -113,7 +112,6 @@ const factory = (routerOverrides = {}) =>
         },
     });
 
-
 describe('PageKYCStatus.vue', () => {
     it('mounts successfully', () => {
         const wrapper = factory();
@@ -121,7 +119,7 @@ describe('PageKYCStatus.vue', () => {
     });
 
     it('refreshes pending users safely on mount', async () => {
-        const wrapper =factory();
+        const wrapper = factory();
         await wrapper.vm.$nextTick();
 
         expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(1);
@@ -202,17 +200,26 @@ describe('PageKYCStatus.vue', () => {
         );
     });
 
-    it('restores previous users if fetch fails', async () => {
+    it('restores users to last known state if fetch fails', async () => {
+        const wrapper = factory();
+
+        // wait for initial mount fetch
+        await wrapper.vm.$nextTick();
+        await flushPromises();
+
+        // mock failure for next fetch
         actions.fetchKycPendingUsers.mockRejectedValueOnce(
             new Error('API failed'),
         );
 
-        const initialUsers = [...store.state.kycStatusPortal.users];
-        const wrapper = factory();
+        // simulate state chnge before refresh
+        const modifiedUsers = [{ id: 999 }];
+        store.state.kycStatusPortal.users = modifiedUsers;
 
         await wrapper.vm.refreshPendingUsersSafely();
 
-        expect(store.state.kycStatusPortal.users).toEqual(initialUsers);
+        // rollback to state at time of refresh
+        expect(store.state.kycStatusPortal.users).toEqual(modifiedUsers);
         expect(buefyMock.dialog.alert).toHaveBeenCalled();
     });
 });
