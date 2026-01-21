@@ -38,7 +38,7 @@ import BookingDetails from '@/components/my-bookings/BookingDetails.vue';
 import { mapActions, mapState } from 'vuex';
 
 export default {
-    name: 'PageMyBooking',
+    name: 'PageMyBookings',
     components: { BookingSidebar, BookingDetails },
 
     data() {

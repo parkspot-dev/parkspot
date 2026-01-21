@@ -1,9 +1,9 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createStore } from 'vuex';
-import PageMyBooking from '@/views/PageMyBookings.vue';
+import PageMyBookings from '@/views/PageMyBookings.vue';
 
-describe('PageMyBooking.vue', () => {
+describe('PageMyBookings.vue', () => {
     let wrapper;
     let store;
     let fetchUserBookingsMock;
@@ -46,7 +46,7 @@ describe('PageMyBooking.vue', () => {
             },
         });
 
-        wrapper = mount(PageMyBooking, {
+        wrapper = mount(PageMyBookings, {
             global: {
                 plugins: [store],
                 stubs: {
