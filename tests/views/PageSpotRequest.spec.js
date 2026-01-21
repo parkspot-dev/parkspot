@@ -13,7 +13,7 @@ vi.mock("@/constant/enums", () => ({
             1: 'Registered',
             2: 'Processing',
             4: 'Verified',
-            8: 'Duplicate0,'
+            8: 'Duplicate,'
         };
         return map[id] || 'Not Set';
     },
