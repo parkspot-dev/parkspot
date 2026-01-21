@@ -1,0 +1,14 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "N9S4Z9WW9J.com.parkspot.mayanagri",
+                "paths": [
+                   "/spot-details/*",
+                   "/register-parking-spot"
+                ]
+            }
+        ]
+    }
+}
