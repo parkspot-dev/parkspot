@@ -443,7 +443,13 @@
                             {{ currBookingDetails.Booking.Name }}
                         </p>
                         <p>
-                            {{ currBookingDetails.Booking.Mobile }}
+                            <a
+                                :href="parkingRequestSearchUrl"
+                                target="_blank"
+                                class="mobile-link"
+                            >
+                                {{ currBookingDetails.Booking.Mobile }}
+                            </a>
                         </p>
                     </div>
                 </div>
@@ -473,16 +479,18 @@
                                     KYCStatus.NotSet
                                 "
                             ></span>
-                            <router-link
+                            <a
                                 v-else
-                                :to="`/internal/users/kyc-status?mobile=${currBookingDetails.Booking.Mobile}`"
+                                :href="kycStatusUrl"
+                                target="_blank"
+                                class="kyc-link"
                             >
                                 {{
                                     getKYCStatusLabel(
                                         currBookingDetails.Booking.VOKYCStatus,
-                                    )
+                                    ) || 'View KYC'
                                 }}
-                            </router-link>
+                            </a>
                         </p>
                     </div>
                 </div>
@@ -678,6 +686,21 @@ export default {
                 },
             }).href;
         },
+
+        parkingRequestSearchUrl() {
+            const mobile = this.currBookingDetails?.Booking?.Mobile;
+            return mobile
+                ? `https://www.parkspot.in/internal/search-portal?tab=parking-request&mobile=${mobile}`
+                : '#';
+        },
+
+        kycStatusUrl() {
+            const mobile = this.currBookingDetails?.Booking?.Mobile;
+            return mobile
+                ? `https://www.parkspot.in/internal/users/kyc-status?mobile=${mobile}`
+                : '#';
+        },
+
         selectedAgent: {
             get() {
                 const index = this.agents.findIndex(
