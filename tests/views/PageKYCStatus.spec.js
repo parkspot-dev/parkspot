@@ -121,6 +121,7 @@ describe('PageKYCStatus.vue', () => {
     it('refreshes pending users safely on mount', async () => {
         const wrapper = factory();
         await wrapper.vm.$nextTick();
+        await flushPromises();
 
         expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(1);
     });
@@ -200,26 +201,27 @@ describe('PageKYCStatus.vue', () => {
         );
     });
 
-    it('restores users to last known state if fetch fails', async () => {
+    it('restores users to state before fetch attempt if fetch fails', async () => {
         const wrapper = factory();
 
-        // wait for initial mount fetch
+        // wait for initial mount fetch to complete
         await wrapper.vm.$nextTick();
         await flushPromises();
 
-        // mock failure for next fetch
+        // Set users state Before refresh attempt
+        const stateBeforeRefresh = [{ id: 1 }, { id: 2 }];
+        store.state.kycStatusPortal.users = stateBeforeRefresh;
+
+        // Mock failure for the fetch triggered by refresh
         actions.fetchKycPendingUsers.mockRejectedValueOnce(
             new Error('API failed'),
         );
 
-        // simulate state change before refresh
-        const modifiedUsers = [{ id: 999 }];
-        store.state.kycStatusPortal.users = modifiedUsers;
-
+        // Trigger refresh (this should fail internally)
         await wrapper.vm.refreshPendingUsersSafely();
 
-        // rollback to state at time of refresh
-        expect(store.state.kycStatusPortal.users).toEqual(modifiedUsers);
+        // Verify users are restored to the state before refresh attempt
+        expect(store.state.kycStatusPortal.users).toEqual(stateBeforeRefresh);
         expect(buefyMock.dialog.alert).toHaveBeenCalled();
     });
 });
