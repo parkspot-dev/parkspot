@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createStore } from 'vuex';
 import TemplateBookingPortal from '@/components/templates/TemplateBookingPortal.vue';
-import { PaymentStatus } from '@/constant/enums';
+import { PaymentStatus, KYCStatus } from '@/constant/enums';
 
 const bookingDetailsMock = {
     Booking: {
@@ -406,7 +406,7 @@ describe('TemplateBookingPortal.vue', () => {
             ...bookingDetailsMock,
             Booking: {
                 ...bookingDetailsMock.Booking,
-                VOKYCStatus: wrapper.vm.KYCStatus.NotSet,
+                VOKYCStatus: KYCStatus.NotSet,
             },
         };
 
