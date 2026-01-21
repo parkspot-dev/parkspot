@@ -14,7 +14,8 @@ describe('PageEditProfile.vue', () => {
                 plugins: [store],
                 stubs: {
                     TemplateEditProfile: {
-                        template: '<div data-testid="template-edit-profile" />',
+                        template:
+                            '<div data-testid="template-edit-profile" />',
                     },
                 },
             },
@@ -46,29 +47,40 @@ describe('PageEditProfile.vue', () => {
     it('dispatches getUserProfile action on mount', async () => {
         wrapper = mountComponent();
         await flushPromises();
+
         expect(getUserProfileMock).toHaveBeenCalledTimes(1);
     });
 
     it('renders TemplateEditProfile on success', async () => {
         wrapper = mountComponent();
         await flushPromises();
+
         expect(
             wrapper.find('[data-testid="template-edit-profile"]').exists(),
         ).toBe(true);
+
+        expect(
+            wrapper.find('[data-testid="profile-error"]').exists(),
+        ).toBe(false);
     });
 
-    it('does not crash when getUserProfile fails', async () => {
-        getUserProfileMock.mockRejectedValueOnce(new Error('Network error'));
+    it('shows error state when getUserProfile fails', async () => {
+        getUserProfileMock.mockRejectedValueOnce(
+            new Error('Something went wrong'),
+        );
+
         wrapper = mountComponent();
         await flushPromises();
         expect(getUserProfileMock).toHaveBeenCalledTimes(1);
-        expect(wrapper.exists()).toBe(true);
-    });
 
-    it('does not crash on network error', async () => {
-        getUserProfileMock.mockRejectedValueOnce(new Error('Network error'));
-        wrapper = mountComponent();
-        await flushPromises();
-        expect(wrapper.exists()).toBe(true);
+        expect(
+            wrapper.find('[data-testid="profile-error"]').exists(),
+        ).toBe(true);
+
+        expect(
+            wrapper.find('[data-testid="template-edit-profile"]').exists(),
+        ).toBe(false);
+
+        expect(wrapper.text()).toContain('Something went wrong');
     });
 });
