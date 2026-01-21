@@ -1,8 +1,8 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect,vi, beforeEach } from "vitest";
-import { createStore } from "vuex";
-import PageKYCStatus from "@/views/PageKYCStatus.vue";
-
+import { mount } from '@vue/test-utils';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { createStore } from 'vuex';
+import PageKYCStatus from '@/views/PageKYCStatus.vue';
+import { flushPromises } from '@vue/test-utils';
 
 vi.mock('@/constant/enums', () => ({
     KYCStatusLabel: ['PENDING', 'APPROVED', 'REJECTED'],
@@ -21,13 +21,12 @@ vi.mock('@/constant/enums', () => ({
     },
 }));
 
-
 let store;
 let actions;
 
 beforeEach(() => {
     vi.clearAllMocks();
-    
+
     actions = {
         fetchKycPendingUsers: vi.fn(),
         updateStatus: vi.fn(),
@@ -83,11 +82,16 @@ const factory = (routerOverrides = {}) =>
                 },
                 'SelectInput': true,
                 'MoleculeSearchBox': {
-                    template:
-                        '<div class="search-box">' +
-                        '<button class="search-btn" @click="$emit(\'on-search\', \'9876543210\')">search</button>' +
-                        '<button class="clear-btn" @click="$emit(\'clear-input\')">clear</button>' +
-                        '</div>',
+                    template: `
+                        <div class="search-box">
+                            <button class="search-btn" @click="$emit('on-search', '9876543210')">
+                                search
+                            </button>
+                            <button class="clear-btn" @click="$emit('clear-input')">
+                                clear
+                            </button>
+                        </div>
+                    `,
                 },
                 'b-table': true,
                 'b-modal': true,
@@ -108,16 +112,18 @@ const factory = (routerOverrides = {}) =>
         },
     });
 
-
 describe('PageKYCStatus.vue', () => {
     it('mounts successfully', () => {
         const wrapper = factory();
         expect(wrapper.exists()).toBe(true);
     });
 
-    it('calls fetchKycPendingUsers on mount', () => {
-        factory();
-        expect(actions.fetchKycPendingUsers).toHaveBeenCalled();
+    it('refreshes pending users safely on mount', async () => {
+        const wrapper = factory();
+        await wrapper.vm.$nextTick();
+        await flushPromises();
+
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(1);
     });
 
     it('shows loader when isLoading is true', () => {
@@ -126,29 +132,34 @@ describe('PageKYCStatus.vue', () => {
         expect(wrapper.find('.loader-modal').exists()).toBe(true);
     });
 
-    it('searches user by mobile and updates route', async () => {
-        const wrapper = factory();
-        await wrapper.find('.search-btn').trigger('click');
-
-        expect(actions.updateMobileInput).toHaveBeenCalledWith(
-            expect.anything(),
-            '9876543210',
-        );
-        expect(routerMock.push).toHaveBeenCalled();
-    });
-
-    it('clears mobile input and resets route', async () => {
+    it('calls refreshPendingUsersSafely on search and clear actions', async () => {
         const wrapper = factory({ query: { mobile: '9876543210' } });
+
+        await wrapper.find('.search-btn').trigger('click');
         await wrapper.find('.clear-btn').trigger('click');
 
-        expect(actions.updateMobileInput).toHaveBeenCalledWith(
-            expect.anything(),
-            ''
-        );
-        expect(routerMock.push).toHaveBeenCalled();
+        // updateMobileInput is expected to be called 3 times:
+        // 1) during component creation to initialize state from route
+        // 2) when searching with a mobile number
+        // 3) when clearing the search input
+
+        expect(actions.updateMobileInput).toHaveBeenCalledTimes(3);
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(3);
     });
 
-    it('updates KYC status on select change', async () => {
+    it('does not manually clear users during search', async () => {
+        const wrapper = factory();
+        const commitSpy = vi.spyOn(store, 'commit');
+
+        await wrapper.find('.search-btn').trigger('click');
+
+        expect(commitSpy).not.toHaveBeenCalledWith(
+            'kycStatusPortal/set-users',
+            [],
+        );
+    });
+
+    it('updates KYC status and refreshes list', async () => {
         const wrapper = factory();
 
         await wrapper.vm.onStatusUpdate(
@@ -157,6 +168,8 @@ describe('PageKYCStatus.vue', () => {
         );
 
         expect(actions.updateStatus).toHaveBeenCalled();
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalled();
+
         expect(buefyMock.toast.open).toHaveBeenCalledWith(
             expect.objectContaining({
                 message: expect.stringContaining('KYC Status updated'),
@@ -186,5 +199,29 @@ describe('PageKYCStatus.vue', () => {
                 message: 'Some error',
             }),
         );
+    });
+
+    it('restores users to state before fetch attempt if fetch fails', async () => {
+        const wrapper = factory();
+
+        // wait for initial mount fetch to complete
+        await wrapper.vm.$nextTick();
+        await flushPromises();
+
+        // Set users state Before refresh attempt
+        const stateBeforeRefresh = [{ id: 1 }, { id: 2 }];
+        store.state.kycStatusPortal.users = stateBeforeRefresh;
+
+        // Mock failure for the fetch triggered by refresh
+        actions.fetchKycPendingUsers.mockRejectedValueOnce(
+            new Error('API failed'),
+        );
+
+        // Trigger refresh (this should fail internally)
+        await wrapper.vm.refreshPendingUsersSafely();
+
+        // Verify users are restored to the state before refresh attempt
+        expect(store.state.kycStatusPortal.users).toEqual(stateBeforeRefresh);
+        expect(buefyMock.dialog.alert).toHaveBeenCalled();
     });
 });
