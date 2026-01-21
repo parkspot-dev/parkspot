@@ -212,7 +212,7 @@ describe('PageKYCStatus.vue', () => {
             new Error('API failed'),
         );
 
-        // simulate state chnge before refresh
+        // simulate state change before refresh
         const modifiedUsers = [{ id: 999 }];
         store.state.kycStatusPortal.users = modifiedUsers;
 
