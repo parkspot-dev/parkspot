@@ -13,6 +13,7 @@ vi.mock("@/constant/enums", () => ({
             1: 'Registered',
             2: 'Processing',
             4: 'Verified',
+            8: 'Duplicate,'
         };
         return map[id] || 'Not Set';
     },
@@ -238,4 +239,37 @@ describe('PageSpotRequest.vue', () => {
 
         expect(buefyMock.dialog.alert).toHaveBeenCalled();
     });
+
+    it('handles Duplicate status correctly in summary', () => {
+        wrapper = factory();
+
+        const data = [{ Status: 1 }, { Status: 8 }, { Status: 8 }];
+
+        wrapper.vm.updateSummary(data);
+
+        expect(wrapper.vm.summary.status[1]).toBe(1);
+        expect(wrapper.vm.summary.status[8]).toBe(2);
+    });
+
+    it('updates status to Duplicate successfully', async () => {
+        wrapper = factory();
+        const row = { ID: 1, Status: 1 };
+
+        await wrapper.vm.onStatusUpdate(row, 'Duplicate');
+
+        expect(updateStatus).toHaveBeenCalledWith(
+            expect.any(Object),
+            expect.objectContaining({
+                Status: 8,
+            }),
+        );
+
+
+        expect(buefyMock.toast.open).toHaveBeenCalledWith(
+            expect.objectContaining({
+                message: expect.stringContaining('Duplicate'),
+            }),
+        );
+    });
+
 });
