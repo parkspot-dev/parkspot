@@ -9,7 +9,10 @@
             ></ImageGallery>
             <!-- Rate Card Organism -->
             <div class="rate-card-container">
-                <SpotRateCard class="card-position"></SpotRateCard>
+                <SpotRateCard
+                    class="card-position"
+                    @open-booking-modal="openBookingModal"
+                ></SpotRateCard>
             </div>
             <div class="spot-detail-main-description">
                 <div class="title-container">
@@ -177,16 +180,12 @@
                                 </AtomButton>
                             </div>
                             <div v-if="isAvailable" class="goto-btn">
-                                <AtomButton
-                                    @click="changeAvailability(-1)"
-                                >
+                                <AtomButton @click="changeAvailability(-1)">
                                     Mark Rented
                                 </AtomButton>
                             </div>
                             <div v-if="!isAvailable" class="goto-btn">
-                                <AtomButton
-                                    @click="changeAvailability(1)"
-                                >
+                                <AtomButton @click="changeAvailability(1)">
                                     Mark Available
                                 </AtomButton>
                             </div>
@@ -213,9 +212,7 @@
                                     <td>
                                         <a
                                             :href="
-                                                getBookingDetailURL(
-                                                    booking.ID,
-                                                )
+                                                getBookingDetailURL(booking.ID)
                                             "
                                             target="_blank"
                                         >
@@ -258,6 +255,12 @@
                 <hr style="width: 100%; margin-top: 80px" />
             </div>
         </div>
+        <BookingModal
+            v-if="showBookingModal"
+            :initial-data="prefilledData"
+            @close="showBookingModal = false"
+            @submitted="handleBookingSubmit"
+        />
     </BodyWrapper>
 </template>
 
@@ -269,6 +272,7 @@ import ImageGallery from '../organisms/OrganismImageGallery.vue';
 import InfographicSteps from '../molecules/MoleculeInfographicSteps.vue';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
+import BookingModal from '@/components/organisms/OrganismBookingModal.vue';
 import {
     BookingStatus,
     getBookingStatusLabel,
@@ -288,6 +292,7 @@ export default {
         AtomButton,
         AtomDatePicker,
         AtomTextarea,
+        BookingModal,
     },
     props: {
         isAdmin: {
@@ -295,10 +300,16 @@ export default {
             default: false,
         },
     },
-    emits: ['goToSearchPortal', 'changeAvailability', 'changeLastCallDate', 'changeRemark'],
+    emits: [
+        'goToSearchPortal',
+        'changeAvailability',
+        'changeLastCallDate',
+        'changeRemark',
+    ],
     data() {
         return {
             BookingStatus: BookingStatus,
+            showBookingModal: false,
         };
     },
     computed: {
@@ -327,6 +338,21 @@ export default {
                 return [];
             }
         },
+        isLoggedIn() {
+            return !!this.$store.state.user.user;
+        },
+        userProfile() {
+            return this.$store.state.user.userProfile;
+        },
+        prefilledData() {
+            if (!this.isLoggedIn) return {};
+
+            return {
+                fullName: this.userProfile.FullName,
+                email: this.userProfile.EmailID,
+                mobile: this.userProfile.Mobile,
+            };
+        },
     },
     methods: {
         goToInterestedVO(latLng) {
@@ -349,6 +375,37 @@ export default {
         },
         getBookingStatusLabel(bookingStatus) {
             return getBookingStatusLabel(bookingStatus);
+        },
+        async handleBookingSubmit(payload) {
+            if (this.isLoggedIn) {
+                this.$router.push('/profile/my-bookings?tab=Request');
+                this.$buefy.toast.open({
+                    message: 'We will get back to you in 12 hrs',
+                    type: 'is-success',
+                    duration: 3000,
+                    position: 'is-top',
+                });
+            } else {
+                this.$buefy.toast.open({
+                    message: 'We will get back to you in 12 hrs',
+                    type: 'is-success',
+                    duration: 3000,
+                    position: 'is-top',
+                });
+            }
+        },
+        openBookingModal() {
+            if (this.isLoggedIn && !this.userProfile.EmailID) {
+                const unwatch = this.$watch('userProfile.EmailID', (val) => {
+                    if (val) {
+                        this.showBookingModal = true;
+                        unwatch();
+                    }
+                });
+                return;
+            }
+
+            this.showBookingModal = true;
         },
     },
 };
