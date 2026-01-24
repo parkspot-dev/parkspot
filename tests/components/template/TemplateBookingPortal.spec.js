@@ -279,7 +279,10 @@ describe('TemplateBookingPortal.vue', () => {
 
         store.state.bookingPortal.bookingDetails = {
             ...bookingDetailsMock,
-            Payments: paymentsMock,
+            Booking: {
+                ...bookingDetailsMock.Booking,
+                Payments: paymentsMock,
+            },
         };
 
         await wrapper.vm.$nextTick();
