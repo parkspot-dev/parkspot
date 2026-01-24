@@ -475,21 +475,25 @@
                         <p>
                             <span
                                 v-if="
-                                    currBookingDetails.Booking.VOKYCStatus ===
+                                    currBookingDetails.Booking.VOKYCStatus !==
                                     KYCStatus.NotSet
                                 "
-                            ></span>
-                            <a
-                                v-else
-                                :href="kycStatusUrl"
-                                target="_blank"
-                                class="kyc-link"
+                                class="kyc-status-text"
                             >
                                 {{
                                     getKYCStatusLabel(
                                         currBookingDetails.Booking.VOKYCStatus,
-                                    ) || 'View KYC'
+                                    )
                                 }}
+                            </span>
+
+                            <a
+                                v-if="kycStatusUrl !== '#'"
+                                :href="kycStatusUrl"
+                                target="_blank"
+                                class="kyc-link"
+                            >
+                                View Details
                             </a>
                         </p>
                     </div>
@@ -1105,6 +1109,9 @@ export default {
 
         p {
             margin-bottom: 16px;
+            min-height: 22px;
+            display: flex;
+            align-items: center;
         }
     }
 
@@ -1114,6 +1121,9 @@ export default {
 
         p {
             margin-bottom: 16px;
+            min-height: 22px;
+            display: flex;
+            align-items: center;
         }
     }
 
@@ -1238,5 +1248,26 @@ export default {
 
 .disabled * {
     fill: var(--parkspot-grey) !important;
+}
+.field-col p,
+.value-col p,
+.value-col div {
+    min-height: 20px;
+}
+
+.kyc-row {
+    display: flex;
+    align-items: center;
+    min-height: 20px; 
+}
+
+.kyc-status-text {
+    font-weight: 600;
+    margin-right: 12px;
+    line-height: 1.2;
+}
+
+.kyc-link {
+    text-decoration: none;
 }
 </style>
