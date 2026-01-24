@@ -488,12 +488,15 @@
                             </span>
 
                             <a
-                                v-if="kycStatusUrl !== '#'"
+                                v-if="
+                                    currBookingDetails.Booking.VOKYCStatus &&
+                                    kycStatusUrl !== '#'
+                                "
                                 :href="kycStatusUrl"
                                 target="_blank"
                                 class="kyc-link"
                             >
-                                View Details
+                                View KYC
                             </a>
                         </p>
                     </div>
@@ -1258,7 +1261,7 @@ export default {
 .kyc-row {
     display: flex;
     align-items: center;
-    min-height: 20px; 
+    min-height: 20px;
 }
 
 .kyc-status-text {
