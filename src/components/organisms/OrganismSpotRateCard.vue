@@ -77,6 +77,7 @@ export default {
         AtomTooltip,
         AtomIcon,
     },
+    emits: ['open-booking-modal'],
     data() {
         return {
             ICON,
@@ -103,7 +104,8 @@ export default {
     },
     methods: {
         onContact() {
-            this.$router.push({ name: 'contactUs' });
+            console.log('Book clicked');
+            this.$emit('open-booking-modal');
         },
     },
 };
