@@ -11,7 +11,6 @@ describe('PageHome.vue', () => {
     const updateContact = vi.fn();
     const push = vi.fn();
     const toastOpen = vi.fn();
-
     beforeEach(() => {
         vi.clearAllMocks();
 
@@ -121,7 +120,6 @@ describe('PageHome.vue', () => {
 
     it('sets loading state during form submission', async () => {
         let resolvePromise;
-
         onlyContact.mockImplementationOnce(
             () =>
                 new Promise((resolve) => {
@@ -129,23 +127,18 @@ describe('PageHome.vue', () => {
                 }),
         );
 
-        wrapper.vm.handleSubmit();
+        wrapper.find('[data-testid="form"]').trigger('submit');
         await wrapper.vm.$nextTick();
-
         expect(wrapper.vm.isLoading).toBe(true);
-
         resolvePromise();
         await flushPromises();
-
         expect(wrapper.vm.isLoading).toBe(false);
     });
 
     it('handles contact form failure', async () => {
         onlyContact.mockRejectedValueOnce(new Error('fail'));
-
         await wrapper.find('[data-testid="form"]').trigger('submit');
         await flushPromises();
-
         expect(toastOpen).toHaveBeenCalledWith(
             expect.objectContaining({
                 type: 'is-danger',
