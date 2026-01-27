@@ -181,7 +181,9 @@ describe('TemplateBookingPortal.vue', () => {
         await wrapper.vm.enableEdit('Rent Details');
         await wrapper.vm.saveField();
 
-        expect(wrapper.vm.rentValidationError).toBe('Rent must be greater than zero');
+        expect(wrapper.vm.rentValidationError).toBe(
+            'Rent must be greater than zero',
+        );
     });
 
     it('does not emit update-booking-details if rent validation fails', async () => {
@@ -279,7 +281,10 @@ describe('TemplateBookingPortal.vue', () => {
 
         store.state.bookingPortal.bookingDetails = {
             ...bookingDetailsMock,
-            Payments: paymentsMock,
+            Booking: {
+                ...bookingDetailsMock.Booking,
+                Payments: paymentsMock,
+            },
         };
 
         await wrapper.vm.$nextTick();
@@ -330,7 +335,9 @@ describe('TemplateBookingPortal.vue', () => {
         wrapper.vm.currBookingDetails.Booking.BaseAmount = 200;
 
         wrapper.vm.validateSOChargesInput();
-        expect(wrapper.vm.soChargesValidationError).toBe('SO Charges cannot be greater than Rent amount');
+        expect(wrapper.vm.soChargesValidationError).toBe(
+            'SO Charges cannot be greater than Rent amount',
+        );
 
         wrapper.vm.currBookingDetails.Booking.BaseAmount = 50;
         wrapper.vm.validateSOChargesInput();
@@ -402,13 +409,16 @@ describe('TemplateBookingPortal.vue', () => {
     });
 
     it('renders span instead of KYC link when KYC status is NotSet', async () => {
-        store.state.bookingPortal.bookingDetails = {
-            ...bookingDetailsMock,
-            Booking: {
-                ...bookingDetailsMock.Booking,
-                VOKYCStatus: KYCStatus.NotSet,
+        await wrapper.setData({
+            currBookingDetails: {
+                ...wrapper.vm.currBookingDetails,
+                Booking: {
+                    ...wrapper.vm.currBookingDetails.Booking,
+                    VOKYCStatus: KYCStatus.NotSet,
+                    Mobile: '',
+                },
             },
-        };
+        });
 
         await wrapper.vm.$nextTick();
 
