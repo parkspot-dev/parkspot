@@ -409,13 +409,16 @@ describe('TemplateBookingPortal.vue', () => {
     });
 
     it('renders span instead of KYC link when KYC status is NotSet', async () => {
-        store.state.bookingPortal.bookingDetails = {
-            ...bookingDetailsMock,
-            Booking: {
-                ...bookingDetailsMock.Booking,
-                VOKYCStatus: KYCStatus.NotSet,
+        await wrapper.setData({
+            currBookingDetails: {
+                ...wrapper.vm.currBookingDetails,
+                Booking: {
+                    ...wrapper.vm.currBookingDetails.Booking,
+                    VOKYCStatus: KYCStatus.NotSet,
+                    Mobile: '',
+                },
             },
-        };
+        });
 
         await wrapper.vm.$nextTick();
 

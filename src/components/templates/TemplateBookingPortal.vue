@@ -473,13 +473,7 @@
                             {{ currBookingDetails.Booking.EmailID }}
                         </p>
                         <p>
-                            <span
-                                v-if="
-                                    currBookingDetails.Booking.VOKYCStatus !==
-                                    KYCStatus.NotSet
-                                "
-                                class="kyc-status-text"
-                            >
+                            <span class="kyc-status-text">
                                 {{
                                     getKYCStatusLabel(
                                         currBookingDetails.Booking.VOKYCStatus,
@@ -489,8 +483,8 @@
 
                             <a
                                 v-if="
-                                    currBookingDetails.Booking.VOKYCStatus &&
-                                    kycStatusUrl !== '#'
+                                    currBookingDetails.Booking.VOKYCStatus !==
+                                        KYCStatus.NotSet && kycStatusUrl !== '#'
                                 "
                                 :href="kycStatusUrl"
                                 target="_blank"
