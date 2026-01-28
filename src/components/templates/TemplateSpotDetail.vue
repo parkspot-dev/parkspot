@@ -69,7 +69,8 @@
                     :spot-details="selectedSpot[0]"
                     :zoom="13"
                     class="sdp-map"
-                ></MapContainer>
+                >
+                </MapContainer>
             </div>
 
             <hr style="width: 100%" />
@@ -85,7 +86,7 @@
 
             <!-- only for agents -->
             <div class="only-to-agent">
-                <div v-if="ownerInfoDetails.UserName" class="spot-detail-owner">
+                <div class="spot-detail-owner">
                     <hr style="width: 100%" />
                     <h2>Owner Info Details</h2>
                     <div class="spot-detail-owner-body">
@@ -161,6 +162,20 @@
                                     <td>UserName</td>
                                     <td>{{ ownerInfoDetails.UserName }}</td>
                                 </tr>
+                                <tr v-if="true" >
+                                    <td>Image Uploads</td>
+                                    <td>
+                                        <div class="form-field">
+                                            <ImageUpload
+                                                v-model:images="updatedImages"
+                                            />
+                                        </div>
+
+                                        <button @click="saveImages">
+                                            Save Images
+                                        </button>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                         <div class="btn-group">
@@ -177,16 +192,12 @@
                                 </AtomButton>
                             </div>
                             <div v-if="isAvailable" class="goto-btn">
-                                <AtomButton
-                                    @click="changeAvailability(-1)"
-                                >
+                                <AtomButton @click="changeAvailability(-1)">
                                     Mark Rented
                                 </AtomButton>
                             </div>
                             <div v-if="!isAvailable" class="goto-btn">
-                                <AtomButton
-                                    @click="changeAvailability(1)"
-                                >
+                                <AtomButton @click="changeAvailability(1)">
                                     Mark Available
                                 </AtomButton>
                             </div>
@@ -213,9 +224,7 @@
                                     <td>
                                         <a
                                             :href="
-                                                getBookingDetailURL(
-                                                    booking.ID,
-                                                )
+                                                getBookingDetailURL(booking.ID)
                                             "
                                             target="_blank"
                                         >
@@ -274,8 +283,10 @@ import {
     getBookingStatusLabel,
     getKYCStatusLabel,
 } from '@/constant/enums';
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
+import ImageUpload from '../global/ImageUpload.vue';
+import ImageUploadService from '@/services/ImageUploadService';
 
 export default {
     name: 'TemplateSpotDetail',
@@ -288,6 +299,7 @@ export default {
         AtomButton,
         AtomDatePicker,
         AtomTextarea,
+        ImageUpload,
     },
     props: {
         isAdmin: {
@@ -295,11 +307,34 @@ export default {
             default: false,
         },
     },
-    emits: ['goToSearchPortal', 'changeAvailability', 'changeLastCallDate', 'changeRemark'],
+    emits: [
+        'goToSearchPortal',
+        'changeAvailability',
+        'changeLastCallDate',
+        'changeRemark',
+    ],
     data() {
         return {
             BookingStatus: BookingStatus,
+            updatedImages: [],
         };
+    },
+    watch: {
+        images: {
+            immediate: true,
+            deep: true,
+            handler(newImages) {
+                if (!newImages || !newImages.length) return;
+
+                // map backend images → ImageUpload format
+                this.updatedImages = newImages.map((img) => ({
+                    id: img.SiteImageID,
+                    preview: img.ImageURL,
+                    file: null,
+                    isNew: false,
+                }));
+            },
+        },
     },
     computed: {
         ...mapState('sdp', [
@@ -329,6 +364,7 @@ export default {
         },
     },
     methods: {
+        ...mapActions('sdp', ['updateImages']),
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
@@ -349,6 +385,10 @@ export default {
         },
         getBookingStatusLabel(bookingStatus) {
             return getBookingStatusLabel(bookingStatus);
+        },
+        saveImages() {
+            
+            this.updateImages(this.updatedImages);
         },
     },
 };

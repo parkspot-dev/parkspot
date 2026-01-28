@@ -748,6 +748,8 @@ export default {
                     }
                 }
             });
+
+            console.log("Updated fields", updatedFields);
             this.setUpdatedFields(Array.from(updatedFields));
             this.saveForm().then((response) => {
                 if (!response.ErrorCode) this.updateInitialFormState();
