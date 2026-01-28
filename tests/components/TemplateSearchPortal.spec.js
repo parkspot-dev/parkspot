@@ -72,18 +72,18 @@ describe('TemplateSearchPortal.vue', () => {
             global: {
                 plugins: [store],
                 stubs: {
-                    AtomButton: {
+                    'AtomButton': {
                         template:
                             '<button class="atom-button" @click="$emit(\'click\')"><slot /></button>',
                     },
-                    AtomIcon: true,
-                    AtomInput: true,
-                    AtomTextarea: true,
-                    AtomDatePicker: true,
-                    AtomSelectInput: true,
-                    SelectInput: true,
-                    FilterDropdown: true,
-                    MobileView: true,
+                    'AtomIcon': true,
+                    'AtomInput': true,
+                    'AtomTextarea': true,
+                    'AtomDatePicker': true,
+                    'AtomSelectInput': true,
+                    'SelectInput': true,
+                    'FilterDropdown': true,
+                    'MobileView': true,
                     'b-table': {
                         template: '<div><slot /></div>',
                     },
@@ -147,7 +147,7 @@ describe('TemplateSearchPortal.vue', () => {
     });
 
     it('applies expiring filter when banner is clicked', async () => {
-        wrapper.vm.handleExpiringRequests();
+        await wrapper.vm.handleExpiringRequests();
         await flushPromises();
 
         expect(resetFilterParkingRequests).toHaveBeenCalled();
@@ -235,10 +235,7 @@ describe('TemplateSearchPortal.vue', () => {
     });
 
     it('updates latitude and longitude correctly', async () => {
-        wrapper.vm.updateLatLng(
-            parkingRequests[0],
-            '28.700000,77.300000',
-        );
+        wrapper.vm.updateLatLng(parkingRequests[0], '28.700000,77.300000');
         await flushPromises();
 
         const payload = wrapper.emitted('updateRequest').at(-1)[0];
@@ -266,14 +263,15 @@ describe('TemplateSearchPortal.vue', () => {
         expect(wrapper.vm.isOpen).toBe(true);
         expect(wrapper.vm.selectedRow.ID).toBe(1);
     });
-
     it('switches desktop and mobile view correctly', async () => {
-        wrapper.vm.windowWidth = 1200;
-        wrapper.vm.isMobileDevice = false;
-        await flushPromises();
+        await wrapper.setData({
+            windowWidth: 1200,
+            isMobileDevice: false,
+        });
         expect(wrapper.vm.isDesktopView).toBe(true);
-        wrapper.vm.windowWidth = 500;
-        await flushPromises();
+        await wrapper.setData({
+            windowWidth: 500,
+        });
         expect(wrapper.vm.isDesktopView).toBe(false);
     });
 
