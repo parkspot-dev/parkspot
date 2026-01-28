@@ -46,6 +46,16 @@ export default {
     props: {
         isShow: Boolean,
     },
+    computed: {
+        showModal: {
+            get() {
+                return this.$store.state.user.loginModal;
+            },
+            set(value) {
+                this.$store.commit('user/update-login-Modal', value);
+            },
+        },
+    },
     methods: {
         ...mapMutations('user', {
             updateLoginModal: 'update-login-Modal',
@@ -60,16 +70,6 @@ export default {
 
         login() {
             this.loginWithGoogle();
-        },
-    },
-    computed: {
-        showModal: {
-            get() {
-                return this.$store.state.user.loginModal;
-            },
-            set(value) {
-                this.$store.commit('user/update-login-Modal', value);
-            },
         },
     },
 };

@@ -38,7 +38,7 @@ import BookingDetails from '@/components/my-bookings/BookingDetails.vue';
 import { mapActions, mapState } from 'vuex';
 
 export default {
-    name: 'PageMyBooking',
+    name: 'PageMyBookings',
     components: { BookingSidebar, BookingDetails },
 
     data() {
@@ -61,6 +61,13 @@ export default {
         ]),
     },
 
+    mounted() {
+        this.fetchUserBookings().then(() => {
+            this.restoreSelectionFromUrl();
+            this.onTabChange(this.activeTab);
+        });
+    },
+    
     methods: {
         ...mapActions('myBookings', ['fetchUserBookings']),
         onSelectBooking(booking) {
@@ -133,13 +140,6 @@ export default {
                 list.find((b) => b.BookingID == bookingId) || list[0];
             this.selectedBooking = booking;
         },
-    },
-
-    mounted() {
-        this.fetchUserBookings().then(() => {
-            this.restoreSelectionFromUrl();
-            this.onTabChange(this.activeTab);
-        });
     },
 };
 </script>

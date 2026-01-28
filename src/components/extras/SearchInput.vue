@@ -13,7 +13,7 @@
                 :open-on-focus="true"
                 @typing="getAsyncData"
                 @select="onSelect"
-                @click.native="addRecentSearches()"
+                @click="addRecentSearches()"
             >
                 <template #default="props">
                     <div class="media">
@@ -59,6 +59,7 @@ export default {
          */
         label: {
             type: String,
+            default : '',
         },
     },
     emits: ['changed'],

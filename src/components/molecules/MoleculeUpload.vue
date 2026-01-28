@@ -21,6 +21,7 @@ export default {
             default: 'field',
         },
     },
+    emits: ['data'],
     methods: {
         async handleUpload(data) {
             const { valid } = await this.$refs.provider.validate(data);

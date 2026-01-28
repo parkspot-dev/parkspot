@@ -5,7 +5,7 @@
             <AtomInput
                 v-model="searchModel"
                 :placeholder="placeholder"
-                @keyup.native.enter="emitSearchEvent"
+                @keyup.enter="emitSearchEvent"
             >
             </AtomInput>
             <span
@@ -19,7 +19,7 @@
         <AtomButton
             class="search-button"
             left="magnify"
-            @click.native="emitSearchEvent"
+            @click="emitSearchEvent"
             >Search
         </AtomButton>
     </div>
@@ -42,6 +42,7 @@ export default {
             default: '',
         },
     },
+    emits: ['on-search','clear-input'],
     data() {
         return {
             searchModel: this.initialValue,

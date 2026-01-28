@@ -60,6 +60,7 @@ export default {
             default: 4,
         },
     },
+    emits : ['update:images'],
     data() {
         return {
             // Structure of each uploaded image object:
@@ -177,7 +178,7 @@ export default {
                     this.isLoading = true;
                     try {
                         file = await ImageUploadService.convertHEICtoJPEG(file);
-                    } catch (error) {
+                    } catch{
                         this.showDangerToast(
                             'Unable to upload file. Please try again',
                         );

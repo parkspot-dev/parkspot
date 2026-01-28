@@ -62,7 +62,7 @@
                 </div>
             </div>
         </BodyWrapper>
-        <Whats_Next :steps="What_Next" />
+        <WhatsNext :steps="What_Next" />
         <TestimonialSection />
     </div>
 </template>
@@ -74,7 +74,7 @@ import BodyWrapper from '../extras/BodyWrapper.vue';
 import ParkingRequestForm from '../vo-portal/ParkingRequestForm.vue';
 import SearchComponent from '../vo-portal/SearchComponent.vue';
 import TestimonialSection from '../global/TestimonialSection.vue';
-import Whats_Next from '../global/Whats_Next.vue';
+import WhatsNext from '../global/Whats_Next.vue';
 import { WHAT_NEXT_VO } from '../../constant/constant';
 import { JOINING_BENEFITS_VO } from '../../constant/constant';
 
@@ -87,14 +87,14 @@ export default {
         ParkingRequestForm,
         SearchComponent,
         TestimonialSection,
-        Whats_Next,
+        WhatsNext,
     },
     emits: ['submit'],
     data() {
         return {
             headingLevel: 'h6',
             JOINING_BENEFITS: JOINING_BENEFITS_VO,
-            What_Next: WHAT_NEXT_VO,
+            WhatsNext: WHAT_NEXT_VO,
         };
     },
     methods: {

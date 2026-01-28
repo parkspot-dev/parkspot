@@ -45,15 +45,15 @@ export default {
         },
     },
     emits: ['homeBtn'],
-    computed: {
-        ...mapState('config', ['helplineNumber', 'helplineRef']),
-    },
     data() {
         return {
             img: '/assets/thankyou.svg',
             imgName: 'Thank You',
             imgRatio: '1by1',
         };
+    },
+    computed: {
+        ...mapState('config', ['helplineNumber', 'helplineRef']),
     },
     methods: {
         homeBtn() {

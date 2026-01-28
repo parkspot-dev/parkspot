@@ -12,7 +12,7 @@
             </div>
             <div v-if="isSummary" class="summary">
                 <div class="so-btn">
-                    <AtomButton @click.native="showSummary">
+                    <AtomButton @click="showSummary">
                         {{ summary.btn }} Summary
                     </AtomButton>
                 </div>
@@ -22,7 +22,7 @@
                         <AtomIcon
                             :icon="'close'"
                             size=""
-                            @click.native="showSummary"
+                            @click="showSummary"
                         />
                     </span>
                     <div class="summary-layout">
@@ -162,12 +162,12 @@
                 centered
                 sortable
             >
-                <template #searchable="{ filters }">
+                <template #searchable="{ filters: filter }">
                     <AtomDatePicker
-                        :assigned-date="filters.UpdatedAt"
+                        :assigned-date="filter.UpdatedAt"
                         placeholder="Filter by Updated Date"
                         @changed="
-                            (date) => (filters.UpdatedAt = formatDate(date))
+                            (date) => (filter.UpdatedAt = formatDate(date))
                         "
                     />
                 </template>
@@ -561,6 +561,7 @@ export default {
     props: {
         parkingRequests: {
             type: Array,
+            default: () => [],
         },
         isLoading: {
             type: Boolean,
@@ -571,74 +572,6 @@ export default {
         },
     },
     emits: ['updateRequest', 'toSrp'],
-    computed: {
-        ...mapState('searchPortal', [
-            'agentList',
-            'expiringRequestsCount',
-            'filteredParkingRequests',
-        ]),
-        ...mapState('user', ['userProfile', 'isAdmin']),
-        isDesktopView() {
-            if (this.isMobileDevice) {
-                return false;
-            }
-            return this.windowWidth > 768 || this.forceDesktop;
-        },
-    },
-
-    watch: {
-        parkingRequests(newRequests) {
-            this.updateSummary(newRequests);
-
-            if (this.$route.query[this.QUERY_PARAMS.IS_EXPIRING]) {
-                this.extractExpiringRequests();
-                this.filters.isExpiring = true;
-            }
-
-            if (this.$route.query[this.QUERY_PARAMS.AGENT]) {
-                const agentName = this.$route.query['agent'];
-                this.filters.Agent = agentName;
-                this.extractRequetsByAgentName(agentName);
-            }
-            if (this.$route.query[this.QUERY_PARAMS.STATUS]) {
-                const statusId = parseInt(this.$route.query['status']);
-                const statusRow = this.statusList.find(
-                    (item) => item.id === statusId,
-                );
-                this.filters.Status = statusRow.name;
-                if (statusRow) {
-                    this.extractRequetsByStatus(statusRow.id);
-                }
-            }
-        },
-    },
-    mounted() {
-        if (this.userProfile && !this.isAdmin) {
-            // If not an admin then agentList will only contain 'NA' and user Fullname
-            const agents = [{ id: 0, FullName: this.userProfile?.FullName }];
-            this.setAgents(agents);
-        }
-
-        if (this.parkingRequests && this.parkingRequests.length > 0) {
-            this.updateSummary(this.parkingRequests);
-        }
-
-        if (typeof window !== 'undefined') {
-            this.windowWidth = window.innerWidth;
-            window.addEventListener('resize', this.updateWidth);
-
-            const ua = navigator.userAgent.toLowerCase();
-            this.isMobileDevice =
-                ua.includes('android') || ua.includes('iphone');
-        }
-    },
-
-    beforeUnmount() {
-        if (typeof window !== 'undefined') {
-            window.removeEventListener('resize', this.updateWidth);
-        }
-    },
-
     data() {
         return {
             // filters were declared explicitly to use in v-model else they have no use
@@ -684,7 +617,6 @@ export default {
                 status: [0, 0, 0, 0, 0, 0],
                 today: 0,
                 yesterday: 0,
-                agent: {},
             },
             showSecondaryDetails: {
                 ID: 0,
@@ -708,14 +640,83 @@ export default {
             },
         };
     },
+    computed: {
+        ...mapState('searchPortal', [
+            'agentList',
+            'expiringRequestsCount',
+            'filteredParkingRequests',
+        ]),
+        ...mapState('user', ['userProfile', 'isAdmin']),
+        isDesktopView() {
+            if (this.isMobileDevice) {
+                return false;
+            }
+            return this.windowWidth > 768 || this.forceDesktop;
+        },
+    },
+
+    watch: {
+        parkingRequests(newRequests) {
+            this.updateSummary(newRequests);
+
+            if (this.$route.query[this.QUERY_PARAMS.IS_EXPIRING]) {
+                this.extractExpiringRequests();
+                this.filters.isExpiring = true;
+            }
+
+            if (this.$route.query[this.QUERY_PARAMS.AGENT]) {
+                const agentName = this.$route.query['agent'];
+                this.filters.Agent = agentName;
+                this.extractRequestsByAgentName(agentName);
+            }
+            if (this.$route.query[this.QUERY_PARAMS.STATUS]) {
+                const statusId = parseInt(this.$route.query['status']);
+                const statusRow = this.statusList.find(
+                    (item) => item.id === statusId,
+                );
+                this.filters.Status = statusRow.name;
+                if (statusRow) {
+                    this.extractRequestsByStatus(statusRow.id);
+                }
+            }
+        },
+    },
+    mounted() {
+        if (this.userProfile && !this.isAdmin) {
+            // If not an admin then agentList will only contain 'NA' and user Fullname
+            const agents = [{ id: 0, FullName: this.userProfile?.FullName }];
+            this.setAgents(agents);
+        }
+
+        if (this.parkingRequests && this.parkingRequests.length > 0) {
+            this.updateSummary(this.parkingRequests);
+        }
+
+        if (typeof window !== 'undefined') {
+            this.windowWidth = window.innerWidth;
+            window.addEventListener('resize', this.updateWidth);
+
+            const ua = navigator.userAgent.toLowerCase();
+            this.isMobileDevice =
+                ua.includes('android') || ua.includes('iphone');
+        }
+    },
+
+    beforeUnmount() {
+        if (typeof window !== 'undefined') {
+            window.removeEventListener('resize', this.updateWidth);
+        }
+    },
+
+    
     methods: {
         ...mapActions('searchPortal', [
             'getAgents',
             'setAgents',
             'extractExpiringRequests',
             'resetFilterParkingRequests',
-            'extractRequetsByAgentName',
-            'extractRequetsByStatus',
+            'extractRequestsByAgentName',
+            'extractRequestsByStatus',
         ]),
 
         applyFilters() {
@@ -730,12 +731,12 @@ export default {
                     (item) => item.name === this.filters.Status,
                 );
                 if (statusRow) {
-                    this.extractRequetsByStatus(statusRow.id);
+                    this.extractRequestsByStatus(statusRow.id);
                 }
             }
 
             if (this.filters.Agent) {
-                this.extractRequetsByAgentName(this.filters.Agent);
+                this.extractRequestsByAgentName(this.filters.Agent);
             }
         },
 

@@ -450,7 +450,7 @@
                     class="btn"
                     :class="{ 'btn-disabled': !isFormModified }"
                     :disabled="!isFormModified"
-                    @click.native="openModal('Save')"
+                    @click="openModal('Save')"
                 >
                     Save
                 </AtomButton>
@@ -467,7 +467,7 @@
                         Booking.spotrequestStatus !==
                             spotRequestStatusOptions.Verified
                     "
-                    @click.native="openModal('Promote')"
+                    @click="openModal('Promote')"
                 >
                     Promote
                 </AtomButton>
@@ -483,10 +483,10 @@
                 }}</AtomHeading>
                 <p>{{ modalContent.message }}</p>
                 <div class="modal-actions">
-                    <AtomButton class="btn" @click.native="confirmAction">
+                    <AtomButton class="btn" @click="confirmAction">
                         {{ modalContent.action }}
                     </AtomButton>
-                    <AtomButton class="btn" @click.native="closeModal">
+                    <AtomButton class="btn" @click="closeModal">
                         Cancel
                     </AtomButton>
                 </div>
@@ -512,9 +512,9 @@ import { RentUnit } from '../constant/enums';
 import { SiteType } from '../constant/enums';
 import { SpotRequestStatus } from '../constant/enums';
 import AtomButton from '../components/atoms/AtomButton.vue';
-import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
+// import AtomDatePicker from '@/components/atoms/AtomDatePicker.vue';
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
-import AtomIcon from '@/components/atoms/AtomIcon.vue';
+// import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import ImageGallery from '@/components/organisms/OrganismImageGallery.vue';
 import ImageUpload from '@/components/global/ImageUpload.vue';
 import ImageUploadService from '@/services/ImageUploadService';
@@ -525,9 +525,7 @@ export default {
     name: 'ReviewSpot',
     components: {
         AtomButton,
-        AtomDatePicker,
         AtomHeading,
-        AtomIcon,
         ImageGallery,
         ImageUpload,
         LoaderModal,
@@ -614,6 +612,34 @@ export default {
                 (img) => typeof img === 'string' && img.trim() !== '',
             );
         },
+    },
+    watch: {
+        SO(SODetails) {
+            if (SODetails.Facilities && SODetails.Facilities.length > 0) {
+                this.Facilities = SODetails.Facilities.map((facility) => {
+                    return facility.Name;
+                });
+            }
+            if (SODetails.mobile) {
+                this.fetchUsersSpotsAndSpotRequests({
+                    mobile: SODetails.mobile,
+                    spotId: SODetails.spotId,
+                });
+            }
+        },
+        status(newStatus) {
+            if (newStatus === 'error') {
+                this.alertError(this.statusMessage);
+            } else if (newStatus === 'success') {
+                this.alertSuccess(this.statusMessage);
+            }
+        },
+    },
+    mounted() {
+        this.setSpotId();
+        this.fetchSpotDetails().then(() => {
+            this.updateInitialFormState();
+        });
     },
     methods: {
         ...mapActions('reviewSpot', [
@@ -710,6 +736,7 @@ export default {
 
             ['SO', 'Rent', 'Booking'].forEach((section) => {
                 for (const key in this[section]) {
+                    if (!Object.prototype.hasOwnProperty.call(this[section], key)) continue;
                     const currentValue = this[section][key];
                     const initialValue = this.initialFormData[section][key];
                     // Convert to JSON strings for deep comparison
@@ -721,6 +748,8 @@ export default {
                     }
                 }
             });
+
+            console.log("Updated fields", updatedFields);
             this.setUpdatedFields(Array.from(updatedFields));
             this.saveForm().then((response) => {
                 if (!response.ErrorCode) this.updateInitialFormState();
@@ -831,34 +860,6 @@ export default {
         getSpotRequestStatusLabel(spotRequestStatus) {
             return getSpotRequestStatusLabel(spotRequestStatus);
         },
-    },
-    watch: {
-        SO(SODetails) {
-            if (SODetails.Facilities && SODetails.Facilities.length > 0) {
-                this.Facilities = SODetails.Facilities.map((facility) => {
-                    return facility.Name;
-                });
-            }
-            if (SODetails.mobile) {
-                this.fetchUsersSpotsAndSpotRequests({
-                    mobile: SODetails.mobile,
-                    spotId: SODetails.spotId,
-                });
-            }
-        },
-        status(newStatus) {
-            if (newStatus === 'error') {
-                this.alertError(this.statusMessage);
-            } else if (newStatus === 'success') {
-                this.alertSuccess(this.statusMessage);
-            }
-        },
-    },
-    mounted() {
-        this.setSpotId();
-        this.fetchSpotDetails().then(() => {
-            this.updateInitialFormState();
-        });
     },
 };
 </script>

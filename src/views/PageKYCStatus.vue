@@ -161,7 +161,7 @@
 <script>
 import { getKYCStatusLabel, KYCStatusLabel, KYCStatus } from '@/constant/enums';
 import { mapState, mapActions } from 'vuex';
-import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
+// import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import SelectInput from '@/components/global/SelectInput.vue';
 import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
@@ -169,7 +169,6 @@ import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
 export default {
     name: 'KYCStatusPage',
     components: {
-        AtomSelectInput,
         LoaderModal,
         MoleculeSearchBox,
         SelectInput,
@@ -192,8 +191,15 @@ export default {
             'searchMobile',
         ]),
     },
+    watch: {
+        hasError(error) {
+            if (error) {
+                this.alertError(this.errorMessage);
+            }
+        },
+    },
     mounted() {
-        this.fetchKycPendingUsers();
+        this.refreshPendingUsersSafely();
     },
     created() {
         const mobile = this.$route.query.mobile;
@@ -216,6 +222,19 @@ export default {
             return getKYCStatusLabel(spotRequestStatus);
         },
 
+        async refreshPendingUsersSafely() {
+            const previousUsers = [...this.users];
+
+            try {
+                await this.fetchKycPendingUsers();
+            } catch {
+                this.$store.commit('kycStatusPortal/set-users', previousUsers);
+                this.alertError(
+                    'Failed to fetch KYC users. Please try again.'
+                );
+            }
+        },
+
         alertError(msg) {
             this.$buefy.dialog.alert({
                 title: 'Error',
@@ -230,16 +249,23 @@ export default {
 
         async onStatusUpdate(row, newStatus) {
             const labelId = KYCStatus[newStatus];
-            if (labelId != null) {
-                row['KYCStatus'] = labelId;
+            if (labelId == null) {
+                this.alertError('Invalid status selected.');
+                return;
+            }
+
+            row['KYCStatus'] = labelId;
+
+            try {
                 await this.updateStatus({ userData: row });
+                await this.refreshPendingUsersSafely();
+
                 this.$buefy.toast.open({
                     message: `KYC Status updated to ${getKYCStatusLabel(labelId)}`,
                     type: 'is-success',
-                    duration: 3000,
                 });
-            } else {
-                this.alertError('Invalid status selected.');
+            } catch {
+                this.alertError('Failed to update KYC status.');
             }
         },
 
@@ -260,6 +286,9 @@ export default {
                 } else {
                     // Update Search Text with voMobile
                     this.updateMobileInput(sanitizeMobileNumber);
+
+                    await this.refreshPendingUsersSafely();
+
                     this.$router.push({
                         path: this.$route.path,
                         query: {
@@ -274,6 +303,7 @@ export default {
         async onClearMobileInput() {
             if (this.$route.query.mobile) {
                 this.updateMobileInput('');
+                await this.refreshPendingUsersSafely();
                 this.$router.push({
                     name: 'kyc-status',
                 });
@@ -299,13 +329,6 @@ export default {
         openImage(url) {
             this.selectedImage = url;
             this.showImageModal = true;
-        },
-    },
-    watch: {
-        hasError(error) {
-            if (error) {
-                this.alertError(this.errorMessage);
-            }
         },
     },
 };

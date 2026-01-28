@@ -4,7 +4,7 @@
             <h1>General Info</h1>
             <h2>Please fill all the fields</h2>
         </div>
-        <Form
+        <VeeForm
             :validation-schema="editProfileFormSchema"
             class="form-container"
             @submit="saveProfile"
@@ -36,20 +36,20 @@
             />
 
             <button class="send-button" type="submit">Save Profile</button>
-        </Form>
+        </VeeForm>
     </div>
 </template>
 
 <script>
 import { editProfileFormSchema } from '@/validationSchemas';
-import { Form } from 'vee-validate';
+import { Form as VeeForm } from 'vee-validate';
 import { mapActions, mapMutations, mapState } from 'vuex';
 import FormInput from '../global/FormInput.vue';
 import RadioInput from '../global/RadioInput.vue';
 export default {
     name: 'OrganismUserGeneralInfo',
     components: {
-        Form,
+        VeeForm,
         FormInput,
         RadioInput,
     },
@@ -106,7 +106,7 @@ export default {
                     type: 'is-success',
                     duration: 2000,
                 });
-            } catch (error) {
+            } catch {
                 this.$buefy.toast.open({
                     message: `Something went wrong!`,
                     type: 'is-danger',

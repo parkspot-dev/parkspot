@@ -12,6 +12,7 @@
             </div>
         </div>
         <div class="divider-line"></div>
+        <!-- eslint-disable-next-line vue/no-v-html -->
         <p class="testimonial-text" v-html="formattedQuote"></p>
         <a
             v-if="item.link"

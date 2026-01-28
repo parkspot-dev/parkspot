@@ -340,7 +340,7 @@ export const WHAT_NEXT_SO = [
     },
     {
         description: `⁠Earn securely`,
-        icon: 'attach_money',
+        icon: 'currency_rupee',
         title: 'Step 3',
     },
     {

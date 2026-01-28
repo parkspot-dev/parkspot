@@ -18,12 +18,15 @@
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue';
 
-const props = defineProps({
+defineProps({
     values: {
         type: Array,
         default: () => [],
     },
-    size: String,
+    size: {
+        type: String,
+        default: 'is-small',
+    },
 });
 
 const emit = defineEmits(['input']);

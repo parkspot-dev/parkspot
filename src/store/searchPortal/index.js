@@ -59,7 +59,7 @@ const mutations = {
     'set-expiring-requests-count'(state, count) {
         state.expiringRequestsCount = count;
     },
-    'set-filterd-parking-requests'(state, requests) {
+    'set-filtered-parking-requests'(state, requests) {
         state.filteredParkingRequests = requests;
     },
 };
@@ -113,7 +113,7 @@ const actions = {
                 throw new Error(response.DisplayMsg);
             }
             commit('set-interested-vo-list', response);
-            commit('set-filterd-parking-requests', response);
+            commit('set-filtered-parking-requests', response);
         } catch (error) {
             commit('set-error', error.message);
         } finally {
@@ -140,26 +140,25 @@ const actions = {
         const extractedCriticalRequests = state.filteredParkingRequests.filter(
             (request) => request.IsExpiring,
         );
-        commit('set-filterd-parking-requests', extractedCriticalRequests);
+        commit('set-filtered-parking-requests', extractedCriticalRequests);
     },
 
-    extractRequetsByAgentName({ commit, state }, agentName) {
+    extractRequestsByAgentName({ commit, state }, agentName) {
         const extractedAgentNameRequests = state.filteredParkingRequests.filter(
             (requests) => requests.Agent === agentName,
         );
-
-        commit('set-filterd-parking-requests', extractedAgentNameRequests);
+        commit('set-filtered-parking-requests', extractedAgentNameRequests);
     },
 
-    extractRequetsByStatus({ commit, state }, status) {
-        const extractRequestsByStatus = state.filteredParkingRequests.filter(
+    extractRequestsByStatus({ commit, state }, status) {
+        const extractRequestsByStatusResult = state.filteredParkingRequests.filter(
             (requests) => requests.Status === status,
         );
-        commit('set-filterd-parking-requests', extractRequestsByStatus);
+        commit('set-filtered-parking-requests', extractRequestsByStatusResult);
     },
 
     resetFilterParkingRequests({ commit, state }) {
-        commit('set-filterd-parking-requests', state.parkingRequests);
+        commit('set-filtered-parking-requests', state.parkingRequests);
     },
 };
 

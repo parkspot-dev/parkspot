@@ -39,6 +39,7 @@ export default {
         },
         placeholder: {
             type: String,
+            default: '',
         },
         fieldName: {
             type: String,
@@ -46,6 +47,7 @@ export default {
         },
         label: {
             type: String,
+            default: '',
         },
         //  for tooltip
         tooltip: {
@@ -58,9 +60,11 @@ export default {
         },
         // must be included in props
         value: {
-            type: null,
+            type: String,
+            default: '',
         },
     },
+    emits: ['input'],
     data() {
         return {
             innerValue: '',

@@ -33,7 +33,10 @@
 export default {
     name: 'FilterDropdown',
     props: {
-        label: String,
+        label: {
+            type : String,
+            default : 'Select Option',
+        },
         options: {
             type: Array,
             default: () => [],
@@ -47,6 +50,7 @@ export default {
             default: true,
         },
     },
+    emits : ['remove','update'],
     data() {
         return {
             isOpen: false,

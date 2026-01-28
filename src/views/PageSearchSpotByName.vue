@@ -79,7 +79,7 @@
 <script>
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
-import SelectInput from '@/components/global/SelectInput.vue';
+// import SelectInput from '@/components/global/SelectInput.vue';
 import { mayaClient } from '../services/api';
 
 export default {
@@ -87,7 +87,6 @@ export default {
     components: {
         LoaderModal,
         MoleculeSearchBox,
-        SelectInput,
     },
 
     data() {

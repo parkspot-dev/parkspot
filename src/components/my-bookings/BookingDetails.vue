@@ -62,7 +62,7 @@
                     <div v-if="activeTab !== 'Past'" class="btn-container">
                         <AtomButton
                             class="cancel-btn"
-                            @click.native="cancelBooking(booking)"
+                            @click="cancelBooking(booking)"
                         >
                             Cancel
                         </AtomButton>
@@ -105,10 +105,7 @@
                     </div>
 
                     <div class="btn-container">
-                        <AtomButton
-                            class="btn"
-                            @click.native="showPopup = true"
-                        >
+                        <AtomButton class="btn" @click="showPopup = true">
                             Show History
                         </AtomButton>
                     </div>
@@ -140,7 +137,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr v-if="hasError">
+                                        <td colspan="5" class="no-data">
+                                            {{ errorMessage }}
+                                        </td>
+                                    </tr>
+
                                     <tr
+                                        v-else-if="payments && payments.length"
                                         v-for="p in payments"
                                         :key="p.bookingID"
                                     >
@@ -158,17 +162,14 @@
                                         </td>
                                         <td class="txn-center">
                                             {{
-                                                getBookingPaymentStatusLabell(
+                                                getBookingPaymentStatusLabel(
                                                     p.Status,
                                                 )
                                             }}
                                         </td>
                                     </tr>
-                                    <tr
-                                        v-if="
-                                            !payments || payments.length === 0
-                                        "
-                                    >
+
+                                    <tr v-else>
                                         <td colspan="5" class="no-data">
                                             Transaction not found
                                         </td>
@@ -209,9 +210,7 @@
                     <div class="btn-container">
                         <AtomButton
                             class="btn"
-                            @click.native="
-                                openSpotDetails(booking.SiteDetails.SiteID)
-                            "
+                            @click="openSpotDetails(booking.SiteDetails.SiteID)"
                         >
                             Spot Details
                         </AtomButton>
@@ -229,14 +228,23 @@ import AtomTooltip from '@/components/atoms/AtomTooltip.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import { DEFAULT_BANGALORE_COORDINATES, ICON } from '@/constant/constant';
 import { mapActions, mapState } from 'vuex';
-import { getBookingPaymentStatusLabell } from '@/constant/enums';
+import { getBookingPaymentStatusLabel } from '@/constant/enums';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import moment from 'moment';
 
 export default {
     name: 'BookingDetails',
     components: { MapContainer, AtomTooltip, AtomIcon, AtomButton },
-    props: { booking: Object, activeTab: String },
+    props: {
+        booking: {
+            type: Object,
+            required: true,
+        },
+        activeTab: {
+            type: String,
+            required: true,
+        },
+    },
     data() {
         return {
             ICON,
@@ -270,6 +278,16 @@ export default {
                   };
         },
     },
+    watch: {
+        booking: {
+            handler(newBooking) {
+                if (newBooking) {
+                    this.fetchPayments(newBooking.BookingID);
+                }
+            },
+            immediate: true,
+        },
+    },
     methods: {
         ...mapActions('myBookings', ['fetchPayments']),
 
@@ -283,8 +301,8 @@ export default {
             });
             window.open(route.href);
         },
-        getBookingPaymentStatusLabell(status) {
-            return getBookingPaymentStatusLabell(status);
+        getBookingPaymentStatusLabel(status) {
+            return getBookingPaymentStatusLabel(status);
         },
         getBookingStatusDescription(status) {
             switch (status) {
@@ -312,16 +330,6 @@ export default {
                     'Could not open WhatsApp. Please contact us on 7488239471 to cancel the booking.',
                 );
             }
-        },
-    },
-    watch: {
-        booking: {
-            handler(newBooking) {
-                if (newBooking) {
-                    this.fetchPayments(newBooking.BookingID);
-                }
-            },
-            immediate: true,
         },
     },
 };

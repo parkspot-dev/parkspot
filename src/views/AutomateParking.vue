@@ -53,7 +53,7 @@
             </div>
             <!-- Right Side Form -->
             <div class="form-container">
-                <Form
+                <VeeForm
                     :validation-schema="contactFormSchema"
                     @submit="handleSubmit"
                 >
@@ -92,7 +92,7 @@
                             class="btn-icon"
                         ></AtomIcon>
                     </button>
-                </Form>
+                </VeeForm>
             </div>
         </section>
 
@@ -116,7 +116,7 @@ import {
     WHY_CHOOSE_PARKSPOT_SOCIETY_AUTOMATION,
 } from '@/constant/constant';
 import { contactFormSchema } from '@/validationSchemas';
-import { Form } from 'vee-validate';
+import { Form as VeeForm} from 'vee-validate';
 import { mapMutations, mapActions } from 'vuex';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import AtomHeading from '@/components/atoms/AtomHeading.vue';
@@ -130,7 +130,7 @@ export default {
         AtomIcon,
         AtomHeading,
         BodyWrapper,
-        Form,
+        VeeForm,
         FormInput,
         TestimonialSection,
         WhatsNext,

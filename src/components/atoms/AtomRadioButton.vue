@@ -35,7 +35,10 @@ export default {
             type: Array,
             default: null,
         },
-        size: String,
+        size: {
+            type: String,
+            default: 'is-small',
+        }
     },
     data() {
         return {

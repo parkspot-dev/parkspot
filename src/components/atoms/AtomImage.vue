@@ -33,6 +33,7 @@
        */
       ratio: {
         type: String,
+        default : '',
       },
       /**
        * Optional width for the image

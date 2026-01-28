@@ -47,7 +47,10 @@ const mutations = {
     'update-user-profile'(state, userProfile) {
         userProfile['UserName'] = '';
         state.userProfile = userProfile;
-        if (userProfile && !userProfile.hasOwnProperty('ErrorCode')) {
+        if (
+            userProfile &&
+            !Object.prototype.hasOwnProperty.call(userProfile, 'ErrorCode')
+        ) {
             localStorage.setItem('UserProfile', JSON.stringify(userProfile));
         }
     },
@@ -89,6 +92,14 @@ const mutations = {
     'update-images'(state, images = {}) {
         state.contactForm.images = images;
     },
+    'reset-user-profile'(state) {
+        state.userProfile = {
+            FullName: '',
+            EmailID: '',
+            Mobile: '',
+            Type: 'VO',
+        };
+    },
 };
 
 const actions = {
@@ -117,6 +128,7 @@ const actions = {
         try {
             await signOut(auth);
             commit('update-user', null);
+            commit('reset-user-profile');
         } catch (err) {
             // todo write proper exception case
             throw new Error(err);
@@ -227,7 +239,6 @@ const actions = {
             Remark: '',
             MapLink: state.contactForm.mapLink,
             SpotImages: state.contactForm.images,
-            ServicesAvailable: state.contactForm.facilities,
             SiteType: state.contactForm.siteType,
             City: state.contactForm.city,
         };
@@ -254,16 +265,12 @@ const actions = {
         mayaClient.post('/owner/parking-request', req);
     },
 
-    async authenticateWithMaya({ state }) {
+    async authenticateWithMaya({ commit }) {
         try {
             const res = await mayaClient.get('/auth/authenticate');
-            if (res.UserType) {
-                if (res.UserType === UserType.Admin) {
-                    state.isAdmin = true;
-                } else if (res.UserType && res.UserType === UserType.Agent) {
-                    state.isAdmin = true;
-                    state.isAgent = true;
-                }
+
+            if (res?.UserType) {
+                commit('set-user-type', res.UserType);
             }
         } catch (err) {
             // todo write proper exception case
@@ -284,22 +291,21 @@ const actions = {
         commit('update-images', images);
     },
 
-    async getUserProfile({ commit }) {
-        const userProfile = JSON.parse(
-            localStorage.getItem('UserProfile') || '{}',
-        );
-        if (Object.keys(userProfile).length !== 0) {
-            commit('update-user-profile', userProfile);
-            commit('set-user-type', userProfile.Type);
-            return;
-        }
+    async getUserProfile({ commit, dispatch }) {
         try {
             const userProfile = await mayaClient.get('/auth/user');
+
             commit('update-user-profile', userProfile);
-            commit('set-user-type', userProfile.Type);
-        } catch (err) {
-            // todo write proper exception case
-            throw new Error(err);
+
+            if (userProfile?.Type) {
+                commit('set-user-type', userProfile.Type);
+            } else {
+                // fallback in case Type missing
+                await dispatch('authenticateWithMaya');
+            }
+        } catch {
+            // fallback if profile API fails
+            await dispatch('authenticateWithMaya');
         }
     },
 };

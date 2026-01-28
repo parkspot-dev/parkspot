@@ -19,6 +19,9 @@ import '@vuepic/vue-datepicker/dist/main.css';
 
 export default {
     name: 'AtomDatePicker',
+    components : {
+        VueDatePicker,
+    },
     props: {
         assignedDate: {
             type: String,

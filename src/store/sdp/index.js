@@ -1,5 +1,7 @@
 import { mayaClient } from '@/services/api';
 import { getPaymentAppTypeLabel } from '@/constant/enums';
+import ImageUploadService from '@/services/ImageUploadService';
+
 
 const UPDATE_SITE_ENDPOINT = '/owner/update-site';
 const state = {
@@ -16,21 +18,26 @@ const state = {
     title: '',
 };
 
+
 const getters = {};
+
 
 const mutations = {
     'update-spot-details'(state, spotDetails) {
         state.spotDetails = spotDetails;
     },
 
+
     'update-owner-info-details'(state, ownerInfoDetails) {
         state.ownerInfoDetails = ownerInfoDetails;
     },
+
 
     'update-selected-spot'(state, spot) {
         state.selectedSpot = [];
         state.selectedSpot = [...state.selectedSpot, spot];
     },
+
 
     'update-is-available'(state, available) {
         if (available > 0) {
@@ -40,27 +47,33 @@ const mutations = {
         }
     },
 
+
     'update-loading'(state, loading) {
         state.loading = loading;
     },
+
 
     'update-image'(state, images) {
         state.images = [];
         state.images = images.map((img) => img.ImageURL);
     },
 
+
     'update-thumbnail-image'(state, image) {
         state.thumbnail = [];
         state.thumbnail = [image];
     },
 
+
     'update-title'(state, title) {
         state.title = title;
     },
 
+
     'update-map-center'(state, center) {
         state.center = center;
     },
+
 
     'update-payment-info'(state, paymentDetails) {
         state.paymentDetails = paymentDetails;
@@ -69,6 +82,7 @@ const mutations = {
         state.spotInProgressBookings = bookings;
     }
 };
+
 
 const actions = {
     async getSpotDetails({ commit, dispatch }, { spotId }) {
@@ -80,6 +94,7 @@ const actions = {
             commit('set-in-progress-bookings', res.Bookings)
             await dispatch('setPaymentDetails', res.Account);
 
+
             const spot = {
                 ID: res.Site.SiteID,
                 Name: res.Site.Name,
@@ -88,6 +103,7 @@ const actions = {
                 Long: res.Site.Long,
                 Rate: res.Site.Rate,
                 Distance: 0, // res.Site.Distance
+                SlotsAvailable: res.Site.SlotsAvailable > 0 ? true : false,
             };
             commit('update-map-center', [spot.Long, spot.Lat]);
             commit('update-selected-spot', spot);
@@ -100,6 +116,7 @@ const actions = {
             throw res.DisplayMsg;
         }
     },
+
 
     // function to handle account Details extraction and commit
     async setPaymentDetails({ commit }, accountDetails) {
@@ -114,8 +131,10 @@ const actions = {
             paymentdetails = `${accountDetails.Mobile}/${paymentApp}`;
         }
 
+
         commit('update-payment-info', paymentdetails);
     },
+
 
     async updateAvailability({ state }, availableCount) {
         state.spotDetails.SlotsAvailable = availableCount;
@@ -124,10 +143,30 @@ const actions = {
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 
+
+    async updateImages({ state }, updatedImages) {
+
+        console.log("Image upload res", updatedImages);
+        console.log("spot id", state.spotDetails.SiteID);
+        const uploadedImageURLs = await ImageUploadService.uploadImages(
+                updatedImages,
+                state.spotDetails.SiteID,
+            );
+
+            console.log("These are upload image urls", uploadedImageURLs);
+        state.spotDetails.SiteImages = uploadedImageURLs;
+        // Updating availabilty means agent connected with SO today.
+        state.spotDetails.LastCallDate = new Date().toISOString();
+       const res = await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
+            console.log("image upload res: ", res);
+    },
+
+
     async updateLastCallDate({ state }, lastCallDate) {
         state.spotDetails.LastCallDate = lastCallDate;
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
+
 
     async updateRemark({ state }, remark) {
         state.spotDetails.Remark = remark;
@@ -136,6 +175,7 @@ const actions = {
     },
 };
 
+
 export default {
     namespaced: true,
     state,
@@ -143,3 +183,5 @@ export default {
     mutations,
     actions,
 };
+
+

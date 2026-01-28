@@ -438,6 +438,7 @@ const actions = {
             state.updatedFields.includes('spotImagesList') ||
             state.updatedFields.includes('uploadImages')
         ) {
+            console.log("Uploading images...", state.SO.uploadImages)
             const uploadedImageURLs = await ImageUploadService.uploadImages(
                 state.SO.uploadImages,
                 state.SO.spotId,

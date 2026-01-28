@@ -1,7 +1,7 @@
 <template>
     <div ref="observer">
         <div name="location" rules="required">
-            <SearchInput class="mb-4" @change.native="validate"></SearchInput>
+            <SearchInput class="mb-4" @change="validate"></SearchInput>
             <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
         </div>
         <div name="map" rules="required">

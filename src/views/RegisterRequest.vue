@@ -100,6 +100,13 @@ export default {
             'remarkError'
         ])
     },
+    watch: {
+        hasError(error) {
+            if (error) {
+                this.alertError(this.errorMessage);
+            }
+        },
+    },
     methods: {
         ...mapActions('registerRequest', [
             'submitForm',
@@ -122,13 +129,6 @@ export default {
                 title: 'Error',
                 type: 'is-danger',
             });
-        },
-    },
-    watch: {
-        hasError(error) {
-            if (error) {
-                this.alertError(this.errorMessage);
-            }
         },
     },
 };

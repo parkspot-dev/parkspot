@@ -63,7 +63,7 @@
                         <p><b>Comments: </b></p>
                         <div class="previous-comments">{{ row.Comments }}</div>
                         <AtomTextarea
-                            v-model="newCommentMap[row.ID]"
+                            v-model="localMap[row.ID]"
                             :maxlength="3000"
                             :row-no="3"
                             size="is-small"
@@ -75,6 +75,7 @@
                                     row,
                                     oldComments,
                                     $event,
+                                    localMap[row.ID],
                                 )
                             "
                         />
@@ -178,7 +179,21 @@ export default {
         isCallDelayed: { type: Function, required: true },
         toSrp: { type: Function, required: true },
         storeOldComment: { type: Function, required: true },
-        oldComments: { type: null },
+        oldComments: { type: null, default: null},
+    },
+    emits: ['connect', 'comment-update', 'agent-update', 'status-update', 'date-update', 'latlng-update', 'oldComments'],
+    data() {
+        return {
+            localMap: {...this.newCommentMap},
+        }
+    },
+    watch: {
+        newCommentMap: {
+            deep: true,
+            handler(val){
+                this.localMap = {...val};
+            }
+        }
     },
 };
 </script>

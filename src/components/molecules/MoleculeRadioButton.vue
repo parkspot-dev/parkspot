@@ -7,7 +7,7 @@
             <AtomRadioButton
                 :values="values"
                 :current-selected-radio="currentSelectedRadio"
-                @change.native="handleChange"
+                @change="handleChange"
             ></AtomRadioButton>
             <span class="has-text-danger is-size-7">{{ errors[0] }}</span>
         </div>

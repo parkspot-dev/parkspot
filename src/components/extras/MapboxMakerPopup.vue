@@ -98,7 +98,10 @@
 <script>
 export default {
     props: {
-        spot: Object,
+        spot: {
+            type : Object,
+            default : () => ({}),
+        }
     },
     computed: {
         encodedSpotId() {

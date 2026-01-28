@@ -2,7 +2,7 @@
     <section>
         <!-- payment link button -->
         <div class="payment-link-btn-wrapper">
-            <AtomButton @click.native="getPaymentLink">
+            <AtomButton @click="getPaymentLink">
                 Generate Payment Link
             </AtomButton>
         </div>
@@ -14,7 +14,7 @@
                 <AtomIcon
                     class="copy-icon"
                     :icon="'content-copy'"
-                    @click.native="copyUrl"
+                    @click="copyUrl"
                 ></AtomIcon>
             </AtomTooltip>
         </div>
@@ -33,9 +33,10 @@
                     >
                         <AtomIcon
                             :icon="'pencil'"
-                            @click.native="enableEdit('Booking Details')"
                             size=""
-                        ></AtomIcon>
+                            @click="enableEdit('Booking Details')"
+                        >
+                        </AtomIcon>
                     </span>
                     <span
                         class="save-icon"
@@ -47,7 +48,11 @@
                             "
                             :icon="'content-save-outline'"
                             size=""
-                        ></AtomIcon>
+                            @click="
+                                editField === 'Booking Details' && saveField()
+                            "
+                        >
+                        </AtomIcon>
                     </span>
                     <span
                         class="cancel-icon"
@@ -59,7 +64,11 @@
                             "
                             :icon="'close'"
                             size=""
-                        ></AtomIcon>
+                            @click="
+                                editField === 'Booking Details' && cancelField()
+                            "
+                        >
+                        </AtomIcon>
                     </span>
                 </div>
             </div>
@@ -240,8 +249,9 @@
                         <AtomIcon
                             :icon="'pencil'"
                             size=""
-                            @click.native="enableEdit('Rent Details')"
-                        ></AtomIcon>
+                            @click="enableEdit('Rent Details')"
+                        >
+                        </AtomIcon>
                     </span>
 
                     <span
@@ -251,23 +261,17 @@
                         <AtomIcon
                             :icon="'content-save-outline'"
                             size=""
-                            @click.native="
-                                editField === 'Rent Details' && saveField()
-                            "
-                        ></AtomIcon>
+                            @click="editField === 'Rent Details' && saveField()"
+                        >
+                        </AtomIcon>
                     </span>
 
                     <span
                         class="cancel-icon"
                         :class="{ disabled: editField !== 'Rent Details' }"
                     >
-                        <AtomIcon
-                            :icon="'close'"
-                            size=""
-                            @click.native="
-                                editField === 'Rent Details' && cancelField()
-                            "
-                        ></AtomIcon>
+                        <AtomIcon :icon="'close'" size="" @click="cancelField">
+                        </AtomIcon>
                     </span>
                 </div>
             </div>
@@ -445,7 +449,13 @@
                             {{ currBookingDetails.Booking.Name }}
                         </p>
                         <p>
-                            {{ currBookingDetails.Booking.Mobile }}
+                            <a
+                                :href="parkingRequestSearchUrl"
+                                target="_blank"
+                                class="mobile-link"
+                            >
+                                {{ currBookingDetails.Booking.Mobile }}
+                            </a>
                         </p>
                     </div>
                 </div>
@@ -477,7 +487,9 @@
                             ></span>
                             <router-link
                                 v-else
-                                :to="`/internal/users/kyc-status?mobile=${currBookingDetails.Booking.Mobile}`"
+                                :href="kycStatusUrl"
+                                target="_blank"
+                                class="kyc-link"
                             >
                                 {{
                                     getKYCStatusLabel(
@@ -509,9 +521,9 @@
                         <strong> Refund </strong>
                     </div>
                 </div>
-                <div v-if="currBookingDetails.Payments">
+                <div v-if="currBookingDetails?.Booking.Payments">
                     <div
-                        v-for="payment in currBookingDetails.Payments"
+                        v-for="payment in currBookingDetails?.Booking.Payments"
                         :key="payment.PaymentID"
                         class="row"
                     >
@@ -559,7 +571,7 @@
                                     :icon="'refresh'"
                                     type="primary"
                                     size="is-small"
-                                    @click.native="
+                                    @click="
                                         refreshPaymentStatus(payment.PaymentID)
                                     "
                                 >
@@ -639,6 +651,7 @@ export default {
         RefundDialog,
         SelectInput,
     },
+    emits: ['payment-link', 'refresh-payment-status', 'update-booking-details'],
     setup() {
         return { RefundIcon };
     },
@@ -657,22 +670,6 @@ export default {
             soChargesValidationError: '',
             KYCStatus,
         };
-    },
-    watch: {
-        '$store.state.bookingPortal.bookingDetails'(val) {
-            this.currBookingDetails = cloneDeep(val); // make a local copy of bookingDetails
-        },
-        '$store.state.bookingPortal.successMessage'(message) {
-            if (message) {
-                this.showSuccessMessage();
-                setTimeout(() => {
-                    this.$store.commit('bookingPortal/set-isField-updated', '');
-                }, 2000);
-            }
-        },
-    },
-    beforeMount() {
-        this.currBookingDetails = cloneDeep(this.bookingDetails); // make a local copy of bookingDetails
     },
     computed: {
         ...mapState('bookingPortal', [
@@ -695,6 +692,21 @@ export default {
                 },
             }).href;
         },
+
+        parkingRequestSearchUrl() {
+            const mobile = this.currBookingDetails?.Booking?.Mobile;
+            return mobile
+                ? `https://www.parkspot.in/internal/search-portal?tab=parking-request&mobile=${mobile}`
+                : '#';
+        },
+
+        kycStatusUrl() {
+            const mobile = this.currBookingDetails?.Booking?.Mobile;
+            return mobile
+                ? `https://www.parkspot.in/internal/users/kyc-status?mobile=${mobile}`
+                : '#';
+        },
+
         selectedAgent: {
             get() {
                 const index = this.agents.findIndex(
@@ -713,6 +725,29 @@ export default {
             const rent = this.currBookingDetails?.Booking?.Rent;
             return rent && rent > 0;
         },
+    },
+    watch: {
+        '$store.state.bookingPortal.bookingDetails'(val) {
+            this.currBookingDetails = cloneDeep(val); // make a local copy of bookingDetails
+        },
+        '$store.state.bookingPortal.successMessage'(message) {
+            if (message) {
+                this.showSuccessMessage();
+                setTimeout(() => {
+                    this.$store.commit('bookingPortal/set-isField-updated', '');
+                }, 2000);
+            }
+        },
+        'status'(newStatus) {
+            if (newStatus === 'error') {
+                this.alertError(this.statusMessage);
+            } else if (newStatus === 'success') {
+                this.alertSuccess(this.statusMessage);
+            }
+        },
+    },
+    beforeMount() {
+        this.currBookingDetails = cloneDeep(this.bookingDetails); // make a local copy of bookingDetails
     },
     mounted() {
         this.getUserProfile();
@@ -846,29 +881,30 @@ export default {
                 }
             }
 
-            this.editField = null;
-
-            // Remove Payments field from currentBookingDetails.Booking object
-            delete this.initialActiveBookingDetails.Payments;
-
-            // Iterate through the loop to check for updated fields.
             const updatedArray = [];
-            for (const key in this.initialActiveBookingDetails) {
+            const initialData = cloneDeep(this.initialActiveBookingDetails);
+            delete initialData.Payments;
+
+            for (const key in initialData) {
                 if (
-                    !updatedArray.includes(key) &&
                     !this.onCompare(
-                        this.initialActiveBookingDetails[key],
+                        initialData[key],
                         this.currBookingDetails.Booking[key],
                     )
                 ) {
                     updatedArray.push(key);
                 }
             }
-            this.setUpdatedFields(updatedArray);
-            this.$emit(
-                'update-booking-details',
-                this.currBookingDetails.Booking,
-            );
+
+            if (updatedArray.length > 0) {
+                this.setUpdatedFields(updatedArray);
+                this.$emit(
+                    'update-booking-details',
+                    this.currBookingDetails.Booking,
+                );
+            }
+
+            this.editField = null;
         },
 
         cancelField() {
@@ -926,10 +962,6 @@ export default {
             };
             this.createRefund(refundRequest);
         },
-        updatePaymentType(value, paymentId) {
-            const paymentType = this.paymentTypeLabels.indexOf(value);
-            this.changePaymentType({ paymentID: paymentId, paymentType });
-        },
         alertError(msg) {
             this.$buefy.dialog.alert({
                 ariaModal: true,
@@ -976,15 +1008,6 @@ export default {
         },
         getKYCStatusLabel(kycStatus) {
             return getKYCStatusLabel(kycStatus);
-        },
-    },
-    watch: {
-        status(newStatus) {
-            if (newStatus === 'error') {
-                this.alertError(this.statusMessage);
-            } else if (newStatus === 'success') {
-                this.alertSuccess(this.statusMessage);
-            }
         },
     },
 };
@@ -1217,7 +1240,6 @@ export default {
     cursor: not-allowed;
     color: var(--parkspot-grey) !important;
     opacity: 0.5;
-    pointer-events: none;
 }
 
 .disabled * {

@@ -10,21 +10,14 @@
         <div class="header">
             <div class="summary">
                 <div class="so-btn">
-                    <AtomButton
-                        v-show="!summary.show"
-                        @click.native="showSummary"
-                    >
+                    <AtomButton v-show="!summary.show" @click="showSummary">
                         {{ summary.btn }} Summary
                     </AtomButton>
                 </div>
                 <br />
                 <div v-show="summary.show" class="so-summary">
                     <span class="close-button">
-                        <AtomIcon
-                            :icon="'close'"
-                            size=""
-                            @click.native="showSummary"
-                        >
+                        <AtomIcon :icon="'close'" size="" @click="showSummary">
                         </AtomIcon>
                     </span>
                     <p class="so-total">Spot Request Summary</p>
@@ -205,11 +198,12 @@ export default {
                 { id: 3, name: 'Requested Modification' },
                 { id: 4, name: 'Verified' },
                 { id: 6, name: 'Denied' },
+                { id: 8, name: 'Duplicate' },
             ],
             summary: {
                 btn: 'Show',
                 show: false,
-                status: [0, 0, 0, 0, 0, 0], // Array to hold counts for each status
+                status: {},
             },
         };
     },
@@ -220,6 +214,19 @@ export default {
             'errorMessage',
             'spotRequests',
         ]),
+    },
+
+    watch: {
+        spotRequests(newRequests) {
+            if (newRequests && newRequests.length > 0) {
+                this.updateSummary(newRequests);
+            }
+        },
+        hasError(error) {
+            if (error) {
+                this.alertError(this.errorMessage);
+            }
+        },
     },
 
     mounted() {
@@ -278,10 +285,12 @@ export default {
         },
 
         updateSummary(requests) {
-            this.summary.status = [0, 0, 0, 0, 0, 0];
+            this.summary.status = {};
+
             requests.forEach((request) => {
-                if (request.Status >= 0 && request.Status <= 5) {
-                    this.summary.status[request.Status]++;
+                if (request.Status != null) {
+                    this.summary.status[request.Status] =
+                        (this.summary.status[request.Status] || 0) + 1;
                 }
             });
         },
@@ -290,8 +299,11 @@ export default {
             return SpotRequestStatus;
         },
 
-       async onStatusUpdate(spotData, status) {
-            const statusId = getIdBasedOnLabel(this.spotRequestStatusList, status);
+        async onStatusUpdate(spotData, status) {
+            const statusId = getIdBasedOnLabel(
+                this.spotRequestStatusList,
+                status,
+            );
             if (statusId != null) {
                 spotData['Status'] = statusId;
                 await this.updateStatus(spotData);
@@ -302,18 +314,6 @@ export default {
                 });
             } else {
                 this.alertError('Invalid status selected.');
-            }
-        },
-    },
-    watch: {
-        spotRequests(newRequests) {
-            if (newRequests && newRequests.length > 0) {
-                this.updateSummary(newRequests);
-            }
-        },
-        hasError(error) {
-            if (error) {
-                this.alertError(this.errorMessage);
             }
         },
     },
