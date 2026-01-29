@@ -17,18 +17,18 @@
 
                 <div class="form-group">
                     <label>Email</label>
-                    <input
-                        v-model="form.email"
-                        placeholder="Enter email address"
-                    />
+                    <input v-model="form.email" @blur="validateEmail" />
+                    <small v-if="errors.email" class="error">{{
+                        errors.email
+                    }}</small>
                 </div>
 
                 <div class="form-group">
                     <label>Mobile</label>
-                    <input
-                        v-model="form.mobile"
-                        placeholder="Enter mobile number"
-                    />
+                    <input v-model="form.mobile" @blur="validateMobile" />
+                    <small v-if="errors.mobile" class="error">{{
+                        errors.mobile
+                    }}</small>
                 </div>
 
                 <div class="form-group">
@@ -42,17 +42,18 @@
                 <AtomButton
                     :expanded="true"
                     class="primary-btn"
+                    :disabled="loading"
                     @click="submitBooking"
                 >
-                    Book
+                    {{ loading ? 'Booking...' : 'Book' }}
                 </AtomButton>
             </div>
         </div>
     </div>
 </template>
-
 <script>
 import AtomButton from '@/components/atoms/AtomButton.vue';
+import { mayaClient } from '@/services/api';
 
 export default {
     name: 'OrganismBookingModal',
@@ -72,6 +73,11 @@ export default {
                 mobile: '',
                 vehicleNo: '',
             },
+            errors: {
+                email: '',
+                mobile: '',
+            },
+            loading: false,
         };
     },
 
@@ -91,9 +97,82 @@ export default {
     },
 
     methods: {
-        submitBooking() {
-            this.$emit('submitted', { ...this.form });
-            this.closeModal();
+        validateEmail() {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!this.form.email) {
+                this.errors.email = 'Email is required';
+                return false;
+            }
+
+            if (!regex.test(this.form.email)) {
+                this.errors.email = 'Invalid email format';
+                return false;
+            }
+
+            this.errors.email = '';
+            return true;
+        },
+
+        validateMobile() {
+            const regex = /^[6-9]\d{9}$/;
+
+            if (!this.form.mobile) {
+                this.errors.mobile = 'Mobile number is required';
+                return false;
+            }
+
+            if (!regex.test(this.form.mobile)) {
+                this.errors.mobile = 'Enter valid 10 digit mobile';
+                return false;
+            }
+
+            this.errors.mobile = '';
+            return true;
+        },
+
+        async submitBooking() {
+            const isEmailValid = this.validateEmail();
+            const isMobileValid = this.validateMobile();
+
+            if (!isEmailValid || !isMobileValid) return;
+
+            try {
+                this.loading = true;
+
+                const payload = {
+                    User: {
+                        FullName: this.form.fullName,
+                        EmailID: this.form.email,
+                        Mobile: this.form.mobile,
+                    },
+                    CarModel: '',
+                    Comments: 'From Spot Detail Page',
+                };
+
+                const response = await mayaClient.post('/contact', payload);
+
+                if (response?.Success === false) {
+                    throw new Error(response?.Message);
+                }
+
+                this.$buefy.toast.open({
+                    message: 'Booking request sent successfully',
+                    type: 'is-success',
+                    position: 'is-top',
+                });
+
+                this.$emit('submitted', payload);
+                this.closeModal();
+            } catch (err) {
+                this.$buefy.toast.open({
+                    message: err?.message || 'Something went wrong',
+                    type: 'is-danger',
+                    position: 'is-top',
+                });
+            } finally {
+                this.loading = false;
+            }
         },
         closeModal() {
             this.$emit('close');
@@ -198,5 +277,10 @@ export default {
         width: 95%;
         padding: 18px;
     }
+}
+
+.error {
+    color: red;
+    font-size: 12px;
 }
 </style>
