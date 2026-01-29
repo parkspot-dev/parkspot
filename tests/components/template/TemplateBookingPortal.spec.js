@@ -408,7 +408,7 @@ describe('TemplateBookingPortal.vue', () => {
         expect(mobileLink.attributes('target')).toBe('_blank');
     });
 
-    it('renders span instead of KYC link when KYC status is NotSet', async () => {
+    it('hides KYC link when status is NotSet or mobile is missing', async () => {
         await wrapper.setData({
             currBookingDetails: {
                 ...wrapper.vm.currBookingDetails,
@@ -422,7 +422,15 @@ describe('TemplateBookingPortal.vue', () => {
 
         await wrapper.vm.$nextTick();
 
+        // link hidden
         expect(wrapper.find('a.kyc-link').exists()).toBe(false);
+
+        // span visible
+        const statusSpan = wrapper.find('span.kyc-status-text');
+        expect(statusSpan.exists()).toBe(true);
+
+        // label present
+        expect(statusSpan.text()).toBeTruthy();
     });
 
     it('uses fallback # URL when mobile number is missing', async () => {
