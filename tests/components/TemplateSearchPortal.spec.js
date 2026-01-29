@@ -32,6 +32,8 @@ describe('TemplateSearchPortal.vue', () => {
     ];
 
     beforeEach(() => {
+        vi.clearAllMocks();
+
         extractExpiringRequests = vi.fn();
         extractRequestsByAgentName = vi.fn();
         extractRequestsByStatus = vi.fn();
@@ -120,7 +122,6 @@ describe('TemplateSearchPortal.vue', () => {
 
     afterEach(() => {
         wrapper?.unmount();
-        vi.clearAllMocks();
     });
 
     it('renders search portal layout', () => {
@@ -138,10 +139,12 @@ describe('TemplateSearchPortal.vue', () => {
 
     it('toggles summary section on button click', async () => {
         expect(wrapper.vm.summary.show).toBe(false);
-        wrapper.vm.showSummary();
+
+        await wrapper.vm.showSummary();
         await flushPromises();
         expect(wrapper.vm.summary.show).toBe(true);
-        wrapper.vm.showSummary();
+
+        await wrapper.vm.showSummary();
         await flushPromises();
         expect(wrapper.vm.summary.show).toBe(false);
     });
@@ -156,7 +159,7 @@ describe('TemplateSearchPortal.vue', () => {
     });
 
     it('applies agent filter', async () => {
-        wrapper.vm.handleAgentFilter('dev');
+        await wrapper.vm.handleAgentFilter('dev');
         await flushPromises();
 
         expect(resetFilterParkingRequests).toHaveBeenCalled();
@@ -167,7 +170,7 @@ describe('TemplateSearchPortal.vue', () => {
     });
 
     it('applies status filter', async () => {
-        wrapper.vm.handleStatusFilter('Registered');
+        await wrapper.vm.handleStatusFilter('Registered');
         await flushPromises();
 
         expect(resetFilterParkingRequests).toHaveBeenCalled();
@@ -178,13 +181,17 @@ describe('TemplateSearchPortal.vue', () => {
     });
 
     it('applyFilters applies all active filters', async () => {
-        wrapper.vm.filters.isExpiring = true;
-        wrapper.vm.filters.Agent = 'dev';
-        wrapper.vm.filters.Status = 'Registered';
+        await wrapper.setData({
+            filters: {
+                Agent: 'dev',
+                Status: 'Registered',
+                UpdatedAt: null,
+                isExpiring: true,
+            },
+        });
 
-        wrapper.vm.applyFilters();
+        await wrapper.vm.applyFilters();
         await flushPromises();
-
         expect(resetFilterParkingRequests).toHaveBeenCalled();
         expect(extractExpiringRequests).toHaveBeenCalled();
         expect(extractRequestsByAgentName).toHaveBeenCalled();
@@ -192,21 +199,22 @@ describe('TemplateSearchPortal.vue', () => {
     });
 
     it('removeAgentFilter clears agent filter', async () => {
-        wrapper.vm.filters.Agent = 'dev';
+        await wrapper.setData({
+            filters: { ...wrapper.vm.filters, Agent: 'dev' },
+        });
 
-        wrapper.vm.removeAgentFilter();
+        await wrapper.vm.removeAgentFilter();
         await flushPromises();
-
         expect(wrapper.vm.filters.Agent).toBe('');
         expect(resetFilterParkingRequests).toHaveBeenCalled();
     });
 
     it('removeStatusFilter clears status filter', async () => {
-        wrapper.vm.filters.Status = 'Registered';
-
-        wrapper.vm.removeStatusFilter();
+        await wrapper.setData({
+            filters: { ...wrapper.vm.filters, Status: 'Registered' },
+        });
+        await wrapper.vm.removeStatusFilter();
         await flushPromises();
-
         expect(wrapper.vm.filters.Status).toBe('');
         expect(resetFilterParkingRequests).toHaveBeenCalled();
     });
@@ -218,26 +226,26 @@ describe('TemplateSearchPortal.vue', () => {
     });
 
     it('emits updateRequest when agent is updated', async () => {
-        wrapper.vm.onAgentUpdate(parkingRequests[0], 1);
+        await wrapper.vm.onAgentUpdate(parkingRequests[0], 1);
         await flushPromises();
-
         const emitted = wrapper.emitted('updateRequest');
         expect(emitted).toBeTruthy();
         expect(emitted[0][0].Agent).toBe('dev');
     });
 
     it('emits updateRequest when status is updated', async () => {
-        wrapper.vm.onStatusUpdate(parkingRequests[0], 2);
+        await wrapper.vm.onStatusUpdate(parkingRequests[0], 2);
         await flushPromises();
-
         const payload = wrapper.emitted('updateRequest').at(-1)[0];
         expect(payload.Status).toBe(2);
     });
 
     it('updates latitude and longitude correctly', async () => {
-        wrapper.vm.updateLatLng(parkingRequests[0], '28.700000,77.300000');
+        await wrapper.vm.updateLatLng(
+            parkingRequests[0],
+            '28.700000,77.300000',
+        );
         await flushPromises();
-
         const payload = wrapper.emitted('updateRequest').at(-1)[0];
         expect(payload.Latitude).toBeCloseTo(28.7);
         expect(payload.Longitude).toBeCloseTo(77.3);
@@ -250,7 +258,8 @@ describe('TemplateSearchPortal.vue', () => {
 
     it('onCommentUpdate appends comment and emits updateRequest', async () => {
         const row = { ID: 1, Comments: '' };
-        wrapper.vm.onCommentUpdate(row, '', 'New comment');
+
+        await wrapper.vm.onCommentUpdate(row, '', 'New comment');
         await flushPromises();
         const emitted = wrapper.emitted('updateRequest');
         expect(emitted).toBeTruthy();
@@ -258,11 +267,12 @@ describe('TemplateSearchPortal.vue', () => {
     });
 
     it('opens connect popup with selected row', async () => {
-        wrapper.vm.onConnect(parkingRequests[0]);
+        await wrapper.vm.onConnect(parkingRequests[0]);
         await flushPromises();
         expect(wrapper.vm.isOpen).toBe(true);
         expect(wrapper.vm.selectedRow.ID).toBe(1);
     });
+
     it('switches desktop and mobile view correctly', async () => {
         await wrapper.setData({
             windowWidth: 1200,
@@ -276,17 +286,17 @@ describe('TemplateSearchPortal.vue', () => {
     });
 
     it('formatDate formats date to YYYY-MM-DD', () => {
-        const result = wrapper.vm.formatDate('2024-01-15T10:00:00Z');
-        expect(result).toBe('2024-01-15');
+        expect(wrapper.vm.formatDate('2024-01-15T10:00:00Z')).toBe(
+            '2024-01-15',
+        );
     });
 
     it('getLatLng returns lat,lng string', () => {
-        const result = wrapper.vm.getLatLng(28.6, 77.2);
-        expect(result).toBe('28.6,77.2');
+        expect(wrapper.vm.getLatLng(28.6, 77.2)).toBe('28.6,77.2');
     });
 
     it('emits toSrp event with latitude and longitude', async () => {
-        wrapper.vm.toSrp(28.6, 77.2);
+        await wrapper.vm.toSrp(28.6, 77.2);
         await flushPromises();
         const emitted = wrapper.emitted('toSrp');
         expect(emitted).toBeTruthy();
