@@ -181,7 +181,9 @@ describe('TemplateBookingPortal.vue', () => {
         await wrapper.vm.enableEdit('Rent Details');
         await wrapper.vm.saveField();
 
-        expect(wrapper.vm.rentValidationError).toBe('Rent must be greater than zero');
+        expect(wrapper.vm.rentValidationError).toBe(
+            'Rent must be greater than zero',
+        );
     });
 
     it('does not emit update-booking-details if rent validation fails', async () => {
@@ -333,7 +335,9 @@ describe('TemplateBookingPortal.vue', () => {
         wrapper.vm.currBookingDetails.Booking.BaseAmount = 200;
 
         wrapper.vm.validateSOChargesInput();
-        expect(wrapper.vm.soChargesValidationError).toBe('SO Charges cannot be greater than Rent amount');
+        expect(wrapper.vm.soChargesValidationError).toBe(
+            'SO Charges cannot be greater than Rent amount',
+        );
 
         wrapper.vm.currBookingDetails.Booking.BaseAmount = 50;
         wrapper.vm.validateSOChargesInput();
@@ -404,18 +408,29 @@ describe('TemplateBookingPortal.vue', () => {
         expect(mobileLink.attributes('target')).toBe('_blank');
     });
 
-    it('renders span instead of KYC link when KYC status is NotSet', async () => {
-        store.state.bookingPortal.bookingDetails = {
-            ...bookingDetailsMock,
-            Booking: {
-                ...bookingDetailsMock.Booking,
-                VOKYCStatus: KYCStatus.NotSet,
+    it('hides KYC link when status is NotSet or mobile is missing', async () => {
+        await wrapper.setData({
+            currBookingDetails: {
+                ...wrapper.vm.currBookingDetails,
+                Booking: {
+                    ...wrapper.vm.currBookingDetails.Booking,
+                    VOKYCStatus: KYCStatus.NotSet,
+                    Mobile: '',
+                },
             },
-        };
+        });
 
         await wrapper.vm.$nextTick();
 
+        // link hidden
         expect(wrapper.find('a.kyc-link').exists()).toBe(false);
+
+        // span visible
+        const statusSpan = wrapper.find('span.kyc-status-text');
+        expect(statusSpan.exists()).toBe(true);
+
+        // label present
+        expect(statusSpan.text()).toBeTruthy();
     });
 
     it('uses fallback # URL when mobile number is missing', async () => {
