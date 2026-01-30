@@ -310,6 +310,7 @@ export default {
         return {
             BookingStatus: BookingStatus,
             showBookingModal: false,
+            emailWatcher: null,
         };
     },
     computed: {
@@ -354,6 +355,9 @@ export default {
             };
         },
     },
+    beforeUnmount() {
+        this.emailWatcher?.();
+    },
     methods: {
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
@@ -379,29 +383,27 @@ export default {
         async handleBookingSubmit(payload) {
             if (this.isLoggedIn) {
                 this.$router.push('/profile/my-bookings?tab=Request');
-                this.$buefy.toast.open({
-                    message: 'We will get back to you in 12 hrs',
-                    type: 'is-success',
-                    duration: 3000,
-                    position: 'is-top',
-                });
-            } else {
-                this.$buefy.toast.open({
-                    message: 'We will get back to you in 12 hrs',
-                    type: 'is-success',
-                    duration: 3000,
-                    position: 'is-top',
-                });
             }
+
+            this.$buefy.toast.open({
+                message: 'We will get back to you in 12 hrs',
+                type: 'is-success',
+                duration: 3000,
+                position: 'is-top',
+            });
         },
         openBookingModal() {
             if (this.isLoggedIn && !this.userProfile.EmailID) {
-                const unwatch = this.$watch('userProfile.EmailID', (val) => {
-                    if (val) {
-                        this.showBookingModal = true;
-                        unwatch();
-                    }
-                });
+                this.emailWatcher = this.$watch(
+                    'userProfile.EmailID',
+                    (val) => {
+                        if (val) {
+                            this.showBookingModal = true;
+                            this.emailWatcher?.();
+                            this.emailWatcher = null;
+                        }
+                    },
+                );
                 return;
             }
 

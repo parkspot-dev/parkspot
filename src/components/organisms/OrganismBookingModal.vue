@@ -6,78 +6,83 @@
                 <span class="close" @click="closeModal">×</span>
             </div>
 
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input
+            <VeeForm
+                :validation-schema="bookingModalFormSchema"
+                @submit="submitBooking"
+            >
+                <div class="modal-body">
+                    <FormInput
                         v-model="form.fullName"
+                        name="fullName"
+                        label="Full Name"
                         placeholder="Enter full name"
                     />
-                </div>
 
-                <div class="form-group">
-                    <label>Email</label>
-                    <input v-model="form.email" @blur="validateEmail" />
-                    <small v-if="errors.email" class="error">{{
-                        errors.email
-                    }}</small>
-                </div>
+                    <FormInput
+                        v-model="form.email"
+                        name="email"
+                        label="Email"
+                        placeholder="Enter email address"
+                    />
 
-                <div class="form-group">
-                    <label>Mobile</label>
-                    <input v-model="form.mobile" @blur="validateMobile" />
-                    <small v-if="errors.mobile" class="error">{{
-                        errors.mobile
-                    }}</small>
-                </div>
+                    <FormInput
+                        v-model="form.mobile"
+                        name="mobile"
+                        label="Mobile"
+                        placeholder="Enter mobile number"
+                    />
 
-                <div class="form-group">
-                    <label>Vehicle Number</label>
-                    <input
+                    <FormInput
                         v-model="form.vehicleNo"
+                        name="vehicleNo"
+                        label="Vehicle Number"
                         placeholder="e.g. MH12AB1234"
                     />
-                </div>
 
-                <AtomButton
-                    :expanded="true"
-                    class="primary-btn"
-                    :disabled="loading"
-                    @click="submitBooking"
-                >
-                    {{ loading ? 'Booking...' : 'Book' }}
-                </AtomButton>
-            </div>
+                    <AtomButton
+                        native-type="submit"
+                        :expanded="true"
+                        class="primary-btn"
+                        :disabled="loading"
+                    >
+                        {{ loading ? 'Booking...' : 'Book' }}
+                    </AtomButton>
+                </div>
+            </VeeForm>
         </div>
     </div>
 </template>
+
 <script>
 import AtomButton from '@/components/atoms/AtomButton.vue';
+import FormInput from '@/components/global/FormInput.vue';
+import { Form as VeeForm } from 'vee-validate';
 import { mayaClient } from '@/services/api';
+import { bookingModalFormSchema } from '@/validationSchemas';
 
 export default {
     name: 'OrganismBookingModal',
-    components: { AtomButton },
+    components: { AtomButton, FormInput, VeeForm },
+
     props: {
         initialData: {
             type: Object,
             default: () => ({}),
         },
     },
+
     emits: ['close', 'submitted'],
+
     data() {
         return {
+            bookingModalFormSchema,
+            loading: false,
             form: {
                 fullName: '',
                 email: '',
                 mobile: '',
                 vehicleNo: '',
             },
-            errors: {
-                email: '',
-                mobile: '',
-            },
-            loading: false,
         };
     },
 
@@ -85,58 +90,14 @@ export default {
         initialData: {
             immediate: true,
             deep: true,
-            handler(newVal) {
-                if (!newVal) return;
-
-                this.form = {
-                    ...this.form,
-                    ...newVal,
-                };
+            handler(val) {
+                if (val) this.form = { ...this.form, ...val };
             },
         },
     },
 
     methods: {
-        validateEmail() {
-            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            if (!this.form.email) {
-                this.errors.email = 'Email is required';
-                return false;
-            }
-
-            if (!regex.test(this.form.email)) {
-                this.errors.email = 'Invalid email format';
-                return false;
-            }
-
-            this.errors.email = '';
-            return true;
-        },
-
-        validateMobile() {
-            const regex = /^[6-9]\d{9}$/;
-
-            if (!this.form.mobile) {
-                this.errors.mobile = 'Mobile number is required';
-                return false;
-            }
-
-            if (!regex.test(this.form.mobile)) {
-                this.errors.mobile = 'Enter valid 10 digit mobile';
-                return false;
-            }
-
-            this.errors.mobile = '';
-            return true;
-        },
-
         async submitBooking() {
-            const isEmailValid = this.validateEmail();
-            const isMobileValid = this.validateMobile();
-
-            if (!isEmailValid || !isMobileValid) return;
-
             try {
                 this.loading = true;
 
@@ -147,33 +108,28 @@ export default {
                         Mobile: this.form.mobile,
                     },
                     CarModel: '',
-                    Comments: 'From Spot Detail Page',
+                    Comments: `Booking request from spot detail page | Vehicle: ${this.form.vehicleNo || 'NA'}`,
                 };
 
-                const response = await mayaClient.post('/contact', payload);
-
-                if (response?.Success === false) {
-                    throw new Error(response?.Message);
-                }
+                await mayaClient.post('/contact', payload);
 
                 this.$buefy.toast.open({
                     message: 'Booking request sent successfully',
                     type: 'is-success',
-                    position: 'is-top',
                 });
 
-                this.$emit('submitted', payload);
+                this.$emit('submitted');
                 this.closeModal();
-            } catch (err) {
+            } catch {
                 this.$buefy.toast.open({
-                    message: err?.message || 'Something went wrong',
+                    message: 'Something went wrong',
                     type: 'is-danger',
-                    position: 'is-top',
                 });
             } finally {
                 this.loading = false;
             }
         },
+
         closeModal() {
             this.$emit('close');
         },

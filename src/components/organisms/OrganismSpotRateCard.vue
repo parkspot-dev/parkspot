@@ -104,7 +104,6 @@ export default {
     },
     methods: {
         onContact() {
-            console.log('Book clicked');
             this.$emit('open-booking-modal');
         },
     },

@@ -72,3 +72,18 @@ export const registerSpotRequestFormSchema = toTypedSchema(
         terms: rules.terms,
     }),
 );
+
+// Booking modal form schema
+
+export const bookingModalFormSchema = toTypedSchema(
+    z.object({
+        email: z.string().min(1, 'Email is required').email('Invalid email'),
+
+        mobile: z
+            .string()
+            .min(1, 'Mobile is required.')
+            .regex(/^[6-9]\d{9}$/, 'Invalid mobile number'),
+
+        vehicleNo: z.string().optional(),
+    }),
+);
