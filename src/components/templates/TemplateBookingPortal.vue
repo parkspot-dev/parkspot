@@ -479,24 +479,25 @@
                             {{ currBookingDetails.Booking.EmailID }}
                         </p>
                         <p>
-                            <span
-                                v-if="
-                                    currBookingDetails.Booking.VOKYCStatus ===
-                                    KYCStatus.NotSet
-                                "
-                            ></span>
-                            <router-link
-                                v-else
-                                :href="kycStatusUrl"
-                                target="_blank"
-                                class="kyc-link"
-                            >
+                            <span class="kyc-status-text">
                                 {{
                                     getKYCStatusLabel(
                                         currBookingDetails.Booking.VOKYCStatus,
                                     )
                                 }}
-                            </router-link>
+                            </span>
+
+                            <a
+                                v-if="
+                                    currBookingDetails.Booking.VOKYCStatus !==
+                                        KYCStatus.NotSet && kycStatusUrl !== '#'
+                                "
+                                :href="kycStatusUrl"
+                                target="_blank"
+                                class="kyc-link"
+                            >
+                                View KYC
+                            </a>
                         </p>
                     </div>
                 </div>
@@ -1111,6 +1112,9 @@ export default {
 
         p {
             margin-bottom: 16px;
+            min-height: 22px;
+            display: flex;
+            align-items: center;
         }
     }
 
@@ -1120,6 +1124,9 @@ export default {
 
         p {
             margin-bottom: 16px;
+            min-height: 22px;
+            display: flex;
+            align-items: center;
         }
     }
 
@@ -1244,5 +1251,26 @@ export default {
 
 .disabled * {
     fill: var(--parkspot-grey) !important;
+}
+.field-col p,
+.value-col p,
+.value-col div {
+    min-height: 20px;
+}
+
+.kyc-row {
+    display: flex;
+    align-items: center;
+    min-height: 20px;
+}
+
+.kyc-status-text {
+    font-weight: 600;
+    margin-right: 12px;
+    line-height: 1.2;
+}
+
+.kyc-link {
+    text-decoration: none;
 }
 </style>
