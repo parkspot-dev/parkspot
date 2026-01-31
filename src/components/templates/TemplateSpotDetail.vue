@@ -9,7 +9,10 @@
             ></ImageGallery>
             <!-- Rate Card Organism -->
             <div class="rate-card-container">
-                <SpotRateCard class="card-position"></SpotRateCard>
+                <SpotRateCard
+                    class="card-position"
+                    @open-booking-modal="openBookingModal"
+                ></SpotRateCard>
             </div>
             <div class="spot-detail-main-description">
                 <div class="title-container">
@@ -162,7 +165,7 @@
                                     <td>UserName</td>
                                     <td>{{ ownerInfoDetails.UserName }}</td>
                                 </tr>
-                            <tr v-if="isAdmin">
+                                <tr v-if="isAdmin">
                                     <td>Image Uploads</td>
                                     <td>
                                         <div class="form-field">
@@ -267,6 +270,12 @@
                 <hr style="width: 100%; margin-top: 80px" />
             </div>
         </div>
+        <BookingModal
+            v-if="showBookingModal"
+            :initial-data="prefilledData"
+            @close="showBookingModal = false"
+            @submitted="handleBookingSubmit"
+        />
     </BodyWrapper>
 </template>
 
@@ -278,6 +287,7 @@ import ImageGallery from '../organisms/OrganismImageGallery.vue';
 import InfographicSteps from '../molecules/MoleculeInfographicSteps.vue';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
+import BookingModal from '@/components/organisms/OrganismBookingModal.vue';
 import {
     BookingStatus,
     getBookingStatusLabel,
@@ -285,8 +295,7 @@ import {
 } from '@/constant/enums';
 import { mapActions, mapState } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
-import ImageUpload from '../global/ImageUpload.vue';
-import ImageUploadService from '@/services/ImageUploadService';
+import { mayaClient } from '@/services/api';
 
 export default {
     name: 'TemplateSpotDetail',
@@ -299,7 +308,13 @@ export default {
         AtomButton,
         AtomDatePicker,
         AtomTextarea,
-        ImageUpload,
+        BookingModal,
+    },
+    props: {
+        isAdmin: {
+            type: Boolean,
+            default: false,
+        },
     },
     emits: [
         'goToSearchPortal',
@@ -311,24 +326,9 @@ export default {
         return {
             BookingStatus: BookingStatus,
             updatedImages: [],
+            showBookingModal: false,
+            emailWatcher: null,
         };
-    },
-    watch: {
-        images: {
-            immediate: true,
-            deep: true,
-            handler(newImages) {
-                if (!newImages || !newImages.length) return;
-
-                // map backend images → ImageUpload format
-                this.updatedImages = newImages.map((img) => ({
-                    id: img.SiteImageID,
-                    preview: img.ImageURL,
-                    file: null,
-                    isNew: false,
-                }));
-            },
-        },
     },
     computed: {
         ...mapState('sdp', [
@@ -357,6 +357,41 @@ export default {
                 return [];
             }
         },
+        isLoggedIn() {
+            return !!this.$store.state.user.user;
+        },
+        userProfile() {
+            return this.$store.state.user.userProfile;
+        },
+        prefilledData() {
+            if (!this.isLoggedIn) return {};
+
+            return {
+                fullName: this.userProfile.FullName,
+                email: this.userProfile.EmailID,
+                mobile: this.userProfile.Mobile,
+            };
+        },
+    },
+    watch: {
+        images: {
+            immediate: true,
+            deep: true,
+            handler(newImages) {
+                if (!newImages || !newImages.length) return;
+
+                // map backend images → ImageUpload format
+                this.updatedImages = newImages.map((img) => ({
+                    id: img.SiteImageID,
+                    preview: img.ImageURL,
+                    file: null,
+                    isNew: false,
+                }));
+            },
+        },
+    },
+    beforeUnmount() {
+        this.emailWatcher?.();
     },
     methods: {
         ...mapActions('sdp', ['updateImages']),
@@ -383,6 +418,85 @@ export default {
         },
         saveImages() {
             this.updateImages(this.updatedImages);
+        },
+        async handleBookingSubmit(form) {
+            try {
+                const formatDate = (date) => {
+                    const yyyy = date.getFullYear();
+                    const mm = String(date.getMonth() + 1).padStart(2, '0');
+                    const dd = String(date.getDate()).padStart(2, '0');
+                    const hh = String(date.getHours()).padStart(2, '0');
+                    const min = String(date.getMinutes()).padStart(2, '0');
+
+                    return `${yyyy}${mm}${dd}t${hh}${min}`;
+                };
+
+                // start = now
+                const startTime = formatDate(new Date());
+
+                // end = after 1 month
+                const endDate = new Date();
+                endDate.setMonth(endDate.getMonth() + 1);
+                const endTime = formatDate(endDate);
+
+                const bookingPayload = {
+                    SiteID: this.spotDetails.SiteID,
+                    StartTime: startTime,
+                    EndTime: endTime,
+
+                    UserInfo: {
+                        Name: form.fullName,
+                        Mobile: form.mobile,
+                        EmailID: form.email,
+                        VehicleNo: form.vehicleNo || '',
+                    },
+
+                    Fee: {
+                        Rent: this.spotDetails.Rate,
+                        ConvenienceFee: 500,
+                    },
+
+                    PaymentEnv: 0,
+                };
+
+                await mayaClient.post('/booking/tentative', bookingPayload);
+
+                this.showBookingModal = false;
+
+                this.$buefy.toast.open({
+                    message: 'Booking request submitted successfully',
+                    type: 'is-success',
+                    duration: 3000,
+                    position: 'is-top',
+                });
+
+                if (this.isLoggedIn) {
+                    this.$router.push('/profile/my-bookings?tab=Request');
+                }
+            } catch (err) {
+                this.$buefy.toast.open({
+                    message: err?.message || 'Booking failed',
+                    type: 'is-danger',
+                    position: 'is-top',
+                });
+            }
+        },
+        openBookingModal() {
+            if (this.isLoggedIn && !this.userProfile.EmailID) {
+                this.emailWatcher = this.$watch(
+                    'userProfile.EmailID',
+                    (val) => {
+                        if (val) {
+                            this.showBookingModal = true;
+                            this.emailWatcher?.();
+                            this.emailWatcher = null;
+                        }
+                    },
+                );
+                return;
+            }
+
+            this.showBookingModal = true;
         },
     },
 };
