@@ -1,5 +1,6 @@
 import { mayaClient } from '@/services/api';
 import { getPaymentAppTypeLabel } from '@/constant/enums';
+import ImageUploadService from '@/services/ImageUploadService';
 
 const UPDATE_SITE_ENDPOINT = '/owner/update-site';
 const state = {
@@ -67,7 +68,7 @@ const mutations = {
     },
     'set-in-progress-bookings'(state, bookings) {
         state.spotInProgressBookings = bookings;
-    }
+    },
 };
 
 const actions = {
@@ -77,7 +78,7 @@ const actions = {
         if (res.Site) {
             commit('update-spot-details', res.Site);
             commit('update-owner-info-details', res.User);
-            commit('set-in-progress-bookings', res.Bookings)
+            commit('set-in-progress-bookings', res.Bookings);
             await dispatch('setPaymentDetails', res.Account);
 
             const spot = {
@@ -120,6 +121,18 @@ const actions = {
 
     async updateAvailability({ state }, availableCount) {
         state.spotDetails.SlotsAvailable = availableCount;
+        // Updating availabilty means agent connected with SO today.
+        state.spotDetails.LastCallDate = new Date().toISOString();
+        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
+    },
+
+    async updateImages({ state }, updatedImages) {
+        const uploadedImageURLs = await ImageUploadService.uploadImages(
+            updatedImages,
+            state.spotDetails.SiteID,
+        );
+
+        state.spotDetails.SiteImages = uploadedImageURLs;
         // Updating availabilty means agent connected with SO today.
         state.spotDetails.LastCallDate = new Date().toISOString();
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);

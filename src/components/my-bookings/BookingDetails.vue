@@ -144,8 +144,8 @@
                                     </tr>
 
                                     <tr
-                                        v-else-if="payments && payments.length"
                                         v-for="p in payments"
+                                        v-else-if="payments && payments.length"
                                         :key="p.bookingID"
                                     >
                                         <td class="txn-center">

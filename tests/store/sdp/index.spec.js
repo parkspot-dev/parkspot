@@ -3,6 +3,7 @@ import { createStore } from 'vuex';
 import spot from '@/store/sdp/index.js';
 import { mayaClient } from '@/services/api';
 import { getPaymentAppTypeLabel } from '@/constant/enums';
+import ImageUploadService from '@/services/ImageUploadService';
 
 vi.mock('@/services/api', () => ({
     mayaClient: {
@@ -13,6 +14,12 @@ vi.mock('@/services/api', () => ({
 
 vi.mock('@/constant/enums', () => ({
     getPaymentAppTypeLabel: vi.fn(),
+}));
+
+vi.mock('@/services/ImageUploadService', () => ({
+    default: {
+        uploadImages: vi.fn(),
+    },
 }));
 
 describe('Vuex - spot module', () => {
@@ -82,10 +89,14 @@ describe('Vuex - spot module', () => {
 
             mayaClient.get.mockResolvedValue(apiResponse);
             getPaymentAppTypeLabel.mockReturnValue('Google Pay');
+
             await store.dispatch('spot/getSpotDetails', { spotId: 'SITE_1' });
+
             expect(store.state.spot.spotDetails.SiteID).toBe('SITE_1');
             expect(store.state.spot.ownerInfoDetails).toEqual(apiResponse.User);
-            expect(store.state.spot.spotInProgressBookings).toEqual(apiResponse.Bookings);
+            expect(store.state.spot.spotInProgressBookings).toEqual(
+                apiResponse.Bookings,
+            );
             expect(store.state.spot.paymentDetails).toBe('test@upi/Google Pay');
             expect(store.state.spot.isAvailable).toBe(false);
             expect(store.state.spot.images).toEqual(['a.jpg']);
@@ -105,33 +116,80 @@ describe('Vuex - spot module', () => {
 
         it('updateAvailability posts updated site with correct payload', async () => {
             store.state.spot.spotDetails = { SlotsAvailable: 0 };
+
             await store.dispatch('spot/updateAvailability', 5);
+
             expect(store.state.spot.spotDetails.SlotsAvailable).toBe(5);
-            expect(store.state.spot.spotDetails.LastCallDate).toEqual(expect.any(String));
+            expect(store.state.spot.spotDetails.LastCallDate).toEqual(
+                expect.any(String),
+            );
             expect(mayaClient.post).toHaveBeenCalledWith(
                 '/owner/update-site',
-                store.state.spot.spotDetails
+                store.state.spot.spotDetails,
+            );
+        });
+
+        it('updateImages uploads images and posts updated site', async () => {
+            store.state.spot.spotDetails = {
+                SiteID: 'SITE_1',
+                SiteImages: [],
+            };
+
+            const uploadedImages = [
+                { ImageURL: 'img1.jpg' },
+                { ImageURL: 'img2.jpg' },
+            ];
+
+            ImageUploadService.uploadImages.mockResolvedValue(uploadedImages);
+
+            const newImages = [{ file: {} }, { file: {} }];
+
+            await store.dispatch('spot/updateImages', newImages);
+
+            expect(ImageUploadService.uploadImages).toHaveBeenCalledWith(
+                newImages,
+                'SITE_1',
+            );
+
+            expect(store.state.spot.spotDetails.SiteImages).toEqual(
+                uploadedImages,
+            );
+            expect(store.state.spot.spotDetails.LastCallDate).toEqual(
+                expect.any(String),
+            );
+
+            expect(mayaClient.post).toHaveBeenCalledWith(
+                '/owner/update-site',
+                store.state.spot.spotDetails,
             );
         });
 
         it('updateLastCallDate posts updated site with correct payload', async () => {
             store.state.spot.spotDetails = {};
+
             await store.dispatch('spot/updateLastCallDate', '2024-01-01');
-            expect(store.state.spot.spotDetails.LastCallDate).toBe('2024-01-01');
+
+            expect(store.state.spot.spotDetails.LastCallDate).toBe(
+                '2024-01-01',
+            );
             expect(mayaClient.post).toHaveBeenCalledWith(
                 '/owner/update-site',
-                store.state.spot.spotDetails
+                store.state.spot.spotDetails,
             );
         });
 
         it('updateRemark posts updated site with remark and date', async () => {
             store.state.spot.spotDetails = {};
+
             await store.dispatch('spot/updateRemark', 'Called owner');
+
             expect(store.state.spot.spotDetails.Remark).toBe('Called owner');
-            expect(store.state.spot.spotDetails.LastCallDate).toEqual(expect.any(String));
+            expect(store.state.spot.spotDetails.LastCallDate).toEqual(
+                expect.any(String),
+            );
             expect(mayaClient.post).toHaveBeenCalledWith(
                 '/owner/update-site',
-                store.state.spot.spotDetails
+                store.state.spot.spotDetails,
             );
         });
     });
