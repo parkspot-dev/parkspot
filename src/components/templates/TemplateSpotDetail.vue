@@ -162,7 +162,7 @@
                                     <td>UserName</td>
                                     <td>{{ ownerInfoDetails.UserName }}</td>
                                 </tr>
-                                <tr v-if="true" >
+                            <tr v-if="isAdmin">
                                     <td>Image Uploads</td>
                                     <td>
                                         <div class="form-field">
@@ -171,9 +171,9 @@
                                             />
                                         </div>
 
-                                        <button @click="saveImages">
+                                        <AtomButton @click="saveImages">
                                             Save Images
-                                        </button>
+                                        </AtomButton>
                                     </td>
                                 </tr>
                             </table>
@@ -301,12 +301,6 @@ export default {
         AtomTextarea,
         ImageUpload,
     },
-    props: {
-        isAdmin: {
-            type: Boolean,
-            default: false,
-        },
-    },
     emits: [
         'goToSearchPortal',
         'changeAvailability',
@@ -348,6 +342,7 @@ export default {
             'spotDetails',
             'spotInProgressBookings',
         ]),
+        ...mapState('user', ['isAdmin']),
         locationName() {
             return this.selectedSpot.length > 0
                 ? this.selectedSpot[0].Name
@@ -387,7 +382,6 @@ export default {
             return getBookingStatusLabel(bookingStatus);
         },
         saveImages() {
-            
             this.updateImages(this.updatedImages);
         },
     },
