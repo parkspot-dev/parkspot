@@ -162,7 +162,7 @@
                                     <td>UserName</td>
                                     <td>{{ ownerInfoDetails.UserName }}</td>
                                 </tr>
-                            <tr v-if="isAdmin">
+                                <tr v-if="isAdmin">
                                     <td>Image Uploads</td>
                                     <td>
                                         <div class="form-field">
@@ -286,8 +286,6 @@ import {
 import { mapActions, mapState } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
 import ImageUpload from '../global/ImageUpload.vue';
-import ImageUploadService from '@/services/ImageUploadService';
-
 export default {
     name: 'TemplateSpotDetail',
     components: {
@@ -312,23 +310,6 @@ export default {
             BookingStatus: BookingStatus,
             updatedImages: [],
         };
-    },
-    watch: {
-        images: {
-            immediate: true,
-            deep: true,
-            handler(newImages) {
-                if (!newImages || !newImages.length) return;
-
-                // map backend images → ImageUpload format
-                this.updatedImages = newImages.map((img) => ({
-                    id: img.SiteImageID,
-                    preview: img.ImageURL,
-                    file: null,
-                    isNew: false,
-                }));
-            },
-        },
     },
     computed: {
         ...mapState('sdp', [
@@ -356,6 +337,23 @@ export default {
             } else {
                 return [];
             }
+        },
+    },
+    watch: {
+        images: {
+            immediate: true,
+            deep: true,
+            handler(newImages) {
+                if (!newImages || !newImages.length) return;
+
+                // map backend images → ImageUpload format
+                this.updatedImages = newImages.map((img) => ({
+                    id: img.SiteImageID,
+                    preview: img.ImageURL,
+                    file: null,
+                    isNew: false,
+                }));
+            },
         },
     },
     methods: {
