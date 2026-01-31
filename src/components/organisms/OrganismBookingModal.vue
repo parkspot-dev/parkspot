@@ -57,7 +57,6 @@
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import FormInput from '@/components/global/FormInput.vue';
 import { Form as VeeForm } from 'vee-validate';
-import { mayaClient } from '@/services/api';
 import { bookingModalFormSchema } from '@/validationSchemas';
 
 export default {
@@ -97,37 +96,9 @@ export default {
     },
 
     methods: {
-        async submitBooking() {
-            try {
-                this.loading = true;
-
-                const payload = {
-                    User: {
-                        FullName: this.form.fullName,
-                        EmailID: this.form.email,
-                        Mobile: this.form.mobile,
-                    },
-                    CarModel: '',
-                    Comments: `Booking request from spot detail page | Vehicle: ${this.form.vehicleNo || 'NA'}`,
-                };
-
-                await mayaClient.post('/contact', payload);
-
-                this.$buefy.toast.open({
-                    message: 'Booking request sent successfully',
-                    type: 'is-success',
-                });
-
-                this.$emit('submitted');
-                this.closeModal();
-            } catch {
-                this.$buefy.toast.open({
-                    message: 'Something went wrong',
-                    type: 'is-danger',
-                });
-            } finally {
-                this.loading = false;
-            }
+        submitBooking() {
+            this.$emit('submitted', this.form);
+            this.closeModal();
         },
 
         closeModal() {
