@@ -48,7 +48,7 @@ export default {
     data() {
         return {
             accessToken: null,
-            img: '/assets/pstopmini.png',
+            img: '/assets/ps__logo_mini.png',
             map: null, // map for mapbox
             marker: null, // marker for location
         };
@@ -296,7 +296,9 @@ export default {
                 psMarker.style.backgroundImage = `url(${this.img})`;
                 psMarker.style.width = '50px';
                 psMarker.style.height = '50px';
-                psMarker.style.backgroundSize = '110%';
+                psMarker.style.backgroundSize = 'contain';
+                psMarker.style.backgroundRepeat = 'no-repeat';
+                psMarker.style.backgroundPosition = 'center';
 
                 const psPopup = this.getPsPopup(spot);
                 const marker = new mapboxgl.Marker(psMarker)

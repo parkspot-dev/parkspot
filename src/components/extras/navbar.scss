@@ -21,13 +21,15 @@
 
 .company-logo {
     margin-right: 2.5rem;
+    display: flex;
 
     a {
         display: inline-flex;
+        gap: 10px;
 
         .ps-icon {
-            width: 36px;
-            height: 36px;
+            width: 24px;
+            height: 24px;
 
             @media only screen and (max-width: 1024px) {
                 width: 30px;
@@ -37,7 +39,7 @@
 
 
         .ps-text {
-            width: 165px;
+            width: 140px;
             height: 36px;
 
             @media only screen and (max-width: 1024px) {

@@ -8,12 +8,12 @@
                     <router-link :to="{ name: 'Home' }">
                         <AtomImage
                             class="ps-icon"
-                            src="/assets/pstopmini.png"
+                            src="/assets/ps__logo_mini.png"
                             alt="parkspot icon"
                         />
                         <AtomImage
                             class="ps-text"
-                            src="/assets/pstoptext.png"
+                            src="/assets/ps__logo_text_light_bg.png"
                             alt="parkspot text"
                         />
                     </router-link>
