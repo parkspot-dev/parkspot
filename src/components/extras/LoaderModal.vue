@@ -1,7 +1,7 @@
 <template>
     <div class="loader-container">
         <div class="loader"></div>
-        <AtomImage class="loader-image" src="/assets/pstopmini.png" alt="parkspot logo" />
+        <AtomImage class="loader-image" src="/assets/ps__logo_mini.png" alt="parkspot logo" />
     </div>
 </template>
 
@@ -37,6 +37,7 @@ export default {
     border: 8px solid #f3f3f3;
     border-top: 8px solid var(--primary-color);
     display: flex;
+    align-items: center;
     height: 136px;
     justify-content: center;
     position: relative;
@@ -44,9 +45,10 @@ export default {
 }
 
 .loader-image {
-    height: 100px;
+    height: 60px;
     position: absolute;
-    width: 100px;
+    width: 60px;
+    margin-top: -28px;
 }
 
 @keyframes spinloader {
