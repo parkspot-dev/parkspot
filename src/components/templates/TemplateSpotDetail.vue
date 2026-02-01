@@ -278,9 +278,8 @@ import {
     getBookingStatusLabel,
     getKYCStatusLabel,
 } from '@/constant/enums';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
-import { mayaClient } from '@/services/api';
 
 export default {
     name: 'TemplateSpotDetail',
@@ -360,6 +359,10 @@ export default {
         this.emailWatcher?.();
     },
     methods: {
+        ...mapActions('bookingPortal', [
+            'createTentativeBooking',
+            'createContactLead',
+        ]),
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
@@ -383,6 +386,25 @@ export default {
         },
         async handleBookingSubmit(form) {
             try {
+                if (!this.isLoggedIn) {
+                    await this.createContactLead({
+                        User: {
+                            FullName: form.fullName,
+                            EmailID: form.email,
+                            Mobile: form.mobile,
+                        },
+                        Comments: `From spot detail page | Vehicle: ${form.vehicleNo || 'NA'}`,
+                    });
+
+                    this.$buefy.toast.open({
+                        message: 'We will get you in 12 hours.',
+                        type: 'is-success',
+                    });
+
+                    this.showBookingModal = false;
+                    return;
+                }
+
                 const formatDate = (date) => {
                     const yyyy = date.getFullYear();
                     const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -401,7 +423,7 @@ export default {
                 endDate.setMonth(endDate.getMonth() + 1);
                 const endTime = formatDate(endDate);
 
-                const bookingPayload = {
+                await this.createTentativeBooking({
                     SiteID: this.spotDetails.SiteID,
                     StartTime: startTime,
                     EndTime: endTime,
@@ -419,9 +441,7 @@ export default {
                     },
 
                     PaymentEnv: 0,
-                };
-
-                await mayaClient.post('/booking/tentative', bookingPayload);
+                });
 
                 this.showBookingModal = false;
 
