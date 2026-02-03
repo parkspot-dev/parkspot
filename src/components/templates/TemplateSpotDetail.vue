@@ -311,8 +311,10 @@ export default {
             BookingStatus: BookingStatus,
             showBookingModal: false,
             emailWatcher: null,
+            bookingIntent: false,
         };
     },
+
     computed: {
         ...mapState('sdp', [
             'images',
@@ -353,6 +355,16 @@ export default {
                 email: this.userProfile.EmailID,
                 mobile: this.userProfile.Mobile,
             };
+        },
+    },
+    watch: {
+        isLoggedIn(val) {
+            if (val && this.bookingIntent) {
+                this.bookingIntent = false;
+                this.$nextTick(() => {
+                    this.showBookingModal = true;
+                });
+            }
         },
     },
     beforeUnmount() {
@@ -464,6 +476,12 @@ export default {
             }
         },
         openBookingModal() {
+            if (!this.isLoggedIn) {
+                this.bookingIntent = true;
+                this.$store.commit('user/update-login-Modal', true);
+                return;
+            }
+
             if (this.isLoggedIn && !this.userProfile.EmailID) {
                 this.emailWatcher = this.$watch(
                     'userProfile.EmailID',
