@@ -342,10 +342,10 @@ export default {
             }
         },
         isLoggedIn() {
-            return !!this.$store.state.user.user;
+            return !!this.$store?.state?.user?.user;
         },
         userProfile() {
-            return this.$store.state.user.userProfile;
+            return this.$store?.state?.user?.userProfile || {};
         },
         prefilledData() {
             if (!this.isLoggedIn) return {};
