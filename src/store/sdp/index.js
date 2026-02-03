@@ -67,7 +67,7 @@ const mutations = {
     },
     'set-in-progress-bookings'(state, bookings) {
         state.spotInProgressBookings = bookings;
-    }
+    },
 };
 
 const actions = {
@@ -77,7 +77,7 @@ const actions = {
         if (res.Site) {
             commit('update-spot-details', res.Site);
             commit('update-owner-info-details', res.User);
-            commit('set-in-progress-bookings', res.Bookings)
+            commit('set-in-progress-bookings', res.Bookings);
             await dispatch('setPaymentDetails', res.Account);
 
             const spot = {
@@ -133,6 +133,15 @@ const actions = {
     async updateRemark({ state }, remark) {
         state.spotDetails.Remark = remark;
         state.spotDetails.LastCallDate = new Date().toISOString();
+        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
+    },
+
+    async updateAddress({ state }, address) {
+        state.spotDetails.Address = address;
+        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
+    },
+    async updateRent({ state }, rent) {
+        state.spotDetails.Rate = rent;
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 };
