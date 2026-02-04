@@ -261,6 +261,7 @@
             @close="showBookingModal = false"
             @submitted="handleBookingSubmit"
         />
+        <LoaderModal v-if="showLoader" />
     </BodyWrapper>
 </template>
 
@@ -280,6 +281,7 @@ import {
 } from '@/constant/enums';
 import { mapState, mapActions } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
+import LoaderModal from '../extras/LoaderModal.vue';
 
 export default {
     name: 'TemplateSpotDetail',
@@ -293,6 +295,7 @@ export default {
         AtomDatePicker,
         AtomTextarea,
         BookingModal,
+        LoaderModal,
     },
     props: {
         isAdmin: {
@@ -311,6 +314,7 @@ export default {
             BookingStatus: BookingStatus,
             showBookingModal: false,
             emailWatcher: null,
+            showLoader: false,
         };
     },
     computed: {
@@ -386,6 +390,7 @@ export default {
         },
         async handleBookingSubmit(form) {
             try {
+                this.showLoader = true;
                 if (!this.isLoggedIn) {
                     await this.createContactLead({
                         User: {
@@ -396,12 +401,13 @@ export default {
                         Comments: `From spot detail page | Vehicle: ${form.vehicleNo || 'NA'}`,
                     });
 
+                    this.showLoader = false;
+
                     this.$buefy.toast.open({
                         message: 'We will get you in 12 hours.',
                         type: 'is-success',
                     });
 
-                    this.showBookingModal = false;
                     return;
                 }
 
@@ -443,7 +449,7 @@ export default {
                     PaymentEnv: 0,
                 });
 
-                this.showBookingModal = false;
+                this.showLoader = false;
 
                 this.$buefy.toast.open({
                     message: 'Booking request submitted successfully',
@@ -452,10 +458,11 @@ export default {
                     position: 'is-top',
                 });
 
-                if (this.isLoggedIn) {
+                setTimeout(() => {
                     this.$router.push('/profile/my-bookings?tab=Request');
-                }
+                }, 800);
             } catch (err) {
+                this.showLoader = false;
                 this.$buefy.toast.open({
                     message: err?.message || 'Booking failed',
                     type: 'is-danger',
