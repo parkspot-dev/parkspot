@@ -276,6 +276,7 @@
             @close="showBookingModal = false"
             @submitted="handleBookingSubmit"
         />
+        <LoaderModal v-if="showLoader" />
     </BodyWrapper>
 </template>
 
@@ -293,9 +294,9 @@ import {
     getBookingStatusLabel,
     getKYCStatusLabel,
 } from '@/constant/enums';
-import { mapActions, mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
-import { mayaClient } from '@/services/api';
+import LoaderModal from '../extras/LoaderModal.vue';
 
 export default {
     name: 'TemplateSpotDetail',
@@ -309,6 +310,7 @@ export default {
         AtomDatePicker,
         AtomTextarea,
         BookingModal,
+        LoaderModal,
     },
     props: {
         isAdmin: {
@@ -328,8 +330,10 @@ export default {
             updatedImages: [],
             showBookingModal: false,
             emailWatcher: null,
+            showLoader: false,
         };
     },
+
     computed: {
         ...mapState('sdp', [
             'images',
@@ -358,10 +362,10 @@ export default {
             }
         },
         isLoggedIn() {
-            return !!this.$store.state.user.user;
+            return !!this.$store?.state?.user?.user;
         },
         userProfile() {
-            return this.$store.state.user.userProfile;
+            return this.$store?.state?.user?.userProfile || {};
         },
         prefilledData() {
             if (!this.isLoggedIn) return {};
@@ -374,27 +378,23 @@ export default {
         },
     },
     watch: {
-        images: {
-            immediate: true,
-            deep: true,
-            handler(newImages) {
-                if (!newImages || !newImages.length) return;
-
-                // map backend images → ImageUpload format
-                this.updatedImages = newImages.map((img) => ({
-                    id: img.SiteImageID,
-                    preview: img.ImageURL,
-                    file: null,
-                    isNew: false,
-                }));
-            },
+        isLoggedIn(val) {
+            if (val && this.bookingIntent) {
+                this.bookingIntent = false;
+                this.$nextTick(() => {
+                    this.showBookingModal = true;
+                });
+            }
         },
     },
     beforeUnmount() {
         this.emailWatcher?.();
     },
     methods: {
-        ...mapActions('sdp', ['updateImages']),
+        ...mapActions('bookingPortal', [
+            'createTentativeBooking',
+            'createContactLead',
+        ]),
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
@@ -421,6 +421,27 @@ export default {
         },
         async handleBookingSubmit(form) {
             try {
+                this.showLoader = true;
+                if (!this.isLoggedIn) {
+                    await this.createContactLead({
+                        User: {
+                            FullName: form.fullName,
+                            EmailID: form.email,
+                            Mobile: form.mobile,
+                        },
+                        Comments: `From spot detail page | Vehicle: ${form.vehicleNo || 'NA'}`,
+                    });
+
+                    this.showLoader = false;
+
+                    this.$buefy.toast.open({
+                        message: 'We will get you in 12 hours.',
+                        type: 'is-success',
+                    });
+
+                    return;
+                }
+
                 const formatDate = (date) => {
                     const yyyy = date.getFullYear();
                     const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -439,7 +460,7 @@ export default {
                 endDate.setMonth(endDate.getMonth() + 1);
                 const endTime = formatDate(endDate);
 
-                const bookingPayload = {
+                await this.createTentativeBooking({
                     SiteID: this.spotDetails.SiteID,
                     StartTime: startTime,
                     EndTime: endTime,
@@ -457,11 +478,9 @@ export default {
                     },
 
                     PaymentEnv: 0,
-                };
+                });
 
-                await mayaClient.post('/booking/tentative', bookingPayload);
-
-                this.showBookingModal = false;
+                this.showLoader = false;
 
                 this.$buefy.toast.open({
                     message: 'Booking request submitted successfully',
@@ -470,10 +489,11 @@ export default {
                     position: 'is-top',
                 });
 
-                if (this.isLoggedIn) {
+                setTimeout(() => {
                     this.$router.push('/profile/my-bookings?tab=Request');
-                }
+                }, 800);
             } catch (err) {
+                this.showLoader = false;
                 this.$buefy.toast.open({
                     message: err?.message || 'Booking failed',
                     type: 'is-danger',
@@ -482,6 +502,12 @@ export default {
             }
         },
         openBookingModal() {
+            if (!this.isLoggedIn) {
+                this.bookingIntent = true;
+                this.$store.commit('user/update-login-modal', true);
+                return;
+            }
+
             if (this.isLoggedIn && !this.userProfile.EmailID) {
                 this.emailWatcher = this.$watch(
                     'userProfile.EmailID',
