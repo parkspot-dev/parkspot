@@ -20,7 +20,7 @@ const rules = {
     cno: z
         .string()
         .min(1, 'Contact number is required.')
-        .regex(/^\+?\d+$/, 'Must be a valid contact number.')
+        .regex(/^[6-9]\d{9}$/, 'Invalid mobile number')
         .length(10, 'Contact number must be 10 digits.'),
     address: z.string().optional(),
     msg: z.string().optional(),
@@ -70,5 +70,16 @@ export const registerSpotRequestFormSchema = toTypedSchema(
         apartment: rules.address,
         expectedRent: rules.expectedRent,
         terms: rules.terms,
+    }),
+);
+
+// Booking modal form schema
+
+export const bookingModalFormSchema = toTypedSchema(
+    z.object({
+        fullName: rules.fullname,
+        email: rules.email,
+        mobile: rules.cno,
+        vehicleNo: z.string().optional(),
     }),
 );
