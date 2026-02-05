@@ -272,9 +272,12 @@
         </div>
         <BookingModal
             v-if="showBookingModal"
+            ref="bookingModal"
             :initial-data="prefilledData"
             @close="showBookingModal = false"
             @submitted="handleBookingSubmit"
+            @guest="handleGuestBooking"
+            @login="handleLoginFromModal"
         />
         <LoaderModal v-if="showLoader" />
     </BodyWrapper>
@@ -329,8 +332,9 @@ export default {
             BookingStatus: BookingStatus,
             updatedImages: [],
             showBookingModal: false,
-            emailWatcher: null,
             showLoader: false,
+            bookingIntent: false,
+            tempBookingForm: {},
         };
     },
 
@@ -368,12 +372,12 @@ export default {
             return this.$store?.state?.user?.userProfile || {};
         },
         prefilledData() {
-            if (!this.isLoggedIn) return {};
-
             return {
-                fullName: this.userProfile.FullName,
-                email: this.userProfile.EmailID,
-                mobile: this.userProfile.Mobile,
+                fullName:
+                    this.userProfile.FullName || this.tempBookingForm.fullName,
+                email: this.userProfile.EmailID || this.tempBookingForm.email,
+                mobile: this.userProfile.Mobile || this.tempBookingForm.mobile,
+                vehicleNo: this.tempBookingForm.vehicleNo,
             };
         },
     },
@@ -381,15 +385,14 @@ export default {
         isLoggedIn(val) {
             if (val && this.bookingIntent) {
                 this.bookingIntent = false;
+
                 this.$nextTick(() => {
                     this.showBookingModal = true;
                 });
             }
         },
     },
-    beforeUnmount() {
-        this.emailWatcher?.();
-    },
+
     methods: {
         ...mapActions('bookingPortal', [
             'createTentativeBooking',
@@ -420,27 +423,10 @@ export default {
             this.updateImages(this.updatedImages);
         },
         async handleBookingSubmit(form) {
+            if (!this.isLoggedIn) return;
+
             try {
                 this.showLoader = true;
-                if (!this.isLoggedIn) {
-                    await this.createContactLead({
-                        User: {
-                            FullName: form.fullName,
-                            EmailID: form.email,
-                            Mobile: form.mobile,
-                        },
-                        Comments: `From spot detail page | Vehicle: ${form.vehicleNo || 'NA'}`,
-                    });
-
-                    this.showLoader = false;
-
-                    this.$buefy.toast.open({
-                        message: 'We will get you in 12 hours.',
-                        type: 'is-success',
-                    });
-
-                    return;
-                }
 
                 const formatDate = (date) => {
                     const yyyy = date.getFullYear();
@@ -452,10 +438,8 @@ export default {
                     return `${yyyy}${mm}${dd}t${hh}${min}`;
                 };
 
-                // start = now
                 const startTime = formatDate(new Date());
 
-                // end = after 1 month
                 const endDate = new Date();
                 endDate.setMonth(endDate.getMonth() + 1);
                 const endTime = formatDate(endDate);
@@ -485,44 +469,60 @@ export default {
                 this.$buefy.toast.open({
                     message: 'Booking request submitted successfully',
                     type: 'is-success',
-                    duration: 3000,
-                    position: 'is-top',
                 });
 
                 setTimeout(() => {
                     this.$router.push('/profile/my-bookings?tab=Request');
-                }, 800);
+                }, 500);
             } catch (err) {
                 this.showLoader = false;
+
                 this.$buefy.toast.open({
                     message: err?.message || 'Booking failed',
                     type: 'is-danger',
-                    position: 'is-top',
                 });
             }
         },
         openBookingModal() {
-            if (!this.isLoggedIn) {
-                this.bookingIntent = true;
-                this.$store.commit('user/update-login-modal', true);
-                return;
-            }
-
-            if (this.isLoggedIn && !this.userProfile.EmailID) {
-                this.emailWatcher = this.$watch(
-                    'userProfile.EmailID',
-                    (val) => {
-                        if (val) {
-                            this.showBookingModal = true;
-                            this.emailWatcher?.();
-                            this.emailWatcher = null;
-                        }
-                    },
-                );
-                return;
-            }
-
             this.showBookingModal = true;
+        },
+        async handleGuestBooking(form) {
+            try {
+                this.showLoader = true;
+
+                await this.createContactLead({
+                    User: {
+                        FullName: form.fullName,
+                        EmailID: form.email,
+                        Mobile: form.mobile,
+                    },
+                    Comments: `Guest booking from spot detail page | Vehicle: ${form.vehicleNo || 'NA'}`,
+                });
+
+                this.showLoader = false;
+                this.showBookingModal = false;
+
+                this.$buefy.toast.open({
+                    message: 'We will get you in 12 hours.',
+                    type: 'is-success',
+                });
+            } catch (err) {
+                this.showLoader = false;
+
+                this.$refs.bookingModal?.resetLoader();
+
+                this.$buefy.toast.open({
+                    message: err?.message || 'Request failed',
+                    type: 'is-danger',
+                });
+            }
+        },
+        handleLoginFromModal(form) {
+            this.tempBookingForm = form;
+            this.bookingIntent = true;
+            this.showBookingModal = false;
+
+            this.$store.commit('user/update-login-modal', true);
         },
     },
 };
