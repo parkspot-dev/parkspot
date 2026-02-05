@@ -11,6 +11,38 @@
                 @submit="submitBooking"
             >
                 <div class="modal-body">
+                    <AtomButton
+                        v-if="!isLoggedIn"
+                        :expanded="true"
+                        class="primary-btn"
+                        :disabled="loading"
+                        @click="openLogin"
+                    >
+                        Login to Book
+                    </AtomButton>
+                    <AtomButton
+                        v-if="!isLoggedIn"
+                        :expanded="true"
+                        style="
+                            background: #fff;
+                            border: 1px solid #ddd;
+                            color: #444;
+                            margin-top: -6px;
+                        "
+                        :disabled="loading"
+                        @click="continueAsGuest"
+                    >
+                        Continue as Guest
+                    </AtomButton>
+
+                    <!-- divider -->
+                    <div
+                        v-if="!isLoggedIn"
+                        style="text-align: center; color: #bbb; font-size: 12px"
+                    >
+                        ── or ──
+                    </div>
+
                     <FormInput
                         v-model="form.fullName"
                         name="fullName"
@@ -38,8 +70,8 @@
                         label="Vehicle Number"
                         placeholder="e.g. MH12AB1234"
                     />
-
                     <AtomButton
+                        v-if="isLoggedIn"
                         native-type="submit"
                         :expanded="true"
                         class="primary-btn"
@@ -70,7 +102,7 @@ export default {
         },
     },
 
-    emits: ['close', 'submitted'],
+    emits: ['close', 'submitted', 'guest', 'login'],
 
     data() {
         return {
@@ -85,6 +117,12 @@ export default {
         };
     },
 
+    computed: {
+        isLoggedIn() {
+            return !!this.$store.state.user?.user;
+        },
+    },
+
     watch: {
         initialData: {
             immediate: true,
@@ -97,12 +135,28 @@ export default {
 
     methods: {
         submitBooking() {
+            if (!this.isLoggedIn) return;
+
+            this.loading = true;
             this.$emit('submitted', this.form);
-            this.closeModal();
         },
 
+        continueAsGuest() {
+            this.loading = true;
+            this.$emit('guest', this.form);
+        },
+
+        openLogin() {
+            this.$emit('login', this.form);
+            this.closeModal();
+        },
         closeModal() {
+            this.loading = false;
             this.$emit('close');
+        },
+
+        resetLoader() {
+            this.loading = false;
         },
     },
 };
