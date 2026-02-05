@@ -8,12 +8,12 @@
                     <router-link :to="{ name: 'Home' }">
                         <AtomImage
                             class="ps-icon"
-                            src="/assets/ps__logo_mini.png"
+                            src="/assets/pstopmini.png"
                             alt="parkspot icon"
                         />
                         <AtomImage
                             class="ps-text"
-                            src="/assets/ps__logo_text_light_bg.png"
+                            src="/assets/pstoptext.png"
                             alt="parkspot text"
                         />
                     </router-link>
@@ -136,10 +136,7 @@
 
                     <template v-if="isAuthReady">
                         <div v-if="!user" class="login-options">
-                            <AtomButton
-                                class="login-btn"
-                                @click="logInBtn"
-                            >
+                            <AtomButton class="login-btn" @click="logInBtn">
                                 Log in
                             </AtomButton>
                             <!-- todo: add functionality for sign up -->
@@ -164,9 +161,9 @@
                                                 Profile
                                             </a>
                                         </li>
-                                          <li class="dropdown-list">
+                                        <li class="dropdown-list">
                                             <a @click="gotoMybookings">
-                                               My Bookings
+                                                My Bookings
                                             </a>
                                         </li>
                                         <li class="dropdown-list">
@@ -328,10 +325,11 @@
                                         </p>
                                     </li>
 
-
-                                        <li class="scroll-item">
+                                    <li class="scroll-item">
                                         <p @click="toggleMobileNav">
-                                            <a @click="gotoMybookings"> My Bookings </a>
+                                            <a @click="gotoMybookings">
+                                                My Bookings
+                                            </a>
                                         </p>
                                     </li>
 
@@ -419,7 +417,7 @@
                             </div>
                         </div>
                         <!-- agent slide -->
-                         <div
+                        <div
                             :class="[
                                 'menu-slide',
                                 activeSlide === 3 ? 'active-slide' : '',
@@ -439,46 +437,46 @@
                                     <li class="scroll-item">
                                         <p @click="toggleMobileNav">
                                             <router-link
-                                            :to="{ name: 'SearchPortal' }"
-                                        >
-                                            Search Portal
-                                        </router-link>
+                                                :to="{ name: 'SearchPortal' }"
+                                            >
+                                                Search Portal
+                                            </router-link>
                                         </p>
                                     </li>
                                     <li class="scroll-item">
                                         <p @click="toggleMobileNav">
                                             <router-link
-                                            :to="{ name: 'booking-portal' }"
-                                        >
-                                            Bookings
-                                        </router-link>
+                                                :to="{ name: 'booking-portal' }"
+                                            >
+                                                Bookings
+                                            </router-link>
                                         </p>
                                     </li>
                                     <li class="scroll-item">
                                         <p @click="toggleMobileNav">
                                             <router-link
-                                            :to="{ name: 'spotRequest' }"
-                                        >
-                                            Spot Requests
-                                        </router-link>
+                                                :to="{ name: 'spotRequest' }"
+                                            >
+                                                Spot Requests
+                                            </router-link>
                                         </p>
                                     </li>
                                     <li class="scroll-item">
                                         <p @click="toggleMobileNav">
                                             <router-link
-                                            :to="{ name: 'spot-search' }"
-                                        >
-                                            Search Spot
-                                        </router-link>
+                                                :to="{ name: 'spot-search' }"
+                                            >
+                                                Search Spot
+                                            </router-link>
                                         </p>
                                     </li>
                                     <li class="scroll-item">
                                         <p @click="toggleMobileNav">
                                             <router-link
-                                            :to="{ name: 'kyc-status' }"
-                                        >
-                                            KYC Status
-                                        </router-link>
+                                                :to="{ name: 'kyc-status' }"
+                                            >
+                                                KYC Status
+                                            </router-link>
                                         </p>
                                     </li>
                                 </ul>
@@ -541,7 +539,7 @@ export default {
         gotoMybookings() {
             this.$router.push({ name: 'my-bookings' });
         },
-        
+
         toggleMobileNav() {
             this.showMobileNav = !this.showMobileNav;
         },
