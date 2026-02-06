@@ -449,6 +449,7 @@ export default {
                 this.$buefy.toast.open({
                     message: 'Booking request submitted successfully',
                     type: 'is-success',
+                    duration: 5000,
                 });
 
                 setTimeout(() => {
@@ -460,6 +461,7 @@ export default {
                 this.$buefy.toast.open({
                     message: err?.message || 'Booking failed',
                     type: 'is-danger',
+                    duration: 5000,
                 });
             }
         },
@@ -485,6 +487,7 @@ export default {
                 this.$buefy.toast.open({
                     message: 'We will get you in 12 hours.',
                     type: 'is-success',
+                    duration: 5000,
                 });
             } catch (err) {
                 this.showLoader = false;
@@ -494,6 +497,7 @@ export default {
                 this.$buefy.toast.open({
                     message: err?.message || 'Request failed',
                     type: 'is-danger',
+                    duration: 5000,
                 });
             }
         },
