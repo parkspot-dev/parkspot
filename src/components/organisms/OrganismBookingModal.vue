@@ -11,28 +11,14 @@
                 @submit="submitBooking"
             >
                 <div class="modal-body">
+                    <!-- Sign in CTA -->
                     <AtomButton
                         v-if="!isLoggedIn"
                         :expanded="true"
-                        class="primary-btn"
                         :disabled="loading"
                         @click="openLogin"
                     >
-                        Login to Book
-                    </AtomButton>
-                    <AtomButton
-                        v-if="!isLoggedIn"
-                        :expanded="true"
-                        style="
-                            background: #fff;
-                            border: 1px solid #ddd;
-                            color: #444;
-                            margin-top: -6px;
-                        "
-                        :disabled="loading"
-                        @click="continueAsGuest"
-                    >
-                        Continue as Guest
+                        For best experience sign in to your account
                     </AtomButton>
 
                     <!-- divider -->
@@ -70,6 +56,8 @@
                         label="Vehicle Number"
                         placeholder="e.g. MH12AB1234"
                     />
+
+                    <!-- Book only for logged in -->
                     <AtomButton
                         v-if="isLoggedIn"
                         native-type="submit"
@@ -78,6 +66,16 @@
                         :disabled="loading"
                     >
                         {{ loading ? 'Booking...' : 'Book' }}
+                    </AtomButton>
+                    <AtomButton
+                        v-if="!isLoggedIn"
+                        native-type="submit"
+                        :expanded="true"
+                        style="margin-top: 1rem; margin-bottom: 1rem"
+                        :disabled="loading"
+                        @click="isGuest = true"
+                    >
+                        Continue as Guest
                     </AtomButton>
                 </div>
             </VeeForm>
@@ -108,6 +106,7 @@ export default {
         return {
             bookingModalFormSchema,
             loading: false,
+            isGuest: false,
             form: {
                 fullName: '',
                 email: '',
@@ -135,9 +134,19 @@ export default {
 
     methods: {
         submitBooking() {
-            if (!this.isLoggedIn) return;
-
             this.loading = true;
+
+            if (this.isGuest) {
+                this.$emit('guest', this.form);
+                this.isGuest = false;
+                return;
+            }
+
+            if (!this.isLoggedIn) {
+                this.loading = false;
+                return;
+            }
+
             this.$emit('submitted', this.form);
         },
 
