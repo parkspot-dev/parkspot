@@ -69,6 +69,14 @@ const mutations = {
     'set-in-progress-bookings'(state, bookings) {
         state.spotInProgressBookings = bookings;
     },
+    'set-site-images-and-last-call'(state, { images, lastCallDate }) {
+        state.spotDetails.SiteImages = images;
+        state.spotDetails.LastCallDate = lastCallDate;
+    },
+    'set-availability'(state, availableCount) {
+        state.spotDetails.SlotsAvailable = availableCount;
+        state.spotDetails.LastCallDate = new Date().toISOString();
+    },
 };
 
 const actions = {
@@ -119,33 +127,38 @@ const actions = {
         commit('update-payment-info', paymentdetails);
     },
 
-    async updateAvailability({ state }, availableCount) {
-        state.spotDetails.SlotsAvailable = availableCount;
-        // Updating availabilty means agent connected with SO today.
-        state.spotDetails.LastCallDate = new Date().toISOString();
+    async updateAvailability({ state, commit }, availableCount) {
+        commit('set-availability', availableCount);
+        // Updating availability means agent connected with SO today.
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 
-    async updateImages({ state }, updatedImages) {
+    async updateImages({ state, commit }, updatedImages) {
         const uploadedImageURLs = await ImageUploadService.uploadImages(
             updatedImages,
             state.spotDetails.SiteID,
         );
-
-        state.spotDetails.SiteImages = uploadedImageURLs;
-        // Updating availabilty means agent connected with SO today.
-        state.spotDetails.LastCallDate = new Date().toISOString();
+        commit('set-site-images-and-last-call', {
+            images: uploadedImageURLs,
+            lastCallDate: new Date().toISOString(),
+        });
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 
-    async updateLastCallDate({ state }, lastCallDate) {
-        state.spotDetails.LastCallDate = lastCallDate;
+    async updateLastCallDate({ state, commit }, lastCallDate) {
+        commit('set-site-images-and-last-call', {
+            images: state.spotDetails.SiteImages,
+            lastCallDate,
+        });
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 
-    async updateRemark({ state }, remark) {
+    async updateRemark({ state, commit }, remark) {
+        commit('set-site-images-and-last-call', {
+            images: state.spotDetails.SiteImages,
+            lastCallDate: new Date().toISOString(),
+        });
         state.spotDetails.Remark = remark;
-        state.spotDetails.LastCallDate = new Date().toISOString();
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 };

@@ -86,7 +86,7 @@
 
             <!-- only for agents -->
             <div class="only-to-agent">
-                <div class="spot-detail-owner">
+                <div v-if="ownerInfoDetails.UserName" class="spot-detail-owner">
                     <hr style="width: 100%" />
                     <h2>Owner Info Details</h2>
                     <div class="spot-detail-owner-body">
