@@ -342,7 +342,7 @@ export default {
     },
     data() {
         return {
-            psfooterImg: '/assets/ps__logo_horizontal_dark_bg (2).png',
+            psfooterImg: '/assets/ps-footer-logo.png',
             appLinkImg: '/assets/google-play-badge.svg',
             iosAppLinkImg: '/assets/apple-store.svg',
         };
