@@ -77,6 +77,10 @@ const mutations = {
         state.spotDetails.SlotsAvailable = availableCount;
         state.spotDetails.LastCallDate = new Date().toISOString();
     },
+    'set-remark'(state, remark) {
+        state.spotDetails.Remark = remark;
+        state.spotDetails.LastCallDate = new Date().toISOString();
+    }
 };
 
 const actions = {
@@ -158,7 +162,7 @@ const actions = {
             images: state.spotDetails.SiteImages,
             lastCallDate: new Date().toISOString(),
         });
-        state.spotDetails.Remark = remark;
+        commit('set-remark', remark);
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 };
