@@ -52,13 +52,13 @@ export default {
                 return this.$store.state.user.loginModal;
             },
             set(value) {
-                this.$store.commit('user/update-login-Modal', value);
+                this.$store.commit('user/update-login-modal', value);
             },
         },
     },
     methods: {
         ...mapMutations('user', {
-            updateLoginModal: 'update-login-Modal',
+            updateLoginModal: 'update-login-modal',
         }),
         ...mapActions('user', {
             loginWithGoogle: 'loginWithGoogle',

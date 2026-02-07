@@ -55,7 +55,7 @@ const mutations = {
         }
     },
 
-    'update-login-Modal'(state, loginModal) {
+    'update-login-modal'(state, loginModal) {
         state.loginModal = loginModal;
     },
 
@@ -110,7 +110,7 @@ const actions = {
             const res = await signInWithPopup(auth, gProvider);
             const user = res.user;
             commit('update-user', user);
-            commit('update-login-Modal', false);
+            commit('update-login-modal', false);
             dispatch('authenticateWithMaya');
         } catch (error) {
             // Handle Errors here.
