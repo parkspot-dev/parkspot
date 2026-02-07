@@ -12,14 +12,14 @@
             >
                 <div class="modal-body">
                     <!-- Sign in CTA -->
-                    <AtomButton
+                    <div
                         v-if="!isLoggedIn"
-                        :expanded="true"
-                        :disabled="loading"
-                        @click="openLogin"
+                        style="font-size: 15px; text-align: center"
                     >
-                        For best experience sign in to your account
-                    </AtomButton>
+                        For best experience
+                        <a @click="openLogin"> sign in </a>
+                        to your account
+                    </div>
 
                     <!-- divider -->
                     <div
