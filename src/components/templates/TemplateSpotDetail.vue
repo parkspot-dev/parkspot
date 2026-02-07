@@ -69,7 +69,8 @@
                     :spot-details="selectedSpot[0]"
                     :zoom="13"
                     class="sdp-map"
-                ></MapContainer>
+                >
+                </MapContainer>
             </div>
 
             <hr style="width: 100%" />
@@ -161,6 +162,20 @@
                                     <td>UserName</td>
                                     <td>{{ ownerInfoDetails.UserName }}</td>
                                 </tr>
+                                <tr v-if="isAdmin">
+                                    <td>Image Uploads</td>
+                                    <td>
+                                        <div class="form-field">
+                                            <ImageUpload
+                                                v-model:images="updatedImages"
+                                            />
+                                        </div>
+
+                                        <AtomButton @click="saveImages">
+                                            Save Images
+                                        </AtomButton>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                         <div class="btn-group">
@@ -177,16 +192,12 @@
                                 </AtomButton>
                             </div>
                             <div v-if="isAvailable" class="goto-btn">
-                                <AtomButton
-                                    @click="changeAvailability(-1)"
-                                >
+                                <AtomButton @click="changeAvailability(-1)">
                                     Mark Rented
                                 </AtomButton>
                             </div>
                             <div v-if="!isAvailable" class="goto-btn">
-                                <AtomButton
-                                    @click="changeAvailability(1)"
-                                >
+                                <AtomButton @click="changeAvailability(1)">
                                     Mark Available
                                 </AtomButton>
                             </div>
@@ -213,9 +224,7 @@
                                     <td>
                                         <a
                                             :href="
-                                                getBookingDetailURL(
-                                                    booking.ID,
-                                                )
+                                                getBookingDetailURL(booking.ID)
                                             "
                                             target="_blank"
                                         >
@@ -274,9 +283,9 @@ import {
     getBookingStatusLabel,
     getKYCStatusLabel,
 } from '@/constant/enums';
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
-
+import ImageUpload from '../global/ImageUpload.vue';
 export default {
     name: 'TemplateSpotDetail',
     components: {
@@ -288,17 +297,18 @@ export default {
         AtomButton,
         AtomDatePicker,
         AtomTextarea,
+        ImageUpload,
     },
-    props: {
-        isAdmin: {
-            type: Boolean,
-            default: false,
-        },
-    },
-    emits: ['goToSearchPortal', 'changeAvailability', 'changeLastCallDate', 'changeRemark'],
+    emits: [
+        'goToSearchPortal',
+        'changeAvailability',
+        'changeLastCallDate',
+        'changeRemark',
+    ],
     data() {
         return {
             BookingStatus: BookingStatus,
+            updatedImages: [],
         };
     },
     computed: {
@@ -313,6 +323,7 @@ export default {
             'spotDetails',
             'spotInProgressBookings',
         ]),
+        ...mapState('user', ['isAdmin']),
         locationName() {
             return this.selectedSpot.length > 0
                 ? this.selectedSpot[0].Name
@@ -328,7 +339,25 @@ export default {
             }
         },
     },
+    watch: {
+        images: {
+            immediate: true,
+            deep: true,
+            handler(newImages) {
+                if (!newImages || !newImages.length) return;
+
+                // map backend images → ImageUpload format
+                this.updatedImages = newImages.map((img) => ({
+                    id: img.SiteImageID,
+                    preview: img.ImageURL,
+                    file: null,
+                    isNew: false,
+                }));
+            },
+        },
+    },
     methods: {
+        ...mapActions('sdp', ['updateImages']),
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
@@ -349,6 +378,9 @@ export default {
         },
         getBookingStatusLabel(bookingStatus) {
             return getBookingStatusLabel(bookingStatus);
+        },
+        saveImages() {
+            this.updateImages(this.updatedImages);
         },
     },
 };
