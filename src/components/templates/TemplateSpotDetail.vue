@@ -9,23 +9,50 @@
             ></ImageGallery>
             <!-- Rate Card Organism -->
             <div class="rate-card-container">
-                <SpotRateCard class="card-position"></SpotRateCard>
+                <SpotRateCard
+                    class="card-position"
+                    :isAdmin="isAdmin"
+                    @update-rent="saveRent"
+                ></SpotRateCard>
             </div>
             <div class="spot-detail-main-description">
                 <div class="title-container">
                     <h1>{{ spotDetails.Name }}</h1>
                 </div>
                 <div>
-                    <p>Address:</p>
-                    <p>
-                        {{ spotDetails.Address }}
+                    <p class="editable-label">
+                        Address:
+                        <span
+                            v-if="isAdmin && !isEditingAddress"
+                            class="material-symbols-outlined edit-icon"
+                            @click="isEditingAddress = true"
+                        >
+                            edit
+                        </span>
                     </p>
-                    <p>
-                        {{ spotDetails.Area }}
-                    </p>
-                    <p>
-                        {{ spotDetails.City }}
-                    </p>
+
+                    <!-- View mode -->
+                    <div v-if="!isEditingAddress">
+                        <p>{{ spotDetails.Address }}</p>
+                        <p>{{ spotDetails.Area }}</p>
+                        <p>{{ spotDetails.City }}</p>
+                    </div>
+
+                    <div v-else>
+                        <AtomTextarea v-model="editableAddress" :row-no="3" />
+                        <div class="edit-actions">
+                            <AtomButton size="is-small" @click="saveAddress">
+                                Save
+                            </AtomButton>
+                            <AtomButton
+                                size="is-small"
+                                type="is-light"
+                                @click="cancelAddressEdit"
+                            >
+                                Cancel
+                            </AtomButton>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -177,16 +204,12 @@
                                 </AtomButton>
                             </div>
                             <div v-if="isAvailable" class="goto-btn">
-                                <AtomButton
-                                    @click="changeAvailability(-1)"
-                                >
+                                <AtomButton @click="changeAvailability(-1)">
                                     Mark Rented
                                 </AtomButton>
                             </div>
                             <div v-if="!isAvailable" class="goto-btn">
-                                <AtomButton
-                                    @click="changeAvailability(1)"
-                                >
+                                <AtomButton @click="changeAvailability(1)">
                                     Mark Available
                                 </AtomButton>
                             </div>
@@ -213,9 +236,7 @@
                                     <td>
                                         <a
                                             :href="
-                                                getBookingDetailURL(
-                                                    booking.ID,
-                                                )
+                                                getBookingDetailURL(booking.ID)
                                             "
                                             target="_blank"
                                         >
@@ -274,7 +295,7 @@ import {
     getBookingStatusLabel,
     getKYCStatusLabel,
 } from '@/constant/enums';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
 
 export default {
@@ -289,16 +310,27 @@ export default {
         AtomDatePicker,
         AtomTextarea,
     },
-    props: {
-        isAdmin: {
-            type: Boolean,
-            default: false,
+    watch: {
+        spotDetails: {
+            immediate: true,
+            handler(val) {
+                if (val?.Address) {
+                    this.editableAddress = val.Address;
+                }
+            },
         },
     },
-    emits: ['goToSearchPortal', 'changeAvailability', 'changeLastCallDate', 'changeRemark'],
+    emits: [
+        'goToSearchPortal',
+        'changeAvailability',
+        'changeLastCallDate',
+        'changeRemark',
+    ],
     data() {
         return {
             BookingStatus: BookingStatus,
+            isEditingAddress: false,
+            editableAddress: '',
         };
     },
     computed: {
@@ -313,6 +345,7 @@ export default {
             'spotDetails',
             'spotInProgressBookings',
         ]),
+        ...mapState('user', ['isAdmin']),
         locationName() {
             return this.selectedSpot.length > 0
                 ? this.selectedSpot[0].Name
@@ -329,6 +362,7 @@ export default {
         },
     },
     methods: {
+        ...mapActions('sdp', ['updateAddress', 'updateRent']),
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
@@ -349,6 +383,38 @@ export default {
         },
         getBookingStatusLabel(bookingStatus) {
             return getBookingStatusLabel(bookingStatus);
+        },
+        saveAddress() {
+            this.isEditingAddress = false;
+            this.updateAddress(this.editableAddress);
+        },
+        cancelAddressEdit() {
+            this.editableAddress = this.spotDetails.Address;
+            this.isEditingAddress = false;
+        },
+        alertError(msg) {
+            this.$buefy.dialog.alert({
+                ariaModal: true,
+                ariaRole: 'alertdialog',
+                hasIcon: true,
+                icon: 'alert-circle',
+                message: msg,
+                title: 'Error',
+                type: 'is-danger',
+            });
+        },
+        saveRent(newRent) {
+            const rent = Number(newRent);
+
+            if (rent <= 0) {
+                console.error('Invalid rent value:', newRent);
+                this.alertError(
+                    'Please enter a valid positive number for rent.',
+                );
+                return;
+            }
+
+            this.updateRent(rent);
         },
     },
 };
