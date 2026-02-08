@@ -68,7 +68,27 @@ const actions = {
         commit('update-active-tab', tabNo);
     },
     async getAgents({ commit }) {
-        commit('set-agent-list', await mayaClient.get('/auth/user/agents'));
+        try {
+            const cachedAgents = localStorage.getItem('agents');
+
+            if (cachedAgents) {
+                const parsedAgents = JSON.parse(cachedAgents);
+
+                if (Array.isArray(parsedAgents) && parsedAgents.length > 0) {
+                    commit('set-agent-list', parsedAgents);
+                    return; 
+                } else {
+                    localStorage.removeItem('agents');
+                }
+            }
+            
+            const res = await mayaClient.get('/auth/user/agents');
+            localStorage.setItem('agents', JSON.stringify(res));
+            commit('set-agent-list', res);
+        } catch {
+            localStorage.removeItem('agents');
+            commit('set-error', 'Failed to load agents');
+        }
     },
     // Get parking requests by mbile number
     async getParkingRequests({ commit, state }) {
@@ -151,9 +171,10 @@ const actions = {
     },
 
     extractRequestsByStatus({ commit, state }, status) {
-        const extractRequestsByStatusResult = state.filteredParkingRequests.filter(
-            (requests) => requests.Status === status,
-        );
+        const extractRequestsByStatusResult =
+            state.filteredParkingRequests.filter(
+                (requests) => requests.Status === status,
+            );
         commit('set-filtered-parking-requests', extractRequestsByStatusResult);
     },
 
