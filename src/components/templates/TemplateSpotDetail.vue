@@ -9,7 +9,10 @@
             ></ImageGallery>
             <!-- Rate Card Organism -->
             <div class="rate-card-container">
-                <SpotRateCard class="card-position"></SpotRateCard>
+                <SpotRateCard
+                    class="card-position"
+                    @open-booking-modal="openBookingModal"
+                ></SpotRateCard>
             </div>
             <div class="spot-detail-main-description">
                 <div class="title-container">
@@ -267,6 +270,13 @@
                 <hr style="width: 100%; margin-top: 80px" />
             </div>
         </div>
+        <BookingModal
+            v-if="showBookingModal"
+            :initial-data="prefilledData"
+            @close="showBookingModal = false"
+            @submitted="handleBookingSubmit"
+        />
+        <LoaderModal v-if="showLoader" />
     </BodyWrapper>
 </template>
 
@@ -278,13 +288,15 @@ import ImageGallery from '../organisms/OrganismImageGallery.vue';
 import InfographicSteps from '../molecules/MoleculeInfographicSteps.vue';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
+import BookingModal from '@/components/organisms/OrganismBookingModal.vue';
 import {
     BookingStatus,
     getBookingStatusLabel,
     getKYCStatusLabel,
 } from '@/constant/enums';
-import { mapActions, mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
+import LoaderModal from '../extras/LoaderModal.vue';
 import ImageUpload from '../global/ImageUpload.vue';
 export default {
     name: 'TemplateSpotDetail',
@@ -297,7 +309,15 @@ export default {
         AtomButton,
         AtomDatePicker,
         AtomTextarea,
+        BookingModal,
+        LoaderModal,
         ImageUpload,
+    },
+    props: {
+        isAdmin: {
+            type: Boolean,
+            default: false,
+        },
     },
     emits: [
         'goToSearchPortal',
@@ -308,6 +328,9 @@ export default {
     data() {
         return {
             BookingStatus: BookingStatus,
+            showBookingModal: false,
+            emailWatcher: null,
+            showLoader: false,
             updatedImages: [],
         };
     },
@@ -338,6 +361,21 @@ export default {
                 return [];
             }
         },
+        isLoggedIn() {
+            return !!this.$store.state.user.user;
+        },
+        userProfile() {
+            return this.$store.state.user.userProfile;
+        },
+        prefilledData() {
+            if (!this.isLoggedIn || !this.userProfile) return {};
+
+            return {
+                fullName: this.userProfile.FullName || '',
+                email: this.userProfile.EmailID || '',
+                mobile: this.userProfile.Mobile || '',
+            };
+        },
     },
     watch: {
         images: {
@@ -356,7 +394,14 @@ export default {
             },
         },
     },
+    beforeUnmount() {
+        this.emailWatcher?.();
+    },
     methods: {
+        ...mapActions('bookingPortal', [
+            'createTentativeBooking',
+            'createContactLead',
+        ]),
         ...mapActions('sdp', ['updateImages']),
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
@@ -378,6 +423,105 @@ export default {
         },
         getBookingStatusLabel(bookingStatus) {
             return getBookingStatusLabel(bookingStatus);
+        },
+        async handleBookingSubmit(form) {
+            try {
+                this.showLoader = true;
+                if (!this.isLoggedIn) {
+                    await this.createContactLead({
+                        User: {
+                            FullName: form.fullName,
+                            EmailID: form.email,
+                            Mobile: form.mobile,
+                        },
+                        Comments: `From spot detail page | Vehicle: ${form.vehicleNo || 'NA'}`,
+                    });
+
+                    this.showLoader = false;
+
+                    this.$buefy.toast.open({
+                        message: 'We will get you in 12 hours.',
+                        type: 'is-success',
+                    });
+
+                    return;
+                }
+
+                const formatDate = (date) => {
+                    const yyyy = date.getFullYear();
+                    const mm = String(date.getMonth() + 1).padStart(2, '0');
+                    const dd = String(date.getDate()).padStart(2, '0');
+                    const hh = String(date.getHours()).padStart(2, '0');
+                    const min = String(date.getMinutes()).padStart(2, '0');
+
+                    return `${yyyy}${mm}${dd}t${hh}${min}`;
+                };
+
+                // start = now
+                const startTime = formatDate(new Date());
+
+                // end = after 1 month
+                const endDate = new Date();
+                endDate.setMonth(endDate.getMonth() + 1);
+                const endTime = formatDate(endDate);
+
+                await this.createTentativeBooking({
+                    SiteID: this.spotDetails.SiteID,
+                    StartTime: startTime,
+                    EndTime: endTime,
+
+                    UserInfo: {
+                        Name: form.fullName,
+                        Mobile: form.mobile,
+                        EmailID: form.email,
+                        VehicleNo: form.vehicleNo || '',
+                    },
+
+                    Fee: {
+                        Rent: this.spotDetails.Rate,
+                        ConvenienceFee: 500,
+                    },
+
+                    PaymentEnv: 0,
+                });
+
+                this.showLoader = false;
+
+                this.$buefy.toast.open({
+                    message: 'Booking request submitted successfully',
+                    type: 'is-success',
+                    duration: 3000,
+                    position: 'is-top',
+                });
+
+                setTimeout(() => {
+                    this.$router.push('/profile/my-bookings?tab=Request');
+                }, 800);
+            } catch (err) {
+                this.showLoader = false;
+                this.$buefy.toast.open({
+                    message: err?.message || 'Booking failed',
+                    type: 'is-danger',
+                    position: 'is-top',
+                });
+            }
+        },
+        openBookingModal() {
+            if (this.isLoggedIn && !this.userProfile.EmailID) {
+                this.emailWatcher = this.$watch(
+                    'userProfile.EmailID',
+                    (val) => {
+                        if (val) {
+                            this.showBookingModal = true;
+                            this.emailWatcher?.();
+                            this.emailWatcher = null;
+                        }
+                    },
+                );
+                return;
+            }
+
+            this.showBookingModal = true;
         },
         saveImages() {
             this.updateImages(this.updatedImages);
