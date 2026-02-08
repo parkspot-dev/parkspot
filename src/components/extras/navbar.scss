@@ -35,7 +35,6 @@
             }
         }
 
-
         .ps-text {
             width: 165px;
             height: 36px;
@@ -73,10 +72,12 @@
                 padding-top: 12px;
                 opacity: 1;
                 visibility: visible;
-                transition: opacity 0.2s ease-in-out,
-                    visibility 0.2s ease-in-out, transform 0.2s ease-in-out,
+                transition:
+                    opacity 0.2s ease-in-out,
+                    visibility 0.2s ease-in-out,
+                    transform 0.2s ease-in-out,
                     -webkit-transform 0.2s ease-in-out;
-                    height: fit-content;
+                height: fit-content;
             }
         }
 
@@ -248,7 +249,8 @@
     background-color: rgba(0, 0, 0, 50%);
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.5s cubic-bezier(1, 0.07, 0.11, 1),
+    transition:
+        opacity 0.5s cubic-bezier(1, 0.07, 0.11, 1),
         visibility 0.5s cubic-bezier(1, 0.07, 0.11, 1);
 }
 
@@ -398,8 +400,11 @@
         .user-dropdown {
             opacity: 1;
             visibility: visible;
-            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out,
-                transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
+            transition:
+                opacity 0.2s ease-in-out,
+                visibility 0.2s ease-in-out,
+                transform 0.2s ease-in-out,
+                -webkit-transform 0.2s ease-in-out;
         }
     }
 
