@@ -368,12 +368,12 @@ export default {
             return this.$store.state.user.userProfile;
         },
         prefilledData() {
-            if (!this.isLoggedIn) return {};
+            if (!this.isLoggedIn || !this.userProfile) return {};
 
             return {
-                fullName: this.userProfile.FullName,
-                email: this.userProfile.EmailID,
-                mobile: this.userProfile.Mobile,
+                fullName: this.userProfile.FullName || '',
+                email: this.userProfile.EmailID || '',
+                mobile: this.userProfile.Mobile || '',
             };
         },
     },
