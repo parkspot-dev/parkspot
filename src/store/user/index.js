@@ -111,7 +111,8 @@ const actions = {
             const user = res.user;
             commit('update-user', user);
             commit('update-login-Modal', false);
-            dispatch('authenticateWithMaya');
+            await dispatch('authenticateWithMaya');
+            await dispatch('bookingPortal/getAgents', null, { root: true});
         } catch (error) {
             // Handle Errors here.
             const errorCode = error.code;
@@ -127,6 +128,7 @@ const actions = {
     async logOut({ commit, state }) {
         try {
             await signOut(auth);
+            localStorage.removeItem('agents');
             commit('update-user', null);
             commit('reset-user-profile');
         } catch (err) {
@@ -310,9 +312,14 @@ const actions = {
     },
 };
 
-const unsub = onAuthStateChanged(auth, (user) => {
+const unsub = onAuthStateChanged(auth, async (user) => {
     store.commit('user/update-user', user);
     store.commit('user/update-auth-ready', true);
+
+    if (user) {
+        await store.dispatch('user/getUserProfile');
+        await store.dispatch('bookingPortal/getAgents');
+    }
     unsub();
 });
 

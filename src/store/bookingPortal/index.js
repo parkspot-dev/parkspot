@@ -27,7 +27,7 @@ const state = {
         "Remark": "Booking remark"
     }] */
     activeBookings: [],
-    agents: {},
+    agents: [],
     bookingDetails: null,
     errorMessage: String,
     hasError: false,
@@ -108,7 +108,28 @@ const mutations = {
 
 const actions = {
     async getAgents({ commit }) {
-        commit('set-agent-list', await mayaClient.get('/auth/user/agents'));
+
+        try {
+            const cachedAgents = localStorage.getItem('agents');
+
+            if (cachedAgents) {
+                const parsedAgents = JSON.parse(cachedAgents);
+
+                if (Array.isArray(parsedAgents) && parsedAgents.length > 0) {
+                    commit('set-agent-list', parsedAgents);
+                    return;
+                } else {
+                    localStorage.removeItem('agents');
+                }
+            }
+
+            const res = await mayaClient.get('/auth/user/agents');
+            localStorage.setItem('agents', JSON.stringify(res));
+            commit('set-agent-list', res);
+        } catch {
+            localStorage.removeItem('agents');
+            commit('set-error', 'Failed to load agents');
+        }
     },
 
     async getBookingDetails({ commit }, bookingId) {
