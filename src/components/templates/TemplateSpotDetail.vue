@@ -72,7 +72,8 @@
                     :spot-details="selectedSpot[0]"
                     :zoom="13"
                     class="sdp-map"
-                ></MapContainer>
+                >
+                </MapContainer>
             </div>
 
             <hr style="width: 100%" />
@@ -163,6 +164,20 @@
                                 <tr v-if="ownerInfoDetails.UserName">
                                     <td>UserName</td>
                                     <td>{{ ownerInfoDetails.UserName }}</td>
+                                </tr>
+                                <tr v-if="isAdmin">
+                                    <td>Image Uploads</td>
+                                    <td>
+                                        <div class="form-field">
+                                            <ImageUpload
+                                                v-model:images="updatedImages"
+                                            />
+                                        </div>
+
+                                        <AtomButton @click="saveImages">
+                                            Save Images
+                                        </AtomButton>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -282,7 +297,7 @@ import {
 import { mapState, mapActions } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
 import LoaderModal from '../extras/LoaderModal.vue';
-
+import ImageUpload from '../global/ImageUpload.vue';
 export default {
     name: 'TemplateSpotDetail',
     components: {
@@ -296,6 +311,7 @@ export default {
         AtomTextarea,
         BookingModal,
         LoaderModal,
+        ImageUpload,
     },
     props: {
         isAdmin: {
@@ -315,6 +331,7 @@ export default {
             showBookingModal: false,
             emailWatcher: null,
             showLoader: false,
+            updatedImages: [],
         };
     },
     computed: {
@@ -329,6 +346,7 @@ export default {
             'spotDetails',
             'spotInProgressBookings',
         ]),
+        ...mapState('user', ['isAdmin']),
         locationName() {
             return this.selectedSpot.length > 0
                 ? this.selectedSpot[0].Name
@@ -359,6 +377,23 @@ export default {
             };
         },
     },
+    watch: {
+        images: {
+            immediate: true,
+            deep: true,
+            handler(newImages) {
+                if (!newImages || !newImages.length) return;
+
+                // map backend images → ImageUpload format
+                this.updatedImages = newImages.map((img) => ({
+                    id: img.SiteImageID,
+                    preview: img.ImageURL,
+                    file: null,
+                    isNew: false,
+                }));
+            },
+        },
+    },
     beforeUnmount() {
         this.emailWatcher?.();
     },
@@ -367,6 +402,7 @@ export default {
             'createTentativeBooking',
             'createContactLead',
         ]),
+        ...mapActions('sdp', ['updateImages']),
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
@@ -486,6 +522,9 @@ export default {
             }
 
             this.showBookingModal = true;
+        },
+        saveImages() {
+            this.updateImages(this.updatedImages);
         },
     },
 };
