@@ -17,8 +17,7 @@
                         style="font-size: 15px; text-align: center"
                     >
                         For best experience
-                        <a @click="openLogin"> sign in </a>
-                        to your account
+                        <a style="font-weight: 600;" @click="openLogin"> sign in to your account </a>
                     </div>
 
                     <!-- divider -->
@@ -73,7 +72,6 @@
                         :expanded="true"
                         style="margin-top: 1rem; margin-bottom: 1rem"
                         :disabled="loading"
-                        @click="isGuest = true"
                     >
                         Continue as Guest
                     </AtomButton>
@@ -136,13 +134,8 @@ export default {
         submitBooking() {
             this.loading = true;
 
-            if (this.isGuest) {
-                this.$emit('guest', this.form);
-                this.isGuest = false;
-                return;
-            }
-
             if (!this.isLoggedIn) {
+                this.$emit('guest', this.form);
                 this.loading = false;
                 return;
             }
@@ -150,15 +143,11 @@ export default {
             this.$emit('submitted', this.form);
         },
 
-        continueAsGuest() {
-            this.loading = true;
-            this.$emit('guest', this.form);
-        },
-
         openLogin() {
             this.$emit('login', this.form);
             this.closeModal();
         },
+
         closeModal() {
             this.loading = false;
             this.$emit('close');
