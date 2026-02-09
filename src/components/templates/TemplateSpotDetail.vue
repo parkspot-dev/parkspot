@@ -272,9 +272,12 @@
         </div>
         <BookingModal
             v-if="showBookingModal"
+            ref="bookingModal"
             :initial-data="prefilledData"
             @close="showBookingModal = false"
             @submitted="handleBookingSubmit"
+            @guest="handleGuestBooking"
+            @login="handleLoginFromModal"
         />
         <LoaderModal v-if="showLoader" />
     </BodyWrapper>
@@ -329,11 +332,14 @@ export default {
         return {
             BookingStatus: BookingStatus,
             showBookingModal: false,
-            emailWatcher: null,
             showLoader: false,
+            bookingIntent: false,
+            tempBookingForm: {},
             updatedImages: [],
+            emailWatcher: null,
         };
     },
+
     computed: {
         ...mapState('sdp', [
             'images',
@@ -362,22 +368,33 @@ export default {
             }
         },
         isLoggedIn() {
-            return !!this.$store.state.user.user;
+            return !!this.$store?.state?.user?.user;
         },
         userProfile() {
-            return this.$store.state.user.userProfile;
+            return this.$store?.state?.user?.userProfile || {};
         },
         prefilledData() {
-            if (!this.isLoggedIn || !this.userProfile) return {};
+            const profile = this.userProfile || {};
+            const temp = this.tempBookingForm || {};
 
             return {
-                fullName: this.userProfile.FullName || '',
-                email: this.userProfile.EmailID || '',
-                mobile: this.userProfile.Mobile || '',
+                fullName: profile.FullName || temp.fullName || '',
+                email: profile.EmailID || temp.email || '',
+                mobile: profile.Mobile || temp.mobile || '',
+                vehicleNo: temp.vehicleNo || '',
             };
         },
     },
     watch: {
+        isLoggedIn(val) {
+            if (val && this.bookingIntent) {
+                this.bookingIntent = false;
+
+                this.$nextTick(() => {
+                    this.showBookingModal = true;
+                });
+            }
+        },
         images: {
             immediate: true,
             deep: true,
@@ -397,6 +414,7 @@ export default {
     beforeUnmount() {
         this.emailWatcher?.();
     },
+
     methods: {
         ...mapActions('bookingPortal', [
             'createTentativeBooking',
@@ -425,27 +443,10 @@ export default {
             return getBookingStatusLabel(bookingStatus);
         },
         async handleBookingSubmit(form) {
+            if (!this.isLoggedIn) return;
+
             try {
                 this.showLoader = true;
-                if (!this.isLoggedIn) {
-                    await this.createContactLead({
-                        User: {
-                            FullName: form.fullName,
-                            EmailID: form.email,
-                            Mobile: form.mobile,
-                        },
-                        Comments: `From spot detail page | Vehicle: ${form.vehicleNo || 'NA'}`,
-                    });
-
-                    this.showLoader = false;
-
-                    this.$buefy.toast.open({
-                        message: 'We will get you in 12 hours.',
-                        type: 'is-success',
-                    });
-
-                    return;
-                }
 
                 const formatDate = (date) => {
                     const yyyy = date.getFullYear();
@@ -457,10 +458,8 @@ export default {
                     return `${yyyy}${mm}${dd}t${hh}${min}`;
                 };
 
-                // start = now
                 const startTime = formatDate(new Date());
 
-                // end = after 1 month
                 const endDate = new Date();
                 endDate.setMonth(endDate.getMonth() + 1);
                 const endTime = formatDate(endDate);
@@ -490,38 +489,70 @@ export default {
                 this.$buefy.toast.open({
                     message: 'Booking request submitted successfully',
                     type: 'is-success',
-                    duration: 3000,
-                    position: 'is-top',
+                    duration: 5000,
                 });
 
                 setTimeout(() => {
                     this.$router.push('/profile/my-bookings?tab=Request');
-                }, 800);
+                }, 500);
             } catch (err) {
                 this.showLoader = false;
+
                 this.$buefy.toast.open({
                     message: err?.message || 'Booking failed',
                     type: 'is-danger',
-                    position: 'is-top',
+                    duration: 5000,
                 });
             }
         },
         openBookingModal() {
-            if (this.isLoggedIn && !this.userProfile.EmailID) {
-                this.emailWatcher = this.$watch(
-                    'userProfile.EmailID',
-                    (val) => {
-                        if (val) {
-                            this.showBookingModal = true;
-                            this.emailWatcher?.();
-                            this.emailWatcher = null;
-                        }
-                    },
-                );
+            if (!this.isLoggedIn) {
+                this.showBookingModal = true;
                 return;
             }
 
             this.showBookingModal = true;
+        },
+
+        async handleGuestBooking(form) {
+            try {
+                this.showLoader = true;
+
+                await this.createContactLead({
+                    User: {
+                        FullName: form.fullName,
+                        EmailID: form.email,
+                        Mobile: form.mobile,
+                    },
+                    Comments: `Guest booking from spot detail page | Vehicle: ${form.vehicleNo || 'NA'}`,
+                });
+
+                this.showLoader = false;
+                this.showBookingModal = false;
+
+                this.$buefy.toast.open({
+                    message: 'We will get you in 12 hours.',
+                    type: 'is-success',
+                    duration: 5000,
+                });
+            } catch (err) {
+                this.showLoader = false;
+
+                this.$refs.bookingModal?.resetLoader();
+
+                this.$buefy.toast.open({
+                    message: err?.message || 'Request failed',
+                    type: 'is-danger',
+                    duration: 5000,
+                });
+            }
+        },
+        handleLoginFromModal(form) {
+            this.tempBookingForm = form;
+            this.bookingIntent = true;
+            this.showBookingModal = false;
+
+            this.$store.commit('user/update-login-modal', true);
         },
         saveImages() {
             this.updateImages(this.updatedImages);

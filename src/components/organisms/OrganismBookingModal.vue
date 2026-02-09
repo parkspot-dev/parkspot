@@ -11,6 +11,23 @@
                 @submit="submitBooking"
             >
                 <div class="modal-body">
+                    <!-- Sign in CTA -->
+                    <div
+                        v-if="!isLoggedIn"
+                        style="font-size: 15px; text-align: center"
+                    >
+                        For best experience
+                        <a style="font-weight: 600;" @click="openLogin"> sign in to your account </a>
+                    </div>
+
+                    <!-- divider -->
+                    <div
+                        v-if="!isLoggedIn"
+                        style="text-align: center; color: #bbb; font-size: 12px"
+                    >
+                        ── or ──
+                    </div>
+
                     <FormInput
                         v-model="form.fullName"
                         name="fullName"
@@ -39,13 +56,24 @@
                         placeholder="e.g. MH12AB1234"
                     />
 
+                    <!-- Book only for logged in -->
                     <AtomButton
+                        v-if="isLoggedIn"
                         native-type="submit"
                         :expanded="true"
                         class="primary-btn"
                         :disabled="loading"
                     >
                         {{ loading ? 'Booking...' : 'Book' }}
+                    </AtomButton>
+                    <AtomButton
+                        v-if="!isLoggedIn"
+                        native-type="submit"
+                        :expanded="true"
+                        style="margin-top: 1rem; margin-bottom: 1rem"
+                        :disabled="loading"
+                    >
+                        Continue as Guest
                     </AtomButton>
                 </div>
             </VeeForm>
@@ -70,12 +98,13 @@ export default {
         },
     },
 
-    emits: ['close', 'submitted'],
+    emits: ['close', 'submitted', 'guest', 'login'],
 
     data() {
         return {
             bookingModalFormSchema,
             loading: false,
+            isGuest: false,
             form: {
                 fullName: '',
                 email: '',
@@ -83,6 +112,12 @@ export default {
                 vehicleNo: '',
             },
         };
+    },
+
+    computed: {
+        isLoggedIn() {
+            return !!this.$store.state.user?.user;
+        },
     },
 
     watch: {
@@ -97,12 +132,29 @@ export default {
 
     methods: {
         submitBooking() {
+            this.loading = true;
+
+            if (!this.isLoggedIn) {
+                this.$emit('guest', this.form);
+                this.loading = false;
+                return;
+            }
+
             this.$emit('submitted', this.form);
+        },
+
+        openLogin() {
+            this.$emit('login', this.form);
             this.closeModal();
         },
 
         closeModal() {
+            this.loading = false;
             this.$emit('close');
+        },
+
+        resetLoader() {
+            this.loading = false;
         },
     },
 };
