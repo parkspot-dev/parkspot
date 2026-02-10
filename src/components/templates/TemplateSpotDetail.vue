@@ -13,6 +13,7 @@
                     class="card-position"
                     :is-admin="isAdmin"
                     @open-booking-modal="openBookingModal"
+                    :isAdmin="isAdmin"
                     @update-rent="saveRent"
                 ></SpotRateCard>
             </div>
@@ -42,16 +43,23 @@
                     <div v-else>
                         <AtomTextarea v-model="editableAddress" :row-no="3" />
                         <div class="edit-actions">
-                            <AtomButton size="is-small" @click="saveAddress">
-                                Save
-                            </AtomButton>
-                            <AtomButton
-                                size="is-small"
-                                type="is-light"
-                                @click="cancelAddressEdit"
-                            >
-                                Cancel
-                            </AtomButton>
+                            <div class="edit-actions">
+                                <div class="edit-actions">
+                                    <AtomButton
+                                        size="is-medium"
+                                        @click="saveAddress"
+                                    >
+                                        Save
+                                    </AtomButton>
+                                    <AtomButton
+                                        size="is-medium"
+                                        type="is-light"
+                                        @click="cancelAddressEdit"
+                                    >
+                                        Cancel
+                                    </AtomButton>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -341,6 +349,16 @@ export default {
         LoaderModal,
         ImageUpload,
     },
+    watch: {
+        spotDetails: {
+            immediate: true,
+            handler(val) {
+                if (val?.Address) {
+                    this.editableAddress = val.Address;
+                }
+            },
+        },
+    },
     emits: [
         'goToSearchPortal',
         'changeAvailability',
@@ -588,6 +606,18 @@ export default {
             this.updateImages(this.updatedImages);
         },
         saveAddress() {
+            this.spotDetails.Address = this.editableAddress;
+            this.isEditingAddress = false;
+            this.updateAddress(this.editableAddress);
+        },
+        cancelAddressEdit() {
+            this.editableAddress = this.spotDetails.Address;
+            this.isEditingAddress = false;
+        },
+        saveRent(newRent) {
+            this.updateRent(newRent);
+        },
+        saveAddress() {
             this.isEditingAddress = false;
             this.updateAddress(this.editableAddress);
         },
@@ -757,10 +787,6 @@ h2 {
     color: var(--secondary-color);
     font-size: 14px;
     font-weight: bold;
-}
-
-.material-symbols-outlined {
-    color: hsl(141, 93%, 30%);
 }
 
 @media screen and (max-width: 768px) {
@@ -933,9 +959,13 @@ h2 {
     display: flex;
     margin-bottom: 20px;
     margin-top: -20px;
-
     span {
         color: red;
     }
+}
+.edit-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
 }
 </style>

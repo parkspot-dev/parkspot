@@ -1,27 +1,7 @@
 <template>
     <div class="rate-card">
         <div class="rate-container">
-            <template v-if="isEditingRent">
-                <AtomInput
-                    v-model.number="editableRent"
-                    type="number"
-                    class="rent-input"
-                />
-                <div class="edit-actions">
-                    <AtomButton size="is-small" @click="saveRent">
-                        Save
-                    </AtomButton>
-                    <AtomButton
-                        size="is-small"
-                        type="is-light"
-                        @click="cancelEdit"
-                    >
-                        Cancel
-                    </AtomButton>
-                </div>
-            </template>
-
-            <template v-else>
+            <template v-if="!isEditingRent">
                 <p class="rate">₹{{ spotDetails.Rate + discountAmount }}</p>
 
                 <p class="discount-rate">
@@ -37,8 +17,26 @@
 
                 <p class="discount-label">{{ discountPercent }}% OFF</p>
             </template>
+            <template v-else>
+                <AtomInput
+                    type="number"
+                    v-model.number="editableRent"
+                    class="rent-input"
+                />
+                <div class="edit-actions">
+                    <AtomButton size="is-small" @click="saveRent">
+                        Save
+                    </AtomButton>
+                    <AtomButton
+                        size="is-small"
+                        type="is-light"
+                        @click="cancelEdit"
+                    >
+                        Cancel
+                    </AtomButton>
+                </div>
+            </template>
         </div>
-
         <div class="star-rating">
             <AtomRating :rate="spotDetails.Rating" />
         </div>
@@ -81,7 +79,6 @@
             <li v-if="isAvailable" class="status-green">Available</li>
             <li v-else class="status-red">Rented Out</li>
         </ul>
-
         <AtomButton class="top-margin" :expanded="true" @click="onContact">
             {{ isAvailable ? 'Book' : 'Notify me' }}
         </AtomButton>
@@ -112,7 +109,7 @@ export default {
             default: false,
         },
     },
-    emits: ['open-booking-modal', 'update-rent'],
+    emits: ['open-booking-modal'],
     data() {
         return {
             ICON,
@@ -140,7 +137,7 @@ export default {
     },
     methods: {
         startEdit() {
-            this.editableRent = Number(this.spotDetails.Rate) || 0;
+            this.editableRent = this.spotDetails.Rate;
             this.isEditingRent = true;
         },
         saveRent() {
@@ -213,7 +210,7 @@ export default {
 
     .edit-actions {
         display: flex;
-        gap: 8px;
+        gap: 12px;
         margin-top: 6px;
     }
 

@@ -65,7 +65,7 @@
                             <p>
                                 <router-link
                                     class="top-search-link"
-                                    :to=" '/srp?latlng=12.910473,77.58575'"
+                                    :to="'/srp?latlng=12.910473,77.58575'"
                                 >
                                     Parking Spot in JP Nagar
                                 </router-link>
@@ -73,7 +73,7 @@
                             <p>
                                 <router-link
                                     class="top-search-link"
-                                    :to=" '/srp?latlng=12.913989,77.60205'"
+                                    :to="'/srp?latlng=12.913989,77.60205'"
                                 >
                                     Parking Spot in BTM
                                 </router-link>
@@ -94,7 +94,7 @@
                             <p>
                                 <router-link
                                     class="top-search-link"
-                                    :to=" '/srp?latlng=17.444939,78.35281'"
+                                    :to="'/srp?latlng=17.444939,78.35281'"
                                 >
                                     Parking Spot in Gachibowli
                                 </router-link>
@@ -350,7 +350,6 @@ export default {
     computed: {
         ...mapState('config', ['helplineNumber', 'helplineRef']),
     },
-    
 };
 </script>
 
