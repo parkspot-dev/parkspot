@@ -210,6 +210,7 @@ describe('TemplateSpotDetail.vue', () => {
         actions.updateRent = vi.fn();
         store = createStoreInstance({ actions });
         wrapper = mountComponent();
+
         const rateCard = wrapper.findComponent({ name: 'SpotRateCard' });
 
         rateCard.vm.$emit('update-rent', 6000);
@@ -235,6 +236,7 @@ describe('TemplateSpotDetail.vue', () => {
 
         wrapper.vm.saveRent(-100);
         await wrapper.vm.$nextTick();
+
         expect(actions.updateRent).not.toHaveBeenCalled();
         expect(wrapper.vm.$buefy.dialog.alert).toHaveBeenCalled();
     });
@@ -243,11 +245,12 @@ describe('TemplateSpotDetail.vue', () => {
         actions.updateAddress = vi.fn();
         store = createStoreInstance({ actions });
         wrapper = mountComponent();
+
         wrapper.vm.isEditingAddress = true;
         wrapper.vm.editableAddress = 'New Address Line';
 
         await wrapper.vm.saveAddress();
- 
+
         expect(actions.updateAddress).toHaveBeenCalledTimes(1);
         expect(actions.updateAddress).toHaveBeenCalledWith(
             expect.anything(),
@@ -258,10 +261,13 @@ describe('TemplateSpotDetail.vue', () => {
 
     it('resets editableAddress and exits edit mode on cancelAddressEdit', async () => {
         wrapper = mountComponent();
+
         wrapper.vm.isEditingAddress = true;
         wrapper.vm.editableAddress = 'Wrong Address';
+
         wrapper.vm.cancelAddressEdit();
         await wrapper.vm.$nextTick();
+
         expect(wrapper.vm.isEditingAddress).toBe(false);
         expect(wrapper.vm.editableAddress).toBe('C-51 Shyam Park Extension');
     });

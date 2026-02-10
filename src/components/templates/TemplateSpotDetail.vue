@@ -609,9 +609,7 @@ export default {
         },
         saveRent(newRent) {
             const rent = Number(newRent);
-
-            if (rent <= 0) {
-                console.error('Invalid rent value:', newRent);
+            if (isNaN(rent) || rent <= 0) {
                 this.alertError(
                     'Please enter a valid positive number for rent.',
                 );

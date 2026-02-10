@@ -112,7 +112,7 @@ export default {
             default: false,
         },
     },
-    emits: ['open-booking-modal'],
+    emits: ['open-booking-modal', 'update-rent'],
     data() {
         return {
             ICON,
@@ -144,7 +144,6 @@ export default {
             this.isEditingRent = true;
         },
         saveRent() {
-            if (!this.editableRent || this.editableRent <= 0) return;
             this.$emit('update-rent', this.editableRent);
             this.isEditingRent = false;
         },
