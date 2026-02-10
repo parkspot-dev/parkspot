@@ -192,6 +192,15 @@ const actions = {
         commit('set-remark', remark);
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
+
+    async updateAddress({ state }, address) {
+        state.spotDetails.Address = address;
+        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
+    },
+    async updateRent({ state }, rent) {
+        state.spotDetails.Rate = rent;
+        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
+    },
 };
 
 export default {

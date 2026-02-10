@@ -12,6 +12,8 @@
                 <SpotRateCard
                     class="card-position"
                     @open-booking-modal="openBookingModal"
+                    :isAdmin="isAdmin"
+                    @update-rent="saveRent"
                 ></SpotRateCard>
             </div>
             <div class="spot-detail-main-description">
@@ -19,16 +21,39 @@
                     <h1>{{ spotDetails.Name }}</h1>
                 </div>
                 <div>
-                    <p>Address:</p>
-                    <p>
-                        {{ spotDetails.Address }}
+                    <p class="editable-label">
+                        Address:
+                        <span
+                            v-if="isAdmin && !isEditingAddress"
+                            class="material-symbols-outlined edit-icon"
+                            @click="isEditingAddress = true"
+                        >
+                            edit
+                        </span>
                     </p>
-                    <p>
-                        {{ spotDetails.Area }}
-                    </p>
-                    <p>
-                        {{ spotDetails.City }}
-                    </p>
+
+                    <!-- View mode -->
+                    <div v-if="!isEditingAddress">
+                        <p>{{ spotDetails.Address }}</p>
+                        <p>{{ spotDetails.Area }}</p>
+                        <p>{{ spotDetails.City }}</p>
+                    </div>
+
+                    <div v-else>
+                        <AtomTextarea v-model="editableAddress" :row-no="3" />
+                        <div class="edit-actions">
+                            <AtomButton size="is-small" @click="saveAddress">
+                                Save
+                            </AtomButton>
+                            <AtomButton
+                                size="is-small"
+                                type="is-light"
+                                @click="cancelAddressEdit"
+                            >
+                                Cancel
+                            </AtomButton>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -316,10 +341,14 @@ export default {
         LoaderModal,
         ImageUpload,
     },
-    props: {
-        isAdmin: {
-            type: Boolean,
-            default: false,
+    watch: {
+        spotDetails: {
+            immediate: true,
+            handler(val) {
+                if (val?.Address) {
+                    this.editableAddress = val.Address;
+                }
+            },
         },
     },
     emits: [
@@ -337,6 +366,8 @@ export default {
             tempBookingForm: {},
             updatedImages: [],
             emailWatcher: null,
+            isEditingAddress: false,
+            editableAddress: '',
         };
     },
 
@@ -421,6 +452,7 @@ export default {
             'createContactLead',
         ]),
         ...mapActions('sdp', ['updateImages']),
+        ...mapActions('sdp', ['updateAddress', 'updateRent']),
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
@@ -556,6 +588,17 @@ export default {
         },
         saveImages() {
             this.updateImages(this.updatedImages);
+        saveAddress() {
+            this.spotDetails.Address = this.editableAddress;
+            this.isEditingAddress = false;
+            this.updateAddress(this.editableAddress);
+        },
+        cancelAddressEdit() {
+            this.editableAddress = this.spotDetails.Address;
+            this.isEditingAddress = false;
+        },
+        saveRent(newRent) {
+            this.updateRent(newRent);
         },
     },
 };
