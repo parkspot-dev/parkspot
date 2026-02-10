@@ -80,7 +80,7 @@ const mutations = {
     'set-remark'(state, remark) {
         state.spotDetails.Remark = remark;
         state.spotDetails.LastCallDate = new Date().toISOString();
-    }
+    },
 };
 
 const actions = {
@@ -138,14 +138,41 @@ const actions = {
     },
 
     async updateImages({ state, commit }, updatedImages) {
-        const uploadedImageURLs = await ImageUploadService.uploadImages(
-            updatedImages,
-            state.spotDetails.SiteID,
+        const newImages = updatedImages.filter((img) => img.isNew && img.file);
+        const existingImages = updatedImages.filter(
+            (img) => !img.isNew && img.preview,
         );
+
+        let allImageUrls = [];
+
+        if (existingImages.length > 0) {
+            allImageUrls = existingImages
+                .map((img) => img.preview)
+                .filter((url) => url && url.startsWith('http'));
+        }
+
+        if (newImages.length > 0) {
+            const files = newImages.map((img) => img.file);
+
+            const uploadResponse = await ImageUploadService.uploadImages(
+                files,
+                state.spotDetails.SiteID,
+            );
+
+            if (
+                uploadResponse.success &&
+                uploadResponse.urls &&
+                uploadResponse.urls.length > 0
+            ) {
+                allImageUrls = [...allImageUrls, ...uploadResponse.urls];
+            }
+        }
+
         commit('set-site-images-and-last-call', {
-            images: uploadedImageURLs,
+            images: allImageUrls,
             lastCallDate: new Date().toISOString(),
         });
+
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 
