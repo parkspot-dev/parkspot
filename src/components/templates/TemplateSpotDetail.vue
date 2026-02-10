@@ -11,8 +11,8 @@
             <div class="rate-card-container">
                 <SpotRateCard
                     class="card-position"
+                    :is-admin="isAdmin"
                     @open-booking-modal="openBookingModal"
-                    :isAdmin="isAdmin"
                     @update-rent="saveRent"
                 ></SpotRateCard>
             </div>
@@ -341,16 +341,6 @@ export default {
         LoaderModal,
         ImageUpload,
     },
-    watch: {
-        spotDetails: {
-            immediate: true,
-            handler(val) {
-                if (val?.Address) {
-                    this.editableAddress = val.Address;
-                }
-            },
-        },
-    },
     emits: [
         'goToSearchPortal',
         'changeAvailability',
@@ -439,6 +429,14 @@ export default {
                     file: null,
                     isNew: false,
                 }));
+            },
+        },
+        spotDetails: {
+            immediate: true,
+            handler(val) {
+                if (val?.Address) {
+                    this.editableAddress = val.Address;
+                }
             },
         },
     },
@@ -588,6 +586,7 @@ export default {
         },
         saveImages() {
             this.updateImages(this.updatedImages);
+        },
         saveAddress() {
             this.isEditingAddress = false;
             this.updateAddress(this.editableAddress);

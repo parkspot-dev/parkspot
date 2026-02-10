@@ -3,8 +3,8 @@
         <div class="rate-container">
             <template v-if="isEditingRent">
                 <AtomInput
-                    type="number"
                     v-model.number="editableRent"
+                    type="number"
                     class="rent-input"
                 />
                 <div class="edit-actions">
