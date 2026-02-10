@@ -129,31 +129,39 @@ describe('Vuex - spot module', () => {
             );
         });
 
-        it('updateImages uploads images and posts updated site', async () => {
+        it('updateImages uploads new images, keeps existing ones, and posts updated site', async () => {
             store.state.spot.spotDetails = {
                 SiteID: 'SITE_1',
                 SiteImages: [],
             };
 
-            const uploadedImages = [
-                { ImageURL: 'img1.jpg' },
-                { ImageURL: 'img2.jpg' },
+            const updatedImages = [
+                {
+                    isNew: false,
+                    preview: 'https://cdn.old-image.com/old.jpg',
+                },
+                {
+                    isNew: true,
+                    file: new File(['img'], 'new.jpg'),
+                },
             ];
 
-            ImageUploadService.uploadImages.mockResolvedValue(uploadedImages);
-
-            const newImages = [{ file: {} }, { file: {} }];
-
-            await store.dispatch('spot/updateImages', newImages);
+            ImageUploadService.uploadImages.mockResolvedValue({
+                success: true,
+                urls: ['https://cdn.new-image.com/new.jpg'],
+            });
+            await store.dispatch('spot/updateImages', updatedImages);
 
             expect(ImageUploadService.uploadImages).toHaveBeenCalledWith(
-                newImages,
+                [updatedImages[1].file],
                 'SITE_1',
             );
 
-            expect(store.state.spot.spotDetails.SiteImages).toEqual(
-                uploadedImages,
-            );
+            expect(store.state.spot.spotDetails.SiteImages).toEqual([
+                'https://cdn.old-image.com/old.jpg',
+                'https://cdn.new-image.com/new.jpg',
+            ]);
+
             expect(store.state.spot.spotDetails.LastCallDate).toEqual(
                 expect.any(String),
             );
