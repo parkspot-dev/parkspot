@@ -55,7 +55,7 @@ const mutations = {
         }
     },
 
-    'update-login-Modal'(state, loginModal) {
+    'update-login-modal'(state, loginModal) {
         state.loginModal = loginModal;
     },
 
@@ -110,9 +110,9 @@ const actions = {
             const res = await signInWithPopup(auth, gProvider);
             const user = res.user;
             commit('update-user', user);
-            commit('update-login-Modal', false);
+            commit('update-login-modal', false);
             await dispatch('authenticateWithMaya');
-            await dispatch('bookingPortal/getAgents', null, { root: true});
+            await dispatch('app/getAgents', null, { root: true});
         } catch (error) {
             // Handle Errors here.
             const errorCode = error.code;
@@ -125,10 +125,10 @@ const actions = {
         }
     },
 
-    async logOut({ commit, state }) {
+    async logOut({ commit, dispatch }) {
         try {
             await signOut(auth);
-            localStorage.removeItem('agents');
+            await dispatch('app/clearAgents', null, { root: true });
             commit('update-user', null);
             commit('reset-user-profile');
         } catch (err) {
@@ -317,8 +317,12 @@ const unsub = onAuthStateChanged(auth, async (user) => {
     store.commit('user/update-auth-ready', true);
 
     if (user) {
-        await store.dispatch('user/getUserProfile');
-        await store.dispatch('bookingPortal/getAgents');
+        try {
+            await store.dispatch('user/getUserProfile');
+            await store.dispatch('app/getAgents');
+        } catch {
+            await store.dispatch('user/logOut');
+        }
     }
     unsub();
 });

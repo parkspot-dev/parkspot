@@ -522,7 +522,7 @@ export default {
     },
     methods: {
         ...mapMutations('user', {
-            updateLoginModal: 'update-login-Modal',
+            updateLoginModal: 'update-login-modal',
         }),
         ...mapActions('user', ['logOut', 'getUserProfile']),
 
