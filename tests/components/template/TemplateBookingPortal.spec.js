@@ -46,6 +46,15 @@ const paymentsMock = [
 const createVuexStore = (isAdmin = true) =>
     createStore({
         modules: {
+            app: {
+                namespaced: true,
+                state: () => ({
+                    agents: [
+                        { UserName: 'agent1', FullName: 'Agent One' },
+                        { UserName: 'agent2', FullName: 'Agent Two' },
+                    ],
+                }),
+            },
             bookingPortal: {
                 namespaced: true,
                 state: () => ({

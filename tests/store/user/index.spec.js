@@ -100,7 +100,11 @@ describe('User Store - Agent Auth Fix', () => {
     });
 
     it('logOut resets user and userProfile', async () => {
-        await userModule.actions.logOut({ commit });
+        await userModule.actions.logOut({ commit, dispatch });
+
+        expect(dispatch).toHaveBeenCalledWith('app/clearAgents', null, {
+            root: true,
+        });
 
         expect(commit).toHaveBeenCalledWith('update-user', null);
         expect(commit).toHaveBeenCalledWith('reset-user-profile');
