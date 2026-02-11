@@ -201,39 +201,38 @@ describe('Vuex - spot module', () => {
             );
         });
     });
-    
+
     it('updateAddress commits address and posts updated site', async () => {
-    store.state.spot.spotDetails = {
-        Address: 'Old Address',
-    };
-    await store.dispatch('spot/updateAddress', 'New Address');
-    expect(store.state.spot.spotDetails.Address).toBe('New Address');
-    expect(mayaClient.post).toHaveBeenCalledWith(
-        '/owner/update-site',
-        store.state.spot.spotDetails,
-    );
-});
+        store.state.spot.spotDetails = {
+            Address: 'Old Address',
+        };
+        await store.dispatch('spot/updateAddress', 'New Address');
+        expect(store.state.spot.spotDetails.Address).toBe('New Address');
+        expect(mayaClient.post).toHaveBeenCalledWith(
+            '/owner/update-site',
+            store.state.spot.spotDetails,
+        );
+    });
 
-it('updateRent commits rent and posts updated site when rent is valid', async () => {
-    store.state.spot.spotDetails = {
-        Rate: 100,
-    };
+    it('updateRent commits rent and posts updated site when rent is valid', async () => {
+        store.state.spot.spotDetails = {
+            Rate: 100,
+        };
 
-    await store.dispatch('spot/updateRent', 500);
-    expect(store.state.spot.spotDetails.Rate).toBe(500);
-    expect(mayaClient.post).toHaveBeenCalledWith(
-        '/owner/update-site',
-        store.state.spot.spotDetails,
-    );
-});
+        await store.dispatch('spot/updateRent', 500);
+        expect(store.state.spot.spotDetails.Rate).toBe(500);
+        expect(mayaClient.post).toHaveBeenCalledWith(
+            '/owner/update-site',
+            store.state.spot.spotDetails,
+        );
+    });
 
-it('updateRent does not commit or post when rent is invalid', async () => {
-    store.state.spot.spotDetails = {
-        Rate: 100,
-    };
-    await store.dispatch('spot/updateRent', -50);
-    expect(store.state.spot.spotDetails.Rate).toBe(100);
-    expect(mayaClient.post).not.toHaveBeenCalled();
-});
-
+    it('updateRent does not commit or post when rent is invalid', async () => {
+        store.state.spot.spotDetails = {
+            Rate: 100,
+        };
+        await store.dispatch('spot/updateRent', -50);
+        expect(store.state.spot.spotDetails.Rate).toBe(100);
+        expect(mayaClient.post).not.toHaveBeenCalled();
+    });
 });
