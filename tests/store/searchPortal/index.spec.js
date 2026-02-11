@@ -54,17 +54,21 @@ describe('SearchPortal Store', () => {
         expect(state.errorMessage).toBe('Failed');
     });
 
-    it('getAgents commits agent list', async () => {
-        mayaClient.get.mockResolvedValue([
-            { FullName: 'Dev Shrivastav' },
-            { FullName: '[System User]' },
-        ]);
+    it('getAgentsFromApp commits agent list from app store', async () => {
+        const rootState = {
+            app: {
+                agents: [
+                    { FullName: 'Dev Shrivastav' },
+                    { FullName: '[System User]' },
+                ],
+            },
+        };
+        actions.getAgents({ commit, rootState });
 
-        await actions.getAgents({ commit });
-        expect(commit).toHaveBeenCalledWith('set-agent-list', [
-            { FullName: 'Dev Shrivastav' },
-            { FullName: '[System User]' },
-        ]);
+        expect(commit).toHaveBeenCalledWith(
+            'set-agent-list',
+            rootState.app.agents,
+        );
     });
 
     it('getParkingRequests commits data on success', async () => {

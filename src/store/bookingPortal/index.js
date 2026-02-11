@@ -27,7 +27,7 @@ const state = {
         "Remark": "Booking remark"
     }] */
     activeBookings: [],
-    agents: {},
+    agents: [],
     bookingDetails: null,
     errorMessage: String,
     hasError: false,
@@ -107,10 +107,10 @@ const mutations = {
 };
 
 const actions = {
-    async getAgents({ commit }) {
-        commit('set-agent-list', await mayaClient.get('/auth/user/agents'));
+    getAgents({ commit, rootState }) {
+        const agents = rootState.app?.agents || [];
+        commit('set-agent-list', agents);
     },
-
     async getBookingDetails({ commit }, bookingId) {
         commit('reset-global-status');
         commit('set-loading', true);

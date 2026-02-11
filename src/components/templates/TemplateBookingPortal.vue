@@ -674,7 +674,6 @@ export default {
     },
     computed: {
         ...mapState('bookingPortal', [
-            'agents',
             'bookingDetails',
             'initialActiveBookingDetails',
             'isFieldUpdated',
@@ -685,6 +684,7 @@ export default {
             'updatedFields',
         ]),
         ...mapState('user', ['isAdmin']),
+        ...mapState('app', ['agents']),
         sdpURL() {
             return this.$router.resolve({
                 name: 'spot-detail',

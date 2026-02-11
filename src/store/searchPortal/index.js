@@ -67,8 +67,9 @@ const actions = {
     updateActiveTab({ commit }, tabNo) {
         commit('update-active-tab', tabNo);
     },
-    async getAgents({ commit }) {
-        commit('set-agent-list', await mayaClient.get('/auth/user/agents'));
+    getAgents({ commit, rootState }) {
+        const agents = rootState.app?.agents || [];
+        commit('set-agent-list', agents);
     },
     // Get parking requests by mbile number
     async getParkingRequests({ commit, state }) {
@@ -151,9 +152,10 @@ const actions = {
     },
 
     extractRequestsByStatus({ commit, state }, status) {
-        const extractRequestsByStatusResult = state.filteredParkingRequests.filter(
-            (requests) => requests.Status === status,
-        );
+        const extractRequestsByStatusResult =
+            state.filteredParkingRequests.filter(
+                (requests) => requests.Status === status,
+            );
         commit('set-filtered-parking-requests', extractRequestsByStatusResult);
     },
 

@@ -89,7 +89,7 @@
 
             <!-- only for agents -->
             <div class="only-to-agent">
-                <div class="spot-detail-owner">
+                <div v-if="ownerInfoDetails.UserName" class="spot-detail-owner">
                     <hr style="width: 100%" />
                     <h2>Owner Info Details</h2>
                     <div class="spot-detail-owner-body">
@@ -299,8 +299,12 @@ import {
 } from '@/constant/enums';
 import { mapState, mapActions } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
+<<<<<<< HEAD
 import LoaderModal from '../extras/LoaderModal.vue';
 
+=======
+import ImageUpload from '../global/ImageUpload.vue';
+>>>>>>> feature/cache-agents-on-login
 export default {
     name: 'TemplateSpotDetail',
     components: {
@@ -337,7 +341,10 @@ export default {
             tempBookingForm: {},
         };
     },
+<<<<<<< HEAD
 
+=======
+>>>>>>> feature/cache-agents-on-login
     computed: {
         ...mapState('sdp', [
             'images',
@@ -382,6 +389,7 @@ export default {
         },
     },
     watch: {
+<<<<<<< HEAD
         isLoggedIn(val) {
             if (val && this.bookingIntent) {
                 this.bookingIntent = false;
@@ -393,6 +401,24 @@ export default {
         },
     },
 
+=======
+        images: {
+            immediate: true,
+            deep: true,
+            handler(newImages) {
+                if (!newImages || !newImages.length) return;
+
+                // map backend images → ImageUpload format
+                this.updatedImages = newImages.map((img) => ({
+                    id: img.SiteImageID,
+                    preview: img.ImageURL,
+                    file: null,
+                    isNew: false,
+                }));
+            },
+        },
+    },
+>>>>>>> feature/cache-agents-on-login
     methods: {
         ...mapActions('bookingPortal', [
             'createTentativeBooking',
