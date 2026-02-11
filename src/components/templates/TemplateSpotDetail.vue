@@ -316,12 +316,6 @@ export default {
         LoaderModal,
         ImageUpload,
     },
-    props: {
-        isAdmin: {
-            type: Boolean,
-            default: false,
-        },
-    },
     emits: [
         'goToSearchPortal',
         'changeAvailability',
