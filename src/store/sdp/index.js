@@ -66,6 +66,7 @@ const mutations = {
     'update-payment-info'(state, paymentDetails) {
         state.paymentDetails = paymentDetails;
     },
+
     'set-in-progress-bookings'(state, bookings) {
         state.spotInProgressBookings = bookings;
     },
@@ -193,13 +194,16 @@ const actions = {
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 
-    async updateAddress({ state }, address) {
-        state.spotDetails.Address = address;
+    async updateAddress({ commit, state }, address) {
+        commit('update-spot-address', address);
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
-    async updateRent({ state }, rent) {
-        state.spotDetails.Rate = rent;
-        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
+
+    async updateRent({ commit, state }, rent) {
+        if (rent > 0) {
+            commit('update-spot-rent', rent);
+            await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
+        }
     },
 };
 

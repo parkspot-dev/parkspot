@@ -205,4 +205,64 @@ describe('TemplateSpotDetail.vue', () => {
         expect(facility.exists()).toBe(true);
         expect(facility.html()).toMatchSnapshot();
     });
+
+    it('updates rent when SpotRateCard emits update-rent', async () => {
+        actions.updateRent = vi.fn();
+        store = createStoreInstance({ actions });
+        wrapper = mountComponent();
+        const rateCard = wrapper.findComponent({ name: 'SpotRateCard' });
+
+        rateCard.vm.$emit('update-rent', 6000);
+        await wrapper.vm.$nextTick();
+
+        expect(actions.updateRent).toHaveBeenCalledTimes(1);
+        expect(actions.updateRent).toHaveBeenCalledWith(
+            expect.anything(),
+            6000,
+        );
+    });
+
+    it('does not update rent and shows error for invalid rent', async () => {
+        actions.updateRent = vi.fn();
+        store = createStoreInstance({ actions });
+        wrapper = mountComponent();
+
+        wrapper.vm.$buefy = {
+            dialog: {
+                alert: vi.fn(),
+            },
+        };
+
+        wrapper.vm.saveRent(-100);
+        await wrapper.vm.$nextTick();
+        expect(actions.updateRent).not.toHaveBeenCalled();
+        expect(wrapper.vm.$buefy.dialog.alert).toHaveBeenCalled();
+    });
+
+    it('updates address when saveAddress is called', async () => {
+        actions.updateAddress = vi.fn();
+        store = createStoreInstance({ actions });
+        wrapper = mountComponent();
+        wrapper.vm.isEditingAddress = true;
+        wrapper.vm.editableAddress = 'New Address Line';
+
+        await wrapper.vm.saveAddress();
+ 
+        expect(actions.updateAddress).toHaveBeenCalledTimes(1);
+        expect(actions.updateAddress).toHaveBeenCalledWith(
+            expect.anything(),
+            'New Address Line',
+        );
+        expect(wrapper.vm.isEditingAddress).toBe(false);
+    });
+
+    it('resets editableAddress and exits edit mode on cancelAddressEdit', async () => {
+        wrapper = mountComponent();
+        wrapper.vm.isEditingAddress = true;
+        wrapper.vm.editableAddress = 'Wrong Address';
+        wrapper.vm.cancelAddressEdit();
+        await wrapper.vm.$nextTick();
+        expect(wrapper.vm.isEditingAddress).toBe(false);
+        expect(wrapper.vm.editableAddress).toBe('C-51 Shyam Park Extension');
+    });
 });

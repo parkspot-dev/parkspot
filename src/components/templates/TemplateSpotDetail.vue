@@ -589,7 +589,6 @@ export default {
         saveImages() {
             this.updateImages(this.updatedImages);
         saveAddress() {
-            this.spotDetails.Address = this.editableAddress;
             this.isEditingAddress = false;
             this.updateAddress(this.editableAddress);
         },
@@ -597,8 +596,29 @@ export default {
             this.editableAddress = this.spotDetails.Address;
             this.isEditingAddress = false;
         },
+        alertError(msg) {
+            this.$buefy.dialog.alert({
+                ariaModal: true,
+                ariaRole: 'alertdialog',
+                hasIcon: true,
+                icon: 'alert-circle',
+                message: msg,
+                title: 'Error',
+                type: 'is-danger',
+            });
+        },
         saveRent(newRent) {
-            this.updateRent(newRent);
+            const rent = Number(newRent);
+
+            if (rent <= 0) {
+                console.error('Invalid rent value:', newRent);
+                this.alertError(
+                    'Please enter a valid positive number for rent.',
+                );
+                return;
+            }
+
+            this.updateRent(rent);
         },
     },
 };

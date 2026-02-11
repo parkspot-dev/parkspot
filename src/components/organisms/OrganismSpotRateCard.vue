@@ -1,23 +1,7 @@
 <template>
     <div class="rate-card">
         <div class="rate-container">
-            <template v-if="!isEditingRent">
-                <p class="rate">₹{{ spotDetails.Rate + discountAmount }}</p>
-
-                <p class="discount-rate">
-                    ₹{{ spotDetails.Rate }}
-                    <span
-                        v-if="isAdmin"
-                        class="material-symbols-outlined edit-icon"
-                        @click="startEdit"
-                    >
-                        edit
-                    </span>
-                </p>
-
-                <p class="discount-label">{{ discountPercent }}% OFF</p>
-            </template>
-            <template v-else>
+            <template v-if="isEditingRent">
                 <AtomInput
                     type="number"
                     v-model.number="editableRent"
@@ -36,7 +20,25 @@
                     </AtomButton>
                 </div>
             </template>
+
+            <template v-else>
+                <p class="rate">₹{{ spotDetails.Rate + discountAmount }}</p>
+
+                <p class="discount-rate">
+                    ₹{{ spotDetails.Rate }}
+                    <span
+                        v-if="isAdmin"
+                        class="material-symbols-outlined edit-icon"
+                        @click="startEdit"
+                    >
+                        edit
+                    </span>
+                </p>
+
+                <p class="discount-label">{{ discountPercent }}% OFF</p>
+            </template>
         </div>
+
         <div class="star-rating">
             <AtomRating :rate="spotDetails.Rating" />
         </div>
@@ -68,10 +70,7 @@
                         )
                     </p>
                     <AtomTooltip :label="tooltipMsg">
-                        <AtomIcon
-                            :icon="ICON.INFO"
-                            size="is-small"
-                        />
+                        <AtomIcon :icon="ICON.INFO" size="is-small" />
                     </AtomTooltip>
                 </div>
                 <p>+ ₹500</p>
@@ -82,11 +81,8 @@
             <li v-if="isAvailable" class="status-green">Available</li>
             <li v-else class="status-red">Rented Out</li>
         </ul>
-        <AtomButton
-            class="top-margin"
-            :expanded="true"
-            @click="onContact"
-        >
+
+        <AtomButton class="top-margin" :expanded="true" @click="onContact">
             {{ isAvailable ? 'Book' : 'Notify me' }}
         </AtomButton>
     </div>
@@ -138,19 +134,17 @@ export default {
         },
 
         discountPercent() {
-            const fakePrice =
-                this.spotDetails.Rate + this.discountAmount;
-            return Math.ceil(
-                (this.discountAmount / fakePrice) * 100,
-            );
+            const fakePrice = this.spotDetails.Rate + this.discountAmount;
+            return Math.ceil((this.discountAmount / fakePrice) * 100);
         },
     },
     methods: {
         startEdit() {
-            this.editableRent = this.spotDetails.Rate;
+            this.editableRent = Number(this.spotDetails.Rate) || 0;
             this.isEditingRent = true;
         },
         saveRent() {
+            if (!this.editableRent || this.editableRent <= 0) return;
             this.$emit('update-rent', this.editableRent);
             this.isEditingRent = false;
         },
