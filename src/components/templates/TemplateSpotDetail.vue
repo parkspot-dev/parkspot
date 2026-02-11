@@ -299,12 +299,8 @@ import {
 } from '@/constant/enums';
 import { mapState, mapActions } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
-<<<<<<< HEAD
 import LoaderModal from '../extras/LoaderModal.vue';
-
-=======
 import ImageUpload from '../global/ImageUpload.vue';
->>>>>>> feature/cache-agents-on-login
 export default {
     name: 'TemplateSpotDetail',
     components: {
@@ -318,6 +314,7 @@ export default {
         AtomTextarea,
         BookingModal,
         LoaderModal,
+        ImageUpload,
     },
     props: {
         isAdmin: {
@@ -334,17 +331,15 @@ export default {
     data() {
         return {
             BookingStatus: BookingStatus,
-            updatedImages: [],
             showBookingModal: false,
             showLoader: false,
             bookingIntent: false,
             tempBookingForm: {},
+            updatedImages: [],
+            emailWatcher: null,
         };
     },
-<<<<<<< HEAD
 
-=======
->>>>>>> feature/cache-agents-on-login
     computed: {
         ...mapState('sdp', [
             'images',
@@ -379,17 +374,18 @@ export default {
             return this.$store?.state?.user?.userProfile || {};
         },
         prefilledData() {
+            const profile = this.userProfile || {};
+            const temp = this.tempBookingForm || {};
+
             return {
-                fullName:
-                    this.userProfile.FullName || this.tempBookingForm.fullName,
-                email: this.userProfile.EmailID || this.tempBookingForm.email,
-                mobile: this.userProfile.Mobile || this.tempBookingForm.mobile,
-                vehicleNo: this.tempBookingForm.vehicleNo,
+                fullName: profile.FullName || temp.fullName || '',
+                email: profile.EmailID || temp.email || '',
+                mobile: profile.Mobile || temp.mobile || '',
+                vehicleNo: temp.vehicleNo || '',
             };
         },
     },
     watch: {
-<<<<<<< HEAD
         isLoggedIn(val) {
             if (val && this.bookingIntent) {
                 this.bookingIntent = false;
@@ -399,9 +395,6 @@ export default {
                 });
             }
         },
-    },
-
-=======
         images: {
             immediate: true,
             deep: true,
@@ -418,12 +411,16 @@ export default {
             },
         },
     },
->>>>>>> feature/cache-agents-on-login
+    beforeUnmount() {
+        this.emailWatcher?.();
+    },
+
     methods: {
         ...mapActions('bookingPortal', [
             'createTentativeBooking',
             'createContactLead',
         ]),
+        ...mapActions('sdp', ['updateImages']),
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
@@ -444,9 +441,6 @@ export default {
         },
         getBookingStatusLabel(bookingStatus) {
             return getBookingStatusLabel(bookingStatus);
-        },
-        saveImages() {
-            this.updateImages(this.updatedImages);
         },
         async handleBookingSubmit(form) {
             if (!this.isLoggedIn) return;
@@ -512,8 +506,14 @@ export default {
             }
         },
         openBookingModal() {
+            if (!this.isLoggedIn) {
+                this.showBookingModal = true;
+                return;
+            }
+
             this.showBookingModal = true;
         },
+
         async handleGuestBooking(form) {
             try {
                 this.showLoader = true;
@@ -553,6 +553,9 @@ export default {
             this.showBookingModal = false;
 
             this.$store.commit('user/update-login-modal', true);
+        },
+        saveImages() {
+            this.updateImages(this.updatedImages);
         },
     },
 };
