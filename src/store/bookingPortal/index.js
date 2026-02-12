@@ -229,6 +229,38 @@ const actions = {
         }
         commit('set-loading', false);
     },
+    
+    // Create contact lead (guest user)
+    async createContactLead({ commit }, payload) {
+        commit('reset-global-status');
+        commit('set-loading', true);
+
+        const res = await mayaClient.post('/contact', payload);
+
+        commit('set-loading', false);
+
+        if (res?.DisplayMsg) {
+            throw new Error(res.DisplayMsg);
+        }
+
+        return res;
+    },
+
+    // Tentative booking (logged in user)
+    async createTentativeBooking({ commit }, payload) {
+        commit('reset-global-status');
+        commit('set-loading', true);
+
+        const res = await mayaClient.post('/booking/tentative', payload);
+
+        commit('set-loading', false);
+
+        if (res?.DisplayMsg) {
+            throw new Error(res.DisplayMsg);
+        }
+
+        return res;
+    },
 };
 
 export default {

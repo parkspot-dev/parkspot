@@ -1,7 +1,7 @@
 <template>
     <div class="loader-container">
         <div class="loader"></div>
-        <AtomImage class="loader-image" src="/assets/ps__logo_mini.png" alt="parkspot logo" />
+        <AtomImage class="loader-image" src="/assets/ps_logo.png" alt="parkspot logo" />
     </div>
 </template>
 

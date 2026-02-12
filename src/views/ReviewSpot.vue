@@ -42,9 +42,7 @@
                                     <td>
                                         <a
                                             :href="
-                                                getSpotDetailURL(
-                                                    spot.SiteID,
-                                                )
+                                                getSpotDetailURL(spot.SiteID)
                                             "
                                             target="_blank"
                                         >
@@ -736,7 +734,13 @@ export default {
 
             ['SO', 'Rent', 'Booking'].forEach((section) => {
                 for (const key in this[section]) {
-                    if (!Object.prototype.hasOwnProperty.call(this[section], key)) continue;
+                    if (
+                        !Object.prototype.hasOwnProperty.call(
+                            this[section],
+                            key,
+                        )
+                    )
+                        continue;
                     const currentValue = this[section][key];
                     const initialValue = this.initialFormData[section][key];
                     // Convert to JSON strings for deep comparison
@@ -748,8 +752,6 @@ export default {
                     }
                 }
             });
-
-            console.log("Updated fields", updatedFields);
             this.setUpdatedFields(Array.from(updatedFields));
             this.saveForm().then((response) => {
                 if (!response.ErrorCode) this.updateInitialFormState();
