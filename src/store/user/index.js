@@ -27,6 +27,7 @@ const state = {
     login: {},
     locationDetails: {},
     preference: {},
+    authError: null,
 };
 
 const getters = {};
@@ -100,6 +101,9 @@ const mutations = {
             Type: 'VO',
         };
     },
+    'set-auth-error'(state, error) {
+        state.authError = error;
+    }
 };
 
 const actions = {
@@ -111,7 +115,8 @@ const actions = {
             const user = res.user;
             commit('update-user', user);
             commit('update-login-modal', false);
-            dispatch('authenticateWithMaya');
+            await dispatch('authenticateWithMaya');
+            await dispatch('app/getAgents', null, { root: true});
         } catch (error) {
             // Handle Errors here.
             const errorCode = error.code;
@@ -124,9 +129,10 @@ const actions = {
         }
     },
 
-    async logOut({ commit, state }) {
+    async logOut({ commit, dispatch }) {
         try {
             await signOut(auth);
+            await dispatch('app/clearAgents', null, { root: true });
             commit('update-user', null);
             commit('reset-user-profile');
         } catch (err) {
@@ -310,9 +316,24 @@ const actions = {
     },
 };
 
-const unsub = onAuthStateChanged(auth, (user) => {
+const unsub = onAuthStateChanged(auth, async (user) => {
     store.commit('user/update-user', user);
     store.commit('user/update-auth-ready', true);
+
+    if (!user) {
+        return;
+    }
+
+    try {
+        await store.dispatch('user/getUserProfile');
+        await store.dispatch('app/getAgents');
+    } catch {
+        store.commit('user/set-auth-error', {
+            source: 'onAuthStateChanged',
+            message: 'Failed to load user bootstrap data',
+        });
+    }
+
     unsub();
 });
 
