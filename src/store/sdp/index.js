@@ -46,8 +46,7 @@ const mutations = {
     },
 
     'update-image'(state, images) {
-        state.images = [];
-        state.images = images.map((img) => img.ImageURL);
+        state.images = images;
     },
 
     'update-thumbnail-image'(state, image) {
@@ -70,9 +69,17 @@ const mutations = {
         state.spotInProgressBookings = bookings;
     },
     'set-site-images-and-last-call'(state, { images, lastCallDate }) {
-        state.spotDetails.SiteImages = images;
+        const mappedImages = images.map((url, index) => ({
+            SiteImageID: `${state.spotDetails.SiteID}#${index + 1}`,
+            ImageURL: url,
+            SiteID: state.spotDetails.SiteID,
+        }));
+
+        state.spotDetails.SiteImages = mappedImages;
+        state.images = mappedImages;
         state.spotDetails.LastCallDate = lastCallDate;
     },
+
     'set-availability'(state, availableCount) {
         state.spotDetails.SlotsAvailable = availableCount;
         state.spotDetails.LastCallDate = new Date().toISOString();
@@ -133,48 +140,50 @@ const actions = {
 
     async updateAvailability({ state, commit }, availableCount) {
         commit('set-availability', availableCount);
-        // Updating availability means agent connected with SO today.
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 
-    async updateImages({ state, commit }, updatedImages) {
-        const newImages = updatedImages.filter((img) => img.isNew && img.file);
-        const existingImages = updatedImages.filter(
-            (img) => !img.isNew && img.preview,
+    async updateImages({ state, commit }, newImages) {
+    const existingImageUrls = Array.isArray(state.spotDetails.SiteImages)
+        ? [...state.spotDetails.SiteImages]
+        : [];
+
+
+    const filesToUpload = newImages
+        .filter(img => img.file)
+        .map(img => img.file);
+
+    let uploadedUrls = [];
+
+    if (filesToUpload.length > 0) {
+        const uploadResponse = await ImageUploadService.uploadImages(
+            filesToUpload,
+            state.spotDetails.SiteID
         );
-
-        let allImageUrls = [];
-
-        if (existingImages.length > 0) {
-            allImageUrls = existingImages
-                .map((img) => img.preview)
-                .filter((url) => url && url.startsWith('http'));
+           console.log("update" , uploadResponse);
+        if (
+            uploadResponse?.success &&
+            Array.isArray(uploadResponse.urls)
+        ) {
+            uploadedUrls = uploadResponse.urls;
         }
+    }
 
-        if (newImages.length > 0) {
-            const files = newImages.map((img) => img.file);
 
-            const uploadResponse = await ImageUploadService.uploadImages(
-                files,
-                state.spotDetails.SiteID,
-            );
+    const allImageUrls = [...existingImageUrls, ...uploadedUrls];
+  console.log("all image" , allImageUrls);
+    commit('set-site-images-and-last-call', {
+        images: allImageUrls,
+        lastCallDate: new Date().toISOString(),
+    });
 
-            if (
-                uploadResponse.success &&
-                uploadResponse.urls &&
-                uploadResponse.urls.length > 0
-            ) {
-                allImageUrls = [...allImageUrls, ...uploadResponse.urls];
-            }
-        }
+   
+    await mayaClient.post(UPDATE_SITE_ENDPOINT, {
+        ...state.spotDetails,
+        SiteImages: allImageUrls,
+    });
+},
 
-        commit('set-site-images-and-last-call', {
-            images: allImageUrls,
-            lastCallDate: new Date().toISOString(),
-        });
-
-        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
-    },
 
     async updateLastCallDate({ state, commit }, lastCallDate) {
         commit('set-site-images-and-last-call', {
