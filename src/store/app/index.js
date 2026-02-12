@@ -34,7 +34,7 @@ const actions = {
             commit('set-agents', res);
         } catch {
             localStorage.removeItem('agents');
-            commit('set-agents', []); 
+            commit('set-agents', []);
         }
     },
 
