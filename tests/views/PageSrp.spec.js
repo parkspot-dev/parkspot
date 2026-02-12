@@ -2,7 +2,6 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createStore } from 'vuex';
 import PageSrp from '@/views/PageSrp.vue';
-import TemplateSrp from '@/components/templates/TemplateSrp.vue';
 
 const MOCK_PAGE_TITLE = { SEARCH: 'Search Page | ' };
 const MOCK_SPOTS = [{ ID: 1, name: 'Bangalore Spot 1' }];
