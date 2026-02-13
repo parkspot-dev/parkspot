@@ -205,4 +205,143 @@ describe('TemplateSpotDetail.vue', () => {
         expect(facility.exists()).toBe(true);
         expect(facility.html()).toMatchSnapshot();
     });
+
+    it('updates rent when SpotRateCard emits update-rent', async () => {
+        actions.updateRent = vi.fn();
+        store = createStoreInstance({ actions });
+        wrapper = mountComponent();
+
+        const rateCard = wrapper.findComponent({ name: 'SpotRateCard' });
+
+        rateCard.vm.$emit('update-rent', 6000);
+        await wrapper.vm.$nextTick();
+
+        expect(actions.updateRent).toHaveBeenCalledTimes(1);
+        expect(actions.updateRent).toHaveBeenCalledWith(
+            expect.anything(),
+            6000,
+        );
+    });
+
+    it('does not update rent and shows error for invalid rent', async () => {
+        actions.updateRent = vi.fn();
+        store = createStoreInstance({ actions });
+        wrapper = mountComponent();
+
+        wrapper.vm.$buefy = {
+            dialog: {
+                alert: vi.fn(),
+            },
+        };
+
+        wrapper.vm.saveRent(-100);
+        await wrapper.vm.$nextTick();
+
+        expect(actions.updateRent).not.toHaveBeenCalled();
+        expect(wrapper.vm.$buefy.dialog.alert).toHaveBeenCalled();
+    });
+
+    it('updates address when saveAddress is called', async () => {
+        actions.updateAddress = vi.fn();
+        store = createStoreInstance({ actions });
+        wrapper = mountComponent();
+
+        wrapper.vm.isEditingAddress = true;
+        wrapper.vm.editableAddress = 'New Address Line';
+
+        await wrapper.vm.saveAddress();
+
+        expect(actions.updateAddress).toHaveBeenCalledTimes(1);
+        expect(actions.updateAddress).toHaveBeenCalledWith(
+            expect.anything(),
+            'New Address Line',
+        );
+        expect(wrapper.vm.isEditingAddress).toBe(false);
+    });
+
+    it('resets editableAddress and exits edit mode on cancelAddressEdit', async () => {
+        wrapper = mountComponent();
+
+        wrapper.vm.isEditingAddress = true;
+        wrapper.vm.editableAddress = 'Wrong Address';
+
+        wrapper.vm.cancelAddressEdit();
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.isEditingAddress).toBe(false);
+        expect(wrapper.vm.editableAddress).toBe('C-51 Shyam Park Extension');
+    });
+    const createAdminStore = (isAdmin) =>
+        createStore({
+            modules: {
+                sdp: {
+                    namespaced: true,
+                    state: () => ({
+                        images: ['img1.jpg'],
+                        thumbnail: ['thumb1.jpg'],
+                        center: [12.97, 77.59],
+                        isAvailable: true,
+                        ownerInfoDetails: {
+                            UserName: 'dev_shrivastav',
+                        },
+                        paymentDetails: 'UPI',
+                        selectedSpot: [
+                            { Name: 'Test Spot', Lat: 11.11, Long: 22.22 },
+                        ],
+                        spotDetails: {
+                            Name: 'Test Spot',
+                            Address: 'C-51 Shyam Park Extension',
+                            Area: 'Ghaziabad',
+                            City: 'Uttar Pradesh',
+                            UpdatedAt: '2025-12-01',
+                            LastCallDate: '2025-12-10',
+                            Lat: 11.11,
+                            Long: 22.22,
+                        },
+                        spotInProgressBookings: [],
+                    }),
+                },
+                user: {
+                    namespaced: true,
+                    state: () => ({
+                        isAdmin,
+                    }),
+                },
+            },
+        });
+
+    it('shows edit pencil icon for admin when not editing address', async () => {
+        store = createAdminStore(true);
+        wrapper = mountComponent();
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find('.edit-icon').exists()).toBe(true);
+    });
+
+    it('hides edit pencil icon for non-admin user', async () => {
+        store = createAdminStore(false);
+        wrapper = mountComponent();
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find('.edit-icon').exists()).toBe(false);
+    });
+
+    it('enters address edit mode when pencil icon is clicked', async () => {
+        store = createAdminStore(true);
+        wrapper = mountComponent();
+        await wrapper.vm.$nextTick();
+        const editIcon = wrapper.find('.edit-icon');
+        expect(editIcon.exists()).toBe(true);
+        await editIcon.trigger('click');
+        expect(wrapper.vm.isEditingAddress).toBe(true);
+    });
+
+    it('renders address textarea when in edit mode', async () => {
+        store = createAdminStore(true);
+        wrapper = mountComponent();
+        await wrapper.vm.$nextTick();
+        await wrapper.find('.edit-icon').trigger('click');
+        await wrapper.vm.$nextTick();
+        expect(wrapper.findComponent({ name: 'AtomTextarea' }).exists()).toBe(
+            true,
+        );
+    });
 });
