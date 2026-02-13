@@ -82,6 +82,13 @@ const mutations = {
         state.spotDetails.Remark = remark;
         state.spotDetails.LastCallDate = new Date().toISOString();
     },
+    'update-spot-address'(state, address) {
+        state.spotDetails.Address = address;
+    },
+
+    'update-spot-rent'(state, rent) {
+        state.spotDetails.Rate = rent;
+    },
 };
 
 const actions = {
@@ -195,14 +202,37 @@ const actions = {
     },
 
     async updateAddress({ commit, state }, address) {
-        commit('update-spot-address', address);
-        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
-    },
+        commit('update-loading', true);
 
+        try {
+            const updatedSpotDetails = {
+                ...state.spotDetails,
+                Address: address,
+            };
+
+            await mayaClient.post(UPDATE_SITE_ENDPOINT, updatedSpotDetails);
+
+            commit('update-spot-address', address);
+        } finally {
+            commit('update-loading', false);
+        }
+    },
     async updateRent({ commit, state }, rent) {
-        if (rent > 0) {
+        if (rent <= 0) return;
+
+        commit('update-loading', true);
+
+        try {
+            const updatedSpotDetails = {
+                ...state.spotDetails,
+                Rate: rent,
+            };
+
+            await mayaClient.post(UPDATE_SITE_ENDPOINT, updatedSpotDetails);
+
             commit('update-spot-rent', rent);
-            await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
+        } finally {
+            commit('update-loading', false);
         }
     },
 };

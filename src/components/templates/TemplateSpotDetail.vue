@@ -592,9 +592,10 @@ export default {
             this.updateAddress(this.editableAddress);
         },
         cancelAddressEdit() {
-            this.editableAddress = this.spotDetails.Address;
+            this.editableAddress = this.spotDetails?.Address ?? '';
             this.isEditingAddress = false;
         },
+
         alertError(msg) {
             this.$buefy.dialog.alert({
                 ariaModal: true,

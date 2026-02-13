@@ -271,4 +271,77 @@ describe('TemplateSpotDetail.vue', () => {
         expect(wrapper.vm.isEditingAddress).toBe(false);
         expect(wrapper.vm.editableAddress).toBe('C-51 Shyam Park Extension');
     });
+    const createAdminStore = (isAdmin) =>
+        createStore({
+            modules: {
+                sdp: {
+                    namespaced: true,
+                    state: () => ({
+                        images: ['img1.jpg'],
+                        thumbnail: ['thumb1.jpg'],
+                        center: [12.97, 77.59],
+                        isAvailable: true,
+                        ownerInfoDetails: {
+                            UserName: 'dev_shrivastav',
+                        },
+                        paymentDetails: 'UPI',
+                        selectedSpot: [
+                            { Name: 'Test Spot', Lat: 11.11, Long: 22.22 },
+                        ],
+                        spotDetails: {
+                            Name: 'Test Spot',
+                            Address: 'C-51 Shyam Park Extension',
+                            Area: 'Ghaziabad',
+                            City: 'Uttar Pradesh',
+                            UpdatedAt: '2025-12-01',
+                            LastCallDate: '2025-12-10',
+                            Lat: 11.11,
+                            Long: 22.22,
+                        },
+                        spotInProgressBookings: [],
+                    }),
+                },
+                user: {
+                    namespaced: true,
+                    state: () => ({
+                        isAdmin,
+                    }),
+                },
+            },
+        });
+
+    it('shows edit pencil icon for admin when not editing address', async () => {
+        store = createAdminStore(true);
+        wrapper = mountComponent();
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find('.edit-icon').exists()).toBe(true);
+    });
+
+    it('hides edit pencil icon for non-admin user', async () => {
+        store = createAdminStore(false);
+        wrapper = mountComponent();
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find('.edit-icon').exists()).toBe(false);
+    });
+
+    it('enters address edit mode when pencil icon is clicked', async () => {
+        store = createAdminStore(true);
+        wrapper = mountComponent();
+        await wrapper.vm.$nextTick();
+        const editIcon = wrapper.find('.edit-icon');
+        expect(editIcon.exists()).toBe(true);
+        await editIcon.trigger('click');
+        expect(wrapper.vm.isEditingAddress).toBe(true);
+    });
+
+    it('renders address textarea when in edit mode', async () => {
+        store = createAdminStore(true);
+        wrapper = mountComponent();
+        await wrapper.vm.$nextTick();
+        await wrapper.find('.edit-icon').trigger('click');
+        await wrapper.vm.$nextTick();
+        expect(wrapper.findComponent({ name: 'AtomTextarea' }).exists()).toBe(
+            true,
+        );
+    });
 });
