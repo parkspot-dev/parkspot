@@ -1,38 +1,76 @@
 <template>
     <div class="rate-card">
         <div class="rate-container">
-            <p class="rate">₹{{ spotDetails.Rate + discountAmount }}</p>
-            <p class="discount-rate">₹{{ spotDetails.Rate }}</p>
-            <p class="discount-label">{{ discountPercent }}% OFF</p>
+            <template v-if="isEditingRent">
+                <AtomInput
+                    v-model.number="editableRent"
+                    type="number"
+                    class="rent-input"
+                />
+                <div class="edit-actions">
+                    <AtomButton size="is-small" @click="saveRent">
+                        Save
+                    </AtomButton>
+                    <AtomButton
+                        size="is-small"
+                        type="is-light"
+                        @click="cancelEdit"
+                    >
+                        Cancel
+                    </AtomButton>
+                </div>
+            </template>
+
+            <template v-else>
+                <p class="rate">₹{{ spotDetails.Rate + discountAmount }}</p>
+
+                <p class="discount-rate">
+                    ₹{{ spotDetails.Rate }}
+                    <span
+                        v-if="isAdmin"
+                        class="material-symbols-outlined edit-icon"
+                        @click="startEdit"
+                    >
+                        edit
+                    </span>
+                </p>
+
+                <p class="discount-label">{{ discountPercent }}% OFF</p>
+            </template>
         </div>
+
         <div class="star-rating">
-            <AtomRating :rate="spotDetails.Rating"></AtomRating>
+            <AtomRating :rate="spotDetails.Rating" />
         </div>
         <hr />
+
         <div class="amount-breakage">
             <div>
                 <p>₹{{ spotDetails.Rate + discountAmount }} x 1 month</p>
                 <p>₹{{ spotDetails.Rate + discountAmount }}</p>
             </div>
+
             <div>
                 <p>Discount</p>
                 <p>- ₹{{ discountAmount }}</p>
             </div>
+
             <hr />
+
             <div>
                 <p>Total</p>
                 <p>₹{{ spotDetails.Rate }}</p>
             </div>
+
             <div>
                 <div class="negative-margin">
                     <p style="margin-right: 5px">
-                        Conv. fee ( <span class="bold-text"> One time </span> )
+                        Conv. fee (
+                        <span class="bold-text"> One time </span>
+                        )
                     </p>
                     <AtomTooltip :label="tooltipMsg">
-                        <AtomIcon
-                            :icon="ICON.INFO"
-                            :size="'is-small'"
-                        ></AtomIcon>
+                        <AtomIcon :icon="ICON.INFO" size="is-small" />
                     </AtomTooltip>
                 </div>
                 <p>+ ₹500</p>
@@ -43,21 +81,9 @@
             <li v-if="isAvailable" class="status-green">Available</li>
             <li v-else class="status-red">Rented Out</li>
         </ul>
-        <AtomButton
-            v-if="isAvailable"
-            class="top-margin"
-            :expanded="true"
-            @click="onContact"
-        >
-            Book
-        </AtomButton>
-        <AtomButton
-            v-else
-            class="top-margin"
-            :expanded="true"
-            @click="onContact"
-        >
-            Notify me
+
+        <AtomButton class="top-margin" :expanded="true" @click="onContact">
+            {{ isAvailable ? 'Book' : 'Notify me' }}
         </AtomButton>
     </div>
 </template>
@@ -67,8 +93,10 @@ import AtomRating from '../atoms/AtomRating.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import AtomTooltip from '../atoms/AtomTooltip.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
+import AtomInput from '../atoms/AtomInput.vue';
 import { ICON } from '@/constant/constant';
 import { mapState } from 'vuex';
+
 export default {
     name: 'OrganismSpotRateCard',
     components: {
@@ -76,13 +104,22 @@ export default {
         AtomButton,
         AtomTooltip,
         AtomIcon,
+        AtomInput,
     },
-    emits: ['open-booking-modal'],
+    props: {
+        isAdmin: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    emits: ['open-booking-modal', 'update-rent'],
     data() {
         return {
             ICON,
             tooltipMsg:
-                'This helps us run our platform and offer services. One time charge only. ',
+                'This helps us run our platform and offer services. One time charge only.',
+            isEditingRent: false,
+            editableRent: null,
         };
     },
     computed: {
@@ -92,9 +129,8 @@ export default {
         }),
 
         discountAmount() {
-            let amount = 0.15 * this.spotDetails.Rate;
-            amount = Math.ceil(amount / 100) * 100;
-            return amount;
+            const amount = 0.15 * this.spotDetails.Rate;
+            return Math.ceil(amount / 100) * 100;
         },
 
         discountPercent() {
@@ -103,6 +139,18 @@ export default {
         },
     },
     methods: {
+        startEdit() {
+            this.editableRent = Number(this.spotDetails.Rate) || 0;
+            this.isEditingRent = true;
+        },
+        saveRent() {
+            this.$emit('update-rent', this.editableRent);
+            this.isEditingRent = false;
+        },
+        cancelEdit() {
+            this.isEditingRent = false;
+            this.editableRent = null;
+        },
         onContact() {
             this.$emit('open-booking-modal');
         },
@@ -129,6 +177,7 @@ export default {
         display: flex;
         align-items: flex-start;
         gap: 10px;
+        position: relative;
 
         .rate {
             font-size: 20px;
@@ -155,9 +204,25 @@ export default {
         }
     }
 
+    .edit-icon {
+        cursor: pointer;
+        font-size: 18px;
+        margin-left: 6px;
+        vertical-align: middle;
+    }
+
+    .edit-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 6px;
+    }
+
+    .rent-input {
+        width: 120px;
+    }
+
     .star-rating {
         font-size: 24px;
-        // margin-bottom: 10px;
     }
 
     .amount-breakage {
