@@ -46,8 +46,7 @@ const mutations = {
     },
 
     'update-image'(state, images) {
-        state.images = [];
-        state.images = images.map((img) => img.ImageURL);
+        state.images = images;
     },
 
     'update-thumbnail-image'(state, image) {
@@ -66,13 +65,22 @@ const mutations = {
     'update-payment-info'(state, paymentDetails) {
         state.paymentDetails = paymentDetails;
     },
+
     'set-in-progress-bookings'(state, bookings) {
         state.spotInProgressBookings = bookings;
     },
     'set-site-images-and-last-call'(state, { images, lastCallDate }) {
-        state.spotDetails.SiteImages = images;
+        const mappedImages = images.map((url, index) => ({
+            SiteImageID: `${state.spotDetails.SiteID}#${index + 1}`,
+            ImageURL: url,
+            SiteID: state.spotDetails.SiteID,
+        }));
+
+        state.spotDetails.SiteImages = mappedImages;
+        state.images = mappedImages;
         state.spotDetails.LastCallDate = lastCallDate;
     },
+
     'set-availability'(state, availableCount) {
         state.spotDetails.SlotsAvailable = availableCount;
         state.spotDetails.LastCallDate = new Date().toISOString();
@@ -80,7 +88,14 @@ const mutations = {
     'set-remark'(state, remark) {
         state.spotDetails.Remark = remark;
         state.spotDetails.LastCallDate = new Date().toISOString();
-    }
+    },
+    'update-spot-address'(state, address) {
+        state.spotDetails.Address = address;
+    },
+
+    'update-spot-rent'(state, rent) {
+        state.spotDetails.Rate = rent;
+    },
 };
 
 const actions = {
@@ -133,21 +148,50 @@ const actions = {
 
     async updateAvailability({ state, commit }, availableCount) {
         commit('set-availability', availableCount);
-        // Updating availability means agent connected with SO today.
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 
-    async updateImages({ state, commit }, updatedImages) {
-        const uploadedImageURLs = await ImageUploadService.uploadImages(
-            updatedImages,
-            state.spotDetails.SiteID,
+    async updateImages({ state, commit }, newImages) {
+    const existingImageUrls = Array.isArray(state.spotDetails.SiteImages)
+        ? [...state.spotDetails.SiteImages]
+        : [];
+
+
+    const filesToUpload = newImages
+        .filter(img => img.file)
+        .map(img => img.file);
+
+    let uploadedUrls = [];
+
+    if (filesToUpload.length > 0) {
+        const uploadResponse = await ImageUploadService.uploadImages(
+            filesToUpload,
+            state.spotDetails.SiteID
         );
-        commit('set-site-images-and-last-call', {
-            images: uploadedImageURLs,
-            lastCallDate: new Date().toISOString(),
-        });
-        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
-    },
+           console.log("update" , uploadResponse);
+        if (
+            uploadResponse?.success &&
+            Array.isArray(uploadResponse.urls)
+        ) {
+            uploadedUrls = uploadResponse.urls;
+        }
+    }
+
+
+    const allImageUrls = [...existingImageUrls, ...uploadedUrls];
+  console.log("all image" , allImageUrls);
+    commit('set-site-images-and-last-call', {
+        images: allImageUrls,
+        lastCallDate: new Date().toISOString(),
+    });
+
+   
+    await mayaClient.post(UPDATE_SITE_ENDPOINT, {
+        ...state.spotDetails,
+        SiteImages: allImageUrls,
+    });
+},
+
 
     async updateLastCallDate({ state, commit }, lastCallDate) {
         commit('set-site-images-and-last-call', {
@@ -164,6 +208,41 @@ const actions = {
         });
         commit('set-remark', remark);
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
+    },
+
+    async updateAddress({ commit, state }, address) {
+        commit('update-loading', true);
+
+        try {
+            const updatedSpotDetails = {
+                ...state.spotDetails,
+                Address: address,
+            };
+
+            await mayaClient.post(UPDATE_SITE_ENDPOINT, updatedSpotDetails);
+
+            commit('update-spot-address', address);
+        } finally {
+            commit('update-loading', false);
+        }
+    },
+    async updateRent({ commit, state }, rent) {
+        if (rent <= 0) return;
+
+        commit('update-loading', true);
+
+        try {
+            const updatedSpotDetails = {
+                ...state.spotDetails,
+                Rate: rent,
+            };
+
+            await mayaClient.post(UPDATE_SITE_ENDPOINT, updatedSpotDetails);
+
+            commit('update-spot-rent', rent);
+        } finally {
+            commit('update-loading', false);
+        }
     },
 };
 

@@ -129,31 +129,39 @@ describe('Vuex - spot module', () => {
             );
         });
 
-        it('updateImages uploads images and posts updated site', async () => {
+        it('updateImages uploads new images, keeps existing ones, and posts updated site', async () => {
             store.state.spot.spotDetails = {
                 SiteID: 'SITE_1',
                 SiteImages: [],
             };
 
-            const uploadedImages = [
-                { ImageURL: 'img1.jpg' },
-                { ImageURL: 'img2.jpg' },
+            const updatedImages = [
+                {
+                    isNew: false,
+                    preview: 'https://cdn.old-image.com/old.jpg',
+                },
+                {
+                    isNew: true,
+                    file: new File(['img'], 'new.jpg'),
+                },
             ];
 
-            ImageUploadService.uploadImages.mockResolvedValue(uploadedImages);
-
-            const newImages = [{ file: {} }, { file: {} }];
-
-            await store.dispatch('spot/updateImages', newImages);
+            ImageUploadService.uploadImages.mockResolvedValue({
+                success: true,
+                urls: ['https://cdn.new-image.com/new.jpg'],
+            });
+            await store.dispatch('spot/updateImages', updatedImages);
 
             expect(ImageUploadService.uploadImages).toHaveBeenCalledWith(
-                newImages,
+                [updatedImages[1].file],
                 'SITE_1',
             );
 
-            expect(store.state.spot.spotDetails.SiteImages).toEqual(
-                uploadedImages,
-            );
+            expect(store.state.spot.spotDetails.SiteImages).toEqual([
+                'https://cdn.old-image.com/old.jpg',
+                'https://cdn.new-image.com/new.jpg',
+            ]);
+
             expect(store.state.spot.spotDetails.LastCallDate).toEqual(
                 expect.any(String),
             );
@@ -192,5 +200,39 @@ describe('Vuex - spot module', () => {
                 store.state.spot.spotDetails,
             );
         });
+    });
+
+    it('updateAddress commits address and posts updated site', async () => {
+        store.state.spot.spotDetails = {
+            Address: 'Old Address',
+        };
+        await store.dispatch('spot/updateAddress', 'New Address');
+        expect(store.state.spot.spotDetails.Address).toBe('New Address');
+        expect(mayaClient.post).toHaveBeenCalledWith(
+            '/owner/update-site',
+            store.state.spot.spotDetails,
+        );
+    });
+
+    it('updateRent commits rent and posts updated site when rent is valid', async () => {
+        store.state.spot.spotDetails = {
+            Rate: 100,
+        };
+
+        await store.dispatch('spot/updateRent', 500);
+        expect(store.state.spot.spotDetails.Rate).toBe(500);
+        expect(mayaClient.post).toHaveBeenCalledWith(
+            '/owner/update-site',
+            store.state.spot.spotDetails,
+        );
+    });
+
+    it('updateRent does not commit or post when rent is invalid', async () => {
+        store.state.spot.spotDetails = {
+            Rate: 100,
+        };
+        await store.dispatch('spot/updateRent', -50);
+        expect(store.state.spot.spotDetails.Rate).toBe(100);
+        expect(mayaClient.post).not.toHaveBeenCalled();
     });
 });
