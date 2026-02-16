@@ -27,6 +27,7 @@ const state = {
     login: {},
     locationDetails: {},
     preference: {},
+    authError: null,
 };
 
 const getters = {};
@@ -100,6 +101,9 @@ const mutations = {
             Type: 'VO',
         };
     },
+    'set-auth-error'(state, error) {
+        state.authError = error;
+    }
 };
 
 const actions = {
@@ -316,14 +320,20 @@ const unsub = onAuthStateChanged(auth, async (user) => {
     store.commit('user/update-user', user);
     store.commit('user/update-auth-ready', true);
 
-    if (user) {
-        try {
-            await store.dispatch('user/getUserProfile');
-            await store.dispatch('app/getAgents');
-        } catch {
-            await store.dispatch('user/logOut');
-        }
+    if (!user) {
+        return;
     }
+
+    try {
+        await store.dispatch('user/getUserProfile');
+        await store.dispatch('app/getAgents');
+    } catch {
+        store.commit('user/set-auth-error', {
+            source: 'onAuthStateChanged',
+            message: 'Failed to load user bootstrap data',
+        });
+    }
+
     unsub();
 });
 

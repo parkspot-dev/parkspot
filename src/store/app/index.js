@@ -34,7 +34,11 @@ const actions = {
             commit('set-agents', res);
         } catch {
             localStorage.removeItem('agents');
+<<<<<<< HEAD
             commit('set-agents', []); 
+=======
+            commit('set-agents', []);
+>>>>>>> feature/update-account-info
         }
     },
 
