@@ -29,6 +29,22 @@ const rules = {
     terms: z.boolean().refine((val) => val === true, {
         message: 'You must accept the terms and conditions.',
     }),
+    accountHolderName: z
+        .string()
+        .min(1, 'Account holder name is required')
+        .min(3, 'Must be at least 3 characters')
+        .regex(/^[A-Za-z\s]+$/, 'Name can contain only letters and spaces'),
+    upi: z
+        .string()
+        .min(1, 'UPI ID is required')
+        .regex(/^[\w.-]{2,256}@[a-zA-Z]{2,64}$/, 'Invalid UPI ID format'),
+    accountNumber: z
+        .string()
+        .min(9, 'Account number is too short')
+        .max(18, 'Account number is too long')
+        .regex(/^\d+$/, 'Account number must contain only digits'),
+
+    ifsc: z.string().regex(/^[A-Z]{4}0[A-Z0-9]{6}$/, 'Invalid IFSC code'),
 };
 
 // Contact Form Schema
@@ -82,4 +98,55 @@ export const bookingModalFormSchema = toTypedSchema(
         mobile: rules.cno,
         vehicleNo: z.string().optional(),
     }),
+);
+
+// Account details form schema
+
+export const accountInformationSchema = toTypedSchema(
+    z
+        .object({
+            fullName: rules.accountHolderName,
+
+            mode: z.enum(['upi', 'mobile', 'bank']),
+
+            // UPI
+            UpiID: rules.upi.optional(),
+            PaymentApp: z.number().optional(),
+
+            // Mobile
+            Mobile: rules.cno.optional(),
+
+            // Bank
+            account_number: rules.accountNumber.optional(),
+            ifsc_code: rules.ifsc.optional(),
+        })
+        .refine(
+            (data) => {
+                if (data.mode === 'upi') {
+                    return (
+                        !!data.UpiID &&
+                        data.PaymentApp !== null &&
+                        data.PaymentApp !== undefined
+                    );
+                }
+
+                if (data.mode === 'mobile') {
+                    return (
+                        !!data.Mobile &&
+                        data.PaymentApp !== null &&
+                        data.PaymentApp !== undefined
+                    );
+                }
+
+                if (data.mode === 'bank') {
+                    return !!data.account_number && !!data.ifsc_code;
+                }
+
+                return false;
+            },
+            {
+                message: 'Please fill all required account details',
+                path: ['mode'],
+            },
+        ),
 );

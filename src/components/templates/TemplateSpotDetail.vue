@@ -157,10 +157,32 @@
                                         />
                                     </td>
                                 </tr>
-                                <tr v-if="paymentDetails">
+                                <tr>
                                     <td>Account</td>
-                                    <td>{{ paymentDetails }}</td>
+                                    <td class="account-cell">
+                                        <span class="account-text">
+                                            {{ paymentDetails || 'Not Set' }}
+                                        </span>
+
+                                        <span
+                                            class="edit-icon"
+                                            :class="{
+                                                disabled:
+                                                    editField !== null &&
+                                                    editField !==
+                                                        'Account Information',
+                                            }"
+                                            @click="
+                                                enableEdit(
+                                                    'Account Information',
+                                                )
+                                            "
+                                        >
+                                            <AtomIcon :icon="'pencil'" />
+                                        </span>
+                                    </td>
                                 </tr>
+
                                 <tr v-if="ownerInfoDetails.UserName">
                                     <td>UserName</td>
                                     <td>{{ ownerInfoDetails.UserName }}</td>
@@ -280,6 +302,13 @@
             @login="handleLoginFromModal"
         />
         <LoaderModal v-if="showLoader" />
+        <OrganismAccountInformation
+            v-if="showAccountModal"
+            :existing-account="$store.state.sdp.spotDetails?.Account"
+            :username="ownerInfoDetails.UserName"
+            @close="closeAccountModal"
+            @saved="handleAccountSaved"
+        />
     </BodyWrapper>
 </template>
 
@@ -301,6 +330,8 @@ import { mapState, mapActions } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
 import LoaderModal from '../extras/LoaderModal.vue';
 import ImageUpload from '../global/ImageUpload.vue';
+import AtomIcon from '../atoms/AtomIcon.vue';
+import OrganismAccountInformation from '../organisms/OrganismAccountInformation.vue';
 export default {
     name: 'TemplateSpotDetail',
     components: {
@@ -315,6 +346,8 @@ export default {
         BookingModal,
         LoaderModal,
         ImageUpload,
+        AtomIcon,
+        OrganismAccountInformation,
     },
     emits: [
         'goToSearchPortal',
@@ -331,6 +364,8 @@ export default {
             tempBookingForm: {},
             updatedImages: [],
             emailWatcher: null,
+            editField: null,
+            showAccountModal: false,
         };
     },
 
@@ -550,6 +585,37 @@ export default {
         },
         saveImages() {
             this.updateImages(this.updatedImages);
+        },
+        enableEdit(fieldName) {
+            if (this.editField && this.editField !== fieldName) return;
+
+            this.editField = fieldName;
+
+            if (fieldName === 'Account Information') {
+                this.showAccountModal = true;
+            }
+        },
+        closeAccountModal() {
+            this.showAccountModal = false;
+            this.editField = null;
+        },
+
+        async handleAccountSaved(account) {
+            this.showLoader = true;
+
+            this.$store.commit('sdp/update-account-details', account);
+            await this.$store.dispatch('sdp/setPaymentDetails', account);
+
+            this.showAccountModal = false;
+            this.editField = null;
+
+            this.$buefy.toast.open({
+                message: 'Account updated successfully',
+                type: 'is-success',
+                duration: 5000,
+            });
+
+            this.showLoader = false;
         },
     },
 };
@@ -870,5 +936,32 @@ h2 {
     span {
         color: red;
     }
+}
+
+.edit-icon {
+    margin-left: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    color: var(--secondary-color);
+}
+
+.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.disabled * {
+    fill: var(--parkspot-grey) !important;
+}
+
+.account-cell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.account-text {
+    flex: 1;
 }
 </style>

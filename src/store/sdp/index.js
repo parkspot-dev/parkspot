@@ -81,6 +81,9 @@ const mutations = {
         state.spotDetails.Remark = remark;
         state.spotDetails.LastCallDate = new Date().toISOString();
     },
+    'update-account-details'(state, account) {
+        state.spotDetails.Account = account;
+    },
 };
 
 const actions = {
@@ -91,6 +94,7 @@ const actions = {
             commit('update-spot-details', res.Site);
             commit('update-owner-info-details', res.User);
             commit('set-in-progress-bookings', res.Bookings);
+            commit('update-account-details', res.Account);
             await dispatch('setPaymentDetails', res.Account);
 
             const spot = {
