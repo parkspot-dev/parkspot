@@ -66,7 +66,6 @@ const mutations = {
     'update-payment-info'(state, paymentDetails) {
         state.paymentDetails = paymentDetails;
     },
-
     'set-in-progress-bookings'(state, bookings) {
         state.spotInProgressBookings = bookings;
     },
@@ -84,12 +83,6 @@ const mutations = {
     },
     'update-account-details'(state, account) {
         state.spotDetails.Account = account;
-    'update-spot-address'(state, address) {
-        state.spotDetails.Address = address;
-    },
-
-    'update-spot-rent'(state, rent) {
-        state.spotDetails.Rate = rent;
     },
 };
 
@@ -202,41 +195,6 @@ const actions = {
         });
         commit('set-remark', remark);
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
-    },
-
-    async updateAddress({ commit, state }, address) {
-        commit('update-loading', true);
-
-        try {
-            const updatedSpotDetails = {
-                ...state.spotDetails,
-                Address: address,
-            };
-
-            await mayaClient.post(UPDATE_SITE_ENDPOINT, updatedSpotDetails);
-
-            commit('update-spot-address', address);
-        } finally {
-            commit('update-loading', false);
-        }
-    },
-    async updateRent({ commit, state }, rent) {
-        if (rent <= 0) return;
-
-        commit('update-loading', true);
-
-        try {
-            const updatedSpotDetails = {
-                ...state.spotDetails,
-                Rate: rent,
-            };
-
-            await mayaClient.post(UPDATE_SITE_ENDPOINT, updatedSpotDetails);
-
-            commit('update-spot-rent', rent);
-        } finally {
-            commit('update-loading', false);
-        }
     },
 };
 
