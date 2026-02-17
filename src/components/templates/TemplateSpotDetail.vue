@@ -374,12 +374,6 @@ export default {
         AtomIcon,
         OrganismAccountInformation,
     },
-    props: {
-        isAdmin: {
-            type: Boolean,
-            default: false,
-        },
-    },
     emits: [
         'goToSearchPortal',
         'changeAvailability',
