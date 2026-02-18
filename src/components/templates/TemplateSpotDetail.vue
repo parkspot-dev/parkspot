@@ -354,6 +354,7 @@ export default {
         'changeAvailability',
         'changeLastCallDate',
         'changeRemark',
+        'account-updated',
     ],
     data() {
         return {
@@ -608,6 +609,7 @@ export default {
 
             this.showAccountModal = false;
             this.editField = null;
+            this.$emit('account-updated');
 
             this.$buefy.toast.open({
                 message: 'Account updated successfully',
