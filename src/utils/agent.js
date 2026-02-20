@@ -1,14 +1,15 @@
-export default function getAgentUserNameFromFullName(fullName) {
-    if (!fullName) return null;
+export default function getAgentUserNameFromFullName(dropdownName) {
+    if (!dropdownName) return null;
 
-    const agents = JSON.parse(localStorage.getItem('agent')) || [];
+    const agents = JSON.parse(localStorage.getItem('agents')) || [];
 
-    // exact FullName match
-    const matchedAgent = agents.find(
-        (a) =>
-            a.FullName &&
-            a.FullName.trim().toLowerCase() === fullName.trim().toLowerCase(),
-    );
+    const matchedAgent = agents.find((agent) => {
+        if (!agent.FullName) return false;
+
+        const firstNameFromFullName = agent.FullName.split(' ')[0]; 
+
+        return firstNameFromFullName === dropdownName;
+    });
 
     return matchedAgent ? matchedAgent.UserName : null;
 }

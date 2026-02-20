@@ -544,6 +544,7 @@ import SelectInput from '../global/SelectInput.vue';
 import FilterDropdown from '../global/FilterDropdown.vue';
 import MobileView from '../search-portal/MobileView.vue';
 import { RequestPriority } from '@/constant/enums';
+import getAgentUserNameFromFullName from '@/utils/agent';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -708,7 +709,6 @@ export default {
         }
     },
 
-    
     methods: {
         ...mapActions('searchPortal', [
             'getAgents',
@@ -755,13 +755,23 @@ export default {
             const agent = this.agentList.find((a) => a.id === agentid);
             if (!agent) return;
 
-            spotData.Agent = agent.name;
+            spotData.Agent = agent.name; 
+
+            const agentUserName = getAgentUserNameFromFullName(agent.name);
+
+            if (!agentUserName) {
+                this.$buefy.toast.open({
+                    message: 'Agent username not found',
+                    type: 'is-danger',
+                });
+                return;
+            }
 
             this.$emit('updateRequest', {
                 FieldMask: ['AgentUserName'],
-                ParkingRequests: {
+                ParkingRequest: {
                     ID: spotData.ID,
-                    AgentUserName: agent.name,
+                    AgentUserName: agentUserName,
                 },
             });
         },
