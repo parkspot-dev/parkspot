@@ -60,6 +60,7 @@
                             label="UPI ID"
                         />
                         <SelectInput
+                            v-model="form.PaymentApp"
                             name="PaymentApp"
                             label="Payment App"
                             :list="[
@@ -77,6 +78,7 @@
                             label="Mobile Number"
                         />
                         <SelectInput
+                            v-model="form.PaymentApp"
                             name="PaymentApp"
                             label="Payment App"
                             :list="[
