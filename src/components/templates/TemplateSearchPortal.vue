@@ -752,12 +752,18 @@ export default {
         },
 
         onAgentUpdate(spotData, agentid) {
-            this.agentList.forEach((agent) => {
-                if (agent.id === agentid) {
-                    spotData['Agent'] = agent.name;
-                }
+            const agent = this.agentList.find((a) => a.id === agentid);
+            if (!agent) return;
+
+            spotData.Agent = agent.name;
+
+            this.$emit('updateRequest', {
+                FieldMask: ['AgentUserName'],
+                ParkingRequests: {
+                    ID: spotData.ID,
+                    AgentUserName: agent.name,
+                },
             });
-            this.$emit('updateRequest', spotData);
         },
 
         getLatLng(lat, lng) {
@@ -777,8 +783,15 @@ export default {
         },
 
         onDateUpdate(spotData, date) {
-            spotData['NextCall'] = date;
-            this.$emit('updateRequest', spotData);
+            spotData.NextCall = date;
+
+            this.$emit('updateRequest', {
+                FieldMask: ['NextCall'],
+                ParkingRequest: {
+                    ID: spotData.ID,
+                    NextCall: date,
+                },
+            });
         },
 
         storeOldComment(row) {
@@ -796,7 +809,13 @@ export default {
             let mm = date.getMonth() + 1;
             if (mm < 10) mm = '0' + mm;
             row.Comments = `${newComment} [${dd}/${mm}]`;
-            this.$emit('updateRequest', row);
+            this.$emit('updateRequest', {
+                FieldMask: ['Comments'],
+                ParkingRequests: {
+                    ID: row.ID,
+                    Comments: row.Comments,
+                },
+            });
             // Reset stored old comment
             this.oldComments = row.Comments;
             this.isOpen = false;
@@ -814,7 +833,13 @@ export default {
                 status = foundStatus.id;
             }
             spotData['Status'] = status;
-            this.$emit('updateRequest', spotData);
+            this.$emit('updateRequest', {
+                FieldMask: ['Status'],
+                ParkingRequests: {
+                    ID: spotData.ID,
+                    Status: status,
+                },
+            });
         },
 
         updateLatLng(spotData, latlng) {
@@ -825,7 +850,14 @@ export default {
             ) {
                 spotData['Latitude'] = parseFloat(coordinate[0]);
                 spotData['Longitude'] = parseFloat(coordinate[1]);
-                this.$emit('updateRequest', spotData);
+                this.$emit('updateRequest', {
+                    FieldMask: ['Latitude', 'Longitude'],
+                    ParkingRequests: {
+                        ID: spotData.ID,
+                        Latitude: spotData['Latitude'],
+                        Longitude: spotData['Longitude'],
+                    },
+                });
             }
         },
 
@@ -873,7 +905,7 @@ export default {
             const url = new URL(window.location.href);
             url.searchParams.set('agent', agent);
             window.history.pushState({}, '', url.toString());
-            this.filters.Agent = agent
+            this.filters.Agent = agent;
             this.applyFilters();
         },
         handleStatusFilter(status) {
