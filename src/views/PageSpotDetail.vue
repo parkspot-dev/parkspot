@@ -3,6 +3,7 @@
         <LoaderModal v-if="isLoading"></LoaderModal>
         <TemplateSpotDetail
             v-else
+            @account-updated="refreshSpotDetails"
             @go-to-search-portal="goToSearchPortal"
             @change-availability="changeAvailability"
             @change-last-call-date="changeLastCallDate"
@@ -138,6 +139,11 @@ export default {
         },
         async changeRemark(remark) {
             await this.updateRemark(remark);
+            await this.getSpotDetails({
+                spotId: this.spotId,
+            });
+        },
+        async refreshSpotDetails() {
             await this.getSpotDetails({
                 spotId: this.spotId,
             });

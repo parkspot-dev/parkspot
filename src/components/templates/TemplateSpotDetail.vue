@@ -11,9 +11,7 @@
             <div class="rate-card-container">
                 <SpotRateCard
                     class="card-position"
-                    :is-admin="isAdmin"
                     @open-booking-modal="openBookingModal"
-                    @update-rent="saveRent"
                 ></SpotRateCard>
             </div>
             <div class="spot-detail-main-description">
@@ -21,39 +19,16 @@
                     <h1>{{ spotDetails.Name }}</h1>
                 </div>
                 <div>
-                    <p class="editable-label">
-                        Address:
-                        <span
-                            v-if="isAdmin && !isEditingAddress"
-                            class="material-symbols-outlined edit-icon"
-                            @click="isEditingAddress = true"
-                        >
-                            edit
-                        </span>
+                    <p>Address:</p>
+                    <p>
+                        {{ spotDetails.Address }}
                     </p>
-
-                    <!-- View mode -->
-                    <div v-if="!isEditingAddress">
-                        <p>{{ spotDetails.Address }}</p>
-                        <p>{{ spotDetails.Area }}</p>
-                        <p>{{ spotDetails.City }}</p>
-                    </div>
-
-                    <div v-else>
-                        <AtomTextarea v-model="editableAddress" :row-no="3" />
-                        <div class="edit-actions">
-                            <AtomButton size="is-small" @click="saveAddress">
-                                Save
-                            </AtomButton>
-                            <AtomButton
-                                size="is-small"
-                                type="is-light"
-                                @click="cancelAddressEdit"
-                            >
-                                Cancel
-                            </AtomButton>
-                        </div>
-                    </div>
+                    <p>
+                        {{ spotDetails.Area }}
+                    </p>
+                    <p>
+                        {{ spotDetails.City }}
+                    </p>
                 </div>
             </div>
 
@@ -182,10 +157,32 @@
                                         />
                                     </td>
                                 </tr>
-                                <tr v-if="paymentDetails">
+                                <tr>
                                     <td>Account</td>
-                                    <td>{{ paymentDetails }}</td>
+                                    <td class="account-cell">
+                                        <span class="account-text">
+                                            {{ paymentDetails || 'Not Set' }}
+                                        </span>
+
+                                        <span
+                                            class="edit-icon"
+                                            :class="{
+                                                disabled:
+                                                    editField !== null &&
+                                                    editField !==
+                                                        'Account Information',
+                                            }"
+                                            @click="
+                                                enableEdit(
+                                                    'Account Information',
+                                                )
+                                            "
+                                        >
+                                            <AtomIcon :icon="'pencil'" />
+                                        </span>
+                                    </td>
                                 </tr>
+
                                 <tr v-if="ownerInfoDetails.UserName">
                                     <td>UserName</td>
                                     <td>{{ ownerInfoDetails.UserName }}</td>
@@ -305,6 +302,13 @@
             @login="handleLoginFromModal"
         />
         <LoaderModal v-if="showLoader" />
+        <OrganismAccountInformation
+            v-if="showAccountModal"
+            :existing-account="$store.state.sdp.spotDetails?.Account"
+            :username="ownerInfoDetails.UserName"
+            @close="closeAccountModal"
+            @saved="handleAccountSaved"
+        />
     </BodyWrapper>
 </template>
 
@@ -326,6 +330,8 @@ import { mapState, mapActions } from 'vuex';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
 import LoaderModal from '../extras/LoaderModal.vue';
 import ImageUpload from '../global/ImageUpload.vue';
+import AtomIcon from '../atoms/AtomIcon.vue';
+import OrganismAccountInformation from '../organisms/OrganismAccountInformation.vue';
 export default {
     name: 'TemplateSpotDetail',
     components: {
@@ -340,12 +346,15 @@ export default {
         BookingModal,
         LoaderModal,
         ImageUpload,
+        AtomIcon,
+        OrganismAccountInformation,
     },
     emits: [
         'goToSearchPortal',
         'changeAvailability',
         'changeLastCallDate',
         'changeRemark',
+        'account-updated',
     ],
     data() {
         return {
@@ -356,8 +365,8 @@ export default {
             tempBookingForm: {},
             updatedImages: [],
             emailWatcher: null,
-            isEditingAddress: false,
-            editableAddress: '',
+            editField: null,
+            showAccountModal: false,
         };
     },
 
@@ -431,14 +440,6 @@ export default {
                 }));
             },
         },
-        spotDetails: {
-            immediate: true,
-            handler(val) {
-                if (val?.Address) {
-                    this.editableAddress = val.Address;
-                }
-            },
-        },
     },
     beforeUnmount() {
         this.emailWatcher?.();
@@ -450,7 +451,6 @@ export default {
             'createContactLead',
         ]),
         ...mapActions('sdp', ['updateImages']),
-        ...mapActions('sdp', ['updateAddress', 'updateRent']),
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
@@ -587,36 +587,37 @@ export default {
         saveImages() {
             this.updateImages(this.updatedImages);
         },
-        saveAddress() {
-            this.isEditingAddress = false;
-            this.updateAddress(this.editableAddress);
-        },
-        cancelAddressEdit() {
-            this.editableAddress = this.spotDetails?.Address ?? '';
-            this.isEditingAddress = false;
-        },
+        enableEdit(fieldName) {
+            if (this.editField && this.editField !== fieldName) return;
 
-        alertError(msg) {
-            this.$buefy.dialog.alert({
-                ariaModal: true,
-                ariaRole: 'alertdialog',
-                hasIcon: true,
-                icon: 'alert-circle',
-                message: msg,
-                title: 'Error',
-                type: 'is-danger',
-            });
-        },
-        saveRent(newRent) {
-            const rent = Number(newRent);
-            if (isNaN(rent) || rent <= 0) {
-                this.alertError(
-                    'Please enter a valid positive number for rent.',
-                );
-                return;
+            this.editField = fieldName;
+
+            if (fieldName === 'Account Information') {
+                this.showAccountModal = true;
             }
+        },
+        closeAccountModal() {
+            this.showAccountModal = false;
+            this.editField = null;
+        },
 
-            this.updateRent(rent);
+        async handleAccountSaved(account) {
+            this.showLoader = true;
+
+            this.$store.commit('sdp/update-account-details', account);
+            await this.$store.dispatch('sdp/setPaymentDetails', account);
+
+            this.showAccountModal = false;
+            this.editField = null;
+            this.$emit('account-updated');
+
+            this.$buefy.toast.open({
+                message: 'Account updated successfully',
+                type: 'is-success',
+                duration: 5000,
+            });
+
+            this.showLoader = false;
         },
     },
 };
@@ -937,5 +938,32 @@ h2 {
     span {
         color: red;
     }
+}
+
+.edit-icon {
+    margin-left: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    color: var(--secondary-color);
+}
+
+.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.disabled * {
+    fill: var(--parkspot-grey) !important;
+}
+
+.account-cell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.account-text {
+    flex: 1;
 }
 </style>
