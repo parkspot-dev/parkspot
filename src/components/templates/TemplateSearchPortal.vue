@@ -755,12 +755,14 @@ export default {
             const agent = this.agentList.find((a) => a.id === agentid);
             if (!agent) return;
 
-            spotData.Agent = agent.name; 
+            spotData.Agent = agent.name;
 
-            const agentUserName = getAgentUserNameFromFullName(agent.name);
-
+            let agentUserName = getAgentUserNameFromFullName(agent.name);
             if (!agentUserName) {
-                this.$buefy.toast.open({
+                agentUserName = agent.userName || agent.name;
+            }
+            if (!agentUserName) {
+                this.$buefy?.toast?.open({
                     message: 'Agent username not found',
                     type: 'is-danger',
                 });
@@ -821,7 +823,7 @@ export default {
             row.Comments = `${newComment} [${dd}/${mm}]`;
             this.$emit('updateRequest', {
                 FieldMask: ['Comments'],
-                ParkingRequests: {
+                ParkingRequest: {
                     ID: row.ID,
                     Comments: row.Comments,
                 },
@@ -845,7 +847,7 @@ export default {
             spotData['Status'] = status;
             this.$emit('updateRequest', {
                 FieldMask: ['Status'],
-                ParkingRequests: {
+                ParkingRequest: {
                     ID: spotData.ID,
                     Status: status,
                 },
@@ -862,7 +864,7 @@ export default {
                 spotData['Longitude'] = parseFloat(coordinate[1]);
                 this.$emit('updateRequest', {
                     FieldMask: ['Latitude', 'Longitude'],
-                    ParkingRequests: {
+                    ParkingRequest: {
                         ID: spotData.ID,
                         Latitude: spotData['Latitude'],
                         Longitude: spotData['Longitude'],
