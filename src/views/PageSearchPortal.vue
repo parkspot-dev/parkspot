@@ -233,7 +233,7 @@ export default {
             try {
                 this.isLoading = true;
                 const response = await mayaClient.patch(
-                    '/owner/request-comments',
+                    '/owner/parking-request',
                     request,
                 );
                 if (response.ErrorCode) {
