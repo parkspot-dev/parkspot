@@ -1,7 +1,7 @@
 <template>
-    <section>
-        <LoaderModal v-if="isLoading"></LoaderModal>
-        <TemplateSrp
+    <section class="srp-wrapper">
+        <div class="srp-slot">
+            <TemplateSrp
             v-if="srpResults && srpResults.length > 0"
             :spots="filteredSrpResults"
             :totals="totalPages"
@@ -12,6 +12,8 @@
             @details="spotDetails"
             @filter="onFilter"
         ></TemplateSrp>
+        </div>
+        <LoaderModal v-if="isLoading" class="overlay"></LoaderModal>
     </section>
 </template>
 <script>
@@ -141,3 +143,23 @@ export default {
     },
 };
 </script>
+
+<style lang="scss" scoped>
+.srp-wrapper {
+    position: relative;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.srp-slot {
+    min-height: 700px;
+}
+</style>
