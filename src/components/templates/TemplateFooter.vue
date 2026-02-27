@@ -347,7 +347,7 @@ export default {
     },
     data() {
         return {
-            psfooterImg: '/assets/ps_logo_horizontal_dark_bg.png',
+            psfooterImg: '/assets/ps_logo_horizontal_dark_bg .png',
             appLinkImg: '/assets/google-play-badge.svg',
             iosAppLinkImg: '/assets/apple-store.svg',
             currentYear: new Date().getFullYear(),
@@ -361,8 +361,16 @@ export default {
 
 <style lang="scss" scoped>
 .parkspot-logo {
-    width: 220px;
-    height: 48px;
+    height: 46px;
+    margin-bottom: 10px;
+    overflow: visible;
+    width: 200px;
+
+    img {
+        height: 56px;
+        object-fit: contain;
+        width: 200px;
+    }
 }
 
 .custom-footer,

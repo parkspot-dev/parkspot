@@ -66,21 +66,34 @@ const mutations = {
     'update-payment-info'(state, paymentDetails) {
         state.paymentDetails = paymentDetails;
     },
+
     'set-in-progress-bookings'(state, bookings) {
         state.spotInProgressBookings = bookings;
     },
+
     'set-site-images-and-last-call'(state, { images, lastCallDate }) {
         state.spotDetails.SiteImages = images;
         state.spotDetails.LastCallDate = lastCallDate;
     },
+
     'set-availability'(state, availableCount) {
         state.spotDetails.SlotsAvailable = availableCount;
         state.spotDetails.LastCallDate = new Date().toISOString();
     },
+
     'set-remark'(state, remark) {
         state.spotDetails.Remark = remark;
         state.spotDetails.LastCallDate = new Date().toISOString();
     },
+
+    'update-spot-address'(state, address) {
+        state.spotDetails.Address = address;
+    },
+
+    'update-spot-rent'(state, rent) {
+        state.spotDetails.Rate = rent;
+    },
+
     'update-account-details'(state, account) {
         state.spotDetails.Account = account;
     },
@@ -107,6 +120,7 @@ const actions = {
                 Distance: 0, // res.Site.Distance
                 SlotsAvailable: res.Site.SlotsAvailable > 0 ? true : false,
             };
+
             commit('update-map-center', [spot.Long, spot.Lat]);
             commit('update-selected-spot', spot);
             commit('update-is-available', res.Site['SlotsAvailable']);
@@ -122,8 +136,10 @@ const actions = {
     // function to handle account Details extraction and commit
     async setPaymentDetails({ commit }, accountDetails) {
         if (!accountDetails) return;
+
         let paymentdetails = '';
         const paymentApp = getPaymentAppTypeLabel(accountDetails.PaymentApp);
+
         if (accountDetails.account_number && accountDetails.ifsc_code) {
             paymentdetails = `${accountDetails.account_number}/${accountDetails.ifsc_code}`;
         } else if (accountDetails.UpiID) {
@@ -185,6 +201,7 @@ const actions = {
             images: state.spotDetails.SiteImages,
             lastCallDate,
         });
+
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 
@@ -193,7 +210,19 @@ const actions = {
             images: state.spotDetails.SiteImages,
             lastCallDate: new Date().toISOString(),
         });
+
         commit('set-remark', remark);
+
+        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
+    },
+
+    async updateAddress({ state, commit }, address) {
+        commit('update-spot-address', address);
+        await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
+    },
+
+    async updateRent({ state, commit }, rent) {
+        commit('update-spot-rent', rent);
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
 };

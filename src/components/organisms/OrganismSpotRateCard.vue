@@ -1,9 +1,39 @@
 <template>
     <div class="rate-card">
         <div class="rate-container">
-            <p class="rate">₹{{ spotDetails.Rate + discountAmount }}</p>
-            <p class="discount-rate">₹{{ spotDetails.Rate }}</p>
-            <p class="discount-label">{{ discountPercent }}% OFF</p>
+            <template v-if="!isEditingRent">
+                <p class="rate">₹{{ spotDetails.Rate + discountAmount }}</p>
+                <p class="discount-rate">
+                    ₹{{ spotDetails.Rate }}
+                    <span
+                        v-if="isAdmin"
+                        class="material-symbols-outlined edit-icon"
+                        @click="startEdit"
+                    >
+                        edit
+                    </span>
+                </p>
+                <p class="discount-label">{{ discountPercent }}% OFF</p>
+            </template>
+            <template v-else>
+                <AtomInput
+                    v-model.number="editableRent"
+                    type="number"
+                    class="rent-input"
+                />
+                <div class="edit-actions">
+                    <AtomButton size="is-small" @click="saveRent">
+                        Save
+                    </AtomButton>
+                    <AtomButton
+                        size="is-small"
+                        type="is-light"
+                        @click="cancelEdit"
+                    >
+                        Cancel
+                    </AtomButton>
+                </div>
+            </template>
         </div>
         <div class="star-rating">
             <AtomRating :rate="spotDetails.Rating"></AtomRating>
@@ -67,6 +97,7 @@ import AtomRating from '../atoms/AtomRating.vue';
 import AtomButton from '../atoms/AtomButton.vue';
 import AtomTooltip from '../atoms/AtomTooltip.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
+import AtomInput from '../atoms/AtomInput.vue';
 import { ICON } from '@/constant/constant';
 import { mapState } from 'vuex';
 export default {
@@ -76,13 +107,22 @@ export default {
         AtomButton,
         AtomTooltip,
         AtomIcon,
+        AtomInput,
     },
-    emits: ['open-booking-modal'],
+    props: {
+        isAdmin: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    emits: ['open-booking-modal', 'update-rent'],
     data() {
         return {
             ICON,
             tooltipMsg:
                 'This helps us run our platform and offer services. One time charge only. ',
+            isEditingRent: false,
+            editableRent: null,
         };
     },
     computed: {
@@ -103,6 +143,18 @@ export default {
         },
     },
     methods: {
+        startEdit() {
+            this.editableRent = this.spotDetails.Rate;
+            this.isEditingRent = true;
+        },
+        saveRent() {
+            this.$emit('update-rent', this.editableRent);
+            this.isEditingRent = false;
+        },
+        cancelEdit() {
+            this.isEditingRent = false;
+            this.editableRent = null;
+        },
         onContact() {
             this.$emit('open-booking-modal');
         },
@@ -129,6 +181,7 @@ export default {
         display: flex;
         align-items: flex-start;
         gap: 10px;
+        position: relative;
 
         .rate {
             font-size: 20px;
@@ -155,9 +208,28 @@ export default {
         }
     }
 
+    .edit-icon {
+        cursor: pointer;
+        font-size: 18px;
+        margin-left: 6px;
+        vertical-align: middle;
+        color: var(--background-color);
+    }
+
+    .edit-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 6px;
+    }
+
+    .rent-input {
+        margin-bottom: 8px;
+        width: 120px;
+    }
+
     .star-rating {
         font-size: 24px;
-        // margin-bottom: 10px;
+        margin-bottom: 10px;
     }
 
     .amount-breakage {

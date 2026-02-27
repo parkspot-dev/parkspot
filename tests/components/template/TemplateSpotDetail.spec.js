@@ -94,9 +94,55 @@ describe('TemplateSpotDetail.vue', () => {
                         ...overrides.state,
                     },
                 },
+                user: {
+                    namespaced: true,
+                    state: {
+                        isAdmin: false,
+                        ...overrides.userState,
+                    },
+                },
             },
         });
     };
+
+    const createAdminStore = (isAdmin) =>
+        createStore({
+            modules: {
+                sdp: {
+                    namespaced: true,
+                    state: () => ({
+                        images: ['img1.jpg'],
+                        thumbnail: ['thumb1.jpg'],
+                        center: [12.97, 77.59],
+                        isAvailable: true,
+                        ownerInfoDetails: {
+                            UserName: 'dev_shrivastav',
+                        },
+                        paymentDetails: 'UPI',
+                        selectedSpot: [
+                            { Name: 'Test Spot', Lat: 11.11, Long: 22.22 },
+                        ],
+                        spotDetails: {
+                            Name: 'Test Spot',
+                            Address: 'C-51 Shyam Park Extension',
+                            Area: 'Ghaziabad',
+                            City: 'Uttar Pradesh',
+                            UpdatedAt: '2025-12-01',
+                            LastCallDate: '2025-12-10',
+                            Lat: 11.11,
+                            Long: 22.22,
+                        },
+                        spotInProgressBookings: [],
+                    }),
+                },
+                user: {
+                    namespaced: true,
+                    state: () => ({
+                        isAdmin,
+                    }),
+                },
+            },
+        });
 
     beforeEach(() => {
         store = createStoreInstance();
@@ -205,4 +251,38 @@ describe('TemplateSpotDetail.vue', () => {
         expect(facility.exists()).toBe(true);
         expect(facility.html()).toMatchSnapshot();
     });
+it('shows edit pencil icon for admin when not editing address', async () => {
+    store = createAdminStore(true);
+    wrapper = mountComponent();
+    await wrapper.vm.$nextTick();
+    const addressEditIcon = wrapper.find('.editable-label .edit-icon');
+    expect(addressEditIcon.exists()).toBe(true);
+});
+
+it('hides edit pencil icon for non-admin user', async () => {
+    store = createAdminStore(false);
+    wrapper = mountComponent();
+    await wrapper.vm.$nextTick();
+    const addressEditIcon = wrapper.find('.editable-label .edit-icon');
+    expect(addressEditIcon.exists()).toBe(false);
+});
+
+it('enters address edit mode when pencil icon is clicked', async () => {
+    store = createAdminStore(true);
+    wrapper = mountComponent();
+    await wrapper.vm.$nextTick();
+    const addressEditIcon = wrapper.find('.editable-label .edit-icon');
+    await addressEditIcon.trigger('click');
+    expect(wrapper.vm.isEditingAddress).toBe(true);
+});
+
+it('renders address textarea when in edit mode', async () => {
+    store = createAdminStore(true);
+    wrapper = mountComponent();
+    await wrapper.vm.$nextTick();
+    const addressEditIcon = wrapper.find('.editable-label .edit-icon');
+    await addressEditIcon.trigger('click');
+    await wrapper.vm.$nextTick();
+    expect(wrapper.findComponent({ name: 'AtomTextarea' }).exists()).toBe(true);
+});
 });
