@@ -534,16 +534,11 @@
                         </div>
                         <div v-if="isAdmin" class="update-payment">
                             <SelectInput
-                                :default-value="
-                                    getPaymentTypeLabel(payment.Type)
-                                "
+                                :model-value="getPaymentTypeLabel(payment.Type)"
                                 :list="paymentTypeLabels"
                                 name="updatePayment"
-                                @change="
-                                    updatePaymentType(
-                                        $event.target.value,
-                                        payment.PaymentID,
-                                    )
+                                @update:model-value="
+                                    updatePaymentType($event, payment.PaymentID)
                                 "
                             />
                         </div>
