@@ -11,7 +11,9 @@
             <div class="rate-card-container">
                 <SpotRateCard
                     class="card-position"
+                    :is-admin="isAdmin"
                     @open-booking-modal="openBookingModal"
+                    @update-rent="saveRent"
                 ></SpotRateCard>
             </div>
             <div class="spot-detail-main-description">
@@ -19,16 +21,39 @@
                     <h1>{{ spotDetails.Name }}</h1>
                 </div>
                 <div>
-                    <p>Address:</p>
-                    <p>
-                        {{ spotDetails.Address }}
+                    <p class="editable-label">
+                        Address:
+                        <span
+                            v-if="isAdmin && !isEditingAddress"
+                            class="material-symbols-outlined edit-icon"
+                            @click="isEditingAddress = true"
+                        >
+                            edit
+                        </span>
                     </p>
-                    <p>
-                        {{ spotDetails.Area }}
-                    </p>
-                    <p>
-                        {{ spotDetails.City }}
-                    </p>
+
+                    <!-- View mode -->
+                    <div v-if="!isEditingAddress">
+                        <p>{{ spotDetails.Address }}</p>
+                        <p>{{ spotDetails.Area }}</p>
+                        <p>{{ spotDetails.City }}</p>
+                    </div>
+
+                    <div v-else>
+                        <AtomTextarea v-model="editableAddress" :row-no="3" />
+                        <div class="edit-actions">
+                            <AtomButton size="is-medium" @click="saveAddress">
+                                Save
+                            </AtomButton>
+                            <AtomButton
+                                size="is-medium"
+                                type="is-light"
+                                @click="cancelAddressEdit"
+                            >
+                                Cancel
+                            </AtomButton>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -367,6 +392,8 @@ export default {
             emailWatcher: null,
             editField: null,
             showAccountModal: false,
+            isEditingAddress: false,
+            editableAddress: '',
         };
     },
 
@@ -416,6 +443,14 @@ export default {
         },
     },
     watch: {
+        spotDetails: {
+            immediate: true,
+            handler(val) {
+                if (val?.Address) {
+                    this.editableAddress = val.Address;
+                }
+            },
+        },
         isLoggedIn(val) {
             if (val && this.bookingIntent) {
                 this.bookingIntent = false;
@@ -450,7 +485,8 @@ export default {
             'createTentativeBooking',
             'createContactLead',
         ]),
-        ...mapActions('sdp', ['updateImages']),
+        ...mapActions('sdp', ['updateImages', 'updateAddress', 'updateRent']),
+
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
@@ -618,6 +654,18 @@ export default {
             });
 
             this.showLoader = false;
+        },
+        saveAddress() {
+            this.spotDetails.Address = this.editableAddress;
+            this.isEditingAddress = false;
+            this.updateAddress(this.editableAddress);
+        },
+        cancelAddressEdit() {
+            this.editableAddress = this.spotDetails.Address;
+            this.isEditingAddress = false;
+        },
+        saveRent(newRent) {
+            this.updateRent(newRent);
         },
     },
 };
@@ -945,7 +993,7 @@ h2 {
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    color: var(--secondary-color);
+    color: var(--background-color);
 }
 
 .disabled {
@@ -965,5 +1013,11 @@ h2 {
 
 .account-text {
     flex: 1;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
 }
 </style>
