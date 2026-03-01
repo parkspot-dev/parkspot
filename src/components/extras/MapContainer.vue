@@ -36,7 +36,7 @@ export default {
         },
         center: {
             type: Array,
-            default: () => [12.968304, 77.588585],
+            default: () => [77.588585, 12.968304],
         },
         // zoom value configuration for the map
         zoom: {
@@ -51,6 +51,7 @@ export default {
             img: '/assets/ps_logo_mini.png',
             map: null, // map for mapbox
             marker: null, // marker for location
+            markers: [],
         };
     },
     computed: {
@@ -83,18 +84,23 @@ export default {
             updateMapConfig: 'map/update-map-config',
         }),
         ...mapActions('map', ['updateUsersCurrentLocation', 'updateZoomValue']),
-        recenterMap(center) {
-            if (!this.map) {
-                return;
-            }
+        isValidLngLat(value) {
+            return (
+                Array.isArray(value) &&
+                value.length === 2 &&
+                typeof value[0] === 'number' &&
+                typeof value[1] === 'number'
+            );
+        },
 
-            this.map.flyTo({
-                center: center,
-            });
-            this.marker.setLngLat(center);
+        recenterMap(center) {
+            if (!this.map || !this.isValidLngLat(center)) return;
+
+            this.map.flyTo({ center });
+            this.marker?.setLngLat(center);
         },
         renderMap() {
-            if (!this.accessToken) {
+            if (!this.accessToken || this.map) {
                 return;
             }
             mapboxgl.accessToken = this.accessToken;
@@ -108,7 +114,10 @@ export default {
             );
 
             // Create marker
-            if (this.filteredSpots) {
+            if (
+                this.filteredSpots &&
+                this.isValidLngLat(this.mapConfig.center)
+            ) {
                 this.marker = new mapboxgl.Marker({
                     draggable: this.drag,
                 })
@@ -117,9 +126,8 @@ export default {
                     .addTo(this.map);
             }
 
-            if (this.spotDetails) {
+            if (this.spotDetails && this.isValidLngLat(this.center)) {
                 const psMarker = document.createElement('div');
-
                 psMarker.className = 'marker';
                 psMarker.style.backgroundImage = `url(${this.img})`;
                 psMarker.style.width = '50px';
@@ -134,27 +142,37 @@ export default {
                     .addTo(this.map);
 
                 // Create user current location marker
-                new mapboxgl.Marker({
-                    draggable: this.drag,
-                })
-                    .setLngLat(this.userCurrentLocation)
-                    .setPopup(popup)
-                    .addTo(this.map);
+                if (
+                    this.userCurrentLocation &&
+                    typeof this.userCurrentLocation === 'object' &&
+                    typeof this.userCurrentLocation.lng === 'number' &&
+                    typeof this.userCurrentLocation.lat === 'number'
+                ) {
+                    new mapboxgl.Marker({ draggable: this.drag })
+                        .setLngLat([
+                            this.userCurrentLocation.lng,
+                            this.userCurrentLocation.lat,
+                        ])
+                        .setPopup(popup)
+                        .addTo(this.map);
+                }
             }
 
-            if (this.drag) {
+            if (this.drag && this.marker) {
                 this.map.on('click', (e) => {
                     this.marker
                         .setPopup(popup)
                         .setLngLat(e.lngLat)
                         .addTo(this.map);
-                    this.updateMapConfig(this.marker.getLngLat());
-                    this.$emit('location', this.marker.getLngLat());
+                    const { lng, lat } = this.marker.getLngLat();
+                    this.updateMapConfig([lng, lat]);
+                    this.$emit('location', { lng, lat });
                 });
 
                 this.marker.on('dragend', () => {
-                    this.updateMapConfig(this.marker.getLngLat());
-                    this.$emit('location', this.marker.getLngLat());
+                    const { lng, lat } = this.marker.getLngLat();
+                    this.updateMapConfig([lng, lat]);
+                    this.$emit('location', { lng, lat });
                 });
             }
 
@@ -284,7 +302,7 @@ export default {
         },
 
         updateMarkers() {
-            if (!this.map) return;
+            if (!this.map || !this.filteredSpots) return;
 
             // Remove existing markers
             if (this.markers) {
@@ -293,6 +311,11 @@ export default {
             this.markers = [];
 
             this.filteredSpots.forEach((spot) => {
+                if (
+                    typeof spot.Long !== 'number' ||
+                    typeof spot.Lat !== 'number'
+                )
+                    return;
                 const psMarker = document.createElement('div');
                 psMarker.className = 'marker';
                 psMarker.style.backgroundImage = `url(${this.img})`;
