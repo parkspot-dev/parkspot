@@ -11,9 +11,7 @@
             <div class="rate-card-container">
                 <SpotRateCard
                     class="card-position"
-                    :is-admin="isAdmin"
                     @open-booking-modal="openBookingModal"
-                    @update-rent="saveRent"
                 ></SpotRateCard>
             </div>
             <div class="spot-detail-main-description">
@@ -21,39 +19,16 @@
                     <h1>{{ spotDetails.Name }}</h1>
                 </div>
                 <div>
-                    <p class="editable-label">
-                        Address:
-                        <span
-                            v-if="isAdmin && !isEditingAddress"
-                            class="material-symbols-outlined edit-icon"
-                            @click="isEditingAddress = true"
-                        >
-                            edit
-                        </span>
+                    <p>Address:</p>
+                    <p>
+                        {{ spotDetails.Address }}
                     </p>
-
-                    <!-- View mode -->
-                    <div v-if="!isEditingAddress">
-                        <p>{{ spotDetails.Address }}</p>
-                        <p>{{ spotDetails.Area }}</p>
-                        <p>{{ spotDetails.City }}</p>
-                    </div>
-
-                    <div v-else>
-                        <AtomTextarea v-model="editableAddress" :row-no="3" />
-                        <div class="edit-actions">
-                            <AtomButton size="is-small" @click="saveAddress">
-                                Save
-                            </AtomButton>
-                            <AtomButton
-                                size="is-small"
-                                type="is-light"
-                                @click="cancelAddressEdit"
-                            >
-                                Cancel
-                            </AtomButton>
-                        </div>
-                    </div>
+                    <p>
+                        {{ spotDetails.Area }}
+                    </p>
+                    <p>
+                        {{ spotDetails.City }}
+                    </p>
                 </div>
             </div>
 
@@ -379,6 +354,7 @@ export default {
         'changeAvailability',
         'changeLastCallDate',
         'changeRemark',
+        'account-updated',
     ],
     data() {
         return {
@@ -391,8 +367,6 @@ export default {
             emailWatcher: null,
             isEditingAddress: false,
             editableAddress: '',
-            editField: null,
-            showAccountModal: false,
         };
     },
 
@@ -466,14 +440,6 @@ export default {
                 }));
             },
         },
-        spotDetails: {
-            immediate: true,
-            handler(val) {
-                if (val?.Address) {
-                    this.editableAddress = val.Address;
-                }
-            },
-        },
     },
     beforeUnmount() {
         this.emailWatcher?.();
@@ -485,7 +451,6 @@ export default {
             'createContactLead',
         ]),
         ...mapActions('sdp', ['updateImages']),
-        ...mapActions('sdp', ['updateAddress', 'updateRent']),
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
         },
@@ -622,37 +587,6 @@ export default {
         saveImages() {
             this.updateImages(this.updatedImages);
         },
-        saveAddress() {
-            this.isEditingAddress = false;
-            this.updateAddress(this.editableAddress);
-        },
-        cancelAddressEdit() {
-            this.editableAddress = this.spotDetails?.Address ?? '';
-            this.isEditingAddress = false;
-        },
-
-        alertError(msg) {
-            this.$buefy.dialog.alert({
-                ariaModal: true,
-                ariaRole: 'alertdialog',
-                hasIcon: true,
-                icon: 'alert-circle',
-                message: msg,
-                title: 'Error',
-                type: 'is-danger',
-            });
-        },
-        saveRent(newRent) {
-            const rent = Number(newRent);
-            if (isNaN(rent) || rent <= 0) {
-                this.alertError(
-                    'Please enter a valid positive number for rent.',
-                );
-                return;
-            }
-
-            this.updateRent(rent);
-        },
         enableEdit(fieldName) {
             if (this.editField && this.editField !== fieldName) return;
 
@@ -675,6 +609,7 @@ export default {
 
             this.showAccountModal = false;
             this.editField = null;
+            this.$emit('account-updated');
 
             this.$buefy.toast.open({
                 message: 'Account updated successfully',

@@ -22,12 +22,14 @@
 <script setup>
 import { Field } from 'vee-validate';
 
-const { label, name, list, modelValue } = defineProps({
+defineProps({
     label: { type: String, default: '' },
     name: { type: String, required: true },
     list: { type: Array, required: true },
-    modelValue: { type: [String, Number], default: null },
+    modelValue: { type: [String, Number, null], default: null },
 });
+
+const emit = defineEmits(['update:modelValue']);
 
 function getValue(option) {
     return typeof option === 'object' ? option.value : option;
@@ -40,9 +42,10 @@ function getKey(option) {
 }
 
 function onFieldChange(value) {
-    if (!isNaN(value)) {
+    if (value !== '' && !isNaN(Number(value))) {
         value = Number(value);
     }
+    emit('update:modelValue', value);
 }
 </script>
 

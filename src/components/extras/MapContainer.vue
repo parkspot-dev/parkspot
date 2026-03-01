@@ -319,5 +319,6 @@ export default {
 /* stylelint-disable-next-line selector-max-id */
 #map {
     width: 100%;
+    height: 550px;
 }
 </style>

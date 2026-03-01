@@ -12,7 +12,10 @@
                                 <figure class="image parkspot-logo">
                                     <img
                                         :src="psfooterImg"
-                                        :alt="'parkspot footer logo'"
+                                        alt="parkspot footer logo"
+                                        width="220px"
+                                        height="48px"
+                                        loading="lazy"
                                     />
                                 </figure>
                             </router-link>
@@ -30,8 +33,11 @@
                                 >
                                     <figure class="card-img image is-128x128">
                                         <img
-                                            alt="google app link"
                                             :src="appLinkImg"
+                                            alt="google app link"
+                                            width="128"
+                                            height="38"
+                                            loading="lazy"
                                         />
                                     </figure>
                                 </a>
@@ -43,8 +49,11 @@
                                 >
                                     <figure class="card-img image is-128x128">
                                         <img
-                                            alt="ios app link"
                                             :src="iosAppLinkImg"
+                                            alt="ios app link"
+                                            width="128"
+                                            height="38"
+                                            loading="lazy"
                                         />
                                     </figure>
                                 </a>
@@ -65,7 +74,7 @@
                             <p>
                                 <router-link
                                     class="top-search-link"
-                                    :to=" '/srp?latlng=12.910473,77.58575'"
+                                    :to="'/srp?latlng=12.910473,77.58575'"
                                 >
                                     Parking Spot in JP Nagar
                                 </router-link>
@@ -73,7 +82,7 @@
                             <p>
                                 <router-link
                                     class="top-search-link"
-                                    :to=" '/srp?latlng=12.913989,77.60205'"
+                                    :to="'/srp?latlng=12.913989,77.60205'"
                                 >
                                     Parking Spot in BTM
                                 </router-link>
@@ -94,7 +103,7 @@
                             <p>
                                 <router-link
                                     class="top-search-link"
-                                    :to=" '/srp?latlng=17.444939,78.35281'"
+                                    :to="'/srp?latlng=17.444939,78.35281'"
                                 >
                                     Parking Spot in Gachibowli
                                 </router-link>
@@ -261,8 +270,8 @@
                 <section class="secondary-container">
                     <div>
                         <AtomParagraph>
-                            © {{ new Date().getFullYear() }} NeoSpot
-                            Technologies Pvt Ltd.- ALL RIGHTS RESERVED
+                            © {{ currentYear }} NeoSpot Technologies Pvt Ltd.-
+                            ALL RIGHTS RESERVED
                         </AtomParagraph>
                         <AtomParagraph>
                             <a
@@ -313,11 +322,7 @@
                             href="https://www.youtube.com/@parkspot4468"
                             target="_blank"
                         >
-                            <AtomIcon
-                                :icon="'youtube'"
-                                style="font-size: 40px; padding: 1.2rem"
-                            >
-                            </AtomIcon>
+                            <AtomIcon :icon="'youtube'" :size="'is-medium'" />
                         </a>
                     </div>
                 </section>
@@ -345,18 +350,19 @@ export default {
             psfooterImg: '/assets/ps_logo_horizontal_dark_bg.png',
             appLinkImg: '/assets/google-play-badge.svg',
             iosAppLinkImg: '/assets/apple-store.svg',
+            currentYear: new Date().getFullYear(),
         };
     },
     computed: {
         ...mapState('config', ['helplineNumber', 'helplineRef']),
     },
-    
 };
 </script>
 
 <style lang="scss" scoped>
 .parkspot-logo {
     width: 220px;
+    height: 48px;
 }
 
 .custom-footer,
@@ -375,7 +381,7 @@ export default {
 }
 
 .image {
-    max-height: fit-content !important;
+    display: block;
 }
 
 .primary-footer {
@@ -399,6 +405,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
+    align-items: flex-start;
 }
 
 @media only screen and (max-width: 600px) {
@@ -487,5 +494,33 @@ export default {
     font-weight: 500;
     margin-top: 0.5rem;
     color: var(--primary-color);
+}
+
+.custom-footer {
+    min-height: 420px;
+}
+
+@media (max-width: 768px) {
+    .custom-footer {
+        min-height: 620px;
+    }
+}
+
+.social-icon {
+    display: inline-flex;
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-img {
+    min-height: 38px;
+}
+
+.social-icon svg,
+.social-icon i {
+    width: 24px;
+    height: 24px;
 }
 </style>
