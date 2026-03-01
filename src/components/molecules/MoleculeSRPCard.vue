@@ -84,7 +84,6 @@ export default {
 .custom-card {
     position: relative;
     overflow: hidden;
-    margin: 0.8rem;
     padding: 1rem;
     max-width: 500px;
     border-radius: var(--border-default);

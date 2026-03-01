@@ -2,6 +2,7 @@
     <TemplateNearBy
         :near-by-location="nearByLocation"
         :spots="spots"
+        :is-loading="isLoading"
         @details="spotDetails"
     ></TemplateNearBy>
 </template>
@@ -27,6 +28,7 @@ export default {
             nearByLocation: '',
             show: false,
             title: undefined,
+            isLoading: true,
         };
     },
     mounted() {
@@ -36,6 +38,7 @@ export default {
     },
     methods: {
         async getPageData() {
+            this.isLoading = true;
             const pageData = await getValueFromFirebase(
                 `seo-pages/${this.nearByLocation}`,
             );
@@ -44,6 +47,7 @@ export default {
                 return;
             }
             this.spots = [...pageData.Sites];
+            this.isLoading = false;
         },
         spotDetails(spotID) {
             const route = this.$router.resolve({
