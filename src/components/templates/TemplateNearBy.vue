@@ -17,13 +17,25 @@
                 Parking near {{ locationWithCaps }}
             </AtomHeading>
             <div class="columns mb-6">
-                <MoleculeSRPCard
-                    v-for="spot in spots"
-                    :key="spot.ID"
-                    class="column"
-                    :spot="spot"
-                    @on-details="details"
-                ></MoleculeSRPCard>
+                <template v-if="isLoading">
+                    <div
+                        v-for="n in 4"
+                        :key="`s-${n}`"
+                        class="column is-one-quarter"
+                    >
+                        <SkeletonSRPCard />
+                    </div>
+                </template>
+
+                <template v-else>
+                    <div
+                        v-for="spot in spots"
+                        :key="spot.ID"
+                        class="column is-one-quarter"
+                    >
+                        <MoleculeSRPCard :spot="spot" @on-details="details" />
+                    </div>
+                </template>
             </div>
             <div class="nearbytext-container">
                 <AtomHeading :level="'h3'">
@@ -49,6 +61,7 @@ import AtomHeading from '../atoms/AtomHeading.vue';
 import MoleculeSRPCard from '../molecules/MoleculeSRPCard.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import BodyWrapper from '../extras/BodyWrapper.vue';
+import SkeletonSRPCard from '../extras/SkeletonSRPCard.vue';
 export default {
     name: 'TemplateNearBy',
     components: {
@@ -57,6 +70,7 @@ export default {
         MoleculeSRPCard,
         AtomParagraph,
         BodyWrapper,
+        SkeletonSRPCard,
     },
     props: {
         nearByLocation: {
@@ -66,6 +80,10 @@ export default {
         spots: {
             type: Array,
             default: () => [],
+        },
+        isLoading: {
+            type: Boolean,
+            default: false,
         },
     },
     emits: ['details'],
