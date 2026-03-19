@@ -9,6 +9,19 @@ import {
     onAuthStateChanged,
 } from 'firebase/auth';
 
+const getPsAuthKey = () =>
+    localStorage.getItem('PSAuthKey') ?? localStorage.getItem('PsAuthKey');
+
+const hasValidPsAuthKey = () => {
+    const key = getPsAuthKey();
+    return Boolean(
+        key &&
+            key.trim() &&
+            key.trim().toLowerCase() !== 'undefined' &&
+            key.trim().toLowerCase() !== 'null',
+    );
+};
+
 const state = {
     user: null,
     userProfile: {
@@ -103,7 +116,7 @@ const mutations = {
     },
     'set-auth-error'(state, error) {
         state.authError = error;
-    }
+    },
 };
 
 const actions = {
@@ -116,7 +129,7 @@ const actions = {
             commit('update-user', user);
             commit('update-login-modal', false);
             await dispatch('authenticateWithMaya');
-            await dispatch('app/getAgents', null, { root: true});
+            await dispatch('app/getAgents', null, { root: true });
         } catch (error) {
             // Handle Errors here.
             const errorCode = error.code;
@@ -272,6 +285,10 @@ const actions = {
     },
 
     async authenticateWithMaya({ commit }) {
+        if (!hasValidPsAuthKey()) {
+            return;
+        }
+
         try {
             const res = await mayaClient.get('/auth/authenticate');
 
@@ -298,6 +315,10 @@ const actions = {
     },
 
     async getUserProfile({ commit, dispatch }) {
+        if (!hasValidPsAuthKey()) {
+            return;
+        }
+
         try {
             const userProfile = await mayaClient.get('/auth/user');
 
