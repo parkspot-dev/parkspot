@@ -9,8 +9,8 @@ import {
     onAuthStateChanged,
 } from 'firebase/auth';
 
-const getPsAuthKey = () =>
-    localStorage.getItem('PSAuthKey') ?? localStorage.getItem('PsAuthKey');
+const PS_AUTH_KEY = 'PSAuthKey';
+const getPsAuthKey = () => localStorage.getItem(PS_AUTH_KEY);
 
 const hasValidPsAuthKey = () => {
     const key = getPsAuthKey();
@@ -48,10 +48,8 @@ const getters = {};
 const mutations = {
     'update-user'(state, user) {
         state.user = user;
-        if (user) {
-            localStorage.setItem('PSAuthKey', user.accessToken);
-        } else {
-            localStorage.setItem('PSAuthKey', null);
+        if (!user) {
+            localStorage.removeItem(PS_AUTH_KEY);
             localStorage.removeItem('UserProfile');
             state.isAdmin = false;
             state.isAgent = false;
@@ -126,6 +124,8 @@ const actions = {
         try {
             const res = await signInWithPopup(auth, gProvider);
             const user = res.user;
+            const token = await user.getIdToken();
+            localStorage.setItem(PS_AUTH_KEY, token);
             commit('update-user', user);
             commit('update-login-modal', false);
             await dispatch('authenticateWithMaya');
@@ -342,8 +342,12 @@ const unsub = onAuthStateChanged(auth, async (user) => {
     store.commit('user/update-auth-ready', true);
 
     if (!user) {
+        localStorage.removeItem(PS_AUTH_KEY);
         return;
     }
+
+    const token = await user.getIdToken();
+    localStorage.setItem(PS_AUTH_KEY, token);
 
     try {
         await store.dispatch('user/getUserProfile');
