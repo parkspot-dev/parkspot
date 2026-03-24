@@ -11,6 +11,7 @@ import spotRequests from './spotRequests';
 import reviewSpot from './reviewSpot';
 import kycStatusPortal from './kycStatusPortal'
 import myBookings from './myBookings';
+import pendingPayments from './pendingPayments';
 import { createStore } from 'vuex';
 import app from './app';
 
@@ -29,6 +30,7 @@ const store = createStore({
         reviewSpot,
         kycStatusPortal,
         myBookings,
+        pendingPayments,
         app,
     },
 });
