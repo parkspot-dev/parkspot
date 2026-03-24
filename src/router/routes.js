@@ -27,6 +27,7 @@ export const pages = {
     APP                     : "/app",
     PRIVACY                 : "/privacy",
     REGISTER_REQUEST        : "/internal/register-request",  
+    PENDING_PAYMENTS        : "/internal/pending-payments",
     SPOT_REQUESTS           : "/internal/spot-requests",
     AUTOMATED_PARKING       : "/automated-parking",
     KYC_STATUS_PAGE         : "/internal/users/kyc-status",
@@ -146,6 +147,11 @@ export const routes = [
         path: pages.BOOKING_PORTAL,
         name: 'booking-portal',
         component: () => import('@/views/BookingPortal.vue'),
+    },
+    {
+        path: pages.PENDING_PAYMENTS,
+        name: 'pending-payments',
+        component: () => import('@/views/PendingPaymentsPortal.vue'),
     },
     {
         path: pages.REGISTER_REQUEST,

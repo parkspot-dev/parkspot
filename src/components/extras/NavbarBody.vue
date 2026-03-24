@@ -68,6 +68,13 @@
                                             Bookings
                                         </router-link>
                                     </li>
+                                    <li v-if="isAuthReady && isAdmin">
+                                        <router-link
+                                            :to="{ name: 'pending-payments' }"
+                                        >
+                                            Pending Payments
+                                        </router-link>
+                                    </li>
                                     <li>
                                         <router-link
                                             :to="{ name: 'spotRequest' }"
@@ -452,6 +459,18 @@
                                             </router-link>
                                         </p>
                                     </li>
+                                    <li
+                                        v-if="isAuthReady && isAdmin"
+                                        class="scroll-item"
+                                    >
+                                        <p @click="toggleMobileNav">
+                                            <router-link
+                                                :to="{ name: 'pending-payments' }"
+                                            >
+                                                Pending Payments
+                                            </router-link>
+                                        </p>
+                                    </li>
                                     <li class="scroll-item">
                                         <p @click="toggleMobileNav">
                                             <router-link
@@ -512,6 +531,7 @@ export default {
             user: (state) => state.user,
             isAuthReady: (state) => state.isAuthReady,
             isAgent: (state) => state.isAgent,
+            isAdmin: (state) => state.isAdmin,
         }),
         ...mapState('config', ['helplineNumber', 'helplineRef']),
     },
