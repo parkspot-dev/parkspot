@@ -314,13 +314,19 @@ const actions = {
         commit('update-images', images);
     },
 
-    async getUserProfile({ commit, dispatch }) {
-        if (!hasValidPsAuthKey()) {
-            return;
-        }
+ async getUserProfile({ commit, dispatch }) {
+    if (!hasValidPsAuthKey()) {
+        return;
+    }
 
-        try {
-            const userProfile = await mayaClient.get('/auth/user');
+    const cache = localStorage.getItem('UserProfileCache');
+    const time = localStorage.getItem('UserProfileCacheTime');
+
+    if (cache && time) {
+        const diff = Date.now() - Number(time);
+
+        if (diff < 24 * 60 * 60 * 1000) {
+            const userProfile = JSON.parse(cache);
 
             commit('update-user-profile', userProfile);
 
@@ -330,11 +336,30 @@ const actions = {
                 // fallback in case Type missing
                 await dispatch('authenticateWithMaya');
             }
-        } catch {
-            // fallback if profile API fails
+
+            return;
+        }
+    }
+
+    try {
+        const userProfile = await mayaClient.get('/auth/user');
+
+        commit('update-user-profile', userProfile);
+
+        localStorage.setItem('UserProfileCache', JSON.stringify(userProfile));
+        localStorage.setItem('UserProfileCacheTime', Date.now().toString());
+
+        if (userProfile?.Type) {
+            commit('set-user-type', userProfile.Type);
+        } else {
+            // fallback in case Type missing
             await dispatch('authenticateWithMaya');
         }
-    },
+    } catch {
+        // fallback if profile API fails
+        await dispatch('authenticateWithMaya');
+    }
+}
 };
 
 const unsub = onAuthStateChanged(auth, async (user) => {

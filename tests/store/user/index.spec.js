@@ -120,6 +120,52 @@ describe('User Store - Agent Auth Fix', () => {
         expect(commit).not.toHaveBeenCalled();
     });
 
+    it('getUserProfile uses cache when valid', async () => {
+        localStorage.setItem('PSAuthKey', 'token');
+
+        const cached = {
+            FullName: 'Cached User',
+            Type: UserType.Agent,
+        };
+
+        localStorage.setItem('UserProfileCache', JSON.stringify(cached));
+        localStorage.setItem('UserProfileCacheTime', Date.now().toString());
+
+        await userModule.actions.getUserProfile({ commit, dispatch });
+
+        expect(mayaClient.get).not.toHaveBeenCalled();
+
+        expect(commit).toHaveBeenCalledWith(
+            'update-user-profile',
+            expect.objectContaining({
+                FullName: 'Cached User',
+            }),
+        );
+
+        expect(commit).toHaveBeenCalledWith('set-user-type', UserType.Agent);
+    });
+
+    it('getUserProfile calls API when cache expired', async () => {
+        localStorage.setItem('PSAuthKey', 'token');
+
+        const oldTime = Date.now() - 25 * 60 * 60 * 1000;
+
+        localStorage.setItem(
+            'UserProfileCache',
+            JSON.stringify({ FullName: 'Old User' }),
+        );
+        localStorage.setItem('UserProfileCacheTime', oldTime.toString());
+
+        mayaClient.get.mockResolvedValue({
+            FullName: 'Fresh User',
+            Type: UserType.Agent,
+        });
+
+        await userModule.actions.getUserProfile({ commit, dispatch });
+
+        expect(mayaClient.get).toHaveBeenCalled();
+    });
+
     it('logOut resets user and userProfile', async () => {
         await userModule.actions.logOut({ commit, dispatch });
 
