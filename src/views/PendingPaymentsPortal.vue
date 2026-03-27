@@ -80,7 +80,7 @@
                 <b-table-column
                     v-slot="props"
                     field="BaseAmount"
-                    label="Base Amount"
+                    label="Transfer"
                     numeric
                     sortable
                     width="120"
@@ -91,7 +91,7 @@
                 <b-table-column
                     v-slot="props"
                     field="Amount"
-                    label="Amount"
+                    label="Received"
                     numeric
                     sortable
                     width="112"
@@ -156,64 +156,74 @@
                                     </div>
                                     <div class="payment-detail-row">
                                         <span class="payment-detail-key"
-                                            >SO Name:</span
+                                            >Name:</span
                                         >
                                         <span class="payment-detail-value">{{
-                                            selectedPayment.SoName
+                                            resolvedPayeeName
                                         }}</span>
                                     </div>
                                     <div class="payment-detail-row">
                                         <span class="payment-detail-key"
-                                            >Base Amount:</span
+                                            >Received:</span
                                         >
                                         <span class="payment-detail-value">{{
                                             formatAmount(
-                                                selectedPayment.BaseAmount,
+                                                selectedPayment.Amount,
                                             )
                                         }}</span>
                                     </div>
                                     <div class="amount-inline-row">
                                         <span class="payment-detail-key"
-                                            >Amount:</span
+                                            >Transfer:</span
                                         >
                                         <div class="amount-input-wrap">
                                             <b-input
                                                 ref="amountInput"
                                                 v-model="draftAmountInput"
-                                                :readonly="!isAmountEditable"
                                                 min="1"
                                                 step="0.01"
                                                 type="number"
                                             ></b-input>
-                                            <button
-                                                v-if="
-                                                    isAmountEditable === false
-                                                "
-                                                class="amount-edit-btn"
-                                                type="button"
-                                                @click="toggleAmountEdit"
-                                            >
-                                                <b-icon icon="pencil"></b-icon>
-                                            </button>
-                                            <div
-                                                v-if="isAmountEditable"
-                                                class="amount-edit-actions"
-                                            >
-                                                <button
-                                                    class="amount-action-btn save-btn"
-                                                    type="button"
-                                                    @click="saveAmountEdit"
+                                            <div class="amount-edit-actions">
+                                                <AtomButton
+                                                    class="amount-action-btn"
+                                                    @btn-click="
+                                                        saveAmountEdit
+                                                    "
                                                 >
                                                     Save
-                                                </button>
-                                                <button
-                                                    class="amount-action-btn cancel-btn"
-                                                    type="button"
-                                                    @click="cancelAmountEdit"
+                                                </AtomButton>
+                                                <AtomButton
+                                                    outlined
+                                                    class="amount-action-btn"
+                                                    @btn-click="
+                                                        cancelAmountEdit
+                                                    "
                                                 >
                                                     Cancel
-                                                </button>
+                                                </AtomButton>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="detail-inline-row">
+                                        <label class="detail-inline-label"
+                                            >Payment App:</label
+                                        >
+                                        <div class="detail-input-wrap">
+                                            <b-input
+                                                v-model="paymentAppInput"
+                                            ></b-input>
+                                        </div>
+                                    </div>
+                                    <div class="detail-inline-row">
+                                        <label class="detail-inline-label"
+                                            >Account Info:</label
+                                        >
+                                        <div class="detail-input-wrap">
+                                            <b-input
+                                                v-model="accountInfoInput"
+                                                placeholder="UPI ID or Account Number"
+                                            ></b-input>
                                         </div>
                                     </div>
                                 </div>
@@ -325,6 +335,8 @@ export default {
             editableAmount: 0,
             draftAmountInput: '0',
             editableRemark: '',
+            paymentAppInput: '',
+            accountInfoInput: '',
             bookingIdSearch: '',
         };
     },
@@ -372,6 +384,15 @@ export default {
             }
             return 'Bank Transfer';
         },
+        resolvedPayeeName() {
+            const accountFullName = String(
+                this.accountDetails.FullName || '',
+            ).trim();
+            if (accountFullName !== '') {
+                return accountFullName;
+            }
+            return String(this.selectedPayment?.SoName || '').trim();
+        },
         finalAmount() {
             return Number(this.editableAmount);
         },
@@ -379,7 +400,7 @@ export default {
             if (this.selectedPayment && this.resolvedUpiId !== '') {
                 const upiParams = new URLSearchParams({
                     pa: this.resolvedUpiId,
-                    pn: this.selectedPayment.SoName,
+                    pn: this.resolvedPayeeName,
                     am: String(this.finalAmount),
                     tn: this.editableRemark,
                     cu: 'INR',
@@ -418,15 +439,31 @@ export default {
         formatAmount(amount) {
             return `₹${Number(amount || 0).toLocaleString('en-IN')}`;
         },
+        getDefaultAccountInfo(payment) {
+            const account = payment?.Account || {};
+            const upiId = String(account.UpiId || '').trim();
+            const accountNumber = String(account.BankAccountNumber || '').trim();
+            if (upiId !== '' && accountNumber !== '') {
+                return `${upiId} / ${accountNumber}`;
+            }
+            return upiId || accountNumber;
+        },
         getDefaultRemark(payment) {
+            if (String(payment?.Remark || '').trim() !== '') {
+                return String(payment.Remark).trim();
+            }
             return `Rent(${payment.VoName}, booking id: ${payment.BookingId})`;
         },
         openPaymentModal(payment) {
             this.selectedPayment = payment;
             this.isAmountEditable = false;
             this.isRemarkEditable = false;
-            this.editableAmount = Number(this.selectedPayment.Amount);
+            this.editableAmount = Number(this.selectedPayment.BaseAmount);
             this.draftAmountInput = String(this.editableAmount);
+            this.paymentAppInput = this.paymentMethod;
+            this.accountInfoInput = this.getDefaultAccountInfo(
+                this.selectedPayment,
+            );
             this.editableRemark = this.getDefaultRemark(this.selectedPayment);
             this.showPaymentModal = true;
         },
@@ -438,25 +475,19 @@ export default {
             this.editableAmount = 0;
             this.draftAmountInput = '0';
             this.editableRemark = '';
-        },
-        toggleAmountEdit() {
-            if (this.isAmountEditable) return;
-            this.draftAmountInput = String(this.editableAmount);
-            this.isAmountEditable = true;
-            this.focusEditableInput('amountInput');
+            this.paymentAppInput = '';
+            this.accountInfoInput = '';
         },
         saveAmountEdit() {
             const parsedAmount = Number(this.draftAmountInput);
             if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
-                this.alertError('Please enter a valid amount');
+                this.alertError('Please enter a valid transfer amount');
                 return;
             }
             this.editableAmount = parsedAmount;
-            this.isAmountEditable = false;
         },
         cancelAmountEdit() {
             this.draftAmountInput = String(this.editableAmount);
-            this.isAmountEditable = false;
         },
         toggleRemarkEdit() {
             this.isRemarkEditable = !this.isRemarkEditable;
@@ -483,7 +514,7 @@ export default {
             this.bookingIdSearch = '';
         },
         openSuccessConfirmation() {
-            if (this.isAmountEditable) {
+            if (Number(this.draftAmountInput) !== Number(this.editableAmount)) {
                 this.alertError(
                     'Please save or cancel amount changes before continuing',
                 );
@@ -563,7 +594,6 @@ export default {
 }
 
 .amount-input-wrap :deep(.input) {
-    padding-right: 28px;
     width: 100%;
 }
 
@@ -575,20 +605,37 @@ export default {
 }
 
 .amount-action-btn {
-    background: var(--parkspot-white);
-    border: 1px solid var(--primary-color);
-    border-radius: 4px;
-    color: var(--parkspot-black);
-    cursor: pointer;
-    font-size: 0.8rem;
-    font-weight: 600;
-    min-width: 62px;
-    padding: 4px 8px;
+    min-width: 72px;
 }
 
-.save-btn {
-    background: var(--primary-color);
-    color: var(--parkspot-white);
+.amount-action-btn :deep(.button) {
+    color: var(--parkspot-black);
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 72px;
+    padding: 4px 10px;
+}
+
+.detail-inline-label {
+    color: var(--parkspot-black);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.detail-inline-row {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    width: 100%;
+}
+
+.detail-input-wrap {
+    flex: 1;
+}
+
+.detail-input-wrap :deep(.control) {
+    width: 100%;
 }
 
 .modal-body-layout {
@@ -622,6 +669,11 @@ export default {
 
 .pay-now-btn {
     min-width: 112px;
+}
+
+.pay-now-btn :deep(.button),
+.pending-modal-foot :deep(.button) {
+    color: var(--parkspot-black);
 }
 
 .payment-context {
