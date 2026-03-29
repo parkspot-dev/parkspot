@@ -30,7 +30,32 @@
                     sortable
                     width="132"
                 >
-                    <div>{{ props.row.BookingId }}</div>
+                    <router-link
+                        v-if="String(props.row.BookingId || '').trim() !== ''"
+                        :to="getBookingPortalRoute(props.row.BookingId)"
+                        class="spot-detail-link"
+                    >
+                        {{ props.row.BookingId }}
+                    </router-link>
+                    <div v-else>{{ props.row.BookingId }}</div>
+                </b-table-column>
+
+                <b-table-column
+                    v-slot="props"
+                    field="SiteId"
+                    label="Site ID"
+                    searchable
+                    sortable
+                    width="160"
+                >
+                    <router-link
+                        v-if="getSpotId(props.row) !== ''"
+                        :to="getSpotDetailRoute(getSpotId(props.row))"
+                        class="spot-detail-link"
+                    >
+                        {{ getSpotId(props.row) }}
+                    </router-link>
+                    <div v-else>-</div>
                 </b-table-column>
 
                 <b-table-column
@@ -142,9 +167,52 @@
                                         <span class="payment-detail-key"
                                             >Booking ID:</span
                                         >
-                                        <span class="payment-detail-value">{{
-                                            selectedPayment.BookingId
-                                        }}</span>
+                                        <router-link
+                                            v-if="
+                                                String(
+                                                    selectedPayment.BookingId ||
+                                                        '',
+                                                ).trim() !== ''
+                                            "
+                                            :to="
+                                                getBookingPortalRoute(
+                                                    selectedPayment.BookingId,
+                                                )
+                                            "
+                                            class="payment-detail-value spot-detail-link"
+                                        >
+                                            {{ selectedPayment.BookingId }}
+                                        </router-link>
+                                        <span
+                                            v-else
+                                            class="payment-detail-value"
+                                            >{{
+                                                selectedPayment.BookingId
+                                            }}</span
+                                        >
+                                    </div>
+                                    <div class="payment-detail-row">
+                                        <span class="payment-detail-key"
+                                            >Site ID:</span
+                                        >
+                                        <router-link
+                                            v-if="
+                                                getSpotId(selectedPayment) !== ''
+                                            "
+                                            :to="
+                                                getSpotDetailRoute(
+                                                    getSpotId(selectedPayment),
+                                                )
+                                            "
+                                            class="payment-detail-value spot-detail-link"
+                                        >
+                                            {{ getSpotId(selectedPayment) }}
+                                        </router-link>
+                                        <span
+                                            v-else
+                                            class="payment-detail-value"
+                                            >-</span
+                                        >
                                     </div>
                                     <div class="payment-detail-row">
                                         <span class="payment-detail-key"
@@ -212,6 +280,8 @@
                                         <div class="detail-input-wrap">
                                             <b-input
                                                 v-model="paymentAppInput"
+                                                readonly
+                                                placeholder="Payment App"
                                             ></b-input>
                                         </div>
                                     </div>
@@ -222,7 +292,8 @@
                                         <div class="detail-input-wrap">
                                             <b-input
                                                 v-model="accountInfoInput"
-                                                placeholder="UPI ID or Account Number"
+                                                readonly
+                                                placeholder="Account details"
                                             ></b-input>
                                         </div>
                                     </div>
@@ -238,8 +309,8 @@
                                         level="M"
                                     />
                                     <p class="upi-id-text">
-                                        <strong>UPI ID:</strong>
-                                        {{ resolvedUpiId }}
+                                        <strong>Account:</strong>
+                                        {{ accountInfoInput || '-' }}
                                     </p>
                                 </div>
 
@@ -247,7 +318,7 @@
                                     v-if="upiUrl === ''"
                                     class="missing-upi-text"
                                 >
-                                    UPI details are unavailable for this
+                                    Payment details are unavailable for this
                                     payment.
                                 </div>
                             </div>
@@ -378,12 +449,6 @@ export default {
             }
             return '';
         },
-        paymentMethod() {
-            if (String(this.accountDetails.UpiId || '').trim() !== '') {
-                return 'UPI';
-            }
-            return 'Bank Transfer';
-        },
         resolvedPayeeName() {
             const accountFullName = String(
                 this.accountDetails.FullName || '',
@@ -398,14 +463,15 @@ export default {
         },
         upiUrl() {
             if (this.selectedPayment && this.resolvedUpiId !== '') {
-                const upiParams = new URLSearchParams({
-                    pa: this.resolvedUpiId,
-                    pn: this.resolvedPayeeName,
-                    am: String(this.finalAmount),
-                    tn: this.editableRemark,
-                    cu: 'INR',
-                });
-                return `upi://pay?${upiParams.toString()}`;
+                const remark = this.decodeTransactionText(this.editableRemark);
+                const upiQuery = [
+                    `pa=${encodeURIComponent(this.resolvedUpiId)}`,
+                    `pn=${encodeURIComponent(this.resolvedPayeeName)}`,
+                    `am=${encodeURIComponent(String(this.finalAmount))}`,
+                    `tn=${encodeURIComponent(remark)}`,
+                    'cu=INR',
+                ].join('&');
+                return `upi://pay?${upiQuery}`;
             }
             return '';
         },
@@ -439,20 +505,107 @@ export default {
         formatAmount(amount) {
             return `₹${Number(amount || 0).toLocaleString('en-IN')}`;
         },
-        getDefaultAccountInfo(payment) {
-            const account = payment?.Account || {};
-            const upiId = String(account.UpiId || '').trim();
-            const accountNumber = String(account.BankAccountNumber || '').trim();
-            if (upiId !== '' && accountNumber !== '') {
-                return `${upiId} / ${accountNumber}`;
+        getSpotId(payment) {
+            return String(
+                payment?.SiteId ||
+                    payment?.SiteID ||
+                    payment?.SiteDetails?.SiteID ||
+                    '',
+            ).trim();
+        },
+        getSpotDetailRoute(spotId) {
+            return {
+                name: 'spot-detail',
+                params: {
+                    spotId,
+                },
+            };
+        },
+        getBookingPortalRoute(bookingId) {
+            return {
+                name: 'booking-portal',
+                query: {
+                    bookingId: String(bookingId || '').trim(),
+                },
+            };
+        },
+        decodeTransactionText(value) {
+            const rawText = String(value || '').trim();
+            if (rawText === '') {
+                return '';
             }
-            return upiId || accountNumber;
+            const plusDecodedText = rawText.replace(/\+/g, ' ');
+            try {
+                return decodeURIComponent(plusDecodedText);
+            } catch {
+                return plusDecodedText;
+            }
+        },
+        resolvePaymentAppLabel(rawValue) {
+            const normalizedValue = String(rawValue || '')
+                .trim()
+                .toLowerCase();
+            if (
+                normalizedValue === '1' ||
+                normalizedValue === 'phonepe' ||
+                normalizedValue === 'phone pe'
+            ) {
+                return 'PhonePe';
+            }
+            if (
+                normalizedValue === '2' ||
+                normalizedValue === 'gpay' ||
+                normalizedValue === 'g pay' ||
+                normalizedValue === 'googlepay' ||
+                normalizedValue === 'google pay'
+            ) {
+                return 'GPay';
+            }
+            return '';
+        },
+        resolvePaymentAppCode(rawValue) {
+            const normalizedValue = String(rawValue || '')
+                .trim()
+                .toLowerCase();
+            if (
+                normalizedValue === '1' ||
+                normalizedValue === 'phonepe' ||
+                normalizedValue === 'phone pe'
+            ) {
+                return 1;
+            }
+            if (
+                normalizedValue === '2' ||
+                normalizedValue === 'gpay' ||
+                normalizedValue === 'g pay' ||
+                normalizedValue === 'googlepay' ||
+                normalizedValue === 'google pay'
+            ) {
+                return 2;
+            }
+            return 0;
+        },
+        getDefaultPaymentApp(payment) {
+            const account = payment?.Account || {};
+            return (
+                this.resolvePaymentAppLabel(
+                    account.PaymentApp ?? payment?.PaymentApp ?? '',
+                ) || ''
+            );
+        },
+        populateAccountInfoFromPayment(payment) {
+            const formattedAccountInfo = String(
+                payment?.PaymentDetails || '',
+            ).trim();
+            this.accountInfoInput = formattedAccountInfo;
         },
         getDefaultRemark(payment) {
-            if (String(payment?.Remark || '').trim() !== '') {
-                return String(payment.Remark).trim();
+            const decodedRemark = this.decodeTransactionText(payment?.Remark);
+            if (decodedRemark !== '') {
+                return decodedRemark;
             }
-            return `Rent(${payment.VoName}, booking id: ${payment.BookingId})`;
+            const decodedVoName = this.decodeTransactionText(payment?.VoName);
+            return `Rent(${decodedVoName}, booking id: ${payment.BookingId})`;
         },
         openPaymentModal(payment) {
             this.selectedPayment = payment;
@@ -460,10 +613,10 @@ export default {
             this.isRemarkEditable = false;
             this.editableAmount = Number(this.selectedPayment.BaseAmount);
             this.draftAmountInput = String(this.editableAmount);
-            this.paymentAppInput = this.paymentMethod;
-            this.accountInfoInput = this.getDefaultAccountInfo(
+            this.paymentAppInput = this.getDefaultPaymentApp(
                 this.selectedPayment,
             );
+            this.populateAccountInfoFromPayment(this.selectedPayment);
             this.editableRemark = this.getDefaultRemark(this.selectedPayment);
             this.showPaymentModal = true;
         },
@@ -530,6 +683,11 @@ export default {
                 const payload = {
                     PaymentID: this.selectedPayment.PaymentId,
                     AmountToSO: this.editableAmount,
+                    PaymentApp: this.resolvePaymentAppCode(
+                        this.selectedPayment?.Account?.PaymentApp ??
+                            this.selectedPayment?.PaymentApp ??
+                            this.paymentAppInput,
+                    ),
                 };
                 const response = await this.updateAmountToSO(payload);
                 if (response?.Success) {
@@ -811,6 +969,12 @@ export default {
 .search-top :deep(.search-input .input) {
     font-size: 0.95rem;
     height: 36px;
+}
+
+.spot-detail-link {
+    color: var(--secondary-color);
+    font-weight: 600;
+    text-decoration: none;
 }
 
 .table-wrapper {
