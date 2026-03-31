@@ -464,10 +464,17 @@ export default {
         upiUrl() {
             if (this.selectedPayment && this.resolvedUpiId !== '') {
                 const remark = this.decodeTransactionText(this.editableRemark);
+                const transactionReference =
+                    remark || `Ref${this.selectedPayment.PaymentId}`;
+                const formattedAmount = Number.isFinite(this.finalAmount)
+                    ? this.finalAmount.toFixed(2)
+                    : '0.00';
                 const upiQuery = [
                     `pa=${encodeURIComponent(this.resolvedUpiId)}`,
                     `pn=${encodeURIComponent(this.resolvedPayeeName)}`,
-                    `am=${encodeURIComponent(String(this.finalAmount))}`,
+                    `am=${encodeURIComponent(formattedAmount)}`,
+                    `tr=${encodeURIComponent(transactionReference)}`,
+                    'mc=0000',
                     `tn=${encodeURIComponent(remark)}`,
                     'cu=INR',
                 ].join('&');
@@ -613,9 +620,7 @@ export default {
             this.isRemarkEditable = false;
             this.editableAmount = Number(this.selectedPayment.BaseAmount);
             this.draftAmountInput = String(this.editableAmount);
-            this.paymentAppInput = this.getDefaultPaymentApp(
-                this.selectedPayment,
-            );
+            this.paymentAppInput = 'PhonePe';
             this.populateAccountInfoFromPayment(this.selectedPayment);
             this.editableRemark = this.getDefaultRemark(this.selectedPayment);
             this.showPaymentModal = true;
@@ -683,11 +688,7 @@ export default {
                 const payload = {
                     PaymentID: this.selectedPayment.PaymentId,
                     AmountToSO: this.editableAmount,
-                    PaymentApp: this.resolvePaymentAppCode(
-                        this.selectedPayment?.Account?.PaymentApp ??
-                            this.selectedPayment?.PaymentApp ??
-                            this.paymentAppInput,
-                    ),
+                    PaymentApp: this.resolvePaymentAppCode('PhonePe'),
                 };
                 const response = await this.updateAmountToSO(payload);
                 if (response?.Success) {
