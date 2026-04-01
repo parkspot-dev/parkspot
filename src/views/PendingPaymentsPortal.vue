@@ -224,7 +224,7 @@
                                     </div>
                                     <div class="payment-detail-row">
                                         <span class="payment-detail-key"
-                                            >Name:</span
+                                            >SO Name:</span
                                         >
                                         <span class="payment-detail-value">{{
                                             resolvedPayeeName
@@ -246,7 +246,6 @@
                                         >
                                         <div class="amount-input-wrap">
                                             <b-input
-                                                ref="amountInput"
                                                 v-model="draftAmountInput"
                                                 min="1"
                                                 step="0.01"
@@ -254,21 +253,21 @@
                                             ></b-input>
                                             <div class="amount-edit-actions">
                                                 <AtomButton
+                                                    outlined
+                                                    class="amount-action-btn amount-cancel-btn"
+                                                    @btn-click="
+                                                        cancelAmountEdit
+                                                    "
+                                                >
+                                                    Cancel
+                                                </AtomButton>
+                                                <AtomButton
                                                     class="amount-action-btn"
                                                     @btn-click="
                                                         saveAmountEdit
                                                     "
                                                 >
                                                     Save
-                                                </AtomButton>
-                                                <AtomButton
-                                                    outlined
-                                                    class="amount-action-btn"
-                                                    @btn-click="
-                                                        cancelAmountEdit
-                                                    "
-                                                >
-                                                    Cancel
                                                 </AtomButton>
                                             </div>
                                         </div>
@@ -279,21 +278,9 @@
                                         >
                                         <div class="detail-input-wrap">
                                             <b-input
-                                                v-model="paymentAppInput"
+                                                :value="resolvedPaymentAppLabel"
                                                 readonly
                                                 placeholder="Payment App"
-                                            ></b-input>
-                                        </div>
-                                    </div>
-                                    <div class="detail-inline-row">
-                                        <label class="detail-inline-label"
-                                            >Account Info:</label
-                                        >
-                                        <div class="detail-input-wrap">
-                                            <b-input
-                                                v-model="accountInfoInput"
-                                                readonly
-                                                placeholder="Account details"
                                             ></b-input>
                                         </div>
                                     </div>
@@ -308,10 +295,6 @@
                                         class="qr-image"
                                         level="M"
                                     />
-                                    <p class="upi-id-text">
-                                        <strong>Account:</strong>
-                                        {{ accountInfoInput || '-' }}
-                                    </p>
                                 </div>
 
                                 <div
@@ -321,6 +304,15 @@
                                     Payment details are unavailable for this
                                     payment.
                                 </div>
+
+                                <div class="account-info-right">
+                                    <span class="account-info-label"
+                                        >Account Info:</span
+                                    >
+                                    <span class="account-info-value">{{
+                                        resolvedAccountInfo || '-'
+                                    }}</span>
+                                </div>
                             </div>
                         </div>
 
@@ -329,7 +321,7 @@
                             <div class="remark-input-wrap">
                                 <b-input
                                     ref="remarkInput"
-                                    :readonly="isRemarkEditable === false"
+                                    :readonly="!isRemarkEditable"
                                     :value="editableRemark"
                                     @input="onRemarkInput"
                                 ></b-input>
@@ -345,7 +337,11 @@
                     </div>
                 </section>
                 <footer class="modal-card-foot pending-modal-foot">
-                    <AtomButton outlined @btn-click="closePaymentModal">
+                    <AtomButton
+                        outlined
+                        class="pending-cancel-btn"
+                        @btn-click="closePaymentModal"
+                    >
                         Cancel
                     </AtomButton>
                     <AtomButton @btn-click="openSuccessConfirmation">
@@ -369,7 +365,11 @@
                     <p>Was payment successful?</p>
                 </section>
                 <footer class="modal-card-foot pending-modal-foot">
-                    <AtomButton outlined @btn-click="closeSuccessModal">
+                    <AtomButton
+                        outlined
+                        class="pending-cancel-btn"
+                        @btn-click="closeSuccessModal"
+                    >
                         Cancel
                     </AtomButton>
                     <AtomButton @btn-click="recordPaymentSuccess">
@@ -401,13 +401,10 @@ export default {
             showPaymentModal: false,
             showSuccessModal: false,
             selectedPayment: null,
-            isAmountEditable: false,
             isRemarkEditable: false,
             editableAmount: 0,
             draftAmountInput: '0',
             editableRemark: '',
-            paymentAppInput: '',
-            accountInfoInput: '',
             bookingIdSearch: '',
         };
     },
@@ -457,6 +454,26 @@ export default {
                 return accountFullName;
             }
             return String(this.selectedPayment?.SoName || '').trim();
+        },
+        resolvedPaymentAppLabel() {
+            return String(this.accountDetails.PaymentAppLabel || '').trim();
+        },
+        resolvedAccountInfo() {
+            const accountNumber = String(
+                this.accountDetails.BankAccountNumber || '',
+            ).trim();
+            const ifscCode = String(this.accountDetails.IfscCode || '')
+                .trim()
+                .toUpperCase();
+            const upiId = String(this.accountDetails.UpiId || '').trim();
+
+            if (accountNumber !== '' && ifscCode !== '') {
+                return `${accountNumber} / ${ifscCode}`;
+            }
+            if (upiId !== '') {
+                return upiId;
+            }
+            return String(this.selectedPayment?.PaymentDetails || '').trim();
         },
         finalAmount() {
             return Number(this.editableAmount);
@@ -548,64 +565,6 @@ export default {
                 return plusDecodedText;
             }
         },
-        resolvePaymentAppLabel(rawValue) {
-            const normalizedValue = String(rawValue || '')
-                .trim()
-                .toLowerCase();
-            if (
-                normalizedValue === '1' ||
-                normalizedValue === 'phonepe' ||
-                normalizedValue === 'phone pe'
-            ) {
-                return 'PhonePe';
-            }
-            if (
-                normalizedValue === '2' ||
-                normalizedValue === 'gpay' ||
-                normalizedValue === 'g pay' ||
-                normalizedValue === 'googlepay' ||
-                normalizedValue === 'google pay'
-            ) {
-                return 'GPay';
-            }
-            return '';
-        },
-        resolvePaymentAppCode(rawValue) {
-            const normalizedValue = String(rawValue || '')
-                .trim()
-                .toLowerCase();
-            if (
-                normalizedValue === '1' ||
-                normalizedValue === 'phonepe' ||
-                normalizedValue === 'phone pe'
-            ) {
-                return 1;
-            }
-            if (
-                normalizedValue === '2' ||
-                normalizedValue === 'gpay' ||
-                normalizedValue === 'g pay' ||
-                normalizedValue === 'googlepay' ||
-                normalizedValue === 'google pay'
-            ) {
-                return 2;
-            }
-            return 0;
-        },
-        getDefaultPaymentApp(payment) {
-            const account = payment?.Account || {};
-            return (
-                this.resolvePaymentAppLabel(
-                    account.PaymentApp ?? payment?.PaymentApp ?? '',
-                ) || ''
-            );
-        },
-        populateAccountInfoFromPayment(payment) {
-            const formattedAccountInfo = String(
-                payment?.PaymentDetails || '',
-            ).trim();
-            this.accountInfoInput = formattedAccountInfo;
-        },
         getDefaultRemark(payment) {
             const decodedRemark = this.decodeTransactionText(payment?.Remark);
             if (decodedRemark !== '') {
@@ -616,25 +575,19 @@ export default {
         },
         openPaymentModal(payment) {
             this.selectedPayment = payment;
-            this.isAmountEditable = false;
             this.isRemarkEditable = false;
             this.editableAmount = Number(this.selectedPayment.BaseAmount);
             this.draftAmountInput = String(this.editableAmount);
-            this.paymentAppInput = 'PhonePe';
-            this.populateAccountInfoFromPayment(this.selectedPayment);
             this.editableRemark = this.getDefaultRemark(this.selectedPayment);
             this.showPaymentModal = true;
         },
         closePaymentModal() {
             this.showPaymentModal = false;
             this.selectedPayment = null;
-            this.isAmountEditable = false;
             this.isRemarkEditable = false;
             this.editableAmount = 0;
             this.draftAmountInput = '0';
             this.editableRemark = '';
-            this.paymentAppInput = '';
-            this.accountInfoInput = '';
         },
         saveAmountEdit() {
             const parsedAmount = Number(this.draftAmountInput);
@@ -650,12 +603,12 @@ export default {
         toggleRemarkEdit() {
             this.isRemarkEditable = !this.isRemarkEditable;
             if (this.isRemarkEditable) {
-                this.focusEditableInput('remarkInput');
+                this.focusRemarkInput();
             }
         },
-        focusEditableInput(refName) {
+        focusRemarkInput() {
             this.$nextTick(() => {
-                const input = this.$refs[refName]?.$el?.querySelector('input');
+                const input = this.$refs.remarkInput?.$el?.querySelector('input');
                 if (input) {
                     input.focus();
                     input.select();
@@ -685,10 +638,12 @@ export default {
         },
         async recordPaymentSuccess() {
             if (this.selectedPayment) {
+                const selectedPaymentApp =
+                    this.selectedPayment?.Account?.PaymentApp ?? 0;
                 const payload = {
                     PaymentID: this.selectedPayment.PaymentId,
                     AmountToSO: this.editableAmount,
-                    PaymentApp: this.resolvePaymentAppCode('PhonePe'),
+                    PaymentApp: selectedPaymentApp,
                 };
                 const response = await this.updateAmountToSO(payload);
                 if (response?.Success) {
@@ -719,22 +674,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.amount-edit-btn {
-    align-items: center;
-    background: transparent;
-    border: 0;
-    color: var(--parkspot-black);
-    cursor: pointer;
-    display: inline-flex;
-    justify-content: center;
-    padding: 0;
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
-}
-
 .amount-inline-row {
     align-items: center;
     color: var(--parkspot-black);
@@ -773,6 +712,20 @@ export default {
     font-weight: 600;
     min-width: 72px;
     padding: 4px 10px;
+}
+
+.amount-edit-actions :deep(.amount-cancel-btn.button) {
+    border-color: var(--parkspot-red, #ff3860);
+    background-color: var(--parkspot-white) !important;
+    color: var(--parkspot-red, #ff3860);
+}
+
+.amount-edit-actions :deep(.amount-cancel-btn.button:hover),
+.amount-edit-actions :deep(.amount-cancel-btn.button:focus),
+.amount-edit-actions :deep(.amount-cancel-btn.button:active) {
+    border-color: var(--parkspot-red, #ff3860);
+    background-color: var(--parkspot-white) !important;
+    color: var(--parkspot-red, #ff3860);
 }
 
 .detail-inline-label {
@@ -833,6 +786,20 @@ export default {
 .pay-now-btn :deep(.button),
 .pending-modal-foot :deep(.button) {
     color: var(--parkspot-black);
+}
+
+.pending-modal-foot :deep(.pending-cancel-btn.button) {
+    border-color: var(--parkspot-red, #ff3860);
+    background-color: var(--parkspot-white) !important;
+    color: var(--parkspot-red, #ff3860);
+}
+
+.pending-modal-foot :deep(.pending-cancel-btn.button:hover),
+.pending-modal-foot :deep(.pending-cancel-btn.button:focus),
+.pending-modal-foot :deep(.pending-cancel-btn.button:active) {
+    border-color: var(--parkspot-red, #ff3860);
+    background-color: var(--parkspot-white) !important;
+    color: var(--parkspot-red, #ff3860);
 }
 
 .payment-context {
@@ -996,11 +963,24 @@ export default {
     font-weight: 700;
 }
 
-.upi-id-text {
+.account-info-right {
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
     color: var(--parkspot-black);
-    font-weight: 600;
     margin-top: 8px;
-    text-align: center;
+    padding: 12px;
+    text-align: left;
+}
+
+.account-info-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.account-info-value {
+    display: block;
+    word-break: break-word;
 }
 
 @media screen and (max-width: 920px) {
