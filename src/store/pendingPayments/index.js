@@ -13,55 +13,37 @@ const extractPendingPayments = (response) => {
     return [];
 };
 
+const resolvePaymentAppCode = (paymentApp) => {
+    const code = Number(paymentApp);
+    return code === 1 || code === 2 ? code : 0;
+};
+
+const resolvePaymentAppLabel = (paymentApp) => {
+    const code = resolvePaymentAppCode(paymentApp);
+    if (code === 1) {
+        return 'Phone Pay';
+    }
+    if (code === 2) {
+        return 'GPay';
+    }
+    return '';
+};
+
 const normalizePendingPayment = (payment = {}) => {
     const account = payment.Account || {};
-    const rawPaymentAppValue = account.PaymentApp ?? payment.PaymentApp ?? 0;
-    const paymentAppValue = Number(rawPaymentAppValue);
-    const upiId = String(
-        account.UpiId || account.UpiID || account.UPIId || '',
-    ).trim();
-    const normalizedUpiId = upiId.toLowerCase();
-    const resolvedPaymentAppValue =
-        paymentAppValue === 1 || paymentAppValue === 2
-            ? paymentAppValue
-            : normalizedUpiId.includes('@ybl')
-                ? 1
-                : normalizedUpiId.includes('@ok')
-                    ? 2
-                    : 0;
-    const paymentAppLabel =
-        resolvedPaymentAppValue === 1
-            ? 'PhonePe'
-            : resolvedPaymentAppValue === 2
-                ? 'GPay'
-                : '';
-    const accountNumber = String(
-        account.account_number ||
-            account.BankAccountNumber ||
-            account.AccountNumber ||
-            '',
-    ).trim();
-    const ifscCode = String(
-        account.ifsc_code ||
-            account.IfscCode ||
-            account.IFSCCode ||
-            account.Ifsc ||
-            account.IFSC ||
-            '',
-    ).trim();
-    const mobile = String(account.Mobile || '').trim();
+    const paymentAppValue = resolvePaymentAppCode(account.PaymentApp ?? 0);
+    const paymentAppLabel = resolvePaymentAppLabel(paymentAppValue);
+    const upiId = String(account.UpiId || '').trim();
+    const accountNumber = String(account.BankAccountNumber || '').trim();
+    const ifscCode = String(account.IfscCode || '')
+        .trim()
+        .toUpperCase();
 
     let paymentDetails = '';
     if (accountNumber !== '' && ifscCode !== '') {
         paymentDetails = `${accountNumber} / ${ifscCode}`;
     } else if (upiId !== '') {
-        paymentDetails =
-            paymentAppLabel !== '' ? `${upiId} / ${paymentAppLabel}` : upiId;
-    } else if (mobile !== '') {
-        paymentDetails =
-            paymentAppLabel !== ''
-                ? `${mobile} / ${paymentAppLabel}`
-                : mobile;
+        paymentDetails = upiId;
     }
 
     return {
@@ -70,7 +52,8 @@ const normalizePendingPayment = (payment = {}) => {
         BookingId: payment.BookingId || payment.BookingID || '',
         Amount: Number(payment.Amount || 0),
         BaseAmount: Number(payment.BaseAmount || 0),
-        PaymentApp: resolvedPaymentAppValue,
+        PaymentApp: paymentAppValue,
+        PaymentAppLabel: paymentAppLabel,
         PaymentDetails: paymentDetails,
         VoName: payment.VoName || '',
         VoMobile: payment.VoMobile || '',
@@ -80,47 +63,14 @@ const normalizePendingPayment = (payment = {}) => {
             ...account,
             AccountId: Number(account.AccountId || 0),
             FullName: account.FullName || '',
-            UpiId: account.UpiId || account.UPIId || '',
-            PaymentApp: resolvedPaymentAppValue,
+            UpiId: upiId,
+            PaymentApp: paymentAppValue,
+            PaymentAppLabel: paymentAppLabel,
             Mobile: account.Mobile || '',
-            BankAccountNumber:
-                account.BankAccountNumber ||
-                account.AccountNumber ||
-                '',
-            IfscCode:
-                account.IfscCode ||
-                account.IFSCCode ||
-                account.Ifsc ||
-                account.IFSC ||
-                '',
+            BankAccountNumber: accountNumber,
+            IfscCode: ifscCode,
         },
     };
-};
-
-const resolvePaymentAppCode = (rawValue) => {
-    const normalizedValue = String(rawValue ?? '')
-        .trim()
-        .toLowerCase();
-
-    if (
-        normalizedValue === '1' ||
-        normalizedValue === 'phonepe' ||
-        normalizedValue === 'phone pe'
-    ) {
-        return 1;
-    }
-
-    if (
-        normalizedValue === '2' ||
-        normalizedValue === 'gpay' ||
-        normalizedValue === 'g pay' ||
-        normalizedValue === 'googlepay' ||
-        normalizedValue === 'google pay'
-    ) {
-        return 2;
-    }
-
-    return 0;
 };
 
 const state = {
@@ -129,8 +79,6 @@ const state = {
     errorMessage: '',
     isLoading: false,
 };
-
-const getters = {};
 
 const mutations = {
     'set-pending-payments'(state, pendingPayments) {
@@ -161,7 +109,7 @@ const mutations = {
 const actions = {
     async getPendingPayments({ commit }) {
         commit('set-loading', true);
-        const res = await mayaClient.get(`/internal/pending-payments`);
+        const res = await mayaClient.get('/internal/pending-payments');
         if (res?.DisplayMsg) {
             commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
         } else {
@@ -199,18 +147,13 @@ const actions = {
                 bookingId: payload?.bookingId,
             });
         }
-
         return res;
-    },
-    async updatePayment({ dispatch }, payload) {
-        return dispatch('updateAmountToSO', payload);
     },
 };
 
 export default {
     namespaced: true,
     state,
-    getters,
     mutations,
     actions,
 };
