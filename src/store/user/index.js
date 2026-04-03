@@ -10,6 +10,10 @@ import {
 } from 'firebase/auth';
 
 const PS_AUTH_KEY = 'PSAuthKey';
+const USER_PROFILE_STORAGE_KEY = 'UserProfile';
+const PROFILE_CACHE_PREFIX = 'profile:';
+const PROFILE_CACHE_VERSION = 1;
+const PROFILE_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const getPsAuthKey = () => localStorage.getItem(PS_AUTH_KEY);
 
 const hasValidPsAuthKey = () => {
@@ -21,6 +25,85 @@ const hasValidPsAuthKey = () => {
             key.trim().toLowerCase() !== 'null',
     );
 };
+
+const normalizeCacheIdentity = (value) =>
+    String(value || '')
+        .trim()
+        .toLowerCase();
+
+const resolveUserIdentity = (user = {}) =>
+    normalizeCacheIdentity(
+        user?.uid || user?.UserName || user?.EmailID || user?.email,
+    );
+
+const getProfileCacheKey = (userId) => {
+    const identity = normalizeCacheIdentity(userId);
+    return identity ? `${PROFILE_CACHE_PREFIX}${identity}` : '';
+};
+
+const clearProfileCache = (userId) => {
+    const cacheKey = getProfileCacheKey(userId);
+    if (!cacheKey) {
+        return;
+    }
+    localStorage.removeItem(cacheKey);
+};
+
+const readProfileCache = (userId) => {
+    const cacheKey = getProfileCacheKey(userId);
+    if (!cacheKey) {
+        return null;
+    }
+
+    const rawCache = localStorage.getItem(cacheKey);
+    if (!rawCache) {
+        return null;
+    }
+
+    try {
+        const parsedCache = JSON.parse(rawCache);
+        const cacheVersion = Number(parsedCache?.version || 0);
+        const savedAt = Number(parsedCache?.savedAt || 0);
+
+        if (
+            cacheVersion !== PROFILE_CACHE_VERSION ||
+            !Number.isFinite(savedAt) ||
+            Date.now() - savedAt > PROFILE_CACHE_TTL_MS ||
+            !parsedCache?.data ||
+            typeof parsedCache.data !== 'object'
+        ) {
+            clearProfileCache(userId);
+            return null;
+        }
+
+        return parsedCache.data;
+    } catch {
+        clearProfileCache(userId);
+        return null;
+    }
+};
+
+const writeProfileCache = (userId, userProfile) => {
+    const cacheKey = getProfileCacheKey(userId);
+    if (!cacheKey || !userProfile || typeof userProfile !== 'object') {
+        return;
+    }
+
+    const payload = {
+        version: PROFILE_CACHE_VERSION,
+        savedAt: Date.now(),
+        data: userProfile,
+    };
+
+    try {
+        localStorage.setItem(cacheKey, JSON.stringify(payload));
+    } catch {
+        clearProfileCache(userId);
+    }
+};
+
+const resolveProfileCacheUserId = (stateUser, authUser = auth.currentUser) =>
+    resolveUserIdentity(stateUser) || resolveUserIdentity(authUser);
 
 const state = {
     user: null,
@@ -50,7 +133,7 @@ const mutations = {
         state.user = user;
         if (!user) {
             localStorage.removeItem(PS_AUTH_KEY);
-            localStorage.removeItem('UserProfile');
+            localStorage.removeItem(USER_PROFILE_STORAGE_KEY);
             state.isAdmin = false;
             state.isAgent = false;
         }
@@ -63,7 +146,10 @@ const mutations = {
             userProfile &&
             !Object.prototype.hasOwnProperty.call(userProfile, 'ErrorCode')
         ) {
-            localStorage.setItem('UserProfile', JSON.stringify(userProfile));
+            localStorage.setItem(
+                USER_PROFILE_STORAGE_KEY,
+                JSON.stringify(userProfile),
+            );
         }
     },
 
@@ -88,7 +174,7 @@ const mutations = {
     },
 
     'update-login'(state, loginData = {}) {
-        state.login = { ...loginData, FirebaseAccessToken: 'test1' };
+        state.login = { ...loginData };
     },
     'update-location-details'(state, data = {}) {
         state.locationDetails = data;
@@ -142,19 +228,21 @@ const actions = {
         }
     },
 
-    async logOut({ commit, dispatch }) {
+    async logOut({ commit, dispatch, state }) {
+        const cacheUserId = resolveProfileCacheUserId(state.user);
         try {
             await signOut(auth);
+            clearProfileCache(cacheUserId);
             await dispatch('app/clearAgents', null, { root: true });
             commit('update-user', null);
             commit('reset-user-profile');
         } catch (err) {
             // todo write proper exception case
-            throw new Error(err);
+            throw new Error(err?.message || 'Something went wrong');
         }
     },
 
-    register({ commit, state }) {
+    async register({ commit, state }) {
         // prettier-ignore
         const req = {
             UserName: 'dummy_' + state.contactForm.fullname + '_' + Date.now(),
@@ -170,14 +258,14 @@ const actions = {
         };
 
         commit('update-login', loginReq);
-        mayaClient.post('/auth/register', req);
+        await mayaClient.post('/auth/register', req);
     },
 
-    login({ state }) {
-        mayaClient.post('/auth/login', state.login);
+    async login({ state }) {
+        await mayaClient.post('/auth/login', state.login);
     },
 
-    kyc({ state }) {
+    async kyc({ state }) {
         // prettier-ignore
         const req = {
             ContactNo: state.contactForm.cno,
@@ -192,10 +280,10 @@ const actions = {
             IdentityDocumentImage: state.kycForm.imgData,
         };
 
-        mayaClient.patch('/kyc', req);
+        await mayaClient.patch('/kyc', req);
     },
 
-    contact({ state }) {
+    async contact({ state }) {
         const convertedAmenities = state.additionalInfo.amenities
             ? state.additionalInfo.amenities.toString()
             : '';
@@ -222,10 +310,10 @@ const actions = {
             },
         };
 
-        mayaClient.post('/contact', req);
+        await mayaClient.post('/contact', req);
     },
 
-    onlyContact({ state }) {
+    async onlyContact({ state }) {
         const comments =
             'From the Home Page ----->' +
             state.contactForm.msg +
@@ -242,7 +330,7 @@ const actions = {
             CarModel: state.contactForm.carModel ? state.contactForm.carModel : '',
         };
 
-        mayaClient.post('/contact', req);
+        await mayaClient.post('/contact', req);
     },
 
     async registerSpot({ state }) {
@@ -281,7 +369,7 @@ const actions = {
             // Landmark    : state.locationDetails.locDetails.city.country,
         };
 
-        mayaClient.post('/owner/parking-request', req);
+        await mayaClient.post('/owner/parking-request', req);
     },
 
     async authenticateWithMaya({ commit }) {
@@ -297,7 +385,7 @@ const actions = {
             }
         } catch (err) {
             // todo write proper exception case
-            throw new Error(err);
+            throw new Error(err?.message || 'Something went wrong');
         }
     },
 
@@ -306,7 +394,7 @@ const actions = {
             await mayaClient.post('/auth/update-fields', state.userProfile);
         } catch (err) {
             // todo write proper exception case
-            throw new Error(err);
+            throw new Error(err?.message || 'Something went wrong');
         }
     },
 
@@ -314,21 +402,27 @@ const actions = {
         commit('update-images', images);
     },
 
- async getUserProfile({ commit, dispatch }) {
-    if (!hasValidPsAuthKey()) {
-        return;
-    }
+    async getUserProfile({ commit, dispatch, state }) {
+        if (!hasValidPsAuthKey()) {
+            return;
+        }
 
-    const cache = localStorage.getItem('UserProfileCache');
-    const time = localStorage.getItem('UserProfileCacheTime');
+        const cacheUserId = resolveProfileCacheUserId(state.user);
+        const cachedProfile = readProfileCache(cacheUserId);
 
-    if (cache && time) {
-        const diff = Date.now() - Number(time);
+        if (cachedProfile) {
+            commit('update-user-profile', cachedProfile);
 
-        if (diff < 24 * 60 * 60 * 1000) {
-            const userProfile = JSON.parse(cache);
+            if (cachedProfile?.Type) {
+                commit('set-user-type', cachedProfile.Type);
+            }
+        }
+
+        try {
+            const userProfile = await mayaClient.get('/auth/user');
 
             commit('update-user-profile', userProfile);
+            writeProfileCache(cacheUserId, userProfile);
 
             if (userProfile?.Type) {
                 commit('set-user-type', userProfile.Type);
@@ -336,37 +430,25 @@ const actions = {
                 // fallback in case Type missing
                 await dispatch('authenticateWithMaya');
             }
-
-            return;
-        }
-    }
-
-    try {
-        const userProfile = await mayaClient.get('/auth/user');
-
-        commit('update-user-profile', userProfile);
-
-        localStorage.setItem('UserProfileCache', JSON.stringify(userProfile));
-        localStorage.setItem('UserProfileCacheTime', Date.now().toString());
-
-        if (userProfile?.Type) {
-            commit('set-user-type', userProfile.Type);
-        } else {
-            // fallback in case Type missing
+        } catch {
+            // fallback if profile API fails
             await dispatch('authenticateWithMaya');
         }
-    } catch {
-        // fallback if profile API fails
-        await dispatch('authenticateWithMaya');
-    }
-}
+    },
 };
 
 const unsub = onAuthStateChanged(auth, async (user) => {
+    const previousUser = store.state?.user?.user;
+    const previousCacheUserId = resolveProfileCacheUserId(
+        previousUser,
+        previousUser,
+    );
+
     store.commit('user/update-user', user);
     store.commit('user/update-auth-ready', true);
 
     if (!user) {
+        clearProfileCache(previousCacheUserId);
         localStorage.removeItem(PS_AUTH_KEY);
         return;
     }
