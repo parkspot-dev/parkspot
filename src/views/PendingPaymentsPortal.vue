@@ -466,13 +466,24 @@ export default {
                 .trim()
                 .toUpperCase();
             const upiId = String(this.accountDetails.UpiId || '').trim();
+            const mobile = String(this.accountDetails.Mobile || '').trim();
 
             if (accountNumber !== '' && ifscCode !== '') {
-                return `${accountNumber} / ${ifscCode}`;
+                return `${accountNumber}/${ifscCode}`;
             }
             if (upiId !== '') {
+                if (this.resolvedPaymentAppLabel !== '') {
+                    return `${upiId}/${this.resolvedPaymentAppLabel}`;
+                }
                 return upiId;
             }
+            if (mobile !== '') {
+                if (this.resolvedPaymentAppLabel !== '') {
+                    return `${mobile}/${this.resolvedPaymentAppLabel}`;
+                }
+                return mobile;
+            }
+
             return String(this.selectedPayment?.PaymentDetails || '').trim();
         },
         finalAmount() {
