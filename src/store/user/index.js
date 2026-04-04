@@ -229,7 +229,7 @@ const actions = {
     },
 
     async logOut({ commit, dispatch, state }) {
-        const cacheUserId = resolveProfileCacheUserId(state.user);
+        const cacheUserId = resolveProfileCacheUserId(state?.user);
         try {
             await signOut(auth);
             clearProfileCache(cacheUserId);
@@ -407,7 +407,7 @@ const actions = {
             return;
         }
 
-        const cacheUserId = resolveProfileCacheUserId(state.user);
+        const cacheUserId = resolveProfileCacheUserId(state?.user);
         const cachedProfile = readProfileCache(cacheUserId);
 
         if (cachedProfile) {
@@ -416,6 +416,8 @@ const actions = {
             if (cachedProfile?.Type) {
                 commit('set-user-type', cachedProfile.Type);
             }
+
+            return;
         }
 
         try {
