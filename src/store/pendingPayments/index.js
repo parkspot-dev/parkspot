@@ -1,4 +1,5 @@
 import { mayaClient } from '@/services/api';
+import { getPaymentAppTypeLabel } from '@/constant/enums';
 
 const extractPendingPayments = (response) => {
     if (Array.isArray(response)) {
@@ -14,36 +15,102 @@ const extractPendingPayments = (response) => {
 };
 
 const resolvePaymentAppCode = (paymentApp) => {
+    if (paymentApp === null || paymentApp === undefined) {
+        return 0;
+    }
+
+    const normalizedValue = String(paymentApp).trim().toLowerCase();
+    if (
+        normalizedValue === '1' ||
+        normalizedValue === 'phonepe' ||
+        normalizedValue === 'phone pay'
+    ) {
+        return 1;
+    }
+    if (
+        normalizedValue === '2' ||
+        normalizedValue === 'gpay' ||
+        normalizedValue === 'google pay'
+    ) {
+        return 2;
+    }
+
     const code = Number(paymentApp);
     return code === 1 || code === 2 ? code : 0;
 };
 
 const resolvePaymentAppLabel = (paymentApp) => {
     const code = resolvePaymentAppCode(paymentApp);
-    if (code === 1) {
-        return 'Phone Pay';
+    if (code === 0) {
+        return '';
     }
-    if (code === 2) {
-        return 'GPay';
+    return getPaymentAppTypeLabel(code);
+};
+
+const normalizeAccountValue = (
+    value,
+    { stripSpaces = false, uppercase = false } = {},
+) => {
+    let normalizedValue = String(value ?? '').trim();
+    if (normalizedValue === '') {
+        return '';
+    }
+
+    if (stripSpaces) {
+        normalizedValue = normalizedValue.replace(/\s+/g, '');
+    }
+    if (uppercase) {
+        normalizedValue = normalizedValue.toUpperCase();
+    }
+    return normalizedValue;
+};
+
+const pickAccountValue = (account, keys, options = {}) => {
+    for (const key of keys) {
+        const value = normalizeAccountValue(account?.[key], options);
+        if (value !== '') {
+            return value;
+        }
     }
     return '';
 };
 
 const normalizePendingPayment = (payment = {}) => {
     const account = payment.Account || {};
-    const paymentAppValue = resolvePaymentAppCode(account.PaymentApp ?? 0);
-    const paymentAppLabel = resolvePaymentAppLabel(paymentAppValue);
-    const upiId = String(account.UpiId || '').trim();
-    const accountNumber = String(account.BankAccountNumber || '').trim();
-    const ifscCode = String(account.IfscCode || '')
-        .trim()
-        .toUpperCase();
+    const paymentAppValue = resolvePaymentAppCode(
+        account.PaymentApp ??
+            account.paymentApp ??
+            payment.PaymentApp ??
+            payment.paymentApp ??
+            0,
+    );
+    const paymentAppLabel =
+        pickAccountValue(account, ['PaymentAppLabel', 'paymentAppLabel']) ||
+        resolvePaymentAppLabel(paymentAppValue);
+    const upiId = pickAccountValue(account, ['UpiId', 'UpiID'], {
+        stripSpaces: true,
+    });
+    const accountNumber = pickAccountValue(account, [
+        'BankAccountNumber',
+        'account_number',
+    ]);
+    const ifscCode = pickAccountValue(account, ['IfscCode', 'ifsc_code'], {
+        uppercase: true,
+    });
+    const mobile = pickAccountValue(account, ['Mobile', 'mobile'], {
+        stripSpaces: true,
+    });
+    const fullName = pickAccountValue(account, ['FullName', 'fullName']);
 
     let paymentDetails = '';
     if (accountNumber !== '' && ifscCode !== '') {
-        paymentDetails = `${accountNumber} / ${ifscCode}`;
+        paymentDetails = `${accountNumber}/${ifscCode}`;
     } else if (upiId !== '') {
-        paymentDetails = upiId;
+        paymentDetails =
+            paymentAppLabel !== '' ? `${upiId}/${paymentAppLabel}` : upiId;
+    } else if (mobile !== '') {
+        paymentDetails =
+            paymentAppLabel !== '' ? `${mobile}/${paymentAppLabel}` : mobile;
     }
 
     return {
@@ -62,13 +129,16 @@ const normalizePendingPayment = (payment = {}) => {
         Account: {
             ...account,
             AccountId: Number(account.AccountId || 0),
-            FullName: account.FullName || '',
+            FullName: fullName,
             UpiId: upiId,
+            UpiID: upiId,
             PaymentApp: paymentAppValue,
             PaymentAppLabel: paymentAppLabel,
-            Mobile: account.Mobile || '',
+            Mobile: mobile,
             BankAccountNumber: accountNumber,
+            account_number: accountNumber,
             IfscCode: ifscCode,
+            ifsc_code: ifscCode,
         },
     };
 };
