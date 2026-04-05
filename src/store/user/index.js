@@ -424,7 +424,10 @@ const actions = {
             const userProfile = await mayaClient.get('/auth/user');
 
             commit('update-user-profile', userProfile);
-            writeProfileCache(cacheUserId, userProfile);
+
+            if (userProfile?.Type) {
+                writeProfileCache(cacheUserId, userProfile);
+            }
 
             if (userProfile?.Type) {
                 commit('set-user-type', userProfile.Type);
