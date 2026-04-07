@@ -1,6 +1,7 @@
 import Home from '../views/PageHome.vue';
 import PageAbout from '@/views/PageAbout.vue';
 import { APP_LINK } from '../constant/constant';
+import store from '@/store';
 
 // prettier-ignore
 export const pages = {
@@ -152,6 +153,21 @@ export const routes = [
         path: pages.PENDING_PAYMENTS,
         name: 'pending-payments',
         component: () => import('@/views/PendingPaymentsPortal.vue'),
+        beforeEnter: (to, from, next) => {
+            const userState = store.state.user;
+
+            if (!userState.isAuthReady) {
+                next();
+                return;
+            }
+
+            if (userState.isAdmin) {
+                next();
+                return;
+            }
+
+            next({ name: 'Home' });
+        },
     },
     {
         path: pages.REGISTER_REQUEST,
@@ -166,17 +182,17 @@ export const routes = [
     {
         path: pages.KYC_STATUS_PAGE,
         name: 'kyc-status',
-        component: () => import('@/views/PageKYCStatus.vue')
+        component: () => import('@/views/PageKYCStatus.vue'),
     },
     {
         path: pages.SPOTS_SEARCH,
         name: 'spot-search',
-        component: () => import('@/views/PageSearchSpotByName.vue')
+        component: () => import('@/views/PageSearchSpotByName.vue'),
     },
     {
         path: pages.MY_BOOKINGS,
         name: 'my-bookings',
-        component: () => import('@/views/PageMyBookings.vue')
+        component: () => import('@/views/PageMyBookings.vue'),
     },
     {
         path: pages.APP,

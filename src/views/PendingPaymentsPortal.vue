@@ -139,7 +139,6 @@
                 </b-table-column>
             </b-table>
         </div>
-
         <b-modal
             v-model="showPaymentModal"
             has-modal-card
@@ -197,7 +196,8 @@
                                         >
                                         <router-link
                                             v-if="
-                                                getSpotId(selectedPayment) !== ''
+                                                getSpotId(selectedPayment) !==
+                                                ''
                                             "
                                             :to="
                                                 getSpotDetailRoute(
@@ -235,9 +235,7 @@
                                             >Received:</span
                                         >
                                         <span class="payment-detail-value">{{
-                                            formatAmount(
-                                                selectedPayment.Amount,
-                                            )
+                                            formatAmount(selectedPayment.Amount)
                                         }}</span>
                                     </div>
                                     <div class="amount-inline-row">
@@ -263,9 +261,7 @@
                                                 </AtomButton>
                                                 <AtomButton
                                                     class="amount-action-btn"
-                                                    @btn-click="
-                                                        saveAmountEdit
-                                                    "
+                                                    @btn-click="saveAmountEdit"
                                                 >
                                                     Save
                                                 </AtomButton>
@@ -386,6 +382,7 @@ import { mapActions, mapState } from 'vuex';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
+import { getPaymentAppLabel, getAccountInfo } from '@/utils/paymentUtils';
 import QrcodeVue from 'qrcode.vue';
 
 export default {
@@ -416,182 +413,165 @@ export default {
             'isLoading',
         ]),
         ...mapState('user', ['isAdmin', 'isAuthReady']),
+
         filteredPendingPayments() {
             const query = this.bookingIdSearch.trim().toLowerCase();
-            if (query === '') {
-                return this.pendingPayments;
-            }
-            return this.pendingPayments.filter((payment) =>
-                String(payment.BookingId || '')
+            if (!query) return this.pendingPayments;
+
+            return this.pendingPayments.filter((p) =>
+                String(p.BookingId || '')
                     .toLowerCase()
                     .includes(query),
             );
         },
-        accountDetails() {
-            return this.selectedPayment?.Account || {};
-        },
-        resolvedUpiId() {
-            const upiId = String(this.accountDetails.UpiId || '').trim();
-            if (upiId !== '') {
-                return upiId;
-            }
-            const accountNumber = String(
-                this.accountDetails.BankAccountNumber || '',
-            ).replace(/\s+/g, '');
-            const ifsc = String(this.accountDetails.IfscCode || '')
-                .replace(/\s+/g, '')
-                .toUpperCase();
-            if (accountNumber !== '' && ifsc !== '') {
-                return `${accountNumber}@${ifsc}.ifsc.npci`;
-            }
-            return '';
-        },
+
         resolvedPayeeName() {
-            const accountFullName = String(
-                this.accountDetails.FullName || '',
+            const fullName = String(
+                this.selectedPayment?.Account?.FullName || '',
             ).trim();
-            if (accountFullName !== '') {
-                return accountFullName;
-            }
+
+            if (fullName) return fullName;
+
             return String(this.selectedPayment?.SoName || '').trim();
         },
+
         resolvedPaymentAppLabel() {
-            return String(this.accountDetails.PaymentAppLabel || '').trim();
+            return getPaymentAppLabel(
+                this.selectedPayment?.Account?.PaymentApp || 0,
+            );
         },
+
         resolvedAccountInfo() {
-            const accountNumber = String(
-                this.accountDetails.BankAccountNumber || '',
-            ).trim();
-            const ifscCode = String(this.accountDetails.IfscCode || '')
-                .trim()
-                .toUpperCase();
-            const upiId = String(this.accountDetails.UpiId || '').trim();
-            const mobile = String(this.accountDetails.Mobile || '').trim();
+            const account = this.selectedPayment?.Account || {};
+            const label = this.resolvedPaymentAppLabel;
 
-            if (accountNumber !== '' && ifscCode !== '') {
-                return `${accountNumber}/${ifscCode}`;
-            }
-            if (upiId !== '') {
-                if (this.resolvedPaymentAppLabel !== '') {
-                    return `${upiId}/${this.resolvedPaymentAppLabel}`;
-                }
-                return upiId;
-            }
-            if (mobile !== '') {
-                if (this.resolvedPaymentAppLabel !== '') {
-                    return `${mobile}/${this.resolvedPaymentAppLabel}`;
-                }
-                return mobile;
-            }
+            const info = getAccountInfo(account, label);
 
-            return String(this.selectedPayment?.PaymentDetails || '').trim();
+            return info;
         },
+
         finalAmount() {
             return Number(this.editableAmount);
         },
-        upiUrl() {
-            if (this.selectedPayment && this.resolvedUpiId !== '') {
-                const remark = this.decodeTransactionText(this.editableRemark);
-                const transactionReference =
-                    remark || `Ref${this.selectedPayment.PaymentId}`;
-                const formattedAmount = Number.isFinite(this.finalAmount)
-                    ? this.finalAmount.toFixed(2)
-                    : '0.00';
-                const upiQuery = [
-                    `pa=${encodeURIComponent(this.resolvedUpiId)}`,
-                    `pn=${encodeURIComponent(this.resolvedPayeeName)}`,
-                    `am=${encodeURIComponent(formattedAmount)}`,
-                    `tr=${encodeURIComponent(transactionReference)}`,
-                    'mc=0000',
-                    `tn=${encodeURIComponent(remark)}`,
-                    'cu=INR',
-                ].join('&');
-                return `upi://pay?${upiQuery}`;
+
+        resolvedUpiId() {
+            const upiId = String(
+                this.selectedPayment?.Account?.UpiId || '',
+            ).trim();
+
+            if (upiId) return upiId;
+
+            const acc = String(
+                this.selectedPayment?.Account?.BankAccountNumber || '',
+            ).replace(/\s+/g, '');
+
+            const ifsc = String(this.selectedPayment?.Account?.IfscCode || '')
+                .replace(/\s+/g, '')
+                .toUpperCase();
+
+            if (acc && ifsc) {
+                return `${acc}@${ifsc}.ifsc.npci`;
             }
+
             return '';
         },
+
+        upiUrl() {
+            if (!this.selectedPayment || !this.resolvedUpiId) return '';
+
+            const remark = this.decodeTransactionText(this.editableRemark);
+            const ref = remark || `Ref${this.selectedPayment.PaymentId}`;
+
+            const amount = Number.isFinite(this.finalAmount)
+                ? this.finalAmount.toFixed(2)
+                : '0.00';
+
+            const query = [
+                `pa=${encodeURIComponent(this.resolvedUpiId)}`,
+                `pn=${encodeURIComponent(this.resolvedPayeeName)}`,
+                `am=${encodeURIComponent(amount)}`,
+                `tr=${encodeURIComponent(ref)}`,
+                'mc=0000',
+                `tn=${encodeURIComponent(remark)}`,
+                'cu=INR',
+            ].join('&');
+
+            return `upi://pay?${query}`;
+        },
     },
+
     watch: {
-        isAdmin(isAdmin) {
-            this.loadPendingPayments(isAdmin, this.isAuthReady);
-        },
-        isAuthReady(isAuthReady) {
-            this.loadPendingPayments(this.isAdmin, isAuthReady);
-        },
-        hasError(hasError) {
-            if (hasError) {
-                this.alertError(this.errorMessage);
-            }
+        isAdmin: 'handleAuthChange',
+        isAuthReady: 'handleAuthChange',
+
+        hasError(val) {
+            if (val) this.alertError(this.errorMessage);
         },
     },
+
     created() {
-        this.loadPendingPayments(this.isAdmin, this.isAuthReady);
+        this.handleAuthChange();
     },
+
     methods: {
         ...mapActions('pendingPayments', [
             'getPendingPayments',
             'updateAmountToSO',
         ]),
-        loadPendingPayments(isAdmin, isAuthReady) {
-            if (isAuthReady && isAdmin) {
+
+        handleAuthChange() {
+            if (this.isAuthReady && this.isAdmin) {
                 this.getPendingPayments();
             }
         },
+
         formatAmount(amount) {
-            return `₹${Number(amount || 0).toLocaleString('en-IN')}`;
+            return `₹${Number(amount ?? 0).toLocaleString('en-IN')}`;
         },
+
         getSpotId(payment) {
-            return String(
-                payment?.SiteId ||
-                    payment?.SiteID ||
-                    payment?.SiteDetails?.SiteID ||
-                    '',
-            ).trim();
+            return String(payment?.SiteID || '').trim();
         },
+
         getSpotDetailRoute(spotId) {
-            return {
-                name: 'spot-detail',
-                params: {
-                    spotId,
-                },
-            };
+            return { name: 'spot-detail', params: { spotId } };
         },
+
         getBookingPortalRoute(bookingId) {
             return {
                 name: 'booking-portal',
-                query: {
-                    bookingId: String(bookingId || '').trim(),
-                },
+                query: { bookingId: String(bookingId || '').trim() },
             };
         },
+
         decodeTransactionText(value) {
-            const rawText = String(value || '').trim();
-            if (rawText === '') {
-                return '';
-            }
-            const plusDecodedText = rawText.replace(/\+/g, ' ');
+            const text = String(value || '').trim();
+            if (!text) return '';
+
             try {
-                return decodeURIComponent(plusDecodedText);
+                return decodeURIComponent(text.replace(/\+/g, ' '));
             } catch {
-                return plusDecodedText;
+                return text;
             }
         },
+
         getDefaultRemark(payment) {
-            const decodedRemark = this.decodeTransactionText(payment?.Remark);
-            if (decodedRemark !== '') {
-                return decodedRemark;
-            }
-            const decodedVoName = this.decodeTransactionText(payment?.VoName);
-            return `Rent(${decodedVoName}, booking id: ${payment.BookingId})`;
+            const remark = this.decodeTransactionText(payment?.Remark);
+            if (remark) return remark;
+
+            const name = this.decodeTransactionText(payment?.VoName);
+            return `Rent(${name}, booking id: ${payment.BookingId})`;
         },
+
         openPaymentModal(payment) {
             this.selectedPayment = payment;
             this.isRemarkEditable = false;
-            this.editableAmount = Number(this.selectedPayment.BaseAmount);
+            this.editableAmount = Number(payment.BaseAmount);
             this.draftAmountInput = String(this.editableAmount);
-            this.editableRemark = this.getDefaultRemark(this.selectedPayment);
+            this.editableRemark = this.getDefaultRemark(payment);
             this.showPaymentModal = true;
         },
+
         closePaymentModal() {
             this.showPaymentModal = false;
             this.selectedPayment = null;
@@ -600,41 +580,50 @@ export default {
             this.draftAmountInput = '0';
             this.editableRemark = '';
         },
+
         saveAmountEdit() {
-            const parsedAmount = Number(this.draftAmountInput);
-            if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
+            const val = Number(this.draftAmountInput);
+
+            if (!Number.isFinite(val) || val <= 0) {
                 this.alertError('Please enter a valid transfer amount');
                 return;
             }
-            this.editableAmount = parsedAmount;
+
+            this.editableAmount = val;
         },
+
         cancelAmountEdit() {
             this.draftAmountInput = String(this.editableAmount);
         },
+
         toggleRemarkEdit() {
             this.isRemarkEditable = !this.isRemarkEditable;
-            if (this.isRemarkEditable) {
-                this.focusRemarkInput();
-            }
+            if (this.isRemarkEditable) this.focusRemarkInput();
         },
+
         focusRemarkInput() {
             this.$nextTick(() => {
-                const input = this.$refs.remarkInput?.$el?.querySelector('input');
+                const input =
+                    this.$refs.remarkInput?.$el?.querySelector('input');
                 if (input) {
                     input.focus();
                     input.select();
                 }
             });
         },
-        onRemarkInput(value) {
-            this.editableRemark = value;
+
+        onRemarkInput(val) {
+            this.editableRemark = val;
         },
-        searchBookingId(searchText) {
-            this.bookingIdSearch = String(searchText || '').trim();
+
+        searchBookingId(val) {
+            this.bookingIdSearch = String(val || '').trim();
         },
+
         clearBookingIdSearch() {
             this.bookingIdSearch = '';
         },
+
         openSuccessConfirmation() {
             if (Number(this.draftAmountInput) !== Number(this.editableAmount)) {
                 this.alertError(
@@ -642,33 +631,40 @@ export default {
                 );
                 return;
             }
+
             this.showSuccessModal = true;
         },
+
         closeSuccessModal() {
             this.showSuccessModal = false;
         },
+
         async recordPaymentSuccess() {
-            if (this.selectedPayment) {
-                const selectedPaymentApp =
-                    this.selectedPayment?.Account?.PaymentApp ?? 0;
-                const payload = {
-                    PaymentID: this.selectedPayment.PaymentId,
-                    AmountToSO: this.editableAmount,
-                    PaymentApp: selectedPaymentApp,
-                };
-                const response = await this.updateAmountToSO(payload);
-                if (response?.Success) {
-                    this.showSuccessModal = false;
-                    this.closePaymentModal();
-                    this.$buefy.toast.open({
-                        message: 'Payment recorded successfully',
-                        type: 'is-success',
-                    });
-                    return;
-                }
-                this.alertError('Failed to record payment');
+            if (!this.selectedPayment) return;
+
+            const payload = {
+                PaymentID: this.selectedPayment.PaymentId,
+                AmountToSO: this.editableAmount,
+                PaymentApp: this.selectedPayment?.Account?.PaymentApp ?? 0,
+            };
+
+            const res = await this.updateAmountToSO(payload);
+
+            if (res?.Success) {
+                this.showSuccessModal = false;
+                this.closePaymentModal();
+
+                this.$buefy.toast.open({
+                    message: 'Payment recorded successfully',
+                    type: 'is-success',
+                });
+
+                return;
             }
+
+            this.alertError('Failed to record payment');
         },
+
         alertError(msg) {
             this.$buefy.dialog.alert({
                 title: 'Error',
@@ -686,24 +682,15 @@ export default {
 
 <style lang="scss" scoped>
 .amount-inline-row {
-    align-items: center;
-    color: var(--parkspot-black);
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 8px;
 }
 
 .amount-input-wrap {
     position: relative;
     width: 160px;
-}
-
-.amount-input-wrap :deep(.control) {
-    width: 100%;
-}
-
-.amount-input-wrap :deep(.input) {
-    width: 100%;
 }
 
 .amount-edit-actions {
@@ -718,11 +705,11 @@ export default {
 }
 
 .amount-action-btn :deep(.button) {
-    color: var(--parkspot-black);
     font-size: 0.8rem;
     font-weight: 600;
     min-width: 72px;
     padding: 4px 10px;
+    color: var(--parkspot-black);
 }
 
 .amount-edit-actions :deep(.amount-cancel-btn.button) {
@@ -731,40 +718,33 @@ export default {
     color: var(--parkspot-red, #ff3860);
 }
 
-.amount-edit-actions :deep(.amount-cancel-btn.button:hover),
-.amount-edit-actions :deep(.amount-cancel-btn.button:focus),
-.amount-edit-actions :deep(.amount-cancel-btn.button:active) {
-    border-color: var(--parkspot-red, #ff3860);
-    background-color: var(--parkspot-white) !important;
-    color: var(--parkspot-red, #ff3860);
-}
-
-.detail-inline-label {
-    color: var(--parkspot-black);
-    font-weight: 600;
-    white-space: nowrap;
-}
-
 .detail-inline-row {
-    align-items: center;
     display: flex;
+    align-items: center;
     gap: 8px;
     margin-bottom: 8px;
     width: 100%;
+}
+
+.detail-inline-label {
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--parkspot-black);
 }
 
 .detail-input-wrap {
     flex: 1;
 }
 
-.detail-input-wrap :deep(.control) {
-    width: 100%;
-}
-
 .modal-body-layout {
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+.modal-top-row {
+    display: flex;
+    gap: 16px;
 }
 
 .modal-left {
@@ -775,51 +755,20 @@ export default {
     min-width: 240px;
 }
 
-.modal-top-row {
-    display: flex;
-    gap: 16px;
-}
-
-.missing-upi-text {
-    border: 1px solid var(--primary-color);
-    border-radius: 8px;
-    color: var(--parkspot-black);
-    font-size: 0.9rem;
-    font-weight: 600;
-    padding: 12px;
-    text-align: left;
-}
-
-.pay-now-btn {
-    min-width: 112px;
-}
-
-.pay-now-btn :deep(.button),
-.pending-modal-foot :deep(.button) {
-    color: var(--parkspot-black);
-}
-
-.pending-modal-foot :deep(.pending-cancel-btn.button) {
-    border-color: var(--parkspot-red, #ff3860);
-    background-color: var(--parkspot-white) !important;
-    color: var(--parkspot-red, #ff3860);
-}
-
-.pending-modal-foot :deep(.pending-cancel-btn.button:hover),
-.pending-modal-foot :deep(.pending-cancel-btn.button:focus),
-.pending-modal-foot :deep(.pending-cancel-btn.button:active) {
-    border-color: var(--parkspot-red, #ff3860);
-    background-color: var(--parkspot-white) !important;
-    color: var(--parkspot-red, #ff3860);
-}
-
 .payment-context {
-    background: var(--parkspot-white);
     border: 1px solid var(--primary-color);
     border-radius: 8px;
-    margin-bottom: 12px;
     padding: 12px;
-    text-align: left;
+    margin-bottom: 12px;
+    background: var(--parkspot-white);
+}
+
+.payment-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    color: var(--parkspot-black);
 }
 
 .payment-detail-key {
@@ -827,160 +776,35 @@ export default {
     padding-right: 8px;
 }
 
-.payment-detail-row {
-    align-items: center;
-    color: var(--parkspot-black);
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-}
-
 .payment-detail-value {
     text-align: right;
 }
 
-.pending-modal-card {
-    width: 100%;
-}
-
-.pending-modal-card .modal-card-title,
-.confirm-modal-card .modal-card-title {
-    color: var(--secondary-color);
-}
-
-.pending-modal-foot {
-    justify-content: flex-end;
-}
-
-.pending-payments-root {
-    background: #f5f5fb;
-    min-height: 100vh;
-    padding: 16px;
+.missing-upi-text {
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--parkspot-black);
 }
 
 .qr-card {
-    align-items: center;
-    border: 1px solid var(--primary-color);
-    border-radius: 8px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 8px;
-    padding: 12px;
-}
-
-.qr-image {
-    height: 220px;
-    width: 220px;
-}
-
-.remark-edit-btn {
-    align-items: center;
-    background: transparent;
-    border: 0;
-    color: var(--parkspot-black);
-    cursor: pointer;
-    display: inline-flex;
-    justify-content: center;
-    padding: 0;
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
-}
-
-.remark-inline-label {
-    color: var(--parkspot-black);
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.remark-inline-row {
-    align-items: center;
-    display: flex;
-    gap: 8px;
-    width: 100%;
-}
-
-.remark-input-wrap {
-    flex: 1;
-    position: relative;
-}
-
-.remark-input-wrap :deep(.control) {
-    width: 100%;
-}
-
-.remark-input-wrap :deep(.input) {
-    padding-right: 28px;
-    width: 100%;
-}
-
-.search-top {
-    display: flex;
-    justify-content: center;
-    margin: 8px 0 12px;
-}
-
-.search-top :deep(.search-button) {
-    margin-left: 8px;
-}
-
-.search-top :deep(.search-button .button) {
-    height: 36px;
-    padding: 0 12px;
-}
-
-.search-top :deep(.search-control) {
-    align-items: center;
-    display: flex;
-    margin: 8px 0;
-}
-
-.search-top :deep(.search-input) {
-    width: 180px;
-}
-
-.search-top :deep(.search-input .field) {
-    margin-bottom: 0;
-}
-
-.search-top :deep(.search-input .input) {
-    font-size: 0.95rem;
-    height: 36px;
-}
-
-.spot-detail-link {
-    color: var(--secondary-color);
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.table-wrapper {
-    background: var(--parkspot-white);
-    border: 1px solid #d8d8e8;
+    border: 1px solid var(--primary-color);
     border-radius: 8px;
     padding: 12px;
-}
-
-.table-wrapper :deep(.table td),
-.table-wrapper :deep(.table th) {
-    background: var(--parkspot-white);
-}
-
-.table-wrapper :deep(.table thead th) {
-    background: var(--parkspot-white);
-    color: var(--parkspot-black);
-    font-weight: 700;
 }
 
 .account-info-right {
     border: 1px solid var(--primary-color);
     border-radius: 8px;
-    color: var(--parkspot-black);
     margin-top: 8px;
     padding: 12px;
-    text-align: left;
+    color: var(--parkspot-black);
 }
 
 .account-info-label {
@@ -994,22 +818,104 @@ export default {
     word-break: break-word;
 }
 
-@media screen and (max-width: 920px) {
-    .modal-right {
-        min-width: 100%;
-    }
+.remark-inline-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
 
+.remark-inline-label {
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--parkspot-black);
+}
+
+.remark-input-wrap {
+    position: relative;
+    flex: 1;
+}
+
+.remark-input-wrap :deep(.input) {
+    width: 100%;
+    padding-right: 28px;
+}
+
+.remark-edit-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    color: var(--parkspot-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-top {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0 12px;
+}
+
+.search-top :deep(.search-button) {
+    margin-left: 8px;
+}
+
+.search-top :deep(.search-input .input) {
+    height: 36px;
+    font-size: 0.95rem;
+}
+
+.table-wrapper {
+    background: var(--parkspot-white);
+    border: 1px solid #d8d8e8;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.spot-detail-link {
+    color: var(--secondary-color);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.pending-payments-root {
+    background: #f5f5fb;
+    min-height: 100vh;
+    padding: 16px;
+}
+
+.pay-now-btn {
+    min-width: 112px;
+}
+
+.pay-now-btn :deep(.button),
+.pending-modal-foot :deep(.button) {
+    color: var(--parkspot-black);
+}
+
+.pending-modal-foot {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pending-modal-foot :deep(.pending-cancel-btn.button) {
+    border-color: var(--parkspot-red, #ff3860);
+    background-color: var(--parkspot-white) !important;
+    color: var(--parkspot-red, #ff3860);
+}
+
+@media screen and (max-width: 920px) {
     .modal-top-row {
         flex-direction: column;
     }
 
-    .qr-card {
-        margin-top: 8px;
-    }
-
-    .qr-image {
-        height: 180px;
-        width: 180px;
+    .modal-right {
+        min-width: 100%;
     }
 }
 </style>
