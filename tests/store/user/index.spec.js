@@ -59,10 +59,7 @@ describe('User Store - Agent Auth Fix', () => {
         await userModule.actions.authenticateWithMaya({ commit });
 
         expect(mayaClient.get).toHaveBeenCalledWith('/auth/authenticate');
-        expect(commit).toHaveBeenCalledWith(
-            'set-user-type',
-            UserType.Agent,
-        );
+        expect(commit).toHaveBeenCalledWith('set-user-type', UserType.Agent);
     });
 
     it('authenticateWithMaya does nothing if UserType is missing', async () => {
@@ -73,7 +70,10 @@ describe('User Store - Agent Auth Fix', () => {
         await userModule.actions.authenticateWithMaya({ commit });
 
         expect(mayaClient.get).toHaveBeenCalledWith('/auth/authenticate');
-        expect(commit).not.toHaveBeenCalledWith('set-user-type', expect.anything());
+        expect(commit).not.toHaveBeenCalledWith(
+            'set-user-type',
+            expect.anything(),
+        );
     });
 
     it('authenticateWithMaya does not call API when PSAuthKey is invalid', async () => {
@@ -82,7 +82,10 @@ describe('User Store - Agent Auth Fix', () => {
         await userModule.actions.authenticateWithMaya({ commit });
 
         expect(mayaClient.get).not.toHaveBeenCalled();
-        expect(commit).not.toHaveBeenCalledWith('set-user-type', expect.anything());
+        expect(commit).not.toHaveBeenCalledWith(
+            'set-user-type',
+            expect.anything(),
+        );
     });
 
     it('getUserProfile sets user type when profile has Type', async () => {
@@ -107,10 +110,7 @@ describe('User Store - Agent Auth Fix', () => {
             }),
         );
 
-        expect(commit).toHaveBeenCalledWith(
-            'set-user-type',
-            UserType.Agent,
-        );
+        expect(commit).toHaveBeenCalledWith('set-user-type', UserType.Agent);
         expect(dispatch).not.toHaveBeenCalledWith(
             'authenticateWithMaya',
             expect.anything(),
@@ -137,7 +137,10 @@ describe('User Store - Agent Auth Fix', () => {
                 FullName: 'User Without Type',
             }),
         );
-        expect(commit).not.toHaveBeenCalledWith('set-user-type', expect.anything());
+        expect(commit).not.toHaveBeenCalledWith(
+            'set-user-type',
+            expect.anything(),
+        );
         expect(dispatch).toHaveBeenCalledWith(
             'authenticateWithMaya',
             expect.anything(),
@@ -161,8 +164,14 @@ describe('User Store - Agent Auth Fix', () => {
             expect.anything(),
             expect.anything(),
         );
-        expect(commit).not.toHaveBeenCalledWith('update-user-profile', expect.anything());
-        expect(commit).not.toHaveBeenCalledWith('set-user-type', expect.anything());
+        expect(commit).not.toHaveBeenCalledWith(
+            'update-user-profile',
+            expect.anything(),
+        );
+        expect(commit).not.toHaveBeenCalledWith(
+            'set-user-type',
+            expect.anything(),
+        );
     });
 
     it('getUserProfile does not call API when PSAuthKey is invalid', async () => {
@@ -179,8 +188,14 @@ describe('User Store - Agent Auth Fix', () => {
             expect.anything(),
             expect.anything(),
         );
-        expect(commit).not.toHaveBeenCalledWith('update-user-profile', expect.anything());
-        expect(commit).not.toHaveBeenCalledWith('set-user-type', expect.anything());
+        expect(commit).not.toHaveBeenCalledWith(
+            'update-user-profile',
+            expect.anything(),
+        );
+        expect(commit).not.toHaveBeenCalledWith(
+            'set-user-type',
+            expect.anything(),
+        );
     });
 
     it('getUserProfile uses cache when valid', async () => {
@@ -326,4 +341,24 @@ describe('User Store - Agent Auth Fix', () => {
         expect(commit).toHaveBeenCalledWith('update-user', null);
         expect(commit).toHaveBeenCalledWith('reset-user-profile');
     });
+
+ it('does NOT write profile to cache when Type is missing', async () => {
+    localStorage.setItem('PSAuthKey', 'token'); 
+
+    const commit = vi.fn();
+    const dispatch = vi.fn();
+    const state = { user: {} };
+    
+    const userProfile = { FullName: 'Dev' }; 
+    vi.spyOn(mayaClient, 'get').mockResolvedValue(userProfile);
+    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+    await userModule.actions.getUserProfile({
+        commit,
+        dispatch,
+        state,
+    });
+
+    expect(setItemSpy).not.toHaveBeenCalled();
+    expect(dispatch).toHaveBeenCalledWith('authenticateWithMaya');
+   });
 });

@@ -393,8 +393,18 @@ const actions = {
         try {
             await mayaClient.post('/auth/update-fields', state.userProfile);
         } catch (err) {
-            // todo write proper exception case
-            throw new Error(err?.message || 'Something went wrong');
+            const data = err?.response?.data;
+            const errorMessage =
+                data?.DisplayMsg ||
+                data?.message ||
+                data?.Message ||
+                data?.error ||
+                data?.Error ||
+                (typeof data === 'string' ? data : '') ||
+                err?.message ||
+                'Something went wrong';
+
+            throw new Error(errorMessage);
         }
     },
 
@@ -427,12 +437,8 @@ const actions = {
 
             if (userProfile?.Type) {
                 writeProfileCache(cacheUserId, userProfile);
-            }
-
-            if (userProfile?.Type) {
                 commit('set-user-type', userProfile.Type);
             } else {
-                // fallback in case Type missing
                 await dispatch('authenticateWithMaya');
             }
         } catch {
