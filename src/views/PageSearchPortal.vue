@@ -108,10 +108,10 @@ export default {
             }
         },
     },
-    mounted() {
-        this.getUserProfile();
+    async mounted() {
+        await this.getUserProfile();
         if (this.isAdmin) {
-            this.getAgents();
+            await this.getAgents();
         }
     },
     async created() {

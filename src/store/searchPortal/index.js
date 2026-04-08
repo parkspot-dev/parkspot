@@ -15,67 +15,78 @@ const state = {
     expiringRequestsCount: 0,
 };
 
-const getters = {};
-
 const mutations = {
-    'set-loading'(state) {
-        state.loading = !state.loading;
+    setLoading(state, value) {
+        state.loading = value;
     },
-    'update-active-tab'(state, tabNo) {
+    updateActiveTab(state, tabNo) {
         state.activeTab = tabNo;
     },
-    'set-parking-requests'(state, result) {
+    setParkingRequests(state, result) {
         state.parkingRequests = result;
         state.filteredParkingRequests = result;
     },
-    'set-interested-vo-list'(state, result) {
+    setInterestedVOList(state, result) {
         state.interestedVOList = result;
     },
-    'update-SO-Lat-Lng-Input'(state, latLng) {
+    updateSOLatLngInput(state, latLng) {
         state.SOLatLngInput = latLng;
     },
-    'set-agent-list'(state, agents) {
+    setAgentList(state, agents) {
         // filtering agent list to filter out the one which has fullname enclosed within []
-        state.agentList = agents
-            .filter((agent) => {
-                const fullName = agent.FullName.toLowerCase();
-                return !(fullName.startsWith('[') && fullName.endsWith(']'));
-            })
-            .map((agent) => {
-                return {
-                    id: agent.FullName.split(' ')[0],
-                    name: agent.FullName.split(' ')[0],
-                };
-            });
-        state.agentList.push({ id: 'NA', name: 'NA' });
+        const uniqueAgentNames = [
+            ...new Set(
+                agents
+                    .filter((agent) => {
+                        const fullName = agent.FullName?.toLowerCase() || '';
+                        return !(
+                            fullName.startsWith('[') && fullName.endsWith(']')
+                        );
+                    })
+                    .map((agent) => agent.FullName?.split(' ')[0])
+                    .filter(Boolean),
+            ),
+        ];
+        state.agentList = [
+            ...uniqueAgentNames.map((name) => ({
+                id: name,
+                name,
+            })),
+            ...(!uniqueAgentNames.includes('NA')
+                ? [{ id: 'NA', name: 'NA' }]
+                : []),
+        ];
     },
-    'set-error'(state, message) {
-        state.hasError = !state.hasError;
+    setError(state, message) {
+        state.hasError = !!message;
         state.errorMessage = message;
     },
-    'set-search-mobile'(state, text) {
+    setSearchMobile(state, text) {
         state.searchMobile = text;
     },
-    'set-expiring-requests-count'(state, count) {
+    setExpiringRequestsCount(state, count) {
         state.expiringRequestsCount = count;
     },
-    'set-filtered-parking-requests'(state, requests) {
+    setFilteredParkingRequests(state, requests) {
         state.filteredParkingRequests = requests;
     },
 };
 const actions = {
     updateActiveTab({ commit }, tabNo) {
-        commit('update-active-tab', tabNo);
+        commit('updateActiveTab', tabNo);
     },
-    getAgents({ commit, rootState }) {
+    async getAgents({ commit, rootState, dispatch }) {
+        if (!rootState.app?.agents?.length) {
+            await dispatch('app/getAgents', null, { root: true });
+        }
         const agents = rootState.app?.agents || [];
-        commit('set-agent-list', agents);
+        commit('setAgentList', agents);
     },
     // Get parking requests by mbile number
     async getParkingRequests({ commit, state }) {
         if (state.loading) return;
         try {
-            commit('set-loading', true);
+            commit('setLoading', true);
             const BASE_PARKING_REQUEST_URL = '/internal/parking-requests';
             const parkingRequestURL = state.searchMobile
                 ? `${BASE_PARKING_REQUEST_URL}?mobile=${state.searchMobile.replace(
@@ -87,21 +98,22 @@ const actions = {
             if (response.ErrorCode) {
                 throw new Error(response.DisplayMsg);
             }
-            commit('set-parking-requests', response.ParkingRequests);
-            commit('set-interested-vo-list', response.ParkingRequests);
+            const parkingRequests = response.ParkingRequests || [];
+            commit('setParkingRequests', parkingRequests);
+            commit('setInterestedVOList', parkingRequests);
             commit(
-                'set-expiring-requests-count',
-                response.ExpiringRequestsCount,
+                'setExpiringRequestsCount',
+                response.ExpiringRequestsCount || 0,
             );
         } catch (error) {
-            commit('set-error', error.message);
+            commit('setError', error.message);
         } finally {
-            commit('set-loading', false);
+            commit('setLoading', false);
         }
     },
     // Get Interested VO by lat lng value
     async getInterestedVO({ commit }, latlng) {
-        commit('set-loading', true);
+        commit('setLoading', true);
         try {
             const [lat, lng] = latlng
                 .trim()
@@ -113,61 +125,58 @@ const actions = {
             if (response.ErrorCode) {
                 throw new Error(response.DisplayMsg);
             }
-            commit('set-interested-vo-list', response);
-            commit('set-filtered-parking-requests', response);
+            const parkingRequests = response.ParkingRequests || [];
+            commit('setInterestedVOList', parkingRequests);
+            commit('setParkingRequests', parkingRequests);
         } catch (error) {
-            commit('set-error', error.message);
+            commit('setError', error.message);
         } finally {
-            commit('set-loading', false);
+            commit('setLoading', false);
         }
     },
     resetError({ commit }) {
-        commit('set-error', '');
+        commit('setError', '');
     },
     // Update Search text with text
     updateMobileInput({ commit }, text) {
-        commit('set-search-mobile', text);
+        commit('setSearchMobile', text);
     },
     // Update SOLatLngInput
     updateSOLatLngInput({ commit }, text) {
-        commit('update-SO-Lat-Lng-Input', text);
+        commit('updateSOLatLngInput', text);
     },
     // setAgents
     setAgents({ commit }, list) {
-        commit('set-agent-list', list);
+        commit('setAgentList', list);
     },
 
-    extractExpiringRequests({ commit, state }) {
-        const extractedCriticalRequests = state.filteredParkingRequests.filter(
-            (request) => request.IsExpiring,
-        );
-        commit('set-filtered-parking-requests', extractedCriticalRequests);
-    },
+    applyParkingRequestFilters({ commit, state }, filters = {}) {
+        const { isExpiring = false, status = null, agentName = '' } = filters;
+        const filteredRequests = state.parkingRequests.filter((request) => {
+            if (isExpiring && !request.IsExpiring) {
+                return false;
+            }
 
-    extractRequestsByAgentName({ commit, state }, agentName) {
-        const extractedAgentNameRequests = state.filteredParkingRequests.filter(
-            (requests) => requests.Agent === agentName,
-        );
-        commit('set-filtered-parking-requests', extractedAgentNameRequests);
-    },
+            if (status !== null && status !== undefined && status !== '') {
+                if (request.Status !== status) {
+                    return false;
+                }
+            }
 
-    extractRequestsByStatus({ commit, state }, status) {
-        const extractRequestsByStatusResult =
-            state.filteredParkingRequests.filter(
-                (requests) => requests.Status === status,
-            );
-        commit('set-filtered-parking-requests', extractRequestsByStatusResult);
-    },
+            if (agentName && request.Agent !== agentName) {
+                return false;
+            }
 
-    resetFilterParkingRequests({ commit, state }) {
-        commit('set-filtered-parking-requests', state.parkingRequests);
+            return true;
+        });
+
+        commit('setFilteredParkingRequests', filteredRequests);
     },
 };
 
 export default {
     namespaced: true,
     state,
-    getters,
     mutations,
     actions,
 };
