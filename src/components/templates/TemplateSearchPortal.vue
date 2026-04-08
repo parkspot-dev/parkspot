@@ -102,7 +102,7 @@
                 />
 
                 <FilterDropdown
-                    :options="agentList.map((agent) => agent.name)"
+                    :options="mergedAgentList.map((agent) => agent.name)"
                     :searchable="false"
                     :selected-value="filters.Agent ? filters.Agent : ''"
                     label="Agent"
@@ -292,7 +292,7 @@
                     <!-- TODO: Remove AtomSelectInput completely from all files. Use Global Select Input -->
                     <AtomSelectInput
                         v-model="props.filters['Agent']"
-                        :list="agentList"
+                        :list="mergedAgentList"
                         :size="'is-small'"
                         label=""
                         placeholder="Agent"
@@ -308,7 +308,7 @@
                             <AtomSelectInput
                                 v-if="isAdmin"
                                 v-model="props.row.Agent"
-                                :list="agentList"
+                                :list="mergedAgentList"
                                 :size="'is-small'"
                                 label=""
                                 placeholder="Select Agent"
@@ -435,12 +435,12 @@
             <div v-else>
                 <MobileView
                     v-if="!isEmpty"
-                    :parking-requests="parkingRequests"
+                    :parking-requests="filteredParkingRequests"
                     :is-empty="isEmpty"
                     :is-admin="isAdmin"
                     :new-comment-map="newCommentMap"
                     :status-list="statusList"
-                    :agent-list="agentList"
+                    :agent-list="mergedAgentList"
                     :get-formatted-date="getFormattedDate"
                     :get-priority="getPriority"
                     :is-call-delayed="isCallDelayed"
@@ -581,12 +581,7 @@ export default {
                 UpdatedAt: null,
                 isExpiring: false,
             },
-            isEmpty: false,
-            isBordered: false,
-            isStriped: false,
             isNarrowed: false,
-            isHoverable: false,
-            isFocusable: false,
             hasMobileCards: true,
 
             statusList: [
@@ -641,44 +636,72 @@ export default {
         };
     },
     computed: {
-        ...mapState('searchPortal', [
-            'agentList',
-            'expiringRequestsCount',
-            'filteredParkingRequests',
-        ]),
+        ...mapState('searchPortal', {
+            agentList: (state) => state.agentList,
+            expiringRequestsCount: (state) => state.expiringRequestsCount,
+            filteredParkingRequests: (state) => state.filteredParkingRequests,
+            storeParkingRequests: (state) => state.parkingRequests,
+        }),
         ...mapState('user', ['userProfile', 'isAdmin']),
+        mergedAgentList() {
+            const stateAgentNames = this.agentList
+                .map((agent) => agent?.name)
+                .filter(Boolean);
+            const requestAgentNames = this.storeParkingRequests
+                .map((request) => request?.Agent)
+                .filter(Boolean);
+            const uniqueAgentNames = [
+                ...new Set([...stateAgentNames, ...requestAgentNames]),
+            ];
+
+            return uniqueAgentNames.map((name) => ({
+                id: name,
+                name,
+            }));
+        },
         isDesktopView() {
             if (this.isMobileDevice) {
                 return false;
             }
             return this.windowWidth > 768 || this.forceDesktop;
         },
+        isEmpty() {
+            return !this.filteredParkingRequests.length;
+        },
     },
 
     watch: {
-        parkingRequests(newRequests) {
-            this.updateSummary(newRequests);
-
-            if (this.$route.query[this.QUERY_PARAMS.IS_EXPIRING]) {
-                this.extractExpiringRequests();
-                this.filters.isExpiring = true;
-            }
-
-            if (this.$route.query[this.QUERY_PARAMS.AGENT]) {
-                const agentName = this.$route.query['agent'];
-                this.filters.Agent = agentName;
-                this.extractRequestsByAgentName(agentName);
-            }
-            if (this.$route.query[this.QUERY_PARAMS.STATUS]) {
-                const statusId = parseInt(this.$route.query['status']);
-                const statusRow = this.statusList.find(
-                    (item) => item.id === statusId,
+        parkingRequests: {
+            immediate: true,
+            handler(newRequests) {
+                const normalizedRequests = newRequests || [];
+                this.$store.commit(
+                    'searchPortal/setParkingRequests',
+                    normalizedRequests,
                 );
-                this.filters.Status = statusRow.name;
-                if (statusRow) {
-                    this.extractRequestsByStatus(statusRow.id);
+                this.updateSummary();
+
+                if (this.$route.query[this.QUERY_PARAMS.AGENT]) {
+                    this.filters.Agent = this.$route.query['agent'];
+                } else {
+                    this.filters.Agent = '';
                 }
-            }
+
+                if (this.$route.query[this.QUERY_PARAMS.STATUS]) {
+                    const statusId = parseInt(this.$route.query['status'], 10);
+                    const statusRow = this.statusList.find(
+                        (item) => item.id === statusId,
+                    );
+                    this.filters.Status = statusRow ? statusRow.name : '';
+                } else {
+                    this.filters.Status = '';
+                }
+
+                this.filters.isExpiring =
+                    !!this.$route.query[this.QUERY_PARAMS.IS_EXPIRING];
+
+                this.applyFilters();
+            },
         },
     },
     mounted() {
@@ -686,10 +709,6 @@ export default {
             // If not an admin then agentList will only contain 'NA' and user Fullname
             const agents = [{ id: 0, FullName: this.userProfile?.FullName }];
             this.setAgents(agents);
-        }
-
-        if (this.parkingRequests && this.parkingRequests.length > 0) {
-            this.updateSummary(this.parkingRequests);
         }
 
         if (typeof window !== 'undefined') {
@@ -708,36 +727,28 @@ export default {
         }
     },
 
-    
     methods: {
         ...mapActions('searchPortal', [
             'getAgents',
             'setAgents',
-            'extractExpiringRequests',
-            'resetFilterParkingRequests',
-            'extractRequestsByAgentName',
-            'extractRequestsByStatus',
+            'applyParkingRequestFilters',
         ]),
 
         applyFilters() {
-            this.resetFilterParkingRequests();
-
-            if (this.filters.isExpiring) {
-                this.extractExpiringRequests();
-            }
+            let statusId = null;
 
             if (this.filters.Status) {
                 const statusRow = this.statusList.find(
                     (item) => item.name === this.filters.Status,
                 );
-                if (statusRow) {
-                    this.extractRequestsByStatus(statusRow.id);
-                }
+                statusId = statusRow ? statusRow.id : null;
             }
 
-            if (this.filters.Agent) {
-                this.extractRequestsByAgentName(this.filters.Agent);
-            }
+            this.applyParkingRequestFilters({
+                isExpiring: this.filters.isExpiring,
+                status: statusId,
+                agentName: this.filters.Agent,
+            });
         },
 
         getPriority(val) {
@@ -752,11 +763,10 @@ export default {
         },
 
         onAgentUpdate(spotData, agentid) {
-            this.agentList.forEach((agent) => {
-                if (agent.id === agentid) {
-                    spotData['Agent'] = agent.name;
-                }
-            });
+            const selectedAgent = this.mergedAgentList.find(
+                (agent) => agent.id === agentid,
+            );
+            spotData['Agent'] = selectedAgent ? selectedAgent.name : agentid;
             this.$emit('updateRequest', spotData);
         },
 
@@ -873,7 +883,7 @@ export default {
             const url = new URL(window.location.href);
             url.searchParams.set('agent', agent);
             window.history.pushState({}, '', url.toString());
-            this.filters.Agent = agent
+            this.filters.Agent = agent;
             this.applyFilters();
         },
         handleStatusFilter(status) {
@@ -887,7 +897,8 @@ export default {
             this.applyFilters();
         },
 
-        updateSummary(requests) {
+        updateSummary() {
+            const requests = this.storeParkingRequests;
             this.summary.totalRequest = requests.length;
             this.summary.today = 0;
             this.summary.yesterday = 0;
@@ -1208,19 +1219,6 @@ $portal-font-size: 13px;
     max-height: 100px;
     overflow-y: scroll;
     white-space: pre-line;
-}
-
-.filters {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: Arial, sans-serif;
-    margin: 5px;
-    margin-bottom: 20px;
-}
-
-.filters-label {
-    font-weight: bold;
 }
 
 .remove-filter {
