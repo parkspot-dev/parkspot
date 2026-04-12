@@ -115,6 +115,20 @@ describe('PendingPayments Store', () => {
             expect(store.state.pendingPayments.errorMessage).toContain('Failed');
         });
 
+        it('getPendingPayments does not append undefined when ErrorMsg is missing', async () => {
+            mayaClient.get.mockResolvedValue({
+                DisplayMsg: 'Failed',
+            });
+
+            await store.dispatch('pendingPayments/getPendingPayments');
+
+            expect(store.state.pendingPayments.hasError).toBe(true);
+            expect(store.state.pendingPayments.errorMessage).toBe('Failed');
+            expect(store.state.pendingPayments.errorMessage).not.toContain(
+                'undefined',
+            );
+        });
+
         it('getPendingPayments handles API failure', async () => {
             mayaClient.get.mockRejectedValue(new Error('Network error'));
 
@@ -165,6 +179,22 @@ describe('PendingPayments Store', () => {
             });
 
             expect(store.state.pendingPayments.hasError).toBe(true);
+        });
+
+        it('updateAmountToSO does not append undefined when ErrorMsg is missing', async () => {
+            mayaClient.post.mockResolvedValue({
+                DisplayMsg: 'Failed',
+            });
+
+            await store.dispatch('pendingPayments/updateAmountToSO', {
+                PaymentID: 1,
+            });
+
+            expect(store.state.pendingPayments.hasError).toBe(true);
+            expect(store.state.pendingPayments.errorMessage).toBe('Failed');
+            expect(store.state.pendingPayments.errorMessage).not.toContain(
+                'undefined',
+            );
         });
 
         it('updateAmountToSO handles network failure', async () => {
