@@ -244,6 +244,53 @@ describe('User Store - Agent Auth Fix', () => {
         expect(commit).toHaveBeenCalledTimes(2);
     });
 
+    it('getUserProfile ignores cached profile without Type and falls back to authenticateWithMaya', async () => {
+        localStorage.setItem('PSAuthKey', 'token');
+        const state = { user: { uid: 'agent_user' } };
+
+        localStorage.setItem(
+            'profile:agent_user',
+            JSON.stringify({
+                version: 1,
+                savedAt: Date.now(),
+                data: { FullName: 'Cached User Without Type' },
+            }),
+        );
+
+        mayaClient.get.mockResolvedValue({
+            FullName: 'Fresh User Without Type',
+        });
+
+        await userModule.actions.getUserProfile({
+            commit,
+            dispatch,
+            state,
+        });
+
+        expect(mayaClient.get).toHaveBeenCalledWith('/auth/user');
+        expect(commit).toHaveBeenCalledWith(
+            'update-user-profile',
+            expect.objectContaining({
+                FullName: 'Fresh User Without Type',
+            }),
+        );
+        expect(commit).not.toHaveBeenCalledWith(
+            'update-user-profile',
+            expect.objectContaining({
+                FullName: 'Cached User Without Type',
+            }),
+        );
+        expect(commit).not.toHaveBeenCalledWith(
+            'set-user-type',
+            expect.anything(),
+        );
+        expect(dispatch).toHaveBeenCalledWith(
+            'authenticateWithMaya',
+            expect.anything(),
+            expect.anything(),
+        );
+    });
+
     it('getUserProfile calls API when cache expired', async () => {
         localStorage.setItem('PSAuthKey', 'token');
         const state = { user: { uid: 'agent_user' } };
@@ -342,23 +389,31 @@ describe('User Store - Agent Auth Fix', () => {
         expect(commit).toHaveBeenCalledWith('reset-user-profile');
     });
 
- it('does NOT write profile to cache when Type is missing', async () => {
-    localStorage.setItem('PSAuthKey', 'token'); 
+    it('does not write profile cache when Type is missing', async () => {
+        localStorage.setItem('PSAuthKey', 'token');
 
-    const commit = vi.fn();
-    const dispatch = vi.fn();
-    const state = { user: {} };
-    
-    const userProfile = { FullName: 'Dev' }; 
-    vi.spyOn(mayaClient, 'get').mockResolvedValue(userProfile);
-    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
-    await userModule.actions.getUserProfile({
-        commit,
-        dispatch,
-        state,
+        const state = { user: { uid: 'agent_user' } };
+        const userProfile = { FullName: 'Dev' };
+        const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+
+        mayaClient.get.mockResolvedValue(userProfile);
+
+        await userModule.actions.getUserProfile({
+            commit,
+            dispatch,
+            state,
+        });
+
+        expect(mayaClient.get).toHaveBeenCalledWith('/auth/user');
+        expect(setItemSpy).not.toHaveBeenCalledWith(
+            'profile:agent_user',
+            expect.any(String),
+        );
+        expect(localStorage.getItem('profile:agent_user')).toBeNull();
+        expect(dispatch).toHaveBeenCalledWith(
+            'authenticateWithMaya',
+            expect.anything(),
+            expect.anything(),
+        );
     });
-
-    expect(setItemSpy).not.toHaveBeenCalled();
-    expect(dispatch).toHaveBeenCalledWith('authenticateWithMaya');
-   });
 });

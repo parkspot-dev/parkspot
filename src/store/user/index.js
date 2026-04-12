@@ -420,13 +420,9 @@ const actions = {
         const cacheUserId = resolveProfileCacheUserId(state?.user);
         const cachedProfile = readProfileCache(cacheUserId);
 
-        if (cachedProfile) {
+        if (cachedProfile?.Type) {
             commit('update-user-profile', cachedProfile);
-
-            if (cachedProfile?.Type) {
-                commit('set-user-type', cachedProfile.Type);
-            }
-
+            commit('set-user-type', cachedProfile.Type);
             return;
         }
 
