@@ -24,6 +24,7 @@ describe('pending-payments route guard', () => {
     );
 
     beforeEach(() => {
+        vi.useRealTimers();
         mockedStore.state.user = {
             isAuthReady: true,
             user: null,
@@ -68,6 +69,38 @@ describe('pending-payments route guard', () => {
         await guardPromise;
 
         expect(unwatch).toHaveBeenCalledTimes(1);
+    });
+
+    it('stops waiting after timeout and redirects unauthenticated users', async () => {
+        vi.useFakeTimers();
+
+        mockedStore.state.user = {
+            isAuthReady: false,
+            user: null,
+            isAdmin: false,
+        };
+
+        const unwatch = vi.fn();
+
+        mockedStore.watch.mockImplementation(() => unwatch);
+
+        const next = vi.fn();
+        const to = { fullPath: '/internal/pending-payments' };
+
+        const guardPromise = pendingPaymentsRoute.beforeEnter(to, {}, next);
+
+        await vi.advanceTimersByTimeAsync(5000);
+        await guardPromise;
+
+        expect(unwatch).toHaveBeenCalledTimes(1);
+        expect(mockedStore.commit).toHaveBeenCalledWith(
+            'user/update-login-modal',
+            true,
+        );
+        expect(next).toHaveBeenCalledWith({
+            name: 'Home',
+            query: { redirect: '/internal/pending-payments' },
+        });
     });
 
     it('redirects unauthenticated users to Home and keeps redirect query', async () => {

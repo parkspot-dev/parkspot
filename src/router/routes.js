@@ -3,23 +3,38 @@ import PageAbout from '@/views/PageAbout.vue';
 import { APP_LINK } from '../constant/constant';
 import store from '@/store';
 
-const waitForAuthReady = () => {
+const AUTH_READY_TIMEOUT_MS = 5000;
+
+const waitForAuthReady = (timeoutMs = AUTH_READY_TIMEOUT_MS) => {
     if (store.state.user.isAuthReady) {
-        return Promise.resolve();
+        return Promise.resolve(true);
     }
 
     return new Promise((resolve) => {
+        let isSettled = false;
         const unwatch = store.watch(
             (state) => state.user.isAuthReady,
             (isAuthReady) => {
-                if (!isAuthReady) {
+                if (!isAuthReady || isSettled) {
                     return;
                 }
 
+                isSettled = true;
+                clearTimeout(timeoutId);
                 unwatch();
-                resolve();
+                resolve(true);
             },
         );
+
+        const timeoutId = setTimeout(() => {
+            if (isSettled) {
+                return;
+            }
+
+            isSettled = true;
+            unwatch();
+            resolve(false);
+        }, timeoutMs);
     });
 };
 
@@ -175,7 +190,12 @@ export const routes = [
         component: () => import('@/views/PendingPaymentsPortal.vue'),
         beforeEnter: async (to, from, next) => {
             if (!store.state.user.isAuthReady) {
-                await waitForAuthReady();
+                const isReady = await waitForAuthReady();
+
+                if (!isReady) {
+                    next({ name: 'Home' });
+                    return;
+                }
             }
 
             const userState = store.state.user;
