@@ -3,312 +3,450 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createStore } from 'vuex';
 import TemplateSearchPortal from '@/components/templates/TemplateSearchPortal.vue';
 
-describe('TemplateSearchPortal.vue', () => {
-    let store;
-    let wrapper;
+const parkingRequests = [
+    {
+        ID: 1,
+        Name: 'dev',
+        Mobile: '9999999999',
+        EmailID: 'dev@test.com',
+        City: 'Delhi',
+        Agent: 'dev',
+        Priority: 2,
+        Status: 1,
+        CreatedAt: '2024-01-01T10:00:00Z',
+        UpdatedAt: '2024-01-01T12:00:00Z',
+        NextCall: '2024-01-02T10:00:00Z',
+        Latitude: 28.6139,
+        Longitude: 77.209,
+        Comments: '',
+        IsExpiring: false,
+    },
+];
 
-    let extractExpiringRequests;
-    let extractRequestsByAgentName;
-    let extractRequestsByStatus;
-    let resetFilterParkingRequests;
+const buildStore = ({ isAdmin = true } = {}) => {
+    const applyParkingRequestFilters = vi.fn();
 
-    const parkingRequests = [
-        {
-            ID: 1,
-            Name: 'dev',
-            Mobile: '9999999999',
-            EmailID: 'dev@test.com',
-            City: 'Delhi',
-            Agent: 'dev',
-            Priority: 2,
-            Status: 1,
-            CreatedAt: '2024-01-01T10:00:00Z',
-            UpdatedAt: '2024-01-01T12:00:00Z',
-            NextCall: '2024-01-02T10:00:00Z',
-            Latitude: 28.6139,
-            Longitude: 77.209,
-            Comments: '',
+    const store = createStore({
+        modules: {
+            searchPortal: {
+                namespaced: true,
+                state: () => ({
+                    agentList: [{ id: 'dev', name: 'dev' }],
+                    expiringRequestsCount: 1,
+                    parkingRequests,
+                    filteredParkingRequests: parkingRequests,
+                }),
+                mutations: {
+                    setParkingRequests(state, requests) {
+                        state.parkingRequests = requests;
+                        state.filteredParkingRequests = requests;
+                    },
+                },
+                actions: {
+                    applyParkingRequestFilters,
+                    getAgents: vi.fn(),
+                    setAgents: vi.fn(),
+                },
+            },
+            user: {
+                namespaced: true,
+                state: () => ({
+                    isAdmin,
+                    userProfile: { FullName: 'dev' },
+                }),
+            },
         },
-    ];
+    });
+
+    return { store, applyParkingRequestFilters };
+};
+
+const createBTableColumnStub = () => ({
+    name: 'b-table-column',
+    template: `
+        <div>
+            <slot
+                :row="{
+                    ID: 1,
+                    Name: 'dev',
+                    Mobile: '9999999999',
+                    EmailID: 'dev@test.com',
+                    City: 'Delhi',
+                    Agent: 'dev',
+                    Priority: 2,
+                    Status: 1,
+                    IsExpiring: false,
+                    CreatedAt: '2024-01-01T10:00:00Z',
+                    UpdatedAt: '2024-01-01T12:00:00Z',
+                    NextCall: '2024-01-02T10:00:00Z',
+                    Latitude: 28.6139,
+                    Longitude: 77.209,
+                    Comments: ''
+                }"
+                :filters="{ Agent: '', Status: '' }"
+            />
+        </div>
+    `,
+});
+
+const mountComponent = ({
+    isAdmin = true,
+    isLoading = false,
+    isSummary = true,
+} = {}) => {
+    const { store, applyParkingRequestFilters } = buildStore({ isAdmin });
+
+    const wrapper = mount(TemplateSearchPortal, {
+        props: {
+            parkingRequests,
+            isLoading,
+            isSummary,
+        },
+        global: {
+            plugins: [store],
+            mocks: {
+                $route: {
+                    query: {},
+                },
+            },
+            stubs: {
+                AtomButton: {
+                    name: 'AtomButton',
+                    inheritAttrs: false,
+                    template:
+                        '<button v-bind="$attrs" class="atom-button" @click="$emit(\'click\')"><slot /></button>',
+                },
+                AtomIcon: {
+                    name: 'AtomIcon',
+                    template:
+                        '<button data-testid="summary-close" @click="$emit(\'click\')" />',
+                },
+                AtomInput: {
+                    name: 'AtomInput',
+                    inheritAttrs: false,
+                    props: ['modelValue', 'placeholder'],
+                    template: '<input />',
+                },
+                AtomTextarea: {
+                    name: 'AtomTextarea',
+                    inheritAttrs: false,
+                    props: ['modelValue'],
+                    template: '<textarea />',
+                },
+                AtomDatePicker: {
+                    name: 'AtomDatePicker',
+                    template: '<div />',
+                },
+                AtomSelectInput: {
+                    name: 'AtomSelectInput',
+                    props: ['modelValue', 'list', 'placeholder'],
+                    template: '<div />',
+                },
+                SelectInput: {
+                    name: 'SelectInput',
+                    props: ['defaultValue', 'list', 'name'],
+                    template: '<div />',
+                },
+                FilterDropdown: {
+                    name: 'FilterDropdown',
+                    props: ['label', 'options', 'selectedValue'],
+                    template: '<div />',
+                },
+                MobileView: {
+                    name: 'MobileView',
+                    template: '<div data-testid="mobile-view-stub" />',
+                },
+                'b-table': {
+                    name: 'b-table',
+                    template: '<div data-testid="desktop-table"><slot /><slot name="empty" /></div>',
+                },
+                'b-table-column': createBTableColumnStub(),
+            },
+        },
+    });
+
+    applyParkingRequestFilters.mockClear();
+
+    return { wrapper, applyParkingRequestFilters };
+};
+
+describe('TemplateSearchPortal.vue', () => {
+    let wrapper;
+    let applyParkingRequestFilters;
 
     beforeEach(() => {
         vi.clearAllMocks();
+        window.history.pushState({}, '', '/search-portal');
 
-        extractExpiringRequests = vi.fn();
-        extractRequestsByAgentName = vi.fn();
-        extractRequestsByStatus = vi.fn();
-        resetFilterParkingRequests = vi.fn();
-
-        store = createStore({
-            modules: {
-                searchPortal: {
-                    namespaced: true,
-                    state: () => ({
-                        agentList: [{ id: 1, name: 'dev' }],
-                        expiringRequestsCount: 1,
-                        filteredParkingRequests: parkingRequests,
-                    }),
-                    actions: {
-                        extractExpiringRequests,
-                        extractRequestsByAgentName,
-                        extractRequestsByStatus,
-                        resetFilterParkingRequests,
-                    },
-                },
-                user: {
-                    namespaced: true,
-                    state: () => ({
-                        isAdmin: true,
-                        userProfile: { FullName: 'dev' },
-                    }),
-                },
-            },
-        });
-
-        wrapper = mount(TemplateSearchPortal, {
-            props: {
-                parkingRequests,
-                isLoading: false,
-                isSummary: true,
-            },
-            global: {
-                plugins: [store],
-                stubs: {
-                    'AtomButton': {
-                        template:
-                            '<button class="atom-button" @click="$emit(\'click\')"><slot /></button>',
-                    },
-                    'AtomIcon': true,
-                    'AtomInput': true,
-                    'AtomTextarea': true,
-                    'AtomDatePicker': true,
-                    'AtomSelectInput': true,
-                    'SelectInput': true,
-                    'FilterDropdown': true,
-                    'MobileView': true,
-                    'b-table': {
-                        template: '<div><slot /></div>',
-                    },
-                    'b-table-column': {
-                        template: `
-                          <div>
-                            <slot
-                              :row="{
-                                ID: 1,
-                                Name: 'dev',
-                                Mobile: '9999999999',
-                                EmailID: 'dev@test.com',
-                                City: 'Delhi',
-                                Agent: 'dev',
-                                Priority: 2,
-                                Status: 1,
-                                IsExpiring: false,
-                                CreatedAt: '2024-01-01T10:00:00Z',
-                                UpdatedAt: '2024-01-01T12:00:00Z',
-                                NextCall: '2024-01-02T10:00:00Z',
-                                Latitude: 28.6139,
-                                Longitude: 77.209,
-                                Comments: ''
-                              }"
-                              :filters="{ Agent: '', Status: '' }"
-                            />
-                          </div>
-                        `,
-                    },
-                },
-            },
-        });
+        ({ wrapper, applyParkingRequestFilters } = mountComponent());
     });
 
     afterEach(() => {
         wrapper?.unmount();
     });
 
-    it('renders search portal layout', () => {
-        expect(wrapper.find('.search-portal-wrapper').exists()).toBe(true);
-    });
-
-    it('shows expiring requests banner', () => {
-        expect(wrapper.text()).toContain('expiring requests');
-    });
-
-    it('renders summary button when enabled', () => {
-        expect(wrapper.find('.summary').exists()).toBe(true);
-        expect(wrapper.find('.atom-button').exists()).toBe(true);
-    });
-
-    it('toggles summary section on button click', async () => {
-        expect(wrapper.vm.summary.show).toBe(false);
-
-        await wrapper.vm.showSummary();
-        await flushPromises();
-        expect(wrapper.vm.summary.show).toBe(true);
-
-        await wrapper.vm.showSummary();
-        await flushPromises();
-        expect(wrapper.vm.summary.show).toBe(false);
-    });
-
-    it('applies expiring filter when banner is clicked', async () => {
-        await wrapper.vm.handleExpiringRequests();
-        await flushPromises();
-
-        expect(resetFilterParkingRequests).toHaveBeenCalled();
-        expect(extractExpiringRequests).toHaveBeenCalled();
-        expect(wrapper.vm.filters.isExpiring).toBe(true);
-    });
-
-    it('applies agent filter', async () => {
-        await wrapper.vm.handleAgentFilter('dev');
-        await flushPromises();
-
-        expect(resetFilterParkingRequests).toHaveBeenCalled();
-        expect(extractRequestsByAgentName).toHaveBeenCalledWith(
-            expect.any(Object),
-            'dev',
-        );
-    });
-
-    it('applies status filter', async () => {
-        await wrapper.vm.handleStatusFilter('Registered');
-        await flushPromises();
-
-        expect(resetFilterParkingRequests).toHaveBeenCalled();
-        expect(extractRequestsByStatus).toHaveBeenCalledWith(
-            expect.any(Object),
-            1,
-        );
-    });
-
-    it('applyFilters applies all active filters', async () => {
-        await wrapper.setData({
-            filters: {
-                Agent: 'dev',
-                Status: 'Registered',
-                UpdatedAt: null,
-                isExpiring: true,
-            },
-        });
-
-        await wrapper.vm.applyFilters();
-        await flushPromises();
-        expect(resetFilterParkingRequests).toHaveBeenCalled();
-        expect(extractExpiringRequests).toHaveBeenCalled();
-        expect(extractRequestsByAgentName).toHaveBeenCalled();
-        expect(extractRequestsByStatus).toHaveBeenCalled();
-    });
-
-    it('removeAgentFilter clears agent filter', async () => {
-        await wrapper.setData({
-            filters: { ...wrapper.vm.filters, Agent: 'dev' },
-        });
-
-        await wrapper.vm.removeAgentFilter();
-        await flushPromises();
-        expect(wrapper.vm.filters.Agent).toBe('');
-        expect(resetFilterParkingRequests).toHaveBeenCalled();
-    });
-
-    it('removeStatusFilter clears status filter', async () => {
-        await wrapper.setData({
-            filters: { ...wrapper.vm.filters, Status: 'Registered' },
-        });
-        await wrapper.vm.removeStatusFilter();
-        await flushPromises();
-        expect(wrapper.vm.filters.Status).toBe('');
-        expect(resetFilterParkingRequests).toHaveBeenCalled();
-    });
-
-    it('getPriority returns correct labels', () => {
-        expect(wrapper.vm.getPriority(1)).toBe('Low');
-        expect(wrapper.vm.getPriority(2)).toBe('Medium');
-        expect(wrapper.vm.getPriority(3)).toBe('High');
-    });
-
-    it('emits updateRequest when agent is updated', async () => {
-        await wrapper.vm.onAgentUpdate(parkingRequests[0], 1);
-        await flushPromises();
-        const emitted = wrapper.emitted('updateRequest');
-        expect(emitted).toBeTruthy();
-        expect(emitted[0][0].Agent).toBe('dev');
-    });
-
-    it('emits updateRequest when status is updated', async () => {
-        await wrapper.vm.onStatusUpdate(parkingRequests[0], 2);
-        await flushPromises();
-        const payload = wrapper.emitted('updateRequest').at(-1)[0];
-        expect(payload.Status).toBe(2);
-    });
-
-    it('updates latitude and longitude correctly', async () => {
-        await wrapper.vm.updateLatLng(
-            parkingRequests[0],
-            '28.700000,77.300000',
-        );
-        await flushPromises();
-        const payload = wrapper.emitted('updateRequest').at(-1)[0];
-        expect(payload.Latitude).toBeCloseTo(28.7);
-        expect(payload.Longitude).toBeCloseTo(77.3);
-    });
-
-    it('stores old comments safely', () => {
-        wrapper.vm.storeOldComment({ Comments: 'old comment' });
-        expect(wrapper.vm.oldComments).toBe('old comment');
-    });
-
-    it('onCommentUpdate appends comment and emits updateRequest', async () => {
-        const row = { ID: 1, Comments: '' };
-
-        await wrapper.vm.onCommentUpdate(row, '', 'New comment');
-        await flushPromises();
-        const emitted = wrapper.emitted('updateRequest');
-        expect(emitted).toBeTruthy();
-        expect(row.Comments).toContain('New comment');
-    });
-
-    it('opens connect popup with selected row', async () => {
-        await wrapper.vm.onConnect(parkingRequests[0]);
-        await flushPromises();
-        expect(wrapper.vm.isOpen).toBe(true);
-        expect(wrapper.vm.selectedRow.ID).toBe(1);
-    });
-
-    it('switches desktop and mobile view correctly', async () => {
+    const switchToDesktopView = async () => {
         await wrapper.setData({
             windowWidth: 1200,
             isMobileDevice: false,
         });
-        expect(wrapper.vm.isDesktopView).toBe(true);
-        await wrapper.setData({
-            windowWidth: 500,
-        });
-        expect(wrapper.vm.isDesktopView).toBe(false);
-    });
+        await flushPromises();
+    };
 
-    it('formatDate formats date to YYYY-MM-DD', () => {
-        expect(wrapper.vm.formatDate('2024-01-15T10:00:00Z')).toBe(
-            '2024-01-15',
+    it('renders the search portal layout with expiring requests summary', () => {
+        expect(wrapper.get('.search-portal-wrapper').exists()).toBe(true);
+        expect(wrapper.text()).toContain('expiring requests');
+        expect(wrapper.get('.atom-button').text()).toBe(
+            'Show Summary',
         );
     });
 
-    it('getLatLng returns lat,lng string', () => {
-        expect(wrapper.vm.getLatLng(28.6, 77.2)).toBe('28.6,77.2');
-    });
+    it('shows and hides the summary panel when the user clicks the summary button', async () => {
+        const summaryButton = wrapper.getComponent({ name: 'AtomButton' });
 
-    it('emits toSrp event with latitude and longitude', async () => {
-        await wrapper.vm.toSrp(28.6, 77.2);
+        summaryButton.vm.$emit('click');
         await flushPromises();
-        const emitted = wrapper.emitted('toSrp');
-        expect(emitted).toBeTruthy();
-        expect(emitted[0]).toEqual([28.6, 77.2]);
+
+        expect(wrapper.get('.atom-button').text()).toBe(
+            'Hide Summary',
+        );
+        expect(wrapper.get('.so-summary').text()).toContain(
+            'Total Requests: 1',
+        );
+
+        summaryButton.vm.$emit('click');
+        await flushPromises();
+
+        expect(wrapper.get('.atom-button').text()).toBe(
+            'Show Summary',
+        );
     });
 
-    it('has correct initial filter state', () => {
-        expect(wrapper.vm.filters).toEqual({
-            Agent: '',
-            Status: '',
-            UpdatedAt: null,
-            isExpiring: false,
+    it('applies the expiring filter when the user clicks the expiring requests link', async () => {
+        await wrapper.get('.hyperlink').trigger('click');
+        await flushPromises();
+
+        expect(applyParkingRequestFilters).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({
+                isExpiring: true,
+                status: null,
+                agentName: '',
+            }),
+        );
+        expect(window.location.search).toContain('isExpiring=true');
+    });
+
+    it('applies the agent filter when the user selects an agent', async () => {
+        const agentFilter = wrapper.findAllComponents({ name: 'FilterDropdown' })[1];
+
+        agentFilter.vm.$emit('update', 'dev');
+        await flushPromises();
+
+        expect(applyParkingRequestFilters).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({
+                isExpiring: false,
+                status: null,
+                agentName: 'dev',
+            }),
+        );
+        expect(window.location.search).toContain('agent=dev');
+    });
+
+    it('applies the status filter when the user selects a status', async () => {
+        const statusFilter = wrapper.findAllComponents({ name: 'FilterDropdown' })[2];
+
+        statusFilter.vm.$emit('update', 'Registered');
+        await flushPromises();
+
+        expect(applyParkingRequestFilters).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({
+                isExpiring: false,
+                status: 1,
+                agentName: '',
+            }),
+        );
+        expect(window.location.search).toContain('status=1');
+    });
+
+    it('applies all active filters when the user combines filter selections', async () => {
+        const [requestTypeFilter, agentFilter, statusFilter] = wrapper.findAllComponents({
+            name: 'FilterDropdown',
         });
+
+        requestTypeFilter.vm.$emit('update');
+        agentFilter.vm.$emit('update', 'dev');
+        statusFilter.vm.$emit('update', 'Registered');
+        await flushPromises();
+
+        expect(applyParkingRequestFilters).toHaveBeenLastCalledWith(
+            expect.anything(),
+            expect.objectContaining({
+                isExpiring: true,
+                status: 1,
+                agentName: 'dev',
+            }),
+        );
+    });
+
+    it('clears the agent filter when the user removes it from the dropdown', async () => {
+        const agentFilter = wrapper.findAllComponents({ name: 'FilterDropdown' })[1];
+
+        agentFilter.vm.$emit('update', 'dev');
+        await flushPromises();
+        applyParkingRequestFilters.mockClear();
+
+        agentFilter.vm.$emit('remove');
+        await flushPromises();
+
+        expect(applyParkingRequestFilters).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({
+                isExpiring: false,
+                status: null,
+                agentName: '',
+            }),
+        );
+    });
+
+    it('clears the status filter when the user removes it from the dropdown', async () => {
+        const statusFilter = wrapper.findAllComponents({ name: 'FilterDropdown' })[2];
+
+        statusFilter.vm.$emit('update', 'Registered');
+        await flushPromises();
+        applyParkingRequestFilters.mockClear();
+
+        statusFilter.vm.$emit('remove');
+        await flushPromises();
+
+        expect(applyParkingRequestFilters).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({
+                isExpiring: false,
+                status: null,
+                agentName: '',
+            }),
+        );
+    });
+
+    it('emits updateRequest when the admin changes the assigned agent', async () => {
+        const agentSelect = wrapper
+            .findAllComponents({ name: 'AtomSelectInput' })
+            .find((component) => component.props('placeholder') === 'Select Agent');
+
+        agentSelect.vm.$emit('change', 'dev');
+        await flushPromises();
+
+        expect(wrapper.emitted('updateRequest')).toBeDefined();
+        expect(wrapper.emitted('updateRequest')[0][0]).toEqual(
+            expect.objectContaining({
+                ID: 1,
+                Agent: 'dev',
+            }),
+        );
+    });
+
+    it('opens the connect popup when a non-admin user clicks connect', async () => {
+        wrapper.unmount();
+        ({ wrapper, applyParkingRequestFilters } = mountComponent({ isAdmin: false }));
+        await switchToDesktopView();
+
+        await wrapper.get('.btn.px-2').trigger('click');
+        await flushPromises();
+
+        expect(wrapper.get('.popup-container').exists()).toBe(true);
+        expect(wrapper.text()).toContain('Contact With dev on');
+    });
+
+    it('emits updateRequest when the user changes status from the connect popup', async () => {
+        wrapper.unmount();
+        ({ wrapper, applyParkingRequestFilters } = mountComponent({ isAdmin: false }));
+        await switchToDesktopView();
+
+        await wrapper.get('.btn.px-2').trigger('click');
+        await flushPromises();
+
+        const statusSelect = wrapper.getComponent({ name: 'SelectInput' });
+
+        statusSelect.vm.$emit('change', { target: { value: 'Processing' } });
+        await flushPromises();
+
+        expect(wrapper.emitted('updateRequest')).toBeDefined();
+        expect(wrapper.emitted('updateRequest')[0][0]).toEqual(
+            expect.objectContaining({
+                ID: 1,
+                Status: 2,
+            }),
+        );
+    });
+
+    it('emits updateRequest when the user changes the lat lng field', async () => {
+        const latLngInput = wrapper
+            .findAllComponents({ name: 'AtomInput' })
+            .find(
+                (component) =>
+                    component.props('modelValue') === '28.613900, 77.209000',
+            );
+
+        latLngInput.vm.$emit('change', {
+            target: { value: '28.700000,77.300000' },
+        });
+        await flushPromises();
+
+        expect(wrapper.emitted('updateRequest')).toBeDefined();
+        expect(wrapper.emitted('updateRequest')[0][0]).toEqual(
+            expect.objectContaining({
+                ID: 1,
+                Latitude: 28.7,
+                Longitude: 77.3,
+            }),
+        );
+    });
+
+    it('appends a note and emits updateRequest when the user updates comments from the popup', async () => {
+        wrapper.unmount();
+        ({ wrapper, applyParkingRequestFilters } = mountComponent({ isAdmin: false }));
+        await switchToDesktopView();
+
+        await wrapper.get('.btn.px-2').trigger('click');
+        await wrapper.setData({ newComment: 'New comment' });
+        await flushPromises();
+
+        await wrapper.get('.popup .btn').trigger('click');
+        await flushPromises();
+
+        expect(wrapper.emitted('updateRequest')).toBeDefined();
+        expect(wrapper.emitted('updateRequest')[0][0]).toEqual(
+            expect.objectContaining({
+                ID: 1,
+            }),
+        );
+        expect(wrapper.emitted('updateRequest')[0][0].Comments).toContain(
+            'New comment',
+        );
+    });
+
+    it('emits toSrp when the user clicks the lat lng link', async () => {
+        await wrapper.get('.lat-lng-link a').trigger('click');
+        await flushPromises();
+
+        expect(wrapper.emitted('toSrp')).toBeDefined();
+        expect(wrapper.emitted('toSrp')[0]).toEqual([28.6139, 77.209]);
+    });
+
+    it('shows the mobile loader and hides the mobile content while loading', async () => {
+        wrapper.unmount();
+        ({ wrapper, applyParkingRequestFilters } = mountComponent({ isLoading: true }));
+
+        await wrapper.setData({
+            windowWidth: 500,
+            isMobileDevice: false,
+        });
+        await flushPromises();
+
+        expect(wrapper.get('.loading').exists()).toBe(true);
+        expect(wrapper.find('[data-testid="mobile-view-stub"]').exists()).toBe(false);
     });
 });
