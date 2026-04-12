@@ -71,7 +71,7 @@ describe('pending-payments route guard', () => {
         expect(unwatch).toHaveBeenCalledTimes(1);
     });
 
-    it('stops waiting after timeout and redirects unauthenticated users', async () => {
+    it('stops waiting after timeout and redirects to Home', async () => {
         vi.useFakeTimers();
 
         mockedStore.state.user = {
@@ -93,14 +93,8 @@ describe('pending-payments route guard', () => {
         await guardPromise;
 
         expect(unwatch).toHaveBeenCalledTimes(1);
-        expect(mockedStore.commit).toHaveBeenCalledWith(
-            'user/update-login-modal',
-            true,
-        );
-        expect(next).toHaveBeenCalledWith({
-            name: 'Home',
-            query: { redirect: '/internal/pending-payments' },
-        });
+        expect(mockedStore.commit).not.toHaveBeenCalled();
+        expect(next).toHaveBeenCalledWith({ name: 'Home' });
     });
 
     it('redirects unauthenticated users to Home and keeps redirect query', async () => {
