@@ -3,6 +3,26 @@ import PageAbout from '@/views/PageAbout.vue';
 import { APP_LINK } from '../constant/constant';
 import store from '@/store';
 
+const waitForAuthReady = () => {
+    if (store.state.user.isAuthReady) {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve) => {
+        const unwatch = store.watch(
+            (state) => state.user.isAuthReady,
+            (isAuthReady) => {
+                if (!isAuthReady) {
+                    return;
+                }
+
+                unwatch();
+                resolve();
+            },
+        );
+    });
+};
+
 // prettier-ignore
 export const pages = {
     HOME                    : '/',
@@ -153,20 +173,26 @@ export const routes = [
         path: pages.PENDING_PAYMENTS,
         name: 'pending-payments',
         component: () => import('@/views/PendingPaymentsPortal.vue'),
-        beforeEnter: (to, from, next) => {
+        beforeEnter: async (to, from, next) => {
+            if (!store.state.user.isAuthReady) {
+                await waitForAuthReady();
+            }
+
             const userState = store.state.user;
+            const isLoggedIn = Boolean(userState.user);
 
-            if (!userState.isAuthReady) {
-                next();
+            if (!isLoggedIn) {
+                store.commit('user/update-login-modal', true);
+                next({ name: 'Home', query: { redirect: to.fullPath } });
                 return;
             }
 
-            if (userState.isAdmin) {
-                next();
+            if (!userState.isAdmin) {
+                next({ name: 'Home' });
                 return;
             }
 
-            next({ name: 'Home' });
+            next();
         },
     },
     {

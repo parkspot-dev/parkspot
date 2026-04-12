@@ -7,6 +7,11 @@ const state = {
     isLoading: false,
 };
 
+const formatDisplayError = (res) => {
+    const errorDetails = res?.ErrorMsg ? ` ( ${res.ErrorMsg} )` : '';
+    return `${res.DisplayMsg}${errorDetails}`;
+};
+
 const mutations = {
     'set-pending-payments'(state, pendingPayments) {
         state.pendingPayments = pendingPayments;
@@ -41,10 +46,7 @@ const actions = {
             const res = await mayaClient.get('/internal/pending-payments');
 
             if (res?.DisplayMsg) {
-                commit(
-                    'set-error',
-                    res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )',
-                );
+                commit('set-error', formatDisplayError(res));
                 return;
             }
 
@@ -73,10 +75,7 @@ const actions = {
             const res = await mayaClient.post('/payment/amount-to-so', reqBody);
 
             if (res?.DisplayMsg) {
-                commit(
-                    'set-error',
-                    res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )',
-                );
+                commit('set-error', formatDisplayError(res));
                 return res;
             }
 
