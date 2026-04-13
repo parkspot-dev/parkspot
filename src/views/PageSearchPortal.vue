@@ -111,7 +111,8 @@ export default {
     async mounted() {
         await this.getUserProfile();
         if (this.isAdmin) {
-            await this.getAgents();
+            await this.$store.dispatch('app/getAgents');
+            await this.$store.dispatch('searchPortal/getAgents');
         }
     },
     async created() {
@@ -149,13 +150,13 @@ export default {
         ...mapActions('searchPortal', [
             'updateActiveTab',
             'updateSOLatLngInput',
-            'getAgents',
             'updateMobileInput',
             'getParkingRequests',
             'resetError',
             'getInterestedVO',
         ]),
         ...mapActions('user', ['getUserProfile']),
+
         alertError(msg) {
             this.$buefy.dialog.alert({
                 title: 'Error',

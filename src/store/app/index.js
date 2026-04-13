@@ -14,30 +14,24 @@ const mutations = {
 };
 
 const actions = {
-    async getAgents({ commit, state }) {
-        if (state.agents.length && localStorage.getItem('agents')) return;
-
+    async getAgents({ commit }) {
         try {
+            const res = await mayaClient.get('/auth/user/agents');
+            localStorage.setItem('agents', JSON.stringify(res));
+            commit('set-agents', res);
+        } catch {
             const cached = localStorage.getItem('agents');
-
             if (cached) {
                 const parsed = JSON.parse(cached);
                 if (Array.isArray(parsed) && parsed.length) {
                     commit('set-agents', parsed);
                     return;
                 }
-                localStorage.removeItem('agents');
             }
-
-            const res = await mayaClient.get('/auth/user/agents');
-            localStorage.setItem('agents', JSON.stringify(res));
-            commit('set-agents', res);
-        } catch {
             localStorage.removeItem('agents');
             commit('set-agents', []);
         }
     },
-
     clearAgents({ commit }) {
         localStorage.removeItem('agents');
         commit('set-agents', []);
