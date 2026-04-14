@@ -82,6 +82,10 @@ describe('User Store - Agent Auth Fix', () => {
         await userModule.actions.authenticateWithMaya({ commit });
 
         expect(mayaClient.get).not.toHaveBeenCalled();
+        expect(commit).toHaveBeenCalledWith('set-auth-error', {
+            source: 'authenticateWithMaya',
+            message: 'Missing PS auth key',
+        });
         expect(commit).not.toHaveBeenCalledWith(
             'set-user-type',
             expect.anything(),
@@ -183,6 +187,10 @@ describe('User Store - Agent Auth Fix', () => {
         });
 
         expect(mayaClient.get).not.toHaveBeenCalled();
+        expect(commit).toHaveBeenCalledWith('set-auth-error', {
+            source: 'getUserProfile',
+            message: 'Missing PS auth key',
+        });
         expect(dispatch).not.toHaveBeenCalledWith(
             'authenticateWithMaya',
             expect.anything(),
@@ -240,8 +248,9 @@ describe('User Store - Agent Auth Fix', () => {
                 Type: UserType.Agent,
             }),
         );
+        expect(commit).toHaveBeenCalledWith('set-auth-error', null);
         expect(commit).toHaveBeenCalledWith('set-user-type', UserType.Agent);
-        expect(commit).toHaveBeenCalledTimes(2);
+        expect(commit).toHaveBeenCalledTimes(3);
     });
 
     it('getUserProfile ignores cached profile without Type and falls back to authenticateWithMaya', async () => {
@@ -328,8 +337,9 @@ describe('User Store - Agent Auth Fix', () => {
                 Type: UserType.Agent,
             }),
         );
+        expect(commit).toHaveBeenCalledWith('set-auth-error', null);
         expect(commit).toHaveBeenCalledWith('set-user-type', UserType.Agent);
-        expect(commit).toHaveBeenCalledTimes(2);
+        expect(commit).toHaveBeenCalledTimes(3);
         expect(commit).not.toHaveBeenCalledWith(
             'update-user-profile',
             expect.objectContaining({
@@ -368,8 +378,9 @@ describe('User Store - Agent Auth Fix', () => {
                 Type: UserType.Agent,
             }),
         );
+        expect(commit).toHaveBeenCalledWith('set-auth-error', null);
         expect(commit).toHaveBeenCalledWith('set-user-type', UserType.Agent);
-        expect(commit).toHaveBeenCalledTimes(2);
+        expect(commit).toHaveBeenCalledTimes(3);
     });
 
     it('logOut resets user and userProfile', async () => {
