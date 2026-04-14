@@ -40,57 +40,37 @@ describe('App Store - Agents Module', () => {
         expect(state.agents).toEqual([{ FullName: 'Ayush Kumar' }]);
     });
 
-    it('getAgents returns early if state and cache exist', async () => {
-        state.agents = [{ FullName: 'Existing Agent' }];
-        localStorage.setItem('agents', JSON.stringify(state.agents));
-
-        await actions.getAgents({ commit, state });
-
-        expect(mayaClient.get).not.toHaveBeenCalled();
-        expect(commit).not.toHaveBeenCalled();
-    });
-
-    it('getAgents commits cached agents', async () => {
-        const cachedAgents = [
-            { FullName: 'Ayush Kumar' },
-            { FullName: '[System User]' },
-        ];
-
-        localStorage.setItem('agents', JSON.stringify(cachedAgents));
-
-        await actions.getAgents({ commit, state });
-
-        expect(commit).toHaveBeenCalledWith('set-agents', cachedAgents);
-        expect(mayaClient.get).not.toHaveBeenCalled();
-    });
-
     it('getAgents fetches from API and caches result', async () => {
         const apiAgents = [{ FullName: 'API Agent' }];
         mayaClient.get.mockResolvedValue(apiAgents);
 
-        await actions.getAgents({ commit, state });
+        await actions.getAgents({ commit });
 
         expect(mayaClient.get).toHaveBeenCalledWith('/auth/user/agents');
         expect(localStorage.getItem('agents')).toBe(JSON.stringify(apiAgents));
         expect(commit).toHaveBeenCalledWith('set-agents', apiAgents);
     });
 
-    it('getAgents removes invalid cache and calls API', async () => {
-        localStorage.setItem('agents', JSON.stringify([]));
-        mayaClient.get.mockResolvedValue([{ FullName: 'Fresh Agent' }]);
-
-        await actions.getAgents({ commit, state });
-
-        expect(mayaClient.get).toHaveBeenCalled();
-        expect(commit).toHaveBeenCalledWith('set-agents', [
-            { FullName: 'Fresh Agent' },
-        ]);
-    });
-
-    it('getAgents clears cache and commits empty list on error', async () => {
+    it('getAgents falls back to cached agents when API fails', async () => {
+        const cachedAgents = [
+            { FullName: 'Ayush Kumar' },
+            { FullName: '[System User]' },
+        ];
+        localStorage.setItem('agents', JSON.stringify(cachedAgents));
         mayaClient.get.mockRejectedValue(new Error('Network error'));
 
-        await actions.getAgents({ commit, state });
+        await actions.getAgents({ commit });
+
+        expect(mayaClient.get).toHaveBeenCalledWith('/auth/user/agents');
+        expect(commit).toHaveBeenCalledWith('set-agents', cachedAgents);
+        expect(localStorage.getItem('agents')).toBe(JSON.stringify(cachedAgents));
+    });
+
+    it('getAgents clears invalid cache and commits empty list on error', async () => {
+        localStorage.setItem('agents', JSON.stringify([]));
+        mayaClient.get.mockRejectedValue(new Error('Network error'));
+
+        await actions.getAgents({ commit });
 
         expect(localStorage.getItem('agents')).toBeNull();
         expect(commit).toHaveBeenCalledWith('set-agents', []);
