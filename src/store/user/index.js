@@ -102,8 +102,10 @@ const writeProfileCache = (userId, userProfile) => {
     }
 };
 
-const resolveProfileCacheUserId = (stateUser, authUser = auth.currentUser) =>
-    resolveUserIdentity(stateUser) || resolveUserIdentity(authUser);
+const resolveProfileCacheUserId = (
+    primaryUser,
+    fallbackUser = auth.currentUser,
+) => resolveUserIdentity(primaryUser) || resolveUserIdentity(fallbackUser);
 
 const state = {
     user: null,
@@ -374,8 +376,14 @@ const actions = {
 
     async authenticateWithMaya({ commit }) {
         if (!hasValidPsAuthKey()) {
+            commit('set-auth-error', {
+                source: 'authenticateWithMaya',
+                message: 'Missing PS auth key',
+            });
             return;
         }
+
+        commit('set-auth-error', null);
 
         try {
             const res = await mayaClient.get('/auth/authenticate');
@@ -414,8 +422,14 @@ const actions = {
 
     async getUserProfile({ commit, dispatch, state }) {
         if (!hasValidPsAuthKey()) {
+            commit('set-auth-error', {
+                source: 'getUserProfile',
+                message: 'Missing PS auth key',
+            });
             return;
         }
+
+        commit('set-auth-error', null);
 
         const cacheUserId = resolveProfileCacheUserId(state?.user);
         const cachedProfile = readProfileCache(cacheUserId);
@@ -446,15 +460,13 @@ const actions = {
 
 const unsub = onAuthStateChanged(auth, async (user) => {
     const previousUser = store.state?.user?.user;
-    const previousCacheUserId = resolveProfileCacheUserId(
-        previousUser,
-        previousUser,
-    );
+    const previousCacheUserId = resolveUserIdentity(previousUser);
 
     store.commit('user/update-user', user);
     store.commit('user/update-auth-ready', true);
 
     if (!user) {
+        store.commit('user/set-auth-error', null);
         clearProfileCache(previousCacheUserId);
         localStorage.removeItem(PS_AUTH_KEY);
         return;
