@@ -642,10 +642,17 @@ export default {
         async recordPaymentSuccess() {
             if (!this.selectedPayment) return;
 
+            const paymentApp = this.selectedPayment?.Account?.PaymentApp;
+
+            if (paymentApp === undefined || paymentApp === null) {
+                this.alertError('PaymentApp is required');
+                return;
+            }
+
             const payload = {
                 PaymentID: this.selectedPayment.PaymentId,
                 AmountToSO: this.editableAmount,
-                PaymentApp: this.selectedPayment?.Account?.PaymentApp ?? 0,
+                PaymentApp: paymentApp,
             };
 
             const res = await this.updateAmountToSO(payload);

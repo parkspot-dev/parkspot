@@ -61,17 +61,44 @@ const actions = {
     async updateAmountToSO({ commit }, payload) {
         commit('set-loading', true);
 
-        const reqBody = {
-            PaymentID: Number(payload?.PaymentID || 0),
-            AmountToSO: Number(payload?.AmountToSO || 0),
-            PaymentApp: Number(payload?.PaymentApp || 0),
-        };
-
-        if (payload?.TransferDate) {
-            reqBody.TransferDate = payload.TransferDate;
-        }
-
         try {
+            const paymentID = Number(payload?.PaymentID);
+            if (
+                payload?.PaymentID === undefined ||
+                payload?.PaymentID === null ||
+                Number.isNaN(paymentID)
+            ) {
+                throw new Error('PaymentID is required');
+            }
+
+            const amountToSO = Number(payload?.AmountToSO);
+            if (
+                payload?.AmountToSO === undefined ||
+                payload?.AmountToSO === null ||
+                Number.isNaN(amountToSO)
+            ) {
+                throw new Error('AmountToSO is required');
+            }
+
+            const paymentApp = Number(payload?.PaymentApp);
+            if (
+                payload?.PaymentApp === undefined ||
+                payload?.PaymentApp === null ||
+                Number.isNaN(paymentApp)
+            ) {
+                throw new Error('PaymentApp is required');
+            }
+
+            const reqBody = {
+                PaymentID: paymentID,
+                AmountToSO: amountToSO,
+                PaymentApp: paymentApp,
+            };
+
+            if (payload?.TransferDate) {
+                reqBody.TransferDate = payload.TransferDate;
+            }
+
             const res = await mayaClient.post('/payment/amount-to-so', reqBody);
 
             if (res?.DisplayMsg) {
@@ -87,8 +114,8 @@ const actions = {
             }
 
             return res;
-        } catch {
-            commit('set-error', 'Failed to update payment');
+        } catch (error) {
+            commit('set-error', error.message || 'Failed to update payment');
         } finally {
             commit('set-loading', false);
         }
