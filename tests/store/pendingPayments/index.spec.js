@@ -176,6 +176,8 @@ describe('PendingPayments Store', () => {
 
             await store.dispatch('pendingPayments/updateAmountToSO', {
                 PaymentID: 1,
+                AmountToSO: 300,
+                PaymentApp: 1,
             });
 
             expect(store.state.pendingPayments.hasError).toBe(true);
@@ -188,6 +190,8 @@ describe('PendingPayments Store', () => {
 
             await store.dispatch('pendingPayments/updateAmountToSO', {
                 PaymentID: 1,
+                AmountToSO: 300,
+                PaymentApp: 1,
             });
 
             expect(store.state.pendingPayments.hasError).toBe(true);
@@ -202,6 +206,8 @@ describe('PendingPayments Store', () => {
 
             await store.dispatch('pendingPayments/updateAmountToSO', {
                 PaymentID: 1,
+                AmountToSO: 300,
+                PaymentApp: 1,
             });
 
             expect(store.state.pendingPayments.hasError).toBe(true);
