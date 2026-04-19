@@ -31,7 +31,7 @@
                                 Total Requests: {{ summary.totalRequest }}
                             </p>
                             <p class="total-agent">
-                                Total Agents:
+                                Total RM:
                                 {{ Object.keys(summary.agent).length }}
                             </p>
                         </div>
@@ -40,7 +40,7 @@
                             <thead>
                                 <tr>
                                     <th>Requests</th>
-                                    <th>Agents</th>
+                                    <th>RM</th>
                                     <th>Priority</th>
                                     <th>Status</th>
                                 </tr>
@@ -102,10 +102,11 @@
                 />
 
                 <FilterDropdown
+                    class="relationship-manager-filter"
                     :options="agentList.map((agent) => agent.name)"
                     :searchable="false"
                     :selected-value="filters.Agent ? filters.Agent : ''"
-                    label="Agent"
+                    :label="'Relationship\u00A0Manager'"
                     @remove="removeAgentFilter"
                     @update="handleAgentFilter"
                 />
@@ -281,7 +282,7 @@
                 </div>
             </b-table-column>
 
-            <b-table-column field="Agent" label="Agent" sortable width="76px">
+            <b-table-column field="Agent" label="RM" sortable width="76px">
                 <template #default="props">
                     <div class="status-column">
                         <div class="status-part">
@@ -1354,6 +1355,15 @@ $portal-font-size: 13px;
 
 .filters-group > * {
     flex: 0 0 auto;
+}
+
+.relationship-manager-filter :deep(.label),
+.relationship-manager-filter :deep(.menu) {
+    width: 190px;
+}
+
+.relationship-manager-filter :deep(.label) {
+    white-space: nowrap;
 }
 
 @media (max-width: 600px) {
