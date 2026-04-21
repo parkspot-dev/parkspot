@@ -642,17 +642,9 @@ export default {
         async recordPaymentSuccess() {
             if (!this.selectedPayment) return;
 
-            const paymentApp = this.selectedPayment?.Account?.PaymentApp;
-
-            if (paymentApp === undefined || paymentApp === null) {
-                this.alertError('PaymentApp is required');
-                return;
-            }
-
             const payload = {
                 PaymentID: this.selectedPayment.PaymentId,
                 AmountToSO: this.editableAmount,
-                PaymentApp: paymentApp,
             };
 
             const res = await this.updateAmountToSO(payload);
@@ -671,7 +663,6 @@ export default {
 
             this.alertError('Failed to record payment');
         },
-
         alertError(msg) {
             this.$buefy.dialog.alert({
                 title: 'Error',
