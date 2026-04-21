@@ -1,0 +1,25 @@
+# Netlify deployment configuration (additive).
+#
+# IMPORTANT: no [build] block is declared here intentionally -- the existing
+# build command and publish directory are managed in the Netlify UI and must
+# stay authoritative. This file only *adds* edge function route registrations
+# on top of whatever is already configured.
+#
+# The SPA fallback in `_redirects` (/* -> /index.html 200) remains
+# authoritative for non-matching paths. Edge functions run BEFORE the SPA
+# fallback; on any match they call `context.next()` to fetch the same
+# index.html response and transform it.
+
+# Route-level interception for per-URL SEO metadata injection.
+# See netlify/edge-functions/seo-inject.js for implementation details.
+[[edge_functions]]
+  path     = "/bangalore/parking-near-*"
+  function = "seo-inject"
+
+[[edge_functions]]
+  path     = "/hyderabad/parking-near-*"
+  function = "seo-inject"
+
+[[edge_functions]]
+  path     = "/spot-details/*"
+  function = "seo-inject"
