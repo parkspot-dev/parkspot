@@ -1,4 +1,5 @@
 import { mayaClient } from '@/services/api';
+import { isValidNumber } from '@/utils/payment';
 
 const state = {
     pendingPayments: [],
@@ -63,36 +64,18 @@ const actions = {
 
         try {
             const paymentID = Number(payload?.PaymentID);
-            if (
-                payload?.PaymentID === undefined ||
-                payload?.PaymentID === null ||
-                Number.isNaN(paymentID)
-            ) {
+            if (!isValidNumber(payload?.PaymentID)) {
                 throw new Error('PaymentID is required');
             }
 
             const amountToSO = Number(payload?.AmountToSO);
-            if (
-                payload?.AmountToSO === undefined ||
-                payload?.AmountToSO === null ||
-                Number.isNaN(amountToSO)
-            ) {
+            if (!isValidNumber(payload?.AmountToSO)) {
                 throw new Error('AmountToSO is required');
-            }
-
-            const paymentApp = Number(payload?.PaymentApp);
-            if (
-                payload?.PaymentApp === undefined ||
-                payload?.PaymentApp === null ||
-                Number.isNaN(paymentApp)
-            ) {
-                throw new Error('PaymentApp is required');
             }
 
             const reqBody = {
                 PaymentID: paymentID,
                 AmountToSO: amountToSO,
-                PaymentApp: paymentApp,
             };
 
             if (payload?.TransferDate) {
