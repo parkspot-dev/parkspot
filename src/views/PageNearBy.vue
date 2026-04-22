@@ -11,15 +11,42 @@
 import { getValueFromFirebase } from '../firebase';
 import TemplateNearBy from '../components/templates/TemplateNearBy.vue';
 import { PAGE_TITLE } from '@/constant/constant';
+import { buildAreaPageMeta } from '@/utils/seo/meta.js';
+import { metaPayloadToHead } from '@/utils/seo/to-head.js';
 export default {
     name: 'PageNearBy',
     components: {
         TemplateNearBy,
     },
+    // Produce the same rich SEO payload that the edge function injects on
+    // the initial HTML response. Using the shared buildAreaPageMeta()
+    // keeps client-side and server-side metadata byte-identical so SPA
+    // navigation never regresses title / description / canonical / og /
+    // JSON-LD that a crawler or social preview already saw.
     metaInfo() {
+        // Touching $route.fullPath makes this reactive: if the user
+        // navigates between two /bangalore/parking-near-* pages, the
+        // meta payload is recomputed with the new URL.
+        const fullPath = this.$route?.fullPath || '';
+        const base = typeof window !== 'undefined' && window.location
+            ? window.location.origin
+            : 'https://www.parkspot.in';
+        const url = new URL(fullPath || '/', base);
+        const enhancement = Array.isArray(this.spots) && this.spots.length > 0
+            ? { sitesCount: this.spots.length }
+            : null;
+        const payload = buildAreaPageMeta(url, enhancement);
+        const head = metaPayloadToHead(payload);
         return {
-            title: this.title,
-            titleTemplate: PAGE_TITLE.DISCOVER + '%s',
+            // Preserve the PAGE_TITLE.DISCOVER prefix as a fallback for
+            // the brief moment before Firebase data arrives and the area
+            // name is resolved. buildAreaPageMeta always returns a title
+            // so this template only applies when the URL is malformed.
+            title: head.title || (this.title || ''),
+            titleTemplate: head.title ? undefined : PAGE_TITLE.DISCOVER + '%s',
+            meta: head.meta,
+            link: head.link,
+            script: head.script,
         };
     },
     data() {
