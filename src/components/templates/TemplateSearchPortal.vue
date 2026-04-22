@@ -102,11 +102,11 @@
                 />
 
                 <FilterDropdown
-                    class="relationship-manager-filter"
                     :options="agentList.map((agent) => agent.name)"
                     :searchable="false"
                     :selected-value="filters.Agent ? filters.Agent : ''"
-                    :label="'Relationship\u00A0Manager'"
+                    label="Relationship Manager"
+                    width="190px"
                     @remove="removeAgentFilter"
                     @update="handleAgentFilter"
                 />
@@ -1355,15 +1355,6 @@ $portal-font-size: 13px;
 
 .filters-group > * {
     flex: 0 0 auto;
-}
-
-.relationship-manager-filter :deep(.label),
-.relationship-manager-filter :deep(.menu) {
-    width: 190px;
-}
-
-.relationship-manager-filter :deep(.label) {
-    white-space: nowrap;
 }
 
 @media (max-width: 600px) {

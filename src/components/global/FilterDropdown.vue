@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="label" @click="toggleDropdown">
+        <div class="label" :style="dropdownStyle" @click="toggleDropdown">
             {{ selectedValue || label }}
             <span
                 v-if="selectedValue && removable"
@@ -16,7 +16,12 @@
             >
         </div>
 
-        <div v-if="isOpen" ref="dropdown" class="menu">
+        <div
+            v-if="isOpen"
+            ref="dropdown"
+            class="menu"
+            :style="dropdownStyle"
+        >
             <div
                 v-for="(option, index) in filteredOptions"
                 :key="index"
@@ -49,6 +54,10 @@ export default {
             type: Boolean,
             default: true,
         },
+        width: {
+            type: String,
+            default: '',
+        },
     },
     emits : ['remove','update'],
     data() {
@@ -59,6 +68,9 @@ export default {
     computed: {
         filteredOptions() {
             return this.options;
+        },
+        dropdownStyle() {
+            return this.width ? { width: this.width } : null;
         },
     },
 
