@@ -18,6 +18,8 @@ import LoaderModal from '../components/extras/LoaderModal.vue';
 import { mapState, mapActions, mapMutations } from 'vuex';
 import { PAGE_TITLE } from '@/constant/constant';
 import { getActiveTabStatusLabel } from '../constant/enums';
+import { buildSpotDetailMeta } from '@/utils/seo/meta.js';
+import { metaPayloadToHead } from '@/utils/seo/to-head.js';
 
 export default {
     name: 'PageSpotDetail',
@@ -25,10 +27,31 @@ export default {
         TemplateSpotDetail,
         LoaderModal,
     },
+    // Produce the same rich SEO payload that the Netlify edge function
+    // injects on the initial HTML response. Using the shared
+    // buildSpotDetailMeta() ensures client-side and server-side metadata
+    // stay in lock-step so SPA navigation never regresses title /
+    // description / canonical / og / JSON-LD that a crawler or social
+    // preview already saw.
     metaInfo() {
+        const fullPath = this.$route?.fullPath || '';
+        const base = typeof window !== 'undefined' && window.location
+            ? window.location.origin
+            : 'https://www.parkspot.in';
+        const url = new URL(fullPath || '/', base);
+        // `this.title` comes from the sdp Vuex module which is populated
+        // after getSpotDetails() resolves. When present we forward it as
+        // the human-friendly spot name; otherwise buildSpotDetailMeta
+        // derives a sensible fallback from the URL itself.
+        const enhancement = this.title ? { name: this.title } : null;
+        const payload = buildSpotDetailMeta(url, enhancement);
+        const head = metaPayloadToHead(payload);
         return {
-            title: this.title,
-            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+            title: head.title || (this.title || ''),
+            titleTemplate: head.title ? undefined : PAGE_TITLE.TITLE_TEMPLATE + '%s',
+            meta: head.meta,
+            link: head.link,
+            script: head.script,
         };
     },
     data() {
