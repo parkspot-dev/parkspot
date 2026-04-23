@@ -77,7 +77,7 @@ export default {
 <style lang="scss" scoped>
 .bg-wrap {
     position: relative;
-    padding: 2.5rem 0;
+    padding: 0rem 0 2.5rem;
     background-color: var(--parkspot-white);
 }
 
