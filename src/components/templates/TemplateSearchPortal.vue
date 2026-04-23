@@ -325,6 +325,16 @@
                             <span class="tag my-status">
                                 {{ statusList[props.row.Status].name }}
                             </span>
+                            <AtomSelectInput
+                                :key="props.row.ID"
+                                v-model="props.row.Status"
+                                :list="statusList"
+                                :size="'is-small'"
+                                class="column-width"
+                                placeholder="Select Status"
+                                @change="onStatusUpdate(props.row, $event)"
+                            >
+                            </AtomSelectInput>
                         </div>
                         <div class="next-call-part">
                             <span
