@@ -141,7 +141,7 @@
                 <template #default="props">
                     <SelectInput
                         :key="props.row.ID"
-                        :default-value="getKYCStatusLabel(props.row.KYCStatus)"
+                        :model-value="getKYCStatusLabel(props.row.KYCStatus)"
                         :list="KYCStatusLabel"
                         class="select"
                         name="updateKYCStatus"

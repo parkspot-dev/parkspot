@@ -28,10 +28,10 @@ const state = {
     // - minValue: Minimum range value (inclusive)
     // - maxValue: Maximum range value (inclusive)
     filters: [],
-    selectedSort : {
-        name : 'Recommended',
-        order : ''
-    }
+    selectedSort: {
+        name: 'Recommended',
+        order: '',
+    },
 };
 
 const getters = {
@@ -120,8 +120,16 @@ const mutations = {
     },
 
     'update-map-config'(state, center) {
-        state.mapConfig.center = center;
-        state.center = center;
+        if (Array.isArray(center) && center.length === 2) {
+            state.mapConfig.center = center;
+            state.center = center;
+        } else if (center?.lng != null && center?.lat != null) {
+            state.mapConfig.center = [center.lng, center.lat];
+            state.center = [center.lng, center.lat];
+        } else {
+            // invalid center, ignore update
+            return;
+        }
     },
 
     'update-total-pages'(state, data) {
@@ -154,7 +162,14 @@ const mutations = {
     },
 
     'update-user-location'(state, center) {
-        state.userCurrentLocation = center;
+        if (Array.isArray(center)) {
+            state.userCurrentLocation = {
+                lng: center[0],
+                lat: center[1],
+            };
+        } else if (center?.lng != null && center?.lat != null) {
+            state.userCurrentLocation = center;
+        }
     },
 
     'update-map-zoom'(state, value) {
@@ -165,9 +180,8 @@ const mutations = {
         state.filters.push(filter);
     },
     'update-sort'(state, { name, order }) {
-        state.selectedSort.name = name,
-        state.selectedSort.order = order
-    }
+        (state.selectedSort.name = name), (state.selectedSort.order = order);
+    },
 };
 
 const actions = {
@@ -240,18 +254,18 @@ const actions = {
 
         commit('update-filter-array', filterObj);
     },
-    
+
     // removeFilterByName action to remove a filter by its name
     removeFilterByName({ state }, filterName) {
         state.filters = state.filters.filter(
             (filter) => filter.name !== filterName,
         );
     },
-    
+
     // updateSort action to track selected sort option
     updateSort({ commit }, { name, order }) {
-         commit('update-sort', {name, order});
-    }
+        commit('update-sort', { name, order });
+    },
 };
 
 export default {

@@ -50,7 +50,7 @@
                             </div>
                         </li>
                         <li v-if="isAgent" class="menu-item">
-                            <span class="menu-title">Agent Portal</span>
+                            <span class="menu-title">CRM</span>
                             <!-- menu dropdown -->
                             <div class="menu-item-dropdown">
                                 <ul>
@@ -254,7 +254,7 @@
                                         class="scroll-item"
                                         @click="toggleSlide(3)"
                                     >
-                                        <p><span>Agent Portal</span></p>
+                                        <p><span>CRM</span></p>
                                         <b-icon icon="chevron-right"> </b-icon>
                                     </li>
                                     <li
@@ -437,7 +437,7 @@
                                 >
                                     <b-icon icon="arrow-left"> </b-icon>
                                 </i>
-                                <p class="slide-header-title">Agent Portal</p>
+                                <p class="slide-header-title">CRM</p>
                             </div>
                             <div class="scroll-section">
                                 <ul class="scroll-items">

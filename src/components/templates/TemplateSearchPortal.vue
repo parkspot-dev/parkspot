@@ -31,7 +31,7 @@
                                 Total Requests: {{ summary.totalRequest }}
                             </p>
                             <p class="total-agent">
-                                Total Agents:
+                                Total RM:
                                 {{ Object.keys(summary.agent).length }}
                             </p>
                         </div>
@@ -40,7 +40,7 @@
                             <thead>
                                 <tr>
                                     <th>Requests</th>
-                                    <th>Agents</th>
+                                    <th>RM</th>
                                     <th>Priority</th>
                                     <th>Status</th>
                                 </tr>
@@ -105,7 +105,8 @@
                     :options="mergedAgentList.map((agent) => agent.name)"
                     :searchable="false"
                     :selected-value="filters.Agent ? filters.Agent : ''"
-                    label="Agent"
+                    label="Relationship Manager"
+                    width="190px"
                     @remove="removeAgentFilter"
                     @update="handleAgentFilter"
                 />
@@ -281,24 +282,7 @@
                 </div>
             </b-table-column>
 
-            <b-table-column
-                field="Agent"
-                label="Agent"
-                searchable
-                sortable
-                width="76px"
-            >
-                <template #searchable="props">
-                    <!-- TODO: Remove AtomSelectInput completely from all files. Use Global Select Input -->
-                    <AtomSelectInput
-                        v-model="props.filters['Agent']"
-                        :list="mergedAgentList"
-                        :size="'is-small'"
-                        label=""
-                        placeholder="Agent"
-                    >
-                    </AtomSelectInput>
-                </template>
+            <b-table-column field="Agent" label="RM" sortable width="76px">
                 <template #default="props">
                     <div class="status-column">
                         <div class="status-part">
@@ -332,20 +316,9 @@
             <b-table-column
                 field="NextCall"
                 label="Status/Next Call"
-                searchable
                 sortable
                 width="80px"
             >
-                <template #searchable="props">
-                    <AtomSelectInput
-                        v-model="props.filters['Status']"
-                        :list="statusList"
-                        :size="'is-small'"
-                        class="column-width"
-                        placeholder="Select Status"
-                    >
-                    </AtomSelectInput>
-                </template>
                 <template #default="props">
                     <div class="status-column">
                         <div class="status-part">
