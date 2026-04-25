@@ -107,18 +107,23 @@
                 searchable
             >
                 <template #searchable="props">
-                    <AtomSelectInput
-                        v-model="props.filters['Status']"
-                        :size="'is-small'"
-                        :list="spotRequestStatusList"
-                        class="column-width"
-                    >
-                    </AtomSelectInput>
+                    <div class="select is-fullwidth">
+                        <select v-model="props.filters['Status']">
+                            <option value="">Select Status</option>
+                            <option
+                                v-for="status in spotRequestStatusList"
+                                :key="status.id"
+                                :value="status.id"
+                            >
+                                {{ status.name }}
+                            </option>
+                        </select>
+                    </div>
                 </template>
                 <template #default="props">
                     <SelectInput
                         :key="props.row.ID"
-                        :default-value="
+                        :model-value="
                             getSpotRequestStatusLabel(props.row.Status)
                         "
                         :list="
@@ -173,7 +178,6 @@ import {
 import { mapState, mapActions } from 'vuex';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
-import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
 import SelectInput from '@/components/global/SelectInput.vue';
@@ -183,7 +187,6 @@ export default {
     components: {
         AtomButton,
         AtomIcon,
-        AtomSelectInput,
         LoaderModal,
         MoleculeSearchBox,
         SelectInput,
@@ -428,13 +431,5 @@ $portal-font-size: 13px;
     background-color: #b5fca1 !important;
     color: #008000 !important;
     font-weight: bold;
-}
-
-.column-width {
-    width: 100px;
-
-    @media only screen and (max-width: 1024px) {
-        width: 150px;
-    }
 }
 </style>
