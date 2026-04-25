@@ -29,26 +29,60 @@ export default defineConfig({
     },
     test: {
         globals: true,
-        environment: 'jsdom',
-        // setupFiles: './vitest.setup.js',
-        
-        // Coverage configuration
+        // Coverage applies across all projects.
         coverage: {
-            provider: 'v8',  // Use V8's built-in coverage
-            reporter: ['text', 'json-summary', 'json', 'html'],  // Multiple reporters
-            reportsDirectory: './coverage',  // Output directory
-            
-            // Files to include in coverage
+            provider: 'v8',
+            reporter: ['text', 'json-summary', 'json', 'html'],
+            reportsDirectory: './coverage',
             include: ['src/**/*.{js,vue}'],
-            
-            // Files to exclude from coverage
             exclude: [
                 'node_modules/**',
                 'tests/**',
-                'src/main.js',  // Entry point
+                'src/main.js',
                 '**/*.spec.js',
                 '**/*.test.js',
             ],
         },
+
+        // Two projects: the existing fast jsdom unit tests, and a
+        // separate browser-based project for pixel-level visual
+        // regression. They are split so `npm run test:unit` stays
+        // millisecond-fast and only the dedicated `test:visual`
+        // command pays the cost of spinning up a real Chromium.
+        projects: [
+            {
+                extends: true,
+                test: {
+                    name: 'unit',
+                    environment: 'jsdom',
+                    include: ['tests/**/*.spec.js'],
+                    exclude: ['tests/visual/**'],
+                },
+            },
+            {
+                extends: true,
+                test: {
+                    name: 'visual',
+                    include: ['tests/visual/**/*.visual.spec.js'],
+                    setupFiles: ['./tests/visual/setup.js'],
+                    browser: {
+                        enabled: true,
+                        provider: 'playwright',
+                        headless: true,
+                        viewport: { width: 1280, height: 800 },
+                        instances: [{ browser: 'chromium' }],
+                    },
+                    expect: {
+                        // Allow up to 1% pixel-difference and a hard
+                        // ceiling of 200 changed pixels per shot to
+                        // absorb sub-pixel font / shadow jitter.
+                        toMatchScreenshot: {
+                            maxDiffPixelRatio: 0.01,
+                            maxDiffPixels: 200,
+                        },
+                    },
+                },
+            },
+        ],
     },
 });
