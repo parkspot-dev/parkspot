@@ -1,5 +1,5 @@
 import { mayaClient } from '@/services/api';
-import { isValidNumber } from '@/utils/payment';
+import { isValidNumber } from '@/utils/isValidNumber';
 
 const state = {
     pendingPayments: [],
