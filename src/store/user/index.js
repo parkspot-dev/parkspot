@@ -337,19 +337,19 @@ const actions = {
     },
 };
 
-const unsub = onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth, async (user) => {
     store.commit('user/update-user', user);
-    store.commit('user/update-auth-ready', true);
 
     if (!user) {
         localStorage.removeItem(PS_AUTH_KEY);
+        store.commit('user/update-auth-ready', true);
         return;
     }
 
-    const token = await user.getIdToken();
-    localStorage.setItem(PS_AUTH_KEY, token);
-
     try {
+        const token = await user.getIdToken();
+        localStorage.setItem(PS_AUTH_KEY, token);
+
         await store.dispatch('user/getUserProfile');
         await store.dispatch('app/getAgents');
     } catch {
@@ -359,7 +359,7 @@ const unsub = onAuthStateChanged(auth, async (user) => {
         });
     }
 
-    unsub();
+    store.commit('user/update-auth-ready', true);
 });
 
 export default {
