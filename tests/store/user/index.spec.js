@@ -92,11 +92,23 @@ describe('User Store - Agent Auth Fix', () => {
         );
     });
 
+    it('authenticateWithMaya does not call API when PSAuthKey is the string null', async () => {
+        localStorage.setItem('PSAuthKey', ' null ');
+
+        await userModule.actions.authenticateWithMaya({ commit });
+
+        expect(mayaClient.get).not.toHaveBeenCalled();
+        expect(commit).toHaveBeenCalledWith('set-auth-error', {
+            source: 'authenticateWithMaya',
+            message: 'Missing PS auth key',
+        });
+    });
+
     it('getUserProfile sets user type when profile has Type', async () => {
         localStorage.setItem('PSAuthKey', 'token');
 
         mayaClient.get.mockResolvedValue({
-            FullName: 'Agent User',
+            FullName: 'Dev Shrivastav',
             Type: UserType.Agent,
         });
 
@@ -109,7 +121,7 @@ describe('User Store - Agent Auth Fix', () => {
         expect(commit).toHaveBeenCalledWith(
             'update-user-profile',
             expect.objectContaining({
-                FullName: 'Agent User',
+                FullName: 'Dev Shrivastav',
                 Type: UserType.Agent,
             }),
         );
@@ -126,7 +138,7 @@ describe('User Store - Agent Auth Fix', () => {
         localStorage.setItem('PSAuthKey', 'token');
 
         mayaClient.get.mockResolvedValue({
-            FullName: 'User Without Type',
+            FullName: 'Dev Shrivastav',
         });
 
         await userModule.actions.getUserProfile({
@@ -138,7 +150,7 @@ describe('User Store - Agent Auth Fix', () => {
         expect(commit).toHaveBeenCalledWith(
             'update-user-profile',
             expect.objectContaining({
-                FullName: 'User Without Type',
+                FullName: 'Dev Shrivastav',
             }),
         );
         expect(commit).not.toHaveBeenCalledWith(
@@ -206,11 +218,31 @@ describe('User Store - Agent Auth Fix', () => {
         );
     });
 
+    it('getUserProfile does not call API when PSAuthKey is blank whitespace', async () => {
+        localStorage.setItem('PSAuthKey', '   ');
+
+        await userModule.actions.getUserProfile({
+            commit,
+            dispatch,
+        });
+
+        expect(mayaClient.get).not.toHaveBeenCalled();
+        expect(commit).toHaveBeenCalledWith('set-auth-error', {
+            source: 'getUserProfile',
+            message: 'Missing PS auth key',
+        });
+        expect(dispatch).not.toHaveBeenCalledWith(
+            'authenticateWithMaya',
+            expect.anything(),
+            expect.anything(),
+        );
+    });
+
     it('getUserProfile uses cache when valid', async () => {
         localStorage.setItem('PSAuthKey', 'token');
 
         const cached = {
-            FullName: 'Cached User',
+            FullName: 'Dev Shrivastav',
             Type: UserType.Agent,
         };
         const state = { user: { uid: 'agent_user' } };
@@ -225,7 +257,7 @@ describe('User Store - Agent Auth Fix', () => {
         );
 
         mayaClient.get.mockResolvedValue({
-            FullName: 'Fresh User',
+            FullName: 'Dev Shrivastav',
             Type: UserType.Agent,
         });
 
@@ -244,7 +276,7 @@ describe('User Store - Agent Auth Fix', () => {
         expect(commit).toHaveBeenCalledWith(
             'update-user-profile',
             expect.objectContaining({
-                FullName: 'Cached User',
+                FullName: 'Dev Shrivastav',
                 Type: UserType.Agent,
             }),
         );
@@ -262,12 +294,12 @@ describe('User Store - Agent Auth Fix', () => {
             JSON.stringify({
                 version: 1,
                 savedAt: Date.now(),
-                data: { FullName: 'Cached User Without Type' },
+                data: { FullName: 'Dev Shrivastav Cached' },
             }),
         );
 
         mayaClient.get.mockResolvedValue({
-            FullName: 'Fresh User Without Type',
+            FullName: 'Dev Shrivastav Fresh',
         });
 
         await userModule.actions.getUserProfile({
@@ -280,13 +312,13 @@ describe('User Store - Agent Auth Fix', () => {
         expect(commit).toHaveBeenCalledWith(
             'update-user-profile',
             expect.objectContaining({
-                FullName: 'Fresh User Without Type',
+                FullName: 'Dev Shrivastav Fresh',
             }),
         );
         expect(commit).not.toHaveBeenCalledWith(
             'update-user-profile',
             expect.objectContaining({
-                FullName: 'Cached User Without Type',
+                FullName: 'Dev Shrivastav Cached',
             }),
         );
         expect(commit).not.toHaveBeenCalledWith(
@@ -309,12 +341,12 @@ describe('User Store - Agent Auth Fix', () => {
             JSON.stringify({
                 version: 1,
                 savedAt: Date.now() - 25 * 60 * 60 * 1000,
-                data: { FullName: 'Old User' },
+                data: { FullName: 'Dev Shrivastav Old' },
             }),
         );
 
         mayaClient.get.mockResolvedValue({
-            FullName: 'Fresh User',
+            FullName: 'Dev Shrivastav Fresh',
             Type: UserType.Agent,
         });
 
@@ -333,7 +365,7 @@ describe('User Store - Agent Auth Fix', () => {
         expect(commit).toHaveBeenCalledWith(
             'update-user-profile',
             expect.objectContaining({
-                FullName: 'Fresh User',
+                FullName: 'Dev Shrivastav Fresh',
                 Type: UserType.Agent,
             }),
         );
@@ -343,7 +375,7 @@ describe('User Store - Agent Auth Fix', () => {
         expect(commit).not.toHaveBeenCalledWith(
             'update-user-profile',
             expect.objectContaining({
-                FullName: 'Old User',
+                FullName: 'Dev Shrivastav Old',
             }),
         );
     });
@@ -355,7 +387,7 @@ describe('User Store - Agent Auth Fix', () => {
         localStorage.setItem('profile:agent_user', 'invalid-json');
 
         mayaClient.get.mockResolvedValue({
-            FullName: 'Fresh User',
+            FullName: 'Dev Shrivastav Fresh',
             Type: UserType.Agent,
         });
 
@@ -374,7 +406,7 @@ describe('User Store - Agent Auth Fix', () => {
         expect(commit).toHaveBeenCalledWith(
             'update-user-profile',
             expect.objectContaining({
-                FullName: 'Fresh User',
+                FullName: 'Dev Shrivastav Fresh',
                 Type: UserType.Agent,
             }),
         );
@@ -404,7 +436,7 @@ describe('User Store - Agent Auth Fix', () => {
         localStorage.setItem('PSAuthKey', 'token');
 
         const state = { user: { uid: 'agent_user' } };
-        const userProfile = { FullName: 'Dev' };
+        const userProfile = { FullName: 'Dev Shrivastav' };
         const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
 
         mayaClient.get.mockResolvedValue(userProfile);
