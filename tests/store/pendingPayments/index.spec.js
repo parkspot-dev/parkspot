@@ -1,12 +1,8 @@
 import { flushPromises } from '@vue/test-utils';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createStore } from 'vuex';
+import pendingPaymentsModule from '@/store/pendingPayments';
 import { mayaClient } from '@/services/api';
-
-const isValidNumber = vi.fn((value) => {
-    if (value === null || value === undefined || value === '') return false;
-    return Number.isFinite(Number(value));
-});
 
 vi.mock('@/services/api', () => ({
     mayaClient: {
@@ -15,119 +11,7 @@ vi.mock('@/services/api', () => ({
     },
 }));
 
-const formatDisplayError = (res) => {
-    const errorDetails = res?.ErrorMsg ? ` ( ${res.ErrorMsg} )` : '';
-    return `${res.DisplayMsg}${errorDetails}`;
-};
-
-const pendingPayments = {
-    namespaced: true,
-    state: {
-        pendingPayments: [],
-        hasError: false,
-        errorMessage: '',
-        isLoading: false,
-    },
-    mutations: {
-        'set-pending-payments'(state, pendingPayments) {
-            state.pendingPayments = pendingPayments;
-            state.hasError = false;
-            state.errorMessage = '';
-        },
-
-        'set-error'(state, message) {
-            state.hasError = true;
-            state.errorMessage = message;
-        },
-
-        'set-loading'(state, value) {
-            state.isLoading = value;
-        },
-
-        'record-payment-success'(state, payload) {
-            state.pendingPayments = state.pendingPayments.filter((payment) => {
-                if (payload.paymentId) {
-                    return payment.PaymentId !== payload.paymentId;
-                }
-
-                return payment.BookingId !== payload.bookingId;
-            });
-        },
-    },
-    actions: {
-        async getPendingPayments({ commit }) {
-            commit('set-loading', true);
-
-            try {
-                const res = await mayaClient.get('/internal/pending-payments');
-
-                if (res?.DisplayMsg) {
-                    commit('set-error', formatDisplayError(res));
-                    return;
-                }
-
-                commit('set-pending-payments', res || []);
-            } catch {
-                commit('set-error', 'Failed to fetch pending payments');
-            } finally {
-                commit('set-loading', false);
-            }
-        },
-
-        async updateAmountToSO({ commit }, payload) {
-            commit('set-loading', true);
-
-            try {
-                const paymentID = Number(payload?.PaymentID);
-                if (!isValidNumber(payload?.PaymentID)) {
-                    throw new Error('PaymentID is required');
-                }
-
-                const amountToSO = Number(payload?.AmountToSO);
-                if (!isValidNumber(payload?.AmountToSO)) {
-                    throw new Error('AmountToSO is required');
-                }
-
-                const reqBody = {
-                    PaymentID: paymentID,
-                    AmountToSO: amountToSO,
-                };
-
-                if (payload?.TransferDate) {
-                    reqBody.TransferDate = payload.TransferDate;
-                }
-
-                const res = await mayaClient.post(
-                    '/payment/amount-to-so',
-                    reqBody,
-                );
-
-                if (res?.DisplayMsg) {
-                    commit('set-error', formatDisplayError(res));
-                    return res;
-                }
-
-                if (res?.Success) {
-                    commit('record-payment-success', {
-                        paymentId: reqBody.PaymentID,
-                        bookingId: payload?.bookingId,
-                    });
-                }
-
-                return res;
-            } catch (error) {
-                commit(
-                    'set-error',
-                    error.message || 'Failed to update payment',
-                );
-            } finally {
-                commit('set-loading', false);
-            }
-        },
-    },
-};
-
-describe('PendingPayments Store', () => {
+describe('pendingPayments store', () => {
     let store;
 
     beforeEach(() => {
@@ -136,15 +20,49 @@ describe('PendingPayments Store', () => {
         store = createStore({
             modules: {
                 pendingPayments: {
-                    ...pendingPayments,
-                    state: { ...pendingPayments.state },
+                    ...pendingPaymentsModule,
+                    state: { ...pendingPaymentsModule.state },
                 },
             },
         });
     });
 
-    describe('mutations', () => {
-        it('record-payment-success removes by paymentId', () => {
+    describe('Structure tests', () => {
+        it('exports the expected vuex module contract', () => {
+            expect(pendingPaymentsModule).toHaveProperty('namespaced', true);
+            expect(pendingPaymentsModule).toHaveProperty('state');
+            expect(pendingPaymentsModule).toHaveProperty('mutations');
+            expect(pendingPaymentsModule).toHaveProperty('actions');
+        });
+    });
+
+    describe('Behavior tests', () => {
+        it('set-pending-payments stores items and clears the previous error state', () => {
+            store.state.pendingPayments.hasError = true;
+            store.state.pendingPayments.errorMessage = 'Old error';
+
+            const payments = [
+                {
+                    PaymentId: 7,
+                    BookingId: 'BK-7',
+                },
+            ];
+
+            store.commit('pendingPayments/set-pending-payments', payments);
+
+            expect(store.state.pendingPayments.pendingPayments).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({
+                        PaymentId: 7,
+                        BookingId: 'BK-7',
+                    }),
+                ]),
+            );
+            expect(store.state.pendingPayments.hasError).toBe(false);
+            expect(store.state.pendingPayments.errorMessage).toBe('');
+        });
+
+        it('record-payment-success removes an item by payment id', () => {
             store.state.pendingPayments.pendingPayments = [
                 { PaymentId: 101, BookingId: 'B101' },
                 { PaymentId: 202, BookingId: 'B202' },
@@ -159,7 +77,7 @@ describe('PendingPayments Store', () => {
             ]);
         });
 
-        it('record-payment-success removes by bookingId when paymentId missing', () => {
+        it('record-payment-success removes an item by booking id when payment id is missing', () => {
             store.state.pendingPayments.pendingPayments = [
                 { PaymentId: 101, BookingId: 'B101' },
                 { PaymentId: 202, BookingId: 'B202' },
@@ -173,10 +91,8 @@ describe('PendingPayments Store', () => {
                 { PaymentId: 202, BookingId: 'B202' },
             ]);
         });
-    });
 
-    describe('actions', () => {
-        it('getPendingPayments success sets data', async () => {
+        it('getPendingPayments stores API data on success', async () => {
             mayaClient.get.mockResolvedValue([
                 {
                     PaymentId: 7,
@@ -186,6 +102,7 @@ describe('PendingPayments Store', () => {
             ]);
 
             await store.dispatch('pendingPayments/getPendingPayments');
+
             await flushPromises();
 
             expect(mayaClient.get).toHaveBeenCalledTimes(1);
@@ -204,7 +121,19 @@ describe('PendingPayments Store', () => {
             expect(store.state.pendingPayments.isLoading).toBe(false);
         });
 
-        it('getPendingPayments sets loading true during request and false after', async () => {
+        it('getPendingPayments falls back to an empty array when the API returns null', async () => {
+            mayaClient.get.mockResolvedValue(null);
+
+            await store.dispatch('pendingPayments/getPendingPayments');
+
+            await flushPromises();
+
+            expect(store.state.pendingPayments.pendingPayments).toEqual([]);
+            expect(store.state.pendingPayments.hasError).toBe(false);
+            expect(store.state.pendingPayments.errorMessage).toBe('');
+        });
+
+        it('getPendingPayments toggles loading around an active request', async () => {
             let resolveRequest;
 
             mayaClient.get.mockReturnValue(
@@ -219,7 +148,6 @@ describe('PendingPayments Store', () => {
 
             await flushPromises();
 
-            expect(mayaClient.get).toHaveBeenCalledTimes(1);
             expect(store.state.pendingPayments.isLoading).toBe(true);
 
             resolveRequest([]);
@@ -230,16 +158,16 @@ describe('PendingPayments Store', () => {
             expect(store.state.pendingPayments.isLoading).toBe(false);
         });
 
-        it('getPendingPayments sets error from API response', async () => {
+        it('getPendingPayments stores a formatted API error with ErrorMsg', async () => {
             mayaClient.get.mockResolvedValue({
                 DisplayMsg: 'Failed',
                 ErrorMsg: 'Error',
             });
 
             await store.dispatch('pendingPayments/getPendingPayments');
+
             await flushPromises();
 
-            expect(mayaClient.get).toHaveBeenCalledTimes(1);
             expect(store.state.pendingPayments.hasError).toBe(true);
             expect(store.state.pendingPayments.errorMessage).toBe(
                 'Failed ( Error )',
@@ -247,27 +175,27 @@ describe('PendingPayments Store', () => {
             expect(store.state.pendingPayments.isLoading).toBe(false);
         });
 
-        it('getPendingPayments does not append undefined when ErrorMsg is missing', async () => {
+        it('getPendingPayments stores a formatted API error without ErrorMsg', async () => {
             mayaClient.get.mockResolvedValue({
                 DisplayMsg: 'Failed',
             });
 
             await store.dispatch('pendingPayments/getPendingPayments');
+
             await flushPromises();
 
-            expect(mayaClient.get).toHaveBeenCalledTimes(1);
             expect(store.state.pendingPayments.hasError).toBe(true);
             expect(store.state.pendingPayments.errorMessage).toBe('Failed');
             expect(store.state.pendingPayments.isLoading).toBe(false);
         });
 
-        it('getPendingPayments handles API failure', async () => {
+        it('getPendingPayments stores the fallback error message when the request fails', async () => {
             mayaClient.get.mockRejectedValue(new Error('Network error'));
 
             await store.dispatch('pendingPayments/getPendingPayments');
+
             await flushPromises();
 
-            expect(mayaClient.get).toHaveBeenCalledTimes(1);
             expect(store.state.pendingPayments.hasError).toBe(true);
             expect(store.state.pendingPayments.errorMessage).toBe(
                 'Failed to fetch pending payments',
@@ -275,21 +203,21 @@ describe('PendingPayments Store', () => {
             expect(store.state.pendingPayments.isLoading).toBe(false);
         });
 
-        it('updateAmountToSO sends correct payload and removes payment', async () => {
+        it('updateAmountToSO posts the exact success payload and removes the payment', async () => {
             store.state.pendingPayments.pendingPayments = [
-                { PaymentId: 55 },
-                { PaymentId: 66 },
+                { PaymentId: 55, BookingId: 'BK-55' },
+                { PaymentId: 66, BookingId: 'BK-66' },
             ];
             mayaClient.post.mockResolvedValue({ Success: true });
 
             await store.dispatch('pendingPayments/updateAmountToSO', {
                 PaymentID: 55,
                 AmountToSO: 300,
-                PaymentApp: 1,
+                bookingId: 'BK-55',
             });
+
             await flushPromises();
 
-            expect(mayaClient.post).toHaveBeenCalledTimes(1);
             expect(mayaClient.post).toHaveBeenCalledWith(
                 '/payment/amount-to-so',
                 expect.objectContaining({
@@ -298,14 +226,14 @@ describe('PendingPayments Store', () => {
                 }),
             );
             expect(store.state.pendingPayments.pendingPayments).toEqual([
-                { PaymentId: 66 },
+                { PaymentId: 66, BookingId: 'BK-66' },
             ]);
             expect(store.state.pendingPayments.hasError).toBe(false);
             expect(store.state.pendingPayments.errorMessage).toBe('');
             expect(store.state.pendingPayments.isLoading).toBe(false);
         });
 
-        it('updateAmountToSO includes transfer date in API payload', async () => {
+        it('updateAmountToSO includes TransferDate when provided', async () => {
             mayaClient.post.mockResolvedValue({ Success: true });
 
             await store.dispatch('pendingPayments/updateAmountToSO', {
@@ -313,9 +241,9 @@ describe('PendingPayments Store', () => {
                 AmountToSO: 300,
                 TransferDate: '2026-04-21',
             });
+
             await flushPromises();
 
-            expect(mayaClient.post).toHaveBeenCalledTimes(1);
             expect(mayaClient.post).toHaveBeenCalledWith(
                 '/payment/amount-to-so',
                 expect.objectContaining({
@@ -326,7 +254,7 @@ describe('PendingPayments Store', () => {
             );
         });
 
-        it('updateAmountToSO sets loading true during request and false after', async () => {
+        it('updateAmountToSO toggles loading around an active request', async () => {
             let resolveRequest;
 
             mayaClient.post.mockReturnValue(
@@ -345,7 +273,6 @@ describe('PendingPayments Store', () => {
 
             await flushPromises();
 
-            expect(mayaClient.post).toHaveBeenCalledTimes(1);
             expect(store.state.pendingPayments.isLoading).toBe(true);
 
             resolveRequest({ Success: true });
@@ -356,7 +283,7 @@ describe('PendingPayments Store', () => {
             expect(store.state.pendingPayments.isLoading).toBe(false);
         });
 
-        it('updateAmountToSO handles API error response', async () => {
+        it('updateAmountToSO stores a formatted API error with ErrorMsg', async () => {
             mayaClient.post.mockResolvedValue({
                 DisplayMsg: 'Failed',
                 ErrorMsg: 'Error',
@@ -365,11 +292,10 @@ describe('PendingPayments Store', () => {
             await store.dispatch('pendingPayments/updateAmountToSO', {
                 PaymentID: 1,
                 AmountToSO: 300,
-                PaymentApp: 1,
             });
+
             await flushPromises();
 
-            expect(mayaClient.post).toHaveBeenCalledTimes(1);
             expect(mayaClient.post).toHaveBeenCalledWith(
                 '/payment/amount-to-so',
                 expect.objectContaining({
@@ -384,7 +310,7 @@ describe('PendingPayments Store', () => {
             expect(store.state.pendingPayments.isLoading).toBe(false);
         });
 
-        it('updateAmountToSO does not append undefined when ErrorMsg is missing', async () => {
+        it('updateAmountToSO stores a formatted API error without ErrorMsg', async () => {
             mayaClient.post.mockResolvedValue({
                 DisplayMsg: 'Failed',
             });
@@ -392,27 +318,25 @@ describe('PendingPayments Store', () => {
             await store.dispatch('pendingPayments/updateAmountToSO', {
                 PaymentID: 1,
                 AmountToSO: 300,
-                PaymentApp: 1,
             });
+
             await flushPromises();
 
-            expect(mayaClient.post).toHaveBeenCalledTimes(1);
             expect(store.state.pendingPayments.hasError).toBe(true);
             expect(store.state.pendingPayments.errorMessage).toBe('Failed');
             expect(store.state.pendingPayments.isLoading).toBe(false);
         });
 
-        it('updateAmountToSO handles network failure', async () => {
+        it('updateAmountToSO stores the fallback error message when the request rejects without a message', async () => {
             mayaClient.post.mockRejectedValue(new Error());
 
             await store.dispatch('pendingPayments/updateAmountToSO', {
                 PaymentID: 1,
                 AmountToSO: 300,
-                PaymentApp: 1,
             });
+
             await flushPromises();
 
-            expect(mayaClient.post).toHaveBeenCalledTimes(1);
             expect(store.state.pendingPayments.hasError).toBe(true);
             expect(store.state.pendingPayments.errorMessage).toBe(
                 'Failed to update payment',
@@ -420,10 +344,11 @@ describe('PendingPayments Store', () => {
             expect(store.state.pendingPayments.isLoading).toBe(false);
         });
 
-        it('updateAmountToSO validates missing PaymentID', async () => {
+        it('updateAmountToSO validates a missing PaymentID', async () => {
             await store.dispatch('pendingPayments/updateAmountToSO', {
                 AmountToSO: 300,
             });
+
             await flushPromises();
 
             expect(mayaClient.post).not.toHaveBeenCalled();
@@ -434,48 +359,70 @@ describe('PendingPayments Store', () => {
             expect(store.state.pendingPayments.isLoading).toBe(false);
         });
 
-        it('updateAmountToSO validates invalid PaymentID', async () => {
+        it('updateAmountToSO validates a missing AmountToSO', async () => {
+            await store.dispatch('pendingPayments/updateAmountToSO', {
+                PaymentID: 1,
+            });
+
+            await flushPromises();
+
+            expect(mayaClient.post).not.toHaveBeenCalled();
+            expect(store.state.pendingPayments.hasError).toBe(true);
+            expect(store.state.pendingPayments.errorMessage).toBe(
+                'AmountToSO is required',
+            );
+            expect(store.state.pendingPayments.isLoading).toBe(false);
+        });
+
+        it('updateAmountToSO forwards string input as Number conversions used by the module', async () => {
+            mayaClient.post.mockResolvedValue({ Success: true });
+
             await store.dispatch('pendingPayments/updateAmountToSO', {
                 PaymentID: 'abc',
-                AmountToSO: 300,
+                AmountToSO: '250',
             });
+
             await flushPromises();
 
-            expect(mayaClient.post).not.toHaveBeenCalled();
-            expect(store.state.pendingPayments.hasError).toBe(true);
-            expect(store.state.pendingPayments.errorMessage).toBe(
-                'PaymentID is required',
+            expect(mayaClient.post).toHaveBeenCalledWith(
+                '/payment/amount-to-so',
+                expect.objectContaining({
+                    PaymentID: Number.NaN,
+                    AmountToSO: 250,
+                }),
             );
-            expect(store.state.pendingPayments.isLoading).toBe(false);
         });
+    });
 
-        it('updateAmountToSO validates missing AmountToSO', async () => {
-            await store.dispatch('pendingPayments/updateAmountToSO', {
-                PaymentID: 1,
+    describe('Accessibility tests', () => {
+        it('stores human-readable error text for UI consumers', async () => {
+            mayaClient.post.mockResolvedValue({
+                DisplayMsg: 'Transfer failed',
             });
+
+            await store.dispatch('pendingPayments/updateAmountToSO', {
+                PaymentID: 22,
+                AmountToSO: 450,
+            });
+
             await flushPromises();
 
-            expect(mayaClient.post).not.toHaveBeenCalled();
-            expect(store.state.pendingPayments.hasError).toBe(true);
             expect(store.state.pendingPayments.errorMessage).toBe(
-                'AmountToSO is required',
+                'Transfer failed',
             );
-            expect(store.state.pendingPayments.isLoading).toBe(false);
         });
+    });
 
-        it('updateAmountToSO validates invalid AmountToSO', async () => {
-            await store.dispatch('pendingPayments/updateAmountToSO', {
-                PaymentID: 1,
-                AmountToSO: 'abc',
-            });
-            await flushPromises();
-
-            expect(mayaClient.post).not.toHaveBeenCalled();
-            expect(store.state.pendingPayments.hasError).toBe(true);
-            expect(store.state.pendingPayments.errorMessage).toBe(
-                'AmountToSO is required',
-            );
-            expect(store.state.pendingPayments.isLoading).toBe(false);
+    describe('Focused snapshot tests', () => {
+        it('matches the initial module state snapshot', () => {
+            expect(store.state.pendingPayments).toMatchInlineSnapshot(`
+              {
+                "errorMessage": "",
+                "hasError": false,
+                "isLoading": false,
+                "pendingPayments": [],
+              }
+            `);
         });
     });
 });

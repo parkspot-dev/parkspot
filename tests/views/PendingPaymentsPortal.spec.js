@@ -132,6 +132,13 @@ describe('PendingPaymentsPortal.vue', () => {
         expect(pendingActions.getPendingPayments).not.toHaveBeenCalled();
     });
 
+    it('does not load pending payments when auth is not ready', async () => {
+        store.state.user.isAuthReady = false;
+        wrapper = mountPage();
+        await flushPromises();
+        expect(pendingActions.getPendingPayments).not.toHaveBeenCalled();
+    });
+
     it('shows loader when pending payments are loading', () => {
         store.state.pendingPayments.isLoading = true;
         wrapper = mountPage();
@@ -175,7 +182,7 @@ describe('PendingPaymentsPortal.vue', () => {
             PaymentId: 10,
             BookingId: 'BK-10',
             BaseAmount: 2500,
-            VoName: 'Rahul',
+            VoName: 'Dev Shrivastav',
             Account: {},
         });
         expect(wrapper.vm.showPaymentModal).toBe(true);
@@ -221,9 +228,9 @@ describe('PendingPaymentsPortal.vue', () => {
         wrapper = mountPage();
         const result = wrapper.vm.getDefaultRemark({
             BookingId: 'BK1',
-            VoName: 'Dev',
+            VoName: 'Dev Shrivastav',
         });
-        expect(result).toContain('Dev');
+        expect(result).toContain('Dev Shrivastav');
     });
 
     it('onRemarkInput updates remark', () => {
@@ -240,18 +247,27 @@ describe('PendingPaymentsPortal.vue', () => {
     it('resolvedAccountInfo covers mobile branch', () => {
         wrapper = mountPage();
         wrapper.vm.selectedPayment = {
-            Account: { Mobile: '9999999999', PaymentApp: 1 },
+            Account: { Mobile: '855788258', PaymentApp: 1 },
         };
-        expect(wrapper.vm.resolvedAccountInfo).toContain('9999999999');
+        expect(wrapper.vm.resolvedAccountInfo).toContain('855788258');
     });
 
     it('resolvedPayeeName fallback works', () => {
         wrapper = mountPage();
         wrapper.vm.selectedPayment = {
-            SoName: 'Fallback',
+            SoName: 'Dev Shrivastav',
             Account: {},
         };
-        expect(wrapper.vm.resolvedPayeeName).toBe('Fallback');
+        expect(wrapper.vm.resolvedPayeeName).toBe('Dev Shrivastav');
+    });
+
+    it('resolvedPayeeName prefers account full name', () => {
+        wrapper = mountPage();
+        wrapper.vm.selectedPayment = {
+            SoName: 'Dev Shrivastav',
+            Account: { FullName: 'Dev Shrivastav' },
+        };
+        expect(wrapper.vm.resolvedPayeeName).toBe('Dev Shrivastav');
     });
 
     it('finalAmount converts properly', () => {
@@ -264,7 +280,7 @@ describe('PendingPaymentsPortal.vue', () => {
         wrapper = mountPage();
         wrapper.vm.selectedPayment = {
             PaymentId: 1,
-            SoName: 'Owner',
+            SoName: 'Dev Shrivastav',
             Account: {
                 BankAccountNumber: '123',
                 IfscCode: 'hdfc123',
@@ -283,6 +299,69 @@ describe('PendingPaymentsPortal.vue', () => {
         expect(wrapper.vm.upiUrl).toBe('');
     });
 
+    it('resolvedUpiId prefers the explicit upi id', () => {
+        wrapper = mountPage();
+        wrapper.vm.selectedPayment = {
+            Account: {
+                UpiId: 'owner@upi',
+                BankAccountNumber: '123',
+                IfscCode: 'hdfc1234',
+            },
+        };
+        expect(wrapper.vm.resolvedUpiId).toBe('owner@upi');
+    });
+
+    it('resolvedUpiId builds the bank account fallback', () => {
+        wrapper = mountPage();
+        wrapper.vm.selectedPayment = {
+            Account: {
+                BankAccountNumber: '123 456',
+                IfscCode: 'hdfc1234',
+            },
+        };
+        expect(wrapper.vm.resolvedUpiId).toBe('123456@HDFC1234.ifsc.npci');
+    });
+
+    it('resolvedUpiId returns an empty string when no payment details are available', () => {
+        wrapper = mountPage();
+        wrapper.vm.selectedPayment = {
+            Account: {},
+        };
+        expect(wrapper.vm.resolvedUpiId).toBe('');
+    });
+
+    it('upiUrl uses the fallback transaction reference when remark is empty', () => {
+        wrapper = mountPage();
+        wrapper.vm.selectedPayment = {
+            PaymentId: 44,
+            SoName: 'Dev Shrivastav',
+            Account: {
+                UpiId: 'owner@upi',
+            },
+        };
+        wrapper.vm.editableAmount = 1000;
+        wrapper.vm.editableRemark = '';
+        expect(wrapper.vm.upiUrl).toContain('tr=Ref44');
+    });
+
+    it('saveAmountEdit updates the editable amount for valid input', () => {
+        wrapper = mountPage();
+        wrapper.vm.draftAmountInput = '2500';
+        wrapper.vm.saveAmountEdit();
+        expect(wrapper.vm.editableAmount).toBe(2500);
+    });
+
+    it('saveAmountEdit shows an error for invalid input', () => {
+        wrapper = mountPage();
+        wrapper.vm.draftAmountInput = '0';
+        wrapper.vm.saveAmountEdit();
+        expect(alertMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                message: 'Please enter a valid transfer amount',
+            }),
+        );
+    });
+
     it('openSuccessConfirmation blocks invalid', () => {
         wrapper = mountPage();
         wrapper.vm.draftAmountInput = '100';
@@ -297,6 +376,13 @@ describe('PendingPaymentsPortal.vue', () => {
         wrapper.vm.editableAmount = 100;
         wrapper.vm.openSuccessConfirmation();
         expect(wrapper.vm.showSuccessModal).toBe(true);
+    });
+
+    it('closeSuccessModal hides the success modal', () => {
+        wrapper = mountPage();
+        wrapper.vm.showSuccessModal = true;
+        wrapper.vm.closeSuccessModal();
+        expect(wrapper.vm.showSuccessModal).toBe(false);
     });
 
     it('recordPaymentSuccess success', async () => {
@@ -334,6 +420,40 @@ describe('PendingPaymentsPortal.vue', () => {
         await wrapper.vm.recordPaymentSuccess();
 
         expect(alertMock).toHaveBeenCalled();
+    });
+
+    it('recordPaymentSuccess returns early when no payment is selected', async () => {
+        wrapper = mountPage();
+        wrapper.vm.selectedPayment = null;
+        await wrapper.vm.recordPaymentSuccess();
+        expect(pendingActions.updateAmountToSO).not.toHaveBeenCalled();
+    });
+
+    it('searchBookingId trims the search value', () => {
+        wrapper = mountPage();
+        wrapper.vm.searchBookingId('  BK1001  ');
+        expect(wrapper.vm.bookingIdSearch).toBe('BK1001');
+    });
+
+    it('getSpotId trims the site id', () => {
+        wrapper = mountPage();
+        expect(wrapper.vm.getSpotId({ SiteID: '  SITE-1  ' })).toBe('SITE-1');
+    });
+
+    it('getSpotDetailRoute returns the exact route object', () => {
+        wrapper = mountPage();
+        expect(wrapper.vm.getSpotDetailRoute('SITE-1')).toEqual({
+            name: 'spot-detail',
+            params: { spotId: 'SITE-1' },
+        });
+    });
+
+    it('getBookingPortalRoute returns the exact route object', () => {
+        wrapper = mountPage();
+        expect(wrapper.vm.getBookingPortalRoute(' BK1001 ')).toEqual({
+            name: 'booking-portal',
+            query: { bookingId: 'BK1001' },
+        });
     });
 
     it('alertError shows dialog', () => {
