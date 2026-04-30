@@ -461,4 +461,151 @@ describe('PendingPaymentsPortal.vue', () => {
         wrapper.vm.alertError('Error');
         expect(alertMock).toHaveBeenCalled();
     });
+
+    it('does not render table-wrapper when user is not admin', () => {
+        store.state.user.isAdmin = false;
+        wrapper = mountPage();
+        expect(wrapper.find('.table-wrapper').exists()).toBe(false);
+    });
+
+    it('does not render table-wrapper when auth is not ready', () => {
+        store.state.user.isAuthReady = false;
+        wrapper = mountPage();
+        expect(wrapper.find('.table-wrapper').exists()).toBe(false);
+    });
+
+    it('filteredPendingPayments returns full list when search is empty', () => {
+        wrapper = mountPage();
+        wrapper.vm.bookingIdSearch = '';
+        expect(wrapper.vm.filteredPendingPayments).toHaveLength(2);
+    });
+
+    it('filteredPendingPayments matches case insensitive search', () => {
+        wrapper = mountPage();
+        wrapper.vm.searchBookingId('bk1001');
+        expect(wrapper.vm.filteredPendingPayments[0].BookingId).toBe('BK1001');
+    });
+
+    it('resolvedUpiId strips spaces and uppercases IFSC', () => {
+        wrapper = mountPage();
+        wrapper.vm.selectedPayment = {
+            Account: {
+                BankAccountNumber: '123 456',
+                IfscCode: 'hdfc0001',
+            },
+        };
+
+        expect(wrapper.vm.resolvedUpiId).toBe('123456@HDFC0001.ifsc.npci');
+    });
+
+    it('upiUrl contains encoded remark and correct amount', () => {
+        wrapper = mountPage();
+        wrapper.vm.selectedPayment = {
+            PaymentId: 1,
+            SoName: 'Dev',
+            Account: { UpiId: 'owner@upi' },
+        };
+
+        wrapper.vm.editableAmount = 1500;
+        wrapper.vm.editableRemark = 'Rent Payment';
+        const url = wrapper.vm.upiUrl;
+        expect(url).toContain('upi://pay');
+        expect(url).toContain('am=1500.00');
+        expect(url).toContain('Rent%20Payment');
+    });
+
+    it('openPaymentModal sets correct initial state', () => {
+        wrapper = mountPage();
+
+        const payment = {
+            PaymentId: 5,
+            BookingId: 'BK5',
+            BaseAmount: 2000,
+            VoName: 'Dev',
+            Account: {},
+        };
+
+        wrapper.vm.openPaymentModal(payment);
+        expect(wrapper.vm.selectedPayment).toEqual(payment);
+        expect(wrapper.vm.editableAmount).toBe(2000);
+        expect(wrapper.vm.draftAmountInput).toBe('2000');
+        expect(wrapper.vm.showPaymentModal).toBe(true);
+    });
+
+    it('closePaymentModal fully resets state', () => {
+        wrapper = mountPage();
+        wrapper.vm.selectedPayment = { PaymentId: 1 };
+        wrapper.vm.editableAmount = 1000;
+        wrapper.vm.draftAmountInput = '1000';
+        wrapper.vm.editableRemark = 'Test';
+        wrapper.vm.isRemarkEditable = true;
+        wrapper.vm.showPaymentModal = true;
+
+        wrapper.vm.closePaymentModal();
+        expect(wrapper.vm.selectedPayment).toBe(null);
+        expect(wrapper.vm.editableAmount).toBe(0);
+        expect(wrapper.vm.draftAmountInput).toBe('0');
+        expect(wrapper.vm.editableRemark).toBe('');
+        expect(wrapper.vm.isRemarkEditable).toBe(false);
+        expect(wrapper.vm.showPaymentModal).toBe(false);
+    });
+
+    it('openSuccessConfirmation blocks when draft and editable mismatch', () => {
+        wrapper = mountPage();
+        wrapper.vm.draftAmountInput = '100';
+        wrapper.vm.editableAmount = 200;
+        wrapper.vm.openSuccessConfirmation();
+        expect(alertMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                message: expect.any(String),
+            }),
+        );
+    });
+
+    it('recordPaymentSuccess sends correct payload to action', async () => {
+        wrapper = mountPage();
+        wrapper.vm.selectedPayment = {
+            PaymentId: 99,
+            Account: {},
+        };
+
+        wrapper.vm.editableAmount = 1234;
+        await wrapper.vm.recordPaymentSuccess();
+        expect(pendingActions.updateAmountToSO).toHaveBeenCalledWith(
+            expect.any(Object),
+            expect.objectContaining({
+                PaymentID: 99,
+                AmountToSO: 1234,
+            }),
+        );
+    });
+
+    it('recordPaymentSuccess shows success toast with message', async () => {
+        wrapper = mountPage();
+        wrapper.vm.selectedPayment = {
+            PaymentId: 1,
+            Account: {},
+        };
+
+        wrapper.vm.editableAmount = 1000;
+        await wrapper.vm.recordPaymentSuccess();
+        expect(toastOpenMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                type: 'is-success',
+                message: expect.any(String),
+            }),
+        );
+    });
+
+    it('alertError passes correct payload to dialog', () => {
+        wrapper = mountPage();
+        wrapper.vm.alertError('Test error');
+
+        expect(alertMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                message: 'Test error',
+                type: 'is-danger',
+            }),
+        );
+    });
 });

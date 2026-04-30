@@ -459,4 +459,96 @@ describe('User Store - Agent Auth Fix', () => {
             expect.anything(),
         );
     });
+
+    describe('User Store - Missing Coverage (Added)', () => {
+        it('authenticateWithMaya throws error when API fails', async () => {
+            localStorage.setItem('PSAuthKey', 'token');
+            mayaClient.get.mockRejectedValue(new Error('API failed'));
+            await expect(
+                userModule.actions.authenticateWithMaya({ commit }),
+            ).rejects.toThrow('API failed');
+            expect(mayaClient.get).toHaveBeenCalledWith('/auth/authenticate');
+        });
+
+        it('authenticateWithMaya clears auth error on valid flow', async () => {
+            localStorage.setItem('PSAuthKey', 'token');
+            mayaClient.get.mockResolvedValue({
+                UserType: UserType.Agent,
+            });
+
+            await userModule.actions.authenticateWithMaya({ commit });
+            expect(commit).toHaveBeenCalledWith('set-auth-error', null);
+        });
+
+        it('getUserProfile resets auth error on success', async () => {
+            localStorage.setItem('PSAuthKey', 'token');
+            mayaClient.get.mockResolvedValue({
+                FullName: 'Dev',
+                Type: UserType.Agent,
+            });
+
+            await userModule.actions.getUserProfile({
+                commit,
+                dispatch,
+                state: { user: { uid: 'agent_user' } },
+            });
+
+            expect(commit).toHaveBeenCalledWith('set-auth-error', null);
+        });
+
+        it('getUserProfile writes cache when Type exists', async () => {
+            localStorage.setItem('PSAuthKey', 'token');
+            const state = { user: { uid: 'agent_user' } };
+            mayaClient.get.mockResolvedValue({
+                FullName: 'Dev',
+                Type: UserType.Agent,
+            });
+
+            await userModule.actions.getUserProfile({
+                commit,
+                dispatch,
+                state,
+            });
+
+            const cache = localStorage.getItem('profile:agent_user');
+            expect(cache).not.toBeNull();
+            expect(JSON.parse(cache)).toHaveProperty('data');
+        });
+
+        it('getUserProfile removes corrupted cache', async () => {
+            localStorage.setItem('PSAuthKey', 'token');
+            const state = { user: { uid: 'agent_user' } };
+            localStorage.setItem('profile:agent_user', 'invalid-json');
+            mayaClient.get.mockResolvedValue({
+                FullName: 'Dev',
+                Type: UserType.Agent,
+            });
+
+            await userModule.actions.getUserProfile({
+                commit,
+                dispatch,
+                state,
+            });
+
+            expect(localStorage.getItem('profile:agent_user')).not.toBe(
+                'invalid-json',
+            );
+        });
+
+        it('logOut clears profile cache from localStorage', async () => {
+            const state = { user: { uid: 'agent_user' } };
+            localStorage.setItem(
+                'profile:agent_user',
+                JSON.stringify({ test: true }),
+            );
+
+            await userModule.actions.logOut({
+                commit,
+                dispatch,
+                state,
+            });
+
+            expect(localStorage.getItem('profile:agent_user')).toBeNull();
+        });
+    });
 });
