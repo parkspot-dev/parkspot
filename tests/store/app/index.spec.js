@@ -8,14 +8,13 @@ vi.mock('@/services/api', () => ({
     },
 }));
 
-const { state: initialState, mutations, actions } = appModule;
-
+const CACHE_KEY = 'maya_agents_cache';
 describe('App Store - Agents Module', () => {
     let state;
     let commit;
 
     beforeEach(() => {
-        state = JSON.parse(JSON.stringify(initialState));
+        state = JSON.parse(JSON.stringify(appModule.state));
         commit = vi.fn();
         localStorage.clear();
         vi.clearAllMocks();
@@ -27,61 +26,86 @@ describe('App Store - Agents Module', () => {
 
     it('has correct default state', () => {
         expect(state.agents).toEqual([]);
+        expect(state.loading).toBe(false);
+        expect(state.lastFetched).toBeNull();
     });
 
-    it('set-agents filters system users', () => {
-        const agents = [
-            { FullName: 'Ayush Kumar' },
-            { FullName: '[System User]' },
-        ];
-
-        mutations['set-agents'](state, agents);
-
-        expect(state.agents).toEqual([{ FullName: 'Ayush Kumar' }]);
+    it('set-agents sets agents correctly', () => {
+        const agents = [{ FullName: 'Dev' }];
+        appModule.mutations['set-agents'](state, agents);
+        expect(state.agents).toEqual(agents);
     });
 
-    it('getAgents fetches from API and caches result', async () => {
-        const apiAgents = [{ FullName: 'API Agent' }];
+    it('getAgents fetches from API and stores cache correctly', async () => {
+        const apiAgents = [{ FullName: 'Dev' }];
         mayaClient.get.mockResolvedValue(apiAgents);
-
-        await actions.getAgents({ commit });
-
+        await appModule.actions.getAgents({ commit, state });
         expect(mayaClient.get).toHaveBeenCalledWith('/auth/user/agents');
-        expect(localStorage.getItem('agents')).toBe(JSON.stringify(apiAgents));
-        expect(commit).toHaveBeenCalledWith('set-agents', apiAgents);
+        const cache = JSON.parse(localStorage.getItem(CACHE_KEY));
+        expect(cache).toHaveProperty('data');
+        expect(cache).toHaveProperty('timestamp');
+        expect(commit).toHaveBeenCalledWith(
+            'set-agents',
+            expect.arrayContaining([{ FullName: 'Dev' }]),
+        );
     });
 
-    it('getAgents falls back to cached agents when API fails', async () => {
-        const cachedAgents = [
-            { FullName: 'Ayush Kumar' },
-            { FullName: '[System User]' },
-        ];
-        localStorage.setItem('agents', JSON.stringify(cachedAgents));
-        mayaClient.get.mockRejectedValue(new Error('Network error'));
+    it('getAgents uses cache when valid', async () => {
+        const cachedData = {
+            data: [{ FullName: 'Cached Dev' }],
+            timestamp: Date.now(),
+        };
 
-        await actions.getAgents({ commit });
-
-        expect(mayaClient.get).toHaveBeenCalledWith('/auth/user/agents');
-        expect(commit).toHaveBeenCalledWith('set-agents', cachedAgents);
-        expect(localStorage.getItem('agents')).toBe(JSON.stringify(cachedAgents));
+        localStorage.setItem(CACHE_KEY, JSON.stringify(cachedData));
+        await appModule.actions.getAgents({ commit, state });
+        expect(mayaClient.get).not.toHaveBeenCalled();
+        expect(commit).toHaveBeenCalledWith('set-agents', cachedData.data);
     });
 
-    it('getAgents clears invalid cache and commits empty list on error', async () => {
-        localStorage.setItem('agents', JSON.stringify([]));
+    it('getAgents calls API when cache is stale', async () => {
+        const cachedData = {
+            data: [{ FullName: 'Old Dev' }],
+            timestamp: Date.now() - 10 * 60 * 1000,
+        };
+
+        localStorage.setItem(CACHE_KEY, JSON.stringify(cachedData));
+        mayaClient.get.mockResolvedValue([{ FullName: 'New Dev' }]);
+        await appModule.actions.getAgents({ commit, state });
+        expect(mayaClient.get).toHaveBeenCalled();
+    });
+
+    it('getAgents falls back to cache on API failure', async () => {
+        const cachedData = {
+            data: [{ FullName: 'Cached Dev' }],
+            timestamp: Date.now(),
+        };
+
+        localStorage.setItem(CACHE_KEY, JSON.stringify(cachedData));
         mayaClient.get.mockRejectedValue(new Error('Network error'));
+        await appModule.actions.getAgents({ commit, state });
+        expect(commit).toHaveBeenCalledWith('set-agents', cachedData.data);
+    });
 
-        await actions.getAgents({ commit });
-
-        expect(localStorage.getItem('agents')).toBeNull();
-        expect(commit).toHaveBeenCalledWith('set-agents', []);
+    it('getAgents throws error when no cache and API fails', async () => {
+        mayaClient.get.mockRejectedValue(new Error('Network error'));
+        await expect(
+            appModule.actions.getAgents({ commit, state }),
+        ).rejects.toThrow();
     });
 
     it('clearAgents removes cache and resets state', () => {
-        localStorage.setItem('agents', JSON.stringify([{ FullName: 'Test' }]));
-
-        actions.clearAgents({ commit });
-
-        expect(localStorage.getItem('agents')).toBeNull();
+        localStorage.setItem(CACHE_KEY, JSON.stringify({}));
+        appModule.actions.clearAgents({ commit });
+        expect(localStorage.getItem(CACHE_KEY)).toBeNull();
         expect(commit).toHaveBeenCalledWith('set-agents', []);
+        expect(commit).toHaveBeenCalledWith('set-last-fetched', null);
+    });
+
+    it('refreshAgents forces API call', async () => {
+        const dispatch = vi.fn();
+        await appModule.actions.refreshAgents({ dispatch });
+        expect(dispatch).toHaveBeenCalledWith('getAgents', {
+            forceRefresh: true,
+        });
     });
 });
