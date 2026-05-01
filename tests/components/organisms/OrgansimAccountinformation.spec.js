@@ -34,7 +34,7 @@ describe('Account Information Modal', () => {
                         methods: {
                             submit(e) {
                                 e.preventDefault();
-                                e.stopImmediatePropagation(); // 🔥 KEY FIX
+                                e.stopImmediatePropagation(); 
 
                                 this.$emit('submit', {
                                     mode: 'upi',
