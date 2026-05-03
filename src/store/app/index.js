@@ -23,78 +23,74 @@ const mutations = {
 
 const filterAgents = (agents) => {
     return agents.filter((agent) => {
-        const name = agent.FullName?.toLowerCase() || '';
+        const name = agent.FullName?.toLowerCase().trim() || '';
         return !(name.startsWith('[') && name.endsWith(']'));
     });
 };
 
 const actions = {
-    async getAgents({ commit, state }, { forceRefresh = false } = {}) {
+    async getAgents({ commit, state }) {
         if (state.loading) return;
 
-        if (typeof window !== 'undefined') {
-            try {
-                const cached = localStorage.getItem(CACHE_KEY);
-                if (cached && !forceRefresh) {
-                    const parsed = JSON.parse(cached);
+        try {
+            const cached = localStorage.getItem(CACHE_KEY);
+            if (cached) {
+                const parsed = JSON.parse(cached);
 
-                    if (parsed?.data && parsed?.timestamp) {
-                        const age = Date.now() - parsed.timestamp;
+                if (parsed?.data && parsed?.timestamp) {
+                    const age = Date.now() - parsed.timestamp;
 
-                        if (age < CACHE_TTL) {
-                            commit('set-agents', parsed.data);
-                            commit('set-last-fetched', parsed.timestamp);
-                            return;
-                        }
+                    if (age < CACHE_TTL) {
+                        commit('set-agents', parsed.data);
+                        commit('set-last-fetched', parsed.timestamp);
+                        return;
                     }
                 }
-            } catch {
-                localStorage.removeItem(CACHE_KEY);
             }
+        } catch {
+            localStorage.removeItem(CACHE_KEY);
         }
 
         commit('set-loading', true);
 
         try {
             const res = await mayaClient.get('/auth/user/agents');
+            const data = res?.data || res;
 
-            if (!Array.isArray(res)) {
+            if (!Array.isArray(data)) {
                 throw new Error('Invalid response format');
             }
 
-            const filtered = filterAgents(res);
+            const filtered = filterAgents(data);
+            const now = Date.now();
 
-            if (typeof window !== 'undefined') {
-                try {
-                    localStorage.setItem(
-                        CACHE_KEY,
-                        JSON.stringify({
-                            data: filtered,
-                            timestamp: Date.now(),
-                        }),
-                    );
-                } catch {
-                    localStorage.removeItem(CACHE_KEY);
-                }
+            try {
+                localStorage.setItem(
+                    CACHE_KEY,
+                    JSON.stringify({
+                        data: filtered,
+                        timestamp: now,
+                    }),
+                );
+            } catch {
+                localStorage.removeItem(CACHE_KEY);
             }
 
             commit('set-agents', filtered);
-            commit('set-last-fetched', Date.now());
+            commit('set-last-fetched', now);
         } catch (error) {
-            if (typeof window !== 'undefined') {
-                try {
-                    const cached = localStorage.getItem(CACHE_KEY);
-                    if (cached) {
-                        const parsed = JSON.parse(cached);
-                        if (parsed?.data) {
-                            commit('set-agents', parsed.data);
-                            commit('set-last-fetched', parsed.timestamp);
-                            return;
-                        }
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (parsed?.data) {
+                        commit('set-agents', parsed.data);
+                        commit('set-last-fetched', parsed.timestamp);
+                        return;
                     }
-                } catch {
-                    localStorage.removeItem(CACHE_KEY);
                 }
+            } catch {
+                localStorage.removeItem(CACHE_KEY);
             }
 
             throw error;
@@ -104,15 +100,9 @@ const actions = {
     },
 
     clearAgents({ commit }) {
-        if (typeof window !== 'undefined') {
-            localStorage.removeItem(CACHE_KEY);
-        }
+        localStorage.removeItem(CACHE_KEY);
         commit('set-agents', []);
         commit('set-last-fetched', null);
-    },
-
-    refreshAgents({ dispatch }) {
-        return dispatch('getAgents', { forceRefresh: true });
     },
 };
 
