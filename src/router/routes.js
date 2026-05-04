@@ -1,6 +1,42 @@
 import Home from '../views/PageHome.vue';
 import PageAbout from '@/views/PageAbout.vue';
 import { APP_LINK } from '../constant/constant';
+import store from '@/store';
+
+const AUTH_READY_TIMEOUT_MS = 5000;
+
+const waitForAuthReady = (timeoutMs = AUTH_READY_TIMEOUT_MS) => {
+    if (store.state.user.isAuthReady) {
+        return Promise.resolve(true);
+    }
+
+    return new Promise((resolve) => {
+        let isSettled = false;
+        const unwatch = store.watch(
+            (state) => state.user.isAuthReady,
+            (isAuthReady) => {
+                if (!isAuthReady || isSettled) {
+                    return;
+                }
+
+                isSettled = true;
+                clearTimeout(timeoutId);
+                unwatch();
+                resolve(true);
+            },
+        );
+
+        const timeoutId = setTimeout(() => {
+            if (isSettled) {
+                return;
+            }
+
+            isSettled = true;
+            unwatch();
+            resolve(false);
+        }, timeoutMs);
+    });
+};
 
 // prettier-ignore
 export const pages = {
@@ -27,6 +63,7 @@ export const pages = {
     APP                     : "/app",
     PRIVACY                 : "/privacy",
     REGISTER_REQUEST        : "/internal/register-request",  
+    PENDING_PAYMENTS        : "/internal/pending-payments",
     SPOT_REQUESTS           : "/internal/spot-requests",
     AUTOMATED_PARKING       : "/automated-parking",
     KYC_STATUS_PAGE         : "/internal/users/kyc-status",
@@ -148,6 +185,37 @@ export const routes = [
         component: () => import('@/views/BookingPortal.vue'),
     },
     {
+        path: pages.PENDING_PAYMENTS,
+        name: 'pending-payments',
+        component: () => import('@/views/PendingPaymentsPortal.vue'),
+        beforeEnter: async (to, from, next) => {
+            if (!store.state.user.isAuthReady) {
+                const isReady = await waitForAuthReady();
+
+                if (!isReady) {
+                    next({ name: 'Home' });
+                    return;
+                }
+            }
+
+            const userState = store.state.user;
+            const isLoggedIn = Boolean(userState.user);
+
+            if (!isLoggedIn) {
+                store.commit('user/update-login-modal', true);
+                next({ name: 'Home', query: { redirect: to.fullPath } });
+                return;
+            }
+
+            if (!userState.isAdmin) {
+                next({ name: 'Home' });
+                return;
+            }
+
+            next();
+        },
+    },
+    {
         path: pages.REGISTER_REQUEST,
         name: 'vehicle-owner-registration',
         component: () => import('@/views/RegisterRequest.vue'),
@@ -160,17 +228,17 @@ export const routes = [
     {
         path: pages.KYC_STATUS_PAGE,
         name: 'kyc-status',
-        component: () => import('@/views/PageKYCStatus.vue')
+        component: () => import('@/views/PageKYCStatus.vue'),
     },
     {
         path: pages.SPOTS_SEARCH,
         name: 'spot-search',
-        component: () => import('@/views/PageSearchSpotByName.vue')
+        component: () => import('@/views/PageSearchSpotByName.vue'),
     },
     {
         path: pages.MY_BOOKINGS,
         name: 'my-bookings',
-        component: () => import('@/views/PageMyBookings.vue')
+        component: () => import('@/views/PageMyBookings.vue'),
     },
     {
         path: pages.APP,
