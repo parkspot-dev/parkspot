@@ -142,7 +142,7 @@ export default {
             required: true,
         },
     },
-    emits: ['close', 'saved'],
+    emits: ['close', 'saved', 'error'],
     data() {
         return {
             loading: false,
@@ -221,30 +221,43 @@ export default {
                     this.existingAccount &&
                     Number(this.existingAccount.AccountID) > 0;
 
+                let res;
+
                 if (hasAccount) {
-                    await mayaClient.patch(
+                    res = await mayaClient.patch(
                         '/auth/user/account-information',
                         payload,
                     );
                 } else {
-                    await mayaClient.post(
+                    res = await mayaClient.post(
                         '/auth/user/account-information',
                         payload,
                     );
                 }
 
+                if (!res || res.ErrorCode !== 0) {
+                    this.$emit(
+                        'error',
+                        res?.DisplayMsg || 'Failed to save account information',
+                    );
+                    this.$emit('close');
+                    return;
+                }
+
                 this.$emit('saved');
+                this.$emit('close');
             } catch (err) {
-                console.error(err);
-                alert(
+                this.$emit(
+                    'error',
                     err?.response?.data?.DisplayMsg ||
+                        err.message ||
                         'Failed to save account information',
                 );
+                this.$emit('close');
             } finally {
                 this.loading = false;
             }
         },
-
         closeModal() {
             this.loading = false;
             this.$emit('close');
