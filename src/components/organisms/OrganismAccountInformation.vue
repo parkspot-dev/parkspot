@@ -240,12 +240,10 @@ export default {
                         'error',
                         res?.DisplayMsg || 'Failed to save account information',
                     );
-                    this.$emit('close');
                     return;
                 }
 
                 this.$emit('saved');
-                this.$emit('close');
             } catch (err) {
                 this.$emit(
                     'error',
@@ -253,7 +251,6 @@ export default {
                         err.message ||
                         'Failed to save account information',
                 );
-                this.$emit('close');
             } finally {
                 this.loading = false;
             }

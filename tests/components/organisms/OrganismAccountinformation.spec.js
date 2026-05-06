@@ -135,7 +135,7 @@ describe('OrganismAccountInformation.vue', () => {
         });
         expect(mayaClient.patch).not.toHaveBeenCalled();
         expect(wrapper.emitted('saved')).toHaveLength(1);
-        expect(wrapper.emitted('close')).toHaveLength(1);
+        expect(wrapper.emitted('close')).toBeUndefined();
     });
 
     it('updates an existing mobile account with the full PATCH payload', async () => {
@@ -159,7 +159,7 @@ describe('OrganismAccountInformation.vue', () => {
         });
         expect(mayaClient.post).not.toHaveBeenCalled();
         expect(wrapper.emitted('saved')).toHaveLength(1);
-        expect(wrapper.emitted('close')).toHaveLength(1);
+        expect(wrapper.emitted('close')).toBeUndefined();
     });
 
     it('submits a new bank account with the full POST payload', async () => {
@@ -179,7 +179,7 @@ describe('OrganismAccountInformation.vue', () => {
         });
         expect(mayaClient.patch).not.toHaveBeenCalled();
         expect(wrapper.emitted('saved')).toHaveLength(1);
-        expect(wrapper.emitted('close')).toHaveLength(1);
+        expect(wrapper.emitted('close')).toBeUndefined();
     });
 
     it('prefills UPI account data when an existing UPI account is passed', async () => {
@@ -286,7 +286,7 @@ describe('OrganismAccountInformation.vue', () => {
         await submitForm();
         expect(wrapper.emitted('error')).toEqual([['Failed']]);
         expect(wrapper.emitted('saved')).toBeUndefined();
-        expect(wrapper.emitted('close')).toHaveLength(1);
+        expect(wrapper.emitted('close')).toBeUndefined();
         expect(wrapper.vm.loading).toBe(false);
     });
 
@@ -301,7 +301,7 @@ describe('OrganismAccountInformation.vue', () => {
             ['Failed to save account information'],
         ]);
         expect(wrapper.emitted('saved')).toBeUndefined();
-        expect(wrapper.emitted('close')).toHaveLength(1);
+        expect(wrapper.emitted('close')).toBeUndefined();
         expect(wrapper.vm.loading).toBe(false);
     });
 
@@ -318,7 +318,7 @@ describe('OrganismAccountInformation.vue', () => {
         await submitForm();
         expect(wrapper.emitted('error')).toEqual([['API Error']]);
         expect(wrapper.emitted('saved')).toBeUndefined();
-        expect(wrapper.emitted('close')).toHaveLength(1);
+        expect(wrapper.emitted('close')).toBeUndefined();
         expect(wrapper.vm.loading).toBe(false);
     });
 
