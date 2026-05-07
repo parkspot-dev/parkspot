@@ -238,7 +238,18 @@ export default {
                     request,
                 );
                 if (response.ErrorCode) {
-                    this.alertError(response.DisplayMsg);
+                    this.$buefy.dialog.alert({
+                        title: 'Error',
+                        message: response.DisplayMsg,
+                        type: 'is-danger',
+                        hasIcon: true,
+                        icon: 'alert-circle',
+                        ariaRole: 'alertdialog',
+                        ariaModal: true,
+                        canCancel: false,        // disables Esc + outside-click
+                        onConfirm: () => window.location.reload(),
+                        onCancel: () => window.location.reload(), // belt-and-suspenders
+                    });
                 } else {
                     this.$buefy.toast.open({
                         message: `Sucessfully updated!`,

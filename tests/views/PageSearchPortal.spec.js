@@ -2,6 +2,13 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 import PageSearchPortal from '@/views/PageSearchPortal.vue';
+import { mayaClient } from '@/services/api';
+
+vi.mock('@/services/api', () => ({
+    mayaClient: {
+        patch: vi.fn(),
+    },
+}));
 
 const createStoreMock = (stateOverrides = {}) =>
     createStore({
@@ -144,5 +151,39 @@ describe('PageSearchPortal.vue', () => {
         wrapper = mountPage(store, { $router: { push } });
         wrapper.vm.handleConfirm();
         expect(push).toHaveBeenCalled();
+    });
+    
+    it('shows non-cancelable alert and reloads on both dialog actions when updateRequest fails', async () => {
+        const alert = vi.fn();
+        const reloadSpy = vi
+            .spyOn(window.location, 'reload')
+            .mockImplementation(() => {});
+        mayaClient.patch.mockResolvedValue({
+            ErrorCode: 'ERR_001',
+            DisplayMsg: 'Unable to update',
+        });
+
+        wrapper = mountPage(store, {
+            $buefy: { dialog: { alert }, toast: { open: vi.fn() } },
+        });
+
+        await wrapper.vm.updateRequest({ id: 1 });
+
+        expect(alert).toHaveBeenCalledWith(
+            expect.objectContaining({
+                title: 'Error',
+                message: 'Unable to update',
+                canCancel: false,
+                onConfirm: expect.any(Function),
+                onCancel: expect.any(Function),
+            }),
+        );
+
+        const dialogConfig = alert.mock.calls[0][0];
+        dialogConfig.onConfirm();
+        dialogConfig.onCancel();
+        expect(reloadSpy).toHaveBeenCalledTimes(2);
+
+        reloadSpy.mockRestore();
     });
 });
