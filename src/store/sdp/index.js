@@ -1,5 +1,5 @@
 import { mayaClient } from '@/services/api';
-import { getPaymentAppTypeLabel } from '@/constant/enums';
+import { getPaymentAppLabel } from '@/utils/paymentUtils';
 import ImageUploadService from '@/services/ImageUploadService';
 
 const UPDATE_SITE_ENDPOINT = '/owner/update-site';
@@ -138,7 +138,7 @@ const actions = {
         if (!accountDetails) return;
 
         let paymentdetails = '';
-        const paymentApp = getPaymentAppTypeLabel(accountDetails.PaymentApp);
+        const paymentApp = getPaymentAppLabel(accountDetails.PaymentApp);
 
         if (accountDetails.account_number && accountDetails.ifsc_code) {
             paymentdetails = `${accountDetails.account_number}/${accountDetails.ifsc_code}`;

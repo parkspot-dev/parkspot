@@ -369,7 +369,10 @@ export default {
 .cancel-btn {
     background: transparent;
     border: 1px solid var(--parkspot-red);
+    border-radius: 12px;
     color: var(--parkspot-red);
+    margin: 14px auto 0;
+    width: min(224px, 100%);
 }
 
 .card {
