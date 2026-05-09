@@ -235,7 +235,7 @@ export default {
                     );
                 }
 
-                if (!res || res.ErrorCode !== 0) {
+                if (!res || res.ErrorCode > 0) {
                     this.$emit(
                         'error',
                         res?.DisplayMsg || 'Failed to save account information',
