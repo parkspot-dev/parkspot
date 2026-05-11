@@ -152,23 +152,33 @@ describe('PageSearchPortal.vue', () => {
         wrapper.vm.handleConfirm();
         expect(push).toHaveBeenCalled();
     });
-    
+
     it('shows non-cancelable alert and reloads on both dialog actions when updateRequest fails', async () => {
         const alert = vi.fn();
-        const reloadSpy = vi
-            .spyOn(window.location, 'reload')
-            .mockImplementation(() => {});
+        const originalLocation = window.location;
+        const reloadMock = vi.fn();
+
+        Object.defineProperty(window, 'location', {
+            configurable: true,
+            value: {
+                ...originalLocation,
+                reload: reloadMock,
+            },
+        });
+
         mayaClient.patch.mockResolvedValue({
             ErrorCode: 'ERR_001',
             DisplayMsg: 'Unable to update',
         });
 
         wrapper = mountPage(store, {
-            $buefy: { dialog: { alert }, toast: { open: vi.fn() } },
+            $buefy: {
+                dialog: { alert },
+                toast: { open: vi.fn() },
+            },
         });
 
         await wrapper.vm.updateRequest({ id: 1 });
-
         expect(alert).toHaveBeenCalledWith(
             expect.objectContaining({
                 title: 'Error',
@@ -182,8 +192,10 @@ describe('PageSearchPortal.vue', () => {
         const dialogConfig = alert.mock.calls[0][0];
         dialogConfig.onConfirm();
         dialogConfig.onCancel();
-        expect(reloadSpy).toHaveBeenCalledTimes(2);
-
-        reloadSpy.mockRestore();
+        expect(reloadMock).toHaveBeenCalledTimes(2);
+        Object.defineProperty(window, 'location', {
+            configurable: true,
+            value: originalLocation,
+        });
     });
 });
