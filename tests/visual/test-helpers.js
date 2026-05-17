@@ -43,13 +43,39 @@ function makeFakeStore(overrides = {}) {
 }
 
 function makeFakeRouter(initialPath = '/') {
-    const router = createRouter({
-        history: createMemoryHistory(),
-        routes: [{ path: '/:catchAll(.*)*', component: { template: '<div/>' } }],
-    });
-    router.push(initialPath);
-    return router;
+   const router = createRouter({
+       history: createMemoryHistory(),
+       routes: [
+           { path: '/', name: 'Home', component: { template: '<div/>' } },
+           { path: '/login', name: 'Login', component: { template: '<div/>' } },
+           { path: '/error', name: 'error', component: { template: '<div/>' } },
+           // Catch-all by path. Any unknown name is rerouted to '/'
+           // by the resolve() patch below so screenshots don't fail
+           // on missing-route errors from navbar / footer links.
+           { path: '/:catchAll(.*)*',
+             name: 'visual-test-catchall',
+             component: { template: '<div/>' } },
+       ],
+   });
+   // vue-router throws when <router-link :to="{ name: 'X' }"> targets
+   // a name we haven't registered. For visual tests we only care that
+   // the link RENDERS, not where it goes -- silently fall back to '/'
+   // so blind-mounted nav chrome doesn't blow up the suite.
+   const originalResolve = router.resolve.bind(router);
+   router.resolve = (to, ...rest) => {
+       try {
+           return originalResolve(to, ...rest);
+       } catch (err) {
+           if (err && typeof err.message === 'string' && err.message.includes('No match for')) {
+               return originalResolve('/', ...rest);
+           }
+           throw err;
+       }
+   };
+   router.push(initialPath);
+   return router;
 }
+
 
 // Buefy components we replace with transparent slot wrappers when the
 // caller does NOT opt into real Buefy. Listing them explicitly is

@@ -1,12 +1,13 @@
 import { fileURLToPath, URL } from 'node:url';
+import { playwright } from '@vitest/browser-playwright';
 
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueDevTools from 'vite-plugin-vue-devtools';
 
 // https://vitejs.dev/config/
-export default defineConfig({
-    plugins: [vue(), vueDevTools()],
+export default defineConfig(({ mode }) => ({
+    plugins: [vue(), ...(mode === 'test' ? [] : [vueDevTools()])],
     // for run dev
     server: {
         port: 8080,
@@ -67,7 +68,7 @@ export default defineConfig({
                     setupFiles: ['./tests/visual/setup.js'],
                     browser: {
                         enabled: true,
-                        provider: 'playwright',
+                        provider: playwright(),
                         headless: true,
                         viewport: { width: 1280, height: 800 },
                         instances: [{ browser: 'chromium' }],
@@ -85,4 +86,4 @@ export default defineConfig({
             },
         ],
     },
-});
+}));
