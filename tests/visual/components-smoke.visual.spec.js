@@ -27,6 +27,18 @@ import { skipReason } from './skip-list.js';
 // Map atomic-design folders to display names. Atoms / molecules /
 // organisms / templates split because they tend to fail (or pass) for
 // distinct reasons; grouping makes the run report easier to read.
+// Components that call vee-validate's useField(props.name) in
+// setup(). Mounting them with no props lets vee-validate read an
+// undefined name and throw asynchronously after the screenshot.
+// Provide a stub name so the post-render rejection never fires.
+const WIDGET_DEFAULT_PROPS = {
+    FormInput:        { name: 'visual-test', label: 'Sample' },
+    SelectInput:      { name: 'visual-test', label: 'Sample', list: [] },
+    CheckBoxInput:    { name: 'visual-test', label: 'Sample' },
+    MultiSelectInput: { name: 'visual-test', label: 'Sample', list: [] },
+    RadioInput:       { name: 'visual-test', label: 'Sample' },
+};
+
 const SETS = {
     atoms:           import.meta.glob('/src/components/atoms/**/*.vue'),
     molecules:       import.meta.glob('/src/components/molecules/**/*.vue'),
@@ -67,7 +79,10 @@ for (const [setName, files] of Object.entries(SETS)) {
                     throw new Error(`No default export from ${filePath}`);
                 }
 
-                const screen = render(Component, renderOptions());
+                const screen = render(Component, {
+                    ...renderOptions(),
+                    props: WIDGET_DEFAULT_PROPS[name] || {},
+                });
                 await tick();
 
                 await expect.element(screen.baseElement)
