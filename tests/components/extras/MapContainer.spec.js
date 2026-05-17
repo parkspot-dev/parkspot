@@ -27,9 +27,9 @@ vi.mock('mapbox-gl', () => {
 
     return {
         default: {
-            Map: vi.fn(() => mapMock),
-            Marker: vi.fn(() => markerMock),
-            Popup: vi.fn(() => popupMock),
+            Map: vi.fn(function() {return mapMock; }),
+            Marker: vi.fn(function() {return markerMock; }),
+            Popup: vi.fn(function() {return popupMock; }),
         },
     };
 });

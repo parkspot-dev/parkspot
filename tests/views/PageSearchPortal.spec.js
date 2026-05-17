@@ -89,6 +89,7 @@ describe('PageSearchPortal.vue', () => {
 
     afterEach(() => {
         wrapper?.unmount();
+        vi.unstubAllGlobals();
     });
 
     it('renders search portal root', () => {
@@ -155,9 +156,11 @@ describe('PageSearchPortal.vue', () => {
     
     it('shows non-cancelable alert and reloads on both dialog actions when updateRequest fails', async () => {
         const alert = vi.fn();
-        const reloadSpy = vi
-            .spyOn(window.location, 'reload')
-            .mockImplementation(() => {});
+        const reloadSpy = vi.fn();
+        vi.stubGlobal('location', {
+            ...window.location,
+            reload: reloadSpy,
+        });
         mayaClient.patch.mockResolvedValue({
             ErrorCode: 'ERR_001',
             DisplayMsg: 'Unable to update',

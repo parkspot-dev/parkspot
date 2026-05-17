@@ -62,10 +62,12 @@ describe('PageMyBookings.vue', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        vi.spyOn(window.history, 'replaceState').mockImplementation(() => {});
-        vi.spyOn(window, 'URLSearchParams').mockImplementation(() => ({
-            get: () => null,
-        }));
+        vi.spyOn(window.history, 'replaceState').mockImplementation(function() {});
+        vi.spyOn(window, 'URLSearchParams').mockImplementation(function() {
+            return {
+                get: () => null
+            };
+        });
     });
 
     afterEach(() => {
@@ -129,13 +131,15 @@ describe('PageMyBookings.vue', () => {
     });
 
     it('final selected booking remains first active booking even if URL has bookingId', async () => {
-        vi.spyOn(window, 'URLSearchParams').mockImplementation(() => ({
-            get: (key) => {
-                if (key === 'tab') return 'Past';
-                if (key === 'bookingId') return '201';
-                return null;
-            },
-        }));
+        vi.spyOn(window, 'URLSearchParams').mockImplementation(function() {
+            return {
+                get: (key) => {
+                    if (key === 'tab') return 'Past';
+                    if (key === 'bookingId') return '201';
+                    return null;
+                },
+            };
+        });
 
         mountComponent();
         await flushPromises();
