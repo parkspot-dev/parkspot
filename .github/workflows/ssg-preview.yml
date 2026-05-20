@@ -1,0 +1,56 @@
+name: SSG preview build
+
+# Runs `npm run build` (which is now `vite-ssg build`) on every PR so that
+# SSR regressions are caught before merge.
+
+on:
+  pull_request:
+    branches: [master, main]
+  push:
+    branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ssg-preview-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: vite-ssg build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        run: npm install --no-audit --no-fund
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Build (vite-ssg + sitemap + verify)
+        env:
+          NODE_OPTIONS: --max_old_space_size=4096
+        run: npm run build
+
+      - name: Inventory generated HTML
+        run: node scripts/inventory-dist.js
+
+      - name: Upload dist artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7

@@ -1,13 +1,7 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, get, child } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: 'AIzaSyAvsZyGzx9hbS7IN4BgejdrCECmyRm1zxY',
     authDomain: 'parkspot-a4313.firebaseapp.com',
@@ -19,21 +13,47 @@ const firebaseConfig = {
     measurementId: 'G-82VNFQXCGR',
 };
 
-// Initialize Firebase
-const firebase = initializeApp(firebaseConfig);
+// Firebase SDKs reach for `window` / `document` / `IndexedDB` during init.
+// Under SSR (`vite-ssg build` / `@vue/server-renderer`) none of those exist,
+// so we lazy-initialize on first use and short-circuit on the server.
+const isBrowser = typeof window !== 'undefined';
 
-// initialize firebase auth
-const auth = getAuth(firebase);
+let firebaseApp = null;
 
-/**
- * getValueFromFirebase returns the value at the path. Value can be a JSON 
- * object or primitive data.
- *
- * @param {String} path: complete path to the node starting from root.
- */
-async function getValueFromFirebase(path) {
-    const res = await get(child(ref(getDatabase(firebase)), path));
-    return await res.val();
+function getFirebaseApp() {
+    if (!isBrowser) {
+        return null;
+    }
+    if (!firebaseApp) {
+        firebaseApp = initializeApp(firebaseConfig);
+    }
+    return firebaseApp;
 }
 
-export { auth, getValueFromFirebase };
+/**
+ * Browser-only Firebase Auth handle. On the server we expose a tiny stub that
+ * satisfies the `onAuthStateChanged(auth, ...)` contract so consumers can be
+ * imported safely during SSR without doing their own typeof-window checks.
+ */
+const serverAuthStub = {
+    currentUser: null,
+};
+
+export const auth = isBrowser ? getAuth(getFirebaseApp()) : serverAuthStub;
+
+/**
+ * Reads a value at `path` in Firebase RTDB. Returns `null` on the server (we
+ * don't need RTDB during SSR rendering — build-time data flows through
+ * `src/utils/seo/rtdb-build.js`, which uses the REST API instead of the SDK).
+ *
+ * @param {string} path Slash-separated RTDB path, root-relative.
+ * @returns {Promise<*>}
+ */
+export async function getValueFromFirebase(path) {
+    if (!isBrowser) {
+        return null;
+    }
+    const app = getFirebaseApp();
+    const res = await get(child(ref(getDatabase(app)), path));
+    return await res.val();
+}

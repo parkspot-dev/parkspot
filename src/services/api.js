@@ -193,19 +193,23 @@ class MapBoxApiService extends BaseApiService {
 }
 
 /**
- * IIFE function to
- * get the device mobile or desktop
- * @return {string} mweb or dweb.
+ * Detect device flavour ("mweb" / "dweb") from the user-agent.
+ *
+ * SSR-safe: when there is no `navigator` (i.e. inside `vite-ssg build` or
+ * any other server runtime), we default to "dweb" rather than throwing. The
+ * value is used only to tag outgoing HTTP requests; nothing semantic depends
+ * on it for the SSG render path because no Maya calls are issued at build
+ * time.
+ *
+ * @return {string} "mweb" or "dweb".
  */
 const getFlavour = (function () {
-    const details = navigator.userAgent;
-    const regexp = /android|iphone|kindle|ipad/i;
-    const isMobileDevice = regexp.test(details);
-    if (isMobileDevice) {
-        return 'mweb';
-    } else {
+    if (typeof navigator === 'undefined') {
         return 'dweb';
     }
+    const details = navigator.userAgent || '';
+    const regexp = /android|iphone|kindle|ipad/i;
+    return regexp.test(details) ? 'mweb' : 'dweb';
 })();
 const mayaClient = new MayaApiService(getFlavour);
 

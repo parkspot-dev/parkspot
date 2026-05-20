@@ -45,6 +45,9 @@ describe('root store', () => {
             expect(store.hasModule('myBookings')).toBe(true);
             expect(store.hasModule('pendingPayments')).toBe(true);
             expect(store.hasModule('app')).toBe(true);
+            // SSG: `seoPages` backs the prerendered area pages and is the
+            // hand-off bucket between `serverPrefetch` and client hydration.
+            expect(store.hasModule('seoPages')).toBe(true);
         });
     });
 
@@ -67,23 +70,26 @@ describe('root store', () => {
 
     describe('Focused snapshot tests', () => {
         it('matches the registered module key snapshot', () => {
-            expect(Object.keys(store.state)).toMatchInlineSnapshot(`
+            // Modules are registered in alphabetical order by
+            // `createAppStore` so module additions stay visually local.
+            expect(Object.keys(store.state).sort()).toMatchInlineSnapshot(`
               [
-                "device",
+                "app",
                 "blog",
-                "user",
-                "map",
-                "sdp",
-                "searchPortal",
                 "bookingPortal",
                 "config",
-                "registerRequest",
-                "spotRequests",
-                "reviewSpot",
+                "device",
                 "kycStatusPortal",
+                "map",
                 "myBookings",
                 "pendingPayments",
-                "app",
+                "registerRequest",
+                "reviewSpot",
+                "sdp",
+                "searchPortal",
+                "seoPages",
+                "spotRequests",
+                "user",
               ]
             `);
         });
