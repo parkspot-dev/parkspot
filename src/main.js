@@ -29,24 +29,10 @@ configure({
     validateOnInput: true,
 });
 
-// Exact paths that are SPA-only by design (client redirects, scratch
-// pages, transactional status pages). Excluded from `includedRoutes`
-// so they never enter the prerender set.
-//
-// `/search-portal` is a legacy redirect that targets
-// `/internal/search-portal`. The /internal/* prefix is already excluded,
-// but a `redirect:` route does not start with `/internal/` itself — if it
-// stays in `paths`, vite-ssg will hand it to `router.push()`, vue-router
-// will follow the redirect, and PageSearchPortal's `created()` hook will
-// fire admin-only API calls during SSR. Excluding the source path keeps
-// the renderer well away from any /internal/* shape.
-const SSG_EXCLUDED_EXACT = new Set([
-    '/app',
-    '/temp',
-    '/thank-you',
-    '/error',
-    '/search-portal',
-]);
+// Route-enumeration hook for vite-ssg. Re-exported as a top-level named
+// export below — that's the only shape vite-ssg recognises. See
+// `./utils/seo/included-routes.js` for the contract and rationale.
+export { includedRoutes } from './utils/seo/included-routes.js';
 
 export const createApp = ViteSSG(
     App,
@@ -100,62 +86,5 @@ export const createApp = ViteSSG(
             // client-side head manager can emit a fresh, deduped copy.
             cleanupEdgeInjectedStructuredData();
         }
-    },
-    {
-        // Route enumeration: include every Vue-Router path plus the area
-        // pages we discover at build time via RTDB. Failures during
-        // enumeration must NOT block the build — falling back to the
-        // static path set still produces a useful SPA shell for unknown
-        // routes (Netlify's `_redirects` catches them).
-        //
-        // Excluded sets:
-        //   - `/internal/*`, `/payment/*`, `/profile/*`, `/user/*`
-        //     auth-gated; route guards in `routes.js` already redirect
-        //     unauthenticated callers, so prerendering them just produces
-        //     SPA-shell HTML at the wrong canonical URL.
-        //   - paths with a `:` param placeholder — can't be prerendered
-        //     without a slug list (spot-details / payment-gateway are
-        //     out of scope for Phase 1+2).
-        //   - paths in `SSG_EXCLUDED_EXACT` (see module-scope set above):
-        //     client-only redirects, scratchpads or transactional status
-        //     pages. They should never appear in search results.
-        async includedRoutes(paths, _routes) {
-            const filtered = paths.filter(
-                (p) =>
-                    !p.startsWith('/internal/') &&
-                    !p.startsWith('/payment/') &&
-                    !p.startsWith('/profile/') &&
-                    !p.startsWith('/user/') &&
-                    !p.includes(':') &&
-                    !SSG_EXCLUDED_EXACT.has(p),
-            );
-
-            try {
-                const { fetchAllSeoSlugs } = await import(
-                    './utils/seo/rtdb-build.js'
-                );
-                const { bangalore, hyderabad } = await fetchAllSeoSlugs();
-                // Trailing slash on area pages so `vite-ssg` emits the
-                // file as `dist/<city>/parking-near-<slug>/index.html`,
-                // matching the canonical URL the edge function (and
-                // `to-head.js`) already declares. Fixes §0.1.c.
-                return [
-                    ...filtered,
-                    ...bangalore.map(
-                        (s) => `/bangalore/parking-near-${s}/`,
-                    ),
-                    ...hyderabad.map(
-                        (s) => `/hyderabad/parking-near-${s}/`,
-                    ),
-                ];
-            } catch (err) {
-                // eslint-disable-next-line no-console
-                console.error(
-                    '[ssg] RTDB enumeration failed; shipping static routes only',
-                    err,
-                );
-                return filtered;
-            }
-        },
     },
 );
