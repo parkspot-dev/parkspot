@@ -7,19 +7,23 @@ import vueDevTools from 'vite-plugin-vue-devtools';
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [vue(), vueDevTools()],
-    // vite-ssg configuration. `crawl: false` makes vite-ssg render exactly
-    // the paths returned from `includedRoutes()` in `src/main.js` and
-    // nothing else. With `crawl: true` (the default) vite-ssg walks
-    // `<a href>` / `<router-link>` tags inside every rendered page and
-    // recursively renders whatever it discovers — which is how
-    // `/internal/*`, `/payment/*` and similar gated paths leak into the
-    // prerender set despite the `includedRoutes` filter (their links exist
-    // inside the navbar / footer / profile menus). Disabling crawl gives
-    // us a deterministic, auditable URL set instead.
+    // vite-ssg configuration. Only fields that appear in upstream's
+    // `ViteSSGOptions` type are accepted; unknown keys are silently
+    // dropped, so it is easy to ship dead config (see git history for
+    // `crawl: false`, which was never a real option). The route set is
+    // fully determined by the `includedRoutes` export from
+    // `src/main.js` — no HTML/link crawling happens regardless.
     ssgOptions: {
-        crawl: false,
         formatting: 'minify',
         script: 'async',
+        // Emit `dist/about/index.html` instead of `dist/about.html` for
+        // every route. The area pages we ship from `includedRoutes`
+        // already use the nested shape (their paths carry a trailing
+        // slash), as does `scripts/verify-ssg-output.js` and the URLs
+        // in `scripts/generate-sitemap.js`. Without this option the
+        // static pages emit as flat `.html` files and the canonical
+        // URL set is inconsistent (e.g. `/about` vs `/bangalore/.../`).
+        dirStyle: 'nested',
     },
     // for run dev
     server: {
