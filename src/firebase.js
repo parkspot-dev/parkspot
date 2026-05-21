@@ -35,8 +35,16 @@ function getFirebaseApp() {
  * satisfies the `onAuthStateChanged(auth, ...)` contract so consumers can be
  * imported safely during SSR without doing their own typeof-window checks.
  */
+// On the server, `auth` is imported by call sites that don't always check
+// for SSR (e.g. axios interceptors that call `auth.authStateReady()` before
+// every request). The stub satisfies the surface that we know is touched at
+// SSR-eval time without dragging in the Firebase Web SDK.
 const serverAuthStub = {
     currentUser: null,
+    authStateReady: () => Promise.resolve(),
+    onAuthStateChanged: () => () => undefined,
+    onIdTokenChanged: () => () => undefined,
+    signOut: () => Promise.resolve(),
 };
 
 export const auth = isBrowser ? getAuth(getFirebaseApp()) : serverAuthStub;

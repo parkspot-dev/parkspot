@@ -7,6 +7,20 @@ import vueDevTools from 'vite-plugin-vue-devtools';
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [vue(), vueDevTools()],
+    // vite-ssg configuration. `crawl: false` makes vite-ssg render exactly
+    // the paths returned from `includedRoutes()` in `src/main.js` and
+    // nothing else. With `crawl: true` (the default) vite-ssg walks
+    // `<a href>` / `<router-link>` tags inside every rendered page and
+    // recursively renders whatever it discovers — which is how
+    // `/internal/*`, `/payment/*` and similar gated paths leak into the
+    // prerender set despite the `includedRoutes` filter (their links exist
+    // inside the navbar / footer / profile menus). Disabling crawl gives
+    // us a deterministic, auditable URL set instead.
+    ssgOptions: {
+        crawl: false,
+        formatting: 'minify',
+        script: 'async',
+    },
     // for run dev
     server: {
         port: 8080,

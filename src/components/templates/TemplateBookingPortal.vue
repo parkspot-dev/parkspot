@@ -605,7 +605,12 @@
 </template>
 
 <script>
-import { cloneDeep } from 'lodash';
+// `lodash` is a CommonJS package; under vite-ssg's SSR pipeline (native
+// ESM) named imports trip "Named export 'cloneDeep' not found" because
+// the CJS module shape can't be statically analysed for named exports.
+// Importing the cherry-picked submodule sidesteps the interop entirely
+// and also tree-shakes better.
+import cloneDeep from 'lodash/cloneDeep.js';
 import { mapActions, mapState } from 'vuex';
 import RefundIcon from '/assets/refund.png';
 import {

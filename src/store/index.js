@@ -59,9 +59,57 @@ export function createAppStore() {
 let lazySingleton = null;
 
 /**
- * Lazy singleton accessor. Only constructed on the client side — and only
- * when something explicitly imports the default export — so the SSR pass
- * uses the per-render store from `createAppStore` and never touches this.
+ * An inert Vuex-shaped stub used as the default-export target during SSR.
+ *
+ * Route guards, route-level config getters and a handful of other legacy
+ * call sites still do `import store from '@/store'; store.state.X.Y` at
+ * module level. Throwing on SSR (an earlier attempt at this) made every
+ * such site a build-time blocker — even though vite-ssg has no business
+ * even firing those guards (`crawl: false` keeps the renderer to the URL
+ * set returned by `includedRoutes`). The stub keeps the build resilient:
+ * any guard that does fire sees an unauthenticated, empty world and
+ * either calls `next()` straight through or redirects to a public page.
+ *
+ * The stub is intentionally read-mostly: `commit`/`dispatch` are no-ops
+ * (so no SSR-side mutation can leak across renders), `state` and
+ * `getters` are recursive empty proxies (so chained access like
+ * `store.state.user.isAuthReady` is undefined rather than throwing).
+ */
+const noopState = () =>
+    new Proxy(
+        {},
+        {
+            get: (target, prop) => {
+                if (prop === Symbol.toPrimitive) return () => '';
+                if (prop === 'toJSON' || prop === Symbol.toStringTag) {
+                    return undefined;
+                }
+                return noopState();
+            },
+            has: () => false,
+        },
+    );
+
+const ssrStoreStub = Object.freeze({
+    state: noopState(),
+    getters: noopState(),
+    commit: () => undefined,
+    dispatch: () => Promise.resolve(),
+    watch: () => () => undefined,
+    subscribe: () => () => undefined,
+    subscribeAction: () => () => undefined,
+    replaceState: () => undefined,
+    registerModule: () => undefined,
+    unregisterModule: () => undefined,
+    hasModule: () => false,
+});
+
+/**
+ * Lazy singleton accessor. On the client, builds (and caches) a real
+ * Vuex store via `createAppStore()` on first access. On the server,
+ * returns the inert stub above — never the real store, since the real
+ * store would (a) re-run side-effectful module subscriptions like
+ * `onAuthStateChanged` and (b) leak state between renders.
  *
  * @returns {import('vuex').Store}
  */
@@ -70,10 +118,7 @@ function getStore() {
         return lazySingleton;
     }
     if (typeof window === 'undefined') {
-        throw new Error(
-            '[store] Default singleton accessed during SSR. Use the ' +
-                'per-render store created by main.js / createAppStore().',
-        );
+        return ssrStoreStub;
     }
     lazySingleton = createAppStore();
     return lazySingleton;
