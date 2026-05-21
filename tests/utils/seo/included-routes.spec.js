@@ -14,6 +14,7 @@ import {
     filterStaticPaths,
     SSG_EXCLUDED_EXACT,
 } from '@/utils/seo/included-routes.js';
+import { __internals as rtdbInternals } from '@/utils/seo/rtdb-build.js';
 
 describe('utils/seo/included-routes', () => {
     describe('filterStaticPaths', () => {
@@ -141,6 +142,10 @@ describe('utils/seo/included-routes', () => {
                     return { indiranagar: true, hyderabad: true };
                 },
             }));
+            // `rtdb-build.js` memoises the bulk catalogue at module scope.
+            // Reset it so tests in this describe block don't leak the
+            // previous test's payload into the next test's network mock.
+            rtdbInternals.resetCache();
         });
 
         afterEach(() => {
