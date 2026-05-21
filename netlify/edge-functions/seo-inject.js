@@ -79,11 +79,17 @@ export default async (request, context) => {
 };
 
 // Routes the function handles. Netlify uses these in addition to any paths
-// defined in netlify.toml.
+// defined in netlify.toml — the union of both is what actually triggers
+// the function.
+//
+// Area paths (`/bangalore/parking-near-:area`,
+// `/hyderabad/parking-near-:area`) were removed here when those routes
+// migrated to vite-ssg prerender. The handler code above (AREA_PATH_REGEX,
+// fetchAreaEnhancement, buildAreaPageMeta) stays in place so a rollback
+// only needs to restore the path entries — no code change.
+// See `ssg-research/04-integration-plan.md` § 2.4.
 export const config = {
     path: [
-        '/bangalore/parking-near-:area',
-        '/hyderabad/parking-near-:area',
         '/spot-details/:spotId',
     ],
 };

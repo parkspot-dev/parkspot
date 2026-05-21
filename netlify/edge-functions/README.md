@@ -1,8 +1,23 @@
 # SEO Injection Edge Function
 
 Per-URL `<title>`, `<meta description>`, `<link rel="canonical">`, Open Graph
-and JSON-LD metadata injection for two URL patterns, without moving off the
-current Vue 3 + Vite SPA architecture.
+and JSON-LD metadata injection.
+
+## Status (2026-05-22)
+
+This function originally handled three URL patterns. After the vite-ssg
+migration (Phase 1 + Phase 2 in `ssg-research/`), **area pages**
+(`/bangalore/parking-near-*`, `/hyderabad/parking-near-*`) are now fully
+prerendered at build time and no longer need edge-side rewriting. The
+function is currently bound only to `/spot-details/*`, which remains
+SPA + edge-injected head until Phase 3 prerenders that pattern too.
+
+The area-page handler code (`AREA_PATH_REGEX`, `fetchAreaEnhancement`,
+`buildAreaPageMeta`) is intentionally retained as a rollback escape
+hatch — adding two `[[edge_functions]]` entries back to `netlify.toml`
+restores the previous behaviour without any code change. See
+`ssg-research/04-integration-plan.md` § 2.4 (area retirement) and § 3.5
+(spot-detail safety net).
 
 ## Why
 
@@ -20,11 +35,11 @@ before the byte stream leaves the CDN.
 
 ## Paths handled
 
-| URL pattern                               | Example                                                      |
-|-------------------------------------------|--------------------------------------------------------------|
-| `/bangalore/parking-near-<area>`          | `/bangalore/parking-near-marathahalli/`                      |
-| `/hyderabad/parking-near-<area>`          | `/hyderabad/parking-near-hitech-city/`                       |
-| `/spot-details/<spotId>`                  | `/spot-details/HYD%23REQ%23104` (decodes to `HYD#REQ#104`)   |
+| URL pattern              | Example                                                    | Current owner |
+|--------------------------|------------------------------------------------------------|---------------|
+| `/spot-details/<spotId>` | `/spot-details/HYD%23REQ%23104` (decodes to `HYD#REQ#104`) | **Edge function** (until Phase 3) |
+| ~~`/bangalore/parking-near-<area>`~~ | ~~`/bangalore/parking-near-marathahalli/`~~ | vite-ssg prerender (Phase 2) |
+| ~~`/hyderabad/parking-near-<area>`~~ | ~~`/hyderabad/parking-near-hitech-city/`~~  | vite-ssg prerender (Phase 2) |
 
 Every other URL is **completely untouched** -- the edge function returns
 early before calling `context.next()`.
