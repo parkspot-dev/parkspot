@@ -32,11 +32,20 @@ configure({
 // Exact paths that are SPA-only by design (client redirects, scratch
 // pages, transactional status pages). Excluded from `includedRoutes`
 // so they never enter the prerender set.
+//
+// `/search-portal` is a legacy redirect that targets
+// `/internal/search-portal`. The /internal/* prefix is already excluded,
+// but a `redirect:` route does not start with `/internal/` itself — if it
+// stays in `paths`, vite-ssg will hand it to `router.push()`, vue-router
+// will follow the redirect, and PageSearchPortal's `created()` hook will
+// fire admin-only API calls during SSR. Excluding the source path keeps
+// the renderer well away from any /internal/* shape.
 const SSG_EXCLUDED_EXACT = new Set([
     '/app',
     '/temp',
     '/thank-you',
     '/error',
+    '/search-portal',
 ]);
 
 export const createApp = ViteSSG(
