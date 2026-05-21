@@ -7,8 +7,19 @@
 // options object silently disables it (the slot is reserved for
 // client-only options like `transformState`). See the upstream README
 // "Custom Routes to Render" section for the contract.
-
-import { fetchAllSeoSlugs } from './rtdb-build.js';
+//
+// IMPORTANT: do NOT static-import `./rtdb-build.js` at module scope.
+// `included-routes.js` is reachable from the client entry (`main.js`
+// re-exports `includedRoutes`), so a static import would pull
+// `rtdb-build.js` — its hardcoded RTDB REST URL and the bulk-cache
+// machinery — into every browser page load. It would also defeat the
+// matching `await import(...)` inside `store/seoPages/index.js` (vite
+// emits an explicit warning about this in the build log:
+// "rtdb-build.js is dynamically imported by store/seoPages but also
+//  statically imported by included-routes, dynamic import will not move
+//  module into another chunk"). Keeping the import dynamic and inside
+// `includedRoutes` lets rollup code-split the module into its own
+// chunk that's loaded only during vite-ssg's prerender pass.
 
 // Exact paths that are SPA-only by design (client redirects, scratch
 // pages, transactional status pages). Excluded from the prerender
@@ -91,6 +102,10 @@ export async function includedRoutes(paths, _routes) {
     const filtered = filterStaticPaths(paths);
 
     try {
+        // Dynamic import — see file-header note. The specifier MUST stay
+        // in literal form so rollup can statically analyse it and emit a
+        // dedicated chunk.
+        const { fetchAllSeoSlugs } = await import('./rtdb-build.js');
         const slugs = await fetchAllSeoSlugs();
         return [...filtered, ...buildAreaPagePaths(slugs)];
     } catch (err) {
