@@ -11,6 +11,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
     buildAreaPagePaths,
+    buildBlogPostPaths,
     filterStaticPaths,
     SSG_EXCLUDED_EXACT,
 } from '@/utils/seo/included-routes.js';
@@ -109,6 +110,58 @@ describe('utils/seo/included-routes', () => {
         });
     });
 
+    describe('buildBlogPostPaths', () => {
+        it('emits trailing-slashed paths for every blog id in the store', () => {
+            const fixture = {
+                state: {
+                    blogs: [
+                        { id: 'foo' },
+                        { id: 'bar-baz' },
+                    ],
+                },
+            };
+            expect(buildBlogPostPaths(fixture)).toEqual([
+                '/blog/foo/',
+                '/blog/bar-baz/',
+            ]);
+        });
+
+        it('skips entries with missing or invalid id (never emits /blog/undefined/)', () => {
+            const fixture = {
+                state: {
+                    blogs: [
+                        { id: 'good' },
+                        {}, // no id
+                        { id: '' }, // empty id
+                        { id: '   ' }, // whitespace-only
+                        { id: 42 }, // wrong type
+                        null,
+                        undefined,
+                    ],
+                },
+            };
+            expect(buildBlogPostPaths(fixture)).toEqual(['/blog/good/']);
+        });
+
+        it('returns [] when the store module is malformed', () => {
+            expect(buildBlogPostPaths({})).toEqual([]);
+            expect(buildBlogPostPaths({ state: null })).toEqual([]);
+            expect(buildBlogPostPaths({ state: { blogs: null } })).toEqual([]);
+            expect(buildBlogPostPaths(null)).toEqual([]);
+        });
+
+        it('defaults to the real bundled blog list when called with no args', () => {
+            // Smoke-test the production wiring: the static import in
+            // included-routes.js MUST resolve to a non-empty list, or
+            // every Phase-1.5 acceptance check downstream will fail.
+            const out = buildBlogPostPaths();
+            expect(out.length).toBeGreaterThan(0);
+            for (const p of out) {
+                expect(p).toMatch(/^\/blog\/[a-z0-9-]+\/$/);
+            }
+        });
+    });
+
     describe('SSG_EXCLUDED_EXACT', () => {
         it('is a frozen Set so consumers cannot mutate it at runtime', () => {
             expect(SSG_EXCLUDED_EXACT).toBeInstanceOf(Set);
@@ -153,7 +206,7 @@ describe('utils/seo/included-routes', () => {
             vi.restoreAllMocks();
         });
 
-        it('combines the filtered static path set with the area-page set', async () => {
+        it('combines static paths + blog posts + area pages, in that order', async () => {
             const { includedRoutes } = await import(
                 '@/utils/seo/included-routes.js'
             );
@@ -164,15 +217,25 @@ describe('utils/seo/included-routes', () => {
                 '/blog/:id',
                 '/app',
             ]);
-            expect(result).toEqual([
-                '/',
-                '/about',
+            // The exact blog ids depend on the bundled `src/store/blog`
+            // module, so we don't hard-code them — just assert (a) the
+            // static and area-page paths sit at the expected ends, and
+            // (b) at least one blog path sits between them in the
+            // canonical `/blog/<id>/` shape.
+            expect(result[0]).toBe('/');
+            expect(result[1]).toBe('/about');
+            expect(result.slice(-2)).toEqual([
                 '/bangalore/parking-near-indiranagar/',
                 '/hyderabad/parking-near-hyderabad/',
             ]);
+            const blogPaths = result.filter((p) => p.startsWith('/blog/'));
+            expect(blogPaths.length).toBeGreaterThan(0);
+            for (const p of blogPaths) {
+                expect(p).toMatch(/^\/blog\/[a-z0-9-]+\/$/);
+            }
         });
 
-        it('falls back to static paths when RTDB enumeration throws', async () => {
+        it('still ships static + blog paths when RTDB enumeration throws', async () => {
             const consoleErr = vi
                 .spyOn(console, 'error')
                 .mockImplementation(() => {});
@@ -183,7 +246,13 @@ describe('utils/seo/included-routes', () => {
                 '@/utils/seo/included-routes.js'
             );
             const result = await includedRoutes(['/', '/internal/admin']);
-            expect(result).toEqual(['/']);
+            expect(result[0]).toBe('/');
+            // No area pages — RTDB is down — but blog paths still ship
+            // because they come from a bundled JS module, not a network
+            // round-trip.
+            expect(result.some((p) => p.startsWith('/bangalore/'))).toBe(false);
+            expect(result.some((p) => p.startsWith('/hyderabad/'))).toBe(false);
+            expect(result.some((p) => p.startsWith('/blog/'))).toBe(true);
             expect(consoleErr).toHaveBeenCalled();
         });
     });

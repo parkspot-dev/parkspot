@@ -9,6 +9,11 @@ let routerPush;
 const mockBlog = {
     id: 'test-blog',
     title: 'Test Blog',
+    author: 'Test Author',
+    img: '/assets/blog/test.jpg',
+    desc: 'A short test description.',
+    dateTime: '2025-01-15',
+    time: 'Jan 15, 2025',
 };
 
 const store = createStore({
@@ -93,9 +98,13 @@ describe('PageBlogPost.vue - Complete Test Suite', () => {
         expect(wrapper.find('.blog-content').text()).toBe('Mock blog content');
     });
 
-    it('sets page title from route param', async () => {
+    it('sets page title from the blog record (not the raw route param)', async () => {
+        // After SSG migration, `mounted()` reads the human-readable
+        // title from the blog Vuex module instead of using the slug.
+        // The previous behaviour was a bug surfaced by the SSG
+        // prerender — see ssg-research/04-integration-plan.md § 2.5.
         await flushPromises();
-        expect(wrapper.vm.title).toBe('test-blog');
+        expect(wrapper.vm.title).toBe('Test Blog');
     });
 
     it('fires contact action and navigates on success', async () => {

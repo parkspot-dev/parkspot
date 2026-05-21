@@ -21,6 +21,13 @@
 // `includedRoutes` lets rollup code-split the module into its own
 // chunk that's loaded only during vite-ssg's prerender pass.
 
+// The blog Vuex module ships with a static `state.blogs` array — all
+// post records are bundled with the app, no network fetch involved.
+// Statically importing it here is SSR- and client-safe because the
+// module has zero Firebase or browser-global side effects. See
+// `src/store/blog/index.js` for the schema.
+import blogModule from '@/store/blog';
+
 // Exact paths that are SPA-only by design (client redirects, scratch
 // pages, transactional status pages). Excluded from the prerender
 // set so they never appear in search results.
@@ -88,6 +95,30 @@ export function buildAreaPagePaths(slugs) {
 }
 
 /**
+ * Produce the trailing-slashed blog-post URLs that vite-ssg should
+ * prerender. Pulls the id list straight from the bundled blog Vuex
+ * module — no async, no network. Trailing slash matches the canonical
+ * URL emitted by `buildBlogPostMeta`.
+ *
+ * @param { { state?: { blogs?: Array<{ id?: string }> } } } [storeModule]
+ *   Defaults to the imported `blogModule`; the parameter exists so the
+ *   unit test can pass a fixture without monkey-patching the import.
+ * @returns { string[] }
+ */
+export function buildBlogPostPaths(storeModule = blogModule) {
+    const list = (storeModule && storeModule.state && storeModule.state.blogs)
+        || [];
+    const out = [];
+    for (const blog of list) {
+        if (!blog || typeof blog.id !== 'string') continue;
+        const id = blog.id.trim();
+        if (!id) continue;
+        out.push(`/blog/${id}/`);
+    }
+    return out;
+}
+
+/**
  * vite-ssg hook. Returns the final list of paths to prerender.
  *
  * Failures during RTDB enumeration must NOT block the build — falling
@@ -100,6 +131,10 @@ export function buildAreaPagePaths(slugs) {
  */
 export async function includedRoutes(paths, _routes) {
     const filtered = filterStaticPaths(paths);
+    // Blog paths come from a static store import — no network. They
+    // ship even if the RTDB enumeration below fails, so they live
+    // outside the try/catch.
+    const blogPaths = buildBlogPostPaths();
 
     try {
         // Dynamic import — see file-header note. The specifier MUST stay
@@ -107,13 +142,17 @@ export async function includedRoutes(paths, _routes) {
         // dedicated chunk.
         const { fetchAllSeoSlugs } = await import('./rtdb-build.js');
         const slugs = await fetchAllSeoSlugs();
-        return [...filtered, ...buildAreaPagePaths(slugs)];
+        return [
+            ...filtered,
+            ...blogPaths,
+            ...buildAreaPagePaths(slugs),
+        ];
     } catch (err) {
         // eslint-disable-next-line no-console
         console.error(
-            '[ssg] RTDB enumeration failed; shipping static routes only',
+            '[ssg] RTDB enumeration failed; shipping static + blog routes only',
             err,
         );
-        return filtered;
+        return [...filtered, ...blogPaths];
     }
 }
