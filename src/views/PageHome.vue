@@ -87,7 +87,12 @@ import { CAR_WASH_SERVICES } from '@/constant/constant';
 import { contactFormSchema } from '@/validationSchemas';
 import { Form as VeeForm } from 'vee-validate';
 import { mapActions, mapMutations } from 'vuex';
-import { PAGE_TITLE, FORM, FORM_PLACEHOLDERS } from '@/constant/constant';
+import {
+    PAGE_TITLE,
+    PAGE_DESCRIPTION,
+    FORM,
+    FORM_PLACEHOLDERS,
+} from '@/constant/constant';
 import FormInput from '@/components/global/FormInput.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
 import TemplateAbout from '../components/templates/TemplateAbout.vue';
@@ -111,9 +116,42 @@ export default {
         TemplateOurProducts,
         TestimonialSection,
     },
+    // Phase 2.5c: emit a route-specific `<meta name="description">`
+    // (and matching og:title / og:description) on the homepage so the
+    // SSG'd HTML stops inheriting the generic shell description from
+    // `index.html`. Google's docs explicitly flag identical-across-
+    // pages descriptions as a quality issue and routinely rewrite
+    // them from the page body. Title also rewritten to a clean
+    // ~55-char value — see `PAGE_TITLE.HOMEPAGE` comment.
     metaInfo() {
         return {
             title: PAGE_TITLE.HOMEPAGE,
+            meta: [
+                {
+                    name: 'description',
+                    content: PAGE_DESCRIPTION.HOMEPAGE,
+                },
+                {
+                    property: 'og:title',
+                    content: PAGE_TITLE.HOMEPAGE,
+                },
+                {
+                    property: 'og:description',
+                    content: PAGE_DESCRIPTION.HOMEPAGE,
+                },
+                { property: 'og:type', content: 'website' },
+                {
+                    property: 'og:url',
+                    content: 'https://www.parkspot.in/',
+                },
+            ],
+            link: [
+                {
+                    rel: 'canonical',
+                    href: 'https://www.parkspot.in/',
+                    key: 'canonical',
+                },
+            ],
         };
     },
     data() {

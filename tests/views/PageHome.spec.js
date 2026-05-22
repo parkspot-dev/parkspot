@@ -21,7 +21,7 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createStore } from 'vuex';
 import PageHome from '@/views/PageHome.vue';
-import { PAGE_TITLE } from '@/constant/constant';
+import { PAGE_TITLE, PAGE_DESCRIPTION } from '@/constant/constant';
 
 let wrapper;
 let routerPush;
@@ -95,6 +95,61 @@ describe('PageHome.vue — Phase 2.5b title-collision regression', () => {
     it("metaInfo() returns PageHome's own title (not any child's)", () => {
         const meta = wrapper.vm.$options.metaInfo.call(wrapper.vm);
         expect(meta.title).toBe(PAGE_TITLE.HOMEPAGE);
+    });
+
+    // Phase 2.5c regression. Before this patch the homepage <title>
+    // was 155 chars of keyword-stuffing — well past Google's ~580px
+    // SERP truncation and a strong title-rewrite signal. Pin the
+    // length so the constant can't drift back to stuffed territory.
+    // 60ch is the standard Google SERP cap; we allow up to that.
+    it('PAGE_TITLE.HOMEPAGE is within Google\'s ~60-char SERP limit and not keyword-stuffed', () => {
+        expect(PAGE_TITLE.HOMEPAGE.length).toBeLessThanOrEqual(60);
+        expect(PAGE_TITLE.HOMEPAGE.length).toBeGreaterThanOrEqual(30);
+        // Stuffing detector: no single token should repeat. Split on
+        // word boundaries (lowercased), filter stop words and the
+        // brand, and require unique tokens. If a future copy edit
+        // duplicates "Parking" or "Bangalore" it trips here.
+        const tokens = PAGE_TITLE.HOMEPAGE
+            .toLowerCase()
+            .split(/[^a-z]+/)
+            .filter(
+                (t) =>
+                    t &&
+                    !['in', 'and', 'the', 'of', 'a', 'parkspot'].includes(t),
+            );
+        const dupes = tokens.filter((t, i) => tokens.indexOf(t) !== i);
+        expect(dupes).toEqual([]);
+    });
+
+    it('PAGE_DESCRIPTION.HOMEPAGE is within the SERP description range (150-160ch ideal)', () => {
+        // Mobile SERPs cut at ~155ch; desktop at ~160ch. Allow 130-170
+        // so editorial tweaks have room without breaking the test.
+        expect(PAGE_DESCRIPTION.HOMEPAGE.length).toBeGreaterThanOrEqual(120);
+        expect(PAGE_DESCRIPTION.HOMEPAGE.length).toBeLessThanOrEqual(170);
+    });
+
+    it('emits a route-specific meta description (no longer inherits the shell)', () => {
+        const meta = wrapper.vm.$options.metaInfo.call(wrapper.vm);
+        const desc = (meta.meta || []).find(
+            (m) => m.name === 'description',
+        );
+        expect(desc).toBeDefined();
+        expect(desc.content).toBe(PAGE_DESCRIPTION.HOMEPAGE);
+    });
+
+    it('emits og:title / og:description mirrors and a canonical link', () => {
+        const meta = wrapper.vm.$options.metaInfo.call(wrapper.vm);
+        const props = (meta.meta || []).reduce((acc, m) => {
+            if (m.property) acc[m.property] = m.content;
+            return acc;
+        }, {});
+        expect(props['og:title']).toBe(PAGE_TITLE.HOMEPAGE);
+        expect(props['og:description']).toBe(PAGE_DESCRIPTION.HOMEPAGE);
+        expect(props['og:type']).toBe('website');
+        expect(props['og:url']).toBe('https://www.parkspot.in/');
+        const canonical = (meta.link || []).find((l) => l.rel === 'canonical');
+        expect(canonical).toBeDefined();
+        expect(canonical.href).toBe('https://www.parkspot.in/');
     });
 
     it('routes the embedded contact widget to fireContact (Vuex + redirect)', async () => {

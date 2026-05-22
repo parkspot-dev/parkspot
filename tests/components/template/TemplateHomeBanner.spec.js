@@ -35,6 +35,22 @@ describe('TemplateHomeBanner.vue — Phase 2.5 heading hygiene', () => {
         expect(wrapper.find('h1').text()).toBe(PAGE_H1.HOMEPAGE);
     });
 
+    // Phase 2.5c regression. H1 copy must:
+    //   1. Stay under ~60ch so it doesn't wrap weirdly when made
+    //      visible in a future redesign + stays scannable for
+    //      screen readers (which announce the full string).
+    //   2. Not claim geos ParkSpot doesn't actually serve. Earlier
+    //      copy said "Across India"; the product is Bangalore /
+    //      Hyderabad only. SEO copy must match reality.
+    it('PAGE_H1.HOMEPAGE stays under ~60ch and reflects actual serviced geos', () => {
+        expect(PAGE_H1.HOMEPAGE.length).toBeLessThanOrEqual(60);
+        expect(PAGE_H1.HOMEPAGE).toMatch(/bangalore/i);
+        expect(PAGE_H1.HOMEPAGE).toMatch(/hyderabad/i);
+        // Aspirational copy that misled previous audits — must not
+        // reappear unless / until ParkSpot launches additional geos.
+        expect(PAGE_H1.HOMEPAGE).not.toMatch(/across india/i);
+    });
+
     it('marks the H1 as sr-only so the hero design is unchanged', () => {
         // Design constraint: the visible card-stack layout has no
         // room for a prominent on-page headline. SEO + a11y both
