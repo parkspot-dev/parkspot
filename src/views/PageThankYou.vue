@@ -17,8 +17,7 @@ export default {
     },
     metaInfo() {
         return {
-            title: PAGE_TITLE.THANK,
-            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+            title: PAGE_TITLE.THANK + PAGE_TITLE.BRAND_SUFFIX,
         };
     },
     mounted() {

@@ -26,6 +26,19 @@ import { useHead } from '@unhead/vue';
 /**
  * Resolve vue-meta's {title, titleTemplate} pair into a single string,
  * tolerating undefined / null titles the way vue-meta does.
+ *
+ * Phase 2.5 hardening: if `title` is empty/whitespace AND the template
+ * contains the `%s` placeholder, refuse to apply the template. The
+ * legacy pattern `{ title: this.title, titleTemplate: 'ParkSpot | %s' }`
+ * used by many views ships `this.title === undefined` on first render
+ * (or whenever a route watcher hasn't fired yet) and produces an
+ * orphan title like `'ParkSpot | '` with a trailing separator. That
+ * leaks into Google SERP snippets and the browser tab. Returning an
+ * empty string is treated by @unhead as a "no-op title" — the
+ * previously-rendered title (typically the index.html shell) stays
+ * intact, which is strictly better than emitting a broken brand
+ * fragment. See ssg-research/04-integration-plan.md § Phase 2.5.
+ *
  * @param {{ title?: unknown, titleTemplate?: string | ((t: string) => string) }} info
  * @returns {string}
  */
@@ -40,7 +53,15 @@ function resolveTitle(info) {
         }
     }
     if (typeof template === 'string' && template.length > 0) {
-        return template.includes('%s') ? template.replace('%s', title) : template;
+        if (template.includes('%s')) {
+            // Defence-in-depth: an orphan template substitution
+            // would produce visible artefacts like "ParkSpot | ".
+            // Skip the substitution entirely when there's nothing
+            // meaningful to slot in.
+            if (title.trim() === '') return '';
+            return template.replace('%s', title);
+        }
+        return template;
     }
     return title;
 }

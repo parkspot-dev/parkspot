@@ -179,4 +179,99 @@ describe('PageSrp.vue - Bangalore SRP View', () => {
         wrapper.vm.onFilter(filter);
         expect(actions.updateSrpResults).toHaveBeenCalledWith(expect.anything(), filter);
     });
+
+    // Phase 2.5 regression — see
+    // ssg-research/04-integration-plan.md § Phase 2.5. Before the fix
+    // `this.title` was undefined, the metaInfo template resolved to
+    // `'ParkSpot | '` (trailing pipe + space), and Google SERP picked
+    // it up. Both branches below MUST emit a meaningful, branded title.
+    describe('Phase 2.5: SEO title hygiene', () => {
+        const mountWithLocation = async (location) => {
+            initializeStore();
+            const w = mount(PageSrp, {
+                global: {
+                    plugins: [store],
+                    stubs: stubComponents,
+                    mocks: {
+                        $route: {
+                            name: 'srp',
+                            params: location === undefined
+                                ? {}
+                                : { location },
+                            query: { latlng: MOCK_COORDINATE_STRING },
+                        },
+                        $router: {
+                            push: mockRouterPush,
+                            resolve: mockRouterResolve,
+                        },
+                    },
+                },
+            });
+            await flushPromises();
+            return w;
+        };
+
+        it('composes a route-aware branded title when location param exists', async () => {
+            wrapper = await mountComponent();
+            expect(wrapper.vm.title).toBe('Car Parking near Bangalore | ParkSpot');
+        });
+
+        // Mapbox `place_name` is comma-separated and verbose
+        // (city + region + postcode + country). The watcher must
+        // keep only the most-specific segment so the rendered title
+        // stays under Google's ~60-char SERP truncation point and
+        // doesn't visually swamp the browser tab.
+        it('uses only the first comma-segment of a Mapbox place_name', async () => {
+            const w = await mountWithLocation(
+                'Indiranagar, Bengaluru, Karnataka 560038, India',
+            );
+            expect(w.vm.title).toBe('Car Parking near Indiranagar | ParkSpot');
+            w.unmount();
+        });
+
+        it('trims whitespace around the first segment', async () => {
+            const w = await mountWithLocation(
+                '   Banjara Hills   ,   Hyderabad, Telangana',
+            );
+            expect(w.vm.title).toBe(
+                'Car Parking near Banjara Hills | ParkSpot',
+            );
+            w.unmount();
+        });
+
+        it('keeps single-segment names intact (no spurious truncation)', async () => {
+            const w = await mountWithLocation('Bengaluru');
+            expect(w.vm.title).toBe('Car Parking near Bengaluru | ParkSpot');
+            w.unmount();
+        });
+
+        it('falls back to the generic headline when location is missing', async () => {
+            const w = await mountWithLocation(undefined);
+            expect(w.vm.title).toBe('Search Results | ParkSpot');
+            // Defence-in-depth: the title MUST NOT be an orphan
+            // `'ParkSpot | '` no matter how this component is mounted.
+            expect(w.vm.title).not.toMatch(/\|\s*$/);
+            w.unmount();
+        });
+
+        it('falls back when the first segment is empty (leading-comma input)', async () => {
+            // Pathological but worth covering: a leading comma would
+            // make split()[0] === '', which the watcher must treat
+            // the same as a missing location rather than emitting
+            // 'Car Parking near  | ParkSpot'.
+            const w = await mountWithLocation(', Bengaluru, India');
+            expect(w.vm.title).toBe('Search Results | ParkSpot');
+            expect(w.vm.title).not.toMatch(/near\s+\|/);
+            w.unmount();
+        });
+
+        it('never lets metaInfo() return an orphan-prone shape', async () => {
+            wrapper = await mountComponent();
+            const meta = wrapper.vm.$options.metaInfo.call(wrapper.vm);
+            expect(meta.titleTemplate).toBeUndefined();
+            expect(typeof meta.title).toBe('string');
+            expect(meta.title.trim()).not.toBe('');
+            expect(meta.title).not.toMatch(/\|\s*$/);
+        });
+    });
 });

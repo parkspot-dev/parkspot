@@ -12,8 +12,7 @@ export default {
     },
     metaInfo() {
         return {
-            title: PAGE_TITLE.ERROR,
-            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+            title: PAGE_TITLE.ERROR + PAGE_TITLE.BRAND_SUFFIX,
         };
     },
     data() {

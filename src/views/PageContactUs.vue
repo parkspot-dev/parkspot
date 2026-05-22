@@ -16,16 +16,16 @@ export default {
         TemplateContactUs,
         LoaderModal,
     },
+    // Phase 2.5: direct branded title — see PageAbout for rationale.
     metaInfo() {
         return {
             title: this.title,
-            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
         };
     },
     data() {
         return {
             isLoading: false,
-            title: undefined,
+            title: PAGE_TITLE.CONTACT + PAGE_TITLE.BRAND_SUFFIX,
             PAGE_TITLE,
         };
     },
@@ -33,7 +33,7 @@ export default {
         $route: {
             handler: function (to) {
                 if (to.name == 'contactUs') {
-                    this.title = PAGE_TITLE.CONTACT;
+                    this.title = PAGE_TITLE.CONTACT + PAGE_TITLE.BRAND_SUFFIX;
                 }
             },
             deep: true,

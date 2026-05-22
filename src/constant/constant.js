@@ -125,9 +125,21 @@ export const ICON = {
 };
 
 export const PAGE_TITLE = {
+    // Suffix appended to every page-level title. Centralised so the
+    // brand only lives in one place; views compose titles as
+    // `PAGE_TITLE.ABOUT + PAGE_TITLE.BRAND_SUFFIX` rather than relying
+    // on the legacy `titleTemplate: 'ParkSpot | %s'` pattern which
+    // produced orphan separators when `title` was undefined.
+    // See ssg-research/04-integration-plan.md § Phase 2.5.
+    BRAND_SUFFIX: ' | ParkSpot',
+    // DEPRECATED — kept only for back-compat with any unmigrated view.
+    // New code should use `BRAND_SUFFIX`. The adapter
+    // (`src/plugins/unhead-meta-adapter.js`) now refuses to apply this
+    // template when title is empty, so accidental orphans are
+    // suppressed at the platform layer.
     TITLE_TEMPLATE: 'ParkSpot | ',
     HOMEPAGE:
-        ' ParkSpot | Find and Book Parking Spaces Nearby | Parking space near me | Bangalore Bengaluru Parking service| Hyderabad Parking',
+        'ParkSpot | Find and Book Parking Spaces Nearby | Parking space near me | Bangalore Bengaluru Parking service | Hyderabad Parking',
     FAQ: `FAQ's - Get Your All Parking Related Queries be Answered...`,
     ABOUT: 'About -  Get Parking Space , Rent Empty Space',
     CONTACT: 'Contact Us',
@@ -142,6 +154,13 @@ export const PAGE_TITLE = {
     SEARCH_PORTAL: 'Search Portal - Admin Only',
     PAYMENT: 'Payment',
     DISCOVER: 'Parking Near ',
+    // Default headline for /srp (when no `location` route param is
+    // present). Search-result detail pages append the location with
+    // a separator via `${PAGE_TITLE.SEARCH_RESULTS_PREFIX}${loc}`.
+    SEARCH_RESULTS: 'Search Results | ParkSpot',
+    SEARCH_RESULTS_PREFIX: 'Car Parking near ',
+    // DEPRECATED — older template prefix. Same back-compat note as
+    // `TITLE_TEMPLATE`.
     SEARCH: 'ParkSpot | ',
 };
 

@@ -29,10 +29,18 @@ export default {
         TemplateSrp,
         LoaderModal,
     },
+    // Direct title pattern (Phase 2.5). Previously the metaInfo
+    // returned `{ title: this.title, titleTemplate: 'ParkSpot | %s' }`
+    // but `this.title` was never declared in data() — so it stayed
+    // undefined, the watcher assignment created a non-reactive
+    // property, and useHead resolved the template against an empty
+    // string. Result: the document <title> rendered as `'ParkSpot | '`
+    // (trailing pipe + space) on first paint and after every SPA nav.
+    // We now declare `title` in data(), give it a meaningful default,
+    // and skip the template entirely.
     metaInfo() {
         return {
             title: this.title,
-            titleTemplate: PAGE_TITLE.SEARCH + '%s',
         };
     },
     data() {
@@ -40,6 +48,7 @@ export default {
             reRender: 0,
             isLoading: false,
             currentPage: 1,
+            title: PAGE_TITLE.SEARCH_RESULTS,
         };
     },
     computed: {
@@ -54,7 +63,36 @@ export default {
         $route: {
             handler: function (to) {
                 if (to.name == 'srp') {
-                    this.title = to.params.location;
+                    // Compose a clean, branded title from the route
+                    // param. `to.params.location` is occasionally
+                    // empty / undefined on direct loads — fall back
+                    // to the generic headline so we never emit an
+                    // orphan-suffixed title.
+                    //
+                    // The value comes from the Mapbox autocomplete via
+                    // the `map/update-selected-location` mutation,
+                    // which stores the full Mapbox `place_name` —
+                    // e.g. `"Indiranagar, Bengaluru, Karnataka 560038,
+                    // India"`. That's ~80 characters once you wrap it
+                    // in the prefix + brand suffix, past Google's
+                    // SERP-title truncation point (~60ch) and
+                    // visually noisy in the browser tab. Keep only
+                    // the most-specific segment (everything before
+                    // the first comma) so the title reads `Car
+                    // Parking near Indiranagar | ParkSpot`. Falls
+                    // back to the whole string if there's no comma
+                    // (city-level picks, programmatic pushes from
+                    // tests, etc.).
+                    const raw =
+                        typeof to.params.location === 'string'
+                            ? to.params.location.trim()
+                            : '';
+                    const loc = raw.includes(',')
+                        ? raw.split(',')[0].trim()
+                        : raw;
+                    this.title = loc
+                        ? `${PAGE_TITLE.SEARCH_RESULTS_PREFIX}${loc}${PAGE_TITLE.BRAND_SUFFIX}`
+                        : PAGE_TITLE.SEARCH_RESULTS;
                 }
             },
             deep: true,

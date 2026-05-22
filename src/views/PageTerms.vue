@@ -10,9 +10,9 @@ export default {
         TemplateTerms,
     },
     metaInfo() {
+        // Phase 2.5: direct branded title; no orphan-prone template.
         return {
-            title: PAGE_TITLE.TERMS,
-            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+            title: PAGE_TITLE.TERMS + PAGE_TITLE.BRAND_SUFFIX,
         };
     },
 };
