@@ -8,10 +8,15 @@ import PageNearBy, { safeLocationFromRoute } from '@/views/PageNearBy.vue';
 // `netlify/edge-functions/lib/meta.js` output. We only care that
 // `PageNearBy.metaInfo()` invokes them with the route-derived URL and
 // passes through the result.
+//
+// Phase 2.5: the mock now also returns `h1` (consumed by the
+// `headline` computed). This lets the heading-hygiene assertions
+// (below) run without standing up the real meta builder.
 vi.mock('@/utils/seo/meta.js', () => ({
     buildAreaPageMeta: vi.fn(() => ({
         title: 'Mocked Title',
         canonical: 'https://www.parkspot.in/bangalore/parking-near-btm/',
+        h1: 'Car Parking near BTM, Bengaluru',
     })),
 }));
 vi.mock('@/utils/seo/to-head.js', () => ({
@@ -70,10 +75,13 @@ function mountWith({ route, store, stubs = {} } = {}) {
                 $router: { resolve: () => ({ href: '/x' }) },
             },
             stubs: {
+                // Phase 2.5: surface the `headline` prop on the stub
+                // so the heading-hygiene assertions can read it
+                // without standing up the real TemplateNearBy.
                 TemplateNearBy: {
-                    props: ['nearByLocation', 'spots', 'isLoading'],
+                    props: ['nearByLocation', 'spots', 'isLoading', 'headline'],
                     template:
-                        '<div class="tnb" :data-loc="nearByLocation" :data-loading="isLoading"><span v-for="s in spots" :key="s.ID" class="spot">{{ s.ID }}</span></div>',
+                        '<div class="tnb" :data-loc="nearByLocation" :data-loading="isLoading" :data-headline="headline"><span v-for="s in spots" :key="s.ID" class="spot">{{ s.ID }}</span></div>',
                 },
                 ...stubs,
             },
@@ -277,6 +285,55 @@ describe('PageNearBy.vue', () => {
             wrapper.vm.$options.metaInfo.call(wrapper.vm);
             const calls = buildAreaPageMeta.mock.calls;
             expect(calls[calls.length - 1][1]).toBeNull();
+        });
+    });
+
+    // Phase 2.5 heading-hygiene regression. The route page now exposes
+    // a `headline` computed that pulls H1 text from the SAME builder
+    // that produces the document <title> and JSON-LD, so the
+    // prerendered <h1>, the edge-injected <title>, and the SERP
+    // snippet share one source of truth.
+    describe('headline computed (Phase 2.5)', () => {
+        it('sources the H1 text from buildAreaPageMeta(...).h1 and passes it to TemplateNearBy', () => {
+            const { store } = makeStore({
+                initialPages: { btm: { Sites: [{ ID: 'A' }] } },
+            });
+            const wrapper = mountWith({
+                route: {
+                    name: 'discover',
+                    path: '/bangalore/parking-near-btm',
+                    fullPath: '/bangalore/parking-near-btm/',
+                    params: { location: 'btm' },
+                },
+                store,
+            });
+            expect(wrapper.vm.headline).toBe(
+                'Car Parking near BTM, Bengaluru',
+            );
+            // And the prop forwarding to the template:
+            expect(
+                wrapper.find('.tnb').attributes('data-headline'),
+            ).toBe('Car Parking near BTM, Bengaluru');
+        });
+
+        it('degrades to empty string when buildAreaPageMeta throws', () => {
+            // Failsafe: if the URL is malformed or the builder is
+            // unavailable, the route page must not crash. The
+            // template's default headline takes over visually.
+            const { store } = makeStore();
+            buildAreaPageMeta.mockImplementationOnce(() => {
+                throw new Error('boom');
+            });
+            const wrapper = mountWith({
+                route: {
+                    name: 'discover',
+                    path: '/bangalore/parking-near-btm',
+                    fullPath: '/bangalore/parking-near-btm',
+                    params: { location: 'btm' },
+                },
+                store,
+            });
+            expect(wrapper.vm.headline).toBe('');
         });
     });
 });

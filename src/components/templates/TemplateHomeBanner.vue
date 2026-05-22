@@ -3,6 +3,16 @@
         class="home-banner"
         :class="activeTab === 'VO' ? 'image-car-owner' : 'image-spot-owner'"
     >
+        <!--
+            Phase 2.5 heading hygiene: ship a semantic <h1> in the
+            prerendered HTML for SEO + a11y. The visual hero is a
+            card-stacked layout (no obvious headline slot), so use
+            the global `.sr-only` utility to keep the H1 in the DOM
+            without disturbing the design. The card subtitles
+            (<h2>Search parking spot in seconds</h2> etc.) remain the
+            visible page hierarchy.
+        -->
+        <h1 class="sr-only">{{ headline }}</h1>
         <OrganismHomeCard
             class="home-cta"
             @changed="getActiveTab"
@@ -18,6 +28,7 @@
 <script>
 import BodyWrapper from '../extras/BodyWrapper.vue';
 import OrganismHomeCard from '../organisms/OrganismHomeCard.vue';
+import { PAGE_H1 } from '@/constant/constant';
 
 export default {
     name: 'TemplateHomeBanner',
@@ -28,6 +39,7 @@ export default {
     data() {
         return {
             activeTab: 'VO',
+            headline: PAGE_H1.HOMEPAGE,
             carOwnerImage: 'url(/assets/home-car-owner.jpg)',
             spotOwnerImage: `url('/assets/home-spot-owner.jpg')`,
             mCarOwnerImage: 'url(/assets/m-home-car-owner.jpg)',

@@ -164,6 +164,27 @@ export const PAGE_TITLE = {
     SEARCH: 'ParkSpot | ',
 };
 
+/**
+ * H1 headlines shipped in the prerendered HTML.
+ *
+ * Distinct from `PAGE_TITLE` (which feeds `<title>` / OG / SERP). H1
+ * text is what Google reads as the page's primary topical heading and
+ * what assistive tech announces as the page landmark. Keeping them in
+ * one place stops them from drifting (and makes copy review trivial
+ * for SEO / brand). See ssg-research/04-integration-plan.md § Phase 2.5
+ * — heading-hygiene patch.
+ *
+ * For dynamic H1s (area pages, blog posts, /srp with a location) the
+ * value is computed at the route page from the URL / route params and
+ * passed into the Template as a `:headline` prop. The constants below
+ * are only the static fallbacks.
+ */
+export const PAGE_H1 = {
+    HOMEPAGE: 'Monthly Car Parking — Find & Book Secure Spaces Across India',
+    ABOUT: 'About ParkSpot',
+    SRP_FALLBACK: 'Car Parking Search Results',
+};
+
 export const APP_LINK = {
     IOS: 'https://apps.apple.com/in/app/parkspot-find-book-parking/id6449634064',
     ANDROID:

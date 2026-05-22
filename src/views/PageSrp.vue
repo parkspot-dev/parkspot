@@ -7,6 +7,7 @@
             :totals="totalPages"
             :current-page="currentPage"
             :re-render="reRender"
+            :headline="title"
             @changed="onPageChange"
             @fly-to-srp="flyToSrp"
             @details="spotDetails"

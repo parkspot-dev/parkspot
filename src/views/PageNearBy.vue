@@ -3,6 +3,7 @@
         :near-by-location="nearByLocation"
         :spots="spots"
         :is-loading="isLoading"
+        :headline="headline"
         @details="spotDetails"
     ></TemplateNearBy>
 </template>
@@ -86,6 +87,28 @@ export default {
             const loc =
                 this.nearByLocation || safeLocationFromRoute(this.$route);
             return this.$store.getters['seoPages/spotsForLocation'](loc);
+        },
+        // Phase 2.5: H1 text for the area page. Sourced from the same
+        // `buildAreaPageMeta` helper that produces the document
+        // <title>, OG tags, and JSON-LD — so the prerendered <h1>,
+        // edge-injected <title>, and search-result snippet all share
+        // a single source of truth. Reactive on $route.fullPath so
+        // SPA navigations between two `/bangalore/parking-near-*`
+        // URLs recompute correctly.
+        headline() {
+            try {
+                const fullPath = this.$route?.fullPath || '/';
+                const base =
+                    typeof window !== 'undefined' && window.location
+                        ? window.location.origin
+                        : 'https://www.parkspot.in';
+                const url = new URL(fullPath, base);
+                return buildAreaPageMeta(url, null).h1 || '';
+            } catch {
+                // Failsafe: malformed URL or builder throw — the
+                // template falls back to its default `headline` prop.
+                return '';
+            }
         },
     },
     async serverPrefetch() {
