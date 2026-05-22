@@ -1,14 +1,22 @@
 <template>
     <div>
         <TemplateBlogPost :blog="blog" :content="content"></TemplateBlogPost>
-        <PageContactUs></PageContactUs>
+        <!--
+            Embed the presentational Template (not the route page).
+            `PageContactUs` declares its own metaInfo() which would
+            otherwise override the blog-post <title> via @unhead's
+            last-wins ordering. Phase 2.5 fix.
+        -->
+        <TemplateContactUs @contactUs="fireContact"></TemplateContactUs>
+        <LoaderModal v-if="isLoading"></LoaderModal>
     </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import TemplateBlogPost from '../components/templates/TemplateBlogPost.vue';
-import PageContactUs from './PageContactUs.vue';
+import TemplateContactUs from '../components/templates/TemplateContactUs.vue';
+import LoaderModal from '../components/extras/LoaderModal.vue';
 import { PAGE_TITLE } from '@/constant/constant';
 import { buildBlogPostMeta } from '@/utils/seo/meta.js';
 import { metaPayloadToHead } from '@/utils/seo/to-head.js';
@@ -16,7 +24,8 @@ export default {
     name: 'PageBlogPost',
     components: {
         TemplateBlogPost,
-        PageContactUs,
+        TemplateContactUs,
+        LoaderModal,
     },
     // Emit full SEO metadata for every prerendered blog post: title,
     // description, canonical, og:* (with the post's `img` as og:image),
@@ -48,6 +57,7 @@ export default {
         return {
             content: '',
             title: undefined,
+            isLoading: false,
         };
     },
     computed: {
@@ -87,31 +97,32 @@ export default {
             getContentById: 'blog/p',
             onlyContact: 'user/onlyContact',
         }),
+        // Handler for the embedded `<TemplateContactUs>` widget.
+        // Symmetric with the wiring in `PageHome.vue` and
+        // `PageContactUs.vue` (they all wrap the same Vuex action).
+        // The `isLoading` reset lives in a `finally` block so a router
+        // failure in the catch arm can't leave the spinner stuck.
         async fireContact() {
             try {
                 this.isLoading = true;
-
                 await this.onlyContact();
-
                 this.$buefy.toast.open({
                     message: 'ParkSpot registered successfully!',
                     type: 'is-success',
                     duration: 2000,
                 });
-
                 this.$router.push({ name: 'thankYou' });
             } catch (error) {
                 console.error({ error });
-
                 this.$buefy.toast.open({
                     message: `Something went wrong!`,
                     type: 'is-danger',
                     duration: 2000,
                 });
-
                 this.$router.push({ name: 'Home' });
+            } finally {
+                this.isLoading = false;
             }
-            this.isLoading = false;
         },
     },
 };
