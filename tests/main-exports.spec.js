@@ -13,8 +13,14 @@ import { describe, expect, it, vi } from 'vitest';
 // vee-validate). Stub the noisier ones so the import is cheap and
 // deterministic in the test runner. We are only inspecting the module's
 // export shape; we are not executing the ViteSSG factory itself.
+// Capture the setup fn passed to ViteSSG so the wiring tests below can
+// invoke it under a controlled environment.
+let capturedSetupFn = null;
 vi.mock('vite-ssg', () => ({
-    ViteSSG: (..._args) => () => undefined,
+    ViteSSG: (_App, _routerOpts, setupFn) => {
+        capturedSetupFn = setupFn;
+        return () => undefined;
+    },
 }));
 
 vi.mock('buefy', () => ({ default: { install: () => {} } }));
@@ -51,5 +57,44 @@ describe('src/main.js exports contract', () => {
     it('also exports the ViteSSG-wrapped `createApp` factory', async () => {
         const main = await import('@/main.js');
         expect(main).toHaveProperty('createApp');
+    });
+});
+
+describe('src/main.js setup fn — seedAppStore wiring', () => {
+    it('seeds the default-export store BEFORE app.use(store)', async () => {
+        capturedSetupFn = null;
+        vi.resetModules();
+        await import('@/main.js');
+        expect(capturedSetupFn).toBeTypeOf('function');
+
+        const callOrder = [];
+        const fakeStore = { replaceState: vi.fn(), state: {} };
+        const createAppStoreSpy = vi.fn(() => fakeStore);
+        const seedAppStoreSpy = vi.fn(() => callOrder.push('seedAppStore'));
+        vi.doMock('@/store', () => ({
+            createAppStore: createAppStoreSpy,
+            seedAppStore: seedAppStoreSpy,
+            default: {},
+        }));
+
+        vi.resetModules();
+        await import('@/main.js');
+        expect(capturedSetupFn).toBeTypeOf('function');
+
+        const app = {
+            use: vi.fn(() => callOrder.push('app.use')),
+            mixin: vi.fn(),
+            component: vi.fn(),
+        };
+        capturedSetupFn({ app, isClient: true, initialState: {} });
+
+        expect(seedAppStoreSpy).toHaveBeenCalledTimes(1);
+        expect(seedAppStoreSpy).toHaveBeenCalledWith(fakeStore);
+        expect(app.use).toHaveBeenCalledWith(fakeStore);
+        expect(callOrder.indexOf('seedAppStore')).toBeLessThan(
+            callOrder.indexOf('app.use'),
+        );
+
+        vi.doUnmock('@/store');
     });
 });

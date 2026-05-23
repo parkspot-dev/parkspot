@@ -8,7 +8,17 @@
             a11y hierarchy violation that every audit tool flagged
             once SSG started shipping the rendered HTML.
         -->
-        <AtomHeading class="about-headline mb-4 ml-1" level="h1">
+        <!--
+            Phase 2.5b heading-hygiene follow-up: TemplateAbout is also
+            embedded into PageHome as a section. Default to <h2> so it
+            doesn't introduce a second <h1> on /; PageAbout opts back
+            into <h1> via the headingLevel prop where this template
+            owns the route's primary heading.
+        -->
+        <AtomHeading
+            class="about-headline mb-4 ml-1"
+            :level="headingLevel"
+        >
             {{ headline }}
         </AtomHeading>
         <div class="about-container">
@@ -94,6 +104,18 @@ export default {
         AtomHeading,
         AtomParagraph,
         AtomImage,
+    },
+    props: {
+        // 'h2' by default — TemplateAbout is used both as the body of
+        // /about/ (where its headline is the page's primary h1) and as
+        // a section inside PageHome (where the homepage banner already
+        // owns the h1 and this should be h2). PageAbout overrides to
+        // 'h1'.
+        headingLevel: {
+            type: String,
+            default: 'h2',
+            validator: (v) => /^h[1-6]$/.test(v),
+        },
     },
     data() {
         return {
