@@ -148,7 +148,7 @@ export async function includedRoutes(paths, _routes) {
             ...buildAreaPagePaths(slugs),
         ];
     } catch (err) {
-        // eslint-disable-next-line no-console
+         
         console.error(
             '[ssg] RTDB enumeration failed; shipping static + blog routes only',
             err,

@@ -7,7 +7,7 @@
             otherwise override the blog-post <title> via @unhead's
             last-wins ordering. Phase 2.5 fix.
         -->
-        <TemplateContactUs @contactUs="fireContact"></TemplateContactUs>
+        <TemplateContactUs @contact-us="fireContact"></TemplateContactUs>
         <LoaderModal v-if="isLoading"></LoaderModal>
     </div>
 </template>
