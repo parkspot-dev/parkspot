@@ -248,6 +248,7 @@ describe('PageNearBy.vue', () => {
                 store,
             });
             wrapper.vm.nearByLocation = 'btm';
+            buildAreaPageMeta.mockClear();
             const info = wrapper.vm.$options.metaInfo.call(wrapper.vm);
 
             expect(buildAreaPageMeta).toHaveBeenCalled();

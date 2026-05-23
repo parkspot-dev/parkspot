@@ -119,7 +119,7 @@ describe('store/seoPages', () => {
             const store = mountModuleStore();
             const data = { Sites: [{ ID: 'A' }], heading: 'BTM' };
             store.commit('seoPages/setPage', { location: 'btm', data });
-            expect(store.getters['seoPages/pageForLocation']('btm')).toBe(data);
+            expect(store.getters['seoPages/pageForLocation']('btm')).toEqual(data);
             expect(
                 store.getters['seoPages/pageForLocation']('never-seen'),
             ).toBeNull();

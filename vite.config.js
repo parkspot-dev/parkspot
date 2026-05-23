@@ -5,9 +5,30 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueDevTools from 'vite-plugin-vue-devtools';
 
+// Strip external CSS @import during tests so headless Chromium does
+// not hang on Google Fonts requests that may never resolve (CI/offline).
+function stripExternalCssImports() {
+    return {
+        name: 'strip-external-css-imports',
+        enforce: 'pre',
+        transform(code, id) {
+            if (process.env.VITEST && /\.(scss|css)$/.test(id)) {
+                return code.replace(
+                    /@import\s+['"]https?:\/\/[^'"]+['"];?/g,
+                    '/* [test] external import stripped */',
+                );
+            }
+            return undefined;
+        },
+    };
+}
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-    plugins: [vue(), ...(mode === 'test' ? [] : [vueDevTools()])],
+    plugins: [
+        vue(),
+        ...(mode === 'test' ? [stripExternalCssImports()] : [vueDevTools()]),
+    ],
     // vite-ssg configuration. Only fields that appear in upstream's
     // `ViteSSGOptions` type are accepted; unknown keys are silently
     // dropped, so it is easy to ship dead config (see git history for
@@ -84,6 +105,7 @@ export default defineConfig(({ mode }) => ({
                     name: 'visual',
                     include: ['tests/visual/**/*.visual.spec.js'],
                     setupFiles: ['./tests/visual/setup.js'],
+                    testTimeout: 30000,
                     browser: {
                         enabled: true,
                         provider: playwright(),

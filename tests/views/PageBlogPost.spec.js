@@ -57,6 +57,7 @@ const mountComponent = () => {
                 // simulates the `contactUs` event so the route's
                 // `fireContact` handler is wired and testable.
                 TemplateContactUs: {
+                    name: 'TemplateContactUs',
                     template: `
                         <div class="template-contact-us">
                             <button class="submit-btn" @click="$emit('contactUs')">Submit</button>

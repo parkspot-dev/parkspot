@@ -35,7 +35,12 @@ const stubs = {
         template: '<component :is="level || \'h2\'"><slot /></component>',
     },
     AtomParagraph: { template: '<p><slot /></p>' },
-    MoleculeSRPCard: { template: '<div class="srp-card"></div>' },
+    MoleculeSRPCard: {
+        name: 'MoleculeSRPCard',
+        props: ['spot'],
+        template: '<div class="srp-card"></div>',
+        emits: ['on-details'],
+    },
     SkeletonSRPCard: { template: '<div class="skeleton"></div>' },
     'b-breadcrumb': { template: '<nav><slot /></nav>' },
     'b-breadcrumb-item': { template: '<a><slot /></a>' },

@@ -68,6 +68,9 @@ export const SKIP = [
    // breaks resolution again — they have negligible regression value.
    { match: /TemplateFooter|NavbarBody/i,
      reason: 'depends on every named route in src/router/index.js' },
+   // ─── External network resources in CSS/template ─────────────────
+   { match: /AutomateParking/i,
+     reason: 'external background-image URL blocks network idle' },
    // ─── Scratch / placeholder ─────────────────────────────────────
    { match: /\/temp\.vue|PageTemp\.vue|ExampleComponent\.vue/i,
      reason: 'scratch / placeholder' },

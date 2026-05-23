@@ -26,6 +26,7 @@ const STORE_MODULE_NAMES = [
     'device', 'blog', 'user', 'map', 'sdp', 'searchPortal',
     'bookingPortal', 'config', 'registerRequest', 'spotRequests',
     'reviewSpot', 'kycStatusPortal', 'myBookings', 'app',
+    'seoPages', 'pendingPayments',
 ];
 
 function makeFakeStore(overrides = {}) {
@@ -107,6 +108,17 @@ const BUEFY_STUBS = {
     'b-message': { template: '<div><slot/></div>' },
     'b-progress': { template: '<progress/>' },
     'b-skeleton': { template: '<div class="skeleton"/>' },
+    'b-tag': { template: '<span class="tag"><slot/></span>' },
+    'b-taglist': { template: '<div><slot/></div>' },
+    'b-image': { template: '<img/>' },
+    'b-carousel': { template: '<div><slot/></div>' },
+    'b-carousel-item': { template: '<div><slot/></div>' },
+    'b-steps': { template: '<div><slot/></div>' },
+    'b-step-item': { template: '<div><slot/></div>' },
+    'b-slider': { template: '<input type="range"/>' },
+    'b-rate': { template: '<div/>' },
+    'b-upload': { template: '<div><slot/></div>' },
+    'b-notification': { template: '<div><slot/></div>' },
 };
 
 /**

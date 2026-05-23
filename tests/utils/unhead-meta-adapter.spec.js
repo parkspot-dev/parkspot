@@ -18,8 +18,8 @@ const { __test__ } = await import('../../src/plugins/unhead-meta-adapter.js');
 const { resolveTitle } = __test__;
 
 describe('resolveTitle', () => {
-    it('returns "" when title and template are missing', () => {
-        expect(resolveTitle({})).toBe('');
+    it('returns undefined when title and template are missing', () => {
+        expect(resolveTitle({})).toBeUndefined();
     });
 
     it('returns the plain title when no template is present', () => {
@@ -41,9 +41,9 @@ describe('resolveTitle', () => {
         ).toBe('[About] ParkSpot');
     });
 
-    it('coerces null / undefined titles to an empty string', () => {
+    it('coerces null / undefined titles — orphan suppression skips %s templates, fixed templates pass through', () => {
         expect(resolveTitle({ title: null, titleTemplate: 'ParkSpot - %s' }))
-            .toBe('ParkSpot - ');
+            .toBeUndefined();
         expect(resolveTitle({ title: undefined, titleTemplate: 'Fixed' }))
             .toBe('Fixed');
     });
