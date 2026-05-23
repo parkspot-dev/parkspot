@@ -3,9 +3,15 @@ import { describe, it, expect } from 'vitest'
 import TemplateAbout from '@/components/templates/TemplateAbout.vue'
 import { APP_LINK } from '@/constant/constant'
 
+// Stub AtomHeading honestly: pass through to the heading level the
+// caller requests, otherwise the heading-hygiene assertions below
+// would all collapse onto `<h3>` and we'd lose the regression.
 const stubs = {
   BodyWrapper: { template: '<div><slot /></div>' },
-  AtomHeading: { template: '<h3><slot /></h3>' },
+  AtomHeading: {
+    props: ['level'],
+    template: '<component :is="level || \'h3\'"><slot /></component>',
+  },
   AtomParagraph: { template: '<p><slot /></p>' },
   AtomImage: { template: '<img />' },
 }
@@ -69,6 +75,38 @@ describe('TemplateAbout.vue (user-focused + style checks)', () => {
 
     const parkLink = wrapper.find('.park-link')
     expect(parkLink.classes()).toContain('park-link')
+  })
+
+  // Phase 2.5 heading-hygiene regression. Before the patch the about
+  // page shipped a hierarchy of: <h3>Company Overview</h3>,
+  // <h3>Our Services</h3> with no <h1> or <h2> above them. SEO
+  // audit tools and screen readers both penalise this. The patch
+  // adds a single <h1> (PAGE_H1.ABOUT) and promotes the section
+  // sub-headings to <h2>.
+  describe('Phase 2.5 — heading hygiene', () => {
+    it('renders exactly one <h1>', () => {
+      const h1s = wrapper.findAll('h1')
+      expect(h1s.length).toBe(1)
+    })
+
+    it('uses the PAGE_H1.ABOUT constant as the H1 text', async () => {
+      const { PAGE_H1 } = await import('@/constant/constant')
+      expect(wrapper.find('h1').text()).toBe(PAGE_H1.ABOUT)
+    })
+
+    it('promotes section sub-headings from <h3> to <h2>', () => {
+      const h2s = wrapper.findAll('h2').map((h) => h.text())
+      expect(h2s).toEqual(
+        expect.arrayContaining(['Company Overview', 'Our Services']),
+      )
+    })
+
+    it('emits no orphan <h3> (every h3 must have a parent h1/h2)', () => {
+      // Practical check: there should be no h3s in the page at all
+      // now that we've promoted the section headings. If a future
+      // edit reintroduces one, this test fires.
+      expect(wrapper.findAll('h3').length).toBe(0)
+    })
   })
 
   // Snapshot test

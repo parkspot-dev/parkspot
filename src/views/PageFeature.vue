@@ -15,8 +15,7 @@ export default {
     components: { TemplateFeature },
     metaInfo() {
         return {
-            title: PAGE_TITLE.FEATURES,
-            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+            title: PAGE_TITLE.FEATURES + PAGE_TITLE.BRAND_SUFFIX,
         };
     },
 };

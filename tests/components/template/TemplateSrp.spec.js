@@ -158,4 +158,37 @@ describe('TemplateSrp.vue - Complete Test Suite', () => {
         const firstSrpCard = wrapper.findAll('.srp-card')[0];
         expect(firstSrpCard.html()).toMatchSnapshot();
     });
+
+    // Phase 2.5 heading-hygiene regression. The /srp page previously
+    // shipped ZERO headings in the prerendered HTML — invisible to
+    // SEO crawlers and screen readers. The fix adds a single sr-only
+    // <h1> driven by the `headline` prop (route-aware copy supplied
+    // by PageSrp.vue: "Car Parking near {location} | ParkSpot" or
+    // the generic PAGE_H1.SRP_FALLBACK).
+    describe('Phase 2.5 — heading hygiene', () => {
+        it('renders exactly one <h1>', () => {
+            expect(wrapper.findAll('h1').length).toBe(1);
+        });
+
+        it('uses the headline prop when provided', () => {
+            const custom = mountComponent({
+                headline: 'Car Parking near Indiranagar | ParkSpot',
+            });
+            expect(custom.find('h1').text()).toBe(
+                'Car Parking near Indiranagar | ParkSpot',
+            );
+            custom.unmount();
+        });
+
+        it('falls back to PAGE_H1.SRP_FALLBACK when no headline is passed', async () => {
+            const { PAGE_H1 } = await import('@/constant/constant');
+            // Default mount has no headline override, so the prop default kicks in.
+            expect(wrapper.find('h1').text()).toBe(PAGE_H1.SRP_FALLBACK);
+        });
+
+        it('marks the H1 as sr-only so the existing visual hierarchy is preserved', () => {
+            const h1 = wrapper.find('h1');
+            expect(h1.classes()).toContain('sr-only');
+        });
+    });
 });

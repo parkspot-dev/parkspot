@@ -3,16 +3,34 @@
         :near-by-location="nearByLocation"
         :spots="spots"
         :is-loading="isLoading"
+        :headline="headline"
         @details="spotDetails"
     ></TemplateNearBy>
 </template>
 
 <script>
-import { getValueFromFirebase } from '../firebase';
 import TemplateNearBy from '../components/templates/TemplateNearBy.vue';
 import { PAGE_TITLE } from '@/constant/constant';
 import { buildAreaPageMeta } from '@/utils/seo/meta.js';
 import { metaPayloadToHead } from '@/utils/seo/to-head.js';
+
+/**
+ * Resolve `route.params.location` safely. Trims whitespace and tolerates
+ * the value being absent or non-string (which happens when the route is
+ * matched without a param, e.g. during the SPA fallback to `/`). Exported
+ * so unit tests can exercise it without mounting the component.
+ *
+ * @param {object} route
+ * @returns {string}
+ */
+function safeLocationFromRoute(route) {
+    const raw = route?.params?.location;
+    if (typeof raw !== 'string') {
+        return '';
+    }
+    return raw.trim();
+}
+
 export default {
     name: 'PageNearBy',
     components: {
@@ -28,13 +46,15 @@ export default {
         // navigates between two /bangalore/parking-near-* pages, the
         // meta payload is recomputed with the new URL.
         const fullPath = this.$route?.fullPath || '';
-        const base = typeof window !== 'undefined' && window.location
-            ? window.location.origin
-            : 'https://www.parkspot.in';
+        const base =
+            typeof window !== 'undefined' && window.location
+                ? window.location.origin
+                : 'https://www.parkspot.in';
         const url = new URL(fullPath || '/', base);
-        const enhancement = Array.isArray(this.spots) && this.spots.length > 0
-            ? { sitesCount: this.spots.length }
-            : null;
+        const enhancement =
+            Array.isArray(this.spots) && this.spots.length > 0
+                ? { sitesCount: this.spots.length }
+                : null;
         const payload = buildAreaPageMeta(url, enhancement);
         const head = metaPayloadToHead(payload);
         return {
@@ -42,7 +62,7 @@ export default {
             // the brief moment before Firebase data arrives and the area
             // name is resolved. buildAreaPageMeta always returns a title
             // so this template only applies when the URL is malformed.
-            title: head.title || (this.title || ''),
+            title: head.title || this.title || '',
             titleTemplate: head.title ? undefined : PAGE_TITLE.DISCOVER + '%s',
             meta: head.meta,
             link: head.link,
@@ -51,29 +71,103 @@ export default {
     },
     data() {
         return {
-            spots: [],
             nearByLocation: '',
             show: false,
             title: undefined,
             isLoading: true,
         };
     },
+    computed: {
+        // `spots` is fed by the `seoPages` Vuex module. During SSG the
+        // server prefetches it via `serverPrefetch`; vite-ssg serializes
+        // the store state into `initialState` and the client hydrates
+        // from the same payload — so the computed already has data on
+        // first paint and there is no hydration mismatch.
+        spots() {
+            const loc =
+                this.nearByLocation || safeLocationFromRoute(this.$route);
+            return this.$store.getters['seoPages/spotsForLocation'](loc);
+        },
+        // Phase 2.5: H1 text for the area page. Sourced from the same
+        // `buildAreaPageMeta` helper that produces the document
+        // <title>, OG tags, and JSON-LD — so the prerendered <h1>,
+        // edge-injected <title>, and search-result snippet all share
+        // a single source of truth. Reactive on $route.fullPath so
+        // SPA navigations between two `/bangalore/parking-near-*`
+        // URLs recompute correctly.
+        headline() {
+            try {
+                const fullPath = this.$route?.fullPath || '/';
+                const base =
+                    typeof window !== 'undefined' && window.location
+                        ? window.location.origin
+                        : 'https://www.parkspot.in';
+                const url = new URL(fullPath, base);
+                return buildAreaPageMeta(url, null).h1 || '';
+            } catch {
+                // Failsafe: malformed URL or builder throw — the
+                // template falls back to its default `headline` prop.
+                return '';
+            }
+        },
+    },
+    async serverPrefetch() {
+        // SSR-only hook. Populates the Vuex store so the prerendered HTML
+        // already contains the spot list. Any failure here is non-fatal:
+        // the page still SSGs (without spots) and the client refetches.
+        this.nearByLocation = safeLocationFromRoute(this.$route);
+        if (!this.nearByLocation) {
+            this.isLoading = false;
+            return;
+        }
+        try {
+            await this.$store.dispatch(
+                'seoPages/loadPage',
+                this.nearByLocation,
+            );
+            const data = this.$store.getters['seoPages/pageForLocation'](
+                this.nearByLocation,
+            );
+            if (!data) {
+                this.show = true;
+            }
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.error(
+                `[PageNearBy] serverPrefetch failed for slug "${this.nearByLocation}":`,
+                err,
+            );
+        } finally {
+            this.isLoading = false;
+            this.title = this.nearByLocation;
+        }
+    },
     mounted() {
-        this.nearByLocation = this.$route.params.location.trim();
-        this.getPageData();
+        this.nearByLocation = safeLocationFromRoute(this.$route);
         this.title = this.nearByLocation;
+        // Hydration shortcut: if `serverPrefetch` already loaded this
+        // slug, skip the client fetch — we'd just briefly flash the same
+        // data and waste an RTDB round-trip.
+        if (
+            this.$store.getters['seoPages/hasLoadedLocation'](
+                this.nearByLocation,
+            )
+        ) {
+            this.isLoading = false;
+            return;
+        }
+        this.getPageData();
     },
     methods: {
         async getPageData() {
             this.isLoading = true;
-            const pageData = await getValueFromFirebase(
-                `seo-pages/${this.nearByLocation}`,
+            const data = await this.$store.dispatch(
+                'seoPages/loadPage',
+                this.nearByLocation,
             );
-            if (pageData == null) {
+            if (data == null) {
                 this.show = !this.show;
-                return;
             }
-            this.spots = [...pageData.Sites];
             this.isLoading = false;
         },
         spotDetails(spotID) {
@@ -87,6 +181,8 @@ export default {
         },
     },
 };
+
+export { safeLocationFromRoute };
 </script>
 
 <style></style>

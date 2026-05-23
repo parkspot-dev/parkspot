@@ -14,10 +14,14 @@ const mutations = {
 
 const actions = {
     async getHelplineNumber({ commit }) {
-        commit(
-            'update-helpline-number',
-            await getValueFromFirebase('helpline-number'),
-        );
+        // SSR safeguard: `getValueFromFirebase` is a no-op on the server (the
+        // Firebase Web SDK requires `window`/`indexedDB`). Skipping the
+        // commit there keeps the seeded default visible in the prerendered
+        // HTML — the client will refresh it on hydration.
+        const value = await getValueFromFirebase('helpline-number');
+        if (value != null) {
+            commit('update-helpline-number', value);
+        }
     },
 };
 

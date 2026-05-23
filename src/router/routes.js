@@ -6,6 +6,13 @@ import store from '@/store';
 const AUTH_READY_TIMEOUT_MS = 5000;
 
 const waitForAuthReady = (timeoutMs = AUTH_READY_TIMEOUT_MS) => {
+    // SSR: there is no Firebase Auth listener on the server (see
+    // `src/firebase.js`); waiting on `store.state.user.isAuthReady` would
+    // deadlock until `timeoutMs` expired. Skip the wait so guards return
+    // promptly during prerender.
+    if (typeof window === 'undefined') {
+        return Promise.resolve(false);
+    }
     if (store.state.user.isAuthReady) {
         return Promise.resolve(true);
     }
@@ -189,6 +196,17 @@ export const routes = [
         name: 'pending-payments',
         component: () => import('@/views/PendingPaymentsPortal.vue'),
         beforeEnter: async (to, from, next) => {
+            // SSR fast-path: `/internal/pending-payments` is filtered out
+            // of `includedRoutes` and `crawl` is disabled (see
+            // `vite.config.js`), so the renderer should never hit this
+            // guard during prerender. The early return is defence in
+            // depth — vue-router still mounts route guards eagerly and
+            // any future code that exercises this route from the server
+            // would otherwise see an unauthenticated stub world.
+            if (typeof window === 'undefined') {
+                next();
+                return;
+            }
             if (!store.state.user.isAuthReady) {
                 const isReady = await waitForAuthReady();
 
@@ -245,6 +263,15 @@ export const routes = [
         name: 'App',
         component: PageAbout,
         beforeEnter(to, from, next) {
+            // SSR-safe: the OS-sniffing redirect can only run in the
+            // browser. During prerender we just let vite-ssg emit the
+            // (essentially empty) About-rendered HTML for `/app`; the
+            // redirect kicks in on the very first client tick once the
+            // SPA hydrates.
+            if (typeof window === 'undefined') {
+                next();
+                return;
+            }
             const androidRegexp = /android/i;
             if (androidRegexp.test(navigator.userAgent)) {
                 window.location.href = APP_LINK.ANDROID;

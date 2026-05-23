@@ -26,7 +26,10 @@
 </template>
 
 <script>
-import 'lightgallery.js';
+// `lightgallery.js` reads `window` at module-eval time, which crashes the
+// SSR pass. The CSS is fine to keep at top level (Vite extracts it into
+// the stylesheet bundle regardless of where it's imported). The JS gets
+// loaded inside `mounted()` so it only ever runs in the browser.
 import 'lightgallery.js/dist/css/lightgallery.css';
 import ParkspotImage from '../../../public/assets/Parkspot_default.png';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
@@ -72,7 +75,10 @@ export default {
     watch: {
         images: 'updateImages',
     },
-    mounted() {
+    async mounted() {
+        // Browser-only dynamic import — see the comment at the top of the
+        // <script> block for why this can't be a static import.
+        await import('lightgallery.js');
         this.updateImages();
     },
     methods: {
@@ -81,14 +87,15 @@ export default {
                 this.images.length > 0 ? this.images : [ParkspotImage];
             this.setImageSize();
             this.$nextTick(() => {
+                if (typeof window === 'undefined') return;
                 const el = document.getElementById('lightgallery');
                 if (el) {
                     if (window.lgData && window.lgData[el]) {
                         window.lgData[el].destroy(true);
                     }
-                    window.lightGallery(el, {
-                        thumbnail: true,
-                    });
+                    if (typeof window.lightGallery === 'function') {
+                        window.lightGallery(el, { thumbnail: true });
+                    }
                 }
             });
         },

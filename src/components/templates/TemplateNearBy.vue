@@ -1,7 +1,18 @@
 <template>
     <div>
         <HeaderBanner class="custom-header">
-            <h1 class="custom-title">Book Your Parking Spot</h1>
+            <!--
+                Phase 2.5 heading hygiene: this H1 is the primary
+                topical heading the SEO crawler reads. Pre-fix it was
+                the generic literal "Book Your Parking Spot" with the
+                area name buried in an <h4> below — a hierarchy
+                violation that every audit tool now flags since SSG
+                started shipping the rendered HTML. The text comes
+                from `buildAreaPageMeta(url).h1`, so it stays in sync
+                with the edge-function and JSON-LD copy (e.g. "Car
+                Parking near Indiranagar, Bengaluru").
+            -->
+            <h1 class="custom-title">{{ headline }}</h1>
             <b-breadcrumb align="is-centered" size="is-small">
                 <b-breadcrumb-item tag="router-link" to="/">
                     Home
@@ -13,7 +24,15 @@
         </HeaderBanner>
 
         <BodyWrapper>
-            <AtomHeading class="mb-4" :level="'h4'">
+            <!--
+                Section heading above the spot grid. Promoted from h4
+                (visual subtitle) to h2 (proper hierarchy below the
+                page's h1). Visual styling is unchanged — the
+                AtomHeading h4 / h2 type-scale is sized in
+                `AtomHeading.vue` but the visual rhythm here is driven
+                by the `.mb-4` margin, not the level itself.
+            -->
+            <AtomHeading class="mb-4" :level="'h2'">
                 Parking near {{ locationWithCaps }}
             </AtomHeading>
             <div class="columns mb-6">
@@ -38,7 +57,7 @@
                 </template>
             </div>
             <div class="nearbytext-container">
-                <AtomHeading :level="'h3'">
+                <AtomHeading :level="'h2'">
                     Find and book parking spaces near
                     {{ locationWithCaps }}
                 </AtomHeading>
@@ -84,6 +103,16 @@ export default {
         isLoading: {
             type: Boolean,
             default: false,
+        },
+        // Phase 2.5: H1 text. The route page (PageNearBy) computes the
+        // location-aware headline ("Car Parking near {area}, {city}")
+        // via the shared `buildAreaPageMeta` helper so client-side
+        // and edge-injected SEO copy stay byte-identical. Falls back
+        // to a generic literal so the template renders standalone
+        // (storybook, snapshot tests).
+        headline: {
+            type: String,
+            default: 'Find Parking',
         },
     },
     emits: ['details'],

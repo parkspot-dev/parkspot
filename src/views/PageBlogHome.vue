@@ -16,8 +16,7 @@ export default {
     },
     metaInfo() {
         return {
-            title: PAGE_TITLE.BLOG,
-            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
+            title: PAGE_TITLE.BLOG + PAGE_TITLE.BRAND_SUFFIX,
         };
     },
     computed: {
