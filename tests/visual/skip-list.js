@@ -71,6 +71,9 @@ export const SKIP = [
    // ─── External network resources in CSS/template ─────────────────
    { match: /AutomateParking/i,
      reason: 'external background-image URL blocks network idle' },
+   // ─── Hand-crafted specs (skip auto-discovery to avoid duplication) ─
+   { match: /TemplateBlogHome|TemplateNearBy/i,
+     reason: 'covered by dedicated hand-crafted spec under tests/visual/templates/' },
    // ─── Scratch / placeholder ─────────────────────────────────────
    { match: /\/temp\.vue|PageTemp\.vue|ExampleComponent\.vue/i,
      reason: 'scratch / placeholder' },

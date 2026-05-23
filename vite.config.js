@@ -5,20 +5,56 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueDevTools from 'vite-plugin-vue-devtools';
 
-// Strip external CSS @import during tests so headless Chromium does
-// not hang on Google Fonts requests that may never resolve (CI/offline).
+// Strip external CSS @import and url() during tests so headless
+// Chromium does not hang on Google Fonts / external image requests
+// that may never resolve (CI/offline).
 function stripExternalCssImports() {
     return {
         name: 'strip-external-css-imports',
         enforce: 'pre',
         transform(code, id) {
-            if (process.env.VITEST && /\.(scss|css)$/.test(id)) {
-                return code.replace(
+            if (process.env.VITEST && /\.(scss|css|vue)$/.test(id)) {
+                let result = code.replace(
                     /@import\s+['"]https?:\/\/[^'"]+['"];?/g,
                     '/* [test] external import stripped */',
                 );
+                result = result.replace(
+                    /url\(\s*['"]?https?:\/\/[^)]+\)/g,
+                    'url()',
+                );
+                return result !== code ? result : undefined;
             }
             return undefined;
+        },
+    };
+}
+
+// During visual tests, intercept /assets/* requests and serve instant
+// minimal placeholders. This prevents network-idle stalls caused by
+// image/SVG loading — the primary source of CI timeouts.
+const TRANSPARENT_PNG = Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQAB' +
+    'Nl7BcQAAAABJRU5ErkJggg==', 'base64',
+);
+const EMPTY_SVG = '<svg xmlns="http://www.w3.org/2000/svg"/>';
+
+function stubStaticAssets() {
+    return {
+        name: 'stub-static-assets',
+        configureServer(server) {
+            if (!process.env.VITEST) return;
+            server.middlewares.use((req, res, next) => {
+                if (!req.url || !req.url.startsWith('/assets/')) return next();
+                if (/\.svg(\?|$)/.test(req.url)) {
+                    res.setHeader('Content-Type', 'image/svg+xml');
+                    res.end(EMPTY_SVG);
+                } else if (/\.(png|jpe?g|gif|webp|avif|ico)(\?|$)/.test(req.url)) {
+                    res.setHeader('Content-Type', 'image/png');
+                    res.end(TRANSPARENT_PNG);
+                } else {
+                    next();
+                }
+            });
         },
     };
 }
@@ -27,7 +63,7 @@ function stripExternalCssImports() {
 export default defineConfig(({ mode }) => ({
     plugins: [
         vue(),
-        ...(mode === 'test' ? [stripExternalCssImports()] : [vueDevTools()]),
+        ...(mode === 'test' ? [stripExternalCssImports(), stubStaticAssets()] : [vueDevTools()]),
     ],
     // vite-ssg configuration. Only fields that appear in upstream's
     // `ViteSSGOptions` type are accepted; unknown keys are silently
@@ -105,7 +141,7 @@ export default defineConfig(({ mode }) => ({
                     name: 'visual',
                     include: ['tests/visual/**/*.visual.spec.js'],
                     setupFiles: ['./tests/visual/setup.js'],
-                    testTimeout: 30000,
+                    testTimeout: 15000,
                     browser: {
                         enabled: true,
                         provider: playwright(),
