@@ -1,6 +1,13 @@
 <template>
     <div class="bg-wrap">
-        <TemplateAbout></TemplateAbout>
+        <!--
+            Phase 2.5b heading-hygiene follow-up: opt this route's
+            instance of TemplateAbout into <h1> for its headline. The
+            template's default is <h2> so homepage / other section
+            embeds don't introduce a second <h1>. /about/ is where the
+            template owns the page's primary heading.
+        -->
+        <TemplateAbout heading-level="h1"></TemplateAbout>
     </div>
 </template>
 
