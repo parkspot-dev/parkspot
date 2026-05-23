@@ -1,6 +1,17 @@
 <template>
     <div class="bg-wrap">
-        <TemplateContactUs @contact-us="fireContact"></TemplateContactUs>
+        <!--
+            Phase 2.5b heading-hygiene follow-up: /contact/ is the only
+            route where this template owns the page's primary heading
+            ("Got a question?"). Opt back into <h1> here; everywhere
+            else the template embeds default to <h2>, keeping the
+            page's own <h1> (homepage banner, blog post title, etc.)
+            as the single document landmark.
+        -->
+        <TemplateContactUs
+            heading-level="h1"
+            @contact-us="fireContact"
+        ></TemplateContactUs>
         <LoaderModal v-if="isLoading"></LoaderModal>
     </div>
 </template>
@@ -16,16 +27,16 @@ export default {
         TemplateContactUs,
         LoaderModal,
     },
+    // Phase 2.5: direct branded title — see PageAbout for rationale.
     metaInfo() {
         return {
             title: this.title,
-            titleTemplate: PAGE_TITLE.TITLE_TEMPLATE + '%s',
         };
     },
     data() {
         return {
             isLoading: false,
-            title: undefined,
+            title: PAGE_TITLE.CONTACT + PAGE_TITLE.BRAND_SUFFIX,
             PAGE_TITLE,
         };
     },
@@ -33,7 +44,7 @@ export default {
         $route: {
             handler: function (to) {
                 if (to.name == 'contactUs') {
-                    this.title = PAGE_TITLE.CONTACT;
+                    this.title = PAGE_TITLE.CONTACT + PAGE_TITLE.BRAND_SUFFIX;
                 }
             },
             deep: true,

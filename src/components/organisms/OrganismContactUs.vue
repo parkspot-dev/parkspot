@@ -1,7 +1,20 @@
 <template>
     <div class="contact-us">
         <div class="contact-us-header mg-large">
-            <AtomHeading class="mb-2">Got a question?</AtomHeading>
+            <!--
+                Phase 2.5b heading-hygiene follow-up: `OrganismContactUs`
+                is embedded as a section on multiple pages (homepage,
+                blog posts, /contact/). Its headline was previously
+                rendered as <h1> via AtomHeading's default, which leaked
+                into every parent page and produced ≥ 2 <h1>s on /
+                and /blog/:id. The level is now a prop, defaulting to
+                <h2> (section heading); the /contact/ route opts back in
+                to <h1> via the chain PageContactUs → TemplateContactUs
+                → OrganismContactUs.
+            -->
+            <AtomHeading class="mb-2" :level="headingLevel"
+                >Got a question?</AtomHeading
+            >
             <AtomParagraph>
                 Fill up the form and our Team will get back to you within 24
                 hours.
@@ -78,6 +91,17 @@ export default {
         AtomHeading,
         AtomParagraph,
         AtomIcon,
+    },
+    props: {
+        // Default 'h2': this organism is overwhelmingly used as a
+        // section heading (embedded into homepage, blog posts, etc.).
+        // /contact/ — where it owns the page's primary heading —
+        // opts back into 'h1' explicitly through TemplateContactUs.
+        headingLevel: {
+            type: String,
+            default: 'h2',
+            validator: (v) => /^h[1-6]$/.test(v),
+        },
     },
     data() {
         return {

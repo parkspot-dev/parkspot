@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     buildAreaPageMeta,
+    buildBlogPostMeta,
     buildSpotDetailMeta,
 } from '../../netlify/edge-functions/lib/meta.js';
 
@@ -84,5 +85,86 @@ describe('buildSpotDetailMeta', () => {
         expect(meta.description).toContain('Marathahalli, Bengaluru');
         expect(meta.description).toContain('₹2,500');
         expect(meta.jsonLd.priceRange).toBe('₹2,500/month');
+    });
+});
+
+describe('buildBlogPostMeta', () => {
+    const sample = {
+        id: 'eliminating-traffic-jams-in-india',
+        title: 'Eliminating Traffic jams in India!',
+        author: 'Nikhil Surya Mukhi',
+        img: '/assets/blog/blog1.jpg',
+        desc: `In the recent years all over the globe production
+                and demand for motor vehicles has increased dramatically.`,
+        dateTime: '2020-02-11',
+    };
+
+    it('produces a brand-suffixed title and canonical URL', () => {
+        const meta = buildBlogPostMeta(sample);
+        expect(meta.title).toBe(
+            'Eliminating Traffic jams in India! | ParkSpot',
+        );
+        expect(meta.canonical).toBe(
+            'https://www.parkspot.in/blog/eliminating-traffic-jams-in-india/',
+        );
+        expect(meta.ogUrl).toBe(meta.canonical);
+        expect(meta.ogType).toBe('article');
+        expect(meta.h1).toBe('Eliminating Traffic jams in India!');
+    });
+
+    it('collapses multi-line desc into a single-line description', () => {
+        const meta = buildBlogPostMeta(sample);
+        expect(meta.description).toBe(
+            'In the recent years all over the globe production and demand for motor vehicles has increased dramatically.',
+        );
+        expect(meta.ogDescription).toBe(meta.description);
+    });
+
+    it('absolutises a relative blog image into the og:image URL', () => {
+        const meta = buildBlogPostMeta(sample);
+        expect(meta.ogImage).toBe(
+            'https://www.parkspot.in/assets/blog/blog1.jpg',
+        );
+    });
+
+    it('passes through an absolute blog image unchanged', () => {
+        const meta = buildBlogPostMeta({
+            ...sample,
+            img: 'https://cdn.example.com/blog/blog1.jpg',
+        });
+        expect(meta.ogImage).toBe('https://cdn.example.com/blog/blog1.jpg');
+    });
+
+    it('emits a BlogPosting JSON-LD with author + publish date when provided', () => {
+        const meta = buildBlogPostMeta(sample);
+        expect(meta.jsonLd['@type']).toBe('BlogPosting');
+        expect(meta.jsonLd.headline).toBe(sample.title);
+        expect(meta.jsonLd.author).toEqual({
+            '@type': 'Person',
+            name: 'Nikhil Surya Mukhi',
+        });
+        expect(meta.jsonLd.datePublished).toBe('2020-02-11');
+        expect(meta.jsonLd.url).toBe(meta.canonical);
+    });
+
+    it('falls back gracefully when fields are missing', () => {
+        const meta = buildBlogPostMeta({});
+        // No id → falls back to the index page canonical so the build
+        // still ships a valid URL instead of crashing or emitting
+        // garbage like `/blog/undefined/`.
+        expect(meta.canonical).toBe('https://www.parkspot.in/blog/');
+        expect(meta.title).toBe('ParkSpot Blog | ParkSpot');
+        expect(meta.description).toContain('read the full post on ParkSpot');
+        expect(meta.jsonLd.author).toBeUndefined();
+        expect(meta.jsonLd.datePublished).toBeUndefined();
+    });
+
+    it('returns the default object shape for non-object input (safe SSG)', () => {
+        // The route enumeration in `included-routes.js` already filters
+        // out blank entries, but defence-in-depth here means a stale
+        // route reference in `routes.js` can't poison the build.
+        const meta = buildBlogPostMeta(null);
+        expect(meta.title).toBe('ParkSpot Blog | ParkSpot');
+        expect(meta.canonical).toBe('https://www.parkspot.in/blog/');
     });
 });

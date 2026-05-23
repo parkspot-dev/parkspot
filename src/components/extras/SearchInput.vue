@@ -16,7 +16,16 @@
                 @click="addRecentSearches()"
             >
                 <template #default="props">
-                    <div class="media">
+                    <!--
+                        Buefy's Vue 3 port invokes this scoped slot with
+                        `undefined` during SSR pre-render, which crashes
+                        `props.option.fromLS`. Guarding with `v-if` makes the
+                        slot a no-op when the host component hasn't supplied
+                        an option object yet — runtime behaviour is unchanged
+                        because the autocomplete only renders this slot for
+                        actual matches (where `props.option` is defined).
+                    -->
+                    <div v-if="props && props.option" class="media">
                         <!-- fromLS should be renamed -->
                         <div
                             v-show="props.option.fromLS"

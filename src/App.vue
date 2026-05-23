@@ -2,13 +2,20 @@
     <div>
         <div id="app">
             <Navbar></Navbar>
-            <OrganismLogin></OrganismLogin>
+            <!-- Login modal depends on Buefy + Firebase Auth, both of which
+                 require the browser. Rendering it client-only keeps the SSR
+                 HTML free of unmounted modal markup. -->
+            <ClientOnly>
+                <OrganismLogin></OrganismLogin>
+            </ClientOnly>
             <main class="body-container">
                 <router-view :key="$route.fullPath" />
             </main>
             <TemplateFooter></TemplateFooter>
         </div>
-        <AtomChat />
+        <ClientOnly>
+            <AtomChat />
+        </ClientOnly>
     </div>
 </template>
 

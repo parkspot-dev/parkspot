@@ -1,5 +1,14 @@
 <template>
     <div class="srp-container">
+        <!--
+            Phase 2.5 heading hygiene: ship a semantic <h1> for SEO +
+            a11y. The visible UI already has "Spots found: N" as a
+            running headline; an additional visible H1 would crowd the
+            map+list layout, so it's screen-reader-only. The text comes
+            from `PageSrp.vue` (route-aware: "Car Parking near
+            {location} | ParkSpot" or the generic fallback).
+        -->
+        <h1 class="sr-only">{{ headline }}</h1>
         <div class="srp-lists">
             <div class="srp-control">
                 <SearchInput
@@ -99,6 +108,7 @@ import vClickOutside from 'v-click-outside';
 import FilterDropdown from '../global/FilterDropdown.vue';
 import {
     DISTANCE_FILTER_OPTIONS,
+    PAGE_H1,
     RENT_FILTER_OPTIONS,
     SORT_FILTER_OPTIONS,
     STATUS_FILTER_OPTIONS,
@@ -131,6 +141,14 @@ export default {
         currentPage: {
             type: Number,
             default: 1,
+        },
+        // Phase 2.5: H1 text for the prerendered HTML. Route-aware
+        // copy ("Car Parking near {location}") is composed by the
+        // route page (PageSrp) and passed in. The default keeps the
+        // template usable standalone (storybook, snapshot tests).
+        headline: {
+            type: String,
+            default: PAGE_H1.SRP_FALLBACK,
         },
     },
     emits: ['changed', 'flyToSrp', 'details'],

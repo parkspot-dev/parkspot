@@ -12,14 +12,31 @@
 
 # Route-level interception for per-URL SEO metadata injection.
 # See netlify/edge-functions/seo-inject.js for implementation details.
-[[edge_functions]]
-  path     = "/bangalore/parking-near-*"
-  function = "seo-inject"
+#
+# Note: `/bangalore/parking-near-*` and `/hyderabad/parking-near-*` are
+# now fully prerendered by vite-ssg (the dist HTML already contains
+# title, description, canonical, og, and JSON-LD baked in via
+# `src/utils/seo/to-head.js`). Leaving the edge function bound to those
+# paths would re-fetch RTDB and regex-rewrite tags to the same values
+# on every cold-cache edge node hit — pure overhead. See
+# `ssg-research/04-integration-plan.md` § 2.4.
+#
+# The handler code for area pages is intentionally kept in
+# `netlify/edge-functions/seo-inject.js` as a rollback escape hatch:
+# if SSG ever needs to be reverted, adding back the two
+# `[[edge_functions]]` blocks below restores head-tag SEO without a
+# code change.
+#
+#   [[edge_functions]]
+#     path     = "/bangalore/parking-near-*"
+#     function = "seo-inject"
+#
+#   [[edge_functions]]
+#     path     = "/hyderabad/parking-near-*"
+#     function = "seo-inject"
 
-[[edge_functions]]
-  path     = "/hyderabad/parking-near-*"
-  function = "seo-inject"
-
+# Spot-detail pages remain SPA + edge-injected head until Phase 3
+# prerenders them. See `ssg-research/04-integration-plan.md` § 3.5.
 [[edge_functions]]
   path     = "/spot-details/*"
   function = "seo-inject"
