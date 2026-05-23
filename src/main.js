@@ -21,7 +21,7 @@ import Buefy from 'buefy';
 import VueDatePicker from '@vuepic/vue-datepicker';
 
 import { routes, scrollBehavior } from './router';
-import { createAppStore } from './store';
+import { createAppStore, seedAppStore } from './store';
 import { metaInfoBridge } from './plugins/unhead-meta-adapter.js';
 import { cleanupEdgeInjectedStructuredData } from './plugins/edge-seo-handoff.js';
 
@@ -48,6 +48,10 @@ export const createApp = ViteSSG(
         } else if (initialState && initialState.store) {
             store.replaceState(initialState.store);
         }
+        // Seed must precede `app.use` so module-level `import store from
+        // '@/store'` subscribers (e.g. `onAuthStateChanged`) commit to
+        // the same instance Vue components are wired to.
+        seedAppStore(store);
         app.use(store);
 
         // Global bridge: every component with the legacy `metaInfo()` option

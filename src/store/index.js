@@ -1,12 +1,13 @@
 // Store entry. Exposes `createAppStore()` so `vite-ssg` can build a fresh
 // Vuex store per render (preventing cross-route state pollution under SSR),
-// plus a lazy `default` singleton so legacy callers that historically did
-// `import store from '@/store'; store.dispatch(...)` keep working unchanged.
+// plus a lazy `default` singleton so legacy `import store from '@/store'`
+// call sites keep working unchanged.
 //
-// The default export is a Proxy that constructs the store on first access,
-// and only on the client. Server-side access throws by design — every code
-// path the SSR pass touches must go through the per-render store from
-// `createAppStore()`.
+// The default export is a Proxy that resolves to the store seeded by
+// `main.js` via `seedAppStore()` on the client, and to an inert stub on
+// the server. The seed step is what guarantees that module-level
+// subscribers (e.g. `onAuthStateChanged` in `src/store/user/index.js`)
+// mutate the same instance Vue components are wired to via `app.use`.
 
 import { createStore } from 'vuex';
 
@@ -122,6 +123,24 @@ function getStore() {
     }
     lazySingleton = createAppStore();
     return lazySingleton;
+}
+
+/**
+ * Register the canonical per-render client store. Must be called from
+ * `main.js` BEFORE `app.use(store)` so module-level subscribers that
+ * `import store from '@/store'` resolve to the same instance Vue
+ * components are wired to. No-op during SSR — each vite-ssg render owns
+ * its own short-lived store.
+ *
+ * @param {import('vuex').Store} store
+ */
+export function seedAppStore(store) {
+    if (typeof window === 'undefined') return;
+    lazySingleton = store;
+}
+
+export function __resetAppStoreSingletonForTests() {
+    lazySingleton = null;
 }
 
 const storeProxyTarget = {};

@@ -94,4 +94,71 @@ describe('root store', () => {
             `);
         });
     });
+
+    describe('seedAppStore — single-instance contract', () => {
+        it('exports seedAppStore and __resetAppStoreSingletonForTests', async () => {
+            const mod = await import('@/store');
+            expect(typeof mod.seedAppStore).toBe('function');
+            expect(typeof mod.__resetAppStoreSingletonForTests).toBe(
+                'function',
+            );
+            expect(typeof mod.createAppStore).toBe('function');
+        });
+
+        it('default-export commits and seeded-instance commits target the same store', async () => {
+            const {
+                createAppStore,
+                seedAppStore,
+                __resetAppStoreSingletonForTests,
+                default: defaultStore,
+            } = await import('@/store');
+            __resetAppStoreSingletonForTests();
+
+            const canonical = createAppStore();
+            seedAppStore(canonical);
+
+            canonical.commit('user/update-auth-ready', true);
+            expect(defaultStore.state.user.isAuthReady).toBe(true);
+
+            __resetAppStoreSingletonForTests();
+            const canonical2 = createAppStore();
+            seedAppStore(canonical2);
+            defaultStore.commit('user/update-auth-ready', true);
+            expect(canonical2.state.user.isAuthReady).toBe(true);
+
+            __resetAppStoreSingletonForTests();
+        });
+
+        it('falls back to a lazily-built store when no seed has happened', async () => {
+            const {
+                __resetAppStoreSingletonForTests,
+                default: defaultStore,
+            } = await import('@/store');
+            __resetAppStoreSingletonForTests();
+
+            expect(defaultStore.state).toBeDefined();
+            expect(defaultStore.state.user).toHaveProperty('isAuthReady');
+        });
+
+        it('reseeding swaps the instance the Proxy resolves to', async () => {
+            const {
+                createAppStore,
+                seedAppStore,
+                __resetAppStoreSingletonForTests,
+                default: defaultStore,
+            } = await import('@/store');
+            __resetAppStoreSingletonForTests();
+
+            const a = createAppStore();
+            const b = createAppStore();
+            seedAppStore(a);
+            a.commit('user/update-auth-ready', true);
+            expect(defaultStore.state.user.isAuthReady).toBe(true);
+
+            seedAppStore(b);
+            expect(defaultStore.state.user.isAuthReady).toBe(false);
+
+            __resetAppStoreSingletonForTests();
+        });
+    });
 });
