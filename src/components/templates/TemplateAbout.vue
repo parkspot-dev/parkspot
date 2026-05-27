@@ -1,5 +1,26 @@
 <template>
     <BodyWrapper>
+        <!--
+            Phase 2.5 heading hygiene: the about page ships a real <h1>
+            and proper H1 > H2 hierarchy. Pre-fix, the section
+            sub-headings ("Company Overview:", "Our Services:") were
+            declared as <h3> with no <h1> or <h2> above them — an SEO /
+            a11y hierarchy violation that every audit tool flagged
+            once SSG started shipping the rendered HTML.
+        -->
+        <!--
+            Phase 2.5b heading-hygiene follow-up: TemplateAbout is also
+            embedded into PageHome as a section. Default to <h2> so it
+            doesn't introduce a second <h1> on /; PageAbout opts back
+            into <h1> via the headingLevel prop where this template
+            owns the route's primary heading.
+        -->
+        <AtomHeading
+            class="about-headline mb-4 ml-1"
+            :level="headingLevel"
+        >
+            {{ headline }}
+        </AtomHeading>
         <div class="about-container">
             <AtomImage
                 :src="aboutImg"
@@ -7,8 +28,8 @@
                 class="about-img"
             ></AtomImage>
             <div class="about-desc" data-aos="zoom-in">
-                <AtomHeading class="mb-3 ml-1" level="h3"
-                    >Company Overview:</AtomHeading
+                <AtomHeading class="mb-3 ml-1" level="h2"
+                    >Company Overview</AtomHeading
                 >
                 <AtomParagraph class="mb-2 ml-1 mr-1">
                     Welcome to ParkSpot, your ultimate destination for
@@ -19,8 +40,8 @@
                     satisfaction above all else.
                 </AtomParagraph>
                 <hr />
-                <AtomHeading class="mb-3 ml-1" level="h3"
-                    >Our Services:</AtomHeading
+                <AtomHeading class="mb-3 ml-1" level="h2"
+                    >Our Services</AtomHeading
                 >
                 <AtomParagraph class="mb-2 ml-1 mr-1">
                     ParkSpot offers a range of monthly car parking services
@@ -75,7 +96,7 @@ import BodyWrapper from '../extras/BodyWrapper.vue';
 import AtomHeading from '../atoms/AtomHeading.vue';
 import AtomParagraph from '../atoms/AtomParagraph.vue';
 import AtomImage from '../atoms/AtomImage.vue';
-import { APP_LINK } from '@/constant/constant';
+import { APP_LINK, PAGE_H1 } from '@/constant/constant';
 export default {
     name: 'TemplateAbout',
     components: {
@@ -84,11 +105,24 @@ export default {
         AtomParagraph,
         AtomImage,
     },
+    props: {
+        // 'h2' by default — TemplateAbout is used both as the body of
+        // /about/ (where its headline is the page's primary h1) and as
+        // a section inside PageHome (where the homepage banner already
+        // owns the h1 and this should be h2). PageAbout overrides to
+        // 'h1'.
+        headingLevel: {
+            type: String,
+            default: 'h2',
+            validator: (v) => /^h[1-6]$/.test(v),
+        },
+    },
     data() {
         return {
             appLinkImg: '/assets/google-play-badge.svg',
             aboutImg: '/assets/about.svg',
             iosAppLinkImg: '/assets/apple-store.svg',
+            headline: PAGE_H1.ABOUT,
             APP_LINK,
         };
     },
@@ -125,6 +159,14 @@ export default {
     .about-links .park-link {
         font-size: 1rem;
     }
+}
+
+.about-headline {
+    // Match the visual weight of the page-level title without
+    // disrupting the section card layout below. Keep the global
+    // AtomHeading scale; only adjust margin / alignment.
+    text-align: center;
+    margin-bottom: 2rem;
 }
 
 .about-container {

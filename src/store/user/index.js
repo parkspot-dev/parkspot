@@ -458,35 +458,41 @@ const actions = {
     },
 };
 
-const unsub = onAuthStateChanged(auth, async (user) => {
-    const previousUser = store.state?.user?.user;
-    const previousCacheUserId = resolveUserIdentity(previousUser);
+// Firebase Auth's `onAuthStateChanged` + `localStorage` are browser-only.
+// Under SSR (vite-ssg) we must not run any of this — both because `auth` is
+// a stub on the server (see `src/firebase.js`) and because mutating a
+// module-level subscription would leak state across renders.
+if (typeof window !== 'undefined') {
+    onAuthStateChanged(auth, async (user) => {
+        const previousUser = store.state?.user?.user;
+        const previousCacheUserId = resolveUserIdentity(previousUser);
 
-    store.commit('user/update-user', user);
-    store.commit('user/update-auth-ready', true);
+        store.commit('user/update-user', user);
 
-    if (!user) {
-        store.commit('user/set-auth-error', null);
-        clearProfileCache(previousCacheUserId);
-        localStorage.removeItem(PS_AUTH_KEY);
-        return;
-    }
+        if (!user) {
+            store.commit('user/set-auth-error', null);
+            clearProfileCache(previousCacheUserId);
+            localStorage.removeItem(PS_AUTH_KEY);
+            store.commit('user/update-auth-ready', true);
+            return;
+        }
 
-    const token = await user.getIdToken();
-    localStorage.setItem(PS_AUTH_KEY, token);
+        try {
+            const token = await user.getIdToken();
+            localStorage.setItem(PS_AUTH_KEY, token);
 
-    try {
-        await store.dispatch('user/getUserProfile');
-        await store.dispatch('app/getAgents');
-    } catch {
-        store.commit('user/set-auth-error', {
-            source: 'onAuthStateChanged',
-            message: 'Failed to load user bootstrap data',
-        });
-    }
+            await store.dispatch('user/getUserProfile');
+            await store.dispatch('app/getAgents');
+        } catch {
+            store.commit('user/set-auth-error', {
+                source: 'onAuthStateChanged',
+                message: 'Failed to load user bootstrap data',
+            });
+        }
 
-    unsub();
-});
+        store.commit('user/update-auth-ready', true);
+    });
+}
 
 export default {
     namespaced: true,

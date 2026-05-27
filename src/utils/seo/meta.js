@@ -5,5 +5,6 @@
 
 export {
     buildAreaPageMeta,
+    buildBlogPostMeta,
     buildSpotDetailMeta,
 } from '../../../netlify/edge-functions/lib/meta.js';

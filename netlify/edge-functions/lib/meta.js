@@ -135,6 +135,85 @@ export function buildSpotDetailMeta(url, enhancement = null) {
     };
 }
 
+/**
+ * Build a MetaPayload for a single blog post. Pure function — caller
+ * passes the blog record (id, title, author, image, description, date),
+ * we return the SEO shape that both vite-ssg prerender and any future
+ * edge-side rewrite can consume identically.
+ *
+ * @param {{
+ *   id: string,
+ *   title: string,
+ *   author?: string,
+ *   author_img?: string,
+ *   img?: string,
+ *   desc?: string,
+ *   dateTime?: string,
+ *   time?: string,
+ * }} blog
+ * @returns {MetaPayload}
+ */
+export function buildBlogPostMeta(blog) {
+    const safe = blog && typeof blog === 'object' ? blog : {};
+    const id = typeof safe.id === 'string' ? safe.id : '';
+    const titleText =
+        typeof safe.title === 'string' && safe.title.trim()
+            ? safe.title.trim()
+            : 'ParkSpot Blog';
+
+    // Collapse the multi-line `desc` field into a single line and clip
+    // the trailing ellipsis the store payload tends to embed.
+    const rawDesc = typeof safe.desc === 'string' ? safe.desc : '';
+    const description = rawDesc.replace(/\s+/g, ' ').trim() ||
+        `${titleText} — read the full post on ParkSpot.`;
+
+    const canonical = id
+        ? `${SITE_ORIGIN}/blog/${id}/`
+        : `${SITE_ORIGIN}/blog/`;
+
+    const ogImage =
+        typeof safe.img === 'string' && safe.img
+            ? // Blog images are relative paths in the store (e.g. `/assets/blog/blog1.jpg`).
+              // Prefix with the site origin so social crawlers can fetch them.
+              safe.img.startsWith('http')
+                ? safe.img
+                : `${SITE_ORIGIN}${safe.img.startsWith('/') ? '' : '/'}${safe.img}`
+            : DEFAULT_OG_IMAGE;
+
+    const title = `${titleText} | ${BRAND_SUFFIX}`;
+
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: titleText,
+        image: ogImage,
+        url: canonical,
+        mainEntityOfPage: canonical,
+        publisher: {
+            '@type': 'Organization',
+            name: BRAND_SUFFIX,
+            url: SITE_ORIGIN,
+        },
+        ...(safe.author
+            ? { author: { '@type': 'Person', name: safe.author } }
+            : {}),
+        ...(safe.dateTime ? { datePublished: safe.dateTime } : {}),
+    };
+
+    return {
+        title,
+        description,
+        canonical,
+        ogTitle: titleText,
+        ogDescription: description,
+        ogUrl: canonical,
+        ogImage,
+        ogType: 'article',
+        h1: titleText,
+        jsonLd,
+    };
+}
+
 function capitalize(s) {
     if (!s) return '';
     return String(s).charAt(0).toUpperCase() + String(s).slice(1);

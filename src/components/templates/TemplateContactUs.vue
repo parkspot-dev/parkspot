@@ -1,7 +1,17 @@
 <template>
     <BodyWrapper>
         <div class="columns">
-            <OrganismContactUs class="column is-half"></OrganismContactUs>
+            <!--
+                Phase 2.5b heading-hygiene follow-up: forward the
+                page-level decision about whether the embedded
+                "Got a question?" headline should be the route's
+                primary <h1> (on /contact/) or just a section <h2>
+                (everywhere else this template is embedded).
+            -->
+            <OrganismContactUs
+                class="column is-half"
+                :heading-level="headingLevel"
+            ></OrganismContactUs>
             <div class="column is-half contact-form" data-aos="slide-up">
                 <div class="card card-padding">
                     <OrganismContactForm
@@ -26,6 +36,16 @@ export default {
         OrganismContactUs,
         OrganismContactForm,
     },
+    props: {
+        // Pass-through to OrganismContactUs. Default 'h2' for the
+        // section-embed case (PageHome, PageBlogPost). PageContactUs
+        // overrides to 'h1' so /contact/ keeps its single landmark.
+        headingLevel: {
+            type: String,
+            default: 'h2',
+            validator: (v) => /^h[1-6]$/.test(v),
+        },
+    },
     emits: ['contactUs'],
     data() {
         return {
@@ -34,8 +54,8 @@ export default {
     },
     methods: {
         submitForm() {
-            this.$emit('contactUs')
-        }
+            this.$emit('contactUs');
+        },
     },
 };
 </script>
