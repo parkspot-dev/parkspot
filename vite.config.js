@@ -5,55 +5,82 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueDevTools from 'vite-plugin-vue-devtools';
 
-// Strip external CSS @import and url() during tests so headless
-// Chromium does not hang on Google Fonts / external image requests
-// that may never resolve (CI/offline).
-function stripExternalCssImports() {
-    return {
-        name: 'strip-external-css-imports',
-        enforce: 'pre',
-        transform(code, id) {
-            if (process.env.VITEST && /\.(scss|css|vue)$/.test(id)) {
-                let result = code.replace(
-                    /@import\s+['"]https?:\/\/[^'"]+['"];?/g,
-                    '/* [test] external import stripped */',
-                );
-                result = result.replace(
-                    /url\(\s*['"]?https?:\/\/[^)]+\)/g,
-                    'url()',
-                );
-                return result !== code ? result : undefined;
-            }
-            return undefined;
-        },
-    };
-}
+// Strip network-blocking resources during tests. Two layers:
+//
+// 1. Transform (compile-time): rewrites source code for local .vue/.scss
+//    files so the browser never issues blocking requests.
+//
+// 2. Server middleware (runtime): intercepts any /assets/* HTTP request
+//    that slipped through (e.g. from node_modules CSS that Vite skips
+//    user transforms on) and serves instant placeholders.
+//
+// Both layers are needed because Vite does NOT run user transform hooks
+// on pre-bundled node_modules CSS (like buefy.css).
 
-// During visual tests, intercept /assets/* requests and serve instant
-// minimal placeholders. This prevents network-idle stalls caused by
-// image/SVG loading — the primary source of CI timeouts.
-const TRANSPARENT_PNG = Buffer.from(
-    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQAB' +
-    'Nl7BcQAAAABJRU5ErkJggg==', 'base64',
-);
+const TRANSPARENT_PNG_B64 =
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQABNl7BcQAAAABJRU5ErkJggg==';
+const TRANSPARENT_PNG = Buffer.from(TRANSPARENT_PNG_B64, 'base64');
 const EMPTY_SVG = '<svg xmlns="http://www.w3.org/2000/svg"/>';
 
-function stubStaticAssets() {
+function stripTestBlockingResources() {
     return {
-        name: 'stub-static-assets',
+        name: 'strip-test-blocking-resources',
+        enforce: 'pre',
+        transform(code, id) {
+            if (!/\.(scss|css|vue)(\?.*)?$/.test(id)) return undefined;
+
+            let result = code;
+            // External @import — quoted string form (@import 'https://...')
+            // Must match full quoted URL including semicolons (Google Fonts uses them).
+            result = result.replace(
+                /@import\s+(['"])https?:\/\/.*?\1\s*;?/g,
+                '/* [test] external import stripped */',
+            );
+            // External @import — url() form (@import url(...))
+            result = result.replace(
+                /@import\s+url\(\s*['"]?https?:\/\/[^)]+\)\s*;?/g,
+                '/* [test] external import stripped */',
+            );
+            // External url()
+            result = result.replace(
+                /url\(\s*['"]?https?:\/\/[^)]+\)/g,
+                'url(data:,)',
+            );
+            // Local /assets/* background images / CSS url() references
+            result = result.replace(
+                /url\(\s*['"]?\/assets\/[^)]+\)/g,
+                'url(data:,)',
+            );
+            // JS strings containing url(/assets/...) used by v-bind() CSS
+            result = result.replace(
+                /(['"`])url\(\s*['"]?\/assets\/[^)]+\)\1/g,
+                '$1none$1',
+            );
+            // Static <img src="/assets/..."> in templates (only in HTML context)
+            // Use a data URI (not src="") — empty src triggers a request to the page URL.
+            result = result.replace(
+                /<img\b[^>]*\bsrc="\/assets\/[^"]+"/g,
+                (match) => match.replace(/src="\/assets\/[^"]+"/, `src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"`),
+            );
+            return result !== code ? result : undefined;
+        },
         configureServer(server) {
-            if (!process.env.VITEST) return;
             server.middlewares.use((req, res, next) => {
-                if (!req.url || !req.url.startsWith('/assets/')) return next();
-                if (/\.svg(\?|$)/.test(req.url)) {
-                    res.setHeader('Content-Type', 'image/svg+xml');
-                    res.end(EMPTY_SVG);
-                } else if (/\.(png|jpe?g|gif|webp|avif|ico)(\?|$)/.test(req.url)) {
-                    res.setHeader('Content-Type', 'image/png');
-                    res.end(TRANSPARENT_PNG);
-                } else {
-                    next();
+                if (!req.url) return next();
+                // Serve instant placeholders for /assets/* image requests
+                if (req.url.startsWith('/assets/')) {
+                    if (/\.svg(\?|$)/i.test(req.url)) {
+                        res.setHeader('Content-Type', 'image/svg+xml');
+                        res.setHeader('Cache-Control', 'max-age=31536000');
+                        return res.end(EMPTY_SVG);
+                    }
+                    if (/\.(png|jpe?g|gif|webp|avif|ico)(\?|$)/i.test(req.url)) {
+                        res.setHeader('Content-Type', 'image/png');
+                        res.setHeader('Cache-Control', 'max-age=31536000');
+                        return res.end(TRANSPARENT_PNG);
+                    }
                 }
+                next();
             });
         },
     };
@@ -61,9 +88,13 @@ function stubStaticAssets() {
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+    // Disable static file serving from public/ during tests so that
+    // /assets/* requests hit our middleware (instant placeholders)
+    // instead of loading real images that stall network idle.
+    publicDir: mode === 'test' ? false : 'public',
     plugins: [
         vue(),
-        ...(mode === 'test' ? [stripExternalCssImports(), stubStaticAssets()] : [vueDevTools()]),
+        ...(mode === 'test' ? [stripTestBlockingResources()] : [vueDevTools()]),
     ],
     // vite-ssg configuration. Only fields that appear in upstream's
     // `ViteSSGOptions` type are accepted; unknown keys are silently
