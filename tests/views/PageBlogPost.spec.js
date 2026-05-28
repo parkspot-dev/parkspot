@@ -57,6 +57,7 @@ const mountComponent = () => {
                 // simulates the `contactUs` event so the route's
                 // `fireContact` handler is wired and testable.
                 TemplateContactUs: {
+                    name: 'TemplateContactUs',
                     template: `
                         <div class="template-contact-us">
                             <button class="submit-btn" @click="$emit('contactUs')">Submit</button>
@@ -161,7 +162,7 @@ describe('PageBlogPost.vue - Complete Test Suite', () => {
         // Make the router throw on the redirect inside fireContact's
         // catch branch — the spinner state must still come back down
         // because the reset moved into `finally`.
-        store.dispatch = vi.fn(() => Promise.reject(new Error('boom')));
+        const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
         wrapper.vm.$router.push = vi.fn(() => {
             throw new Error('router exploded');
         });
@@ -172,5 +173,6 @@ describe('PageBlogPost.vue - Complete Test Suite', () => {
             // swallow — we only care about the spinner state.
         }
         expect(wrapper.vm.isLoading).toBe(false);
+        errSpy.mockRestore();
     });
 });

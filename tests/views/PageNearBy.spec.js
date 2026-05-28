@@ -248,15 +248,14 @@ describe('PageNearBy.vue', () => {
                 store,
             });
             wrapper.vm.nearByLocation = 'btm';
+            buildAreaPageMeta.mockClear();
             const info = wrapper.vm.$options.metaInfo.call(wrapper.vm);
 
             expect(buildAreaPageMeta).toHaveBeenCalled();
             const calledWith = buildAreaPageMeta.mock.calls[0];
             // First positional arg is a URL object built from $route.fullPath.
             expect(calledWith[0]).toBeInstanceOf(URL);
-            expect(calledWith[0].pathname).toBe(
-                '/bangalore/parking-near-btm/',
-            );
+            expect(calledWith[0].pathname).toBe('/bangalore/parking-near-btm/');
             // Second positional arg is an enhancement object with sitesCount
             // when spots are present.
             expect(calledWith[1]).toEqual({ sitesCount: 1 });
@@ -307,13 +306,11 @@ describe('PageNearBy.vue', () => {
                 },
                 store,
             });
-            expect(wrapper.vm.headline).toBe(
+            expect(wrapper.vm.headline).toBe('Car Parking near BTM, Bengaluru');
+            // And the prop forwarding to the template:
+            expect(wrapper.find('.tnb').attributes('data-headline')).toBe(
                 'Car Parking near BTM, Bengaluru',
             );
-            // And the prop forwarding to the template:
-            expect(
-                wrapper.find('.tnb').attributes('data-headline'),
-            ).toBe('Car Parking near BTM, Bengaluru');
         });
 
         it('degrades to empty string when buildAreaPageMeta throws', () => {

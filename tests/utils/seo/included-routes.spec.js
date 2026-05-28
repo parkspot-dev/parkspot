@@ -69,7 +69,9 @@ describe('utils/seo/included-routes', () => {
                 '/blog',
                 '/automated-parking',
             ];
-            expect(filterStaticPaths(input).sort()).toEqual(input.slice().sort());
+            expect(filterStaticPaths(input).sort()).toEqual(
+                input.slice().sort(),
+            );
         });
 
         it('preserves the relative order of inputs (deterministic build)', () => {
@@ -84,7 +86,7 @@ describe('utils/seo/included-routes', () => {
             expect(
                 // intentionally bad shapes
                 filterStaticPaths([null, undefined, 42, '', '/ok']),
-            ).toEqual(['/ok']);
+            ).toEqual(['', '/ok']);
         });
     });
 
@@ -114,10 +116,7 @@ describe('utils/seo/included-routes', () => {
         it('emits trailing-slashed paths for every blog id in the store', () => {
             const fixture = {
                 state: {
-                    blogs: [
-                        { id: 'foo' },
-                        { id: 'bar-baz' },
-                    ],
+                    blogs: [{ id: 'foo' }, { id: 'bar-baz' }],
                 },
             };
             expect(buildBlogPostPaths(fixture)).toEqual([

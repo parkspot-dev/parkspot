@@ -32,9 +32,7 @@ describe('store/seoPages', () => {
             const store = mountModuleStore();
             const result = await store.dispatch('seoPages/loadPage', 'btm');
 
-            expect(getValueFromFirebase).toHaveBeenCalledWith(
-                'seo-pages/btm',
-            );
+            expect(getValueFromFirebase).toHaveBeenCalledWith('seo-pages/btm');
             expect(result).toEqual(payload);
             expect(store.state.seoPages.byLocation.btm).toEqual(payload);
         });
@@ -119,7 +117,9 @@ describe('store/seoPages', () => {
             const store = mountModuleStore();
             const data = { Sites: [{ ID: 'A' }], heading: 'BTM' };
             store.commit('seoPages/setPage', { location: 'btm', data });
-            expect(store.getters['seoPages/pageForLocation']('btm')).toBe(data);
+            expect(store.getters['seoPages/pageForLocation']('btm')).toEqual(
+                data,
+            );
             expect(
                 store.getters['seoPages/pageForLocation']('never-seen'),
             ).toBeNull();

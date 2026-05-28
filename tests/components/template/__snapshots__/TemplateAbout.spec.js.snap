@@ -1,0 +1,38 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TemplateAbout.vue (user-focused + style checks) > matches the snapshot 1`] = `
+"<div data-v-0a89d346="">
+  <!--
+            Phase 2.5 heading hygiene: the about page ships a real <h1>
+            and proper H1 > H2 hierarchy. Pre-fix, the section
+            sub-headings ("Company Overview:", "Our Services:") were
+            declared as <h3> with no <h1> or <h2> above them — an SEO /
+            a11y hierarchy violation that every audit tool flagged
+            once SSG started shipping the rendered HTML.
+        -->
+  <!--
+            Phase 2.5b heading-hygiene follow-up: TemplateAbout is also
+            embedded into PageHome as a section. Default to <h2> so it
+            doesn't introduce a second <h1> on /; PageAbout opts back
+            into <h1> via the headingLevel prop where this template
+            owns the route's primary heading.
+        -->
+  <h2 data-v-0a89d346="" class="about-headline mb-4 ml-1">About ParkSpot</h2>
+  <div data-v-0a89d346="" class="about-container"><img data-v-0a89d346="" src="/assets/about.svg" alt="About Image" class="about-img">
+    <div data-v-0a89d346="" class="about-desc" data-aos="zoom-in">
+      <h2 data-v-0a89d346="" class="mb-3 ml-1">Company Overview</h2>
+      <p data-v-0a89d346="" class="mb-2 ml-1 mr-1"> Welcome to ParkSpot, your ultimate destination for hassle-free monthly car parking solutions. At ParkSpot, our mission is to revolutionize the parking experience by providing convenient and reliable monthly car parking services. We value efficiency, reliability, and customer satisfaction above all else. </p>
+      <hr data-v-0a89d346="">
+      <h2 data-v-0a89d346="" class="mb-3 ml-1">Our Services</h2>
+      <p data-v-0a89d346="" class="mb-2 ml-1 mr-1"> ParkSpot offers a range of monthly car parking services designed to meet your needs. With our user-friendly platform, finding and booking a parking spot is quick and easy. Experience the convenience and benefits of secure parking tailored to your requirements. </p><br data-v-0a89d346="">
+      <p data-v-0a89d346="" class="mb-2 ml-1 mr-1"> Let's get started and <a data-v-0a89d346="" href="/get-parking-spot">get your Parking Spot</a> or <a data-v-0a89d346="" href="/register-parking-spot">register your Parking Spot</a> with your parking companion. </p>
+      <div data-v-0a89d346="" class="about-links-container">
+        <div data-v-0a89d346="" class="about-links">
+          <p data-v-0a89d346="" class="park-link">Get ParkSpot App</p>
+          <div data-v-0a89d346="" class="app-links"><span data-v-0a89d346=""><a data-v-0a89d346="" href="https://play.google.com/store/apps/details?id=com.parkspot.maya_nagri&amp;utm_source=parkspot.in&amp;utm_campaign=website" target="_blank"><figure data-v-0a89d346="" class="card-img image"><img data-v-0a89d346="" alt="google app link" src="/assets/google-play-badge.svg"></figure></a></span><span data-v-0a89d346=""><a data-v-0a89d346="" href="https://apps.apple.com/in/app/parkspot-find-book-parking/id6449634064" target="_blank"><figure data-v-0a89d346="" class="card-img image"><img data-v-0a89d346="" alt="ios app link" src="/assets/apple-store.svg"></figure></a></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>"
+`;

@@ -25,18 +25,22 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import TemplateNearBy from '@/components/templates/TemplateNearBy.vue';
 
 const stubs = {
-    HeaderBanner: { template: '<div class="header-banner"><slot /></div>' },
-    BodyWrapper: { template: '<section><slot /></section>' },
-    AtomHeading: {
+    'HeaderBanner': { template: '<div class="header-banner"><slot /></div>' },
+    'BodyWrapper': { template: '<section><slot /></section>' },
+    'AtomHeading': {
         // Honest passthrough — render the level the caller asks for,
         // otherwise the heading-hygiene assertions all collapse to
         // a single tag and the regression is lost.
         props: ['level'],
         template: '<component :is="level || \'h2\'"><slot /></component>',
     },
-    AtomParagraph: { template: '<p><slot /></p>' },
-    MoleculeSRPCard: { template: '<div class="srp-card"></div>' },
-    SkeletonSRPCard: { template: '<div class="skeleton"></div>' },
+    'AtomParagraph': { template: '<p><slot /></p>' },
+    'MoleculeSRPCard': {
+        name: 'MoleculeSRPCard',
+        template: '<div class="srp-card"></div>',
+        emits: ['on-details'],
+    },
+    'SkeletonSRPCard': { template: '<div class="skeleton"></div>' },
     'b-breadcrumb': { template: '<nav><slot /></nav>' },
     'b-breadcrumb-item': { template: '<a><slot /></a>' },
 };
@@ -91,16 +95,19 @@ describe('TemplateNearBy.vue — Phase 2.5 heading hygiene', () => {
     it('promotes the spot-grid sub-heading from <h4> to <h2>', () => {
         const h2s = wrapper.findAll('h2').map((h) => h.text());
         expect(
-            h2s.some((t) => t.includes('Parking near') && t.includes('Indiranagar')),
+            h2s.some(
+                (t) => t.includes('Parking near') && t.includes('Indiranagar'),
+            ),
         ).toBe(true);
     });
 
     it('promotes the descriptive-text sub-heading from <h3> to <h2>', () => {
         const h2s = wrapper.findAll('h2').map((h) => h.text());
         expect(
-            h2s.some((t) =>
-                t.includes('Find and book parking spaces near') &&
-                t.includes('Indiranagar'),
+            h2s.some(
+                (t) =>
+                    t.includes('Find and book parking spaces near') &&
+                    t.includes('Indiranagar'),
             ),
         ).toBe(true);
     });

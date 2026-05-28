@@ -130,17 +130,15 @@ describe('root store', () => {
         });
 
         it('falls back to a lazily-built store when no seed has happened', async () => {
-            const {
-                __resetAppStoreSingletonForTests,
-                default: defaultStore,
-            } = await import('@/store');
+            const { __resetAppStoreSingletonForTests, default: defaultStore } =
+                await import('@/store');
             __resetAppStoreSingletonForTests();
 
             expect(defaultStore.state).toBeDefined();
             expect(defaultStore.state.user).toHaveProperty('isAuthReady');
         });
 
-        it('reseeding swaps the instance the Proxy resolves to', async () => {
+        it('reseeding swaps the instance the Proxy resolves commit calls to', async () => {
             const {
                 createAppStore,
                 seedAppStore,
@@ -151,12 +149,23 @@ describe('root store', () => {
 
             const a = createAppStore();
             const b = createAppStore();
+            const commitSpyA = vi.spyOn(a, 'commit');
+            const commitSpyB = vi.spyOn(b, 'commit');
+
             seedAppStore(a);
-            a.commit('user/update-auth-ready', true);
-            expect(defaultStore.state.user.isAuthReady).toBe(true);
+            defaultStore.commit('user/update-auth-ready', true);
+            expect(commitSpyA).toHaveBeenCalledWith(
+                'user/update-auth-ready',
+                true,
+            );
+            expect(commitSpyB).not.toHaveBeenCalled();
 
             seedAppStore(b);
-            expect(defaultStore.state.user.isAuthReady).toBe(false);
+            defaultStore.commit('user/update-auth-ready', false);
+            expect(commitSpyB).toHaveBeenCalledWith(
+                'user/update-auth-ready',
+                false,
+            );
 
             __resetAppStoreSingletonForTests();
         });

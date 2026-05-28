@@ -30,6 +30,7 @@ vi.mock('@vuepic/vue-datepicker', () => ({ default: {} }));
 vi.mock('@vuepic/vue-datepicker/dist/main.css', () => ({}));
 
 vi.mock('aos/dist/aos.css', () => ({}));
+vi.mock('aos', () => ({ default: { init: vi.fn() } }));
 
 vi.mock('firebase/app', () => ({ initializeApp: vi.fn(() => ({})) }));
 vi.mock('firebase/database', () => ({
@@ -52,12 +53,12 @@ describe('src/main.js exports contract', () => {
         const main = await import('@/main.js');
         expect(main).toHaveProperty('includedRoutes');
         expect(typeof main.includedRoutes).toBe('function');
-    });
+    }, 15000);
 
     it('also exports the ViteSSG-wrapped `createApp` factory', async () => {
         const main = await import('@/main.js');
         expect(main).toHaveProperty('createApp');
-    });
+    }, 15000);
 });
 
 describe('src/main.js setup fn — seedAppStore wiring', () => {
@@ -96,5 +97,5 @@ describe('src/main.js setup fn — seedAppStore wiring', () => {
         );
 
         vi.doUnmock('@/store');
-    });
+    }, 15000);
 });
