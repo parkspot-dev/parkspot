@@ -39,6 +39,14 @@ if (typeof window !== 'undefined') {
         };
     }
 
+    // Satisfy document.fonts.ready so Playwright's screenshot() does not
+    // hang waiting for web fonts that will never load (the @import is
+    // stripped at build time but font-family declarations remain).
+    const fontFamilies = ['Poppins', 'Inter', 'Roboto', 'Rubik'];
+    for (const family of fontFamilies) {
+        document.fonts.add(new FontFace(family, 'local(sans-serif)'));
+    }
+
     // Force CSS animations to terminate immediately so screenshots are
     // taken at the steady state. Cheaper than per-component overrides.
     const css = document.createElement('style');
