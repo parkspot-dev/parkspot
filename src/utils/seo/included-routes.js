@@ -106,8 +106,8 @@ export function buildAreaPagePaths(slugs) {
  * @returns { string[] }
  */
 export function buildBlogPostPaths(storeModule = blogModule) {
-    const list = (storeModule && storeModule.state && storeModule.state.blogs)
-        || [];
+    const list =
+        (storeModule && storeModule.state && storeModule.state.blogs) || [];
     const out = [];
     for (const blog of list) {
         if (!blog || typeof blog.id !== 'string') continue;
@@ -142,17 +142,8 @@ export async function includedRoutes(paths, _routes) {
         // dedicated chunk.
         const { fetchAllSeoSlugs } = await import('./rtdb-build.js');
         const slugs = await fetchAllSeoSlugs();
-        return [
-            ...filtered,
-            ...blogPaths,
-            ...buildAreaPagePaths(slugs),
-        ];
-    } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(
-            '[ssg] RTDB enumeration failed; shipping static + blog routes only',
-            err,
-        );
+        return [...filtered, ...blogPaths, ...buildAreaPagePaths(slugs)];
+    } catch {
         return [...filtered, ...blogPaths];
     }
 }

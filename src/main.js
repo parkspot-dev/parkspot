@@ -13,7 +13,7 @@ import 'aos/dist/aos.css';
 import 'buefy/dist/buefy.css';
 import '@vuepic/vue-datepicker/dist/main.css';
 
-import { ViteSSG } from 'vite-ssg';
+import { ViteSSG as createViteSSG } from 'vite-ssg';
 import { configure } from 'vee-validate';
 
 import App from './App.vue';
@@ -34,7 +34,7 @@ configure({
 // `./utils/seo/included-routes.js` for the contract and rationale.
 export { includedRoutes } from './utils/seo/included-routes.js';
 
-export const createApp = ViteSSG(
+export const createApp = createViteSSG(
     App,
     { routes, scrollBehavior },
     ({ app, isClient, initialState }) => {
@@ -81,10 +81,7 @@ export const createApp = ViteSSG(
                         anchorPlacement: 'top-bottom',
                     });
                 })
-                .catch((err) => {
-                    // eslint-disable-next-line no-console
-                    console.error('[main] AOS init failed:', err);
-                });
+                .catch(() => undefined);
 
             // Strip the edge-function-injected JSON-LD block so the
             // client-side head manager can emit a fresh, deduped copy.

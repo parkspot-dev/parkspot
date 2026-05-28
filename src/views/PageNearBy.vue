@@ -131,12 +131,8 @@ export default {
             if (!data) {
                 this.show = true;
             }
-        } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(
-                `[PageNearBy] serverPrefetch failed for slug "${this.nearByLocation}":`,
-                err,
-            );
+        } catch {
+            this.show = true;
         } finally {
             this.isLoading = false;
             this.title = this.nearByLocation;

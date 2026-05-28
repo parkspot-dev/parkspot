@@ -59,12 +59,7 @@ const actions = {
             } else {
                 data = await getValueFromFirebase(`seo-pages/${location}`);
             }
-        } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(
-                `[store/seoPages] loadPage("${location}") failed:`,
-                err,
-            );
+        } catch {
             data = null;
         }
 

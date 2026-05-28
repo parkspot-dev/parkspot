@@ -61,7 +61,11 @@
 
                         <div class="btn-wrapper">
                             <button type="submit" class="send-button">
-                                Submit <AtomIcon class="btn-icon" :icon="'send-outline'"></AtomIcon>
+                                Submit
+                                <AtomIcon
+                                    class="btn-icon"
+                                    :icon="'send-outline'"
+                                ></AtomIcon>
                             </button>
                         </div>
                     </VeeForm>
@@ -78,7 +82,7 @@
         -->
         <TemplateAbout></TemplateAbout>
         <TestimonialSection></TestimonialSection>
-        <TemplateContactUs @contactUs="fireContact"></TemplateContactUs>
+        <TemplateContactUs @contact-us="fireContact"></TemplateContactUs>
         <LoaderModal v-if="isLoading"></LoaderModal>
     </div>
 </template>
@@ -163,11 +167,11 @@ export default {
                 cno: '',
                 address: '',
                 msg: '[Car Wash Request]',
-                carModel: ''
+                carModel: '',
             },
             contactFormSchema,
             FORM: FORM,
-            FORM_PLACEHOLDERS : FORM_PLACEHOLDERS
+            FORM_PLACEHOLDERS: FORM_PLACEHOLDERS,
         };
     },
     methods: {
@@ -200,8 +204,7 @@ export default {
                     duration: 2000,
                 });
                 this.$router.push({ name: 'thankYou' });
-            } catch (error) {
-                console.error({ error });
+            } catch {
                 this.$buefy.toast.open({
                     message: `Something went wrong!`,
                     type: 'is-danger',
@@ -221,9 +224,7 @@ export default {
                 await this.onlyContact();
 
                 this.$router.push({ name: 'thankYou' });
-            } catch (error) {
-                console.error({ error });
-
+            } catch {
                 this.$buefy.toast.open({
                     message: `Something went wrong!`,
                     type: 'is-danger',
