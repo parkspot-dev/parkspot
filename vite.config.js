@@ -179,14 +179,23 @@ export default defineConfig(({ mode }) => ({
                         headless: true,
                         viewport: { width: 1280, height: 800 },
                         instances: [{ browser: 'chromium' }],
-                    },
-                    expect: {
-                        // Allow up to 1% pixel-difference and a hard
-                        // ceiling of 200 changed pixels per shot to
-                        // absorb sub-pixel font / shadow jitter.
-                        toMatchScreenshot: {
-                            maxDiffPixelRatio: 0.01,
-                            maxDiffPixels: 200,
+                        expect: {
+                            toMatchScreenshot: {
+                                comparatorOptions: {
+                                    threshold: 0.2,
+                                    allowedMismatchedPixelRatio: 0.01,
+                                    allowedMismatchedPixels: 200,
+                                },
+                                screenshotOptions: {
+                                    // Use 'allow' instead of the default 'disabled'.
+                                    // Playwright's 'disabled' mode waits for document.fonts.ready
+                                    // which hangs when font-family references fonts with no
+                                    // @font-face (stripped at build time). We disable animations
+                                    // ourselves via CSS in setup.js.
+                                    animations: 'allow',
+                                    timeout: 10000,
+                                },
+                            },
                         },
                     },
                 },

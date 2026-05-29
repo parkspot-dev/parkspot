@@ -49,6 +49,9 @@ if (typeof window !== 'undefined') {
 
     // Force CSS animations to terminate immediately so screenshots are
     // taken at the steady state. Cheaper than per-component overrides.
+    // Also neutralize AOS initial states — elements with [data-aos]
+    // start at opacity:0/transform:scale(.6) which can cause
+    // Playwright's bounding-box stability check to fail.
     const css = document.createElement('style');
     css.textContent = `
         *, *::before, *::after {
@@ -57,6 +60,10 @@ if (typeof window !== 'undefined') {
             transition-duration: 0s !important;
             transition-delay: 0s !important;
             scroll-behavior: auto !important;
+        }
+        [data-aos] {
+            opacity: 1 !important;
+            transform: none !important;
         }
     `;
     document.head.appendChild(css);
