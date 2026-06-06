@@ -19,3 +19,5 @@ coverage/
 # Environment variables
 .env
 .env.*
+# Vitest debugging attachments
+.vitest-attachments/

@@ -78,7 +78,7 @@
         -->
         <TemplateAbout></TemplateAbout>
         <TestimonialSection></TestimonialSection>
-        <TemplateContactUs @contactUs="fireContact"></TemplateContactUs>
+        <TemplateContactUs @contact-us="fireContact"></TemplateContactUs>
         <LoaderModal v-if="isLoading"></LoaderModal>
     </div>
 </template>

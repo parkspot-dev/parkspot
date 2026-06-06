@@ -67,7 +67,7 @@ const SSG_EXCLUDED_PREFIXES = Object.freeze([
  */
 export function filterStaticPaths(paths) {
     return paths.filter((p) => {
-        if (typeof p !== 'string') return false;
+        if (typeof p !== 'string' || !p) return false;
         if (p.includes(':')) return false;
         if (SSG_EXCLUDED_EXACT.has(p)) return false;
         for (const prefix of SSG_EXCLUDED_PREFIXES) {
@@ -148,7 +148,7 @@ export async function includedRoutes(paths, _routes) {
             ...buildAreaPagePaths(slugs),
         ];
     } catch (err) {
-        // eslint-disable-next-line no-console
+         
         console.error(
             '[ssg] RTDB enumeration failed; shipping static + blog routes only',
             err,

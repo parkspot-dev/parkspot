@@ -107,7 +107,7 @@ const resolveProfileCacheUserId = (
     fallbackUser = auth.currentUser,
 ) => resolveUserIdentity(primaryUser) || resolveUserIdentity(fallbackUser);
 
-const state = {
+const state = () => ({
     user: null,
     userProfile: {
         FullName: '',
@@ -126,7 +126,7 @@ const state = {
     locationDetails: {},
     preference: {},
     authError: null,
-};
+});
 
 const getters = {};
 

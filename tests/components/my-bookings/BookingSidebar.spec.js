@@ -39,9 +39,11 @@ describe('BookingSidebar.vue', () => {
     ];
 
     const mockURLParams = (params = {}) => {
-        vi.spyOn(window, 'URLSearchParams').mockImplementation(() => ({
-            get: (key) => params[key] ?? null,
-        }));
+        vi.spyOn(window, 'URLSearchParams').mockImplementation(function() {
+            return {
+                get: (key) => params[key] ?? null
+            };
+        });
     };
 
     const mountComponent = (props = {}) => {

@@ -89,6 +89,7 @@ describe('PageSearchPortal.vue', () => {
 
     afterEach(() => {
         wrapper?.unmount();
+        vi.unstubAllGlobals();
     });
 
     it('renders search portal root', () => {

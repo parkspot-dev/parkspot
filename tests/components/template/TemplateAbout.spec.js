@@ -24,12 +24,12 @@ describe('TemplateAbout.vue (user-focused + style checks)', () => {
   })
 
   it('renders the company overview text', () => {
-    expect(wrapper.text()).toContain('Company Overview:')
+    expect(wrapper.text()).toContain('Company Overview')
     expect(wrapper.text()).toContain('Welcome to ParkSpot')
   })
 
   it('renders the services section', () => {
-    expect(wrapper.text()).toContain('Our Services:')
+    expect(wrapper.text()).toContain('Our Services')
     expect(wrapper.text()).toContain('monthly car parking services')
   })
 
