@@ -24,10 +24,16 @@ import { routes, scrollBehavior } from './router';
 import { createAppStore, seedAppStore } from './store';
 import { metaInfoBridge } from './plugins/unhead-meta-adapter.js';
 import { cleanupEdgeInjectedStructuredData } from './plugins/edge-seo-handoff.js';
+import { captureFromUrl as captureAttribution } from './lib/analytics/attribution.js';
 
 configure({
     validateOnInput: true,
 });
+
+// Persist campaign click-ids and UTM params on first entry so every
+// subsequent SPA navigation / form submit can attribute correctly.
+// Runs once at module-eval time. SSR-safe (no-op on prerender).
+captureAttribution();
 
 // Route-enumeration hook for vite-ssg. Re-exported as a top-level named
 // export below — that's the only shape vite-ssg recognises. See
