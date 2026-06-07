@@ -244,6 +244,26 @@ describe('PendingPaymentsPortal.vue', () => {
         expect(wrapper.vm.formatAmount(1500)).toContain('₹');
     });
 
+    it('getPayNowButtonType marks the pay now button red when received amount is lower than transfer amount', () => {
+        wrapper = mountPage();
+        expect(
+            wrapper.vm.getPayNowButtonType({
+                BaseAmount: 1500,
+                Amount: 500,
+            }),
+        ).toBe('is-danger');
+    });
+
+    it('getPayNowButtonType keeps the default pay now button color when received amount covers the transfer amount', () => {
+        wrapper = mountPage();
+        expect(
+            wrapper.vm.getPayNowButtonType({
+                BaseAmount: 1500,
+                Amount: 1500,
+            }),
+        ).toBe('btn-color');
+    });
+
     it('resolvedAccountInfo covers mobile branch', () => {
         wrapper = mountPage();
         wrapper.vm.selectedPayment = {

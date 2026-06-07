@@ -132,6 +132,7 @@
                 >
                     <AtomButton
                         class="pay-now-btn"
+                        :type="getPayNowButtonType(props.row)"
                         @btn-click="openPaymentModal(props.row)"
                     >
                         Pay Now
@@ -527,6 +528,20 @@ export default {
 
         formatAmount(amount) {
             return `₹${Number(amount ?? 0).toLocaleString('en-IN')}`;
+        },
+
+        getPayNowButtonType(payment) {
+            const receivedAmount = Number(payment?.Amount ?? 0);
+            const transferAmount = Number(payment?.BaseAmount ?? 0);
+
+            if (
+                !Number.isFinite(receivedAmount) ||
+                !Number.isFinite(transferAmount)
+            ) {
+                return 'btn-color';
+            }
+
+            return receivedAmount < transferAmount ? 'is-danger' : 'btn-color';
         },
 
         getSpotId(payment) {
