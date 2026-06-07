@@ -8,10 +8,10 @@ import { PAGE_TITLE } from '@/constant/constant';
 import { track, EVENTS } from '@/lib/analytics';
 
 // Maps the upstream `?from=` query into the funnel_name used by the
-// Phase-1 spec. `from=booking` is wired up in PR-5; missing/unknown
-// values fall through to a dev warning and skip the event (per plan
-// §2.6 — `lead_confirmed` is a sanity check, not a conversion, so a
-// drop here does not affect Ads counts).
+// Phase-1 spec. Lead funnels (vo/so/contact) emit `lead_confirmed`;
+// the booking funnel emits `purchase_confirmed` instead and requires
+// the `?t=` (transaction_id) param forwarded by PagePaymentGateway on
+// the success redirect.
 const FROM_TO_FUNNEL = Object.freeze({
     vo: 'vo_lead',
     so: 'so_register',
@@ -35,7 +35,7 @@ export default {
     },
     mounted() {
         this.getMsg();
-        this.fireLeadConfirmed();
+        this.fireFunnelConfirmation();
     },
     methods: {
         homeBtn() {
@@ -46,8 +46,29 @@ export default {
             this.msg = this.$route.params.msg;
         },
 
-        fireLeadConfirmed() {
+        fireFunnelConfirmation() {
             const from = this.$route?.query?.from;
+
+            // Booking funnel step 11: `purchase_confirmed` when the
+            // payment-success redirect lands here with `?from=booking`.
+            // The schema marks `transaction_id` as required on
+            // `purchase_confirmed`, so we only fire when `?t=` is
+            // present. A missing `?t=` indicates a stale bookmark /
+            // direct visit, which we deliberately ignore.
+            if (from === 'booking') {
+                const t = this.$route?.query?.t;
+                if (t) {
+                    track(EVENTS.PURCHASE_CONFIRMED, {
+                        funnel_name: 'booking',
+                        transaction_id: String(t),
+                    });
+                }
+                return;
+            }
+
+            // Lead funnels A/B/C — `lead_confirmed` is a sanity check,
+            // not a conversion (per plan §2.6), so a drop here does not
+            // affect Ads counts.
             const funnelName = from ? FROM_TO_FUNNEL[from] : undefined;
             if (!funnelName) {
                 if (
@@ -55,9 +76,8 @@ export default {
                     import.meta.env &&
                     import.meta.env.DEV
                 ) {
-
                     console.warn(
-                        `[PageThankYou] missing or unknown ?from= query (got ${JSON.stringify(from)}); skipping lead_confirmed`,
+                        `[PageThankYou] missing or unknown ?from= query (got ${JSON.stringify(from)}); skipping confirmation event`,
                     );
                 }
                 return;

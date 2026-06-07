@@ -82,9 +82,10 @@
             <div class="srp-list-items">
                 <MoleculeSRPCard
                     v-for="spot in filteredSpots"
+                    :ref="(el) => registerCardRef(el, spot)"
                     :key="spot.ID"
                     :spot="spot"
-                    @on-details="details"
+                    @on-details="details(spot)"
                 ></MoleculeSRPCard>
             </div>
         </div>
@@ -114,6 +115,8 @@ import {
     STATUS_FILTER_OPTIONS,
 } from '@/constant/constant';
 import FilterManager from '@/modules/filter';
+import { track, EVENTS } from '@/lib/analytics';
+import { createListImpressionTracker } from '@/lib/analytics/observer.js';
 export default {
     name: 'TemplateSrp',
     directives: {
@@ -166,6 +169,13 @@ export default {
             },
             filterManager: null,
             isFilterContainerOpen: false,
+            // Phase 2.5 booking funnel: batched view_item_list tracker.
+            // Lazily created on mount so SSR doesn't try to construct an
+            // IntersectionObserver. `spotMetaById` lets us look up the
+            // full spot record when a card crosses the viewport — the
+            // tracker only sees ids.
+            impressionTracker: null,
+            spotMetaById: Object.create(null),
         };
     },
     computed: {
@@ -198,19 +208,73 @@ export default {
         }
         // Load and apply filter values from the query parameters
         this.loadFiltersFromQuery();
+
+        // Spin up the IntersectionObserver-backed batched impression
+        // tracker. SSR-safe: factory returns a no-op handle when there's
+        // no `window` or `IntersectionObserver`.
+        this.impressionTracker = createListImpressionTracker({
+            funnel_name: 'booking',
+            stepIndex: 3,
+            getItemMeta: (id) => {
+                const spot = this.spotMetaById[id];
+                if (!spot) return null;
+                return {
+                    item_id: spot.ID,
+                    item_name: spot.Name,
+                    price: spot.Rate,
+                };
+            },
+        });
+    },
+    beforeUnmount() {
+        if (this.impressionTracker) {
+            this.impressionTracker.disconnect();
+            this.impressionTracker = null;
+        }
     },
     methods: {
         onPageChange(page) {
             this.$emit('changed', page);
         },
-        details(spotID) {
-            this.$emit('details', spotID);
+        details(spot) {
+            // Per plan.md §2.5, selecting a spot card emits select_item
+            // (booking funnel step 4) before the parent navigates the
+            // user to /spot-details/:spotId.
+            const id = spot && spot.ID ? spot.ID : spot;
+            const meta = this.spotMetaById[id] || spot || {};
+            track(EVENTS.SELECT_ITEM, {
+                funnel_name: 'booking',
+                step_index: 4,
+                items: [
+                    {
+                        item_id: meta.ID || id,
+                        item_name: meta.Name,
+                        price: meta.Rate,
+                    },
+                ],
+            });
+            this.$emit('details', id);
         },
         onChange() {
             this.$emit('flyToSrp');
         },
         showFilters() {
             this.isFilterContainerOpen = !this.isFilterContainerOpen;
+        },
+        registerCardRef(componentInstance, spot) {
+            // Vue's `:ref="(el) => ..."` callback fires with `null` on
+            // unmount; ignore those so we never feed nulls to the
+            // observer. The card root <div> exposes itself via a
+            // `cardRoot` template ref so we can hand the underlying
+            // DOM node to IntersectionObserver.
+            if (!componentInstance || !spot) return;
+            this.spotMetaById[spot.ID] = spot;
+            const el =
+                componentInstance.$el ||
+                componentInstance.cardRoot ||
+                componentInstance;
+            if (!el || !this.impressionTracker) return;
+            this.impressionTracker.observe(el, spot.ID);
         },
     },
 };
