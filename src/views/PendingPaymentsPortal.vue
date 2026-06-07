@@ -384,6 +384,7 @@ import AtomButton from '@/components/atoms/AtomButton.vue';
 import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
 import { getPaymentAppLabel, getAccountInfo } from '@/utils/paymentUtils';
+import { isValidNumber } from '@/utils/isValidNumber';
 import QrcodeVue from 'qrcode.vue';
 
 export default {
@@ -531,15 +532,15 @@ export default {
         },
 
         getPayNowButtonType(payment) {
-            const receivedAmount = Number(payment?.Amount ?? 0);
-            const transferAmount = Number(payment?.BaseAmount ?? 0);
-
             if (
-                !Number.isFinite(receivedAmount) ||
-                !Number.isFinite(transferAmount)
+                !isValidNumber(payment?.Amount) ||
+                !isValidNumber(payment?.BaseAmount)
             ) {
                 return 'btn-color';
             }
+
+            const receivedAmount = Number(payment.Amount);
+            const transferAmount = Number(payment.BaseAmount);
 
             return receivedAmount < transferAmount ? 'is-danger' : 'btn-color';
         },
