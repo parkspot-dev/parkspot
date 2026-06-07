@@ -7,12 +7,6 @@
                     Last updated: June 7, 2026
                 </AtomParagraph>
 
-                <!-- LEGAL REVIEW NEEDED:
-                     - Grievance Officer name/email/address
-                     - Privacy email contact
-                     - Effective date for these changes
-                     - Confirmation that all third-party processors are accurately listed -->
-
                 <AtomParagraph class="mb-3">
                     This Privacy Policy describes Our policies and procedures on the collection, use and
                     disclosure of Your information when You use the Service and tells You about Your privacy
@@ -711,31 +705,18 @@
                     </AtomParagraph>
 
                 <AtomHeading class="mb-5">
-                    Grievance Officer
+                    Grievance contact
                 </AtomHeading>
 
                     <AtomParagraph class="mb-4">
-                        In accordance with the DPDP Act 2023, parkspot has designated a Grievance Officer
-                        to address user concerns:
+                        In accordance with the DPDP Act 2023, parkspot provides a dedicated channel
+                        for user concerns and data-related grievances:
                     </AtomParagraph>
 
-                    <ul class="pl-6 mb-4" style="list-style-type:disc;">
-                        <li>
-                            <AtomParagraph>
-                                <strong>Name:</strong> [LEGAL TO COMPLETE — designated officer's name]
-                            </AtomParagraph>
-                        </li>
-                        <li>
-                            <AtomParagraph>
-                                <strong>Email:</strong> [LEGAL TO COMPLETE — grievance@parkspot.in or similar]
-                            </AtomParagraph>
-                        </li>
-                        <li>
-                            <AtomParagraph class="mb-4">
-                                <strong>Address:</strong> [LEGAL TO COMPLETE — registered office address]
-                            </AtomParagraph>
-                        </li>
-                    </ul>
+                    <AtomParagraph class="mb-4">
+                        <strong>Email:</strong>
+                        <a href="mailto:connect@parkspot.in">connect@parkspot.in</a>
+                    </AtomParagraph>
 
                     <AtomParagraph class="mb-4">
                         We will respond to grievances within 30 days as required by law.
@@ -761,8 +742,8 @@
                         <li>
                             <AtomParagraph>
                                 <strong>Request deletion of your account and personal data:</strong>
-                                email [LEGAL TO COMPLETE — privacy@parkspot.in or similar]. We will
-                                process the request within 30 days.
+                                email <a href="mailto:connect@parkspot.in">connect@parkspot.in</a>.
+                                We will process the request within 30 days.
                             </AtomParagraph>
                         </li>
                         <li>
