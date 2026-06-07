@@ -75,6 +75,22 @@
                 "image": "https://drive.google.com/file/d/1aMP5kWvStDh-mVRoZRtsoc2dZMZ0_f75/view?usp=sharing"
             }
     </script>
+    <!-- Consent Mode v2 defaults (PR-2 of conversion-tracking).
+         MUST execute before any GTM/gtag.js loader so the very first
+         page-view respects the chosen defaults. parkspot's posture is
+         disclosure-only (see plan.md §2.8): all four flags ship as
+         `granted` and the on-page notice does not call
+         gtag('consent', 'update', ...). -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('consent', 'default', {
+            analytics_storage:  'granted',
+            ad_storage:         'granted',
+            ad_user_data:       'granted',
+            ad_personalization: 'granted'
+        });
+    </script>
     <!-- Google tag -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-779VHE86MJ"></script>
     <script>
