@@ -199,7 +199,10 @@ export default {
                     type: 'is-success',
                     duration: 2000,
                 });
-                this.$router.push({ name: 'thankYou' });
+                this.$router.push({
+                    name: 'thankYou',
+                    query: { from: 'contact' },
+                });
             } catch (error) {
                 console.error({ error });
                 this.$buefy.toast.open({
@@ -220,7 +223,10 @@ export default {
 
                 await this.onlyContact();
 
-                this.$router.push({ name: 'thankYou' });
+                this.$router.push({
+                    name: 'thankYou',
+                    query: { from: 'contact' },
+                });
             } catch (error) {
                 console.error({ error });
 

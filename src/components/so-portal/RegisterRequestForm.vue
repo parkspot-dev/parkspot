@@ -2,6 +2,8 @@
     <VeeForm
         :validation-schema="registerSpotRequestFormSchema"
         @submit="submitForm"
+        @invalid-submit="onInvalidSubmit"
+        @focusout.capture="onFieldBlur"
     >
         <div class="form-row">
             <FormInput
@@ -137,6 +139,9 @@ import { mapMutations } from 'vuex';
 import { ParkingSizeDisplayMap, ParkingSizeLabels } from '@/constant/constant';
 import { Form as VeeForm } from 'vee-validate';
 import { SiteType } from '@/constant/enums';
+import { track, EVENTS } from '@/lib/analytics';
+
+const FUNNEL_NAME = 'so_register';
 
 export default {
     name: 'RegisterRequestForm',
@@ -176,7 +181,17 @@ export default {
             ADD_INFO,
             termData: ADD_INFO.TERMS_DATA,
             citiesOptions: CITY_OPTIONS,
+            // Funnel-B instrumentation: gates `form_start` to fire only on the
+            // first non-empty blur per form lifetime. See plan.md §2.4 / §1.1.
+            formStarted: false,
         };
+    },
+    mounted() {
+        // Step 1 — Funnel B entry marker.
+        track(EVENTS.FUNNEL_VIEW, {
+            funnel_name: FUNNEL_NAME,
+            step_index: 1,
+        });
     },
     methods: {
         ...mapMutations({
@@ -197,7 +212,37 @@ export default {
             this.contactModel.isTermsAccepted = val;
         },
 
+        // Step 2 — first non-empty blur on any form field.
+        onFieldBlur(event) {
+            if (this.formStarted) return;
+            const target = event && event.target;
+            if (!target) return;
+            const value =
+                typeof target.value === 'string' ? target.value.trim() : '';
+            if (!value) return;
+            this.formStarted = true;
+            track(EVENTS.FORM_START, {
+                funnel_name: FUNNEL_NAME,
+                step_index: 2,
+            });
+        },
+
+        // Step 3 — vee-validate fires this on submit when the schema fails.
+        onInvalidSubmit({ errors }) {
+            const errorFields = Object.keys(errors || {}).join(',');
+            track(EVENTS.FORM_ERROR, {
+                funnel_name: FUNNEL_NAME,
+                step_index: 3,
+                error_fields: errorFields,
+            });
+        },
+
         submitForm() {
+            // Step 4 — vee-validate calls this only when the schema is valid.
+            track(EVENTS.FORM_SUBMIT_ATTEMPT, {
+                funnel_name: FUNNEL_NAME,
+                step_index: 4,
+            });
             this.updateContact(this.contactModel);
             this.$emit('submitForm', this.contactModel);
         },

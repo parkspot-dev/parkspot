@@ -174,7 +174,10 @@ export default {
 
                 await this.onlyContact();
 
-                this.$router.push({ name: 'thankYou' });
+                this.$router.push({
+                    name: 'thankYou',
+                    query: { from: 'contact' },
+                });
             } catch (error) {
                 console.error({ error });
 
