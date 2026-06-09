@@ -1,5 +1,5 @@
 <template>
-    <div class="custom-card" @click="onDetails">
+    <div ref="cardRoot" class="custom-card" @click="onDetails">
         <div class="card-primary">
             <div>
                 <div class="card-title">

@@ -25,6 +25,7 @@ import { createAppStore, seedAppStore } from './store';
 import { metaInfoBridge } from './plugins/unhead-meta-adapter.js';
 import { cleanupEdgeInjectedStructuredData } from './plugins/edge-seo-handoff.js';
 import { captureFromUrl as captureAttribution } from './lib/analytics/attribution.js';
+import { track, EVENTS } from './lib/analytics';
 
 configure({
     validateOnInput: true,
@@ -43,7 +44,7 @@ export { includedRoutes } from './utils/seo/included-routes.js';
 export const createApp = createViteSSG(
     App,
     { routes, scrollBehavior },
-    ({ app, isClient, initialState }) => {
+    ({ app, router, isClient, initialState }) => {
         // Per-render Vuex store. On SSR we snapshot the final state into
         // `initialState.store` (serialized into HTML); on client we restore
         // from that snapshot so `serverPrefetch`-populated data survives
@@ -72,6 +73,26 @@ export const createApp = createViteSSG(
         // the dynamic-import timing flagged in §0.1.b of the checklist).
         app.use(Buefy);
         app.component('VueDatePicker', VueDatePicker);
+
+        if (isClient && router) {
+            // Custom SPA page_view tracking. GA4's default page_view only fires
+            // on hard navigation, so SPA route changes need explicit firing.
+            // The `track()` wrapper auto-fills page_path/page_title from
+            // window.location/document.title if not provided, but passing them
+            // from the router makes intent explicit and survives any future
+            // refactor of the wrapper's defaults.
+            //
+            // Note for GA4 admin: disable "Enhanced Measurement → Page changes
+            // based on browser history events" to avoid double-counting against
+            // this hook.
+            router.afterEach((to, from) => {
+                track(EVENTS.PAGE_VIEW, {
+                    page_path: to.fullPath,
+                    page_title: document.title,
+                    page_referrer: from.fullPath,
+                });
+            });
+        }
 
         if (isClient) {
             // Browser-only side effects. AOS reads `document` at import-time

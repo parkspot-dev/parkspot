@@ -357,6 +357,63 @@ import LoaderModal from '../extras/LoaderModal.vue';
 import ImageUpload from '../global/ImageUpload.vue';
 import AtomIcon from '../atoms/AtomIcon.vue';
 import OrganismAccountInformation from '../organisms/OrganismAccountInformation.vue';
+import { track, EVENTS, LEAD_TYPES } from '@/lib/analytics';
+
+// Phase 2.5: best-effort phone normalization for Enhanced Conversions.
+// GTM's "User-provided data" field will hash this client-side, so we just
+// ensure a consistent E.164 form. parkspot stores Indian numbers; if a
+// number lacks a `+` prefix we assume India and prepend `+91` after
+// stripping any leading zero.
+function normalizeE164(raw) {
+    if (!raw) return '';
+    const trimmed = String(raw).trim();
+    if (!trimmed) return '';
+    if (trimmed.startsWith('+')) return trimmed.replace(/\s+/g, '');
+    const digits = trimmed.replace(/\D+/g, '');
+    if (!digits) return '';
+    if (digits.startsWith('91') && digits.length > 10) return `+${digits}`;
+    const local = digits.replace(/^0+/, '');
+    return `+91${local}`;
+}
+
+// Cashfree retries, double-clicks on Submit, and back-button revisits
+// could all re-fire `generate_lead`. We dedupe per-key in
+// sessionStorage so the spend stays correct. Wrapped in try/catch
+// because Safari ITP and embedded webviews occasionally throw on
+// sessionStorage access (private mode, storage quota).
+const FIRED_LEADS_KEY = 'parkspot_fired_leads';
+
+function readFiredSet(storageKey) {
+    if (typeof window === 'undefined') return new Set();
+    try {
+        const raw = window.sessionStorage.getItem(storageKey);
+        if (!raw) return new Set();
+        const parsed = JSON.parse(raw);
+        return new Set(Array.isArray(parsed) ? parsed : []);
+    } catch {
+        return new Set();
+    }
+}
+
+function writeFiredSet(storageKey, set) {
+    if (typeof window === 'undefined') return;
+    try {
+        window.sessionStorage.setItem(
+            storageKey,
+            JSON.stringify(Array.from(set)),
+        );
+    } catch {
+        // Ignore storage errors — dedup is a defense, not a guarantee.
+    }
+}
+
+function markLeadFired(dedupKey) {
+    const set = readFiredSet(FIRED_LEADS_KEY);
+    if (set.has(dedupKey)) return false;
+    set.add(dedupKey);
+    writeFiredSet(FIRED_LEADS_KEY, set);
+    return true;
+}
 export default {
     name: 'TemplateSpotDetail',
     components: {
@@ -530,7 +587,7 @@ export default {
                 endDate.setMonth(endDate.getMonth() + 1);
                 const endTime = formatDate(endDate);
 
-                await this.createTentativeBooking({
+                const apiResponse = await this.createTentativeBooking({
                     SiteID: this.spotDetails.SiteID,
                     StartTime: startTime,
                     EndTime: endTime,
@@ -549,6 +606,50 @@ export default {
 
                     PaymentEnv: 0,
                 });
+
+                // Booking-funnel step 8 (auth path): the PRIMARY Google
+                // Ads conversion. Email/phone come from the user store
+                // (the auth modal does not re-collect them). If the
+                // backend's tentative-booking response includes a
+                // booking/lead id, forward it as `transaction_id` per
+                // plan.md Appendix B Q10 — otherwise omit the field.
+                const profile = this.userProfile || {};
+                const authEmail = profile.EmailID || form.email || '';
+                const authPhone = profile.Mobile || form.mobile || '';
+                const bookingId =
+                    apiResponse?.BookingID ||
+                    apiResponse?.bookingId ||
+                    apiResponse?.ID ||
+                    apiResponse?.id ||
+                    null;
+                const dedupKey = bookingId
+                    ? `booking_${LEAD_TYPES.TENTATIVE_BOOKING_AUTH}_${bookingId}`
+                    : `booking_${LEAD_TYPES.TENTATIVE_BOOKING_AUTH}_${this.spotDetails.SiteID}_${startTime}`;
+                if (markLeadFired(dedupKey)) {
+                    const params = {
+                        funnel_name: 'booking',
+                        step_index: 8,
+                        lead_type: LEAD_TYPES.TENTATIVE_BOOKING_AUTH,
+                        value: 750,
+                        currency: 'INR',
+                        items: [
+                            {
+                                item_id: this.spotDetails.SiteID,
+                                item_name: this.spotDetails.Name,
+                                price: this.spotDetails.Rate,
+                            },
+                        ],
+                        enhanced_conversion_data: {
+                            email_address: authEmail,
+                            phone_number: normalizeE164(authPhone),
+                        },
+                        // Analytics-only: spot price for segmentation,
+                        // distinct from the locked ₹750 conversion value.
+                        item_price: this.spotDetails.Rate,
+                    };
+                    if (bookingId) params.transaction_id = String(bookingId);
+                    track(EVENTS.GENERATE_LEAD, params);
+                }
 
                 this.showLoader = false;
 
@@ -572,11 +673,25 @@ export default {
             }
         },
         openBookingModal() {
-            if (!this.isLoggedIn) {
-                this.showBookingModal = true;
-                return;
+            // Booking-funnel step 6: begin_checkout on modal open. Fire
+            // before flipping `showBookingModal` so the event ordering
+            // (begin_checkout → form_start → generate_lead) reads
+            // cleanly in GA4 funnel exploration.
+            if (this.spotDetails && this.spotDetails.SiteID) {
+                track(EVENTS.BEGIN_CHECKOUT, {
+                    funnel_name: 'booking',
+                    step_index: 6,
+                    value: this.spotDetails.Rate,
+                    currency: 'INR',
+                    items: [
+                        {
+                            item_id: this.spotDetails.SiteID,
+                            item_name: this.spotDetails.Name,
+                            price: this.spotDetails.Rate,
+                        },
+                    ],
+                });
             }
-
             this.showBookingModal = true;
         },
 
@@ -592,6 +707,36 @@ export default {
                     },
                     Comments: `Guest booking from spot detail page | Vehicle: ${form.vehicleNo || 'NA'}`,
                 });
+
+                // Booking-funnel step 8 (guest path): the PRIMARY Ads
+                // conversion for unauthenticated users. PII goes only
+                // inside enhanced_conversion_data (GTM hashes
+                // client-side). Dedup is keyed on email+spot to defend
+                // against double-clicks; no booking id is returned by
+                // /contact.
+                const dedupKey = `booking_${LEAD_TYPES.TENTATIVE_BOOKING_GUEST}_${this.spotDetails.SiteID}_${form.email || form.mobile || ''}`;
+                if (markLeadFired(dedupKey)) {
+                    track(EVENTS.GENERATE_LEAD, {
+                        funnel_name: 'booking',
+                        step_index: 8,
+                        lead_type: LEAD_TYPES.TENTATIVE_BOOKING_GUEST,
+                        value: 500,
+                        currency: 'INR',
+                        items: [
+                            {
+                                item_id: this.spotDetails.SiteID,
+                                item_name: this.spotDetails.Name,
+                                price: this.spotDetails.Rate,
+                            },
+                        ],
+                        enhanced_conversion_data: {
+                            email_address: form.email,
+                            phone_number: normalizeE164(form.mobile),
+                        },
+                        // Analytics-only metadata, not the conversion value.
+                        item_price: this.spotDetails.Rate,
+                    });
+                }
 
                 this.showLoader = false;
                 this.showBookingModal = false;
