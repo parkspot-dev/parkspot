@@ -43,6 +43,7 @@ const NOOP_HANDLE = Object.freeze({
  *           disconnect: () => void }}
  */
 export function createListImpressionTracker({
+    // eslint-disable-next-line camelcase -- snake_case keys mirror GA4 wire format
     funnel_name,
     getItemMeta,
     stepIndex = 3,
@@ -76,6 +77,7 @@ export function createListImpressionTracker({
         const items = pending;
         pending = [];
         track(EVENTS.VIEW_ITEM_LIST, {
+            // eslint-disable-next-line camelcase -- snake_case keys mirror GA4 wire format
             funnel_name,
             step_index: stepIndex,
             items,

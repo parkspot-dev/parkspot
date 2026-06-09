@@ -64,7 +64,7 @@ function readStoredAck() {
             return null;
         }
         return parsed;
-    } catch (_e) {
+    } catch () {
         // SecurityError in Safari private mode, JSON parse error from
         // hand-edited values, etc. Treat as "no record" — the worst
         // case is we re-show the strip, which is the safe default.
@@ -113,7 +113,7 @@ export default {
                         timestamp: Date.now(),
                     }),
                 );
-            } catch (_e) {
+            } catch () {
                 // Storage failure (private mode, quota, disabled
                 // cookies) — strip will re-show next visit, which is
                 // acceptable for a disclosure-only notice.

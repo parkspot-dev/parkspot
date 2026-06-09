@@ -52,6 +52,11 @@ export default {
             PAGE_TITLE,
         };
     },
+    computed: {
+        // The contact form mutates `user/contactForm` via `update-contact`
+        // before emitting submit, so latest email/phone are readable here.
+        ...mapState('user', ['contactForm']),
+    },
     watch: {
         $route: {
             handler: function (to) {
@@ -62,11 +67,6 @@ export default {
             deep: true,
             immediate: true,
         },
-    },
-    computed: {
-        // The contact form mutates `user/contactForm` via `update-contact`
-        // before emitting submit, so latest email/phone are readable here.
-        ...mapState('user', ['contactForm']),
     },
     methods: {
         ...mapActions({
