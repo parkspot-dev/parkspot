@@ -132,6 +132,7 @@
                 >
                     <AtomButton
                         class="pay-now-btn"
+                        :type="getPayNowButtonType(props.row)"
                         @btn-click="openPaymentModal(props.row)"
                     >
                         Pay Now
@@ -383,6 +384,7 @@ import AtomButton from '@/components/atoms/AtomButton.vue';
 import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
 import LoaderModal from '@/components/extras/LoaderModal.vue';
 import { getPaymentAppLabel, getAccountInfo } from '@/utils/paymentUtils';
+import { isValidNumber } from '@/utils/isValidNumber';
 import QrcodeVue from 'qrcode.vue';
 
 export default {
@@ -527,6 +529,20 @@ export default {
 
         formatAmount(amount) {
             return `₹${Number(amount ?? 0).toLocaleString('en-IN')}`;
+        },
+
+        getPayNowButtonType(payment) {
+            if (
+                !isValidNumber(payment?.Amount) ||
+                !isValidNumber(payment?.BaseAmount)
+            ) {
+                return 'is-danger';
+            }
+
+            const receivedAmount = Number(payment.Amount);
+            const transferAmount = Number(payment.BaseAmount);
+
+            return receivedAmount < transferAmount ? 'is-danger' : 'btn-color';
         },
 
         getSpotId(payment) {

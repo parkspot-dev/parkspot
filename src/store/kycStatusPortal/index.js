@@ -34,7 +34,7 @@ const mutations = {
 
 const actions = {
     // Fetches Pending KYC Users
-    async fetchKycPendingUsers({ commit }) {
+    async fetchKycPendingUsers({ commit, state }) {
         if (state.isLoading) return;
         try {
             commit('set-loading', true);

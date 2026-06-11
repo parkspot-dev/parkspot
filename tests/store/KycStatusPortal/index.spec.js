@@ -83,9 +83,22 @@ describe("Vuex Module: KycStatusPortal", () => {
 
       await kycStatusPortal.actions.fetchKycPendingUsers({ commit, state });
 
+      expect(mayaClient.get).toHaveBeenCalledWith("/internal/users/kyc-status");
       expect(commit).toHaveBeenCalledWith("set-loading", true);
       expect(commit).toHaveBeenCalledWith("set-users", mockUsers);
       expect(commit).toHaveBeenCalledWith("set-loading", false);
+    });
+
+    it("passes mobile query parameter when searchMobile is set", async () => {
+      const commit = vi.fn();
+      state.searchMobile = " 98765 43210 ";
+      mayaClient.get.mockResolvedValue([]);
+
+      await kycStatusPortal.actions.fetchKycPendingUsers({ commit, state });
+
+      expect(mayaClient.get).toHaveBeenCalledWith(
+        "/internal/users/kyc-status?mobile=9876543210"
+      );
     });
 
     it("commits set-error on failure", async () => {
