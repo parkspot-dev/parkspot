@@ -20,6 +20,7 @@ import { PAGE_TITLE } from '@/constant/constant';
 import { getActiveTabStatusLabel } from '../constant/enums';
 import { buildSpotDetailMeta } from '@/utils/seo/meta.js';
 import { metaPayloadToHead } from '@/utils/seo/to-head.js';
+import { track, EVENTS } from '@/lib/analytics';
 
 export default {
     name: 'PageSpotDetail',
@@ -75,6 +76,24 @@ export default {
             await this.getSpotDetails({
                 spotId: this.spotId,
             });
+            // Booking-funnel step 5: view_item, fired once the spot
+            // record is in the sdp store. Read the live spot off Vuex
+            // because the action commits everything via mutations.
+            const spot = this.$store?.state?.sdp?.spotDetails;
+            if (spot && spot.SiteID) {
+                track(EVENTS.VIEW_ITEM, {
+                    funnel_name: 'booking',
+                    step_index: 5,
+                    items: [
+                        {
+                            item_id: spot.SiteID,
+                            item_name: spot.Name,
+                            price: spot.Rate,
+                            currency: 'INR',
+                        },
+                    ],
+                });
+            }
         } catch (error) {
             this.$buefy.toast.open({
                 message: `Something went wrong!`,

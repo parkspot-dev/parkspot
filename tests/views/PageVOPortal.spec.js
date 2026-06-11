@@ -83,7 +83,10 @@ describe('PageVOPortal.vue', () => {
                 type: 'is-success',
             })
         );
-        expect(routerPush).toHaveBeenCalledWith({ name: 'thankYou' });
+        expect(routerPush).toHaveBeenCalledWith({
+            name: 'thankYou',
+            query: { from: 'vo' },
+        });
         expect(wrapper.find('[data-testid="loader-modal"]').exists()).toBe(false);
     });
 

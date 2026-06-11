@@ -23,6 +23,7 @@ import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import { getCoordinate } from '../includes/LatLng';
 import { PAGE_TITLE } from '@/constant/constant';
+import { track, EVENTS } from '@/lib/analytics';
 
 export default {
     name: 'PageSrp',
@@ -104,13 +105,30 @@ export default {
     async mounted() {
         try {
             this.isLoading = true;
+            // Booking-funnel step 1: route entry to /srp with a `latlng`
+            // query. `search_term` is the verbatim latlng string per
+            // events.csv (no funnel_name on `search` itself — it's a
+            // GA4 recommended event whose only required param is
+            // search_term).
+            const latlngQuery = this.$route.query.latlng;
+            if (latlngQuery) {
+                track(EVENTS.SEARCH, { search_term: latlngQuery });
+            }
             const center = this.getLatLng();
             if (Array.isArray(center) && center.length === 2) {
                 await this.updateMapConfig(center);
-            } 
+            }
             await this.srpCall();
             this.reRender++;
             this.isLoading = false;
+            // Step 2: view_search_results once the SRP fetch resolved.
+            track(EVENTS.VIEW_SEARCH_RESULTS, {
+                funnel_name: 'booking',
+                step_index: 2,
+                item_count: Array.isArray(this.srpResults)
+                    ? this.srpResults.length
+                    : 0,
+            });
         } catch (errorMsg) {
             this.$router.push({
                 name: 'error',

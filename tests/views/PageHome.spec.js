@@ -155,7 +155,10 @@ describe('PageHome.vue — Phase 2.5b title-collision regression', () => {
     it('routes the embedded contact widget to fireContact (Vuex + redirect)', async () => {
         await wrapper.find('.t-contact-us .submit-btn').trigger('click');
         await flushPromises();
-        expect(routerPush).toHaveBeenCalledWith({ name: 'thankYou' });
+        expect(routerPush).toHaveBeenCalledWith({
+            name: 'thankYou',
+            query: { from: 'contact' },
+        });
     });
 
     it('resets isLoading via finally on the catch path', async () => {

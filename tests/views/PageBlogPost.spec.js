@@ -130,6 +130,7 @@ describe('PageBlogPost.vue - Complete Test Suite', () => {
         await wrapper.vm.fireContact();
         expect(routerPush).toHaveBeenCalledWith({
             name: 'thankYou',
+            query: { from: 'contact' },
         });
     });
 
@@ -140,7 +141,10 @@ describe('PageBlogPost.vue - Complete Test Suite', () => {
         // the navigation fires.
         await wrapper.find('.template-contact-us .submit-btn').trigger('click');
         await flushPromises();
-        expect(routerPush).toHaveBeenCalledWith({ name: 'thankYou' });
+        expect(routerPush).toHaveBeenCalledWith({
+            name: 'thankYou',
+            query: { from: 'contact' },
+        });
     });
 
     // Phase 2.5b primary regression. Before this patch, the homepage
