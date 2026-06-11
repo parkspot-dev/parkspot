@@ -536,7 +536,7 @@ export default {
                 !isValidNumber(payment?.Amount) ||
                 !isValidNumber(payment?.BaseAmount)
             ) {
-                return 'btn-color';
+                return 'is-danger';
             }
 
             const receivedAmount = Number(payment.Amount);

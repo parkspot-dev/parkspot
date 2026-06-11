@@ -264,6 +264,16 @@ describe('PendingPaymentsPortal.vue', () => {
         ).toBe('btn-color');
     });
 
+    it('getPayNowButtonType defaults to is-danger when payment amounts are invalid', () => {
+        wrapper = mountPage();
+        expect(
+            wrapper.vm.getPayNowButtonType({
+                BaseAmount: null,
+                Amount: undefined,
+            }),
+        ).toBe('is-danger');
+    });
+
     it('resolvedAccountInfo covers mobile branch', () => {
         wrapper = mountPage();
         wrapper.vm.selectedPayment = {
