@@ -333,6 +333,7 @@
             :username="ownerInfoDetails.UserName"
             @close="closeAccountModal"
             @saved="handleAccountSaved"
+            @error="handleAccountError"
         />
     </BodyWrapper>
 </template>
@@ -811,6 +812,16 @@ export default {
         },
         saveRent(newRent) {
             this.updateRent(newRent);
+        },
+        handleAccountError(msg) {
+            this.showAccountModal = false;
+            this.editField = null;
+
+            this.$buefy.toast.open({
+                message: msg,
+                type: 'is-danger',
+                duration: 5000,
+            });
         },
     },
 };
