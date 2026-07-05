@@ -228,16 +228,23 @@ describe('TemplateSearchPortal.vue', () => {
     it('emits updateRequest when agent is updated', async () => {
         await wrapper.vm.onAgentUpdate(parkingRequests[0], 1);
         await flushPromises();
-        const emitted = wrapper.emitted('updateRequest');
-        expect(emitted).toBeTruthy();
-        expect(emitted[0][0].Agent).toBe('dev');
+
+        const payload = wrapper.emitted('updateRequest').at(-1)[0];
+
+        expect(payload.FieldMask).toEqual(['AgentUserName']);
+        expect(payload.ParkingRequest.ID).toBe(1);
+        expect(payload.ParkingRequest.AgentUserName).toBe('dev');
     });
 
     it('emits updateRequest when status is updated', async () => {
         await wrapper.vm.onStatusUpdate(parkingRequests[0], 2);
         await flushPromises();
+
         const payload = wrapper.emitted('updateRequest').at(-1)[0];
-        expect(payload.Status).toBe(2);
+
+        expect(payload.FieldMask).toEqual(['Status']);
+        expect(payload.ParkingRequest.ID).toBe(1);
+        expect(payload.ParkingRequest.Status).toBe(2);
     });
 
     it('updates latitude and longitude correctly', async () => {
@@ -246,9 +253,12 @@ describe('TemplateSearchPortal.vue', () => {
             '28.700000,77.300000',
         );
         await flushPromises();
+
         const payload = wrapper.emitted('updateRequest').at(-1)[0];
-        expect(payload.Latitude).toBeCloseTo(28.7);
-        expect(payload.Longitude).toBeCloseTo(77.3);
+
+        expect(payload.FieldMask).toEqual(['Latitude', 'Longitude']);
+        expect(payload.ParkingRequest.Latitude).toBeCloseTo(28.7);
+        expect(payload.ParkingRequest.Longitude).toBeCloseTo(77.3);
     });
 
     it('stores old comments safely', () => {

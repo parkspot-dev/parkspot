@@ -517,6 +517,7 @@ import SelectInput from '../global/SelectInput.vue';
 import FilterDropdown from '../global/FilterDropdown.vue';
 import MobileView from '../search-portal/MobileView.vue';
 import { RequestPriority } from '@/constant/enums';
+import getAgentUserNameFromFullName from '@/utils/agent';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -724,12 +725,30 @@ export default {
         },
 
         onAgentUpdate(spotData, agentid) {
-            this.agentList.forEach((agent) => {
-                if (agent.id === agentid) {
-                    spotData['Agent'] = agent.name;
-                }
+            const agent = this.agentList.find((a) => a.id === agentid);
+            if (!agent) return;
+
+            spotData.Agent = agent.name;
+
+            let agentUserName = getAgentUserNameFromFullName(agent.name);
+            if (!agentUserName) {
+                agentUserName = agent.userName || agent.name;
+            }
+            if (!agentUserName) {
+                this.$buefy?.toast?.open({
+                    message: 'Agent username not found',
+                    type: 'is-danger',
+                });
+                return;
+            }
+
+            this.$emit('updateRequest', {
+                FieldMask: ['AgentUserName'],
+                ParkingRequest: {
+                    ID: spotData.ID,
+                    AgentUserName: agentUserName,
+                },
             });
-            this.$emit('updateRequest', spotData);
         },
 
         getLatLng(lat, lng) {
@@ -749,8 +768,15 @@ export default {
         },
 
         onDateUpdate(spotData, date) {
-            spotData['NextCall'] = date;
-            this.$emit('updateRequest', spotData);
+            spotData.NextCall = date;
+
+            this.$emit('updateRequest', {
+                FieldMask: ['NextCall'],
+                ParkingRequest: {
+                    ID: spotData.ID,
+                    NextCall: date,
+                },
+            });
         },
 
         storeOldComment(row) {
@@ -768,7 +794,13 @@ export default {
             let mm = date.getMonth() + 1;
             if (mm < 10) mm = '0' + mm;
             row.Comments = `${newComment} [${dd}/${mm}]`;
-            this.$emit('updateRequest', row);
+            this.$emit('updateRequest', {
+                FieldMask: ['Comments'],
+                ParkingRequest: {
+                    ID: row.ID,
+                    Comments: row.Comments,
+                },
+            });
             // Reset stored old comment
             this.oldComments = row.Comments;
             this.isOpen = false;
@@ -786,7 +818,13 @@ export default {
                 status = foundStatus.id;
             }
             spotData['Status'] = status;
-            this.$emit('updateRequest', spotData);
+            this.$emit('updateRequest', {
+                FieldMask: ['Status'],
+                ParkingRequest: {
+                    ID: spotData.ID,
+                    Status: status,
+                },
+            });
         },
 
         updateLatLng(spotData, latlng) {
@@ -797,7 +835,14 @@ export default {
             ) {
                 spotData['Latitude'] = parseFloat(coordinate[0]);
                 spotData['Longitude'] = parseFloat(coordinate[1]);
-                this.$emit('updateRequest', spotData);
+                this.$emit('updateRequest', {
+                    FieldMask: ['Latitude', 'Longitude'],
+                    ParkingRequest: {
+                        ID: spotData.ID,
+                        Latitude: spotData['Latitude'],
+                        Longitude: spotData['Longitude'],
+                    },
+                });
             }
         },
 
