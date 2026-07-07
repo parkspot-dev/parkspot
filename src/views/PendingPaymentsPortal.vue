@@ -18,7 +18,7 @@
                 :mobile-cards="true"
                 :narrowed="true"
                 :paginated="true"
-                :per-page="20"
+                :per-page="10"
                 :sticky-header="true"
                 height="500"
             >
