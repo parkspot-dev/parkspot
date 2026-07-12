@@ -8,6 +8,7 @@ import {
     signOut,
     onAuthStateChanged,
 } from 'firebase/auth';
+import { identify, setUserProperty } from '@/lib/analytics';
 
 const PS_AUTH_KEY = 'PSAuthKey';
 const USER_PROFILE_STORAGE_KEY = 'UserProfile';
@@ -473,6 +474,9 @@ if (typeof window !== 'undefined') {
             store.commit('user/set-auth-error', null);
             clearProfileCache(previousCacheUserId);
             localStorage.removeItem(PS_AUTH_KEY);
+            // Clear the GA4 user-scoped identity on sign-out. No user_id and
+            // no PII — just flips the authenticated flag off.
+            setUserProperty('is_authenticated', false);
             store.commit('user/update-auth-ready', true);
             return;
         }
@@ -483,6 +487,21 @@ if (typeof window !== 'undefined') {
 
             await store.dispatch('user/getUserProfile');
             await store.dispatch('app/getAgents');
+
+            // GA4 user identity. `user.uid` is Firebase's internal ID (not
+            // PII); role comes from the resolved profile. `city` is
+            // intentionally omitted — the app has no reliable home-city
+            // source (locName is a searched location, not the user's city).
+            const currentUser = store.state?.user;
+            const userRole = currentUser?.isAdmin
+                ? 'admin'
+                : currentUser?.isAgent
+                  ? 'agent'
+                  : currentUser?.userProfile?.Type || 'unknown';
+            identify(user.uid, {
+                is_authenticated: true,
+                user_role: userRole,
+            });
         } catch {
             store.commit('user/set-auth-error', {
                 source: 'onAuthStateChanged',
