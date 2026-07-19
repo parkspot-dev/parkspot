@@ -225,6 +225,21 @@ const actions = {
         commit('update-spot-rent', rent);
         await mayaClient.post(UPDATE_SITE_ENDPOINT, state.spotDetails);
     },
+
+    async deleteSpot({ state }) {
+        if (!state.spotDetails || !state.spotDetails.SiteID) {
+            throw new Error('No spot details found to delete');
+        }
+        const siteId = encodeURIComponent(state.spotDetails.SiteID);
+        const siteName = encodeURIComponent(state.spotDetails.Name);
+        const res = await mayaClient.delete(
+            `/owner/site/${siteId}?site-name=${siteName}`,
+        );
+        if (res && res.DisplayMsg) {
+            throw new Error(res.DisplayMsg);
+        }
+        return res;
+    },
 };
 
 export default {
