@@ -1,5 +1,10 @@
 <template>
-    <VeeForm :validation-schema="contactFormSchema" @submit="submitForm">
+    <VeeForm
+        :validation-schema="contactFormSchema"
+        @submit="submitForm"
+        @invalid-submit="onInvalidSubmit"
+        @focusout.capture="onFieldBlur"
+    >
         <FormInput
             v-model="model.fullname"
             :name="'fullname'"
@@ -51,6 +56,9 @@ import { mapMutations } from 'vuex';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import AtomTextarea from '@/components/atoms/AtomTextarea.vue';
 import FormInput from '@/components/global/FormInput.vue';
+import { track, EVENTS } from '@/lib/analytics';
+
+const FUNNEL_NAME = 'contact';
 
 export default {
     name: 'OrganismContactForm',
@@ -80,17 +88,58 @@ export default {
                 fullname: '',
                 msg: '',
             },
+            // Funnel-C instrumentation: gates `form_start` to the first
+            // non-empty blur per form lifetime. Reset on remount.
+            formStarted: false,
         };
     },
     mounted() {
         this.isEnable = this.$route?.name === 'SOPortal';
+        // Step 1 — Funnel C entry marker. Fires whenever the contact
+        // form mounts; multiple host pages embed this organism (Home,
+        // BlogPost, ContactUs, AutomateParking) so Funnel C view counts
+        // are aggregated across them, which matches the spec.
+        track(EVENTS.FUNNEL_VIEW, {
+            funnel_name: FUNNEL_NAME,
+            step_index: 1,
+        });
     },
     methods: {
         ...mapMutations({
             updateContactForm: 'user/update-contact',
         }),
 
+        // Step 2 — first non-empty blur on any form field.
+        onFieldBlur(event) {
+            if (this.formStarted) return;
+            const target = event && event.target;
+            if (!target) return;
+            const value =
+                typeof target.value === 'string' ? target.value.trim() : '';
+            if (!value) return;
+            this.formStarted = true;
+            track(EVENTS.FORM_START, {
+                funnel_name: FUNNEL_NAME,
+                step_index: 2,
+            });
+        },
+
+        // Step 3 — vee-validate fires this on submit when the schema fails.
+        onInvalidSubmit({ errors }) {
+            const errorFields = Object.keys(errors || {}).join(',');
+            track(EVENTS.FORM_ERROR, {
+                funnel_name: FUNNEL_NAME,
+                step_index: 3,
+                error_fields: errorFields,
+            });
+        },
+
         submitForm() {
+            // Step 4 — vee-validate calls this only when the schema is valid.
+            track(EVENTS.FORM_SUBMIT_ATTEMPT, {
+                funnel_name: FUNNEL_NAME,
+                step_index: 4,
+            });
             this.updateContactForm(this.model);
             this.$emit('submitForm');
         },

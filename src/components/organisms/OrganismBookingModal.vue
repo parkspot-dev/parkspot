@@ -33,6 +33,7 @@
                         name="fullName"
                         label="Full Name"
                         placeholder="Enter full name"
+                        @blur="onFieldBlur"
                     />
 
                     <FormInput
@@ -40,6 +41,7 @@
                         name="email"
                         label="Email"
                         placeholder="Enter email address"
+                        @blur="onFieldBlur"
                     />
 
                     <FormInput
@@ -47,6 +49,7 @@
                         name="mobile"
                         label="Mobile"
                         placeholder="Enter mobile number"
+                        @blur="onFieldBlur"
                     />
 
                     <FormInput
@@ -54,6 +57,7 @@
                         name="vehicleNo"
                         label="Vehicle Number"
                         placeholder="e.g. MH12AB1234"
+                        @blur="onFieldBlur"
                     />
 
                     <!-- Book only for logged in -->
@@ -86,6 +90,7 @@ import AtomButton from '@/components/atoms/AtomButton.vue';
 import FormInput from '@/components/global/FormInput.vue';
 import { Form as VeeForm } from 'vee-validate';
 import { bookingModalFormSchema } from '@/validationSchemas';
+import { track, EVENTS } from '@/lib/analytics';
 
 export default {
     name: 'OrganismBookingModal',
@@ -105,6 +110,10 @@ export default {
             bookingModalFormSchema,
             loading: false,
             isGuest: false,
+            // Phase 2.5 booking-funnel step 7: gate `form_start` so it
+            // fires only on the first blur per modal lifetime, never
+            // once-per-field. Resets when the modal is unmounted.
+            formStarted: false,
             form: {
                 fullName: '',
                 email: '',
@@ -141,6 +150,18 @@ export default {
             }
 
             this.$emit('submitted', this.form);
+        },
+
+        onFieldBlur() {
+            // Booking-funnel step 7: form_start fires once on the first
+            // blur the user produces in the modal. Subsequent blurs are
+            // no-ops because of the `formStarted` flag.
+            if (this.formStarted) return;
+            this.formStarted = true;
+            track(EVENTS.FORM_START, {
+                funnel_name: 'booking',
+                step_index: 7,
+            });
         },
 
         openLogin() {

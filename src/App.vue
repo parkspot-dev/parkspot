@@ -16,6 +16,13 @@
         <ClientOnly>
             <AtomChat />
         </ClientOnly>
+        <!-- Disclosure-only cookie notice (PR-2 of conversion-tracking).
+             Wrapped in <ClientOnly> for SSG safety: the component reads
+             localStorage in mounted(), which is unavailable during
+             vite-ssg prerender. See plan.md §2.8. -->
+        <ClientOnly>
+            <OrganismConsentNotice />
+        </ClientOnly>
     </div>
 </template>
 
@@ -23,6 +30,7 @@
 import TemplateFooter from './components/templates/TemplateFooter.vue';
 import Navbar from './components/extras/NavbarBody.vue';
 import OrganismLogin from './components/organisms/OrganismLogin.vue';
+import OrganismConsentNotice from './components/organisms/OrganismConsentNotice.vue';
 import AtomChat from './components/atoms/AtomChat.vue';
 import { PAGE_TITLE } from '@/constant/constant';
 import { mapActions } from 'vuex';
@@ -32,6 +40,7 @@ export default {
         TemplateFooter,
         Navbar,
         OrganismLogin,
+        OrganismConsentNotice,
         AtomChat,
     },
     async created() {

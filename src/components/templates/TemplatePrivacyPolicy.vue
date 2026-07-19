@@ -4,12 +4,12 @@
                 <AtomHeading class="mb-6"> Privacy Policy </AtomHeading>
 
                 <AtomParagraph class="mb-3">
-                    Last updated: December 29, 2023
+                    Last updated: June 7, 2026
                 </AtomParagraph>
 
                 <AtomParagraph class="mb-3">
-                    This Privacy Policy describes Our policies and procedures on the collection, use and 
-                    disclosure of Your information when You use the Service and tells You about Your privacy 
+                    This Privacy Policy describes Our policies and procedures on the collection, use and
+                    disclosure of Your information when You use the Service and tells You about Your privacy
                     rights and how the law protects You.
                 </AtomParagraph>
 
@@ -564,6 +564,196 @@
                         You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are 
                         effective when they are posted on this page.
                     </AtomParagraph>
+
+                <AtomHeading class="mb-5">
+                    Your rights under the Digital Personal Data Protection Act, 2023
+                </AtomHeading>
+
+                    <AtomParagraph class="mb-4">
+                        parkspot processes personal data in compliance with India's Digital Personal Data
+                        Protection Act, 2023 (DPDP Act). As a Data Principal, you have the right to:
+                    </AtomParagraph>
+
+                    <ul class="pl-6 mb-4" style="list-style-type:disc;">
+                        <li>
+                            <AtomParagraph>
+                                Access the personal data we hold about you
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph>
+                                Request correction or erasure of your personal data
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph>
+                                Withdraw consent for data processing (where consent is the legal basis)
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph>
+                                Nominate another individual to exercise these rights on your behalf
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph class="mb-4">
+                                File a grievance with our designated officer
+                            </AtomParagraph>
+                        </li>
+                    </ul>
+
+                <AtomHeading class="mb-5">
+                    Cookies and tracking
+                </AtomHeading>
+
+                    <AtomParagraph class="mb-4">
+                        parkspot uses cookies and similar technologies to:
+                    </AtomParagraph>
+
+                    <ul class="pl-6 mb-4" style="list-style-type:disc;">
+                        <li>
+                            <AtomParagraph>
+                                Enable core site functionality (login session, booking flow)
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph>
+                                Measure website performance and user journeys (Google Analytics 4)
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph>
+                                Measure marketing campaign effectiveness (Google Ads)
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph class="mb-4">
+                                Improve your user experience over time
+                            </AtomParagraph>
+                        </li>
+                    </ul>
+
+                    <AtomParagraph :variation="'large'" class="mb-4">
+                        Categories of data collected
+                    </AtomParagraph>
+
+                    <ul class="pl-6 mb-4" style="list-style-type:disc;">
+                        <li>
+                            <AtomParagraph>
+                                <strong>Page-view data:</strong> pages visited, time spent, click paths
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph>
+                                <strong>Device data:</strong> browser type, screen size, operating system,
+                                device category (mobile/desktop)
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph>
+                                <strong>Marketing identifiers:</strong> Google Click ID (gclid), UTM
+                                parameters from referring campaigns
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph class="mb-4">
+                                <strong>Hashed contact data (for advertising):</strong> when you submit a
+                                form or complete a booking, your email and phone number are sent to Google
+                                Ads in hashed form (SHA-256) to attribute marketing campaigns. Plain-text
+                                contact data is never shared with advertising platforms.
+                            </AtomParagraph>
+                        </li>
+                    </ul>
+
+                <AtomHeading class="mb-5">
+                    Third-party data processors
+                </AtomHeading>
+
+                    <AtomParagraph class="mb-4">
+                        We use the following third parties to process personal data on our behalf:
+                    </AtomParagraph>
+
+                    <ul class="pl-6 mb-4" style="list-style-type:disc;">
+                        <li>
+                            <AtomParagraph>
+                                <strong>Google Analytics 4</strong> — website analytics (Google LLC, USA)
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph>
+                                <strong>Google Ads</strong> — advertising and conversion measurement
+                                (Google LLC, USA)
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph>
+                                <strong>Google Tag Manager</strong> — tag delivery infrastructure
+                                (Google LLC, USA)
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph class="mb-4">
+                                <strong>Cashfree Payments</strong> — payment processing (Cashfree Payments
+                                India Pvt. Ltd., India)
+                            </AtomParagraph>
+                        </li>
+                    </ul>
+
+                    <AtomParagraph class="mb-4">
+                        Each of these processors operates under their own privacy policies and
+                        data-processing terms.
+                    </AtomParagraph>
+
+                <AtomHeading class="mb-5">
+                    Grievance contact
+                </AtomHeading>
+
+                    <AtomParagraph class="mb-4">
+                        In accordance with the DPDP Act 2023, parkspot provides a dedicated channel
+                        for user concerns and data-related grievances:
+                    </AtomParagraph>
+
+                    <AtomParagraph class="mb-4">
+                        <strong>Email:</strong>
+                        <a href="mailto:connect@parkspot.in">connect@parkspot.in</a>
+                    </AtomParagraph>
+
+                    <AtomParagraph class="mb-4">
+                        We will respond to grievances within 30 days as required by law.
+                    </AtomParagraph>
+
+                <AtomHeading class="mb-5">
+                    Opt-out and data deletion
+                </AtomHeading>
+
+                    <AtomParagraph class="mb-4">
+                        You can:
+                    </AtomParagraph>
+
+                    <ul class="pl-6 mb-4" style="list-style-type:disc;">
+                        <li>
+                            <AtomParagraph>
+                                <strong>Opt out of advertising tracking:</strong> install the Google
+                                Analytics opt-out browser add-on at
+                                https://tools.google.com/dlpage/gaoptout, or use your browser's
+                                "Do Not Track" / private browsing mode.
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph>
+                                <strong>Request deletion of your account and personal data:</strong>
+                                email <a href="mailto:connect@parkspot.in">connect@parkspot.in</a>.
+                                We will process the request within 30 days.
+                            </AtomParagraph>
+                        </li>
+                        <li>
+                            <AtomParagraph class="mb-4">
+                                <strong>Manage cookies in your browser:</strong> most browsers allow you
+                                to clear or block cookies via settings. Note that disabling essential
+                                cookies may break booking and login functionality.
+                            </AtomParagraph>
+                        </li>
+                    </ul>
 
                 <AtomParagraph :variation="'large'" class="mb-4">
                     Contact Us

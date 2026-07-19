@@ -142,7 +142,7 @@ export default {
             required: true,
         },
     },
-    emits: ['close', 'saved'],
+    emits: ['close', 'saved', 'error'],
     data() {
         return {
             loading: false,
@@ -195,49 +195,66 @@ export default {
         async saveAccount(values) {
             this.loading = true;
 
-            const payload = {
-                UserName: this.username,
-                FullName: values.fullName.trim(),
-            };
-
-            if (values.mode === 'upi') {
-                payload.UpiID = values.UpiID.trim();
-                payload.PaymentApp = values.PaymentApp;
-            }
-
-            if (values.mode === 'mobile') {
-                payload.Mobile = values.Mobile.trim();
-                payload.PaymentApp = values.PaymentApp;
-            }
-
-            if (values.mode === 'bank') {
-                payload.account_number = values.account_number.trim();
-                payload.ifsc_code = values.ifsc_code.trim();
-                payload.PaymentApp = 0;
-            }
-
             try {
+                const payload = {
+                    UserName: this.username,
+                    FullName: (values.fullName || '').trim(),
+                };
+
+                if (this.existingAccount?.AccountID) {
+                    payload.AccountID = this.existingAccount.AccountID;
+                }
+
+                if (values.mode === 'upi') {
+                    payload.UpiID = (values.UpiID || '').trim();
+                    payload.PaymentApp = values.PaymentApp;
+                }
+
+                if (values.mode === 'mobile') {
+                    payload.Mobile = (values.Mobile || '').trim();
+                    payload.PaymentApp = values.PaymentApp;
+                }
+
+                if (values.mode === 'bank') {
+                    payload.account_number = (
+                        values.account_number || ''
+                    ).trim();
+                    payload.ifsc_code = (values.ifsc_code || '').trim();
+                    payload.PaymentApp = 0;
+                }
+
                 const hasAccount =
                     this.existingAccount &&
                     Number(this.existingAccount.AccountID) > 0;
 
+                let res;
+
                 if (hasAccount) {
-                    await mayaClient.patch(
+                    res = await mayaClient.patch(
                         '/auth/user/account-information',
                         payload,
                     );
                 } else {
-                    await mayaClient.post(
+                    res = await mayaClient.post(
                         '/auth/user/account-information',
                         payload,
                     );
                 }
 
-                this.$emit('saved');
+                if (!res || res.ErrorCode > 0) {
+                    this.$emit(
+                        'error',
+                        res?.DisplayMsg || 'Failed to save account information',
+                    );
+                    return;
+                }
+
+                this.$emit('saved', payload);
             } catch (err) {
-                console.error(err);
-                alert(
+                this.$emit(
+                    'error',
                     err?.response?.data?.DisplayMsg ||
+                        err.message ||
                         'Failed to save account information',
                 );
             } finally {
