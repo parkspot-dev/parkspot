@@ -210,15 +210,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .search-spot-portal-root {
-    background: #f5f5fb;
+    background: var(--parkspot-white);
     padding: 16px;
     text-align: center;
 
     h1 {
         font-size: 24px;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
     }
 }
 
@@ -228,6 +228,6 @@ export default {
 
 .cursor-pointer {
     cursor: pointer;
-    color: blue;
+    color: var(--secondary-color);
 }
 </style>
