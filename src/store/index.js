@@ -27,6 +27,7 @@ import searchPortal from './searchPortal';
 import seoPages from './seoPages';
 import spotRequests from './spotRequests';
 import user from './user';
+import spotSearch from './spotSearch';
 
 /**
  * Build a fresh Vuex store. Used by vite-ssg's per-render factory in
@@ -53,6 +54,7 @@ export function createAppStore() {
             seoPages,
             spotRequests,
             user,
+            spotSearch,
         },
     });
 }

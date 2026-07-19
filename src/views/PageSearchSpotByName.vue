@@ -3,11 +3,32 @@
         <!-- Search Bar -->
         <div class="search-control mb-4">
             <MoleculeSearchBox
-                :initial-value="searchName"
-                placeholder="Spot Name"
-                @clear-input="onClearNameInput"
-                @on-search="searchSpotsByName"
+                :initial-value="searchQuery"
+                :placeholder="searchPlaceholder"
+                @clear-input="onClearSearchInput"
+                @on-search="searchSpots"
             ></MoleculeSearchBox>
+        </div>
+
+        <!-- Search Type Selection -->
+        <div class="is-flex is-justify-content-center mb-4">
+            <b-field>
+                <b-radio
+                    v-model="searchType"
+                    native-value="name"
+                    type="is-info"
+                    class="mr-4"
+                >
+                    By Name
+                </b-radio>
+                <b-radio
+                    v-model="searchType"
+                    native-value="mobile"
+                    type="is-info"
+                >
+                    By Mobile Number
+                </b-radio>
+            </b-field>
         </div>
 
         <!-- Loading modal displayed during data fetch -->
@@ -79,8 +100,7 @@
 <script>
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
-// import SelectInput from '@/components/global/SelectInput.vue';
-import { mayaClient } from '../services/api';
+import { mapState, mapActions } from 'vuex';
 
 export default {
     name: 'SiteSearchPage',
@@ -91,59 +111,61 @@ export default {
 
     data() {
         return {
-            isLoading: false,
-            hasError: false,
-            errorMessage: '',
-            sites: [],
-            searchName: '',
+            searchQuery: '',
+            searchType: 'name',
         };
+    },
+
+    computed: {
+        ...mapState('spotSearch', [
+            'sites',
+            'isLoading',
+            'hasError',
+            'errorMessage',
+        ]),
+        searchPlaceholder() {
+            return this.searchType === 'name' ? 'Spot Name' : 'Mobile Number';
+        },
     },
 
     created() {
         const name = this.$route.query.name;
-        if (name) {
-            this.searchName = name;
-            this.fetchSitesByName(name);
+        const mobile = this.$route.query.mobile;
+
+        if (mobile) {
+            this.searchType = 'mobile';
+            this.searchQuery = mobile;
+            this.triggerSearch(mobile, 'mobile');
+        } else if (name) {
+            this.searchType = 'name';
+            this.searchQuery = name;
+            this.triggerSearch(name, 'name');
         }
     },
 
     methods: {
-        async fetchSitesByName(name) {
-            this.isLoading = true;
-            this.hasError = false;
-            this.errorMessage = '';
-            this.sites = [];
-            name = name.trim();
+        ...mapActions('spotSearch', ['fetchSites']),
+
+        async triggerSearch(query, searchType) {
             try {
-                const encodedName = encodeURIComponent(name);
-                const res = await mayaClient.get(
-                    `/sites-by-name?name=${encodedName}`,
-                );
-                console.log("this is res", res)
-                this.sites = res || [];
+                await this.fetchSites({ query, searchType });
             } catch (err) {
-                this.hasError = true;
-                this.errorMessage =
-                    err.response?.data?.message ||
-                    err.message ||
-                    'Something went wrong';
+                console.error(err);
                 this.$buefy.dialog.alert({
                     title: 'Error',
-                    message: this.errorMessage,
+                    message: this.errorMessage || 'Something went wrong',
                     type: 'is-danger',
                 });
-            } finally {
-                this.isLoading = false;
             }
         },
 
-        async searchSpotsByName(siteName) {
-            if (siteName !== '') {
-                const sanitized = this.sanitizeName(siteName);
+        async searchSpots(query) {
+            if (query !== '') {
+                const sanitized = this.sanitizeInput(query);
                 if (!sanitized) {
                     this.$buefy.dialog.alert({
                         title: 'Error',
-                        message: 'Invalid Site Name',
+                        message: `Invalid ${this.searchType === 'name' ? 'Site Name' : 'Mobile Number'}`,
                         type: 'is-danger',
                         hasIcon: true,
                         icon: 'alert-circle',
@@ -151,10 +173,12 @@ export default {
                         ariaModal: true,
                     });
                 } else {
-                    this.searchName = sanitized;
+                    this.searchQuery = sanitized;
+                    const newQuery = {};
+                    newQuery[this.searchType] = sanitized;
                     this.$router.push({
                         path: this.$route.path,
-                        query: { name: sanitized },
+                        query: newQuery,
                     });
                 }
             }
@@ -170,15 +194,15 @@ export default {
             window.open(route.href);
         },
 
-        async onClearNameInput() {
-            if (this.$route.query.name) {
-                this.searchName = '';
-                this.sites = [];
+        async onClearSearchInput() {
+            this.searchQuery = '';
+            this.$store.commit('spotSearch/set-sites', []);
+            if (this.$route.query.name || this.$route.query.mobile) {
                 this.$router.push({ name: 'spot-search' });
             }
         },
 
-        sanitizeName(input) {
+        sanitizeInput(input) {
             const sanitized = input.trim();
             return sanitized.length > 0 ? sanitized : null;
         },
