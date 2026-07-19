@@ -89,6 +89,7 @@ describe('root store', () => {
                 "searchPortal",
                 "seoPages",
                 "spotRequests",
+                "spotSearch",
                 "user",
               ]
             `);
