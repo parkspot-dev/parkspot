@@ -408,7 +408,7 @@
             <div v-else>
                 <MobileView
                     v-if="!isEmpty"
-                    :parking-requests="parkingRequests"
+                    :parking-requests="filteredParkingRequests"
                     :is-empty="isEmpty"
                     :is-admin="isAdmin"
                     :new-comment-map="newCommentMap"
@@ -554,7 +554,6 @@ export default {
                 UpdatedAt: null,
                 isExpiring: false,
             },
-            isEmpty: false,
             isBordered: false,
             isStriped: false,
             isNarrowed: false,
@@ -620,6 +619,12 @@ export default {
             'filteredParkingRequests',
         ]),
         ...mapState('user', ['userProfile', 'isAdmin']),
+        isEmpty() {
+            return (
+                !this.filteredParkingRequests ||
+                this.filteredParkingRequests.length === 0
+            );
+        },
         isDesktopView() {
             if (this.isMobileDevice) {
                 return false;
