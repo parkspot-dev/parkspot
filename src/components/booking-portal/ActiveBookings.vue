@@ -4,7 +4,7 @@
             <b-field>
                 <b-input
                     v-model="mobileSearchQuery"
-                    placeholder="Search VO/SO by Name or Mobile..."
+                    placeholder="Search VO/SO by Name or Mobile"
                     icon="magnify"
                     type="search"
                     clearable
