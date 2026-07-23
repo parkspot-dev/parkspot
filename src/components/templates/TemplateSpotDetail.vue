@@ -19,6 +19,14 @@
             <div class="spot-detail-main-description">
                 <div class="title-container">
                     <h1>{{ spotDetails.Name }}</h1>
+                    <AtomIcon
+                        v-if="isAdmin"
+                        icon="delete"
+                        type=""
+                        size="is-medium"
+                        class="delete-btn"
+                        @click="confirmDeleteSpot"
+                    />
                 </div>
                 <div>
                     <p class="editable-label">
@@ -467,7 +475,7 @@ export default {
             'spotDetails',
             'spotInProgressBookings',
         ]),
-        ...mapState('user', ['isAdmin']),
+        ...mapState('user', ['isAdmin', 'isAgent']),
         locationName() {
             return this.selectedSpot.length > 0
                 ? this.selectedSpot[0].Name
@@ -543,7 +551,12 @@ export default {
             'createTentativeBooking',
             'createContactLead',
         ]),
-        ...mapActions('sdp', ['updateImages', 'updateAddress', 'updateRent']),
+        ...mapActions('sdp', [
+            'updateImages',
+            'updateAddress',
+            'updateRent',
+            'deleteSpot',
+        ]),
 
         goToInterestedVO(latLng) {
             this.$emit('goToSearchPortal', latLng);
@@ -823,11 +836,44 @@ export default {
                 duration: 5000,
             });
         },
+        confirmDeleteSpot() {
+            this.$buefy.dialog.confirm({
+                title: 'Delete Spot',
+                message: 'Are you sure you want to delete this spot?',
+                confirmText: 'Delete',
+                type: 'is-danger',
+                cancelType: 'is-primary',
+                hasIcon: true,
+                icon: 'alert-circle',
+                ariaRole: 'alertdialog',
+                ariaModal: true,
+                onConfirm: async () => {
+                    try {
+                        this.showLoader = true;
+                        await this.deleteSpot();
+                        this.showLoader = false;
+                        this.$buefy.toast.open({
+                            message: 'Spot deleted successfully',
+                            type: 'is-success',
+                            duration: 5000,
+                        });
+                        this.$router.push('/');
+                    } catch (err) {
+                        this.showLoader = false;
+                        this.$buefy.toast.open({
+                            message: err?.message || 'Failed to delete spot',
+                            type: 'is-danger',
+                            duration: 5000,
+                        });
+                    }
+                },
+            });
+        },
     },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 hr {
     width: 600px;
 }
@@ -897,13 +943,26 @@ hr {
     .title-container {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 13px;
 
         h1 {
             font-size: 32px;
             font-weight: 500;
-            margin-bottom: 13px;
             color: black;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .delete-btn {
+            cursor: pointer;
+            transform: translateY(3px);
+            color: var(--parkspot-grey, #666666);
+            transition: color 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            color: #d9534f;
         }
     }
 
@@ -1175,5 +1234,26 @@ h2 {
     display: flex;
     gap: 8px;
     margin-top: 6px;
+}
+
+.dialog {
+    .modal-card-foot {
+        .button:first-child {
+            background-color: var(--primary-color) !important;
+            color: var(--parkspot-black) !important;
+            border-color: transparent !important;
+            border-radius: var(--border-default, 8px) !important;
+            font-weight: 500 !important;
+
+            &:hover {
+                filter: brightness(0.95) !important;
+            }
+        }
+
+        .button.is-danger {
+            border-radius: var(--border-default, 8px) !important;
+            font-weight: 500 !important;
+        }
+    }
 }
 </style>
