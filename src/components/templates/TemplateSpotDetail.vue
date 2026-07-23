@@ -19,15 +19,14 @@
             <div class="spot-detail-main-description">
                 <div class="title-container">
                     <h1>{{ spotDetails.Name }}</h1>
-                    <AtomButton
-                        v-if="isAgent"
-                        type="is-danger"
-                        size="is-small"
+                    <AtomIcon
+                        v-if="isAdmin"
+                        icon="delete"
+                        type=""
+                        size="is-medium"
                         class="delete-btn"
                         @click="confirmDeleteSpot"
-                    >
-                        Delete
-                    </AtomButton>
+                    />
                 </div>
                 <div>
                     <p class="editable-label">
@@ -840,7 +839,7 @@ export default {
         confirmDeleteSpot() {
             this.$buefy.dialog.confirm({
                 title: 'Delete Spot',
-                message: `Are you sure you want to delete this spot? .<br><br><b>site name :</b> ${this.spotDetails.Name}<br><b>site id :</b> ${this.spotDetails.SiteID}`,
+                message: 'Are you sure you want to delete this spot?',
                 confirmText: 'Delete',
                 type: 'is-danger',
                 cancelType: 'is-primary',
@@ -956,7 +955,14 @@ hr {
         }
 
         .delete-btn {
+            cursor: pointer;
             transform: translateY(3px);
+            color: var(--parkspot-grey, #666666);
+            transition: color 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            color: #d9534f;
         }
     }
 

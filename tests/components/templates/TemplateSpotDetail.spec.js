@@ -58,6 +58,7 @@ const SPOT = {
 
 function buildStore({
     isLoggedIn = true,
+    isAdmin = false,
     isAgent = false,
     deleteSpot,
     createTentativeBooking,
@@ -88,7 +89,7 @@ function buildStore({
             user: {
                 namespaced: true,
                 state: {
-                    isAdmin: false,
+                    isAdmin: isAdmin,
                     isAgent: isAgent,
                     user: isLoggedIn ? { ID: 'U1' } : null,
                     userProfile: isLoggedIn
@@ -294,14 +295,14 @@ describe('TemplateSpotDetail.vue — booking funnel generate_lead', () => {
     });
 
     describe('spot deletion feature', () => {
-        it('does not render Delete button when user is not an agent', () => {
-            const wrapper = mountTemplate(buildStore({ isAgent: false }));
+        it('does not render Delete button when user is not an admin', () => {
+            const wrapper = mountTemplate(buildStore({ isAdmin: false }));
             expect(wrapper.find('.delete-btn').exists()).toBe(false);
             wrapper.unmount();
         });
 
-        it('renders Delete button when user is an agent', () => {
-            const wrapper = mountTemplate(buildStore({ isAgent: true }));
+        it('renders Delete button when user is an admin', () => {
+            const wrapper = mountTemplate(buildStore({ isAdmin: true }));
             expect(wrapper.find('.delete-btn').exists()).toBe(true);
             wrapper.unmount();
         });
@@ -309,7 +310,7 @@ describe('TemplateSpotDetail.vue — booking funnel generate_lead', () => {
         it('confirmDeleteSpot opens $buefy.dialog.confirm with danger and primary cancel options', async () => {
             const deleteSpotMock = vi.fn().mockResolvedValue({});
             const store = buildStore({
-                isAgent: true,
+                isAdmin: true,
                 deleteSpot: deleteSpotMock,
             });
             const wrapper = mountTemplate(store);
@@ -327,8 +328,9 @@ describe('TemplateSpotDetail.vue — booking funnel generate_lead', () => {
                 type: 'is-danger',
                 cancelType: 'is-primary',
             });
-            expect(confirmOptions.message).toContain('Indiranagar Covered');
-            expect(confirmOptions.message).toContain('SPOT_42');
+            expect(confirmOptions.message).toBe(
+                'Are you sure you want to delete this spot?',
+            );
 
             // Trigger onConfirm handler
             await confirmOptions.onConfirm();
