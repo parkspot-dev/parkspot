@@ -1,7 +1,6 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import ActiveBookings from "@/components/booking-portal/ActiveBookings.vue";
-
+import { mount } from '@vue/test-utils';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import ActiveBookings from '@/components/booking-portal/ActiveBookings.vue';
 
 vi.mock('@/constant/enums', () => ({
     getPaymentPeriodicityLabel: vi.fn(() => 'Monthly'),
@@ -19,11 +18,11 @@ const routerMock = {
 const mockBookings = [
     {
         ID: 101,
-        Name: 'Vendor One',
-        Mobile: '1234567890',
+        Name: 'Dev Shrivastav',
+        Mobile: '8595788258',
         SOContactDetails: {
-            FullName: 'SO Name',
-            Mobile: '8888888888',
+            FullName: 'Dev Shrivastav',
+            Mobile: '8595788258',
         },
         SiteID: 'SITE123',
         Status: 1,
@@ -44,6 +43,14 @@ const stubs = {
             };
         },
     },
+    BInput: {
+        props: ['modelValue', 'value'],
+        template:
+            '<input class="b-input" :value="modelValue || value" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+    },
+    BField: {
+        template: '<div class="b-field"><slot /></div>',
+    },
 };
 
 const factory = (props = {}) =>
@@ -60,7 +67,6 @@ const factory = (props = {}) =>
         },
     });
 
-
 describe('ActiveBookings.vue', () => {
     let wrapper;
 
@@ -72,12 +78,33 @@ describe('ActiveBookings.vue', () => {
         wrapper.unmount();
         vi.clearAllMocks();
     });
+
     it('renders component', () => {
         expect(wrapper.exists()).toBe(true);
     });
 
+    it('uses default empty array for activeBookings prop', () => {
+        const defaultWrapper = mount(ActiveBookings, {
+            global: {
+                stubs,
+                mocks: {
+                    $router: routerMock,
+                },
+            },
+        });
+        expect(defaultWrapper.vm.activeBookings).toEqual([]);
+        defaultWrapper.unmount();
+    });
+
     it('renders b-table', () => {
         expect(wrapper.find('.b-table').exists()).toBe(true);
+    });
+
+    it('updates mobileSearchQuery when b-input receives input', async () => {
+        const inputWrapper = wrapper.find('.b-input');
+        expect(inputWrapper.exists()).toBe(true);
+        await inputWrapper.setValue('Search Query');
+        expect(wrapper.vm.mobileSearchQuery).toBe('Search Query');
     });
 
     it('generates SDP URL correctly', () => {
@@ -102,5 +129,80 @@ describe('ActiveBookings.vue', () => {
     it('returns booking status label', () => {
         const label = wrapper.vm.getBookingStatusLabel(1);
         expect(label).toBe('Active');
+    });
+
+    describe('filteredActiveBookings computed property', () => {
+        const sampleBookings = [
+            {
+                ID: 1,
+                Name: 'Dev Shrivastav',
+                Mobile: '8595788258',
+                SOContactDetails: {
+                    FullName: 'Space Owner One',
+                    Mobile: '7777711111',
+                },
+            },
+            {
+                ID: 2,
+                Name: 'Vendor Two',
+                Mobile: '9999922222',
+                SOContactDetails: {
+                    FullName: 'Dev Manager',
+                    Mobile: '8595788258',
+                },
+            },
+            {
+                ID: 3,
+                Name: null,
+                Mobile: null,
+                SOContactDetails: null,
+            },
+        ];
+
+        it('returns all active bookings when mobileSearchQuery is empty', () => {
+            wrapper = factory({ activeBookings: sampleBookings });
+            wrapper.vm.mobileSearchQuery = '';
+            expect(wrapper.vm.filteredActiveBookings).toHaveLength(3);
+        });
+
+        it('filters active bookings by VO Name', () => {
+            wrapper = factory({ activeBookings: sampleBookings });
+            wrapper.vm.mobileSearchQuery = 'shrivastav';
+            expect(wrapper.vm.filteredActiveBookings).toHaveLength(1);
+            expect(wrapper.vm.filteredActiveBookings[0].ID).toBe(1);
+        });
+
+        it('filters active bookings by VO Mobile', () => {
+            wrapper = factory({ activeBookings: sampleBookings });
+            wrapper.vm.mobileSearchQuery = '8595788258';
+            expect(wrapper.vm.filteredActiveBookings).toHaveLength(2);
+            expect(wrapper.vm.filteredActiveBookings[0].ID).toBe(1);
+        });
+
+        it('filters active bookings by SO Name', () => {
+            wrapper = factory({ activeBookings: sampleBookings });
+            wrapper.vm.mobileSearchQuery = 'manager';
+            expect(wrapper.vm.filteredActiveBookings).toHaveLength(1);
+            expect(wrapper.vm.filteredActiveBookings[0].ID).toBe(2);
+        });
+
+        it('filters active bookings by SO Mobile', () => {
+            wrapper = factory({ activeBookings: sampleBookings });
+            wrapper.vm.mobileSearchQuery = '7777711111';
+            expect(wrapper.vm.filteredActiveBookings).toHaveLength(1);
+            expect(wrapper.vm.filteredActiveBookings[0].ID).toBe(1);
+        });
+
+        it('returns empty array when search query matches no items', () => {
+            wrapper = factory({ activeBookings: sampleBookings });
+            wrapper.vm.mobileSearchQuery = 'nonexistent';
+            expect(wrapper.vm.filteredActiveBookings).toHaveLength(0);
+        });
+
+        it('handles missing or null fields gracefully', () => {
+            wrapper = factory({ activeBookings: sampleBookings });
+            wrapper.vm.mobileSearchQuery = 'something';
+            expect(() => wrapper.vm.filteredActiveBookings).not.toThrow();
+        });
     });
 });
