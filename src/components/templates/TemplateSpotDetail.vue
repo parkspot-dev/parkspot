@@ -475,7 +475,7 @@ export default {
             'spotDetails',
             'spotInProgressBookings',
         ]),
-        ...mapState('user', ['isAdmin', 'isAgent']),
+        ...mapState('user', ['isAdmin']),
         locationName() {
             return this.selectedSpot.length > 0
                 ? this.selectedSpot[0].Name
