@@ -165,6 +165,7 @@ import { mapState, mapActions } from 'vuex';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import SelectInput from '@/components/global/SelectInput.vue';
 import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
+import { sanitizeMobile } from '@/utils/sanitizeMobile';
 
 export default {
     name: 'KYCStatusPage',
@@ -313,18 +314,7 @@ export default {
 
         // Sanitize mobile number
         sanitizeMobile(input) {
-            // filter all non-digints characters
-            let sanitized = input.replace(/[^\d]/g, '');
-            // if this constains extra 91 (Country code)
-            if (sanitized.length > 10 && sanitized.startsWith('91')) {
-                sanitized = sanitized.slice(2);
-            }
-
-            if (sanitized.length !== 10) {
-                return null;
-            }
-
-            return sanitized;
+            return sanitizeMobile(input);
         },
 
         openImage(url) {

@@ -1,4 +1,5 @@
 import { mayaClient } from '@/services/api';
+import { sanitizeMobile } from '@/utils/sanitizeMobile';
 
 const state = {
     sites: [],
@@ -49,12 +50,13 @@ const actions = {
                         res.DisplayMsg || 'Failed to fetch sites by name',
                     );
                 }
-                console.log('this is res', res);
                 sites = res || [];
             } else if (searchType === 'mobile') {
-                const encodedMobile = encodeURIComponent(
-                    trimmedQuery.replace(/\s+/g, ''),
-                );
+                const sanitizedMobile = sanitizeMobile(trimmedQuery);
+                if (!sanitizedMobile) {
+                    throw new Error('Invalid mobile number');
+                }
+                const encodedMobile = encodeURIComponent(sanitizedMobile);
                 const res = await mayaClient.get(
                     `/sites-and-spot-requests?mobile=${encodedMobile}`,
                 );
@@ -64,7 +66,6 @@ const actions = {
                             'Failed to fetch sites by mobile number',
                     );
                 }
-                console.log('this is res (mobile)', res);
                 sites = res.Sites || res.sites || [];
             }
             commit('set-sites', sites);
