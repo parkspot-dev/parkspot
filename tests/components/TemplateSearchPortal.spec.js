@@ -311,4 +311,20 @@ describe('TemplateSearchPortal.vue', () => {
             isExpiring: false,
         });
     });
+
+    describe('isEmpty computed property', () => {
+        it('returns false when filteredParkingRequests contains items', () => {
+            expect(wrapper.vm.isEmpty).toBe(false);
+        });
+
+        it('returns true when filteredParkingRequests is empty', () => {
+            store.state.searchPortal.filteredParkingRequests = [];
+            expect(wrapper.vm.isEmpty).toBe(true);
+        });
+
+        it('returns true when filteredParkingRequests is null or undefined', () => {
+            store.state.searchPortal.filteredParkingRequests = null;
+            expect(wrapper.vm.isEmpty).toBe(true);
+        });
+    });
 });
