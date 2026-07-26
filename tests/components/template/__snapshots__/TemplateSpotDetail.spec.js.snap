@@ -1,11 +1,11 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`TemplateSpotDetail.vue > matches snapshot for first facility item 1`] = `
-"<div data-v-103d742e="" class="facility-card"><span data-v-103d742e="" class="material-symbols-outlined">cctv_icon</span>
-  <div data-v-103d742e="" class="facility-text">
-    <div data-v-103d742e="">CCTV</div>
+"<div class="facility-card"><span class="material-symbols-outlined">cctv_icon</span>
+  <div class="facility-text">
+    <div>CCTV</div>
   </div>
 </div>"
 `;
 
-exports[`TemplateSpotDetail.vue > matches snapshot for title section 1`] = `"<h1 data-v-103d742e="">Test Spot</h1>"`;
+exports[`TemplateSpotDetail.vue > matches snapshot for title section 1`] = `"<h1>Test Spot</h1>"`;

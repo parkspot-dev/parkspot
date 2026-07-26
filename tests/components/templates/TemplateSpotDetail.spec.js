@@ -58,6 +58,9 @@ const SPOT = {
 
 function buildStore({
     isLoggedIn = true,
+    isAdmin = false,
+    isAgent = false,
+    deleteSpot,
     createTentativeBooking,
     createContactLead,
 } = {}) {
@@ -80,12 +83,14 @@ function buildStore({
                     updateImages: vi.fn(),
                     updateAddress: vi.fn(),
                     updateRent: vi.fn(),
+                    deleteSpot: deleteSpot || vi.fn().mockResolvedValue({}),
                 },
             },
             user: {
                 namespaced: true,
                 state: {
-                    isAdmin: false,
+                    isAdmin: isAdmin,
+                    isAgent: isAgent,
                     user: isLoggedIn ? { ID: 'U1' } : null,
                     userProfile: isLoggedIn
                         ? {
@@ -139,7 +144,10 @@ const mountTemplate = (store) =>
             plugins: [store],
             mocks: {
                 $router: { push: vi.fn() },
-                $buefy: { toast: { open: vi.fn() } },
+                $buefy: {
+                    toast: { open: vi.fn() },
+                    dialog: { confirm: vi.fn() },
+                },
             },
             stubs: STUBS,
         },
@@ -284,5 +292,52 @@ describe('TemplateSpotDetail.vue — booking funnel generate_lead', () => {
         });
 
         wrapper.unmount();
+    });
+
+    describe('spot deletion feature', () => {
+        it('does not render Delete button when user is not an admin', () => {
+            const wrapper = mountTemplate(buildStore({ isAdmin: false }));
+            expect(wrapper.find('.delete-btn').exists()).toBe(false);
+            wrapper.unmount();
+        });
+
+        it('renders Delete button when user is an admin', () => {
+            const wrapper = mountTemplate(buildStore({ isAdmin: true }));
+            expect(wrapper.find('.delete-btn').exists()).toBe(true);
+            wrapper.unmount();
+        });
+
+        it('confirmDeleteSpot opens $buefy.dialog.confirm with danger and primary cancel options', async () => {
+            const deleteSpotMock = vi.fn().mockResolvedValue({});
+            const store = buildStore({
+                isAdmin: true,
+                deleteSpot: deleteSpotMock,
+            });
+            const wrapper = mountTemplate(store);
+
+            let confirmOptions;
+            wrapper.vm.$buefy.dialog.confirm = vi.fn((opts) => {
+                confirmOptions = opts;
+            });
+
+            await wrapper.vm.confirmDeleteSpot();
+
+            expect(wrapper.vm.$buefy.dialog.confirm).toHaveBeenCalled();
+            expect(confirmOptions).toMatchObject({
+                title: 'Delete Spot',
+                type: 'is-danger',
+                cancelType: 'is-primary',
+            });
+            expect(confirmOptions.message).toBe(
+                'Are you sure you want to delete this spot?',
+            );
+
+            // Trigger onConfirm handler
+            await confirmOptions.onConfirm();
+            expect(deleteSpotMock).toHaveBeenCalled();
+            expect(wrapper.vm.$router.push).toHaveBeenCalledWith('/');
+
+            wrapper.unmount();
+        });
     });
 });

@@ -112,6 +112,23 @@ class BaseApiService {
             return err.response.data;
         }
     }
+
+    /**
+     * handle delete request api call.
+     * @param { any } resource - url .
+     */
+    async delete(resource) {
+        try {
+            const response = await this.client.delete(resource);
+            if (!response) {
+                return {};
+            }
+            return response.data;
+        } catch (err) {
+            this.handleErrors(err);
+            return err.response.data;
+        }
+    }
 }
 
 // MayaApiService inherits BaseApiService to create http clients for Maya services.
@@ -152,14 +169,17 @@ class MayaApiService extends BaseApiService {
                     return config;
                 }
                 await auth.authStateReady();
-                if(localStorage.getItem(
-                    'PSAuthKey',
-                )) {
-                    localStorage.setItem('PSAuthKey', auth.currentUser?.accessToken)
+                if (localStorage.getItem('PSAuthKey')) {
+                    localStorage.setItem(
+                        'PSAuthKey',
+                        auth.currentUser?.accessToken,
+                    );
                 }
-                config.headers['PSAuthKey'] = `${localStorage.getItem(
-                    'PSAuthKey',
-                )}`;
+                const token = localStorage.getItem('PSAuthKey');
+                config.headers['PSAuthKey'] = `${token}`;
+                if (token) {
+                    config.headers['Authorization'] = `Bearer ${token}`;
+                }
                 return config;
             },
             (error) => {
