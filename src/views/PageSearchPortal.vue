@@ -177,7 +177,7 @@ export default {
         async searchRequestWithMobile(voMobile) {
             if (voMobile != '') {
                 // Sanitize Mobile Number
-                const sanitizeMobileNumber = this.sanitizeMobile(voMobile);
+                const sanitizeMobileNumber = sanitizeMobile(voMobile);
                 if (!sanitizeMobileNumber) {
                     this.$buefy.dialog.alert({
                         title: 'Error',
@@ -290,11 +290,6 @@ export default {
                 name: 'SearchPortal',
                 query: { tab: getActiveTabStatusLabel(this.activeTab) },
             });
-        },
-
-        // Sanitize mobile number
-        sanitizeMobile(input) {
-            return sanitizeMobile(input);
         },
     },
 };

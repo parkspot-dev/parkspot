@@ -274,7 +274,7 @@ export default {
         async searchUsersWithMobile(userMobile) {
             if (userMobile != '') {
                 // Sanitize Mobile Number
-                const sanitizeMobileNumber = this.sanitizeMobile(userMobile);
+                const sanitizeMobileNumber = sanitizeMobile(userMobile);
                 if (!sanitizeMobileNumber) {
                     this.$buefy.dialog.alert({
                         title: 'Error',
@@ -310,11 +310,6 @@ export default {
                     name: 'kyc-status',
                 });
             }
-        },
-
-        // Sanitize mobile number
-        sanitizeMobile(input) {
-            return sanitizeMobile(input);
         },
 
         openImage(url) {
