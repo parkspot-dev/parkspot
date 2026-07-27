@@ -551,4 +551,99 @@ describe('User Store - Agent Auth Fix', () => {
             expect(localStorage.getItem('profile:agent_user')).toBeNull();
         });
     });
+
+    describe('UTM parameters in API calls', () => {
+        beforeEach(() => {
+            window.history.replaceState(
+                {},
+                '',
+                '/?utm_campaign=diwali_sale&utm_content=hero_banner&utm_source=google',
+            );
+        });
+
+        it('registerSpot includes UTM in Remark field', async () => {
+            const state = {
+                contactForm: {
+                    fullname: 'Test Owner',
+                    cno: '9999999999',
+                    remark: 'My spot remark',
+                },
+            };
+
+            await userModule.actions.registerSpot({ state });
+
+            expect(mayaClient.post).toHaveBeenCalledWith(
+                '/owner/spot-request',
+                expect.objectContaining({
+                    FullName: 'Test Owner',
+                    Comments:
+                        'My spot remark\n[utm_campaign]: diwali_sale\n[utm_content]: hero_banner\n[utm_source]: google',
+                    Remark: 'My spot remark\n[utm_campaign]: diwali_sale\n[utm_content]: hero_banner\n[utm_source]: google',
+                }),
+            );
+        });
+
+        it('requestSpot includes UTM in Comments and Remark fields', async () => {
+            const state = {
+                contactForm: {
+                    fullname: 'Test Seeker',
+                    cno: '8888888888',
+                },
+                preference: {
+                    carModel: 'SUV',
+                    minDur: '2 hours',
+                },
+            };
+
+            await userModule.actions.requestSpot({ state });
+
+            expect(mayaClient.post).toHaveBeenCalledWith(
+                '/owner/parking-request',
+                expect.objectContaining({
+                    Name: 'Test Seeker',
+                    Comments:
+                        '[utm_campaign]: diwali_sale\n[utm_content]: hero_banner\n[utm_source]: google',
+                    Remark: '[utm_campaign]: diwali_sale\n[utm_content]: hero_banner\n[utm_source]: google',
+                }),
+            );
+        });
+
+        it('contact includes UTM in Comments field', async () => {
+            const state = {
+                login: {},
+                contactForm: { fullname: 'Contact User' },
+                additionalInfo: {},
+                locationDetails: {},
+            };
+
+            await userModule.actions.contact({ state });
+
+            expect(mayaClient.post).toHaveBeenCalledWith(
+                '/contact',
+                expect.objectContaining({
+                    Comments:
+                        'Spot Registered\n[utm_campaign]: diwali_sale\n[utm_content]: hero_banner\n[utm_source]: google',
+                }),
+            );
+        });
+
+        it('onlyContact includes UTM in Comments field', async () => {
+            const state = {
+                contactForm: {
+                    msg: 'Need help',
+                    carModel: 'Sedan',
+                },
+            };
+
+            await userModule.actions.onlyContact({ state });
+
+            expect(mayaClient.post).toHaveBeenCalledWith(
+                '/contact',
+                expect.objectContaining({
+                    Comments:
+                        'From the Home Page ----->Need help Car Model: Sedan\n[utm_campaign]: diwali_sale\n[utm_content]: hero_banner\n[utm_source]: google',
+                }),
+            );
+        });
+    });
 });
