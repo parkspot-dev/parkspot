@@ -2,10 +2,21 @@
     <div class="pending-payments-root">
         <LoaderModal v-if="isLoading"></LoaderModal>
         <div v-if="isAuthReady && isAdmin" class="table-wrapper">
+            <div class="mobile-search-wrapper">
+                <b-field>
+                    <b-input
+                        v-model="mobileSearchQuery"
+                        placeholder="Search by Site ID, VO/SO Name or Mobile"
+                        icon="magnify"
+                        type="search"
+                        clearable
+                    ></b-input>
+                </b-field>
+            </div>
             <div class="search-top">
                 <MoleculeSearchBox
                     :initial-value="bookingIdSearch"
-                    placeholder="Booking ID"
+                    placeholder="Search by Site ID, VO/SO Name or Mobile"
                     @clear-input="clearBookingIdSearch"
                     @on-search="searchBookingId"
                 ></MoleculeSearchBox>
@@ -405,6 +416,7 @@ export default {
             draftAmountInput: '0',
             editableRemark: '',
             bookingIdSearch: '',
+            mobileSearchQuery: '',
         };
     },
     computed: {
@@ -417,14 +429,32 @@ export default {
         ...mapState('user', ['isAdmin', 'isAuthReady']),
 
         filteredPendingPayments() {
-            const query = this.bookingIdSearch.trim().toLowerCase();
+            const query = (this.mobileSearchQuery || this.bookingIdSearch || '')
+                .toLowerCase()
+                .trim();
             if (!query) return this.pendingPayments;
 
-            return this.pendingPayments.filter((p) =>
-                String(p.BookingId || '')
-                    .toLowerCase()
-                    .includes(query),
-            );
+            return this.pendingPayments.filter((p) => {
+                const siteId = this.getSpotId(p)
+                    ? String(this.getSpotId(p)).toLowerCase()
+                    : '';
+                const voName = p.VoName ? String(p.VoName).toLowerCase() : '';
+                const voMobile = p.VoMobile
+                    ? String(p.VoMobile).toLowerCase()
+                    : '';
+                const soName = p.SoName ? String(p.SoName).toLowerCase() : '';
+                const soMobile = p.SoMobile
+                    ? String(p.SoMobile).toLowerCase()
+                    : '';
+
+                return (
+                    siteId.includes(query) ||
+                    voName.includes(query) ||
+                    voMobile.includes(query) ||
+                    soName.includes(query) ||
+                    soMobile.includes(query)
+                );
+            });
         },
 
         resolvedPayeeName() {
@@ -638,6 +668,7 @@ export default {
 
         clearBookingIdSearch() {
             this.bookingIdSearch = '';
+            this.mobileSearchQuery = '';
         },
 
         openSuccessConfirmation() {
@@ -869,10 +900,23 @@ export default {
     justify-content: center;
 }
 
+.mobile-search-wrapper {
+    display: none;
+    margin-bottom: 16px;
+
+    @media screen and (max-width: 920px) {
+        display: block;
+    }
+}
+
 .search-top {
     display: flex;
     justify-content: center;
     margin: 8px 0 12px;
+
+    @media screen and (max-width: 920px) {
+        display: none;
+    }
 }
 
 .search-top :deep(.search-button) {
@@ -889,6 +933,10 @@ export default {
     border: 1px solid #d8d8e8;
     border-radius: 8px;
     padding: 12px;
+}
+
+.table-wrapper :deep(.table-mobile-sort) {
+    display: none !important;
 }
 
 .spot-detail-link {
@@ -930,6 +978,10 @@ export default {
 
     .modal-right {
         min-width: 100%;
+    }
+
+    .table-wrapper :deep(.table-mobile-sort) {
+        display: none !important;
     }
 }
 </style>
