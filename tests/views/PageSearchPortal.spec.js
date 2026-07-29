@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 import PageSearchPortal from '@/views/PageSearchPortal.vue';
 import { mayaClient } from '@/services/api';
+import { sanitizeMobile } from '@/utils/sanitizeMobile';
 
 vi.mock('@/services/api', () => ({
     mayaClient: {
@@ -98,9 +99,8 @@ describe('PageSearchPortal.vue', () => {
     });
 
     it('sanitizeMobile works correctly', () => {
-        wrapper = mountPage(store);
-        expect(wrapper.vm.sanitizeMobile('+91-9876543210')).toBe('9876543210');
-        expect(wrapper.vm.sanitizeMobile('123')).toBe(null);
+        expect(sanitizeMobile('+91-9876543210')).toBe('9876543210');
+        expect(sanitizeMobile('123')).toBe(null);
     });
 
     it('navigates for valid mobile number', () => {

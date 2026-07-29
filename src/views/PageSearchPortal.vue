@@ -45,6 +45,7 @@ import { mayaClient } from '@/services/api';
 import { mapActions, mapState } from 'vuex';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
 import { getActiveTabStatusLabel } from '../constant/enums';
+import { sanitizeMobile } from '@/utils/sanitizeMobile';
 
 export default {
     name: 'PageSearchPortal',
@@ -176,7 +177,7 @@ export default {
         async searchRequestWithMobile(voMobile) {
             if (voMobile != '') {
                 // Sanitize Mobile Number
-                const sanitizeMobileNumber = this.sanitizeMobile(voMobile);
+                const sanitizeMobileNumber = sanitizeMobile(voMobile);
                 if (!sanitizeMobileNumber) {
                     this.$buefy.dialog.alert({
                         title: 'Error',
@@ -289,22 +290,6 @@ export default {
                 name: 'SearchPortal',
                 query: { tab: getActiveTabStatusLabel(this.activeTab) },
             });
-        },
-
-        // Sanitize mobile number
-        sanitizeMobile(input) {
-            // filter all non-digints characters
-            let sanitized = input.replace(/[^\d]/g, '');
-            // if this constains extra 91 (Country code)
-            if (sanitized.length > 10 && sanitized.startsWith('91')) {
-                sanitized = sanitized.slice(2);
-            }
-
-            if (sanitized.length !== 10) {
-                return null;
-            }
-
-            return sanitized;
         },
     },
 };
