@@ -9,6 +9,7 @@ import {
     onAuthStateChanged,
 } from 'firebase/auth';
 import { identify, setUserProperty } from '@/lib/analytics';
+import { formatRemarkWithUtm } from '@/lib/analytics/attribution';
 
 const PS_AUTH_KEY = 'PSAuthKey';
 const USER_PROFILE_STORAGE_KEY = 'UserProfile';
@@ -300,7 +301,7 @@ const actions = {
                 EmailID: state.contactForm.email,
                 Mobile: state.contactForm.cno,
             },
-            Comments: 'Spot Registered',
+            Comments: formatRemarkWithUtm('Spot Registered'),
             RentDetails: {
                 VehicleType: '',
                 Rate: state.additionalInfo.rent ? state.additionalInfo.rent : '',
@@ -329,7 +330,7 @@ const actions = {
                 EmailID: state.contactForm.email,
                 Mobile: state.contactForm.cno,
             },
-            Comments: comments,
+            Comments: formatRemarkWithUtm(comments),
             CarModel: state.contactForm.carModel ? state.contactForm.carModel : '',
         };
 
@@ -337,6 +338,9 @@ const actions = {
     },
 
     async registerSpot({ state }) {
+        const userRemark =
+            state.contactForm.remark || state.contactForm.Remark || '';
+        const remarkWithUtm = formatRemarkWithUtm(userRemark);
         const req = {
             FullName: state.contactForm.fullname,
             ApartmentName: state.contactForm.ApartmentName,
@@ -346,7 +350,8 @@ const actions = {
             ParkingSize: state.contactForm.parkingSize, // "Hatchback","Compact SUV", "SUV"
             ServicesAvailable: state.contactForm.facilities, // "CCTV", "Security Gaurd", "Covered", "24Hrs Access", "Parking Stickers"
             BookingDuration: '', // "Monthly", "Weekly", "Daily"
-            Remark: '',
+            Comments: remarkWithUtm,
+            Remark: remarkWithUtm,
             MapLink: state.contactForm.mapLink,
             SpotImages: state.contactForm.images,
             SiteType: state.contactForm.siteType,
@@ -357,6 +362,13 @@ const actions = {
     },
 
     async requestSpot({ state }) {
+        const userRemark =
+            state.contactForm.remark ||
+            state.contactForm.Remark ||
+            state.preference.remark ||
+            '';
+        const remarkWithUtm = formatRemarkWithUtm(userRemark);
+
         // prettier-ignore
         const req = {
             Name: state.contactForm.fullname,
@@ -370,6 +382,8 @@ const actions = {
             // Latitude    : state.locationDetails.lnglat.lat,
             // Longitude   : state.locationDetails.lnglat.lng,
             // Landmark    : state.locationDetails.locDetails.city.country,
+            Comments: remarkWithUtm,
+            Remark: remarkWithUtm,
         };
 
         await mayaClient.post('/owner/parking-request', req);

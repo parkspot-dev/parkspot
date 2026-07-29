@@ -147,3 +147,72 @@ export function getStored() {
     }
     return stored;
 }
+
+/**
+ * Read `utm_campaign`, `utm_content`, and `utm_source` first from `window.location.search`
+ * or `window.location.href`, falling back to stored attribution values.
+ * Supports common spelling variations (utm_campion, utm_campaing, utm_contend).
+ *
+ * @return {{ utmCampaign: string, utmContent: string, utmSource: string }}
+ */
+export function getUtmParams() {
+    if (!isBrowser()) {
+        return { utmCampaign: '', utmContent: '', utmSource: '' };
+    }
+
+    let searchStr = window.location.search || '';
+    if (!searchStr && window.location.href.includes('?')) {
+        searchStr = '?' + window.location.href.split('?')[1];
+    }
+
+    const searchParams = new URLSearchParams(searchStr);
+    const stored = getStored() || {};
+
+    const findParam = (...keys) => {
+        for (const key of keys) {
+            const valFromSearch = searchParams.get(key);
+            if (valFromSearch) return valFromSearch;
+        }
+        for (const key of keys) {
+            if (stored[key]) return stored[key];
+        }
+        return '';
+    };
+
+    const utmCampaign = findParam(
+        'utm_campaign',
+        'utm_campion',
+        'utm_campaing',
+    );
+    const utmContent = findParam('utm_content', 'utm_contend');
+    const utmSource = findParam('utm_source');
+
+    return { utmCampaign, utmContent, utmSource };
+}
+
+/**
+ * Format a remark/comments string by appending UTM parameters on new lines in brackets:
+ * [utm_campaign]: <value>
+ * [utm_content]: <value>
+ * [utm_source]: <value>
+ *
+ * @param {string} [existingRemark='']
+ * @return {string}
+ */
+export function formatRemarkWithUtm(existingRemark = '') {
+    const { utmCampaign, utmContent, utmSource } = getUtmParams();
+    const parts = [];
+    if (utmCampaign) parts.push(`[utm_campaign]: ${utmCampaign}`);
+    if (utmContent) parts.push(`[utm_content]: ${utmContent}`);
+    if (utmSource) parts.push(`[utm_source]: ${utmSource}`);
+
+    if (parts.length === 0) {
+        return existingRemark || '';
+    }
+
+    const utmStr = parts.join('\n');
+    if (!existingRemark) {
+        return utmStr;
+    }
+    return `${existingRemark}\n${utmStr}`;
+}

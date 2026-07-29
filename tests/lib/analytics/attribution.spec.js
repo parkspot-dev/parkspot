@@ -4,6 +4,8 @@ import {
     getStored,
     readStored,
     writeStored,
+    getUtmParams,
+    formatRemarkWithUtm,
 } from '@/lib/analytics/attribution.js';
 
 const STORAGE_KEY = 'parkspot_attrib';
@@ -14,8 +16,7 @@ function clearAllCookies() {
     for (const raw of document.cookie.split(';')) {
         const name = raw.trim().split('=')[0];
         if (!name) continue;
-        document.cookie =
-            `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
     }
 }
 
@@ -49,7 +50,9 @@ describe('analytics/attribution', () => {
                 utm_medium: 'cpc',
                 utm_campaign: 'jun',
             });
-            expect(JSON.parse(sessionStorage.getItem(STORAGE_KEY))).toMatchObject({
+            expect(
+                JSON.parse(sessionStorage.getItem(STORAGE_KEY)),
+            ).toMatchObject({
                 gclid: 'ABC123',
                 utm_source: 'google',
             });
@@ -132,6 +135,76 @@ describe('analytics/attribution', () => {
         it('readStored returns null for malformed JSON', () => {
             sessionStorage.setItem(STORAGE_KEY, '{not json}');
             expect(readStored()).toBeNull();
+        });
+    });
+
+    describe('getUtmParams()', () => {
+        it('reads utm_campaign, utm_content, and utm_source from URL query first', () => {
+            setLocation(
+                'utm_campaign=summer_sale&utm_content=banner_ad&utm_source=google',
+            );
+            const result = getUtmParams();
+            expect(result).toEqual({
+                utmCampaign: 'summer_sale',
+                utmContent: 'banner_ad',
+                utmSource: 'google',
+            });
+        });
+
+        it('supports utm_campion and utm_contend spelling variations', () => {
+            setLocation('utm_campion=summer_sale&utm_contend=banner_ad');
+            const result = getUtmParams();
+            expect(result).toEqual({
+                utmCampaign: 'summer_sale',
+                utmContent: 'banner_ad',
+                utmSource: '',
+            });
+        });
+
+        it('falls back to stored attribution when query is empty', () => {
+            writeStored({
+                utm_campaign: 'fall_promo',
+                utm_content: 'sidebar_link',
+            });
+            const result = getUtmParams();
+            expect(result).toEqual({
+                utmCampaign: 'fall_promo',
+                utmContent: 'sidebar_link',
+                utmSource: '',
+            });
+        });
+
+        it('prioritizes query over stored attribution', () => {
+            writeStored({ utm_campaign: 'old_campaign' });
+            setLocation('utm_campaign=new_campaign');
+            const result = getUtmParams();
+            expect(result.utmCampaign).toBe('new_campaign');
+        });
+    });
+
+    describe('formatRemarkWithUtm()', () => {
+        it('returns existing remark when no UTM params present', () => {
+            expect(formatRemarkWithUtm('Existing remark')).toBe(
+                'Existing remark',
+            );
+        });
+
+        it('appends UTM params to existing remark on new lines with brackets', () => {
+            setLocation(
+                'utm_campaign=my_campaign&utm_content=my_content&utm_source=google',
+            );
+            expect(formatRemarkWithUtm('My remark')).toBe(
+                'My remark\n[utm_campaign]: my_campaign\n[utm_content]: my_content\n[utm_source]: google',
+            );
+        });
+
+        it('returns formatted UTM params when no existing remark', () => {
+            setLocation(
+                'utm_campaign=my_campaign&utm_content=my_content&utm_source=google',
+            );
+            expect(formatRemarkWithUtm('')).toBe(
+                '[utm_campaign]: my_campaign\n[utm_content]: my_content\n[utm_source]: google',
+            );
         });
     });
 });
