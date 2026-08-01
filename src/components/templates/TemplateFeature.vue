@@ -15,6 +15,11 @@
                 </p>
             </MoleculeFeatureBody>
         </div>
+        <div class="terms-container">
+            <router-link to="/terms-and-conditions" class="terms-link">
+                Terms and Conditions
+            </router-link>
+        </div>
     </BodyWrapper>
 </template>
 
@@ -101,6 +106,23 @@ export default {
     display: grid;
     grid-template-columns: 1fr 1fr;
     row-gap: 1rem;
+}
+
+.terms-container {
+    margin-top: 2.5rem;
+    text-align: center;
+}
+
+.terms-link {
+    color: var(--secondary-color);
+    font-weight: var(--bold-font);
+    font-size: 1.3rem;
+    text-decoration: underline;
+    transition: color 0.2s ease-in-out;
+}
+
+.terms-link:hover {
+    color: var(--parkspot-black);
 }
 
 @media only screen and (max-width: 800px) {

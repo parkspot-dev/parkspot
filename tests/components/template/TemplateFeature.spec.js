@@ -20,6 +20,9 @@ const stubs = {
             </div>
         `,
     },
+    RouterLink: {
+        template: '<a><slot /></a>',
+    },
 };
 
 const factory = () => {
@@ -65,5 +68,12 @@ describe('TemplateFeature.vue', () => {
         expect(text).toContain('reserve a spot');
         expect(text).toContain('safe and secure parking area');
         expect(text).toContain('search apartment parking areas');
+    });
+
+    it('renders terms and conditions hyperlink', () => {
+        const wrapper = factory();
+        const termsContainer = wrapper.find('.terms-container');
+        expect(termsContainer.exists()).toBe(true);
+        expect(termsContainer.text()).toContain('Terms and Conditions');
     });
 });
