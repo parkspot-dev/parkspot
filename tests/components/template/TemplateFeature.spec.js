@@ -56,7 +56,7 @@ describe('TemplateFeature.vue', () => {
             'Navigation',
             'Booking',
             'Searching',
-            'Safety & Security',
+            'Safety & Security*',
         ]);
     });
 
@@ -72,8 +72,9 @@ describe('TemplateFeature.vue', () => {
 
     it('renders terms and conditions hyperlink', () => {
         const wrapper = factory();
-        const termsContainer = wrapper.find('.terms-container');
-        expect(termsContainer.exists()).toBe(true);
-        expect(termsContainer.text()).toContain('Terms and Conditions');
+        const termsText = wrapper.find('.terms-text');
+        expect(termsText.exists()).toBe(true);
+        expect(termsText.text()).toContain('Terms & Conditions');
+        expect(termsText.text()).toContain('apply');
     });
 });
