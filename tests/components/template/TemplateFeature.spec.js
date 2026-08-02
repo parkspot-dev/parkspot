@@ -72,9 +72,14 @@ describe('TemplateFeature.vue', () => {
 
     it('renders terms and conditions hyperlink', () => {
         const wrapper = factory();
-        const termsText = wrapper.find('.terms-text');
-        expect(termsText.exists()).toBe(true);
-        expect(termsText.text()).toContain('Terms & Conditions');
-        expect(termsText.text()).toContain('apply');
+        const termsNote = wrapper.find('.terms-conditions-note');
+        expect(termsNote.exists()).toBe(true);
+        expect(termsNote.text()).toContain('Terms & Conditions');
+        expect(termsNote.text()).toContain('apply');
+
+        const termsLink = wrapper.find('.terms-conditions-link');
+        expect(termsLink.attributes('href')).toBe(
+            'https://www.parkspot.in/terms-and-conditions/#landlord-cooperation'
+        );
     });
 });

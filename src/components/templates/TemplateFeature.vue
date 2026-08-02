@@ -15,11 +15,13 @@
                         {{ feature.para2 }}
                     </p>
                 </MoleculeFeatureBody>
-                <p v-if="feature.showTerms" class="terms-text">
-                    <span class="terms-asterisk">*</span>
-                    <router-link to="/terms-and-conditions" class="terms-link"
-                        >Terms & Conditions</router-link
-                    >
+                <p v-if="feature.hasTermsConditions" class="terms-conditions-note">
+                    <span class="terms-conditions-asterisk">*</span>
+                    <a
+                        href="https://www.parkspot.in/terms-and-conditions/#landlord-cooperation"
+                        target="_blank"
+                        class="terms-conditions-link"
+                    >Terms & Conditions</a>
                     apply
                 </p>
             </div>
@@ -88,7 +90,7 @@ export default {
                         no mishappening will be done to the user’s property. ParkSpot provides \
                         security to private property as well so that users don’t need to worry \
                         about the place where they are keeping their vehicles.`,
-                    showTerms: true,
+                    hasTermsConditions: true,
                 },
                 {
                     id: 4,
@@ -113,19 +115,19 @@ export default {
     row-gap: 1rem;
 }
 
-.terms-text {
+.terms-conditions-note {
     color: var(--parkspot-muted-black);
     font-size: 1.1rem;
     margin-top: 0.75rem;
     padding-left: 0.25rem;
 }
 
-.terms-asterisk {
+.terms-conditions-asterisk {
     font-size: 1.35rem;
     font-weight: var(--bold-font);
 }
 
-.terms-link {
+.terms-conditions-link {
     color: inherit;
     font-weight: var(--bold-font);
     font-size: 1.1rem;
