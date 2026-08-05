@@ -15,13 +15,16 @@
                         {{ feature.para2 }}
                     </p>
                 </MoleculeFeatureBody>
-                <p v-if="feature.hasTermsConditions" class="terms-conditions-note">
+                <p
+                    v-if="feature.hasTermsConditions"
+                    class="terms-conditions-note"
+                >
                     <span class="terms-conditions-asterisk">*</span>
                     <a
-                        href="https://www.parkspot.in/terms-and-conditions/#landlord-cooperation"
-                        target="_blank"
+                        href="/terms-and-conditions/#landlord-cooperation"
                         class="terms-conditions-link"
-                    >Terms & Conditions</a>
+                        >Terms & Conditions</a
+                    >
                     apply
                 </p>
             </div>
@@ -117,20 +120,20 @@ export default {
 
 .terms-conditions-note {
     color: var(--parkspot-muted-black);
-    font-size: 1.1rem;
-    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
     padding-left: 0.25rem;
 }
 
 .terms-conditions-asterisk {
-    font-size: 1.35rem;
-    font-weight: var(--bold-font);
+    font-size: 1rem;
+    font-weight: var(--regular-font);
 }
 
 .terms-conditions-link {
     color: inherit;
-    font-weight: var(--bold-font);
-    font-size: 1.1rem;
+    font-size: 0.9rem;
+    font-weight: var(--regular-font);
     text-decoration: none;
 }
 

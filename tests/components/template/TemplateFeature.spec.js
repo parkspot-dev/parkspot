@@ -79,7 +79,7 @@ describe('TemplateFeature.vue', () => {
 
         const termsLink = wrapper.find('.terms-conditions-link');
         expect(termsLink.attributes('href')).toBe(
-            'https://www.parkspot.in/terms-and-conditions/#landlord-cooperation'
+            '/terms-and-conditions/#landlord-cooperation',
         );
     });
 });
