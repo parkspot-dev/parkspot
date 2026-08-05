@@ -654,9 +654,11 @@
                             <li>
                                 <AtomParagraph>
                                     ParkSpot will collect the monthly rent from
-                                    the vehicle owner, deduct the service fee,
-                                    and deposit the remaining amount into the
-                                    landlord’s designated bank account. Both
+                                    the vehicle owner, deduct the applicable
+                                    service fee, and deposit the remaining
+                                    amount into the landlord’s designated bank
+                                    account. The settlement of the rent shall be
+                                    processed on a T+1 settlement cycle. Both
                                     parties agree to this process for smooth
                                     financial transactions.
                                 </AtomParagraph>
