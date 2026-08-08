@@ -148,6 +148,7 @@ export function getKYCStatusLabel(kyStatus) {
     return getEnumLabel(KYCStatusLabel, kyStatus);
 }
 
+
 export const IDType = Object.freeze({
     NotSet: 0,
     Aadhaar: 1,
@@ -165,6 +166,7 @@ export function getIDTypeLabel(idType) {
     return getEnumLabel(IDTypeLabel, idType);
 }
 
+ (add: UI for kyc and Cashfree initiate)
 // kyc statuses
 export const IdentityKycStatus = Object.freeze({
     NotVerified: 'NOT_VERIFIED',
@@ -172,6 +174,7 @@ export const IdentityKycStatus = Object.freeze({
     Verified: 'VERIFIED',
     Failed: 'FAILED',
 });
+
 
 export const IdentityKycStatusLabel = {
     [IdentityKycStatus.NotVerified]: 'Not verified',
@@ -189,6 +192,7 @@ export function getIdentityKycStatusLabel(identityKycStatus) {
     return getEnumLabel(IdentityKycStatusLabel, identityKycStatus);
 }
 
+ (add: UI for kyc and Cashfree initiate)
 // Aadhaar is the only supported ID type today; IdType=1 is fixed by the
 // backend contract.
 export const IDENTITY_KYC_AADHAAR_ID_TYPE = 1;
