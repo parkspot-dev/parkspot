@@ -2,18 +2,32 @@
     <BodyWrapper>
         <MoleculeFeatureHeader></MoleculeFeatureHeader>
         <div class="feature-container">
-            <MoleculeFeatureBody
+            <div
                 v-for="feature of featuresData"
                 :key="feature.id"
-                :features-title="feature.title"
+                class="feature-item"
             >
-                <p class="mb-2">
-                    {{ feature.para }}
+                <MoleculeFeatureBody :features-title="feature.title">
+                    <p class="mb-2">
+                        {{ feature.para }}
+                    </p>
+                    <p v-if="feature.para2">
+                        {{ feature.para2 }}
+                    </p>
+                </MoleculeFeatureBody>
+                <p
+                    v-if="feature.hasTermsConditions"
+                    class="terms-conditions-note"
+                >
+                    <span class="terms-conditions-asterisk">*</span>
+                    <a
+                        href="/terms-and-conditions/#landlord-cooperation"
+                        class="terms-conditions-link"
+                        >Terms & Conditions</a
+                    >
+                    apply
                 </p>
-                <p>
-                    {{ feature.para2 }}
-                </p>
-            </MoleculeFeatureBody>
+            </div>
         </div>
     </BodyWrapper>
 </template>
@@ -79,10 +93,11 @@ export default {
                         no mishappening will be done to the user’s property. ParkSpot provides \
                         security to private property as well so that users don’t need to worry \
                         about the place where they are keeping their vehicles.`,
+                    hasTermsConditions: true,
                 },
                 {
                     id: 4,
-                    title: `Safety & Security`,
+                    title: `Safety & Security*`,
                     para: `People go to places like shopping malls, hospitals, and many local \
                         areas with their cars, without thinking that there may not be available car \
                         parking spaces. Maps can help you search popular sites but ParkSpot along \
@@ -101,6 +116,25 @@ export default {
     display: grid;
     grid-template-columns: 1fr 1fr;
     row-gap: 1rem;
+}
+
+.terms-conditions-note {
+    color: var(--parkspot-muted-black);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    padding-left: 0.25rem;
+}
+
+.terms-conditions-asterisk {
+    font-size: 1rem;
+    font-weight: var(--regular-font);
+}
+
+.terms-conditions-link {
+    color: inherit;
+    font-size: 0.9rem;
+    font-weight: var(--regular-font);
+    text-decoration: none;
 }
 
 @media only screen and (max-width: 800px) {

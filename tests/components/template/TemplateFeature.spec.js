@@ -20,6 +20,9 @@ const stubs = {
             </div>
         `,
     },
+    RouterLink: {
+        template: '<a><slot /></a>',
+    },
 };
 
 const factory = () => {
@@ -53,7 +56,7 @@ describe('TemplateFeature.vue', () => {
             'Navigation',
             'Booking',
             'Searching',
-            'Safety & Security',
+            'Safety & Security*',
         ]);
     });
 
@@ -65,5 +68,18 @@ describe('TemplateFeature.vue', () => {
         expect(text).toContain('reserve a spot');
         expect(text).toContain('safe and secure parking area');
         expect(text).toContain('search apartment parking areas');
+    });
+
+    it('renders terms and conditions hyperlink', () => {
+        const wrapper = factory();
+        const termsNote = wrapper.find('.terms-conditions-note');
+        expect(termsNote.exists()).toBe(true);
+        expect(termsNote.text()).toContain('Terms & Conditions');
+        expect(termsNote.text()).toContain('apply');
+
+        const termsLink = wrapper.find('.terms-conditions-link');
+        expect(termsLink.attributes('href')).toBe(
+            '/terms-and-conditions/#landlord-cooperation',
+        );
     });
 });
