@@ -77,9 +77,7 @@ const actions = {
     },
 
     async checkKycStatus({ commit, state }) {
-        const res = await mayaClient.post('/kyc/status', {
-            VerificationID: state.verificationId,
-        });
+        const res = await mayaClient.get(`/kyc/status?VerificationID=${state.verificationId}`);
 
         if (!res?.Status) {
             // A single transient failure/hiccup shouldn't wipe the current
