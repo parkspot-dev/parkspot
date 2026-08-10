@@ -133,7 +133,7 @@ const buttonLabel = computed(() => {
 });
 
 async function getVerified(values) {
-    const idNumber = (values.aadhaarNumber || '').replace(/\s+/g, '');
+    const idNumber = (values.aadhaarNumber || '').replace(/\s+/g, ''); // remove formatted adhaar number group into 4-4-4
 
     let redirectUrl;
     try {
@@ -277,7 +277,7 @@ onUnmounted(() => {
     // <i> element), so overriding font-size on <i> alone has no visible
     // effect — the pseudo-element itself has to be targeted.
     :deep(i::before) {
-        font-size: 16px !important;
+        font-size: 24px !important;
     }
 }
 
