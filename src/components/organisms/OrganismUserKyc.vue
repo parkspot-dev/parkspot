@@ -15,7 +15,7 @@
                     :aria-expanded="open"
                     @keydown.enter.space.prevent="onHeaderKeydown"
                 >
-                    <div class="icon-box">
+                    <div class="icon-box" :class="status.toLowerCase()">
                         <AtomIcon icon="shield-key-outline" size="is-small" />
                     </div>
 
@@ -220,6 +220,32 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    // Match the status-badge palette so the icon reflects the same state.
+    &.not_verified {
+        background: #faeeda;
+        :deep(i::before) {
+            color: #854f0b;
+        }
+    }
+    &.pending {
+        background: #e6f1fb;
+        :deep(i::before) {
+            color: #185fa5;
+        }
+    }
+    &.failed {
+        background: #fcebeb;
+        :deep(i::before) {
+            color: #a32d2d;
+        }
+    }
+    &.verified {
+        background: #eaf3de;
+        :deep(i::before) {
+            color: #3b6d11;
+        }
+    }
 }
 
 .card-content {
