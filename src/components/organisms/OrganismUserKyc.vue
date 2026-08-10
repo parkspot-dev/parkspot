@@ -54,6 +54,8 @@
                         name="aadhaarNumber"
                         label="Aadhaar number"
                         placeholder="1234 5678 9012"
+                        maxlength="14"
+                        inputmode="numeric"
                         :disabled="isBusy"
                     />
 
@@ -72,7 +74,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { Form as VeeForm } from 'vee-validate';
 import AtomIcon from '../atoms/AtomIcon.vue';
@@ -89,6 +91,17 @@ const STATUS_META = {
 
 const store = useStore();
 const aadhaarNumber = ref('');
+
+// Group into 4-4-4 as the user types, matching the "1234 5678 9012" placeholder.
+function formatAadhaarNumber(value) {
+    const digits = value.replace(/\D/g, '').slice(0, 12);
+    return digits.replace(/(\d{4})(?=\d)/g, '$1 ');
+}
+
+watch(aadhaarNumber, (value) => {
+    const formatted = formatAadhaarNumber(value);
+    if (formatted !== value) aadhaarNumber.value = formatted;
+});
 
 // Buefy's b-collapse only wires a click handler on the trigger — Enter/Space
 // need to be forwarded manually so the header is keyboard-operable.
@@ -350,6 +363,33 @@ onUnmounted(() => {
     &:disabled {
         cursor: not-allowed;
         opacity: 0.6;
+    }
+}
+
+@media (max-width: 600px) {
+    .card-header {
+        gap: 12px;
+        padding: 12px 16px;
+    }
+
+    .icon-box {
+        width: 32px;
+        height: 32px;
+    }
+
+    .title-line {
+        h2 {
+            font-size: 15px;
+        }
+    }
+
+    .card-content {
+        gap: 12px;
+        padding: 0 16px 16px;
+    }
+
+    .verify-button {
+        width: 100%;
     }
 }
 </style>
