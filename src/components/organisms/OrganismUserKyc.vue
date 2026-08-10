@@ -1,19 +1,40 @@
 <template>
     <div class="identity-kyc">
-        <div class="identity-kyc-card">
-            <div class="icon-box">
-                <AtomIcon icon="shield-key-outline" size="is-small" />
-            </div>
+        <b-collapse
+            v-model="isOpen"
+            class="identity-kyc-card"
+            animation="slide"
+            aria-id="identity-kyc-content"
+        >
+            <template #trigger="{ open }">
+                <div
+                    class="card-header"
+                    role="button"
+                    tabindex="0"
+                    aria-controls="identity-kyc-content"
+                    :aria-expanded="open"
+                    @keydown.enter.space.prevent="onHeaderKeydown"
+                >
+                    <div class="icon-box" :class="status.toLowerCase()">
+                        <AtomIcon icon="shield-key-outline" size="is-small" />
+                    </div>
+
+                    <div class="title-line">
+                        <h2>Identity verification</h2>
+                        <span class="status-badge" :class="status.toLowerCase()">
+                            {{ statusLabel }}
+                        </span>
+                    </div>
+
+                    <AtomIcon
+                        class="chevron"
+                        :icon="open ? 'menu-up' : 'menu-down'"
+                        size="is-small"
+                    />
+                </div>
+            </template>
 
             <div class="card-content">
-                <div class="title-line">
-                    <h2>Identity verification</h2>
-                    <span class="status-badge" :class="status.toLowerCase()">
-                        <AtomIcon :icon="statusIcon" size="is-small" />
-                        {{ statusLabel }}
-                    </span>
-                </div>
-
                 <p v-if="showForm" class="kyc-description">
                     Opens new tab to verify your identity, it
                     takes less than 2 minutes. Come back here once you're
@@ -24,6 +45,7 @@
 
                 <VeeForm
                     v-if="showForm"
+                    class="kyc-form"
                     :validation-schema="identityKycFormSchema"
                     @submit="getVerified"
                 >
@@ -45,7 +67,7 @@
                     </button>
                 </VeeForm>
             </div>
-        </div>
+        </b-collapse>
     </div>
 </template>
 
@@ -59,14 +81,20 @@ import { identityKycFormSchema } from '@/validationSchemas';
 import { IdentityKycStatus } from '@/constant/enums';
 
 const STATUS_META = {
-    [IdentityKycStatus.NotVerified]: { label: 'Not verified', icon: 'circle-small' },
-    [IdentityKycStatus.Pending]: { label: 'Pending', icon: 'circle-small' },
-    [IdentityKycStatus.Verified]: { label: 'Verified', icon: 'check-circle' },
-    [IdentityKycStatus.Failed]: { label: 'Failed', icon: 'alert-circle' },
+    [IdentityKycStatus.NotVerified]: { label: 'Not verified' },
+    [IdentityKycStatus.Pending]: { label: 'Pending' },
+    [IdentityKycStatus.Verified]: { label: 'Verified' },
+    [IdentityKycStatus.Failed]: { label: 'Failed' },
 };
 
 const store = useStore();
 const aadhaarNumber = ref('');
+
+// Buefy's b-collapse only wires a click handler on the trigger — Enter/Space
+// need to be forwarded manually so the header is keyboard-operable.
+function onHeaderKeydown(event) {
+    event.currentTarget.click();
+}
 
 // TODO: rename once the real user API field for this is confirmed.
 const isProfileVerified = computed(() => store.state.user.userProfile?.verified);
@@ -77,11 +105,13 @@ const status = computed(() =>
 const errorMessage = computed(() => store.state.identityKyc.errorMessage);
 const showForm = computed(() => status.value !== IdentityKycStatus.Verified);
 
+// Collapsed by default once verified — there's nothing left to act on.
+const isOpen = ref(status.value !== IdentityKycStatus.Verified);
+
 const isBusy = computed(() => status.value === IdentityKycStatus.Pending);
 
 // status.value is always a valid IdentityKycStatus key, so no fallback.
 const statusLabel = computed(() => STATUS_META[status.value].label);
-const statusIcon = computed(() => STATUS_META[status.value].icon);
 
 const buttonLabel = computed(() => {
     if (status.value === IdentityKycStatus.Pending) return 'Verifying…';
@@ -163,37 +193,88 @@ onUnmounted(() => {
 }
 
 .identity-kyc-card {
-    display: flex;
-    gap: 16px;
     border: 1px solid #e5e5ea;
     border-radius: var(--border-default);
-    padding: 24px;
     background: var(--parkspot-white);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: -2px;
+    }
 }
 
 .icon-box {
     flex: 0 0 auto;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 8px;
     background: #f1ede4;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    // Match the status-badge palette so the icon reflects the same state.
+    &.not_verified {
+        background: #faeeda;
+        :deep(i::before) {
+            color: #854f0b;
+        }
+    }
+    &.pending {
+        background: #e6f1fb;
+        :deep(i::before) {
+            color: #185fa5;
+        }
+    }
+    &.failed {
+        background: #fcebeb;
+        :deep(i::before) {
+            color: #a32d2d;
+        }
+    }
+    &.verified {
+        background: #eaf3de;
+        :deep(i::before) {
+            color: #3b6d11;
+        }
+    }
 }
 
 .card-content {
-    flex: 1 1 auto;
-    min-width: 0;
-    padding-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 24px 24px;
+}
+
+.chevron {
+    flex: 0 0 auto;
+    margin-left: auto;
+    color: #6e6d7a;
+
+    // The mdi webfont sets its own font-size on the ::before glyph (not the
+    // <i> element), so overriding font-size on <i> alone has no visible
+    // effect — the pseudo-element itself has to be targeted.
+    :deep(i::before) {
+        font-size: 16px !important;
+    }
 }
 
 .title-line {
+    flex: 1 1 auto;
+    min-width: 0;
     display: flex;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 8px;
 
     h2 {
         font-size: 16px;
@@ -210,33 +291,45 @@ onUnmounted(() => {
     font-weight: var(--semi-bold-font);
     padding: 3px 10px;
     border-radius: 999px;
-    background: #f1f1f4;
-    color: #6e6d7a;
+    border: 1px solid transparent;
 
-    &.verified {
-        background: #e6f7ff;
-        color: var(--secondary-color);
-    }
-    &.failed {
-        background: #fdecef;
-        color: var(--parkspot-red);
+    &.not_verified {
+        background: #faeeda;
+        color: #854f0b;
+        border-color: #ef9f27;
     }
     &.pending {
-        background: #fff8e8;
-        color: #a17a00;
+        background: #e6f1fb;
+        color: #185fa5;
+        border-color: #378add;
+    }
+    &.failed {
+        background: #fcebeb;
+        color: #a32d2d;
+        border-color: #e24b4a;
+    }
+    &.verified {
+        background: #eaf3de;
+        color: #3b6d11;
+        border-color: #97c459;
     }
 }
 
 .kyc-description {
     font-size: 14px;
     color: #6e6d7a;
-    margin-bottom: 16px;
+        padding: 16px 0 0px 0px;
 }
 
 .kyc-error {
     color: var(--parkspot-red);
     font-size: 13px;
-    margin: -8px 0 16px;
+}
+
+.kyc-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .verify-button {
@@ -245,13 +338,14 @@ onUnmounted(() => {
     border-radius: 5px;
     border: none;
     cursor: pointer;
-    display: inline-flex;
+    display: flex;
+    justify-content: center;
     gap: 8px;
     font-size: 14px;
     font-weight: var(--semi-bold-font);
     color: var(--parkspot-black);
     padding: 10px 20px;
-    margin-top: 4px;
+    margin: 0 auto;
 
     &:disabled {
         cursor: not-allowed;
