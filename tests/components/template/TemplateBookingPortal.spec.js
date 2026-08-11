@@ -21,6 +21,7 @@ const bookingDetailsMock = {
         RentCycle: 30,
         AgentUserName: 'agent1',
         UserName: 'user1',
+        VOUserName: 'vo_user1',
         Name: 'Test User',
         Mobile: '1234567890',
         EmailID: 'test@example.com',
@@ -151,6 +152,23 @@ describe('TemplateBookingPortal.vue', () => {
     it('renders booking ID and site ID', () => {
         expect(wrapper.text()).toContain('101');
         expect(wrapper.text()).toContain('SITE123');
+    });
+
+    it('renders vehicle owner user name (VOUserName)', async () => {
+        expect(wrapper.text()).toContain('vo_user1');
+
+        await wrapper.setData({
+            currBookingDetails: {
+                ...wrapper.vm.currBookingDetails,
+                Booking: {
+                    ...wrapper.vm.currBookingDetails.Booking,
+                    VOUserName: 'updated_vo_username',
+                },
+            },
+        });
+
+        expect(wrapper.text()).toContain('updated_vo_username');
+        expect(wrapper.text()).not.toContain('vo_user1');
     });
 
     it('emits payment-link event when getPaymentLink is called', () => {

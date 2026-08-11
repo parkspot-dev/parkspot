@@ -437,7 +437,7 @@
                     </div>
                     <div class="value-col">
                         <p>
-                            {{ currBookingDetails.Booking.UserName }}
+                            {{ currBookingDetails.Booking.VOUserName }}
                         </p>
                         <p>
                             {{ currBookingDetails.Booking.Name }}
