@@ -9,10 +9,13 @@
             <template #trigger="{ open }">
                 <div
                     class="card-header"
+                    :class="{ locked: isLocked }"
                     role="button"
-                    tabindex="0"
+                    :tabindex="isLocked ? -1 : 0"
+                    :aria-disabled="isLocked"
                     aria-controls="identity-kyc-content"
                     :aria-expanded="open"
+                    @click="onHeaderClick"
                     @keydown.enter.space.prevent="onHeaderKeydown"
                 >
                     <div class="icon-box" :class="status.toLowerCase()">
@@ -27,6 +30,7 @@
                     </div>
 
                     <AtomIcon
+                        v-if="!isLocked"
                         class="chevron"
                         :icon="open ? 'menu-up' : 'menu-down'"
                         size="is-small"
@@ -106,7 +110,14 @@ watch(aadhaarNumber, (value) => {
 // Buefy's b-collapse only wires a click handler on the trigger — Enter/Space
 // need to be forwarded manually so the header is keyboard-operable.
 function onHeaderKeydown(event) {
+    if (isLocked.value) return;
     event.currentTarget.click();
+}
+
+// Verified card has nothing left to show (showForm is false) — block the
+// click before it reaches b-collapse's own toggle listener on the wrapper.
+function onHeaderClick(event) {
+    if (isLocked.value) event.stopPropagation();
 }
 
 // TODO: rename once the real user API field for this is confirmed.
@@ -117,6 +128,7 @@ const status = computed(() =>
 );
 const errorMessage = computed(() => store.state.identityKyc.errorMessage);
 const showForm = computed(() => status.value !== IdentityKycStatus.Verified);
+const isLocked = computed(() => status.value === IdentityKycStatus.Verified);
 
 // Collapsed by default once verified — there's nothing left to act on.
 const isOpen = ref(status.value !== IdentityKycStatus.Verified);
@@ -133,7 +145,7 @@ const buttonLabel = computed(() => {
 });
 
 async function getVerified(values) {
-    const idNumber = (values.aadhaarNumber || '').replace(/\s+/g, '');
+    const idNumber = (values.aadhaarNumber || '').replace(/\s+/g, ''); // remove formatted adhaar number group into 4-4-4
 
     let redirectUrl;
     try {
@@ -222,6 +234,10 @@ onUnmounted(() => {
         outline: 2px solid var(--primary-color);
         outline-offset: -2px;
     }
+
+    &.locked {
+        cursor: default;
+    }
 }
 
 .icon-box {
@@ -277,7 +293,7 @@ onUnmounted(() => {
     // <i> element), so overriding font-size on <i> alone has no visible
     // effect — the pseudo-element itself has to be targeted.
     :deep(i::before) {
-        font-size: 16px !important;
+        font-size: 24px !important;
     }
 }
 
