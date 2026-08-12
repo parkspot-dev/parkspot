@@ -2,10 +2,21 @@
     <div class="pending-payments-root">
         <LoaderModal v-if="isLoading"></LoaderModal>
         <div v-if="isAuthReady && isAdmin" class="table-wrapper">
+            <div class="mobile-search-wrapper">
+                <b-field>
+                    <b-input
+                        v-model="mobileSearchQuery"
+                        placeholder="Search by Site ID, VO/SO Name or Mobile"
+                        icon="magnify"
+                        type="search"
+                        clearable
+                    ></b-input>
+                </b-field>
+            </div>
             <div class="search-top">
                 <MoleculeSearchBox
                     :initial-value="bookingIdSearch"
-                    placeholder="Booking ID"
+                    placeholder="Search by Site ID, VO/SO Name or Mobile"
                     @clear-input="clearBookingIdSearch"
                     @on-search="searchBookingId"
                 ></MoleculeSearchBox>
@@ -318,16 +329,25 @@
                             <div class="remark-input-wrap">
                                 <b-input
                                     ref="remarkInput"
+                                    v-model="editableRemark"
                                     :readonly="!isRemarkEditable"
-                                    :value="editableRemark"
-                                    @input="onRemarkInput"
                                 ></b-input>
                                 <button
                                     class="remark-edit-btn"
+                                    :class="{ 'is-editing': isRemarkEditable }"
                                     type="button"
-                                    @click="toggleRemarkEdit"
+                                    :title="
+                                        isRemarkEditable
+                                            ? 'Save remark'
+                                            : 'Edit remark'
+                                    "
+                                    @click.stop.prevent="toggleRemarkEdit"
                                 >
-                                    <b-icon icon="pencil"></b-icon>
+                                    <b-icon
+                                        :icon="
+                                            isRemarkEditable ? 'check' : 'pencil'
+                                        "
+                                    ></b-icon>
                                 </button>
                             </div>
                         </div>
@@ -405,6 +425,7 @@ export default {
             draftAmountInput: '0',
             editableRemark: '',
             bookingIdSearch: '',
+            mobileSearchQuery: '',
         };
     },
     computed: {
@@ -417,14 +438,32 @@ export default {
         ...mapState('user', ['isAdmin', 'isAuthReady']),
 
         filteredPendingPayments() {
-            const query = this.bookingIdSearch.trim().toLowerCase();
+            const query = (this.mobileSearchQuery || this.bookingIdSearch || '')
+                .toLowerCase()
+                .trim();
             if (!query) return this.pendingPayments;
 
-            return this.pendingPayments.filter((p) =>
-                String(p.BookingId || '')
-                    .toLowerCase()
-                    .includes(query),
-            );
+            return this.pendingPayments.filter((p) => {
+                const siteId = this.getSpotId(p)
+                    ? String(this.getSpotId(p)).toLowerCase()
+                    : '';
+                const voName = p.VoName ? String(p.VoName).toLowerCase() : '';
+                const voMobile = p.VoMobile
+                    ? String(p.VoMobile).toLowerCase()
+                    : '';
+                const soName = p.SoName ? String(p.SoName).toLowerCase() : '';
+                const soMobile = p.SoMobile
+                    ? String(p.SoMobile).toLowerCase()
+                    : '';
+
+                return (
+                    siteId.includes(query) ||
+                    voName.includes(query) ||
+                    voMobile.includes(query) ||
+                    soName.includes(query) ||
+                    soMobile.includes(query)
+                );
+            });
         },
 
         resolvedPayeeName() {
@@ -622,6 +661,7 @@ export default {
                 const input =
                     this.$refs.remarkInput?.$el?.querySelector('input');
                 if (input) {
+                    input.removeAttribute('readonly');
                     input.focus();
                     input.select();
                 }
@@ -638,6 +678,7 @@ export default {
 
         clearBookingIdSearch() {
             this.bookingIdSearch = '';
+            this.mobileSearchQuery = '';
         },
 
         openSuccessConfirmation() {
@@ -662,6 +703,10 @@ export default {
                 PaymentID: this.selectedPayment.PaymentId,
                 AmountToSO: this.editableAmount,
             };
+
+            if (this.editableRemark) {
+                payload.Remark = this.editableRemark;
+            }
 
             const res = await this.updateAmountToSO(payload);
 
@@ -867,12 +912,36 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 5;
+    padding: 4px;
+    border-radius: 4px;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    &.is-editing {
+        color: var(--parkspot-green);
+    }
+}
+
+.mobile-search-wrapper {
+    display: none;
+    margin-bottom: 16px;
+
+    @media screen and (max-width: 920px) {
+        display: block;
+    }
 }
 
 .search-top {
     display: flex;
     justify-content: center;
     margin: 8px 0 12px;
+
+    @media screen and (max-width: 920px) {
+        display: none;
+    }
 }
 
 .search-top :deep(.search-button) {
@@ -889,6 +958,10 @@ export default {
     border: 1px solid #d8d8e8;
     border-radius: 8px;
     padding: 12px;
+}
+
+.table-wrapper :deep(.table-mobile-sort) {
+    display: none !important;
 }
 
 .spot-detail-link {
@@ -930,6 +1003,10 @@ export default {
 
     .modal-right {
         min-width: 100%;
+    }
+
+    .table-wrapper :deep(.table-mobile-sort) {
+        display: none !important;
     }
 }
 </style>

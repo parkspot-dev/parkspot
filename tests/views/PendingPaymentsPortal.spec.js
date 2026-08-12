@@ -22,6 +22,7 @@ describe('PendingPaymentsPortal.vue', () => {
                     'MoleculeSearchBox': true,
                     'LoaderModal': true,
                     'QrcodeVue': true,
+                    'b-field': true,
                     'router-link': {
                         template: '<a><slot /></a>',
                     },
@@ -77,6 +78,7 @@ describe('PendingPaymentsPortal.vue', () => {
                             {
                                 PaymentId: 1,
                                 BookingId: 'BK1001',
+                                SiteID: 'SITE1001',
                                 BaseAmount: 1500,
                                 Amount: 500,
                                 SoName: 'SO One',
@@ -89,6 +91,7 @@ describe('PendingPaymentsPortal.vue', () => {
                             {
                                 PaymentId: 2,
                                 BookingId: 'BK2002',
+                                SiteID: 'SITE2002',
                                 BaseAmount: 1800,
                                 Amount: 700,
                                 SoName: 'SO Two',
@@ -163,17 +166,69 @@ describe('PendingPaymentsPortal.vue', () => {
         );
     });
 
-    it('filters pending payments by booking id search', () => {
+    it('filters pending payments by site id search', () => {
         wrapper = mountPage();
-        wrapper.vm.searchBookingId('bk1001');
+        wrapper.vm.searchBookingId('site1001');
         expect(wrapper.vm.filteredPendingPayments).toHaveLength(1);
     });
 
-    it('clearBookingIdSearch resets search', () => {
+    it('filters pending payments by Site ID, VO Name, VO Mobile, SO Name, and SO Mobile', () => {
+        store.state.pendingPayments.pendingPayments = [
+            {
+                PaymentId: 1,
+                BookingId: 'BK101',
+                SiteID: 'SITE-ALPHA',
+                VoName: 'Rahul Kumar',
+                VoMobile: '9876543210',
+                SoName: 'Amit Sharma',
+                SoMobile: '9123456789',
+            },
+            {
+                PaymentId: 2,
+                BookingId: 'BK102',
+                SiteID: 'SITE-BETA',
+                VoName: 'Priya Singh',
+                VoMobile: '8888877777',
+                SoName: 'Vikram Das',
+                SoMobile: '7777766666',
+            },
+        ];
+
+        wrapper = mountPage();
+
+        // Search by Site ID
+        wrapper.vm.mobileSearchQuery = 'site-alpha';
+        expect(wrapper.vm.filteredPendingPayments).toHaveLength(1);
+        expect(wrapper.vm.filteredPendingPayments[0].PaymentId).toBe(1);
+
+        // Search by VO Name
+        wrapper.vm.mobileSearchQuery = 'priya';
+        expect(wrapper.vm.filteredPendingPayments).toHaveLength(1);
+        expect(wrapper.vm.filteredPendingPayments[0].PaymentId).toBe(2);
+
+        // Search by VO Mobile
+        wrapper.vm.mobileSearchQuery = '9876543210';
+        expect(wrapper.vm.filteredPendingPayments).toHaveLength(1);
+        expect(wrapper.vm.filteredPendingPayments[0].PaymentId).toBe(1);
+
+        // Search by SO Name
+        wrapper.vm.mobileSearchQuery = 'vikram';
+        expect(wrapper.vm.filteredPendingPayments).toHaveLength(1);
+        expect(wrapper.vm.filteredPendingPayments[0].PaymentId).toBe(2);
+
+        // Search by SO Mobile
+        wrapper.vm.mobileSearchQuery = '9123456789';
+        expect(wrapper.vm.filteredPendingPayments).toHaveLength(1);
+        expect(wrapper.vm.filteredPendingPayments[0].PaymentId).toBe(1);
+    });
+
+    it('clearBookingIdSearch resets both desktop and mobile search', () => {
         wrapper = mountPage();
         wrapper.vm.bookingIdSearch = 'BK123';
+        wrapper.vm.mobileSearchQuery = 'BK123';
         wrapper.vm.clearBookingIdSearch();
         expect(wrapper.vm.bookingIdSearch).toBe('');
+        expect(wrapper.vm.mobileSearchQuery).toBe('');
     });
 
     it('openPaymentModal initializes amount and default remark', () => {
@@ -512,8 +567,8 @@ describe('PendingPaymentsPortal.vue', () => {
 
     it('filteredPendingPayments matches case insensitive search', () => {
         wrapper = mountPage();
-        wrapper.vm.searchBookingId('bk1001');
-        expect(wrapper.vm.filteredPendingPayments[0].BookingId).toBe('BK1001');
+        wrapper.vm.searchBookingId('site1001');
+        expect(wrapper.vm.filteredPendingPayments[0].PaymentId).toBe(1);
     });
 
     it('resolvedUpiId strips spaces and uppercases IFSC', () => {
