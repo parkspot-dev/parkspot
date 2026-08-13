@@ -38,7 +38,7 @@
                 </div>
             </template>
 
-            <div class="card-content">
+            <div v-if="!isLocked" class="card-content">
                 <p v-if="showForm" class="kyc-description">
                     Opens new tab to verify your identity, it
                     takes less than 2 minutes. Come back here once you're
@@ -84,7 +84,7 @@ import { Form as VeeForm } from 'vee-validate';
 import AtomIcon from '../atoms/AtomIcon.vue';
 import FormInput from '../global/FormInput.vue';
 import { identityKycFormSchema } from '@/validationSchemas';
-import { IdentityKycStatus } from '@/constant/enums';
+import { IdentityKycStatus, KYCStatus } from '@/constant/enums';
 
 const STATUS_META = {
     [IdentityKycStatus.NotVerified]: { label: 'Not verified' },
@@ -120,8 +120,9 @@ function onHeaderClick(event) {
     if (isLocked.value) event.stopPropagation();
 }
 
-// TODO: rename once the real user API field for this is confirmed.
-const isProfileVerified = computed(() => store.state.user.userProfile?.verified);
+const isProfileVerified = computed(
+    () => store.state.user.userProfile?.KYCStatus === KYCStatus.IDVerified,
+);
 
 const status = computed(() =>
     isProfileVerified.value ? IdentityKycStatus.Verified : store.state.identityKyc.status,
