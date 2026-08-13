@@ -51,7 +51,7 @@
                     v-if="showForm"
                     class="kyc-form"
                     :validation-schema="identityKycFormSchema"
-                    @submit="getVerified"
+                    @submit="handleVerifySubmit"
                 >
                     <FormInput
                         v-model="aadhaarNumber"
@@ -145,7 +145,7 @@ const buttonLabel = computed(() => {
     return 'Get Verified';
 });
 
-async function getVerified(values) {
+async function handleVerifySubmit(values) {
     const idNumber = (values.aadhaarNumber || '').replace(/\s+/g, ''); // remove formatted adhaar number group into 4-4-4
 
     let redirectUrl;
