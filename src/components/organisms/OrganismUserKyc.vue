@@ -121,7 +121,7 @@ function onHeaderClick(event) {
 }
 
 const isProfileVerified = computed(
-    () => store.state.user.userProfile?.KYCStatus === KYCStatus.IDVerified,
+    () => store.state.user.userProfile?.KYCStatus === KYCStatus.IDVerified || KYCStatus.Verified,
 );
 
 const status = computed(() =>
