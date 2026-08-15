@@ -1,10 +1,10 @@
 <template>
-    <div class="identity-kyc">
+    <div class="rc-kyc">
         <b-collapse
             v-model="isOpen"
-            class="identity-kyc-card"
+            class="rc-kyc-card"
             animation="slide"
-            aria-id="identity-kyc-content"
+            aria-id="rc-kyc-content"
         >
             <template #trigger="{ open }">
                 <div
@@ -13,18 +13,18 @@
                     role="button"
                     :tabindex="isLocked ? -1 : 0"
                     :aria-disabled="isLocked"
-                    aria-controls="identity-kyc-content"
+                    aria-controls="rc-kyc-content"
                     :aria-expanded="open"
                     @click="onHeaderClick"
                     @keydown.enter.space.prevent="onHeaderKeydown"
                 >
-                    <div class="icon-box" :class="status.toLowerCase()">
-                        <AtomIcon icon="shield-key-outline" size="is-small" />
+                    <div class="icon-box" :class="status">
+                        <AtomIcon icon="car-outline" size="is-small" />
                     </div>
 
                     <div class="title-line">
-                        <h2>Identity verification</h2>
-                        <span class="status-badge" :class="status.toLowerCase()">
+                        <h2>RC verification</h2>
+                        <span class="status-badge" :class="status">
                             {{ statusLabel }}
                         </span>
                     </div>
@@ -40,9 +40,7 @@
 
             <div v-if="!isLocked" class="card-content">
                 <p v-if="showForm" class="kyc-description">
-                    Opens new tab to verify your identity, it
-                    takes less than 2 minutes. Come back here once you're
-                    done.
+                    Enter your vehicle's registration number to verify ownership.
                 </p>
 
                 <p v-if="errorMessage" class="kyc-error">{{ errorMessage }}</p>
@@ -50,16 +48,15 @@
                 <VeeForm
                     v-if="showForm"
                     class="kyc-form"
-                    :validation-schema="identityKycFormSchema"
+                    :validation-schema="vehicleRcFormSchema"
                     @submit="handleVerifySubmit"
                 >
                     <FormInput
-                        v-model="aadhaarNumber"
-                        name="aadhaarNumber"
-                        label="Aadhaar number"
-                        placeholder="1234 5678 9012"
-                        maxlength="14"
-                        inputmode="numeric"
+                        v-model="vehicleNumber"
+                        name="vehicleNumber"
+                        label="Vehicle number"
+                        placeholder="KA01AB1234"
+                        maxlength="10"
                         :disabled="isBusy"
                     />
 
@@ -68,7 +65,7 @@
                         class="verify-button"
                         :disabled="isBusy"
                     >
-                        <AtomIcon icon="shield-key-outline" size="is-small" />
+                        <AtomIcon icon="car-outline" size="is-small" />
                         {{ buttonLabel }}
                     </button>
                 </VeeForm>
@@ -78,33 +75,29 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { Form as VeeForm } from 'vee-validate';
 import AtomIcon from '../atoms/AtomIcon.vue';
 import FormInput from '../global/FormInput.vue';
-import { identityKycFormSchema } from '@/validationSchemas';
-import { IdentityKycStatus, KYCStatus } from '@/constant/enums';
+import { vehicleRcFormSchema } from '@/validationSchemas';
+import { KYCStatus } from '@/constant/enums';
 
 const STATUS_META = {
-    [IdentityKycStatus.NotVerified]: { label: 'Not verified' },
-    [IdentityKycStatus.Pending]: { label: 'Pending' },
-    [IdentityKycStatus.Verified]: { label: 'Verified' },
-    [IdentityKycStatus.Failed]: { label: 'Failed' },
+    not_verified: { label: 'Not verified' },
+    pending: { label: 'Verifying…' },
+    verified: { label: 'Verified' },
+    failed: { label: 'Failed' },
 };
 
 const store = useStore();
-const aadhaarNumber = ref('');
+const vehicleNumber = ref('');
+const isSubmitting = ref(false);
+const submitFailed = ref(false);
 
-// Group into 4-4-4 as the user types, matching the "1234 5678 9012" placeholder.
-function formatAadhaarNumber(value) {
-    const digits = value.replace(/\D/g, '').slice(0, 12);
-    return digits.replace(/(\d{4})(?=\d)/g, '$1 ');
-}
-
-watch(aadhaarNumber, (value) => {
-    const formatted = formatAadhaarNumber(value);
-    if (formatted !== value) aadhaarNumber.value = formatted;
+watch(vehicleNumber, (value) => {
+    const upper = value.toUpperCase();
+    if (upper !== value) vehicleNumber.value = upper;
 });
 
 // Buefy's b-collapse only wires a click handler on the trigger — Enter/Space
@@ -120,105 +113,60 @@ function onHeaderClick(event) {
     if (isLocked.value) event.stopPropagation();
 }
 
-const isProfileVerified = computed(
-    () => store.state.user.userProfile?.KYCStatus === KYCStatus.IDVerified || KYCStatus.Verified,
-);
+const isProfileVerified = computed(() => {
+    const kycStatus = store.state.user.userProfile?.KYCStatus;
+    return kycStatus === KYCStatus.OwnershipVerified || kycStatus === KYCStatus.Verified;
+});
 
-const status = computed(() =>
-    isProfileVerified.value ? IdentityKycStatus.Verified : store.state.identityKyc.status,
-);
-const errorMessage = computed(() => store.state.identityKyc.errorMessage);
-const showForm = computed(() => status.value !== IdentityKycStatus.Verified);
-const isLocked = computed(() => status.value === IdentityKycStatus.Verified);
+// Synchronous call — no verification-id/polling state to persist, so the
+// only states are: already verified (from the profile), mid-submit,
+// failed last attempt, or not started.
+const status = computed(() => {
+    if (isProfileVerified.value) return 'verified';
+    if (isSubmitting.value) return 'pending';
+    if (submitFailed.value) return 'failed';
+    return 'not_verified';
+});
+
+const errorMessage = computed(() => store.state.vehicleRc.errorMessage);
+const showForm = computed(() => status.value !== 'verified');
+const isLocked = computed(() => status.value === 'verified');
 
 // Collapsed by default once verified — there's nothing left to act on.
-const isOpen = ref(status.value !== IdentityKycStatus.Verified);
+const isOpen = ref(status.value !== 'verified');
 
-const isBusy = computed(() => status.value === IdentityKycStatus.Pending);
+const isBusy = computed(() => isSubmitting.value);
 
-// status.value is always a valid IdentityKycStatus key, so no fallback.
 const statusLabel = computed(() => STATUS_META[status.value].label);
 
 const buttonLabel = computed(() => {
-    if (status.value === IdentityKycStatus.Pending) return 'Verifying…';
-    if (status.value === IdentityKycStatus.Failed) return 'Retry Verification';
+    if (isSubmitting.value) return 'Verifying…';
+    if (submitFailed.value) return 'Retry Verification';
     return 'Get Verified';
 });
 
 async function handleVerifySubmit(values) {
-    const idNumber = (values.aadhaarNumber || '').replace(/\s+/g, ''); // remove formatted adhaar number group into 4-4-4
-
-    let redirectUrl;
+    isSubmitting.value = true;
     try {
-        redirectUrl = await store.dispatch('identityKyc/initiateKyc', { idNumber });
+        await store.dispatch('vehicleRc/verifyRc', {
+            vehicleNumber: values.vehicleNumber,
+        });
+        submitFailed.value = false;
     } catch {
         // Error state already committed by the action.
-        return;
-    }
-
-    openVerificationTab(redirectUrl);
-}
-
-function openVerificationTab(url) {
-    // Null `opener` explicitly — 'noopener' as a window.open() feature is unreliable (e.g. Safari) and lets the opened page redirect this tab.
-    const win = window.open('', '_blank');
-
-    if (!win) {
-        // Popup blocked — fall back to a same-tab redirect.
-        window.location.href = url;
-        return;
-    }
-
-    win.opener = null;
-    win.location.href = url;
-
-    attachReturnListener();
-}
-
-// Check once when the user returns to this tab.
-let checkInFlight = false;
-
-async function handleReturnToTab() {
-    if (checkInFlight || status.value !== IdentityKycStatus.Pending) return;
-    if (!store.state.identityKyc.verificationId) return;
-
-    checkInFlight = true;
-    try {
-        await store.dispatch('identityKyc/checkKycStatus');
+        submitFailed.value = true;
     } finally {
-        checkInFlight = false;
+        isSubmitting.value = false;
     }
 }
-
-function onVisibilityChange() {
-    if (document.visibilityState === 'visible') handleReturnToTab();
-}
-
-function attachReturnListener() {
-    document.addEventListener('visibilitychange', onVisibilityChange);
-}
-
-onMounted(() => {
-    // Re-attach if we mounted mid-verification (e.g. after the same-tab fallback).
-    if (
-        status.value === IdentityKycStatus.Pending &&
-        store.state.identityKyc.verificationId
-    ) {
-        attachReturnListener();
-    }
-});
-
-onUnmounted(() => {
-    document.removeEventListener('visibilitychange', onVisibilityChange);
-});
 </script>
 
 <style lang="scss" scoped>
-.identity-kyc {
+.rc-kyc {
     margin-top: 32px;
 }
 
-.identity-kyc-card {
+.rc-kyc-card {
     border: 1px solid #e5e5ea;
     border-radius: var(--border-default);
     background: var(--parkspot-white);
@@ -348,7 +296,7 @@ onUnmounted(() => {
 .kyc-description {
     font-size: 14px;
     color: #6e6d7a;
-        padding: 16px 0 0px 0px;
+    padding: 16px 0 0px 0px;
 }
 
 .kyc-error {

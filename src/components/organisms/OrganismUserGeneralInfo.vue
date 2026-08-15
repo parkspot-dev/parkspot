@@ -5,6 +5,7 @@
             <h2>Please fill all the fields</h2>
         </div>
         <OrganismUserKyc v-if="userProfile?.Type" />
+        <OrganismUserRcVerification v-if="userProfile?.Type === 'VO'" />
         <VeeForm
             :validation-schema="editProfileFormSchema"
             class="form-container"
@@ -48,6 +49,7 @@ import { mapActions, mapMutations, mapState } from 'vuex';
 import FormInput from '../global/FormInput.vue';
 import RadioInput from '../global/RadioInput.vue';
 import OrganismUserKyc from './OrganismUserKyc.vue';
+import OrganismUserRcVerification from './OrganismUserRcVerification.vue';
 export default {
     name: 'OrganismUserGeneralInfo',
     components: {
@@ -55,6 +57,7 @@ export default {
         FormInput,
         RadioInput,
         OrganismUserKyc,
+        OrganismUserRcVerification,
     },
     data() {
         return {
