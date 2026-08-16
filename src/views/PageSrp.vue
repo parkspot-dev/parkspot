@@ -170,6 +170,9 @@ export default {
 
         flyToSrp() {
             this.$nextTick(() => {
+                if (!this.LocDetails?.lnglat) {
+                    return;
+                }
                 const coordinate = getCoordinate(
                     this.LocDetails.lnglat.toString(),
                 )
