@@ -221,10 +221,9 @@ class MayaApiService extends BaseApiService {
      * @param { any } error -  .
      */
     errorInterceptor(error) {
-        super.errorInterceptor(error);
         if (!error.response) {
-            // this case is handled in base interceptor.
-            return;
+            // network/timeout error, handled (and re-thrown) by base interceptor.
+            return super.errorInterceptor(error);
         }
         reportApiError(error.response.status, error);
         switch (error.response.status) {
