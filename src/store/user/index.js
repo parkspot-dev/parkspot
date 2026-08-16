@@ -500,13 +500,21 @@ if (typeof window !== 'undefined') {
             localStorage.setItem(PS_AUTH_KEY, token);
 
             await store.dispatch('user/getUserProfile');
-            await store.dispatch('app/getAgents');
 
             // GA4 user identity. `user.uid` is Firebase's internal ID (not
             // PII); role comes from the resolved profile. `city` is
             // intentionally omitted — the app has no reliable home-city
             // source (locName is a searched location, not the user's city).
             const currentUser = store.state?.user;
+
+            // /auth/user/agents is an internal CRM endpoint (search/booking
+            // portal only) — regular customers get a 401/403 from it, which
+            // now surfaces as a "session expired" alert right after a
+            // successful login. Only agents/admins need this data.
+            if (currentUser?.isAdmin || currentUser?.isAgent) {
+                await store.dispatch('app/getAgents');
+            }
+
             const userRole = currentUser?.isAdmin
                 ? 'admin'
                 : currentUser?.isAgent
