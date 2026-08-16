@@ -79,6 +79,15 @@ export default {
         this.getMapAccessToken().then(() => this.renderMap());
     },
 
+    unmounted() {
+        // Without this, re-mounting MapContainer into the same #map
+        // container (e.g. on pagination) leaks the previous Mapbox GL
+        // instance and triggers "map re-initialization into a non-empty
+        // container" warnings.
+        this.map?.remove();
+        this.map = null;
+    },
+
     methods: {
         ...mapMutations({
             updateMapConfig: 'map/update-map-config',
@@ -107,6 +116,13 @@ export default {
 
             // Create map
             this.map = new mapboxgl.Map(this.mapConfig);
+
+            // Missing sprite images (e.g. a style referencing an image that
+            // was never registered) otherwise spam the console; swallow
+            // them instead of letting them surface as warnings/errors.
+            this.map.on('styleimagemissing', (e) => {
+                console.warn(`Mapbox style image missing: ${e.id}`);
+            });
 
             // Create popup
             const popup = new mapboxgl.Popup({ offset: 25 }).setText(
