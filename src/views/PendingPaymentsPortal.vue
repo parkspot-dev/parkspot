@@ -345,7 +345,9 @@
                                 >
                                     <b-icon
                                         :icon="
-                                            isRemarkEditable ? 'check' : 'pencil'
+                                            isRemarkEditable
+                                                ? 'check'
+                                                : 'pencil'
                                         "
                                     ></b-icon>
                                 </button>
@@ -666,10 +668,6 @@ export default {
                     input.select();
                 }
             });
-        },
-
-        onRemarkInput(val) {
-            this.editableRemark = val;
         },
 
         searchBookingId(val) {
