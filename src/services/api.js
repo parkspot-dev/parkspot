@@ -1,5 +1,33 @@
 import axios from 'axios';
 import { auth } from '../firebase';
+import router from '../router';
+import store from '../store';
+import { getPtid } from '../utils/ptid';
+
+/**
+ * Report an API error to New Relic Browser, tagged with the identifiers
+ * needed to correlate it with a session/page. Expected outcomes (401/404)
+ * are logged as page actions (info-level) rather than noticed errors, so
+ * they don't inflate the app's error rate.
+ * @param { number } status - HTTP status of the failed request.
+ * @param { any } error - the axios error.
+ */
+function reportApiError(status, error) {
+    if (typeof window === 'undefined' || !window.newrelic) {
+        return;
+    }
+    const attributes = {
+        ptid: getPtid(),
+        session: store.state.user?.user?.uid || 'anonymous',
+        pageUrl: router.currentRoute?.value?.fullPath || '',
+        status,
+    };
+    if (status === 401 || status === 404) {
+        window.newrelic.addPageAction('ExpectedApiOutcome', attributes);
+    } else {
+        window.newrelic.noticeError(error, attributes);
+    }
+}
 
 // BaseApiService create http client with basic configurations and error handling.
 /** Class representing a BaseApiService. */
@@ -198,6 +226,7 @@ class MayaApiService extends BaseApiService {
             // this case is handled in base interceptor.
             return;
         }
+        reportApiError(error.response.status, error);
         switch (error.response.status) {
             case 401: // authentication error, logout the user
                 alert('Your session has expired. Please login and try again.');
