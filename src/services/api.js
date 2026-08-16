@@ -200,7 +200,13 @@ class MayaApiService extends BaseApiService {
         }
         switch (error.response.status) {
             case 401: // authentication error, logout the user
-                alert('Please login and try again.');
+                alert('Your session has expired. Please login and try again.');
+                break;
+
+            case 404: // requested spot/site does not exist or isn't supported
+                alert(
+                    'We couldn\'t find a parking spot for this search. Please try a different location.',
+                );
                 break;
 
             default:
