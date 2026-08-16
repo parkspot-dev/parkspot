@@ -164,6 +164,48 @@ describe('PageSrp.vue - Bangalore SRP View', () => {
         }));
     });
 
+    it('does not navigate or throw when no location has been selected', async () => {
+        store = createStore({
+            modules: {
+                map: {
+                    namespaced: true,
+                    state: {
+                        srpResults: MOCK_SPOTS,
+                        filteredSrpResults: MOCK_SPOTS,
+                    },
+                    getters: {
+                        getPaginateSrpResults: () => MOCK_SPOTS,
+                        getTotalPages: () => 5,
+                        getLocDetails: () => ({ locDetails: null, lnglat: null }),
+                    },
+                    actions,
+                    mutations,
+                },
+            },
+        });
+        wrapper = mount(PageSrp, {
+            global: {
+                plugins: [store],
+                stubs: stubComponents,
+                mocks: {
+                    $route: {
+                        name: 'srp',
+                        params: { location: 'Bangalore' },
+                        query: { latlng: MOCK_COORDINATE_STRING },
+                    },
+                    $router: { push: mockRouterPush, resolve: mockRouterResolve },
+                },
+                provide: { PAGE_TITLE: MOCK_PAGE_TITLE },
+            },
+        });
+        await flushPromises();
+        mockRouterPush.mockClear();
+
+        expect(() => wrapper.vm.flyToSrp()).not.toThrow();
+        await flushPromises();
+        expect(mockRouterPush).not.toHaveBeenCalled();
+    });
+
     it('opens spot details in a new window', async () => {
         wrapper = await mountComponent();
         wrapper.vm.spotDetails(101);

@@ -84,7 +84,9 @@ export default {
         // container (e.g. on pagination) leaks the previous Mapbox GL
         // instance and triggers "map re-initialization into a non-empty
         // container" warnings.
-        this.map?.remove();
+        if (typeof this.map?.remove === 'function') {
+            this.map.remove();
+        }
         this.map = null;
     },
 
