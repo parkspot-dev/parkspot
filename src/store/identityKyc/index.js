@@ -3,10 +3,6 @@ import { IdentityKycStatus, IDENTITY_KYC_AADHAAR_ID_TYPE } from '@/constant/enum
 
 const extractErrorMessage = (data, fallback) =>
     data?.DisplayMsg ||
-    data?.message ||
-    data?.Message ||
-    data?.error ||
-    data?.Error ||
     (typeof data === 'string' ? data : '') ||
     fallback;
 

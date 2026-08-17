@@ -4,7 +4,7 @@
             <h1>General Info</h1>
             <h2>Please fill all the fields</h2>
         </div>
-        <OrganismUserKyc v-if="userProfile?.Type" />
+        <OrganismUserKyc />
         <OrganismUserRcVerification v-if="userProfile?.Type === 'VO'" />
         <VeeForm
             :validation-schema="editProfileFormSchema"
