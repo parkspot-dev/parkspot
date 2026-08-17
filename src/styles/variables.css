@@ -24,6 +24,8 @@
 
     /* shades */
     --grey-shade: #a9a9a9;
+    --parkspot-border-grey: #e5e5ea;
+    --parkspot-muted-grey: #6e6d7a;
 
     /* border radius */
     --border-default: 9px;
