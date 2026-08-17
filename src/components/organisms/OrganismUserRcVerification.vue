@@ -163,7 +163,7 @@ async function handleVerifySubmit(values) {
 
 <style lang="scss" scoped>
 .rc-kyc {
-    margin-top: 32px;
+    margin-top: 20px;
 }
 
 .rc-kyc-card {
