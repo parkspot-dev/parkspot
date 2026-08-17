@@ -214,6 +214,14 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+// bg, text, border — used to derive both .icon-box and .status-badge palettes below.
+$status-colors: (
+    not_verified: (#faeeda, #854f0b, #ef9f27),
+    pending: (#e6f1fb, #185fa5, #378add),
+    failed: (#fcebeb, #a32d2d, #e24b4a),
+    verified: (#eaf3de, #3b6d11, #97c459),
+);
+
 .identity-kyc {
     margin-top: 32px;
 }
@@ -252,28 +260,12 @@ onUnmounted(() => {
     justify-content: center;
 
     // Match the status-badge palette so the icon reflects the same state.
-    &.not_verified {
-        background: #faeeda;
-        :deep(i::before) {
-            color: #854f0b;
-        }
-    }
-    &.pending {
-        background: #e6f1fb;
-        :deep(i::before) {
-            color: #185fa5;
-        }
-    }
-    &.failed {
-        background: #fcebeb;
-        :deep(i::before) {
-            color: #a32d2d;
-        }
-    }
-    &.verified {
-        background: #eaf3de;
-        :deep(i::before) {
-            color: #3b6d11;
+    @each $status, $colors in $status-colors {
+        &.#{$status} {
+            background: nth($colors, 1);
+            :deep(i::before) {
+                color: nth($colors, 2);
+            }
         }
     }
 }
@@ -323,25 +315,12 @@ onUnmounted(() => {
     border-radius: 999px;
     border: 1px solid transparent;
 
-    &.not_verified {
-        background: #faeeda;
-        color: #854f0b;
-        border-color: #ef9f27;
-    }
-    &.pending {
-        background: #e6f1fb;
-        color: #185fa5;
-        border-color: #378add;
-    }
-    &.failed {
-        background: #fcebeb;
-        color: #a32d2d;
-        border-color: #e24b4a;
-    }
-    &.verified {
-        background: #eaf3de;
-        color: #3b6d11;
-        border-color: #97c459;
+    @each $status, $colors in $status-colors {
+        &.#{$status} {
+            background: nth($colors, 1);
+            color: nth($colors, 2);
+            border-color: nth($colors, 3);
+        }
     }
 }
 
