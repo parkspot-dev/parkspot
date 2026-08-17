@@ -214,6 +214,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@use 'sass:list';
 // bg, text, border — used to derive both .icon-box and .status-badge palettes below.
 $status-colors: (
     not_verified: (#faeeda, #854f0b, #ef9f27),
@@ -227,7 +228,7 @@ $status-colors: (
 }
 
 .identity-kyc-card {
-    border: 1px solid #e5e5ea;
+    border: 1px solid var(--parkspot-border-grey);
     border-radius: var(--border-default);
     background: var(--parkspot-white);
 }
@@ -262,9 +263,9 @@ $status-colors: (
     // Match the status-badge palette so the icon reflects the same state.
     @each $status, $colors in $status-colors {
         &.#{$status} {
-            background: nth($colors, 1);
+            background: list.nth($colors, 1);
             :deep(i::before) {
-                color: nth($colors, 2);
+                color: list.nth($colors, 2);
             }
         }
     }
@@ -280,7 +281,7 @@ $status-colors: (
 .chevron {
     flex: 0 0 auto;
     margin-left: auto;
-    color: #6e6d7a;
+    color: var(--parkspot-muted-grey);
 
     // The mdi webfont sets its own font-size on the ::before glyph (not the
     // <i> element), so overriding font-size on <i> alone has no visible
@@ -317,16 +318,16 @@ $status-colors: (
 
     @each $status, $colors in $status-colors {
         &.#{$status} {
-            background: nth($colors, 1);
-            color: nth($colors, 2);
-            border-color: nth($colors, 3);
+            background: list.nth($colors, 1);
+            color: list.nth($colors, 2);
+            border-color: list.nth($colors, 3);
         }
     }
 }
 
 .kyc-description {
     font-size: 14px;
-    color: #6e6d7a;
+    color: var(--parkspot-muted-grey);
         padding: 16px 0 0px 0px;
 }
 
