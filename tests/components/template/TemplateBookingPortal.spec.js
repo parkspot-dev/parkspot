@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createStore } from 'vuex';
 import TemplateBookingPortal from '@/components/templates/TemplateBookingPortal.vue';
-import { PaymentStatus, KYCStatus } from '@/constant/enums';
+import { PaymentStatus, KYCStatus, BookingStatus } from '@/constant/enums';
 
 const bookingDetailsMock = {
     Booking: {
@@ -44,7 +44,7 @@ const paymentsMock = [
     },
 ];
 
-const createVuexStore = (isAdmin = true) =>
+const createVuexStore = (isAdmin = true, isAgent = false) =>
     createStore({
         modules: {
             app: {
@@ -83,6 +83,7 @@ const createVuexStore = (isAdmin = true) =>
                 namespaced: true,
                 state: () => ({
                     isAdmin,
+                    isAgent,
                 }),
                 actions: {
                     getUserProfile: vi.fn(),
@@ -91,8 +92,8 @@ const createVuexStore = (isAdmin = true) =>
         },
     });
 
-const factory = (isAdmin = true) => {
-    const store = createVuexStore(isAdmin);
+const factory = (isAdmin = true, isAgent = false) => {
+    const store = createVuexStore(isAdmin, isAgent);
     const wrapper = mount(TemplateBookingPortal, {
         global: {
             plugins: [store],
@@ -490,5 +491,95 @@ describe('TemplateBookingPortal.vue', () => {
 
         expect(kycLink.exists()).toBe(true);
         expect(kycLink.text()).toBe('View KYC');
+    });
+
+    it('applies is-not-set class when VOKYCStatus is NotSet', async () => {
+        store.state.bookingPortal.bookingDetails = {
+            ...bookingDetailsMock,
+            Booking: {
+                ...bookingDetailsMock.Booking,
+                VOKYCStatus: KYCStatus.NotSet,
+            },
+        };
+        await wrapper.vm.$nextTick();
+        const statusSpan = wrapper.find('span.kyc-status-text');
+        expect(statusSpan.classes()).toContain('is-not-set');
+    });
+
+    it('shows warning alert and blocks status change when Agent tries to change status to Confirmed, Payment Pending, or Visiting without verified KYC', async () => {
+        const { wrapper: agentWrapper } = factory(false, true);
+        agentWrapper.vm.editField = 'Booking Details';
+        agentWrapper.vm.currBookingDetails.Booking.VOKYCStatus =
+            KYCStatus.Pending;
+        agentWrapper.vm.currBookingDetails.Booking.Status =
+            BookingStatus.BookingPaymentPending;
+
+        await agentWrapper.vm.$nextTick();
+
+        agentWrapper.vm.saveField();
+
+        expect(agentWrapper.vm.$buefy.dialog.alert).toHaveBeenCalledWith(
+            expect.objectContaining({
+                message: 'First complete the KYC to change the status',
+                type: 'is-warning',
+            }),
+        );
+        expect(agentWrapper.vm.currBookingDetails.Booking.Status).toBe(1);
+    });
+
+    it('allows status change when Agent has verified KYC', async () => {
+        const { wrapper: agentWrapper } = factory(false, true);
+        agentWrapper.vm.editField = 'Booking Details';
+        agentWrapper.vm.currBookingDetails.Booking.VOKYCStatus =
+            KYCStatus.Verified;
+        agentWrapper.vm.currBookingDetails.Booking.Status =
+            BookingStatus.BookingConfirmed;
+
+        await agentWrapper.vm.$nextTick();
+
+        agentWrapper.vm.saveField();
+
+        expect(agentWrapper.emitted('update-booking-details')).toBeTruthy();
+    });
+
+    it('allows Agent to change status to Cancelled (2) or Schedule Visit (8) even without verified KYC', async () => {
+        const { wrapper: agentWrapper } = factory(false, true);
+        agentWrapper.vm.editField = 'Booking Details';
+        agentWrapper.vm.currBookingDetails.Booking.VOKYCStatus =
+            KYCStatus.Pending;
+        agentWrapper.vm.currBookingDetails.Booking.Status =
+            BookingStatus.BookingCancelled;
+
+        await agentWrapper.vm.$nextTick();
+
+        agentWrapper.vm.saveField();
+
+        expect(agentWrapper.emitted('update-booking-details')).toBeTruthy();
+    });
+
+    it('hides "Rent Due" for non-admin users but allows "Visiting"', () => {
+        const { wrapper: nonAdminWrapper } = factory(false, true);
+        const options = nonAdminWrapper.vm.availableBookingStatusOptions;
+        const hasRentDue = options.some(
+            (opt) => opt.value === BookingStatus.BookingRentDue,
+        );
+        const hasVisiting = options.some(
+            (opt) => opt.value === BookingStatus.BookingVisiting,
+        );
+        expect(hasRentDue).toBe(false);
+        expect(hasVisiting).toBe(true);
+    });
+
+    it('shows "Rent Due" and "Visiting" status options for Admin users', () => {
+        const { wrapper: adminWrapper } = factory(true, false);
+        const options = adminWrapper.vm.availableBookingStatusOptions;
+        const hasRentDue = options.some(
+            (opt) => opt.value === BookingStatus.BookingRentDue,
+        );
+        const hasVisiting = options.some(
+            (opt) => opt.value === BookingStatus.BookingVisiting,
+        );
+        expect(hasRentDue).toBe(true);
+        expect(hasVisiting).toBe(true);
     });
 });

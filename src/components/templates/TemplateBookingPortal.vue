@@ -98,15 +98,23 @@
                         >
                             <select v-model="currBookingDetails.Booking.Status">
                                 <option
-                                    v-for="(
-                                        label, index
-                                    ) in bookingStatusLabels"
-                                    :key="label"
-                                    :value="index"
+                                    v-for="option in availableBookingStatusOptions"
+                                    :key="option.value"
+                                    :value="option.value"
                                 >
-                                    {{ label }}
+                                    {{ option.label }}
                                 </option>
                             </select>
+                            <p
+                                v-if="
+                                    isAgentUser &&
+                                    !isKYCVerified &&
+                                    isKycRequiredStatus
+                                "
+                                class="kyc-warning-text"
+                            >
+                                First complete the KYC to change the status
+                            </p>
                         </div>
                         <p v-else>
                             {{
@@ -473,7 +481,18 @@
                             {{ currBookingDetails.Booking.EmailID }}
                         </p>
                         <p>
-                            <span class="kyc-status-text">
+                            <span
+                                class="kyc-status-text"
+                                :class="{
+                                    'is-not-set':
+                                        currBookingDetails.Booking
+                                            .VOKYCStatus === KYCStatus.NotSet ||
+                                        currBookingDetails.Booking
+                                            .VOKYCStatus ===
+                                            KYCStatus.NotVerified ||
+                                        !currBookingDetails.Booking.VOKYCStatus,
+                                }"
+                            >
                                 {{
                                     getKYCStatusLabel(
                                         currBookingDetails.Booking.VOKYCStatus,
@@ -614,6 +633,7 @@ import cloneDeep from 'lodash/cloneDeep.js';
 import { mapActions, mapState } from 'vuex';
 import RefundIcon from '/assets/refund.png';
 import {
+    BookingStatus,
     BookingStatusLabels,
     getBookingStatusLabel,
     getKYCStatusLabel,
@@ -625,6 +645,7 @@ import {
     PaymentPeriodicityLabels,
     PaymentStatus,
     PaymentTypeLabels,
+    UserType,
 } from '@/constant/enums';
 import AtomButton from '@/components/atoms/AtomButton.vue';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
@@ -677,8 +698,44 @@ export default {
             'successMessage',
             'updatedFields',
         ]),
-        ...mapState('user', ['isAdmin']),
+        ...mapState('user', ['isAdmin', 'isAgent', 'userProfile']),
         ...mapState('app', ['agents']),
+        isAgentUser() {
+            if (this.isAdmin) return false;
+            if (this.isAgent) return true;
+            return (
+                this.userProfile?.Type === UserType.Agent ||
+                this.userProfile?.Type === 4 ||
+                this.userProfile?.Type === 'Agent'
+            );
+        },
+        isKYCVerified() {
+            const kycStatus = this.currBookingDetails?.Booking?.VOKYCStatus;
+            return kycStatus === KYCStatus.Verified;
+        },
+        isKycRequiredStatus() {
+            const kycRequiredStatuses = [
+                BookingStatus.BookingConfirmed,
+                BookingStatus.BookingPaymentPending,
+                BookingStatus.BookingVisiting,
+            ];
+            return kycRequiredStatuses.includes(
+                Number(this.currBookingDetails?.Booking?.Status),
+            );
+        },
+        availableBookingStatusOptions() {
+            return this.bookingStatusLabels
+                .map((label, index) => ({ label, value: index }))
+                .filter((option) => {
+                    if (
+                        !this.isAdmin &&
+                        option.value === BookingStatus.BookingRentDue
+                    ) {
+                        return false;
+                    }
+                    return true;
+                });
+        },
         sdpURL() {
             return this.$router.resolve({
                 name: 'spot-detail',
@@ -845,6 +902,34 @@ export default {
             this.rentValidationError = '';
             this.soChargesValidationError = '';
 
+            if (this.editField === 'Booking Details') {
+                const initialStatus = Number(
+                    this.initialActiveBookingDetails?.Status,
+                );
+                const newStatus = Number(
+                    this.currBookingDetails?.Booking?.Status,
+                );
+                const kycRequiredStatuses = [
+                    BookingStatus.BookingConfirmed,
+                    BookingStatus.BookingPaymentPending,
+                    BookingStatus.BookingVisiting,
+                ];
+
+                if (
+                    this.isAgentUser &&
+                    initialStatus !== undefined &&
+                    newStatus !== initialStatus &&
+                    !this.isKYCVerified &&
+                    kycRequiredStatuses.includes(newStatus)
+                ) {
+                    this.alertWarning(
+                        'First complete the KYC to change the status',
+                    );
+                    this.currBookingDetails.Booking.Status = initialStatus;
+                    return;
+                }
+            }
+
             if (this.editField === 'Rent Details') {
                 const rent = this.currBookingDetails?.Booking?.Rent;
                 const soCharges = this.currBookingDetails?.Booking?.BaseAmount;
@@ -966,6 +1051,17 @@ export default {
                 message: msg,
                 title: 'Error',
                 type: 'is-danger',
+            });
+        },
+        alertWarning(msg) {
+            this.$buefy.dialog.alert({
+                ariaModal: true,
+                ariaRole: 'alertdialog',
+                hasIcon: true,
+                icon: 'alert',
+                message: msg,
+                title: 'Warning',
+                type: 'is-warning',
             });
         },
         alertSuccess(msg) {
@@ -1262,9 +1358,20 @@ export default {
     font-weight: 600;
     margin-right: 12px;
     line-height: 1.2;
+
+    &.is-not-set {
+        color: var(--parkspot-red);
+    }
 }
 
 .kyc-link {
     text-decoration: none;
+}
+
+.kyc-warning-text {
+    color: var(--parkspot-red);
+    font-size: 0.85rem;
+    margin-top: 4px;
+    font-weight: 600;
 }
 </style>
