@@ -663,6 +663,7 @@ export default {
                 const input =
                     this.$refs.remarkInput?.$el?.querySelector('input');
                 if (input) {
+                    // Safety check to ensure the input immediately allows focus and typing without any component render delay
                     input.removeAttribute('readonly');
                     input.focus();
                     input.select();
