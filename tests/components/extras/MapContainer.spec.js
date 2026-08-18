@@ -10,6 +10,7 @@ vi.mock('mapbox-gl', () => {
     const mapMock = {
         on: vi.fn(),
         flyTo: vi.fn(),
+        remove: vi.fn(),
     };
 
     const markerMock = {
@@ -158,5 +159,21 @@ describe('MapContainer.vue', () => {
         });
 
         expect(popup).toBeDefined();
+    });
+
+    it('registers a styleimagemissing handler on the map', () => {
+        expect(wrapper.vm.map.on).toHaveBeenCalledWith(
+            'styleimagemissing',
+            expect.any(Function),
+        );
+    });
+
+    it('removes the map instance on unmount', () => {
+        const map = wrapper.vm.map;
+
+        wrapper.unmount();
+        wrapper = null; // avoid double-unmount in afterEach
+
+        expect(map.remove).toHaveBeenCalled();
     });
 });

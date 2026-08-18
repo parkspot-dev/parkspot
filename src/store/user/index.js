@@ -208,7 +208,7 @@ const mutations = {
 };
 
 const actions = {
-    async loginWithGoogle({ commit, dispatch }) {
+    async loginWithGoogle({ commit, dispatch, state }) {
         const gProvider = new GoogleAuthProvider();
 
         try {
@@ -219,7 +219,12 @@ const actions = {
             commit('update-user', user);
             commit('update-login-modal', false);
             await dispatch('authenticateWithMaya');
-            await dispatch('app/getAgents', null, { root: true });
+            // /auth/user/agents is an internal CRM endpoint — see the
+            // onAuthStateChanged fix above for why this must not fire for
+            // regular customers.
+            if (state.isAdmin || state.isAgent) {
+                await dispatch('app/getAgents', null, { root: true });
+            }
         } catch (error) {
             // Handle Errors here.
             const errorCode = error.code;
@@ -500,13 +505,13 @@ if (typeof window !== 'undefined') {
             localStorage.setItem(PS_AUTH_KEY, token);
 
             await store.dispatch('user/getUserProfile');
-            await store.dispatch('app/getAgents');
 
             // GA4 user identity. `user.uid` is Firebase's internal ID (not
             // PII); role comes from the resolved profile. `city` is
             // intentionally omitted — the app has no reliable home-city
             // source (locName is a searched location, not the user's city).
             const currentUser = store.state?.user;
+
             const userRole = currentUser?.isAdmin
                 ? 'admin'
                 : currentUser?.isAgent
