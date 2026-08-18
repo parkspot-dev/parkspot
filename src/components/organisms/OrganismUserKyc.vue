@@ -120,8 +120,8 @@ function onHeaderClick(event) {
     if (isLocked.value) event.stopPropagation();
 }
 
-const isProfileVerified = computed(
-    () => store.state.user.userProfile?.KYCStatus === KYCStatus.IDVerified || KYCStatus.Verified,
+const isProfileVerified = computed(() =>
+    [KYCStatus.IDVerified, KYCStatus.Verified].includes(store.state.user.userProfile?.KYCStatus),
 );
 
 const status = computed(() =>
