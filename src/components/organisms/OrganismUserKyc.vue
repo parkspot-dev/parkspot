@@ -255,7 +255,7 @@ $status-colors: (
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    background: #f1ede4;
+    background: var(--parkspot-white)
     display: flex;
     align-items: center;
     justify-content: center;
