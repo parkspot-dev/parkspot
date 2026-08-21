@@ -81,10 +81,24 @@
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { Form as VeeForm } from 'vee-validate';
+<<<<<<< HEAD
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
 import FormInput from '@/components/global/FormInput.vue';
 import { identityKycFormSchema } from '@/validationSchemas';
 import { IdentityKycStatus, KYCStatus, getIdentityKycStatusLabel } from '@/constant/enums';
+=======
+import AtomIcon from '../atoms/AtomIcon.vue';
+import FormInput from '../global/FormInput.vue';
+import { identityKycFormSchema } from '@/validationSchemas';
+import { IdentityKycStatus, KYCStatus } from '@/constant/enums';
+
+const STATUS_META = {
+    [IdentityKycStatus.NotVerified]: { label: 'Not verified' },
+    [IdentityKycStatus.Pending]: { label: 'Pending' },
+    [IdentityKycStatus.Verified]: { label: 'Verified' },
+    [IdentityKycStatus.Failed]: { label: 'Failed' },
+};
+>>>>>>> 82511869 (refactor: move UserKyc to module folder, fix build-breaking scss bug, reuse tag colors)
 
 const store = useStore();
 const aadhaarNumber = ref('');
@@ -129,7 +143,12 @@ const isOpen = ref(status.value !== IdentityKycStatus.Verified);
 
 const isBusy = computed(() => status.value === IdentityKycStatus.Pending);
 
+<<<<<<< HEAD
 const statusLabel = computed(() => getIdentityKycStatusLabel(status.value));
+=======
+// status.value is always a valid IdentityKycStatus key, so no fallback.
+const statusLabel = computed(() => STATUS_META[status.value].label);
+>>>>>>> 82511869 (refactor: move UserKyc to module folder, fix build-breaking scss bug, reuse tag colors)
 
 const buttonLabel = computed(() => {
     if (status.value === IdentityKycStatus.Pending) return 'Verifying…';
