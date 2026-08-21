@@ -217,10 +217,10 @@ onUnmounted(() => {
 @use 'sass:list';
 // bg, text, border — used to derive both .icon-box and .status-badge palettes below.
 $status-colors: (
-    not_verified: (#faeeda, #854f0b, #ef9f27),
-    pending: (#e6f1fb, #185fa5, #378add),
-    failed: (#fcebeb, #a32d2d, #e24b4a),
-    verified: (#eaf3de, #3b6d11, #97c459),
+    not_verified: (var(--parkspot-status-not-verified-bg), var(--parkspot-status-not-verified-text), var(--parkspot-status-not-verified-border)),
+    pending: (var(--parkspot-status-pending-bg), var(--parkspot-status-pending-text), var(--parkspot-status-pending-border)),
+    failed: (var(--parkspot-status-failed-bg), var(--parkspot-status-failed-text), var(--parkspot-status-failed-border)),
+    verified: (var(--parkspot-status-verified-bg), var(--parkspot-status-verified-text), var(--parkspot-status-verified-border)),
 );
 
 .identity-kyc {
@@ -255,7 +255,7 @@ $status-colors: (
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    background: var(--parkspot-white)
+    background: var(--parkspot-white);
     display: flex;
     align-items: center;
     justify-content: center;
