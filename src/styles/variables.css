@@ -24,6 +24,8 @@
 
     /* shades */
     --grey-shade: #a9a9a9;
+    --parkspot-border-grey: #e5e5ea;
+    --parkspot-muted-grey: #6e6d7a;
 
     /* border radius */
     --border-default: 9px;
@@ -42,4 +44,18 @@
 
     /* background colors */
     --bg-color-tertiary: #171c37;
+
+    /* status colors: bg, text, border per state; derived from existing tag colors */
+    --parkspot-status-not-verified-bg: #fffaed;
+    --parkspot-status-not-verified-text: var(--parkspot-black);
+    --parkspot-status-not-verified-border: #ffeebf;
+    --parkspot-status-pending-bg: #d9edf3;
+    --parkspot-status-pending-text: var(--secondary-color);
+    --parkspot-status-pending-border: #73bcd2;
+    --parkspot-status-failed-bg: #fde3e8;
+    --parkspot-status-failed-text: var(--parkspot-red);
+    --parkspot-status-failed-border: #f799ac;
+    --parkspot-status-verified-bg: #b5fca1;
+    --parkspot-status-verified-text: #008000;
+    --parkspot-status-verified-border: #73b973;
 }
