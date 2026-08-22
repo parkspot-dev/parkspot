@@ -256,14 +256,64 @@ describe('TemplateSearchPortal.vue', () => {
         expect(wrapper.vm.oldComments).toBe('old comment');
     });
 
-    it('onCommentUpdate appends comment and emits updateRequest', async () => {
-        const row = { ID: 1, Comments: '' };
+    describe('onCommentUpdate', () => {
+        beforeEach(() => {
+            vi.useFakeTimers();
+            vi.setSystemTime(new Date('2024-03-05T10:00:00Z'));
+        });
 
-        await wrapper.vm.onCommentUpdate(row, '', 'New comment');
-        await flushPromises();
-        const emitted = wrapper.emitted('updateRequest');
-        expect(emitted).toBeTruthy();
-        expect(row.Comments).toContain('New comment');
+        afterEach(() => {
+            vi.useRealTimers();
+        });
+
+        it('appends new comment to old comment with date suffix and emits updateRequest', async () => {
+            const row = { ID: 1, Comments: '' };
+
+            await wrapper.vm.onCommentUpdate(row, 'Old comment', 'New comment');
+            await flushPromises();
+
+            expect(row.Comments).toBe('Old comment\nNew comment [5/03]');
+            const emitted = wrapper.emitted('updateRequest');
+            expect(emitted).toBeTruthy();
+            expect(emitted.at(-1)[0]).toBe(row);
+        });
+
+        it('pads single-digit month with a leading zero', async () => {
+            const row = { ID: 2, Comments: '' };
+
+            await wrapper.vm.onCommentUpdate(row, '', 'Comment');
+            await flushPromises();
+
+            expect(row.Comments).toBe('\nComment [5/03]');
+        });
+
+        it('does not emit or mutate row when new comment is empty', async () => {
+            const row = { ID: 3, Comments: 'unchanged' };
+
+            await wrapper.vm.onCommentUpdate(row, 'Old comment', '');
+            await flushPromises();
+
+            expect(row.Comments).toBe('unchanged');
+            expect(wrapper.emitted('updateRequest')).toBeFalsy();
+        });
+
+        it('resets popup, newComment, oldComments and per-row draft after update', async () => {
+            const row = { ID: 4, Comments: '' };
+            await wrapper.setData({
+                isOpen: true,
+                newComment: 'draft',
+                oldComments: 'Old comment',
+                newCommentMap: { 4: 'draft comment' },
+            });
+
+            await wrapper.vm.onCommentUpdate(row, 'Old comment', 'New comment');
+            await flushPromises();
+
+            expect(wrapper.vm.isOpen).toBe(false);
+            expect(wrapper.vm.newComment).toBe('');
+            expect(wrapper.vm.oldComments).toBe('');
+            expect(wrapper.vm.newCommentMap[row.ID]).toBe('');
+        });
     });
 
     it('opens connect popup with selected row', async () => {

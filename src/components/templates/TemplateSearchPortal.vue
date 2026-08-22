@@ -476,7 +476,7 @@
                             onCommentUpdate(
                                 selectedRow,
                                 selectedRow.Comments,
-                                `${selectedRow.Comments}\n${tag}`,
+                                tag, // avoid double-prepending oldComment
                             )
                         "
                     >
