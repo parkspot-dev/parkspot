@@ -128,112 +128,120 @@
                     <div class="spot-detail-owner-body">
                         <div>
                             <table>
-                                <tr v-if="spotDetails.ApartmentName">
-                                    <td>Apartment</td>
-                                    <td>{{ spotDetails.ApartmentName }}</td>
-                                </tr>
-                                <tr v-if="ownerInfoDetails.FullName">
-                                    <td>FullName</td>
-                                    <td>{{ ownerInfoDetails.FullName }}</td>
-                                </tr>
-                                <tr v-if="ownerInfoDetails.Mobile">
-                                    <td>Mobile</td>
-                                    <td>{{ ownerInfoDetails.Mobile }}</td>
-                                </tr>
-                                <tr v-if="ownerInfoDetails.AlternateMobile">
-                                    <td>Alternate Mobile</td>
-                                    <td>
-                                        {{ ownerInfoDetails.AlternateMobile }}
-                                    </td>
-                                </tr>
-                                <tr v-if="ownerInfoDetails.City">
-                                    <td>City</td>
-                                    <td>{{ ownerInfoDetails.City }}</td>
-                                </tr>
-                                <tr v-if="ownerInfoDetails.EmailID">
-                                    <td>EmailID</td>
-                                    <td>{{ ownerInfoDetails.EmailID }}</td>
-                                </tr>
-                                <tr v-if="ownerInfoDetails.KYCStatus">
-                                    <td>KYCStatus</td>
-                                    <td>
-                                        {{
-                                            getKYCStatus(
-                                                ownerInfoDetails.KYCStatus,
-                                            )
-                                        }}
-                                    </td>
-                                </tr>
-                                <tr v-if="spotDetails.UpdatedAt">
-                                    <td>Last Call Date</td>
-                                    <td>
-                                        <AtomDatePicker
-                                            :assigned-date="
-                                                spotDetails.LastCallDate
-                                            "
-                                            :size="'is-small'"
-                                            @changed="
-                                                (date) =>
-                                                    changeLastCallDate(date)
-                                            "
-                                        >
-                                        </AtomDatePicker>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Remark</td>
-                                    <td>
-                                        <AtomTextarea
-                                            v-model="spotDetails.Remark"
-                                            :row-no="2"
-                                            @changed="changeRemark"
-                                        />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Account</td>
-                                    <td class="account-cell">
-                                        <span class="account-text">
-                                            {{ paymentDetails || 'Not Set' }}
-                                        </span>
-
-                                        <span
-                                            class="edit-icon"
-                                            :class="{
-                                                disabled:
-                                                    editField !== null &&
-                                                    editField !==
-                                                        'Account Information',
-                                            }"
-                                            @click="
-                                                enableEdit(
-                                                    'Account Information',
+                                <tbody>
+                                    <tr v-if="spotDetails.ApartmentName">
+                                        <td>Apartment</td>
+                                        <td>{{ spotDetails.ApartmentName }}</td>
+                                    </tr>
+                                    <tr v-if="ownerInfoDetails.FullName">
+                                        <td>FullName</td>
+                                        <td>{{ ownerInfoDetails.FullName }}</td>
+                                    </tr>
+                                    <tr v-if="ownerInfoDetails.Mobile">
+                                        <td>Mobile</td>
+                                        <td>{{ ownerInfoDetails.Mobile }}</td>
+                                    </tr>
+                                    <tr v-if="ownerInfoDetails.AlternateMobile">
+                                        <td>Alternate Mobile</td>
+                                        <td>
+                                            {{
+                                                ownerInfoDetails.AlternateMobile
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="ownerInfoDetails.City">
+                                        <td>City</td>
+                                        <td>{{ ownerInfoDetails.City }}</td>
+                                    </tr>
+                                    <tr v-if="ownerInfoDetails.EmailID">
+                                        <td>EmailID</td>
+                                        <td>{{ ownerInfoDetails.EmailID }}</td>
+                                    </tr>
+                                    <tr v-if="ownerInfoDetails.KYCStatus">
+                                        <td>KYCStatus</td>
+                                        <td>
+                                            {{
+                                                getKYCStatus(
+                                                    ownerInfoDetails.KYCStatus,
                                                 )
-                                            "
-                                        >
-                                            <AtomIcon :icon="'pencil'" />
-                                        </span>
-                                    </td>
-                                </tr>
-
-                                <tr v-if="ownerInfoDetails.UserName">
-                                    <td>UserName</td>
-                                    <td>{{ ownerInfoDetails.UserName }}</td>
-                                </tr>
-                                <tr v-if="isAdmin">
-                                    <td>Image Uploads</td>
-                                    <td>
-                                        <div class="form-field">
-                                            <ImageUpload
-                                                v-model:images="updatedImages"
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="spotDetails.UpdatedAt">
+                                        <td>Last Call Date</td>
+                                        <td>
+                                            <AtomDatePicker
+                                                :assigned-date="
+                                                    spotDetails.LastCallDate
+                                                "
+                                                :size="'is-small'"
+                                                @changed="
+                                                    (date) =>
+                                                        changeLastCallDate(date)
+                                                "
+                                            >
+                                            </AtomDatePicker>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Remark</td>
+                                        <td>
+                                            <AtomTextarea
+                                                v-model="spotDetails.Remark"
+                                                :row-no="2"
+                                                @changed="changeRemark"
                                             />
-                                        </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Account</td>
+                                        <td class="account-cell">
+                                            <span class="account-text">
+                                                {{
+                                                    paymentDetails || 'Not Set'
+                                                }}
+                                            </span>
 
-                                        <AtomButton @click="saveImages">
-                                            Save Images
-                                        </AtomButton>
-                                    </td>
-                                </tr>
+                                            <span
+                                                class="edit-icon"
+                                                :class="{
+                                                    disabled:
+                                                        editField !== null &&
+                                                        editField !==
+                                                            'Account Information',
+                                                }"
+                                                @click="
+                                                    enableEdit(
+                                                        'Account Information',
+                                                    )
+                                                "
+                                            >
+                                                <AtomIcon :icon="'pencil'" />
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                    <tr v-if="ownerInfoDetails.UserName">
+                                        <td>UserName</td>
+                                        <td>{{ ownerInfoDetails.UserName }}</td>
+                                    </tr>
+                                    <tr v-if="isAdmin">
+                                        <td>Image Uploads</td>
+                                        <td>
+                                            <div class="form-field">
+                                                <ImageUpload
+                                                    v-model:images="
+                                                        updatedImages
+                                                    "
+                                                />
+                                            </div>
+
+                                            <AtomButton @click="saveImages">
+                                                Save Images
+                                            </AtomButton>
+                                        </td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                         <div class="btn-group">
@@ -837,20 +845,27 @@ export default {
             });
         },
         confirmDeleteSpot() {
-            this.$buefy.dialog.confirm({
+            this.$buefy.dialog.prompt({
                 title: 'Delete Spot',
-                message: 'Are you sure you want to delete this spot?',
+                message: 'Please specify the reason for deleting this site',
+                size: 'is-medium',
+                inputAttrs: {
+                    type: 'textarea',
+                    rows: 3,
+                    required: true,
+                    placeholder: 'Enter reason for deleting this site...',
+                },
                 confirmText: 'Delete',
                 type: 'is-danger',
                 cancelType: 'is-primary',
                 hasIcon: true,
                 icon: 'alert-circle',
-                ariaRole: 'alertdialog',
+                ariaRole: 'dialog',
                 ariaModal: true,
-                onConfirm: async () => {
+                onConfirm: async (reason) => {
                     try {
                         this.showLoader = true;
-                        await this.deleteSpot();
+                        await this.deleteSpot(reason);
                         this.showLoader = false;
                         this.$buefy.toast.open({
                             message: 'Spot deleted successfully',
@@ -1236,7 +1251,24 @@ h2 {
     margin-top: 6px;
 }
 
+.delete-spot-modal {
+    width: 560px;
+    max-width: 90vw;
+
+    .delete-prompt-message {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 12px;
+        color: black;
+    }
+}
+
 .dialog {
+    .modal-card {
+        width: 560px;
+        max-width: 90vw;
+    }
+
     .modal-card-foot {
         .button:first-child {
             background-color: var(--primary-color) !important;
@@ -1253,7 +1285,18 @@ h2 {
         .button.is-danger {
             border-radius: var(--border-default, 8px) !important;
             font-weight: 500 !important;
+            background-color: var(--parkspot-red) !important;
+            color: var(--parkspot-white) !important;
+            transition:
+                background-color 0.2s ease,
+                opacity 0.2s ease;
         }
+    }
+
+    &:has(textarea:placeholder-shown) .modal-card-foot .button.is-danger,
+    &:has(input:placeholder-shown) .modal-card-foot .button.is-danger {
+        background-color: var(--grey-shade) !important;
+        opacity: 0.8;
     }
 }
 </style>

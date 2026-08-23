@@ -307,7 +307,7 @@ describe('TemplateSpotDetail.vue — booking funnel generate_lead', () => {
             wrapper.unmount();
         });
 
-        it('confirmDeleteSpot opens $buefy.dialog.confirm with danger and primary cancel options', async () => {
+        it('confirmDeleteSpot opens $buefy.dialog.prompt asking for deletion reason', async () => {
             const deleteSpotMock = vi.fn().mockResolvedValue({});
             const store = buildStore({
                 isAdmin: true,
@@ -315,26 +315,30 @@ describe('TemplateSpotDetail.vue — booking funnel generate_lead', () => {
             });
             const wrapper = mountTemplate(store);
 
-            let confirmOptions;
-            wrapper.vm.$buefy.dialog.confirm = vi.fn((opts) => {
-                confirmOptions = opts;
+            let promptOptions;
+            wrapper.vm.$buefy.dialog.prompt = vi.fn((opts) => {
+                promptOptions = opts;
             });
 
             await wrapper.vm.confirmDeleteSpot();
 
-            expect(wrapper.vm.$buefy.dialog.confirm).toHaveBeenCalled();
-            expect(confirmOptions).toMatchObject({
+            expect(wrapper.vm.$buefy.dialog.prompt).toHaveBeenCalled();
+            expect(promptOptions).toMatchObject({
                 title: 'Delete Spot',
+                message: 'Please specify the reason for deleting this site',
+                size: 'is-medium',
+                inputAttrs: {
+                    type: 'textarea',
+                },
                 type: 'is-danger',
                 cancelType: 'is-primary',
             });
-            expect(confirmOptions.message).toBe(
-                'Are you sure you want to delete this spot?',
-            );
 
-            // Trigger onConfirm handler
-            await confirmOptions.onConfirm();
-            expect(deleteSpotMock).toHaveBeenCalled();
+            await promptOptions.onConfirm('Duplicate spot listing');
+            expect(deleteSpotMock).toHaveBeenCalledWith(
+                expect.anything(),
+                'Duplicate spot listing',
+            );
             expect(wrapper.vm.$router.push).toHaveBeenCalledWith('/');
 
             wrapper.unmount();
