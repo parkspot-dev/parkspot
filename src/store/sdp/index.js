@@ -227,15 +227,15 @@ const actions = {
     },
 
     async deleteSpot({ state }, reason) {
+        if (!reason || !reason.trim()) {
+            throw new Error('Reason is required');
+        }
         if (!state.spotDetails || !state.spotDetails.SiteID) {
             throw new Error('No spot details found to delete');
         }
         const siteId = encodeURIComponent(state.spotDetails.SiteID);
         const siteName = encodeURIComponent(state.spotDetails.Name);
-        let url = `/owner/site/${siteId}?site-name=${siteName}`;
-        if (reason) {
-            url += `&reason=${encodeURIComponent(reason)}`;
-        }
+        const url = `/owner/site/${siteId}?site-name=${siteName}&reason=${encodeURIComponent(reason)}`;
         const res = await mayaClient.delete(url);
         if (res && res.DisplayMsg) {
             throw new Error(res.DisplayMsg);
