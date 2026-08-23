@@ -852,6 +852,8 @@ export default {
                 inputAttrs: {
                     type: 'textarea',
                     rows: 3,
+                    required: true,
+                    placeholder: 'Enter reason for deleting this site...',
                 },
                 confirmText: 'Delete',
                 type: 'is-danger',
@@ -1249,6 +1251,18 @@ h2 {
     margin-top: 6px;
 }
 
+.delete-spot-modal {
+    width: 560px;
+    max-width: 90vw;
+
+    .delete-prompt-message {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 12px;
+        color: black;
+    }
+}
+
 .dialog {
     .modal-card {
         width: 560px;
@@ -1271,7 +1285,18 @@ h2 {
         .button.is-danger {
             border-radius: var(--border-default, 8px) !important;
             font-weight: 500 !important;
+            background-color: var(--parkspot-red) !important;
+            color: var(--parkspot-white) !important;
+            transition:
+                background-color 0.2s ease,
+                opacity 0.2s ease;
         }
+    }
+
+    &:has(textarea:placeholder-shown) .modal-card-foot .button.is-danger,
+    &:has(input:placeholder-shown) .modal-card-foot .button.is-danger {
+        background-color: var(--grey-shade) !important;
+        opacity: 0.8;
     }
 }
 </style>
