@@ -231,6 +231,25 @@ describe('Vuex - spot module', () => {
                 expect(res).toEqual(mockResponse);
             });
 
+            it('calls mayaClient.delete with reason in query params when reason is provided', async () => {
+                store.state.spot.spotDetails = {
+                    SiteID: 'SITE_100',
+                    Name: 'Indiranagar Spot #1',
+                };
+                const mockResponse = { Success: true };
+                mayaClient.delete.mockResolvedValue(mockResponse);
+
+                const res = await store.dispatch(
+                    'spot/deleteSpot',
+                    'Owner requested deletion',
+                );
+
+                expect(mayaClient.delete).toHaveBeenCalledWith(
+                    '/owner/site/SITE_100?site-name=Indiranagar%20Spot%20%231&reason=Owner%20requested%20deletion',
+                );
+                expect(res).toEqual(mockResponse);
+            });
+
             it('throws error if response contains DisplayMsg', async () => {
                 store.state.spot.spotDetails = {
                     SiteID: 'SITE_100',
