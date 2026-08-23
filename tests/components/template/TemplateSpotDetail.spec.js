@@ -105,11 +105,16 @@ describe('TemplateSpotDetail.vue', () => {
         });
     };
 
-    const createAdminStore = (isAdmin) =>
+    const createAdminStore = (isAdmin, actionsOverride = {}) =>
         createStore({
             modules: {
                 sdp: {
                     namespaced: true,
+                    actions: {
+                        getSpotDetails: vi.fn().mockResolvedValue(),
+                        deleteSpot: vi.fn().mockResolvedValue(),
+                        ...actionsOverride,
+                    },
                     state: () => ({
                         images: ['img1.jpg'],
                         thumbnail: ['thumb1.jpg'],
@@ -304,8 +309,7 @@ describe('TemplateSpotDetail.vue', () => {
 
     it('confirmDeleteSpot opens $buefy.dialog.prompt asking for deletion reason with required input', async () => {
         const deleteSpotMock = vi.fn().mockResolvedValue({});
-        actions.deleteSpot = deleteSpotMock;
-        store = createAdminStore(true);
+        store = createAdminStore(true, { deleteSpot: deleteSpotMock });
         wrapper = mountComponent();
         wrapper.vm.$router = { push: vi.fn() };
         let promptOptions;
