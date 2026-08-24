@@ -329,6 +329,7 @@ describe('TemplateSpotDetail.vue — booking funnel generate_lead', () => {
                 size: 'is-medium',
                 inputAttrs: {
                     type: 'textarea',
+                    placeholder: 'Enter reason for deleting this site',
                 },
                 type: 'is-danger',
                 cancelType: 'is-primary',
