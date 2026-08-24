@@ -135,7 +135,7 @@ const isLocked = computed(() => status.value === VehicleRcStatus.Verified);
 // Collapsed by default once verified — there's nothing left to act on.
 const isOpen = ref(status.value !== VehicleRcStatus.Verified);
 
-const isBusy = computed(() => isSubmitting.value);
+const isBusy = computed(() => status.value === VehicleRcStatus.Pending);
 
 const statusLabel = computed(() => STATUS_META[status.value].label);
 
