@@ -160,6 +160,13 @@ export const IdentityKycStatus = Object.freeze({
 // backend contract.
 export const IDENTITY_KYC_AADHAAR_ID_TYPE = 1;
 
+export const VehicleRcStatus = Object.freeze({
+    NotVerified: 'NOT_VERIFIED',
+    Pending: 'PENDING',
+    Verified: 'VERIFIED',
+    Failed: 'FAILED',
+});
+
 export const BookingStatus = Object.freeze({
     // BookingInitiated => fired tentative, SO not confirmed yet.
     BookingInitiated: 0, // tentative
