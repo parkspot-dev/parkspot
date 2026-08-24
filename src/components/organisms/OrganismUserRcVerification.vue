@@ -18,13 +18,13 @@
                     @click="onHeaderClick"
                     @keydown.enter.space.prevent="onHeaderKeydown"
                 >
-                    <div class="icon-box" :class="status">
+                    <div class="icon-box" :class="status.toLowerCase()">
                         <AtomIcon icon="car-outline" size="is-small" />
                     </div>
 
                     <div class="title-line">
                         <h2>RC verification</h2>
-                        <span class="status-badge" :class="status">
+                        <span class="status-badge" :class="status.toLowerCase()">
                             {{ statusLabel }}
                         </span>
                     </div>
@@ -81,13 +81,13 @@ import { Form as VeeForm } from 'vee-validate';
 import AtomIcon from '../atoms/AtomIcon.vue';
 import FormInput from '../global/FormInput.vue';
 import { vehicleRcFormSchema } from '@/validationSchemas';
-import { KYCStatus } from '@/constant/enums';
+import { KYCStatus, VehicleRcStatus } from '@/constant/enums';
 
 const STATUS_META = {
-    not_verified: { label: 'Not verified' },
-    pending: { label: 'Verifying…' },
-    verified: { label: 'Verified' },
-    failed: { label: 'Failed' },
+    [VehicleRcStatus.NotVerified]: { label: 'Not verified' },
+    [VehicleRcStatus.Pending]: { label: 'Verifying…' },
+    [VehicleRcStatus.Verified]: { label: 'Verified' },
+    [VehicleRcStatus.Failed]: { label: 'Failed' },
 };
 
 const store = useStore();
@@ -122,18 +122,18 @@ const isProfileVerified = computed(() => {
 // only states are: already verified (from the profile), mid-submit,
 // failed last attempt, or not started.
 const status = computed(() => {
-    if (isProfileVerified.value) return 'verified';
-    if (isSubmitting.value) return 'pending';
-    if (submitFailed.value) return 'failed';
-    return 'not_verified';
+    if (isProfileVerified.value) return VehicleRcStatus.Verified;
+    if (isSubmitting.value) return VehicleRcStatus.Pending;
+    if (submitFailed.value) return VehicleRcStatus.Failed;
+    return VehicleRcStatus.NotVerified;
 });
 
 const errorMessage = computed(() => store.state.vehicleRc.errorMessage);
-const showForm = computed(() => status.value !== 'verified');
-const isLocked = computed(() => status.value === 'verified');
+const showForm = computed(() => status.value !== VehicleRcStatus.Verified);
+const isLocked = computed(() => status.value === VehicleRcStatus.Verified);
 
 // Collapsed by default once verified — there's nothing left to act on.
-const isOpen = ref(status.value !== 'verified');
+const isOpen = ref(status.value !== VehicleRcStatus.Verified);
 
 const isBusy = computed(() => isSubmitting.value);
 
@@ -165,10 +165,10 @@ async function handleVerifySubmit(values) {
 @use 'sass:list';
 // bg, text, border — used to derive both .icon-box and .status-badge palettes below.
 $status-colors: (
-    not_verified: (#faeeda, #854f0b, #ef9f27),
-    pending: (#e6f1fb, #185fa5, #378add),
-    failed: (#fcebeb, #a32d2d, #e24b4a),
-    verified: (#eaf3de, #3b6d11, #97c459),
+    not_verified: (var(--parkspot-status-not-verified-bg), var(--parkspot-status-not-verified-text), var(--parkspot-status-not-verified-border)),
+    pending: (var(--parkspot-status-pending-bg), var(--parkspot-status-pending-text), var(--parkspot-status-pending-border)),
+    failed: (var(--parkspot-status-failed-bg), var(--parkspot-status-failed-text), var(--parkspot-status-failed-border)),
+    verified: (var(--parkspot-status-verified-bg), var(--parkspot-status-verified-text), var(--parkspot-status-verified-border)),
 );
 
 .rc-kyc {
@@ -203,7 +203,7 @@ $status-colors: (
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    background: #f1ede4;
+    background: var(--parkspot-white);
     display: flex;
     align-items: center;
     justify-content: center;
