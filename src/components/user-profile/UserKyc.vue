@@ -120,8 +120,8 @@ function onHeaderClick(event) {
     if (isLocked.value) event.stopPropagation();
 }
 
-const isProfileVerified = computed(
-    () => store.state.user.userProfile?.KYCStatus === KYCStatus.IDVerified || KYCStatus.Verified,
+const isProfileVerified = computed(() =>
+    [KYCStatus.IDVerified, KYCStatus.Verified].includes(store.state.user.userProfile?.KYCStatus),
 );
 
 const status = computed(() =>
@@ -214,12 +214,21 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@use 'sass:list';
+// bg, text, border — used to derive both .icon-box and .status-badge palettes below.
+$status-colors: (
+    not_verified: (var(--parkspot-status-not-verified-bg), var(--parkspot-status-not-verified-text), var(--parkspot-status-not-verified-border)),
+    pending: (var(--parkspot-status-pending-bg), var(--parkspot-status-pending-text), var(--parkspot-status-pending-border)),
+    failed: (var(--parkspot-status-failed-bg), var(--parkspot-status-failed-text), var(--parkspot-status-failed-border)),
+    verified: (var(--parkspot-status-verified-bg), var(--parkspot-status-verified-text), var(--parkspot-status-verified-border)),
+);
+
 .identity-kyc {
     margin-top: 32px;
 }
 
 .identity-kyc-card {
-    border: 1px solid #e5e5ea;
+    border: 1px solid var(--parkspot-border-grey);
     border-radius: var(--border-default);
     background: var(--parkspot-white);
 }
@@ -246,34 +255,18 @@ onUnmounted(() => {
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    background: #f1ede4;
+    background: var(--parkspot-white);
     display: flex;
     align-items: center;
     justify-content: center;
 
     // Match the status-badge palette so the icon reflects the same state.
-    &.not_verified {
-        background: #faeeda;
-        :deep(i::before) {
-            color: #854f0b;
-        }
-    }
-    &.pending {
-        background: #e6f1fb;
-        :deep(i::before) {
-            color: #185fa5;
-        }
-    }
-    &.failed {
-        background: #fcebeb;
-        :deep(i::before) {
-            color: #a32d2d;
-        }
-    }
-    &.verified {
-        background: #eaf3de;
-        :deep(i::before) {
-            color: #3b6d11;
+    @each $status, $colors in $status-colors {
+        &.#{$status} {
+            background: list.nth($colors, 1);
+            :deep(i::before) {
+                color: list.nth($colors, 2);
+            }
         }
     }
 }
@@ -288,7 +281,7 @@ onUnmounted(() => {
 .chevron {
     flex: 0 0 auto;
     margin-left: auto;
-    color: #6e6d7a;
+    color: var(--parkspot-muted-grey);
 
     // The mdi webfont sets its own font-size on the ::before glyph (not the
     // <i> element), so overriding font-size on <i> alone has no visible
@@ -323,31 +316,18 @@ onUnmounted(() => {
     border-radius: 999px;
     border: 1px solid transparent;
 
-    &.not_verified {
-        background: #faeeda;
-        color: #854f0b;
-        border-color: #ef9f27;
-    }
-    &.pending {
-        background: #e6f1fb;
-        color: #185fa5;
-        border-color: #378add;
-    }
-    &.failed {
-        background: #fcebeb;
-        color: #a32d2d;
-        border-color: #e24b4a;
-    }
-    &.verified {
-        background: #eaf3de;
-        color: #3b6d11;
-        border-color: #97c459;
+    @each $status, $colors in $status-colors {
+        &.#{$status} {
+            background: list.nth($colors, 1);
+            color: list.nth($colors, 2);
+            border-color: list.nth($colors, 3);
+        }
     }
 }
 
 .kyc-description {
     font-size: 14px;
-    color: #6e6d7a;
+    color: var(--parkspot-muted-grey);
         padding: 16px 0 0px 0px;
 }
 

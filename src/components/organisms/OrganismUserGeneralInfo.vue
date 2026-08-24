@@ -4,8 +4,8 @@
             <h1>General Info</h1>
             <h2>Please fill all the fields</h2>
         </div>
-        <OrganismUserKyc v-if="userProfile?.Type" />
-        <OrganismUserRcVerification v-if="userProfile?.Type === 'VO'" />
+        <UserRcVerification v-if="userProfile?.Type === 'VO'" />
+        <UserKyc />
         <VeeForm
             :validation-schema="editProfileFormSchema"
             class="form-container"
@@ -48,16 +48,16 @@ import { Form as VeeForm } from 'vee-validate';
 import { mapActions, mapMutations, mapState } from 'vuex';
 import FormInput from '../global/FormInput.vue';
 import RadioInput from '../global/RadioInput.vue';
-import OrganismUserKyc from './OrganismUserKyc.vue';
-import OrganismUserRcVerification from './OrganismUserRcVerification.vue';
+import UserRcVerification from '../user-profile/UserRcVerification.vue';
+import UserKyc from '../user-profile/UserKyc.vue';
 export default {
     name: 'OrganismUserGeneralInfo',
     components: {
         VeeForm,
         FormInput,
         RadioInput,
-        OrganismUserKyc,
-        OrganismUserRcVerification,
+        UserRcVerification,
+        UserKyc,
     },
     data() {
         return {
