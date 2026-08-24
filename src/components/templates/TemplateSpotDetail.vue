@@ -853,7 +853,15 @@ export default {
                     type: 'textarea',
                     rows: 3,
                     required: true,
-                    placeholder: 'Enter reason for deleting this site...',
+                    placeholder: 'Enter reason for deleting this site',
+                    onInvalid: (e) => {
+                        e.target.setCustomValidity(
+                            'Please enter a reason for deleting this site',
+                        );
+                    },
+                    onInput: (e) => {
+                        e.target.setCustomValidity('');
+                    },
                 },
                 confirmText: 'Delete',
                 type: 'is-danger',

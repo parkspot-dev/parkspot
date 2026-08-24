@@ -332,6 +332,7 @@ describe('TemplateSpotDetail.vue', () => {
             inputAttrs: {
                 type: 'textarea',
                 required: true,
+                placeholder: 'Enter reason for deleting this site',
             },
             type: 'is-danger',
             cancelType: 'is-primary',
