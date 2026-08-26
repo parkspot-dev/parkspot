@@ -35,14 +35,15 @@ describe('MayaApiService errorInterceptor', () => {
         message: 'boom',
     });
 
-    it('shows a session-expired message for 401 and logs it as an expected page action', () => {
-        expect(() => mayaClient.errorInterceptor(makeError(401))).toThrow();
+    it('shows a session-expired message for 401 and notices a real error', () => {
+        const error = makeError(401);
+        expect(() => mayaClient.errorInterceptor(error)).toThrow();
 
         expect(alertSpy).toHaveBeenCalledWith(
             expect.stringContaining('session has expired'),
         );
-        expect(window.newrelic.addPageAction).toHaveBeenCalledWith(
-            'ExpectedApiOutcome',
+        expect(window.newrelic.noticeError).toHaveBeenCalledWith(
+            error,
             expect.objectContaining({
                 ptid: 'ptid-abc',
                 session: 'user-123',
@@ -50,20 +51,34 @@ describe('MayaApiService errorInterceptor', () => {
                 status: 401,
             }),
         );
-        expect(window.newrelic.noticeError).not.toHaveBeenCalled();
+        expect(window.newrelic.addPageAction).not.toHaveBeenCalled();
     });
 
-    it('shows a not-found message for 404 and logs it as an expected page action', () => {
-        expect(() => mayaClient.errorInterceptor(makeError(404))).toThrow();
+    it('shows a not-found message for 404 and notices a real error', () => {
+        const error = makeError(404);
+        expect(() => mayaClient.errorInterceptor(error)).toThrow();
 
         expect(alertSpy).toHaveBeenCalledWith(
             expect.stringContaining("couldn't find a parking spot"),
         );
-        expect(window.newrelic.addPageAction).toHaveBeenCalledWith(
-            'ExpectedApiOutcome',
+        expect(window.newrelic.noticeError).toHaveBeenCalledWith(
+            error,
             expect.objectContaining({ status: 404 }),
         );
-        expect(window.newrelic.noticeError).not.toHaveBeenCalled();
+        expect(window.newrelic.addPageAction).not.toHaveBeenCalled();
+    });
+
+    it('prefers Maya\'s DisplayMsg over the hardcoded 404 copy when present', () => {
+        const error = {
+            response: {
+                status: 404,
+                data: { DisplayMsg: 'No sites match that search.' },
+            },
+            message: 'boom',
+        };
+        expect(() => mayaClient.errorInterceptor(error)).toThrow();
+
+        expect(alertSpy).toHaveBeenCalledWith('No sites match that search.');
     });
 
     it('shows the generic fallback and notices a real error for other statuses', () => {
