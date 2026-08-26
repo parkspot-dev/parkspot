@@ -6,9 +6,7 @@ import { getPtid } from '../utils/ptid';
 
 /**
  * Report an API error to New Relic Browser, tagged with the identifiers
- * needed to correlate it with a session/page. Expected outcomes (401/404)
- * are logged as page actions (info-level) rather than noticed errors, so
- * they don't inflate the app's error rate.
+ * needed to correlate it with a session/page.
  * @param { number } status - HTTP status of the failed request.
  * @param { any } error - the axios error.
  */
@@ -22,11 +20,7 @@ function reportApiError(status, error) {
         pageUrl: router.currentRoute?.value?.fullPath || '',
         status,
     };
-    if (status === 401 || status === 404) {
-        window.newrelic.addPageAction('ExpectedApiOutcome', attributes);
-    } else {
-        window.newrelic.noticeError(error, attributes);
-    }
+    window.newrelic.noticeError(error, attributes);
 }
 
 // BaseApiService create http client with basic configurations and error handling.
@@ -233,7 +227,8 @@ class MayaApiService extends BaseApiService {
 
             case 404: // requested spot/site does not exist or isn't supported
                 alert(
-                    'We couldn\'t find a parking spot for this search. Please try a different location.',
+                    error.response.data?.DisplayMsg ||
+                        'We couldn\'t find a parking spot for this search. Please try a different location.',
                 );
                 break;
 
