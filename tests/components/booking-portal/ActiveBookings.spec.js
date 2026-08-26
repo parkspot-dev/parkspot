@@ -51,6 +51,11 @@ const stubs = {
     BField: {
         template: '<div class="b-field"><slot /></div>',
     },
+    BRadioButton: {
+        props: ['modelValue', 'nativeValue', 'value'],
+        template:
+            '<button class="b-radio-button" :data-value="nativeValue || value" @click="$emit(\'update:modelValue\', nativeValue || value)"><slot /></button>',
+    },
 };
 
 const factory = (props = {}) =>
@@ -204,5 +209,12 @@ describe('ActiveBookings.vue', () => {
             wrapper.vm.mobileSearchQuery = 'something';
             expect(() => wrapper.vm.filteredActiveBookings).not.toThrow();
         });
+    });
+
+    it('emits type-change when selectedBookingType is changed', async () => {
+        wrapper = factory({ bookingType: 'active' });
+        wrapper.vm.selectedBookingType = 'upcoming';
+        expect(wrapper.emitted('type-change')).toBeTruthy();
+        expect(wrapper.emitted('type-change')[0]).toEqual(['upcoming']);
     });
 });

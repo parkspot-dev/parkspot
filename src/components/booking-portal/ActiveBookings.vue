@@ -1,5 +1,23 @@
 <template>
     <div class="root">
+        <div class="status-toggle-wrapper">
+            <b-field class="is-flex is-justify-content-flex-end">
+                <b-radio-button
+                    v-model="selectedBookingType"
+                    native-value="active"
+                    type="is-primary"
+                >
+                    <span>Active</span>
+                </b-radio-button>
+                <b-radio-button
+                    v-model="selectedBookingType"
+                    native-value="upcoming"
+                    type="is-primary"
+                >
+                    <span>Upcoming</span>
+                </b-radio-button>
+            </b-field>
+        </div>
         <div class="mobile-search-wrapper">
             <b-field>
                 <b-input
@@ -164,13 +182,26 @@ export default {
             type: Array,
             default: () => [],
         },
+        bookingType: {
+            type: String,
+            default: 'active',
+        },
     },
+    emits: ['type-change'],
     data() {
         return {
             mobileSearchQuery: '',
         };
     },
     computed: {
+        selectedBookingType: {
+            get() {
+                return this.bookingType;
+            },
+            set(val) {
+                this.$emit('type-change', val);
+            },
+        },
         filteredActiveBookings() {
             if (!this.mobileSearchQuery) {
                 return this.activeBookings;
@@ -234,6 +265,18 @@ export default {
 <style lang="scss" scoped>
 .root {
     padding: 16px;
+}
+.status-toggle-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+
+    :deep(.b-radio-button.button),
+    :deep(.button) {
+        font-weight: 600;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
 .mobile-search-wrapper {
     display: none;
