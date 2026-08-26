@@ -163,4 +163,57 @@ describe('BookingPortal Store', () => {
             'Refund was initiated successfully',
         );
     });
+
+    it('set-active-booking-type mutation updates activeBookingType state', () => {
+        mutations['set-active-booking-type'](state, 'upcoming');
+        expect(state.activeBookingType).toBe('upcoming');
+    });
+
+    it('getActiveBooking fetches active bookings from /internal/active-bookings', async () => {
+        const mockResponse = [{ ID: 1, Status: 1 }];
+        mayaClient.get.mockResolvedValue(mockResponse);
+
+        await actions.getActiveBooking({ commit, state }, true);
+
+        expect(mayaClient.get).toHaveBeenCalledWith(
+            '/internal/active-bookings',
+        );
+        expect(commit).toHaveBeenCalledWith(
+            'set-active-bookings',
+            mockResponse,
+        );
+        expect(commit).toHaveBeenCalledWith(
+            'set-active-booking-type',
+            'active',
+        );
+    });
+
+    it('getUpcomingBooking fetches upcoming bookings from /internal/bookings?status=upcoming', async () => {
+        const mockResponse = [{ ID: 2, Status: 0 }];
+        mayaClient.get.mockResolvedValue(mockResponse);
+
+        await actions.getUpcomingBooking({ commit });
+
+        expect(mayaClient.get).toHaveBeenCalledWith(
+            '/internal/bookings?status=upcoming',
+        );
+        expect(commit).toHaveBeenCalledWith(
+            'set-active-bookings',
+            mockResponse,
+        );
+        expect(commit).toHaveBeenCalledWith(
+            'set-active-booking-type',
+            'upcoming',
+        );
+    });
+
+    it('getBookingsByStatus dispatches getUpcomingBooking when status is upcoming', async () => {
+        await actions.getBookingsByStatus({ dispatch }, 'upcoming');
+        expect(dispatch).toHaveBeenCalledWith('getUpcomingBooking');
+    });
+
+    it('getBookingsByStatus dispatches getActiveBooking when status is active', async () => {
+        await actions.getBookingsByStatus({ dispatch }, 'active');
+        expect(dispatch).toHaveBeenCalledWith('getActiveBooking', true);
+    });
 });
