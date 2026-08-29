@@ -188,6 +188,7 @@ const actions = {
         ) {
             return;
         }
+        commit('set-active-booking-type', 'active');
         commit('set-loading', true);
         const res = await mayaClient.get('/internal/active-bookings');
         if (res?.DisplayMsg) {
@@ -197,13 +198,13 @@ const actions = {
                 'set-active-bookings',
                 Array.isArray(res) ? res : res?.Bookings || res?.bookings || [],
             );
-            commit('set-active-booking-type', 'active');
         }
         commit('set-loading', false);
     },
 
     async getUpcomingBooking({ commit }) {
         commit('reset-global-status');
+        commit('set-active-booking-type', 'upcoming');
         commit('set-loading', true);
         const res = await mayaClient.get('/internal/bookings?status=upcoming');
         if (res?.DisplayMsg) {
@@ -213,7 +214,6 @@ const actions = {
                 ? res
                 : res?.Bookings || res?.bookings || [];
             commit('set-active-bookings', bookingsList);
-            commit('set-active-booking-type', 'upcoming');
         }
         commit('set-loading', false);
     },

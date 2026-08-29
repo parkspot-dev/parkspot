@@ -3,16 +3,18 @@
         <div class="status-toggle-wrapper">
             <b-field class="is-flex is-justify-content-flex-end">
                 <b-radio-button
-                    v-model="selectedBookingType"
+                    :model-value="bookingType"
                     native-value="active"
                     type="is-primary"
+                    @update:model-value="onTypeClick"
                 >
                     <span>Active</span>
                 </b-radio-button>
                 <b-radio-button
-                    v-model="selectedBookingType"
+                    :model-value="bookingType"
                     native-value="upcoming"
                     type="is-primary"
+                    @update:model-value="onTypeClick"
                 >
                     <span>Upcoming</span>
                 </b-radio-button>
@@ -194,14 +196,6 @@ export default {
         };
     },
     computed: {
-        selectedBookingType: {
-            get() {
-                return this.bookingType;
-            },
-            set(val) {
-                this.$emit('type-change', val);
-            },
-        },
         filteredActiveBookings() {
             if (!this.mobileSearchQuery) {
                 return this.activeBookings;
@@ -236,6 +230,11 @@ export default {
         },
     },
     methods: {
+        onTypeClick(val) {
+            if (val && val !== this.bookingType) {
+                this.$emit('type-change', val);
+            }
+        },
         sdpURL(siteId) {
             return this.$router.resolve({
                 name: 'spot-detail',
