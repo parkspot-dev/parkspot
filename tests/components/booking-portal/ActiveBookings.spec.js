@@ -211,9 +211,9 @@ describe('ActiveBookings.vue', () => {
         });
     });
 
-    it('emits type-change when selectedBookingType is changed', async () => {
+    it('emits type-change when onTypeClick is called with a new status', async () => {
         wrapper = factory({ bookingType: 'active' });
-        wrapper.vm.selectedBookingType = 'upcoming';
+        wrapper.vm.onTypeClick('upcoming');
         expect(wrapper.emitted('type-change')).toBeTruthy();
         expect(wrapper.emitted('type-change')[0]).toEqual(['upcoming']);
     });

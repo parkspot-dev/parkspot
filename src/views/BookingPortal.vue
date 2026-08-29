@@ -59,17 +59,9 @@ export default {
         ]),
     },
     watch: {
-        'hasError'(error) {
+        hasError(error) {
             if (error) {
                 this.alertError(this.errorMessage);
-            }
-        },
-        '$route.query.status'(newStatus) {
-            if (!this.$route.query.bookingId) {
-                const status = newStatus || 'active';
-                if (status !== this.activeBookingType) {
-                    this.getBookingsByStatus(status);
-                }
             }
         },
     },
@@ -100,7 +92,7 @@ export default {
             'updateSearchText',
             'resetBookingDetails',
         ]),
-        async onBookingTypeChange(type) {
+        onBookingTypeChange(type) {
             if (type === this.activeBookingType) return;
             const query = { ...this.$route.query };
             if (type === 'upcoming') {
@@ -112,7 +104,6 @@ export default {
                 path: this.$route.path,
                 query,
             });
-            await this.getBookingsByStatus(type);
         },
         searchBooking(bookingId) {
             this.resetBookingDetails();
@@ -137,8 +128,6 @@ export default {
                     name: 'booking-portal',
                     query,
                 });
-                const status = query.status || 'active';
-                await this.getBookingsByStatus(status);
             }
         },
         alertError(msg) {
