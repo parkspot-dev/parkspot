@@ -4,6 +4,8 @@
             <h1>General Info</h1>
             <h2>Please fill all the fields</h2>
         </div>
+        <UserRcVerification v-if="userProfile?.Type === 'VO'" />
+        <UserKyc />
         <VeeForm
             :validation-schema="editProfileFormSchema"
             class="form-container"
@@ -46,12 +48,16 @@ import { Form as VeeForm } from 'vee-validate';
 import { mapActions, mapMutations, mapState } from 'vuex';
 import FormInput from '../global/FormInput.vue';
 import RadioInput from '../global/RadioInput.vue';
+import UserRcVerification from '../user-profile/UserRcVerification.vue';
+import UserKyc from '../user-profile/UserKyc.vue';
 export default {
     name: 'OrganismUserGeneralInfo',
     components: {
         VeeForm,
         FormInput,
         RadioInput,
+        UserRcVerification,
+        UserKyc,
     },
     data() {
         return {
@@ -61,7 +67,7 @@ export default {
                 'I am a vehicle owner looking for a parking spot to rent',
             ],
             userType: 'VO',
-            getUserType: false
+            getUserType: false,
         };
     },
     computed: {
@@ -80,7 +86,7 @@ export default {
         } else {
             this.userType = this.userTypeData[1];
         }
-        this.getUserType = true
+        this.getUserType = true;
     },
     methods: {
         ...mapMutations('user', {
