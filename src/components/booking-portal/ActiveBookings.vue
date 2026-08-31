@@ -67,7 +67,7 @@
                 label="VO Name"
                 searchable
                 sortable
-                width="168"
+                width="200"
             >
                 <div>
                     {{ props.row.Name }}
@@ -95,7 +95,7 @@
                 label="SO Name"
                 searchable
                 sortable
-                width="112"
+                width="140"
             >
                 <div>
                     {{ props.row.SOContactDetails.FullName }}
@@ -122,6 +122,7 @@
                 field="SiteID"
                 label="SiteID"
                 sortable
+                width="110"
             >
                 <div>
                     <a :href="sdpURL(props.row.SiteID)" target="_blank">
@@ -138,7 +139,7 @@
                 field="Status"
                 label="Status"
                 sortable
-                width="100"
+                width="180"
             >
                 <div>
                     {{ getBookingStatusLabel(props.row.Status) }}
@@ -163,7 +164,7 @@
                 field="PaymentPeriod"
                 label="Periodicity"
                 sortable
-                width="112"
+                width="85"
             >
                 <div>
                     {{ getPaymentPeriodicityLabel(props.row.PaymentPeriod) }}
