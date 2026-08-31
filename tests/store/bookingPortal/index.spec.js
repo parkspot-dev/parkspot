@@ -216,4 +216,91 @@ describe('BookingPortal Store', () => {
         await actions.getBookingsByStatus({ dispatch }, 'active');
         expect(dispatch).toHaveBeenCalledWith('getActiveBooking', true);
     });
+
+    it('refreshPaymentStatus returns early if paymentId is 0 or handles API error', async () => {
+        await actions.refreshPaymentStatus({ commit, dispatch, state }, 0);
+        expect(mayaClient.get).not.toHaveBeenCalled();
+
+        mayaClient.get.mockResolvedValueOnce({
+            DisplayMsg: 'Status error',
+            ErrorMsg: 'Failed',
+        });
+        await actions.refreshPaymentStatus({ commit, dispatch, state }, 55);
+        expect(commit).toHaveBeenCalledWith(
+            'set-error',
+            'Status error ( Failed )',
+        );
+    });
+
+    it('updateBookingDetails commits error on API failure', async () => {
+        mayaClient.post.mockResolvedValue({
+            DisplayMsg: 'Update error',
+            ErrorMsg: 'Failed',
+        });
+
+        await actions.updateBookingDetails(
+            { commit, dispatch, state },
+            { ID: 5 },
+        );
+
+        expect(commit).toHaveBeenCalledWith(
+            'set-error',
+            'Update error ( Failed )',
+        );
+    });
+
+    it('changePaymentType commits error on API failure', async () => {
+        mayaClient.patch.mockResolvedValue({
+            DisplayMsg: 'Patch error',
+            ErrorMsg: 'Failed',
+        });
+
+        await actions.changePaymentType(
+            { commit },
+            { paymentID: 5, paymentType: 1 },
+        );
+
+        expect(commit).toHaveBeenCalledWith(
+            'set-error',
+            'Patch error ( Failed )',
+        );
+    });
+
+    it('createRefund commits error on API failure', async () => {
+        mayaClient.post.mockResolvedValue({
+            DisplayMsg: 'Refund error',
+            ErrorMsg: 'Failed',
+        });
+
+        await actions.createRefund({ commit }, { PaymentID: 5 });
+
+        expect(commit).toHaveBeenCalledWith(
+            'set-error',
+            'Refund error ( Failed )',
+        );
+    });
+
+    it('createContactLead posts payload and handles error', async () => {
+        const payload = { Name: 'Test' };
+        mayaClient.post.mockResolvedValueOnce({ Success: true });
+        const res = await actions.createContactLead({ commit }, payload);
+        expect(res).toEqual({ Success: true });
+
+        mayaClient.post.mockResolvedValueOnce({ DisplayMsg: 'Lead error' });
+        await expect(
+            actions.createContactLead({ commit }, payload),
+        ).rejects.toThrow('Lead error');
+    });
+
+    it('createTentativeBooking posts payload and handles error', async () => {
+        const payload = { SpotID: 'S1' };
+        mayaClient.post.mockResolvedValueOnce({ Success: true });
+        const res = await actions.createTentativeBooking({ commit }, payload);
+        expect(res).toEqual({ Success: true });
+
+        mayaClient.post.mockResolvedValueOnce({ DisplayMsg: 'Booking error' });
+        await expect(
+            actions.createTentativeBooking({ commit }, payload),
+        ).rejects.toThrow('Booking error');
+    });
 });
