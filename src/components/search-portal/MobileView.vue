@@ -82,7 +82,14 @@
                     </div>
 
                     <div class="status-section">
-                        <p><b>Agent:</b> {{ row.Agent }}</p>
+                        <p>
+                            <b>Agent:</b>
+                            {{
+                                formatAgentName
+                                    ? formatAgentName(row.Agent)
+                                    : row.Agent
+                            }}
+                        </p>
                         <AtomSelectInput
                             v-if="isAdmin"
                             v-model="row.Agent"
@@ -90,13 +97,26 @@
                             size="is-small"
                             @change="$emit('agent-update', row, $event)"
                         />
-                        <button
-                            v-else
-                            class="btn"
-                            @click="$emit('agent-update', row, agentList[0].id)"
-                        >
-                            Assign to me
-                        </button>
+                        <template v-else>
+                            <AtomTooltip
+                                v-if="isAssignDisabled"
+                                class="assign-agent-tooltip"
+                                label="Please complete 7 registered requests to assign more"
+                            >
+                                <button class="btn assign-agent-btn" disabled>
+                                    Assign to me
+                                </button>
+                            </AtomTooltip>
+                            <button
+                                v-else
+                                class="btn assign-agent-btn"
+                                @click="
+                                    $emit('agent-update', row, agentList[0].id)
+                                "
+                            >
+                                Assign to me
+                            </button>
+                        </template>
                     </div>
 
                     <div class="status-section">
@@ -156,6 +176,7 @@ import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import AtomInput from '../atoms/AtomInput.vue';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
+import AtomTooltip from '../atoms/AtomTooltip.vue';
 
 export default {
     name: 'MobileVue',
@@ -164,11 +185,13 @@ export default {
         AtomInput,
         AtomSelectInput,
         AtomTextarea,
+        AtomTooltip,
     },
     props: {
         parkingRequests: { type: Array, required: true },
         isEmpty: { type: Boolean, required: true },
         isAdmin: { type: Boolean, default: false },
+        isAssignDisabled: { type: Boolean, default: false },
         newCommentMap: { type: Object, required: true },
         statusList: { type: Object, required: true },
         agentList: { type: Array, default: () => [] },
@@ -179,21 +202,30 @@ export default {
         isCallDelayed: { type: Function, required: true },
         toSrp: { type: Function, required: true },
         storeOldComment: { type: Function, required: true },
-        oldComments: { type: null, default: null},
+        oldComments: { type: null, default: null },
+        formatAgentName: { type: Function, default: null },
     },
-    emits: ['connect', 'comment-update', 'agent-update', 'status-update', 'date-update', 'latlng-update', 'oldComments'],
+    emits: [
+        'connect',
+        'comment-update',
+        'agent-update',
+        'status-update',
+        'date-update',
+        'latlng-update',
+        'oldComments',
+    ],
     data() {
         return {
-            localMap: {...this.newCommentMap},
-        }
+            localMap: { ...this.newCommentMap },
+        };
     },
     watch: {
         newCommentMap: {
             deep: true,
-            handler(val){
-                this.localMap = {...val};
-            }
-        }
+            handler(val) {
+                this.localMap = { ...val };
+            },
+        },
     },
 };
 </script>
@@ -229,7 +261,7 @@ export default {
 }
 
 .mobile-card .card-body p {
-    display: flex; 
+    display: flex;
     justify-content: space-between;
     line-height: 1.4;
     margin: 8px 0;
@@ -250,6 +282,20 @@ export default {
     margin-top: 0.8rem;
     padding-top: 0.5rem;
     border-top: 1px solid #eee;
+}
+
+.status-section .assign-agent-tooltip {
+    width: 100%;
+    display: flex;
+}
+
+.status-section .assign-agent-tooltip .tooltip-trigger {
+    width: 100%;
+    display: flex;
+}
+
+.status-section .assign-agent-btn {
+    width: 100%;
 }
 
 .status-section p {
