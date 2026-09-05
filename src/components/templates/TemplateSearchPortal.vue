@@ -146,9 +146,9 @@
                 cell-class="id-column-parent"
             >
                 <div class="id-column">
-                    {{ props.row.ID }}
+                    {{ props && props.row ? props.row.ID : '' }}
                     <div
-                        v-if="props.row.IsExpiring"
+                        v-if="props && props.row && props.row.IsExpiring"
                         class="material-symbols-outlined expiring-icon"
                     >
                         report
@@ -173,13 +173,17 @@
                     />
                 </template>
 
-                <template #default="{ row }">
-                    <div class="date-column">
+                <template #default="slotProps">
+                    <div v-if="slotProps && slotProps.row" class="date-column">
                         <p class="tag">UpdatedAt:</p>
-                        <strong>{{ getFormattedDate(row.UpdatedAt) }}</strong>
+                        <strong>{{
+                            getFormattedDate(slotProps.row.UpdatedAt)
+                        }}</strong>
 
                         <p class="tag">CreatedAt:</p>
-                        <strong>{{ getFormattedDate(row.CreatedAt) }}</strong>
+                        <strong>{{
+                            getFormattedDate(slotProps.row.CreatedAt)
+                        }}</strong>
                     </div>
                 </template>
             </b-table-column>
@@ -191,6 +195,7 @@
                 sortable
             >
                 <span
+                    v-if="props && props.row"
                     class="tag"
                     :class="{
                         'is-info': props.row.Priority === 1,
@@ -207,7 +212,7 @@
                 field="contact"
                 label="Contact Details"
             >
-                <div class="contact-column">
+                <div v-if="props && props.row" class="contact-column">
                     <div class="primary">
                         <p>
                             Name:
@@ -263,7 +268,7 @@
                 label="Comments"
                 width="10px"
             >
-                <div class="comment-wrapper">
+                <div v-if="props && props.row" class="comment-wrapper">
                     <div class="previous-comments">
                         {{ props.row.Comments }}
                     </div>
@@ -284,10 +289,10 @@
 
             <b-table-column field="Agent" label="RM" sortable width="76px">
                 <template #default="props">
-                    <div class="status-column">
+                    <div v-if="props && props.row" class="status-column">
                         <div class="status-part">
                             <span class="tag my-status">
-                                {{ props.row.Agent }}
+                                {{ formatAgentName(props.row.Agent) }}
                             </span>
                             <AtomSelectInput
                                 v-if="isAdmin"
@@ -299,15 +304,32 @@
                                 @change="onAgentUpdate(props.row, $event)"
                             >
                             </AtomSelectInput>
-                            <button
-                                v-else
-                                class="btn"
-                                @click="
-                                    onAgentUpdate(props.row, agentList[0].id)
-                                "
-                            >
-                                Assign to me
-                            </button>
+                            <template v-else>
+                                <AtomTooltip
+                                    v-if="isAssignDisabled"
+                                    class="assign-agent-tooltip"
+                                    label="Please complete 7 registered requests to assign more"
+                                >
+                                    <button
+                                        class="btn assign-agent-btn"
+                                        disabled
+                                    >
+                                        Assign to me
+                                    </button>
+                                </AtomTooltip>
+                                <button
+                                    v-else
+                                    class="btn assign-agent-btn"
+                                    @click="
+                                        onAgentUpdate(
+                                            props.row,
+                                            agentList[0].id,
+                                        )
+                                    "
+                                >
+                                    Assign to me
+                                </button>
+                            </template>
                         </div>
                     </div>
                 </template>
@@ -320,10 +342,14 @@
                 width="80px"
             >
                 <template #default="props">
-                    <div class="status-column">
+                    <div v-if="props && props.row" class="status-column">
                         <div class="status-part">
                             <span class="tag my-status">
-                                {{ statusList[props.row.Status].name }}
+                                {{
+                                    statusList && statusList[props.row.Status]
+                                        ? statusList[props.row.Status].name
+                                        : ''
+                                }}
                             </span>
                             <AtomSelectInput
                                 :key="props.row.ID"
@@ -368,7 +394,7 @@
             </b-table-column>
 
             <b-table-column v-slot="props" field="lat_lng" label="Lat/Lng">
-                <div class="lat-lng-column">
+                <div v-if="props && props.row" class="lat-lng-column">
                     <div class="lat-lng-link">
                         <a
                             target="_blank"
@@ -411,6 +437,7 @@
                     :parking-requests="filteredParkingRequests"
                     :is-empty="isEmpty"
                     :is-admin="isAdmin"
+                    :is-assign-disabled="isAssignDisabled"
                     :new-comment-map="newCommentMap"
                     :status-list="statusList"
                     :agent-list="agentList"
@@ -420,6 +447,7 @@
                     :to-srp="toSrp"
                     :store-old-comment="storeOldComment"
                     :old-comments="oldComments"
+                    :format-agent-name="formatAgentName"
                     @connect="onConnect"
                     @comment-update="onCommentUpdate"
                     @agent-update="onAgentUpdate"
@@ -512,6 +540,7 @@ import AtomIcon from '../atoms/AtomIcon';
 import AtomInput from '../atoms/AtomInput.vue';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
+import AtomTooltip from '../atoms/AtomTooltip.vue';
 import moment from 'moment';
 import SelectInput from '../global/SelectInput.vue';
 import FilterDropdown from '../global/FilterDropdown.vue';
@@ -527,6 +556,7 @@ export default {
         AtomDatePicker,
         AtomInput,
         AtomButton,
+        AtomTooltip,
         SelectInput,
         FilterDropdown,
         MobileView,
@@ -631,29 +661,101 @@ export default {
             }
             return this.windowWidth > 768 || this.forceDesktop;
         },
+        agentRegisteredRequestsCount() {
+            const requestsToCount =
+                this.parkingRequests && this.parkingRequests.length
+                    ? this.parkingRequests
+                    : this.filteredParkingRequests || [];
+
+            if (!requestsToCount || !requestsToCount.length) return 0;
+
+            let rawAgentName = this.userProfile?.FullName;
+            if (!rawAgentName) {
+                const validAgent = (this.agentList || []).find(
+                    (a) => a && a.name && a.name !== 'NA',
+                );
+                if (validAgent) {
+                    rawAgentName = validAgent.name;
+                }
+            }
+
+            if (!rawAgentName) return 0;
+
+            const cleanAgentName = rawAgentName
+                .replace(/[[\]]/g, '')
+                .trim()
+                .toLowerCase();
+            const currentAgentFirstName = cleanAgentName.split(' ')[0];
+
+            return requestsToCount.filter((req) => {
+                if (!req || !req.Agent || req.Agent === 'NA') return false;
+
+                const reqAgentClean = req.Agent.replace(/[[\]]/g, '')
+                    .trim()
+                    .toLowerCase();
+                const reqAgentFirstName = reqAgentClean.split(' ')[0];
+
+                const isAssigned =
+                    reqAgentClean === cleanAgentName ||
+                    reqAgentFirstName === currentAgentFirstName ||
+                    (cleanAgentName &&
+                        reqAgentClean.includes(currentAgentFirstName));
+
+                const isRegistered =
+                    req.Status === 1 ||
+                    req.Status === '1' ||
+                    req.Status === 'Registered';
+
+                return isAssigned && isRegistered;
+            }).length;
+        },
+        isAssignDisabled() {
+            return this.agentRegisteredRequestsCount >= 7;
+        },
     },
 
     watch: {
+        userProfile: {
+            immediate: true,
+            handler(newProfile) {
+                if (newProfile && newProfile.FullName && !this.isAdmin) {
+                    const agents = [{ id: 0, FullName: newProfile.FullName }];
+                    this.setAgents(agents);
+                }
+            },
+        },
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
 
-            if (this.$route.query[this.QUERY_PARAMS.IS_EXPIRING]) {
+            if (
+                this.$route &&
+                this.$route.query &&
+                this.$route.query[this.QUERY_PARAMS.IS_EXPIRING]
+            ) {
                 this.extractExpiringRequests();
                 this.filters.isExpiring = true;
             }
 
-            if (this.$route.query[this.QUERY_PARAMS.AGENT]) {
+            if (
+                this.$route &&
+                this.$route.query &&
+                this.$route.query[this.QUERY_PARAMS.AGENT]
+            ) {
                 const agentName = this.$route.query['agent'];
                 this.filters.Agent = agentName;
                 this.extractRequestsByAgentName(agentName);
             }
-            if (this.$route.query[this.QUERY_PARAMS.STATUS]) {
+            if (
+                this.$route &&
+                this.$route.query &&
+                this.$route.query[this.QUERY_PARAMS.STATUS]
+            ) {
                 const statusId = parseInt(this.$route.query['status']);
                 const statusRow = this.statusList.find(
                     (item) => item.id === statusId,
                 );
-                this.filters.Status = statusRow.name;
                 if (statusRow) {
+                    this.filters.Status = statusRow.name;
                     this.extractRequestsByStatus(statusRow.id);
                 }
             }
@@ -717,6 +819,11 @@ export default {
             }
         },
 
+        formatAgentName(name) {
+            if (!name) return 'NA';
+            return name.replace(/[[\]]/g, '').trim() || 'NA';
+        },
+
         getPriority(val) {
             switch (val) {
                 case 1:
@@ -729,6 +836,21 @@ export default {
         },
 
         onAgentUpdate(spotData, agentid) {
+            if (!this.isAdmin) {
+                const rawName =
+                    this.userProfile?.FullName ||
+                    this.agentList.find((a) => a.id !== 'NA')?.name;
+                const cleanName = rawName
+                    ? rawName.replace(/[[\]]/g, '').trim()
+                    : '';
+                const loggedInAgentName = cleanName.split(' ')[0];
+                if (loggedInAgentName && loggedInAgentName !== 'NA') {
+                    spotData['Agent'] = loggedInAgentName;
+                    this.$emit('updateRequest', spotData);
+                    return;
+                }
+            }
+
             this.agentList.forEach((agent) => {
                 if (agent.id === agentid) {
                     spotData['Agent'] = agent.name;
@@ -1070,6 +1192,16 @@ $portal-font-size: 13px;
             flex-direction: column;
             gap: 10px;
             margin-bottom: 20px;
+
+            .assign-agent-tooltip {
+                width: 100%;
+                display: flex;
+
+                :deep(.tooltip-trigger) {
+                    width: 100%;
+                    display: flex;
+                }
+            }
         }
 
         .next-call-part {
@@ -1162,8 +1294,14 @@ $portal-font-size: 13px;
     padding: 4px 0;
 }
 
+.assign-agent-btn {
+    width: 100%;
+}
+
 .btn:disabled {
     cursor: not-allowed;
+    background-color: var(--parkspot-grey, var(--grey-shade, #a9a9a9));
+    color: var(--parkspot-black, #252525);
 }
 
 .frequent-comments {

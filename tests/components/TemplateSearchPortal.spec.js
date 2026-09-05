@@ -73,6 +73,9 @@ describe('TemplateSearchPortal.vue', () => {
             },
             global: {
                 plugins: [store],
+                mocks: {
+                    $route: { query: {} },
+                },
                 stubs: {
                     'AtomButton': {
                         template:
@@ -375,6 +378,98 @@ describe('TemplateSearchPortal.vue', () => {
         it('returns true when filteredParkingRequests is null or undefined', () => {
             store.state.searchPortal.filteredParkingRequests = null;
             expect(wrapper.vm.isEmpty).toBe(true);
+        });
+    });
+
+    describe('isAssignDisabled validation', () => {
+        it('calculates agentRegisteredRequestsCount and disables assign to me when agent has 7 or more registered requests', async () => {
+            const agentRequests = Array.from({ length: 7 }, (_, i) => ({
+                ID: i + 1,
+                Agent: 'dev',
+                Status: 1,
+            }));
+            await wrapper.setProps({ parkingRequests: agentRequests });
+            expect(wrapper.vm.agentRegisteredRequestsCount).toBe(7);
+            expect(wrapper.vm.isAssignDisabled).toBe(true);
+        });
+
+        it('enables assign to me when agent has fewer than 7 registered requests', async () => {
+            const agentRequests = Array.from({ length: 6 }, (_, i) => ({
+                ID: i + 1,
+                Agent: 'dev',
+                Status: 1,
+            }));
+            await wrapper.setProps({ parkingRequests: agentRequests });
+            expect(wrapper.vm.agentRegisteredRequestsCount).toBe(6);
+            expect(wrapper.vm.isAssignDisabled).toBe(false);
+        });
+
+        it('re-enables assign to me when a request status is changed from Registered (1) to Processing (2)', async () => {
+            const agentRequests = Array.from({ length: 7 }, (_, i) => ({
+                ID: i + 1,
+                Agent: 'dev',
+                Status: 1,
+            }));
+            await wrapper.setProps({ parkingRequests: agentRequests });
+            expect(wrapper.vm.isAssignDisabled).toBe(true);
+
+            agentRequests[0].Status = 2;
+            await wrapper.setProps({ parkingRequests: [...agentRequests] });
+            expect(wrapper.vm.agentRegisteredRequestsCount).toBe(6);
+            expect(wrapper.vm.isAssignDisabled).toBe(false);
+        });
+
+        it('formatAgentName strips brackets [ ] from agent names', () => {
+            expect(wrapper.vm.formatAgentName('[Divyanshu]')).toBe('Divyanshu');
+            expect(wrapper.vm.formatAgentName('[Divyanshu')).toBe('Divyanshu');
+            expect(wrapper.vm.formatAgentName('')).toBe('NA');
+            expect(wrapper.vm.formatAgentName(null)).toBe('NA');
+        });
+
+        it('counts registered requests accurately even when agent name in data contains brackets', async () => {
+            const agentRequests = Array.from({ length: 7 }, (_, i) => ({
+                ID: i + 1,
+                Agent: '[dev]',
+                Status: 1,
+            }));
+            await wrapper.setProps({ parkingRequests: agentRequests });
+            expect(wrapper.vm.agentRegisteredRequestsCount).toBe(7);
+            expect(wrapper.vm.isAssignDisabled).toBe(true);
+        });
+
+        it('onAgentUpdate sets spotData Agent to clean first name for non-admin user', () => {
+            const nonAdminStore = createStore({
+                modules: {
+                    searchPortal: {
+                        namespaced: true,
+                        state: () => ({
+                            agentList: [{ id: 'Divyanshu', name: 'Divyanshu' }],
+                            expiringRequestsCount: 0,
+                            filteredParkingRequests: [],
+                        }),
+                        actions: {
+                            extractExpiringRequests: vi.fn(),
+                            extractRequestsByAgentName: vi.fn(),
+                            extractRequestsByStatus: vi.fn(),
+                            resetFilterParkingRequests: vi.fn(),
+                        },
+                    },
+                    user: {
+                        namespaced: true,
+                        state: () => ({
+                            isAdmin: false,
+                            userProfile: { FullName: '[Divyanshu Sharma]' },
+                        }),
+                    },
+                },
+            });
+            const nonAdminWrapper = mount(TemplateSearchPortal, {
+                global: { plugins: [nonAdminStore] },
+                props: { parkingRequests: [] },
+            });
+            const spotData = { ID: 10, Agent: 'NA' };
+            nonAdminWrapper.vm.onAgentUpdate(spotData, 'NA');
+            expect(spotData.Agent).toBe('Divyanshu');
         });
     });
 });
