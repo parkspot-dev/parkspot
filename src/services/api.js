@@ -170,16 +170,35 @@ class MayaApiService extends BaseApiService {
                 }
                 await auth.authStateReady();
                 if (localStorage.getItem('PSAuthKey')) {
+                    console.log(
+                        '[PSAuthKey] UPDATE (Axios Interceptor): Refreshing PSAuthKey before API call with currentUser accessToken:',
+                        auth.currentUser?.accessToken,
+                    );
                     localStorage.setItem(
                         'PSAuthKey',
                         auth.currentUser?.accessToken,
                     );
                 }
                 const token = localStorage.getItem('PSAuthKey');
-                config.headers['PSAuthKey'] = `${token}`;
-                if (token) {
+                const isInvalidToken =
+                    !token ||
+                    !token.trim() ||
+                    token.trim().toLowerCase() === 'undefined' ||
+                    token.trim().toLowerCase() === 'null';
+
+                if (isInvalidToken) {
+                    console.error(
+                        `[PSAuthKey Error] Sender check failed: PSAuthKey is empty or invalid for ${config.method?.toUpperCase()} ${config.url}`,
+                        token,
+                    );
+                } else {
+                    console.log(
+                        `[PSAuthKey] SENDING TO BACKEND API (${config.method?.toUpperCase()} ${config.url}): Attaching PSAuthKey to headers:`,
+                        token,
+                    );
                     config.headers['Authorization'] = `Bearer ${token}`;
                 }
+                config.headers['PSAuthKey'] = `${token || ''}`;
                 return config;
             },
             (error) => {
