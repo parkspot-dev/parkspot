@@ -15,6 +15,7 @@ import TemplatePaymentGateway from '../components/templates/TemplatePaymentGatew
 import { PAGE_TITLE } from '@/constant/constant';
 import { PaymentType } from '@/constant/enums';
 import { track, EVENTS } from '@/lib/analytics';
+import { MAYA_API_DOMAIN } from '@/services/api';
 
 // Phase 2.5 booking funnel: dedup `purchase` events on `transaction_id`.
 // Cashfree retries, browser back-button revisits, and any client-side
@@ -107,7 +108,9 @@ export default {
             const h = this.$route.query.h;
             try {
                 const response = await fetch(
-                    `https://maya-in.parkspot.in/payment/validate?p=${p}&h=${h}`,
+                    `${
+                        MAYA_API_DOMAIN
+                    }/payment/validate?p=${p}&h=${h}`,
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -190,7 +193,9 @@ export default {
         async getStatus() {
             const o = this.$route.query.order_id;
             const response = await fetch(
-                `https://maya-in.parkspot.in/payment/status?order_id=${o}`,
+                `${
+                    MAYA_API_DOMAIN
+                }/payment/status?order_id=${o}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',

@@ -35,6 +35,14 @@
 #     path     = "/hyderabad/parking-near-*"
 #     function = "seo-inject"
 
+# UAT branch deploys talk to the UAT Maya backend instead of production.
+# `maya` (the Go service) resolves the same way: ENV=uat on the UAT host.
+# Production/master builds get no var and fall back to
+# https://maya-in.parkspot.in in src/services/api.js. Vite inlines this at
+# build time, so a deploy can only target one backend by design.
+[context.uat.environment]
+  VITE_MAYA_API_DOMAIN = "https://maya-uat.parkspot.in"
+
 # Spot-detail pages remain SPA + edge-injected head until Phase 3
 # prerenders them. See `ssg-research/04-integration-plan.md` § 3.5.
 [[edge_functions]]
