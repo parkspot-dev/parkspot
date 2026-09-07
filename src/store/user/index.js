@@ -10,6 +10,7 @@ import {
 } from 'firebase/auth';
 import { identify, setUserProperty } from '@/lib/analytics';
 import { formatRemarkWithUtm } from '@/lib/analytics/attribution';
+import { logger } from '@/utils/logger';
 
 const PS_AUTH_KEY = 'PSAuthKey';
 const USER_PROFILE_STORAGE_KEY = 'UserProfile';
@@ -24,12 +25,9 @@ const getPsAuthKey = () => {
         key.trim().toLowerCase() === 'undefined' ||
         key.trim().toLowerCase() === 'null'
     ) {
-        console.error(
-            '[PSAuthKey Error] Receiver check: PSAuthKey is empty or invalid in localStorage:',
-            key,
+        logger.warn(
+            '[PSAuthKey Error] Receiver check: PSAuthKey is empty or invalid in localStorage',
         );
-    } else {
-        console.log('[PSAuthKey] READ from localStorage:', key);
     }
     return key;
 };
@@ -43,11 +41,9 @@ const hasValidPsAuthKey = () => {
             key.trim().toLowerCase() !== 'null',
     );
     if (!isValid) {
-        console.error(
+        logger.warn(
             '[PSAuthKey Error] Receiver validation failed: PSAuthKey is empty/invalid',
         );
-    } else {
-        console.log('[PSAuthKey] VALIDATION CHECK passed:', { key, isValid });
     }
     return isValid;
 };
@@ -160,9 +156,6 @@ const mutations = {
     'update-user'(state, user) {
         state.user = user;
         if (!user) {
-            console.log(
-                '[PSAuthKey] REMOVE: Removing PSAuthKey from localStorage (User signed out / null)',
-            );
             localStorage.removeItem(PS_AUTH_KEY);
             localStorage.removeItem(USER_PROFILE_STORAGE_KEY);
             state.isAdmin = false;
@@ -243,29 +236,20 @@ const actions = {
             const user = res.user;
             const token = await user.getIdToken();
             if (!token || !token.trim()) {
-                console.error(
-                    '[PSAuthKey Error] Google Sign-In succeeded but received empty PSAuthKey',
+                logger.error(
+                    new Error(
+                        '[PSAuthKey Error] Google Sign-In succeeded but received empty PSAuthKey',
+                    ),
                 );
                 throw new Error('Received empty PSAuthKey from Google login');
             }
-            console.log(
-                '[PSAuthKey] SET (loginWithGoogle): Received token from Google Login:',
-                token,
-            );
             localStorage.setItem(PS_AUTH_KEY, token);
             commit('update-user', user);
             commit('update-login-modal', false);
             await dispatch('authenticateWithMaya');
             await dispatch('app/getAgents', null, { root: true });
         } catch (error) {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
-            console.log(errorCode, errorMessage, email, credential);
+            logger.error(error);
         }
     },
 
@@ -535,7 +519,7 @@ if (typeof window !== 'undefined') {
         try {
             const token = await user.getIdToken();
             if (!token || !token.trim()) {
-                console.error(
+                logger.warn(
                     '[PSAuthKey Error] Firebase Auth state changed but received empty PSAuthKey',
                 );
                 store.commit('user/set-auth-error', {
@@ -545,10 +529,6 @@ if (typeof window !== 'undefined') {
                 store.commit('user/update-auth-ready', true);
                 return;
             }
-            console.log(
-                '[PSAuthKey] SET (onAuthStateChanged): Received token from Firebase Auth state change:',
-                token,
-            );
             localStorage.setItem(PS_AUTH_KEY, token);
 
             await store.dispatch('user/getUserProfile');

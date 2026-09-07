@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { auth } from '../firebase';
+import { logger } from '../utils/logger';
 
 // BaseApiService create http client with basic configurations and error handling.
 /** Class representing a BaseApiService. */
@@ -43,8 +44,8 @@ class BaseApiService {
                 // timeout
                 alert('Something went wrong. Please try again.');
             }
+            throw error;
         }
-        throw error;
     }
 
     // Interceptor for responses
@@ -56,13 +57,12 @@ class BaseApiService {
      */
     handleErrors(error) {
         if (!error.request) {
-            console.log({ 'Http server/network error': error });
+            logger.error(error, { context: 'Http server/network error' });
             return;
         }
-        console.log({
-            message: 'Errors in http call',
-            url: error.request.responseURL,
-            err: error,
+        logger.error(error, {
+            context: 'Errors in http call',
+            url: error.request?.responseURL,
         });
     }
 
@@ -77,7 +77,7 @@ class BaseApiService {
             return response.data;
         } catch (err) {
             this.handleErrors(err);
-            return err.response.data;
+            return err.response?.data;
         }
     }
 
@@ -92,7 +92,7 @@ class BaseApiService {
             return response.data;
         } catch (err) {
             this.handleErrors(err);
-            return err.response.data;
+            return err.response?.data;
         }
     }
 
@@ -109,7 +109,7 @@ class BaseApiService {
             return response.data;
         } catch (err) {
             this.handleErrors(err);
-            return err.response.data;
+            return err.response?.data;
         }
     }
 
@@ -126,7 +126,7 @@ class BaseApiService {
             return response.data;
         } catch (err) {
             this.handleErrors(err);
-            return err.response.data;
+            return err.response?.data;
         }
     }
 }
@@ -170,10 +170,6 @@ class MayaApiService extends BaseApiService {
                 }
                 await auth.authStateReady();
                 if (localStorage.getItem('PSAuthKey')) {
-                    console.log(
-                        '[PSAuthKey] UPDATE (Axios Interceptor): Refreshing PSAuthKey before API call with currentUser accessToken:',
-                        auth.currentUser?.accessToken,
-                    );
                     localStorage.setItem(
                         'PSAuthKey',
                         auth.currentUser?.accessToken,
@@ -187,15 +183,10 @@ class MayaApiService extends BaseApiService {
                     token.trim().toLowerCase() === 'null';
 
                 if (isInvalidToken) {
-                    console.error(
+                    logger.warn(
                         `[PSAuthKey Error] Sender check failed: PSAuthKey is empty or invalid for ${config.method?.toUpperCase()} ${config.url}`,
-                        token,
                     );
                 } else {
-                    console.log(
-                        `[PSAuthKey] SENDING TO BACKEND API (${config.method?.toUpperCase()} ${config.url}): Attaching PSAuthKey to headers:`,
-                        token,
-                    );
                     config.headers['Authorization'] = `Bearer ${token}`;
                 }
                 config.headers['PSAuthKey'] = `${token || ''}`;
@@ -226,11 +217,10 @@ class MayaApiService extends BaseApiService {
                 alert(
                     'Something went wrong.\nNo worries, our team is always there to help. \nPlease reach out to us at +91 80929 96057.',
                 );
-                console.error(
-                    'maya interceptor default',
-                    error.response.status,
-                    error.message,
-                );
+                logger.error(error, {
+                    context: 'maya interceptor default',
+                    status: error.response.status,
+                });
         }
         throw error;
     }
@@ -274,4 +264,11 @@ const mayaClient = new MayaApiService(getFlavour);
 
 const mapBoxClient = new MapBoxApiService();
 
-export { mayaClient, mapBoxClient };
+export {
+    mayaClient,
+    mapBoxClient,
+    BaseApiService,
+    MayaApiService,
+    MapBoxApiService,
+    getFlavour,
+};
