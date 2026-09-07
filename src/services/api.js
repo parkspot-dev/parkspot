@@ -114,7 +114,12 @@ class BaseApiService {
     }
 }
 
-// MayaApiService inherits BaseApiService to create http clients for Maya services.
+// MayaApiService inherits BaseApiService to create http clients for Maya services. The
+// domain is configurable per environment (VITE_MAYA_API_DOMAIN); UAT Netlify builds set it
+// to https://maya-uat.parkspot.in, anything else falls back to production.
+export const MAYA_API_DOMAIN =
+    import.meta.env.VITE_MAYA_API_DOMAIN || 'https://maya-in.parkspot.in';
+
 /** Class representing a MayaApiService extends BaseApiService. */
 class MayaApiService extends BaseApiService {
     /**
@@ -122,7 +127,7 @@ class MayaApiService extends BaseApiService {
      *  @param { function } flavour - getFlavour function.
      */
     constructor(flavour) {
-        const mayaDomain = 'https://maya-in.parkspot.in'; //   TODO: we can pick from .env files.
+        const mayaDomain = MAYA_API_DOMAIN;
         const baseHeaderMap = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
