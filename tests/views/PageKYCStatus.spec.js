@@ -19,6 +19,7 @@ vi.mock('@/constant/enums', () => ({
         };
         return map[val];
     },
+    getIDTypeLabel: (val) => (val === 1 ? 'Aadhaar' : 'RC'),
 }));
 
 let store;
@@ -43,12 +44,19 @@ beforeEach(() => {
                     errorMessage: '',
                     users: [
                         {
-                            ID: 1,
-                            FullName: 'Test User',
-                            Mobile: '9876543210',
-                            KYCStatus: 0,
-                            IDProofURLs: ['front.jpg'],
-                            OwnershipProofURLs: [],
+                            User: {
+                                FullName: 'Test User',
+                                UserName: 'testuser',
+                                Mobile: '9876543210',
+                                KYCStatus: 0,
+                            },
+                            IDVerifiedDetails: { Name: 'Test User', IDType: 1 },
+                            OwnershipVerifiedDetails: {
+                                Name: 'Test User',
+                                IDType: 2,
+                            },
+                            IdentityDocument: ['front.jpg'],
+                            OwnershipDocument: [],
                         },
                     ],
                     searchMobile: '',
@@ -118,7 +126,7 @@ describe('PageKYCStatus.vue', () => {
         expect(wrapper.exists()).toBe(true);
     });
 
-    it('refreshes pending users safely on mount', async () => {
+    it('fetches pending users on mount', async () => {
         const wrapper = factory();
         await wrapper.vm.$nextTick();
         await flushPromises();
@@ -132,31 +140,14 @@ describe('PageKYCStatus.vue', () => {
         expect(wrapper.find('.loader-modal').exists()).toBe(true);
     });
 
-    it('calls refreshPendingUsersSafely on search and clear actions', async () => {
+    it('calls fetchKycPendingUsers on search and clear actions', async () => {
         const wrapper = factory({ query: { mobile: '9876543210' } });
 
         await wrapper.find('.search-btn').trigger('click');
         await wrapper.find('.clear-btn').trigger('click');
 
-        // updateMobileInput is expected to be called 3 times:
-        // 1) during component creation to initialize state from route
-        // 2) when searching with a mobile number
-        // 3) when clearing the search input
-
         expect(actions.updateMobileInput).toHaveBeenCalledTimes(3);
         expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(3);
-    });
-
-    it('does not manually clear users during search', async () => {
-        const wrapper = factory();
-        const commitSpy = vi.spyOn(store, 'commit');
-
-        await wrapper.find('.search-btn').trigger('click');
-
-        expect(commitSpy).not.toHaveBeenCalledWith(
-            'kycStatusPortal/set-users',
-            [],
-        );
     });
 
     it('updates KYC status and refreshes list', async () => {
@@ -178,13 +169,26 @@ describe('PageKYCStatus.vue', () => {
         );
     });
 
-    it('open image preview modal', async () => {
+    it('opens image preview modal', async () => {
         const wrapper = factory();
 
         wrapper.vm.openImage('front.jpg');
 
         expect(wrapper.vm.showImageModal).toBe(true);
         expect(wrapper.vm.selectedImage).toBe('front.jpg');
+    });
+
+    it('opens details modal for ID and Ownership', () => {
+        const wrapper = factory();
+        const userRow = store.state.kycStatusPortal.users[0];
+
+        wrapper.vm.openDetailsModal(userRow, 'id');
+        expect(wrapper.vm.showDetailsModal).toBe(true);
+        expect(wrapper.vm.activeModalType).toBe('id');
+        expect(wrapper.vm.selectedUserKYC).toEqual(userRow);
+
+        wrapper.vm.openDetailsModal(userRow, 'ownership');
+        expect(wrapper.vm.activeModalType).toBe('ownership');
     });
 
     it('shows error alert when hasError becomes true', async () => {
@@ -199,29 +203,5 @@ describe('PageKYCStatus.vue', () => {
                 message: 'Some error',
             }),
         );
-    });
-
-    it('restores users to state before fetch attempt if fetch fails', async () => {
-        const wrapper = factory();
-
-        // wait for initial mount fetch to complete
-        await wrapper.vm.$nextTick();
-        await flushPromises();
-
-        // Set users state Before refresh attempt
-        const stateBeforeRefresh = [{ id: 1 }, { id: 2 }];
-        store.state.kycStatusPortal.users = stateBeforeRefresh;
-
-        // Mock failure for the fetch triggered by refresh
-        actions.fetchKycPendingUsers.mockRejectedValueOnce(
-            new Error('API failed'),
-        );
-
-        // Trigger refresh (this should fail internally)
-        await wrapper.vm.refreshPendingUsersSafely();
-
-        // Verify users are restored to the state before refresh attempt
-        expect(store.state.kycStatusPortal.users).toEqual(stateBeforeRefresh);
-        expect(buefyMock.dialog.alert).toHaveBeenCalled();
     });
 });

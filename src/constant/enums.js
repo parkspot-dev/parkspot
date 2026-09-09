@@ -183,6 +183,23 @@ export const VehicleRcStatus = Object.freeze({
     Failed: 'FAILED',
 });
 
+export const IDType = Object.freeze({
+    NotSet: 0,
+    Aadhaar: 1,
+    RC: 2,
+});
+
+export const IDTypeLabel = ['NotSet', 'Aadhaar', 'RC'];
+
+/**
+ *
+ * @param {int} idType
+ * @return {string}: label for id type
+ */
+export function getIDTypeLabel(idType) {
+    return getEnumLabel(IDTypeLabel, idType);
+}
+
 export const BookingStatus = Object.freeze({
     // BookingInitiated => fired tentative, SO not confirmed yet.
     BookingInitiated: 0, // tentative
