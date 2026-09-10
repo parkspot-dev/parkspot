@@ -1,4 +1,4 @@
-<template>
+/payment/validate?p=$<template>
     <div class="custom-bg">
         <div class="bg-decor"></div>
 
@@ -108,9 +108,7 @@ export default {
             const h = this.$route.query.h;
             try {
                 const response = await fetch(
-                    `${
-                        MAYA_API_DOMAIN
-                    }/payment/validate?p=${p}&h=${h}`,
+                    `${MAYA_API_DOMAIN}/payment/validate?p=${p}&h=${h}`,
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -193,9 +191,7 @@ export default {
         async getStatus() {
             const o = this.$route.query.order_id;
             const response = await fetch(
-                `${
-                    MAYA_API_DOMAIN
-                }/payment/status?order_id=${o}`,
+                `${ MAYA_API_DOMAIN}/payment/status?order_id=${o}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
