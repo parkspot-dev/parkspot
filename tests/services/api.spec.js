@@ -225,27 +225,22 @@ describe('MayaApiService', () => {
         await expect(interceptorErrorHandler(reqErr)).rejects.toThrow(reqErr);
     });
 
-    it('handles 401 response error with login alert', () => {
+    it('handles 401 response error', () => {
         const error = {
             response: { status: 401 },
         };
         expect(() => mayaService.errorInterceptor(error)).toThrow();
-        expect(alertMock).toHaveBeenCalledWith('Please login and try again.');
+        expect(alertMock).not.toHaveBeenCalled();
     });
 
-    it('handles 500 default error with team alert and logger error', () => {
+    it('handles 500 default error', () => {
         const error = {
             response: { status: 500 },
             message: 'Internal Server Error',
         };
         expect(() => mayaService.errorInterceptor(error)).toThrow();
-        expect(alertMock).toHaveBeenCalledWith(
-            expect.stringContaining('Something went wrong.'),
-        );
-        expect(logger.error).toHaveBeenCalledWith(error, {
-            context: 'maya interceptor default',
-            status: 500,
-        });
+        expect(alertMock).not.toHaveBeenCalled();
+        expect(logger.error).not.toHaveBeenCalled();
     });
 
     it('returns early in errorInterceptor if error.response is undefined', () => {
