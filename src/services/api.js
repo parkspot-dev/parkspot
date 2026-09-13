@@ -44,8 +44,8 @@ class BaseApiService {
                 // timeout
                 alert('Something went wrong. Please try again.');
             }
-            throw error;
         }
+        throw error;
     }
 
     // Interceptor for responses
