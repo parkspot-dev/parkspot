@@ -73,6 +73,9 @@ describe('TemplateSearchPortal.vue', () => {
             },
             global: {
                 plugins: [store],
+                mocks: {
+                    $route: { query: {} },
+                },
                 stubs: {
                     'AtomButton': {
                         template:
@@ -375,6 +378,42 @@ describe('TemplateSearchPortal.vue', () => {
         it('returns true when filteredParkingRequests is null or undefined', () => {
             store.state.searchPortal.filteredParkingRequests = null;
             expect(wrapper.vm.isEmpty).toBe(true);
+        });
+    });
+
+    describe('isAssignDisabled validation', () => {
+        it('disables assign to me when agent has 7 or more registered requests', async () => {
+            const agentRequests = Array.from({ length: 7 }, (_, i) => ({
+                ID: i + 1,
+                Agent: 'dev',
+                Status: 1,
+            }));
+            await wrapper.setProps({ parkingRequests: agentRequests });
+            expect(wrapper.vm.isAssignDisabled).toBe(true);
+        });
+
+        it('enables assign to me when agent has fewer than 7 registered requests', async () => {
+            const agentRequests = Array.from({ length: 6 }, (_, i) => ({
+                ID: i + 1,
+                Agent: 'dev',
+                Status: 1,
+            }));
+            await wrapper.setProps({ parkingRequests: agentRequests });
+            expect(wrapper.vm.isAssignDisabled).toBe(false);
+        });
+
+        it('re-enables assign to me when a request status changes from Registered (1) to Processing (2)', async () => {
+            const agentRequests = Array.from({ length: 7 }, (_, i) => ({
+                ID: i + 1,
+                Agent: 'dev',
+                Status: 1,
+            }));
+            await wrapper.setProps({ parkingRequests: agentRequests });
+            expect(wrapper.vm.isAssignDisabled).toBe(true);
+
+            agentRequests[0].Status = 2;
+            await wrapper.setProps({ parkingRequests: [...agentRequests] });
+            expect(wrapper.vm.isAssignDisabled).toBe(false);
         });
     });
 });
