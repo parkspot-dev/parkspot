@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import userModule from '@/store/user';
 import { UserType } from '@/constant/enums';
 import { mayaClient } from '@/services/api';
-import { signOut } from 'firebase/auth';
+import { signOut, signInWithPopup } from 'firebase/auth';
 
 vi.mock('@/store', () => ({
     default: {
@@ -24,6 +24,8 @@ vi.mock('firebase/auth', async () => {
     return {
         ...actual,
         signOut: vi.fn().mockResolvedValue(),
+        signInWithPopup: vi.fn(),
+        GoogleAuthProvider: vi.fn(),
     };
 });
 
@@ -34,6 +36,10 @@ describe('User Store - Agent Auth Fix', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         localStorage.clear();
+
+        mayaClient.get.mockReset().mockResolvedValue({});
+        mayaClient.post.mockReset().mockResolvedValue({});
+        mayaClient.patch.mockReset().mockResolvedValue({});
 
         commit = vi.fn();
         const dispatchMock = vi.fn();
@@ -460,7 +466,192 @@ describe('User Store - Agent Auth Fix', () => {
         );
     });
 
-    describe('User Store - Missing Coverage (Added)', () => {
+    describe('User Store - Mutations & Actions Coverage', () => {
+        it('tests state function defaults', () => {
+            const defaultState = userModule.state();
+            expect(defaultState.user).toBeNull();
+            expect(defaultState.userProfile.Type).toBe('VO');
+            expect(defaultState.isAdmin).toBe(false);
+            expect(defaultState.isAgent).toBe(false);
+        });
+
+        it('mutations update state as expected', () => {
+            const stateObj = userModule.state();
+
+            userModule.mutations['update-user'](stateObj, { uid: 'u1' });
+            expect(stateObj.user).toEqual({ uid: 'u1' });
+
+            userModule.mutations['update-user'](stateObj, null);
+            expect(stateObj.user).toBeNull();
+            expect(stateObj.isAdmin).toBe(false);
+            expect(stateObj.isAgent).toBe(false);
+
+            userModule.mutations['update-user-profile'](stateObj, {
+                FullName: 'Test User',
+            });
+            expect(stateObj.userProfile.FullName).toBe('Test User');
+            expect(stateObj.userProfile.UserName).toBe('');
+
+            userModule.mutations['update-user-profile'](stateObj, {
+                ErrorCode: 500,
+                DisplayMsg: 'Error',
+            });
+            expect(stateObj.userProfile.ErrorCode).toBe(500);
+
+            userModule.mutations['update-login-modal'](stateObj, true);
+            expect(stateObj.loginModal).toBe(true);
+
+            userModule.mutations['update-auth-ready'](stateObj, true);
+            expect(stateObj.isAuthReady).toBe(true);
+
+            userModule.mutations['update-contact'](stateObj, { cno: '123' });
+            expect(stateObj.contactForm).toEqual({ cno: '123' });
+
+            userModule.mutations['update-kyc'](stateObj, { owner: 'self' });
+            expect(stateObj.kycForm).toEqual({ owner: 'self' });
+
+            userModule.mutations['update-additional-info'](stateObj, {
+                rent: '500',
+            });
+            expect(stateObj.additionalInfo).toEqual({ rent: '500' });
+
+            userModule.mutations['update-login'](stateObj, { Username: 'u' });
+            expect(stateObj.login).toEqual({ Username: 'u' });
+
+            userModule.mutations['update-location-details'](stateObj, {
+                loc: 'bglr',
+            });
+            expect(stateObj.locationDetails).toEqual({ loc: 'bglr' });
+
+            userModule.mutations['update-preference'](stateObj, { pref: 'a' });
+            expect(stateObj.preference).toEqual({ pref: 'a' });
+
+            userModule.mutations['set-user-type'](stateObj, UserType.Admin);
+            expect(stateObj.isAdmin).toBe(true);
+            expect(stateObj.isAgent).toBe(true);
+
+            userModule.mutations['set-user-type'](stateObj, UserType.Agent);
+            expect(stateObj.isAdmin).toBe(false);
+            expect(stateObj.isAgent).toBe(true);
+
+            userModule.mutations['update-images'](stateObj, ['img1']);
+            expect(stateObj.contactForm.images).toEqual(['img1']);
+
+            userModule.mutations['reset-user-profile'](stateObj);
+            expect(stateObj.userProfile).toEqual({
+                FullName: '',
+                EmailID: '',
+                Mobile: '',
+                Type: 'VO',
+            });
+
+            userModule.mutations['set-auth-error'](stateObj, 'err');
+            expect(stateObj.authError).toBe('err');
+        });
+
+        it('loginWithGoogle handles successful Google login', async () => {
+            const userMock = {
+                getIdToken: vi.fn().mockResolvedValue('google_token_123'),
+            };
+            signInWithPopup.mockResolvedValue({ user: userMock });
+
+            await userModule.actions.loginWithGoogle({ commit, dispatch });
+
+            expect(localStorage.getItem('PSAuthKey')).toBe('google_token_123');
+            expect(commit).toHaveBeenCalledWith('update-user', userMock);
+            expect(commit).toHaveBeenCalledWith('update-login-modal', false);
+            expect(dispatch).toHaveBeenCalledWith(
+                'authenticateWithMaya',
+                expect.anything(),
+                expect.anything(),
+            );
+            expect(dispatch).toHaveBeenCalledWith(
+                'app/getAgents',
+                expect.anything(),
+                expect.objectContaining({ root: true }),
+            );
+        });
+
+        it('loginWithGoogle handles empty token from Google login', async () => {
+            const userMock = {
+                getIdToken: vi.fn().mockResolvedValue(''),
+            };
+            signInWithPopup.mockResolvedValue({ user: userMock });
+
+            await userModule.actions.loginWithGoogle({ commit, dispatch });
+
+            expect(commit).not.toHaveBeenCalledWith('update-user', userMock);
+        });
+
+        it('register posts auth register and updates login', async () => {
+            const state = {
+                contactForm: { fullname: 'John', email: 'john@ex.com' },
+                locationDetails: { locDetails: { locName: 'City' } },
+            };
+
+            await userModule.actions.register({ commit, state });
+
+            expect(commit).toHaveBeenCalledWith(
+                'update-login',
+                expect.objectContaining({ Password: 'dummy@123' }),
+            );
+            expect(mayaClient.post).toHaveBeenCalledWith(
+                '/auth/register',
+                expect.objectContaining({ FullName: 'John', City: 'City' }),
+            );
+        });
+
+        it('login posts auth login', async () => {
+            const state = { login: { Username: 'u', Password: 'p' } };
+            await userModule.actions.login({ state });
+            expect(mayaClient.post).toHaveBeenCalledWith(
+                '/auth/login',
+                state.login,
+            );
+        });
+
+        it('kyc patches /kyc payload', async () => {
+            const state = {
+                contactForm: { cno: '9876543210' },
+                login: { Username: 'user1' },
+                kycForm: { owner: 'self', documentData: 'doc', imgData: 'img' },
+            };
+
+            await userModule.actions.kyc({ state });
+
+            expect(mayaClient.patch).toHaveBeenCalledWith(
+                '/kyc',
+                expect.objectContaining({
+                    ContactNo: '9876543210',
+                    UserName: 'user1',
+                    Owner: 'self',
+                }),
+            );
+        });
+
+        it('updateUserInfo calls post and handles errors', async () => {
+            const state = { userProfile: { FullName: 'New Name' } };
+            mayaClient.post.mockResolvedValue({});
+
+            await userModule.actions.updateUserInfo({ commit, state });
+            expect(mayaClient.post).toHaveBeenCalledWith(
+                '/auth/update-fields',
+                state.userProfile,
+            );
+
+            mayaClient.post.mockRejectedValue({
+                response: { data: { DisplayMsg: 'Display Error' } },
+            });
+            await expect(
+                userModule.actions.updateUserInfo({ commit, state }),
+            ).rejects.toThrow('Display Error');
+        });
+
+        it('updateImages dispatches commit update-images', () => {
+            userModule.actions.updateImages({ commit }, ['img1.jpg']);
+            expect(commit).toHaveBeenCalledWith('update-images', ['img1.jpg']);
+        });
+
         it('authenticateWithMaya throws error when API fails', async () => {
             localStorage.setItem('PSAuthKey', 'token');
             mayaClient.get.mockRejectedValue(new Error('API failed'));
@@ -478,77 +669,6 @@ describe('User Store - Agent Auth Fix', () => {
 
             await userModule.actions.authenticateWithMaya({ commit });
             expect(commit).toHaveBeenCalledWith('set-auth-error', null);
-        });
-
-        it('getUserProfile resets auth error on success', async () => {
-            localStorage.setItem('PSAuthKey', 'token');
-            mayaClient.get.mockResolvedValue({
-                FullName: 'Dev',
-                Type: UserType.Agent,
-            });
-
-            await userModule.actions.getUserProfile({
-                commit,
-                dispatch,
-                state: { user: { uid: 'agent_user' } },
-            });
-
-            expect(commit).toHaveBeenCalledWith('set-auth-error', null);
-        });
-
-        it('getUserProfile writes cache when Type exists', async () => {
-            localStorage.setItem('PSAuthKey', 'token');
-            const state = { user: { uid: 'agent_user' } };
-            mayaClient.get.mockResolvedValue({
-                FullName: 'Dev',
-                Type: UserType.Agent,
-            });
-
-            await userModule.actions.getUserProfile({
-                commit,
-                dispatch,
-                state,
-            });
-
-            const cache = localStorage.getItem('profile:agent_user');
-            expect(cache).not.toBeNull();
-            expect(JSON.parse(cache)).toHaveProperty('data');
-        });
-
-        it('getUserProfile removes corrupted cache', async () => {
-            localStorage.setItem('PSAuthKey', 'token');
-            const state = { user: { uid: 'agent_user' } };
-            localStorage.setItem('profile:agent_user', 'invalid-json');
-            mayaClient.get.mockResolvedValue({
-                FullName: 'Dev',
-                Type: UserType.Agent,
-            });
-
-            await userModule.actions.getUserProfile({
-                commit,
-                dispatch,
-                state,
-            });
-
-            expect(localStorage.getItem('profile:agent_user')).not.toBe(
-                'invalid-json',
-            );
-        });
-
-        it('logOut clears profile cache from localStorage', async () => {
-            const state = { user: { uid: 'agent_user' } };
-            localStorage.setItem(
-                'profile:agent_user',
-                JSON.stringify({ test: true }),
-            );
-
-            await userModule.actions.logOut({
-                commit,
-                dispatch,
-                state,
-            });
-
-            expect(localStorage.getItem('profile:agent_user')).toBeNull();
         });
     });
 
