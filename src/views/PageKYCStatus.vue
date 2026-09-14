@@ -471,7 +471,20 @@ export default {
         };
     },
     computed: {
-        ...mapState('kycStatusPortal', ['isLoading', 'searchMobile', 'users']),
+        ...mapState('kycStatusPortal', [
+            'isLoading',
+            'searchMobile',
+            'users',
+            'hasError',
+            'errorMessage',
+        ]),
+    },
+    watch: {
+        hasError(val) {
+            if (val) {
+                this.alertError(this.errorMessage);
+            }
+        },
     },
     mounted() {
         this.fetchKycPendingUsers();
@@ -486,6 +499,18 @@ export default {
             'updateStatus',
             'updateMobileInput',
         ]),
+
+        alertError(msg) {
+            this.$buefy.dialog.alert({
+                title: 'Error',
+                message: msg,
+                type: 'is-danger',
+                hasIcon: true,
+                icon: 'alert-circle',
+                ariaRole: 'alertdialog',
+                ariaModal: true,
+            });
+        },
 
         getKYCStatusLabel(status) {
             return getKYCStatusLabel(status);

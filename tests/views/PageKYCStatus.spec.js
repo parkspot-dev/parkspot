@@ -194,8 +194,8 @@ describe('PageKYCStatus.vue', () => {
     it('shows error alert when hasError becomes true', async () => {
         const wrapper = factory();
 
-        store.state.kycStatusPortal.hasError = true;
-        store.state.kycStatusPortal.errorMessage = 'Some error';
+        wrapper.vm.$store.state.kycStatusPortal.errorMessage = 'Some error';
+        wrapper.vm.$store.state.kycStatusPortal.hasError = true;
         await wrapper.vm.$nextTick();
 
         expect(buefyMock.dialog.alert).toHaveBeenCalledWith(
