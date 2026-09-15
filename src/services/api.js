@@ -209,6 +209,7 @@ class MayaApiService extends BaseApiService {
      */
     errorInterceptor(error) {
         if (!error.response) {
+            // this case is handled in base interceptor.
             super.errorInterceptor(error);
             return;
         }
