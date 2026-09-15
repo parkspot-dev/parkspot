@@ -1,4 +1,4 @@
-<template>
+/payment/validate?p=$<template>
     <div class="custom-bg">
         <div class="bg-decor"></div>
 
