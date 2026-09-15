@@ -38,16 +38,6 @@
             </b-table-column>
 
             <b-table-column
-                field="UserName"
-                label="User Name"
-                cell-class="has-text-left"
-            >
-                <template #default="props">
-                    <div>{{ props.row?.User?.UserName }}</div>
-                </template>
-            </b-table-column>
-
-            <b-table-column
                 field="Mobile"
                 label="Mobile"
                 searchable
@@ -186,12 +176,6 @@
                                 }}</span>
                             </div>
                             <div class="info-item">
-                                <span class="info-label">User Name</span>
-                                <span class="info-value">{{
-                                    selectedUserKYC.User?.UserName
-                                }}</span>
-                            </div>
-                            <div class="info-item">
                                 <span class="info-label">Mobile Number</span>
                                 <span class="info-value">{{
                                     selectedUserKYC.User?.Mobile
@@ -222,11 +206,6 @@
                             <h3 class="card-title">
                                 Cashfree ID Verification Details (Aadhaar)
                             </h3>
-                            <span
-                                v-if="selectedUserKYC.IDVerifiedDetails"
-                                class="tag verified-badge"
-                                >Verified</span
-                            >
                         </div>
                         <div
                             v-if="selectedUserKYC.IDVerifiedDetails"
@@ -277,14 +256,6 @@
                             <h3 class="card-title">
                                 Uploaded Identity Document Proof
                             </h3>
-                            <span
-                                v-if="
-                                    selectedUserKYC.IdentityDocument &&
-                                    selectedUserKYC.IdentityDocument.length > 0
-                                "
-                                class="tag verified-badge"
-                                >Verified</span
-                            >
                         </div>
                         <div
                             v-if="
@@ -321,11 +292,6 @@
                             <h3 class="card-title">
                                 Cashfree Ownership Verification Details (RC)
                             </h3>
-                            <span
-                                v-if="selectedUserKYC.OwnershipVerifiedDetails"
-                                class="tag verified-badge"
-                                >Verified</span
-                            >
                         </div>
                         <div
                             v-if="selectedUserKYC.OwnershipVerifiedDetails"
@@ -388,14 +354,6 @@
                             <h3 class="card-title">
                                 Uploaded Ownership Document Proof
                             </h3>
-                            <span
-                                v-if="
-                                    selectedUserKYC.OwnershipDocument &&
-                                    selectedUserKYC.OwnershipDocument.length > 0
-                                "
-                                class="tag verified-badge"
-                                >Verified</span
-                            >
                         </div>
                         <div
                             v-if="
@@ -714,25 +672,6 @@ $portal-font-size: 12px;
         .id-type-badge {
             color: var(--secondary-color) !important;
             font-weight: 700 !important;
-        }
-
-        .verified-badge {
-            background-color: var(--parkspot-green) !important;
-            color: var(--parkspot-white) !important;
-            font-weight: 600;
-            border-radius: 8px;
-            padding: 4px 12px;
-        }
-
-        .status-badge {
-            background-color: var(--primary-color);
-            color: var(--parkspot-black);
-            font-weight: 600;
-
-            &.is-verified {
-                background-color: var(--parkspot-green) !important;
-                color: var(--parkspot-white) !important;
-            }
         }
 
         .empty-doc-box {
