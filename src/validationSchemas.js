@@ -45,6 +45,11 @@ const rules = {
         .regex(/^\d+$/, 'Account number must contain only digits'),
 
     ifsc: z.string().regex(/^[A-Z]{4}0[A-Z0-9]{6}$/, 'Invalid IFSC code'),
+
+    aadhaarNumber: z
+        .string()
+        .min(1, 'Aadhaar number is required.')
+        .regex(/^\d{4}\s?\d{4}\s?\d{4}$/, 'Enter a valid 12-digit Aadhaar number.'),
 };
 
 // Contact Form Schema
@@ -97,6 +102,13 @@ export const bookingModalFormSchema = toTypedSchema(
         email: rules.email,
         mobile: rules.cno,
         vehicleNo: z.string().optional(),
+    }),
+);
+
+// Identity KYC form schema (Aadhaar-only for now)
+export const identityKycFormSchema = toTypedSchema(
+    z.object({
+        aadhaarNumber: rules.aadhaarNumber,
     }),
 );
 

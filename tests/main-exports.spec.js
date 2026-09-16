@@ -48,16 +48,20 @@ vi.mock('firebase/auth', async () => {
 });
 
 describe('src/main.js exports contract', () => {
+    // `main.js` is a heavy entry module (Buefy, vue-datepicker,
+    // vee-validate) — the dynamic import can exceed the default 5s
+    // timeout when the runner is under load (e.g. alongside the
+    // browser-based visual project). Give it more headroom.
     it('re-exports `includedRoutes` as a top-level named export', async () => {
         const main = await import('@/main.js');
         expect(main).toHaveProperty('includedRoutes');
         expect(typeof main.includedRoutes).toBe('function');
-    });
+    }, 30000);
 
     it('also exports the ViteSSG-wrapped `createApp` factory', async () => {
         const main = await import('@/main.js');
         expect(main).toHaveProperty('createApp');
-    });
+    }, 30000);
 });
 
 describe('src/main.js setup fn — seedAppStore wiring', () => {
