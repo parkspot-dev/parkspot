@@ -26,7 +26,7 @@ const STORE_MODULE_NAMES = [
     'device', 'blog', 'user', 'map', 'sdp', 'searchPortal',
     'bookingPortal', 'config', 'registerRequest', 'spotRequests',
     'reviewSpot', 'kycStatusPortal', 'myBookings', 'app',
-    'seoPages', 'pendingPayments',
+    'seoPages', 'pendingPayments', 'spotSearch',
 ];
 
 function makeFakeStore(overrides = {}) {
