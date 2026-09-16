@@ -78,6 +78,10 @@ const actions = {
                 AmountToSO: amountToSO,
             };
 
+            if (payload?.Remark) {
+                reqBody.Remark = payload.Remark;
+            }
+
             if (payload?.TransferDate) {
                 reqBody.TransferDate = payload.TransferDate;
             }

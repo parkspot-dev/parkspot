@@ -203,19 +203,41 @@ describe('Vuex - spot module', () => {
         });
 
         describe('deleteSpot', () => {
-            it('throws error if spotDetails or SiteID is missing', async () => {
-                store.state.spot.spotDetails = null;
+            it('throws error if reason is missing or empty', async () => {
+                store.state.spot.spotDetails = {
+                    SiteID: 'SITE_100',
+                    Name: 'Indiranagar Spot #1',
+                };
                 await expect(store.dispatch('spot/deleteSpot')).rejects.toThrow(
-                    'No spot details found to delete',
+                    'Reason is required',
                 );
-
-                store.state.spot.spotDetails = { Name: 'Test Spot' };
-                await expect(store.dispatch('spot/deleteSpot')).rejects.toThrow(
-                    'No spot details found to delete',
-                );
+                await expect(
+                    store.dispatch('spot/deleteSpot', ''),
+                ).rejects.toThrow('Reason is required');
+                await expect(
+                    store.dispatch('spot/deleteSpot', '   '),
+                ).rejects.toThrow('Reason is required');
             });
 
-            it('calls mayaClient.delete with encoded siteId and siteName', async () => {
+            it('throws error if spotDetails or SiteID is missing', async () => {
+                store.state.spot.spotDetails = null;
+                await expect(
+                    store.dispatch(
+                        'spot/deleteSpot',
+                        'Owner requested deletion',
+                    ),
+                ).rejects.toThrow('No spot details found to delete');
+
+                store.state.spot.spotDetails = { Name: 'Test Spot' };
+                await expect(
+                    store.dispatch(
+                        'spot/deleteSpot',
+                        'Owner requested deletion',
+                    ),
+                ).rejects.toThrow('No spot details found to delete');
+            });
+
+            it('calls mayaClient.delete with encoded siteId, siteName, and reason', async () => {
                 store.state.spot.spotDetails = {
                     SiteID: 'SITE_100',
                     Name: 'Indiranagar Spot #1',
@@ -223,10 +245,13 @@ describe('Vuex - spot module', () => {
                 const mockResponse = { Success: true };
                 mayaClient.delete.mockResolvedValue(mockResponse);
 
-                const res = await store.dispatch('spot/deleteSpot');
+                const res = await store.dispatch(
+                    'spot/deleteSpot',
+                    'Owner requested deletion',
+                );
 
                 expect(mayaClient.delete).toHaveBeenCalledWith(
-                    '/owner/site/SITE_100?site-name=Indiranagar%20Spot%20%231',
+                    '/owner/site/SITE_100?site-name=Indiranagar%20Spot%20%231&reason=Owner%20requested%20deletion',
                 );
                 expect(res).toEqual(mockResponse);
             });
@@ -240,7 +265,12 @@ describe('Vuex - spot module', () => {
                     DisplayMsg: 'Failed to delete site due to active bookings',
                 });
 
-                await expect(store.dispatch('spot/deleteSpot')).rejects.toThrow(
+                await expect(
+                    store.dispatch(
+                        'spot/deleteSpot',
+                        'Owner requested deletion',
+                    ),
+                ).rejects.toThrow(
                     'Failed to delete site due to active bookings',
                 );
             });

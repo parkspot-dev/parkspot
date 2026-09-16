@@ -27,6 +27,7 @@ const state = {
         "Remark": "Booking remark"
     }] */
     activeBookings: [],
+    activeBookingType: 'active',
     agents: [],
     bookingDetails: null,
     errorMessage: String,
@@ -77,6 +78,10 @@ const mutations = {
 
     'set-active-bookings'(state, activeBookings) {
         state.activeBookings = activeBookings;
+    },
+
+    'set-active-booking-type'(state, activeBookingType) {
+        state.activeBookingType = activeBookingType;
     },
 
     'set-agent-list'(state, agents) {
@@ -173,20 +178,52 @@ const actions = {
         commit('set-loading', false);
     },
 
-    async getActiveBooking({ commit }) {
+    async getActiveBooking({ commit, state }, force = false) {
         commit('reset-global-status');
-        // Check if activeBookings already has data
-        if (state.activeBookings && state.activeBookings.length > 0) {
+        if (
+            !force &&
+            state.activeBookingType === 'active' &&
+            state.activeBookings &&
+            state.activeBookings.length > 0
+        ) {
             return;
         }
+        commit('set-active-booking-type', 'active');
         commit('set-loading', true);
         const res = await mayaClient.get('/internal/active-bookings');
-        if (res.DisplayMsg) {
+        if (res?.DisplayMsg) {
             commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
         } else {
-            commit('set-active-bookings', res);
+            commit(
+                'set-active-bookings',
+                Array.isArray(res) ? res : res?.Bookings || res?.bookings || [],
+            );
         }
         commit('set-loading', false);
+    },
+
+    async getUpcomingBooking({ commit }) {
+        commit('reset-global-status');
+        commit('set-active-booking-type', 'upcoming');
+        commit('set-loading', true);
+        const res = await mayaClient.get('/internal/bookings?status=upcoming');
+        if (res?.DisplayMsg) {
+            commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
+        } else {
+            const bookingsList = Array.isArray(res)
+                ? res
+                : res?.Bookings || res?.bookings || [];
+            commit('set-active-bookings', bookingsList);
+        }
+        commit('set-loading', false);
+    },
+
+    async getBookingsByStatus({ dispatch }, status = 'active') {
+        if (status === 'upcoming') {
+            await dispatch('getUpcomingBooking');
+        } else {
+            await dispatch('getActiveBooking', true);
+        }
     },
 
     // Update Search Text
@@ -229,7 +266,7 @@ const actions = {
         }
         commit('set-loading', false);
     },
-    
+
     // Create contact lead (guest user)
     async createContactLead({ commit }, payload) {
         commit('reset-global-status');

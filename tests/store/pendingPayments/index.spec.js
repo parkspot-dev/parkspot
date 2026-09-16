@@ -226,6 +226,26 @@ describe('pendingPayments store', () => {
             );
         });
 
+        it('updateAmountToSO includes Remark when provided', async () => {
+            mayaClient.post.mockResolvedValue({ Success: true });
+            await store.dispatch('pendingPayments/updateAmountToSO', {
+                PaymentID: 55,
+                AmountToSO: 300,
+                Remark: 'Updated Remark',
+            });
+
+            await flushPromises();
+
+            expect(mayaClient.post).toHaveBeenCalledWith(
+                '/payment/amount-to-so',
+                expect.objectContaining({
+                    PaymentID: 55,
+                    AmountToSO: 300,
+                    Remark: 'Updated Remark',
+                }),
+            );
+        });
+
         it('updateAmountToSO toggles loading around an active request', async () => {
             let resolveRequest;
 

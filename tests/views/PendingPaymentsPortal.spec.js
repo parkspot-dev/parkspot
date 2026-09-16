@@ -288,12 +288,6 @@ describe('PendingPaymentsPortal.vue', () => {
         expect(result).toContain('Dev Shrivastav');
     });
 
-    it('onRemarkInput updates remark', () => {
-        wrapper = mountPage();
-        wrapper.vm.onRemarkInput('Test');
-        expect(wrapper.vm.editableRemark).toBe('Test');
-    });
-
     it('formatAmount works', () => {
         wrapper = mountPage();
         expect(wrapper.vm.formatAmount(1500)).toContain('₹');

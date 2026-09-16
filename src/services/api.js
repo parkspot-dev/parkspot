@@ -3,6 +3,7 @@ import { auth } from '../firebase';
 import router from '../router';
 import store from '../store';
 import { getPtid } from '../utils/ptid';
+import { logger } from '../utils/logger';
 
 /**
  * Report an API error to New Relic Browser, tagged with the identifiers
@@ -78,13 +79,12 @@ class BaseApiService {
      */
     handleErrors(error) {
         if (!error.request) {
-            console.log({ 'Http server/network error': error });
+            logger.error(error, { context: 'Http server/network error' });
             return;
         }
-        console.log({
-            message: 'Errors in http call',
-            url: error.request.responseURL,
-            err: error,
+        logger.error(error, {
+            context: 'Errors in http call',
+            url: error.request?.responseURL,
         });
     }
 
@@ -99,7 +99,7 @@ class BaseApiService {
             return response.data;
         } catch (err) {
             this.handleErrors(err);
-            return err.response.data;
+            return err.response?.data;
         }
     }
 
@@ -114,7 +114,7 @@ class BaseApiService {
             return response.data;
         } catch (err) {
             this.handleErrors(err);
-            return err.response.data;
+            return err.response?.data;
         }
     }
 
@@ -131,7 +131,7 @@ class BaseApiService {
             return response.data;
         } catch (err) {
             this.handleErrors(err);
-            return err.response.data;
+            return err.response?.data;
         }
     }
 
@@ -148,12 +148,17 @@ class BaseApiService {
             return response.data;
         } catch (err) {
             this.handleErrors(err);
-            return err.response.data;
+            return err.response?.data;
         }
     }
 }
 
-// MayaApiService inherits BaseApiService to create http clients for Maya services.
+// MayaApiService inherits BaseApiService to create http clients for Maya services. The
+// domain is configurable per environment (VITE_MAYA_API_DOMAIN); UAT Netlify builds set it
+// to https://maya-uat.parkspot.in, anything else falls back to production.
+export const MAYA_API_DOMAIN =
+    import.meta.env.VITE_MAYA_API_DOMAIN || 'https://maya-in.parkspot.in';
+
 /** Class representing a MayaApiService extends BaseApiService. */
 class MayaApiService extends BaseApiService {
     /**
@@ -161,7 +166,7 @@ class MayaApiService extends BaseApiService {
      *  @param { function } flavour - getFlavour function.
      */
     constructor(flavour) {
-        const mayaDomain = 'https://maya-in.parkspot.in'; //   TODO: we can pick from .env files.
+        const mayaDomain = MAYA_API_DOMAIN;
         const baseHeaderMap = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -198,10 +203,20 @@ class MayaApiService extends BaseApiService {
                     );
                 }
                 const token = localStorage.getItem('PSAuthKey');
-                config.headers['PSAuthKey'] = `${token}`;
-                if (token) {
+                const isInvalidToken =
+                    !token ||
+                    !token.trim() ||
+                    token.trim().toLowerCase() === 'undefined' ||
+                    token.trim().toLowerCase() === 'null';
+
+                if (isInvalidToken) {
+                    logger.warn(
+                        `[PSAuthKey Error] Sender check failed: PSAuthKey is empty or invalid for ${config.method?.toUpperCase()} ${config.url}`,
+                    );
+                } else {
                     config.headers['Authorization'] = `Bearer ${token}`;
                 }
+                config.headers['PSAuthKey'] = `${token || ''}`;
                 return config;
             },
             (error) => {
@@ -236,11 +251,10 @@ class MayaApiService extends BaseApiService {
                 alert(
                     'Something went wrong.\nNo worries, our team is always there to help. \nPlease reach out to us at +91 80929 96057.',
                 );
-                console.error(
-                    'maya interceptor default',
-                    error.response.status,
-                    error.message,
-                );
+                logger.error(error, {
+                    context: 'maya interceptor default',
+                    status: error.response.status,
+                });
         }
         throw error;
     }
@@ -284,4 +298,11 @@ const mayaClient = new MayaApiService(getFlavour);
 
 const mapBoxClient = new MapBoxApiService();
 
-export { mayaClient, mapBoxClient };
+export {
+    mayaClient,
+    mapBoxClient,
+    BaseApiService,
+    MayaApiService,
+    MapBoxApiService,
+    getFlavour,
+};

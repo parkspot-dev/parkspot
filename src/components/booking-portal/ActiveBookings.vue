@@ -1,5 +1,25 @@
 <template>
     <div class="root">
+        <div class="status-toggle-wrapper">
+            <b-field class="is-flex is-justify-content-flex-end">
+                <b-radio-button
+                    :model-value="bookingType"
+                    native-value="active"
+                    type="is-primary"
+                    @update:model-value="onTypeClick"
+                >
+                    <span>Active</span>
+                </b-radio-button>
+                <b-radio-button
+                    :model-value="bookingType"
+                    native-value="upcoming"
+                    type="is-primary"
+                    @update:model-value="onTypeClick"
+                >
+                    <span>Upcoming</span>
+                </b-radio-button>
+            </b-field>
+        </div>
         <div class="mobile-search-wrapper">
             <b-field>
                 <b-input
@@ -47,7 +67,7 @@
                 label="VO Name"
                 searchable
                 sortable
-                width="168"
+                width="200"
             >
                 <div>
                     {{ props.row.Name }}
@@ -75,7 +95,7 @@
                 label="SO Name"
                 searchable
                 sortable
-                width="112"
+                width="140"
             >
                 <div>
                     {{ props.row.SOContactDetails.FullName }}
@@ -102,6 +122,7 @@
                 field="SiteID"
                 label="SiteID"
                 sortable
+                width="110"
             >
                 <div>
                     <a :href="sdpURL(props.row.SiteID)" target="_blank">
@@ -118,7 +139,7 @@
                 field="Status"
                 label="Status"
                 sortable
-                width="100"
+                width="180"
             >
                 <div>
                     {{ getBookingStatusLabel(props.row.Status) }}
@@ -143,7 +164,7 @@
                 field="PaymentPeriod"
                 label="Periodicity"
                 sortable
-                width="112"
+                width="85"
             >
                 <div>
                     {{ getPaymentPeriodicityLabel(props.row.PaymentPeriod) }}
@@ -164,7 +185,12 @@ export default {
             type: Array,
             default: () => [],
         },
+        bookingType: {
+            type: String,
+            default: 'active',
+        },
     },
+    emits: ['type-change'],
     data() {
         return {
             mobileSearchQuery: '',
@@ -205,6 +231,11 @@ export default {
         },
     },
     methods: {
+        onTypeClick(val) {
+            if (val && val !== this.bookingType) {
+                this.$emit('type-change', val);
+            }
+        },
         sdpURL(siteId) {
             return this.$router.resolve({
                 name: 'spot-detail',
@@ -234,6 +265,18 @@ export default {
 <style lang="scss" scoped>
 .root {
     padding: 16px;
+}
+.status-toggle-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+
+    :deep(.b-radio-button.button),
+    :deep(.button) {
+        font-weight: 600;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
 .mobile-search-wrapper {
     display: none;

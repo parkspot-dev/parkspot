@@ -329,16 +329,27 @@
                             <div class="remark-input-wrap">
                                 <b-input
                                     ref="remarkInput"
+                                    v-model="editableRemark"
                                     :readonly="!isRemarkEditable"
-                                    :value="editableRemark"
-                                    @input="onRemarkInput"
                                 ></b-input>
                                 <button
                                     class="remark-edit-btn"
+                                    :class="{ 'is-editing': isRemarkEditable }"
                                     type="button"
-                                    @click="toggleRemarkEdit"
+                                    :title="
+                                        isRemarkEditable
+                                            ? 'Save remark'
+                                            : 'Edit remark'
+                                    "
+                                    @click.stop.prevent="toggleRemarkEdit"
                                 >
-                                    <b-icon icon="pencil"></b-icon>
+                                    <b-icon
+                                        :icon="
+                                            isRemarkEditable
+                                                ? 'check'
+                                                : 'pencil'
+                                        "
+                                    ></b-icon>
                                 </button>
                             </div>
                         </div>
@@ -652,14 +663,12 @@ export default {
                 const input =
                     this.$refs.remarkInput?.$el?.querySelector('input');
                 if (input) {
+                    // Safety check to ensure the input immediately allows focus and typing without any component render delay
+                    input.removeAttribute('readonly');
                     input.focus();
                     input.select();
                 }
             });
-        },
-
-        onRemarkInput(val) {
-            this.editableRemark = val;
         },
 
         searchBookingId(val) {
@@ -693,6 +702,10 @@ export default {
                 PaymentID: this.selectedPayment.PaymentId,
                 AmountToSO: this.editableAmount,
             };
+
+            if (this.editableRemark) {
+                payload.Remark = this.editableRemark;
+            }
 
             const res = await this.updateAmountToSO(payload);
 
@@ -898,6 +911,17 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 5;
+    padding: 4px;
+    border-radius: 4px;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    &.is-editing {
+        color: var(--parkspot-green);
+    }
 }
 
 .mobile-search-wrapper {

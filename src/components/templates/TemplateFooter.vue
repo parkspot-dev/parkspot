@@ -152,8 +152,8 @@
                                 </AtomIcon>
                             </span>
                             <AtomParagraph :type="'span'">
-                                2nd Floor, Nextcoworks BTM Layout, BTM 2nd
-                                Stage, Bengaluru, Karnataka 560076
+                                Ground Floor, NO 635,Ward no 11, KOK-2 RUR, KOK-2 RUR
+                                0, Lichi Bagan, Lowadih, P.O. Namkum Ranchi, Jharkhand, 834010
                             </AtomParagraph>
                         </div>
                         <div>
