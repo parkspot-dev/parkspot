@@ -1,7 +1,7 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import { createStore } from 'vuex';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import OrganismUserKyc from '@/components/organisms/OrganismUserKyc.vue';
+import OrganismUserKyc from '@/components/user-profile/UserKyc.vue';
 import identityKycModule from '@/store/identityKyc/index';
 import { mayaClient } from '@/services/api';
 import { KYCStatus } from '@/constant/enums';
