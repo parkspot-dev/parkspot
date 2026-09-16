@@ -21,6 +21,8 @@
         <ActiveBookings
             v-else
             :active-bookings="activeBookings"
+            :booking-type="activeBookingType"
+            @type-change="onBookingTypeChange"
         ></ActiveBookings>
     </div>
 </template>
@@ -52,6 +54,7 @@ export default {
             'isLoading',
             'bookingDetails',
             'activeBookings',
+            'activeBookingType',
             'searchText',
         ]),
     },
@@ -71,7 +74,8 @@ export default {
         } else {
             this.updateSearchText('');
             this.resetBookingDetails();
-            this.getActiveBooking();
+            const status = this.$route.query['status'] || 'active';
+            await this.getBookingsByStatus(status);
         }
     },
 
@@ -80,12 +84,27 @@ export default {
             'getBookingDetails',
             'getPaymentLink',
             'getActiveBooking',
+            'getUpcomingBooking',
+            'getBookingsByStatus',
             'updateBookingDetails',
             'refreshPaymentStatus',
             'getAgents',
             'updateSearchText',
             'resetBookingDetails',
         ]),
+        onBookingTypeChange(type) {
+            if (type === this.activeBookingType) return;
+            const query = { ...this.$route.query };
+            if (type === 'upcoming') {
+                query.status = 'upcoming';
+            } else {
+                delete query.status;
+            }
+            this.$router.push({
+                path: this.$route.path,
+                query,
+            });
+        },
         searchBooking(bookingId) {
             this.resetBookingDetails();
             this.updateSearchText(bookingId);
@@ -101,8 +120,14 @@ export default {
             if (this.$route.query.bookingId) {
                 this.updateSearchText('');
                 this.resetBookingDetails();
-                // Navigate to the main booking portal route
-                this.$router.push({ name: 'booking-portal' });
+                const query = {};
+                if (this.$route.query.status === 'upcoming') {
+                    query.status = 'upcoming';
+                }
+                this.$router.push({
+                    name: 'booking-portal',
+                    query,
+                });
             }
         },
         alertError(msg) {
