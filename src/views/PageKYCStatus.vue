@@ -126,10 +126,10 @@
                 <template #default="props">
                     <SelectInput
                         :key="
-                            props.row?.User?.UserName || props.row?.User?.Mobile
+                            props.row?.User?.UserName || props.row?.User?.Mobile || props.row?.ID
                         "
                         :model-value="
-                            getKYCStatusLabel(props.row?.User?.KYCStatus)
+                            getKYCStatusLabel(props.row?.User?.KYCStatus ?? props.row?.KYCStatus)
                         "
                         :list="KYCStatusLabel"
                         class="select"
@@ -492,14 +492,19 @@ export default {
         async onStatusUpdate(row, newStatus) {
             const labelId = KYCStatus[newStatus];
             if (labelId == null) return;
-            if (row && row.User) {
-                row.User.KYCStatus = labelId;
+
+            if (row) {
+                row.KYCStatus = labelId;
+                if (row.User) {
+                    row.User.KYCStatus = labelId;
+                }
             }
+
             await this.updateStatus({ userData: row });
-            await this.fetchKycPendingUsers();
             this.$buefy.toast.open({
                 message: `KYC Status updated to ${getKYCStatusLabel(labelId)}`,
                 type: 'is-success',
+                duration: 3000,
             });
         },
 
