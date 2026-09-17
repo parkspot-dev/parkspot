@@ -299,15 +299,28 @@
                                 @change="onAgentUpdate(props.row, $event)"
                             >
                             </AtomSelectInput>
-                            <button
-                                v-else
-                                class="btn"
-                                @click="
-                                    onAgentUpdate(props.row, agentList[0].id)
-                                "
-                            >
-                                Assign to me
-                            </button>
+                            <template v-else>
+                                <AtomTooltip
+                                    v-if="isAssignDisabled"
+                                    label="Please complete 7 registered requests to assign more"
+                                >
+                                    <button class="btn" disabled>
+                                        Assign to me
+                                    </button>
+                                </AtomTooltip>
+                                <button
+                                    v-else
+                                    class="btn"
+                                    @click="
+                                        onAgentUpdate(
+                                            props.row,
+                                            agentList[0].id,
+                                        )
+                                    "
+                                >
+                                    Assign to me
+                                </button>
+                            </template>
                         </div>
                     </div>
                 </template>
@@ -411,6 +424,7 @@
                     :parking-requests="filteredParkingRequests"
                     :is-empty="isEmpty"
                     :is-admin="isAdmin"
+                    :is-assign-disabled="isAssignDisabled"
                     :new-comment-map="newCommentMap"
                     :status-list="statusList"
                     :agent-list="agentList"
@@ -512,6 +526,7 @@ import AtomIcon from '../atoms/AtomIcon';
 import AtomInput from '../atoms/AtomInput.vue';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
+import AtomTooltip from '../atoms/AtomTooltip.vue';
 import moment from 'moment';
 import SelectInput from '../global/SelectInput.vue';
 import FilterDropdown from '../global/FilterDropdown.vue';
@@ -527,6 +542,7 @@ export default {
         AtomDatePicker,
         AtomInput,
         AtomButton,
+        AtomTooltip,
         SelectInput,
         FilterDropdown,
         MobileView,
@@ -631,23 +647,50 @@ export default {
             }
             return this.windowWidth > 768 || this.forceDesktop;
         },
+        isAssignDisabled() {
+            const rawAgent =
+                this.userProfile?.FullName || this.agentList?.[0]?.name || '';
+            const currentAgent = rawAgent
+                .replace(/[[\]]/g, '')
+                .trim()
+                .split(' ')[0]
+                .toLowerCase();
+            if (!currentAgent) return false;
+
+            const requests = this.parkingRequests?.length
+                ? this.parkingRequests
+                : this.filteredParkingRequests || [];
+            return (
+                requests.filter((req) => {
+                    const reqAgent = (req?.Agent || '')
+                        .replace(/[[\]]/g, '')
+                        .trim()
+                        .split(' ')[0]
+                        .toLowerCase();
+                    return (
+                        reqAgent === currentAgent &&
+                        (req?.Status == 1 || req?.Status === 'Registered')
+                    );
+                }).length >= 7
+            );
+        },
     },
 
     watch: {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
 
-            if (this.$route.query[this.QUERY_PARAMS.IS_EXPIRING]) {
+            if (this.$route?.query?.[this.QUERY_PARAMS.IS_EXPIRING]) {
                 this.extractExpiringRequests();
                 this.filters.isExpiring = true;
             }
 
-            if (this.$route.query[this.QUERY_PARAMS.AGENT]) {
+            if (this.$route?.query?.[this.QUERY_PARAMS.AGENT]) {
                 const agentName = this.$route.query['agent'];
                 this.filters.Agent = agentName;
                 this.extractRequestsByAgentName(agentName);
             }
-            if (this.$route.query[this.QUERY_PARAMS.STATUS]) {
+            if (this.$route?.query?.[this.QUERY_PARAMS.STATUS]) {
                 const statusId = parseInt(this.$route.query['status']);
                 const statusRow = this.statusList.find(
                     (item) => item.id === statusId,
@@ -1164,6 +1207,8 @@ $portal-font-size: 13px;
 
 .btn:disabled {
     cursor: not-allowed;
+    background-color: var(--parkspot-grey, #a9a9a9);
+    color: #252525;
 }
 
 .frequent-comments {
