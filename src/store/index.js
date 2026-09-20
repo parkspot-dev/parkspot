@@ -16,6 +16,7 @@ import blog from './blog';
 import bookingPortal from './bookingPortal';
 import config from './config';
 import device from './device';
+import identityKyc from './identityKyc';
 import kycStatusPortal from './kycStatusPortal';
 import map from './map';
 import myBookings from './myBookings';
@@ -43,6 +44,7 @@ export function createAppStore() {
             bookingPortal,
             config,
             device,
+            identityKyc,
             kycStatusPortal,
             map,
             myBookings,

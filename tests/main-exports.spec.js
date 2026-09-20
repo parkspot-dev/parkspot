@@ -48,30 +48,20 @@ vi.mock('firebase/auth', async () => {
 });
 
 describe('src/main.js exports contract', () => {
-    // `import('@/main.js')` pulls in the full app dependency graph
-    // (router, every view, the mocked-but-still-transformed SPA libs
-    // above). That's cheap in isolation but can cross Vitest's 5s
-    // default under full-suite parallel load, where many other test
-    // files are transforming modules on the same CPU at once — so this
-    // is genuinely slow-but-correct contention, not a hang.
-    it(
-        're-exports `includedRoutes` as a top-level named export',
-        async () => {
-            const main = await import('@/main.js');
-            expect(main).toHaveProperty('includedRoutes');
-            expect(typeof main.includedRoutes).toBe('function');
-        },
-        20000,
-    );
+    // `main.js` is a heavy entry module (Buefy, vue-datepicker,
+    // vee-validate) — the dynamic import can exceed the default 5s
+    // timeout when the runner is under load (e.g. alongside the
+    // browser-based visual project). Give it more headroom.
+    it('re-exports `includedRoutes` as a top-level named export', async () => {
+        const main = await import('@/main.js');
+        expect(main).toHaveProperty('includedRoutes');
+        expect(typeof main.includedRoutes).toBe('function');
+    }, 30000);
 
-    it(
-        'also exports the ViteSSG-wrapped `createApp` factory',
-        async () => {
-            const main = await import('@/main.js');
-            expect(main).toHaveProperty('createApp');
-        },
-        20000,
-    );
+    it('also exports the ViteSSG-wrapped `createApp` factory', async () => {
+        const main = await import('@/main.js');
+        expect(main).toHaveProperty('createApp');
+    }, 30000);
 });
 
 describe('src/main.js setup fn — seedAppStore wiring', () => {
