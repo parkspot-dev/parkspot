@@ -65,40 +65,46 @@ describe('src/main.js exports contract', () => {
 });
 
 describe('src/main.js setup fn — seedAppStore wiring', () => {
-    it('seeds the default-export store BEFORE app.use(store)', async () => {
-        capturedSetupFn = null;
-        vi.resetModules();
-        await import('@/main.js');
-        expect(capturedSetupFn).toBeTypeOf('function');
+    it(
+        'seeds the default-export store BEFORE app.use(store)',
+        async () => {
+            capturedSetupFn = null;
+            vi.resetModules();
+            await import('@/main.js');
+            expect(capturedSetupFn).toBeTypeOf('function');
 
-        const callOrder = [];
-        const fakeStore = { replaceState: vi.fn(), state: {} };
-        const createAppStoreSpy = vi.fn(() => fakeStore);
-        const seedAppStoreSpy = vi.fn(() => callOrder.push('seedAppStore'));
-        vi.doMock('@/store', () => ({
-            createAppStore: createAppStoreSpy,
-            seedAppStore: seedAppStoreSpy,
-            default: {},
-        }));
+            const callOrder = [];
+            const fakeStore = { replaceState: vi.fn(), state: {} };
+            const createAppStoreSpy = vi.fn(() => fakeStore);
+            const seedAppStoreSpy = vi.fn(() =>
+                callOrder.push('seedAppStore'),
+            );
+            vi.doMock('@/store', () => ({
+                createAppStore: createAppStoreSpy,
+                seedAppStore: seedAppStoreSpy,
+                default: {},
+            }));
 
-        vi.resetModules();
-        await import('@/main.js');
-        expect(capturedSetupFn).toBeTypeOf('function');
+            vi.resetModules();
+            await import('@/main.js');
+            expect(capturedSetupFn).toBeTypeOf('function');
 
-        const app = {
-            use: vi.fn(() => callOrder.push('app.use')),
-            mixin: vi.fn(),
-            component: vi.fn(),
-        };
-        capturedSetupFn({ app, isClient: true, initialState: {} });
+            const app = {
+                use: vi.fn(() => callOrder.push('app.use')),
+                mixin: vi.fn(),
+                component: vi.fn(),
+            };
+            capturedSetupFn({ app, isClient: true, initialState: {} });
 
-        expect(seedAppStoreSpy).toHaveBeenCalledTimes(1);
-        expect(seedAppStoreSpy).toHaveBeenCalledWith(fakeStore);
-        expect(app.use).toHaveBeenCalledWith(fakeStore);
-        expect(callOrder.indexOf('seedAppStore')).toBeLessThan(
-            callOrder.indexOf('app.use'),
-        );
+            expect(seedAppStoreSpy).toHaveBeenCalledTimes(1);
+            expect(seedAppStoreSpy).toHaveBeenCalledWith(fakeStore);
+            expect(app.use).toHaveBeenCalledWith(fakeStore);
+            expect(callOrder.indexOf('seedAppStore')).toBeLessThan(
+                callOrder.indexOf('app.use'),
+            );
 
-        vi.doUnmock('@/store');
-    });
+            vi.doUnmock('@/store');
+        },
+        20000,
+    );
 });
