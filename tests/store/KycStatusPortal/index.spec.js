@@ -30,9 +30,16 @@ describe('Vuex Module: KycStatusPortal', () => {
 
     // Getters
     describe('getters', () => {
-        it('getter isLoading returns correct value', () => {
+        it('getters return correct values', () => {
+            state.users = [{ id: 1 }];
             state.isLoading = true;
+            state.hasError = true;
+            state.errorMessage = 'error';
+
+            expect(kycStatusPortal.getters.users(state)).toEqual([{ id: 1 }]);
             expect(kycStatusPortal.getters.isLoading(state)).toBe(true);
+            expect(kycStatusPortal.getters.hasError(state)).toBe(true);
+            expect(kycStatusPortal.getters.errorMessage(state)).toBe('error');
         });
     });
 
