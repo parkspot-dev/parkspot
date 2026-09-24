@@ -69,8 +69,9 @@ export default {
         if (this.$route.query['bookingId'] != undefined) {
             const bookingId = this.$route.query['bookingId'];
             this.updateSearchText(bookingId);
-            this.getAgents();
             this.getBookingDetails(bookingId);
+            await this.$store.dispatch('app/getAgents'); 
+            await this.getAgents();
         } else {
             this.updateSearchText('');
             this.resetBookingDetails();
