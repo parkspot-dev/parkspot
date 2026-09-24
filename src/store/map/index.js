@@ -107,16 +107,16 @@ const mutations = {
     },
 
     'update-selected-city'(state, city) {
-        state.selectedLocation.city = city.text || '';
+        state.selectedLocation.city = city?.text || '';
     },
 
     // region is same as state like jharkhand, karnataka etc.
     'update-selected-state'(state, region) {
-        state.selectedLocation.state = region.text || '';
+        state.selectedLocation.state = region?.text || '';
     },
 
     'update-selected-country'(state, country) {
-        state.selectedLocation.country = country.text || '';
+        state.selectedLocation.country = country?.text || '';
     },
 
     'update-map-config'(state, center) {
