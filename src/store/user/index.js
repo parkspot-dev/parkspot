@@ -10,22 +10,42 @@ import {
 } from 'firebase/auth';
 import { identify, setUserProperty } from '@/lib/analytics';
 import { formatRemarkWithUtm } from '@/lib/analytics/attribution';
+import { logger } from '@/utils/logger';
 
 const PS_AUTH_KEY = 'PSAuthKey';
 const USER_PROFILE_STORAGE_KEY = 'UserProfile';
 const PROFILE_CACHE_PREFIX = 'profile:';
 const PROFILE_CACHE_VERSION = 1;
 const PROFILE_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
-const getPsAuthKey = () => localStorage.getItem(PS_AUTH_KEY);
+const getPsAuthKey = () => {
+    const key = localStorage.getItem(PS_AUTH_KEY);
+    if (
+        !key ||
+        !key.trim() ||
+        key.trim().toLowerCase() === 'undefined' ||
+        key.trim().toLowerCase() === 'null'
+    ) {
+        logger.warn(
+            '[PSAuthKey Error] Receiver check: PSAuthKey is empty or invalid in localStorage',
+        );
+    }
+    return key;
+};
 
 const hasValidPsAuthKey = () => {
     const key = getPsAuthKey();
-    return Boolean(
+    const isValid = Boolean(
         key &&
             key.trim() &&
             key.trim().toLowerCase() !== 'undefined' &&
             key.trim().toLowerCase() !== 'null',
     );
+    if (!isValid) {
+        logger.warn(
+            '[PSAuthKey Error] Receiver validation failed: PSAuthKey is empty/invalid',
+        );
+    }
+    return isValid;
 };
 
 const normalizeCacheIdentity = (value) =>
@@ -215,20 +235,20 @@ const actions = {
             const res = await signInWithPopup(auth, gProvider);
             const user = res.user;
             const token = await user.getIdToken();
+            if (!token || !token.trim()) {
+                logger.error(
+                    new Error(
+                        '[PSAuthKey Error] Google Sign-In succeeded but received empty PSAuthKey',
+                    ),
+                );
+                throw new Error('Received empty PSAuthKey from Google login');
+            }
             localStorage.setItem(PS_AUTH_KEY, token);
             commit('update-user', user);
             commit('update-login-modal', false);
             await dispatch('authenticateWithMaya');
-            await dispatch('app/getAgents', null, { root: true });
         } catch (error) {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
-            console.log(errorCode, errorMessage, email, credential);
+            logger.error(error);
         }
     },
 
@@ -479,51 +499,71 @@ const actions = {
 // module-level subscription would leak state across renders.
 if (typeof window !== 'undefined') {
     onAuthStateChanged(auth, async (user) => {
-        const previousUser = store.state?.user?.user;
-        const previousCacheUserId = resolveUserIdentity(previousUser);
-
-        store.commit('user/update-user', user);
-
-        if (!user) {
-            store.commit('user/set-auth-error', null);
-            clearProfileCache(previousCacheUserId);
-            localStorage.removeItem(PS_AUTH_KEY);
-            // Clear the GA4 user-scoped identity on sign-out. No user_id and
-            // no PII — just flips the authenticated flag off.
-            setUserProperty('is_authenticated', false);
-            store.commit('user/update-auth-ready', true);
-            return;
-        }
-
+        // Firebase does not attach a `.catch` to this callback, so any
+        // throw here becomes an unhandled rejection. Guard the whole body
+        // (not just the Maya calls) so a stale `store` binding — e.g. under
+        // module teardown in tests — can't escape as one.
         try {
-            const token = await user.getIdToken();
-            localStorage.setItem(PS_AUTH_KEY, token);
+            const previousUser = store?.state?.user?.user;
+            const previousCacheUserId = resolveUserIdentity(previousUser);
 
-            await store.dispatch('user/getUserProfile');
-            await store.dispatch('app/getAgents');
+            store.commit('user/update-user', user);
 
-            // GA4 user identity. `user.uid` is Firebase's internal ID (not
-            // PII); role comes from the resolved profile. `city` is
-            // intentionally omitted — the app has no reliable home-city
-            // source (locName is a searched location, not the user's city).
-            const currentUser = store.state?.user;
-            const userRole = currentUser?.isAdmin
-                ? 'admin'
-                : currentUser?.isAgent
-                  ? 'agent'
-                  : currentUser?.userProfile?.Type || 'unknown';
-            identify(user.uid, {
-                is_authenticated: true,
-                user_role: userRole,
-            });
-        } catch {
-            store.commit('user/set-auth-error', {
-                source: 'onAuthStateChanged',
-                message: 'Failed to load user bootstrap data',
-            });
+            if (!user) {
+                store.commit('user/set-auth-error', null);
+                clearProfileCache(previousCacheUserId);
+                localStorage.removeItem(PS_AUTH_KEY);
+                // Clear the GA4 user-scoped identity on sign-out. No user_id and
+                // no PII — just flips the authenticated flag off.
+                setUserProperty('is_authenticated', false);
+                store.commit('user/update-auth-ready', true);
+                return;
+            }
+
+            try {
+                const token = await user.getIdToken();
+                if (!token || !token.trim()) {
+                    logger.warn(
+                        '[PSAuthKey Error] Firebase Auth state changed but received empty PSAuthKey',
+                    );
+                    store.commit('user/set-auth-error', {
+                        source: 'onAuthStateChanged',
+                        message: 'Received empty PSAuthKey from Firebase',
+                    });
+                    store.commit('user/update-auth-ready', true);
+                    return;
+                }
+                localStorage.setItem(PS_AUTH_KEY, token);
+
+                await store.dispatch('user/getUserProfile');
+
+                // GA4 user identity. `user.uid` is Firebase's internal ID
+                // (not PII); role comes from the resolved profile. `city` is
+                // intentionally omitted — the app has no reliable home-city
+                // source (locName is a searched location, not the user's
+                // city).
+                const currentUser = store.state?.user;
+
+                const userRole = currentUser?.isAdmin
+                    ? 'admin'
+                    : currentUser?.isAgent
+                      ? 'agent'
+                      : currentUser?.userProfile?.Type || 'unknown';
+                identify(user.uid, {
+                    is_authenticated: true,
+                    user_role: userRole,
+                });
+            } catch {
+                store.commit('user/set-auth-error', {
+                    source: 'onAuthStateChanged',
+                    message: 'Failed to load user bootstrap data',
+                });
+            }
+
+            store.commit('user/update-auth-ready', true);
+        } catch (err) {
+            console.error('onAuthStateChanged listener failed', err);
         }
-
-        store.commit('user/update-auth-ready', true);
     });
 }
 

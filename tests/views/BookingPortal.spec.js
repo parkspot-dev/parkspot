@@ -7,6 +7,7 @@ describe('BookingPortal.vue', () => {
     let wrapper;
     let store;
     let actionsMock;
+    let appActionsMock;
     let alertMock;
     let routerPushMock;
 
@@ -24,8 +25,15 @@ describe('BookingPortal.vue', () => {
             resetBookingDetails: vi.fn(),
         };
 
+        appActionsMock = { getAgents: vi.fn().mockResolvedValue() };
+
         return createStore({
             modules: {
+                app: {
+                    namespaced: true,
+                    state: () => ({ agents: [] }),
+                    actions: appActionsMock,
+                },
                 bookingPortal: {
                     namespaced: true,
                     state: () => ({
@@ -151,6 +159,57 @@ describe('BookingPortal.vue', () => {
             'BK-555',
         );
         expect(actionsMock.getBookingsByStatus).not.toHaveBeenCalled();
+    });
+
+    it('fetches agents from the API when bookingId query param is present', async () => {
+        mountComponent({ routeQuery: { bookingId: 'BK-555' } });
+        await flushPromises();
+
+        expect(appActionsMock.getAgents).toHaveBeenCalledTimes(1);
+    });
+
+    it('fetches agents before copying them into the booking portal store', async () => {
+        const callOrder = [];
+        const orderedStore = createVuexStore();
+        appActionsMock.getAgents.mockImplementation(async () => {
+            callOrder.push('app/getAgents');
+        });
+        actionsMock.getAgents.mockImplementation(() => {
+            callOrder.push('bookingPortal/getAgents');
+        });
+
+        wrapper = mount(BookingPortal, {
+            global: {
+                plugins: [orderedStore],
+                mocks: {
+                    $route: {
+                        query: { bookingId: 'BK-555' },
+                        path: '/booking-portal',
+                    },
+                    $router: { push: vi.fn() },
+                    $buefy: { dialog: { alert: vi.fn() } },
+                },
+                stubs: {
+                    MoleculeSearchBox: true,
+                    TemplateBookingPortal: true,
+                    ActiveBookings: true,
+                    LoaderModal: true,
+                },
+            },
+        });
+        await flushPromises();
+
+        expect(callOrder).toEqual([
+            'app/getAgents',
+            'bookingPortal/getAgents',
+        ]);
+    });
+
+    it('does not fetch agents when bookingId query param is absent', async () => {
+        mountComponent({ routeQuery: { status: 'upcoming' } });
+        await flushPromises();
+
+        expect(appActionsMock.getAgents).not.toHaveBeenCalled();
     });
 
     it('fetches bookings by status on mount when bookingId query param is absent', async () => {
