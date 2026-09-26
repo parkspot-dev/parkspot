@@ -93,7 +93,7 @@
                         <template v-else>
                             <AtomTooltip
                                 v-if="isAssignDisabled"
-                                label="Please complete 7 registered requests to assign more"
+                                :label="`Please complete ${MAX_REGISTERED_REQUESTS} registered requests to assign more`"
                             >
                                 <button class="btn" disabled>
                                     Assign to me
@@ -166,6 +166,7 @@
 </template>
 
 <script>
+import { MAX_REGISTERED_REQUESTS } from '@/constant/constant';
 import AtomDatePicker from '../atoms/AtomDatePicker.vue';
 import AtomInput from '../atoms/AtomInput.vue';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
@@ -209,6 +210,7 @@ export default {
     ],
     data() {
         return {
+            MAX_REGISTERED_REQUESTS,
             localMap: { ...this.newCommentMap },
         };
     },

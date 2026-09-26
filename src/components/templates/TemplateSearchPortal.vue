@@ -302,7 +302,7 @@
                             <template v-else>
                                 <AtomTooltip
                                     v-if="isAssignDisabled"
-                                    label="Please complete 7 registered requests to assign more"
+                                    :label="`Please complete ${MAX_REGISTERED_REQUESTS} registered requests to assign more`"
                                 >
                                     <button class="btn" disabled>
                                         Assign to me
@@ -517,7 +517,10 @@
 </template>
 
 <script>
-import { FREQUENT_COMMENTS } from '@/constant/constant';
+import {
+    FREQUENT_COMMENTS,
+    MAX_REGISTERED_REQUESTS,
+} from '@/constant/constant';
 import { getCoordinate } from '../../includes/LatLng';
 import { mapActions, mapState } from 'vuex';
 import AtomButton from '../atoms/AtomButton.vue';
@@ -570,11 +573,6 @@ export default {
                 UpdatedAt: null,
                 isExpiring: false,
             },
-            isBordered: false,
-            isStriped: false,
-            isNarrowed: false,
-            isHoverable: false,
-            isFocusable: false,
             hasMobileCards: true,
 
             statusList: [
@@ -586,13 +584,6 @@ export default {
                 { id: 5, name: 'SpotDenied' },
                 { id: 6, name: 'Archive' },
             ],
-
-            model: {
-                comments: '',
-                agent: '',
-                status: '',
-                nextCall: '',
-            },
 
             summary: {
                 btn: 'Show',
@@ -606,16 +597,13 @@ export default {
                 today: 0,
                 yesterday: 0,
             },
-            showSecondaryDetails: {
-                ID: 0,
-                isShow: false,
-            },
             oldComments: '',
             isOpen: false,
             selectedRow: {},
             newComment: '',
             defaultStatus: '',
             FREQUENT_COMMENTS: FREQUENT_COMMENTS,
+            MAX_REGISTERED_REQUESTS: MAX_REGISTERED_REQUESTS,
             newCommentMap: {},
             requestsFilterOptions: ['Expiring'],
             windowWidth: 0,
@@ -657,9 +645,7 @@ export default {
                 .toLowerCase();
             if (!currentAgent) return false;
 
-            const requests = this.parkingRequests?.length
-                ? this.parkingRequests
-                : this.filteredParkingRequests || [];
+            const requests = this.parkingRequests || [];
             return (
                 requests.filter((req) => {
                     const reqAgent = (req?.Agent || '')
@@ -671,7 +657,7 @@ export default {
                         reqAgent === currentAgent &&
                         (req?.Status == 1 || req?.Status === 'Registered')
                     );
-                }).length >= 7
+                }).length >= MAX_REGISTERED_REQUESTS
             );
         },
     },
@@ -731,7 +717,6 @@ export default {
 
     methods: {
         ...mapActions('searchPortal', [
-            'getAgents',
             'setAgents',
             'extractExpiringRequests',
             'resetFilterParkingRequests',

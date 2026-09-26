@@ -2,6 +2,7 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createStore } from 'vuex';
 import TemplateSearchPortal from '@/components/templates/TemplateSearchPortal.vue';
+import { MAX_REGISTERED_REQUESTS } from '@/constant/constant';
 
 describe('TemplateSearchPortal.vue', () => {
     let store;
@@ -460,32 +461,41 @@ describe('TemplateSearchPortal.vue', () => {
     });
 
     describe('isAssignDisabled validation', () => {
-        it('disables assign to me when agent has 7 or more registered requests', async () => {
-            const agentRequests = Array.from({ length: 7 }, (_, i) => ({
-                ID: i + 1,
-                Agent: 'dev',
-                Status: 1,
-            }));
+        it(`disables assign to me when agent has ${MAX_REGISTERED_REQUESTS} or more registered requests`, async () => {
+            const agentRequests = Array.from(
+                { length: MAX_REGISTERED_REQUESTS },
+                (_, i) => ({
+                    ID: i + 1,
+                    Agent: 'dev',
+                    Status: 1,
+                }),
+            );
             await wrapper.setProps({ parkingRequests: agentRequests });
             expect(wrapper.vm.isAssignDisabled).toBe(true);
         });
 
-        it('enables assign to me when agent has fewer than 7 registered requests', async () => {
-            const agentRequests = Array.from({ length: 6 }, (_, i) => ({
-                ID: i + 1,
-                Agent: 'dev',
-                Status: 1,
-            }));
+        it(`enables assign to me when agent has fewer than ${MAX_REGISTERED_REQUESTS} registered requests`, async () => {
+            const agentRequests = Array.from(
+                { length: MAX_REGISTERED_REQUESTS - 1 },
+                (_, i) => ({
+                    ID: i + 1,
+                    Agent: 'dev',
+                    Status: 1,
+                }),
+            );
             await wrapper.setProps({ parkingRequests: agentRequests });
             expect(wrapper.vm.isAssignDisabled).toBe(false);
         });
 
         it('re-enables assign to me when a request status changes from Registered (1) to Processing (2)', async () => {
-            const agentRequests = Array.from({ length: 7 }, (_, i) => ({
-                ID: i + 1,
-                Agent: 'dev',
-                Status: 1,
-            }));
+            const agentRequests = Array.from(
+                { length: MAX_REGISTERED_REQUESTS },
+                (_, i) => ({
+                    ID: i + 1,
+                    Agent: 'dev',
+                    Status: 1,
+                }),
+            );
             await wrapper.setProps({ parkingRequests: agentRequests });
             expect(wrapper.vm.isAssignDisabled).toBe(true);
 
