@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
     BaseApiService,
     MayaApiService,
@@ -18,6 +18,14 @@ vi.mock('@/firebase', () => ({
         },
     },
 }));
+
+vi.mock('@/router', () => ({
+    default: { currentRoute: { value: { fullPath: '/srp?latlng=1,2' } } },
+}));
+vi.mock('@/store', () => ({
+    default: { state: { user: { user: { uid: 'user-123' } } } },
+}));
+vi.mock('@/utils/ptid', () => ({ getPtid: () => 'ptid-abc' }));
 
 vi.mock('@/utils/logger', () => ({
     logger: {
@@ -230,7 +238,9 @@ describe('MayaApiService', () => {
             response: { status: 401 },
         };
         expect(() => mayaService.errorInterceptor(error)).toThrow();
-        expect(alertMock).toHaveBeenCalledWith('Please login and try again.');
+        expect(alertMock).toHaveBeenCalledWith(
+            'Your session has expired. Please login and try again.',
+        );
     });
 
     it('handles 500 default error with team alert and logger error', () => {
@@ -240,7 +250,7 @@ describe('MayaApiService', () => {
         };
         expect(() => mayaService.errorInterceptor(error)).toThrow();
         expect(alertMock).toHaveBeenCalledWith(
-            expect.stringContaining('Something went wrong.'),
+            expect.stringContaining('Something went wrong'),
         );
         expect(logger.error).toHaveBeenCalledWith(error, {
             context: 'maya interceptor default',
@@ -267,5 +277,88 @@ describe('MapBoxApiService & getFlavour & Clients', () => {
 
     it('getFlavour returns dweb or mweb string', () => {
         expect(['dweb', 'mweb']).toContain(getFlavour);
+    });
+});
+
+describe('MayaApiService errorInterceptor New Relic reporting', () => {
+    let alertSpy;
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+        alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+        window.newrelic = {
+            noticeError: vi.fn(),
+            addPageAction: vi.fn(),
+        };
+    });
+
+    afterEach(() => {
+        alertSpy.mockRestore();
+        delete window.newrelic;
+    });
+
+    const makeError = (status) => ({
+        response: { status, data: {} },
+        message: 'boom',
+    });
+
+    it('shows a session-expired message for 401 and notices a real error', () => {
+        const error = makeError(401);
+        expect(() => mayaClient.errorInterceptor(error)).toThrow();
+
+        expect(alertSpy).toHaveBeenCalledWith(
+            expect.stringContaining('session has expired'),
+        );
+        expect(window.newrelic.noticeError).toHaveBeenCalledWith(
+            error,
+            expect.objectContaining({
+                ptid: 'ptid-abc',
+                session: 'user-123',
+                pageUrl: '/srp?latlng=1,2',
+                status: 401,
+            }),
+        );
+        expect(window.newrelic.addPageAction).not.toHaveBeenCalled();
+    });
+
+    it('shows a not-found message for 404 and notices a real error', () => {
+        const error = makeError(404);
+        expect(() => mayaClient.errorInterceptor(error)).toThrow();
+
+        expect(alertSpy).toHaveBeenCalledWith(
+            expect.stringContaining("couldn't find a parking spot"),
+        );
+        expect(window.newrelic.noticeError).toHaveBeenCalledWith(
+            error,
+            expect.objectContaining({ status: 404 }),
+        );
+        expect(window.newrelic.addPageAction).not.toHaveBeenCalled();
+    });
+
+    it('prefers Maya\'s DisplayMsg over the hardcoded 404 copy when present', () => {
+        const error = {
+            response: {
+                status: 404,
+                data: { DisplayMsg: 'No sites match that search.' },
+            },
+            message: 'boom',
+        };
+        expect(() => mayaClient.errorInterceptor(error)).toThrow();
+
+        expect(alertSpy).toHaveBeenCalledWith('No sites match that search.');
+    });
+
+    it('shows the generic fallback and notices a real error for other statuses', () => {
+        const error = makeError(500);
+        expect(() => mayaClient.errorInterceptor(error)).toThrow();
+
+        expect(alertSpy).toHaveBeenCalledWith(
+            expect.stringContaining('Something went wrong'),
+        );
+        expect(window.newrelic.noticeError).toHaveBeenCalledWith(
+            error,
+            expect.objectContaining({ status: 500 }),
+        );
+        expect(window.newrelic.addPageAction).not.toHaveBeenCalled();
     });
 });
