@@ -233,7 +233,7 @@ describe('MayaApiService', () => {
         await expect(interceptorErrorHandler(reqErr)).rejects.toThrow(reqErr);
     });
 
-    it('handles 401 response error', () => {
+    it('handles 401 response error with login alert', () => {
         const error = {
             response: { status: 401 },
         };
@@ -243,7 +243,7 @@ describe('MayaApiService', () => {
         );
     });
 
-    it('handles 500 default error', () => {
+    it('handles 500 default error with team alert and logger error', () => {
         const error = {
             response: { status: 500 },
             message: 'Internal Server Error',
