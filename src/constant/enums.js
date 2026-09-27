@@ -148,6 +148,25 @@ export function getKYCStatusLabel(kyStatus) {
     return getEnumLabel(KYCStatusLabel, kyStatus);
 }
 
+// kyc statuses
+export const IdentityKycStatus = Object.freeze({
+    NotVerified: 'NOT_VERIFIED',
+    Pending: 'PENDING',
+    Verified: 'VERIFIED',
+    Failed: 'FAILED',
+});
+
+// Aadhaar is the only supported ID type today; IdType=1 is fixed by the
+// backend contract.
+export const IDENTITY_KYC_AADHAAR_ID_TYPE = 1;
+
+export const VehicleRcStatus = Object.freeze({
+    NotVerified: 'NOT_VERIFIED',
+    Pending: 'PENDING',
+    Verified: 'VERIFIED',
+    Failed: 'FAILED',
+});
+
 export const BookingStatus = Object.freeze({
     // BookingInitiated => fired tentative, SO not confirmed yet.
     BookingInitiated: 0, // tentative
