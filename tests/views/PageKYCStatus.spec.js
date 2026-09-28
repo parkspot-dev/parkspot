@@ -111,11 +111,13 @@ const factory = (routerOverrides = {}) =>
                     `,
                 },
                 'b-table-column': {
-                    template: '<div><slot /><slot name="default" :row="{ User: { FullName: \'Test\', Mobile: \'999\', KYCStatus: 0 } }" /></div>',
+                    template:
+                        '<div><slot /><slot name="default" :row="{ User: { FullName: \'Test\', Mobile: \'999\', KYCStatus: 0 } }" /></div>',
                 },
                 'b-modal': {
                     props: ['modelValue'],
-                    template: '<div class="b-modal-stub" v-if="modelValue"><slot /></div>',
+                    template:
+                        '<div class="b-modal-stub" v-if="modelValue"><slot /></div>',
                 },
             },
             mocks: {
@@ -177,6 +179,20 @@ describe('PageKYCStatus.vue', () => {
         );
     });
 
+    it('does not show success toast and reverts status when updateStatus fails', async () => {
+        const wrapper = factory();
+        actions.updateStatus.mockImplementationOnce(() => {
+            store.state.kycStatusPortal.hasError = true;
+        });
+
+        const userRow = store.state.kycStatusPortal.users[0];
+        await wrapper.vm.onStatusUpdate(userRow, 'APPROVED');
+
+        expect(actions.updateStatus).toHaveBeenCalled();
+        expect(userRow.User.KYCStatus).toBe(0);
+        expect(buefyMock.toast.open).not.toHaveBeenCalled();
+    });
+
     it('opens image preview modal', async () => {
         const wrapper = factory();
 
@@ -190,8 +206,23 @@ describe('PageKYCStatus.vue', () => {
         const wrapper = factory();
         const fullUser = {
             User: { FullName: 'Test', Mobile: '123', KYCStatus: 1 },
-            IDVerifiedDetails: { Name: 'Test', Gender: 'M', DOB: '2000-01-01', MaskedAadhar: 'XXXX', Address: 'Addr', IDType: 1 },
-            OwnershipVerifiedDetails: { Name: 'Test', VehicleNumber: 'DL01', Expiry: '2030', Make: 'Toyota', Model: 'Camry', Address: 'Addr', IDType: 2 },
+            IDVerifiedDetails: {
+                Name: 'Test',
+                Gender: 'M',
+                DOB: '2000-01-01',
+                MaskedAadhar: 'XXXX',
+                Address: 'Addr',
+                IDType: 1,
+            },
+            OwnershipVerifiedDetails: {
+                Name: 'Test',
+                VehicleNumber: 'DL01',
+                Expiry: '2030',
+                Make: 'Toyota',
+                Model: 'Camry',
+                Address: 'Addr',
+                IDType: 2,
+            },
             IdentityDocument: ['id.jpg'],
             OwnershipDocument: ['rc.jpg'],
         };
@@ -239,6 +270,9 @@ describe('PageKYCStatus.vue', () => {
         await wrapper.vm.searchUsersWithMobile('9876543210');
         await wrapper.vm.searchUsersWithMobile('');
         await wrapper.vm.onClearMobileInput();
-        await wrapper.vm.onStatusUpdate(store.state.kycStatusPortal.users[0], 'INVALID_STATUS');
+        await wrapper.vm.onStatusUpdate(
+            store.state.kycStatusPortal.users[0],
+            'INVALID_STATUS',
+        );
     });
 });

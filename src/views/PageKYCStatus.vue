@@ -54,7 +54,14 @@
                 cell-class="has-text-left"
             >
                 <template #default="props">
-                    <div>{{ props.row?.User?.VehicleNumber }}</div>
+                    <div>
+                        {{
+                            props.row?.User?.VehicleNumber ||
+                            props.row?.OwnershipVerifiedDetails
+                                ?.VehicleNumber ||
+                            '—'
+                        }}
+                    </div>
                 </template>
             </b-table-column>
 
@@ -162,7 +169,7 @@
                         @click="showDetailsModal = false"
                     />
                 </header>
-                <section class="modal-card-body" v-if="selectedUserKYC">
+                <section v-if="selectedUserKYC" class="modal-card-body">
                     <!-- User Basic Information Card -->
                     <div class="kyc-card">
                         <div class="card-header-bar">
@@ -308,7 +315,9 @@
                                 <span class="info-label">Vehicle Number</span>
                                 <span class="info-value">{{
                                     selectedUserKYC.OwnershipVerifiedDetails
-                                        ?.VehicleNumber
+                                        ?.VehicleNumber ||
+                                    selectedUserKYC.User?.VehicleNumber ||
+                                    '—'
                                 }}</span>
                             </div>
                             <div class="info-item">
@@ -492,15 +501,29 @@ export default {
         async onStatusUpdate(row, newStatus) {
             const labelId = KYCStatus[newStatus];
             if (labelId == null) return;
-            if (row && row.User) {
-                row.User.KYCStatus = labelId;
+            const originalStatus = row?.User?.KYCStatus;
+            try {
+                if (row && row.User) {
+                    row.User.KYCStatus = labelId;
+                }
+                await this.updateStatus({ userData: row });
+                if (this.hasError) {
+                    if (row && row.User) {
+                        row.User.KYCStatus = originalStatus;
+                    }
+                    return;
+                }
+                await this.fetchKycPendingUsers();
+                this.$buefy.toast.open({
+                    message: `KYC Status updated to ${getKYCStatusLabel(labelId)}`,
+                    type: 'is-success',
+                });
+            } catch (error) {
+                if (row && row.User) {
+                    row.User.KYCStatus = originalStatus;
+                }
+                this.alertError(error.message || 'Failed to update status');
             }
-            await this.updateStatus({ userData: row });
-            await this.fetchKycPendingUsers();
-            this.$buefy.toast.open({
-                message: `KYC Status updated to ${getKYCStatusLabel(labelId)}`,
-                type: 'is-success',
-            });
         },
 
         async searchUsersWithMobile(userMobile) {
@@ -605,10 +628,31 @@ $portal-font-size: 12px;
 
 .kyc-details-modal {
     text-align: left;
+    max-width: 100%;
+
+    :deep(.modal-card-head) {
+        padding: 12px 16px;
+        align-items: center;
+
+        .modal-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.3;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            padding-right: 12px;
+        }
+
+        .delete {
+            flex-shrink: 0;
+        }
+    }
 
     .modal-card-body {
         background-color: var(--parkspot-white);
         padding: 20px;
+        word-break: break-word;
+        overflow-wrap: break-word;
     }
 
     .kyc-card {
@@ -631,6 +675,8 @@ $portal-font-size: 12px;
                 font-weight: 700;
                 color: var(--parkspot-black);
                 margin: 0;
+                word-break: break-word;
+                overflow-wrap: break-word;
             }
         }
 
@@ -644,6 +690,8 @@ $portal-font-size: 12px;
             display: flex;
             flex-direction: column;
             gap: 4px;
+            word-break: break-word;
+            overflow-wrap: break-word;
 
             &.full-width {
                 grid-column: 1 / -1;
@@ -661,6 +709,8 @@ $portal-font-size: 12px;
                 font-size: 16px;
                 font-weight: 500;
                 color: var(--parkspot-black);
+                word-break: break-word;
+                overflow-wrap: break-word;
 
                 &.highlight-gender {
                     font-weight: 600;
@@ -726,6 +776,58 @@ $portal-font-size: 12px;
                 text-align: center;
                 padding: 4px 0;
                 font-weight: 500;
+            }
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        margin: 0 auto;
+
+        :deep(.modal-card-head) {
+            padding: 10px 12px;
+
+            .modal-card-title {
+                font-size: 15px;
+                line-height: 1.25;
+                padding-right: 8px;
+            }
+        }
+
+        .modal-card-body {
+            padding: 12px;
+        }
+
+        .kyc-card {
+            padding: 12px;
+            margin-bottom: 12px;
+
+            .card-header-bar {
+                padding-bottom: 8px;
+                margin-bottom: 12px;
+
+                .card-title {
+                    font-size: 14px;
+                }
+            }
+
+            .card-grid {
+                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+                gap: 12px;
+            }
+
+            .info-item {
+                .info-label {
+                    font-size: 11px;
+                }
+
+                .info-value {
+                    font-size: 14px;
+                }
+            }
+
+            .doc-thumb {
+                width: 110px;
+                height: 80px;
             }
         }
     }

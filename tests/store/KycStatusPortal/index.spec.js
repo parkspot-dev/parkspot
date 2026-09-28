@@ -16,7 +16,7 @@ describe('Vuex Module: KycStatusPortal', () => {
     beforeEach(() => {
         // reset state before each test
         state = { ...kycStatusPortal.state };
-        vi.clearAllMocks();
+        vi.resetAllMocks();
     });
 
     // States
@@ -137,6 +137,20 @@ describe('Vuex Module: KycStatusPortal', () => {
             );
             expect(commit).toHaveBeenCalledWith('set-loading', false);
         });
+
+        it('commits set-error when mayaClient.get throws an exception', async () => {
+            const commit = vi.fn();
+            mayaClient.get.mockRejectedValueOnce(new Error('Network failure'));
+
+            await kycStatusPortal.actions.fetchKycPendingUsers({
+                commit,
+                state,
+            });
+
+            expect(commit).toHaveBeenCalledWith('set-loading', true);
+            expect(commit).toHaveBeenCalledWith('set-error', 'Network failure');
+            expect(commit).toHaveBeenCalledWith('set-loading', false);
+        });
     });
 
     describe('actions.updateStatus', () => {
@@ -159,6 +173,22 @@ describe('Vuex Module: KycStatusPortal', () => {
                 'set-error',
                 'Invalid status ( ERR_CODE )',
             );
+            expect(commit).toHaveBeenCalledWith('set-loading', false);
+        });
+
+        it('commits set-error when mayaClient.patch throws an exception', async () => {
+            const commit = vi.fn();
+            const userData = { User: { UserName: 'john', KYCStatus: 1 } };
+
+            mayaClient.patch.mockRejectedValueOnce(new Error('Patch error'));
+
+            await kycStatusPortal.actions.updateStatus(
+                { commit },
+                { userData },
+            );
+
+            expect(commit).toHaveBeenCalledWith('set-loading', true);
+            expect(commit).toHaveBeenCalledWith('set-error', 'Patch error');
             expect(commit).toHaveBeenCalledWith('set-loading', false);
         });
 

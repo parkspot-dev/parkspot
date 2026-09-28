@@ -35,29 +35,47 @@ const mutations = {
 const actions = {
     async fetchKycPendingUsers({ commit, state }) {
         commit('set-loading', true);
-        const url = state.searchMobile
-            ? `/internal/users/kyc?Mobile=${state.searchMobile.replace(/\s+/g, '')}`
-            : '/internal/users/kyc';
-        const res = await mayaClient.get(url);
-        if (res && res.DisplayMsg) {
-            commit('set-error', res.DisplayMsg + ' ( ' + (res.ErrorMsg || '') + ' )');
-        } else {
-            commit('set-users', Array.isArray(res) ? res : (res ? [res] : []));
+        try {
+            const url = state.searchMobile
+                ? `/internal/users/kyc?Mobile=${state.searchMobile.replace(/\s+/g, '')}`
+                : '/internal/users/kyc';
+            const res = await mayaClient.get(url);
+            if (res && res.DisplayMsg) {
+                throw new Error(
+                    res.DisplayMsg + ' ( ' + (res.ErrorMsg || '') + ' )',
+                );
+            }
+            commit('set-users', Array.isArray(res) ? res : res ? [res] : []);
+        } catch (error) {
+            commit('set-error', error.message);
+        } finally {
+            commit('set-loading', false);
         }
-        commit('set-loading', false);
     },
 
     async updateStatus({ commit }, { userData }) {
         commit('set-loading', true);
-        const usernameOrMobile = userData?.User?.UserName || userData?.User?.Mobile || userData?.UserName || userData?.Mobile;
-        const statusValue = userData?.User?.KYCStatus ?? userData?.KYCStatus;
-        const res = await mayaClient.patch(`auth/user/${usernameOrMobile}/kycStatus`, {
-            KYCStatus: statusValue,
-        });
-        if (res && res.DisplayMsg) {
-            commit('set-error', res.DisplayMsg + ' ( ' + (res.ErrorMsg || '') + ' )');
+        try {
+            const usernameOrMobile =
+                userData?.User?.UserName || userData?.User?.Mobile;
+            const statusValue =
+                userData?.User?.KYCStatus ?? userData?.KYCStatus;
+            const res = await mayaClient.patch(
+                `auth/user/${usernameOrMobile}/kycStatus`,
+                {
+                    KYCStatus: statusValue,
+                },
+            );
+            if (res && res.DisplayMsg) {
+                throw new Error(
+                    res.DisplayMsg + ' ( ' + (res.ErrorMsg || '') + ' )',
+                );
+            }
+        } catch (error) {
+            commit('set-error', error.message);
+        } finally {
+            commit('set-loading', false);
         }
-        commit('set-loading', false);
     },
 
     updateMobileInput({ commit }, mobileInput) {
