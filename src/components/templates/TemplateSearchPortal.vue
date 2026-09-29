@@ -636,8 +636,7 @@ export default {
             return this.windowWidth > 768 || this.forceDesktop;
         },
         isAssignDisabled() {
-            const rawAgent =
-                this.userProfile?.FullName || this.agentList?.[0]?.name || '';
+            const rawAgent = this.userProfile?.FullName ?? '';
             const currentAgent = rawAgent
                 .replace(/[[\]]/g, '')
                 .trim()
