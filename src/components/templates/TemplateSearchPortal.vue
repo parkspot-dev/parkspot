@@ -534,7 +534,7 @@ import moment from 'moment';
 import SelectInput from '../global/SelectInput.vue';
 import FilterDropdown from '../global/FilterDropdown.vue';
 import MobileView from '../search-portal/MobileView.vue';
-import { RequestPriority } from '@/constant/enums';
+import { ParkingRequestStatus, RequestPriority } from '@/constant/enums';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -592,8 +592,8 @@ export default {
                 high: 0,
                 medium: 0,
                 low: 0,
-                agent: [0, 0, 0, 0],
-                status: [0, 0, 0, 0, 0, 0],
+                agent: {},
+                status: [0, 0, 0, 0, 0, 0, 0],
                 today: 0,
                 yesterday: 0,
             },
@@ -654,7 +654,7 @@ export default {
                         .toLowerCase();
                     return (
                         reqAgent === currentAgent &&
-                        (req?.Status == 1 || req?.Status === 'Registered')
+                        req?.Status === ParkingRequestStatus.RequestRegistered
                     );
                 }).length >= MAX_REGISTERED_REQUESTS
             );
@@ -898,7 +898,7 @@ export default {
             this.summary.high = 0;
             this.summary.medium = 0;
             this.summary.low = 0;
-            this.summary.status = [0, 0, 0, 0];
+            this.summary.status = [0, 0, 0, 0, 0, 0, 0];
             this.summary.agent = {};
 
             const today = new Date();

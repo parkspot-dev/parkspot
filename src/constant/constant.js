@@ -356,7 +356,6 @@ export const FREQUENT_COMMENTS = [
 
 export const MAX_REGISTERED_REQUESTS = 7;
 
-
 export const CAR_WASH_SERVICES = [
     'Full Exterior Steam Wash',
     'Vecuuming of Interior',
