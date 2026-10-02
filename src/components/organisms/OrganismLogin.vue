@@ -13,14 +13,18 @@
                 <p class="login-subtitle">
                     Get started today by entering just a few details.
                 </p>
-                <button class="google-btn" @click="login">
+                <button class="google-btn" :disabled="isLoading" @click="login">
                     <span class="google-btn-icon-wrapper">
                         <AtomImage
                             src="/assets/googleicon.svg"
                             alt="gmail icon"
                         />
                     </span>
-                    <span class="google-btn-text"> Sign in With Google </span>
+                    <span class="google-btn-text">
+                        {{
+                            isLoading ? 'Signing in…' : ' Sign in With Google '
+                        }}
+                    </span>
                 </button>
                 <div class="login-footer">
                     <p>
@@ -46,6 +50,14 @@ export default {
     props: {
         isShow: Boolean,
     },
+    data() {
+        return {
+            // Guards against double submits: a second click while the Google
+            // popup is open opens a second popup, and Firebase then throws
+            // auth/popup-blocked, which reads to the user as a failed login.
+            isLoading: false,
+        };
+    },
     computed: {
         showModal: {
             get() {
@@ -68,8 +80,53 @@ export default {
             this.updateLoginModal(isClose);
         },
 
-        login() {
-            this.loginWithGoogle();
+        showDangerToast(message) {
+            this.$buefy.toast.open({
+                message,
+                type: 'is-danger',
+                duration: 4000,
+            });
+        },
+
+        async login() {
+            if (this.isLoading) {
+                return;
+            }
+            this.isLoading = true;
+
+            try {
+                // `loginWithGoogle` reports failure in its result instead of
+                // throwing (see the store action), so the user gets told what
+                // happened instead of the click silently doing nothing.
+                const result = await this.loginWithGoogle();
+
+                if (result?.ok === false && !this.isDismissed(result.code)) {
+                    this.showDangerToast(
+                        'Sign-in failed. Please check your connection and try again.',
+                    );
+                }
+            } catch {
+                // The action is contracted not to throw. Guard anyway so an
+                // unexpected rejection cannot leave the button stuck disabled.
+                if (!this.isDismissed(null)) {
+                    this.showDangerToast(
+                        'Sign-in failed. Please check your connection and try again.',
+                    );
+                }
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        // The user closing the popup is a normal outcome, not a failure, so it
+        // gets no error toast. Matched loosely because Firebase has carried
+        // both `popup-closed-by-user` and `cancelled-popup-request` codes.
+        isDismissed(code) {
+            return Boolean(
+                code &&
+                    (code.includes('popup-closed-by-user') ||
+                        code.includes('cancelled-popup-request')),
+            );
         },
     },
 };
@@ -128,6 +185,11 @@ export default {
             0 2px 2px 0 rgb(0 0 0 / 14%),
             0 3px 1px -2px rgb(0 0 0 / 20%),
             0 1px 5px 0 rgb(0 0 0 / 12%);
+
+        &:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
 
         .google-btn-icon-wrapper {
             width: 18px;
