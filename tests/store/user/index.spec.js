@@ -525,6 +525,45 @@ describe('User Store - Agent Auth Fix', () => {
             expect(stateObj.isRoleResolved).toBe(false);
         });
 
+        it('drops the previous role the moment a different user is installed', () => {
+            // The race this guards: `handleAuthStateChanged` commits
+            // `update-user` and only THEN awaits `getIdToken()` (up to 5s).
+            // If the new user's role state were only reset afterwards, that
+            // window would show the new user carrying the old user's admin
+            // flag, and the pending-payments guard would admit them on it.
+            const stateObj = {
+                user: { uid: 'user-a' },
+                isAdmin: true,
+                isAgent: true,
+                isRoleResolved: true,
+            };
+
+            userModule.mutations['update-user'](stateObj, { uid: 'user-b' });
+
+            expect(stateObj.user).toEqual({ uid: 'user-b' });
+            expect(stateObj.isAdmin).toBe(false);
+            expect(stateObj.isAgent).toBe(false);
+            expect(stateObj.isRoleResolved).toBe(false);
+        });
+
+        it('keeps the resolved role when the same user is re-announced', () => {
+            // Firebase re-fires `onAuthStateChanged` for the same account (e.g.
+            // on token refresh). Reopening the unresolved-role window there
+            // would make the route guard wait again for no reason.
+            const stateObj = {
+                user: { uid: 'user-a' },
+                isAdmin: true,
+                isAgent: true,
+                isRoleResolved: true,
+            };
+
+            userModule.mutations['update-user'](stateObj, { uid: 'user-a' });
+
+            expect(stateObj.isAdmin).toBe(true);
+            expect(stateObj.isAgent).toBe(true);
+            expect(stateObj.isRoleResolved).toBe(true);
+        });
+
         it('tests state function defaults', () => {
             const defaultState = userModule.state();
             expect(defaultState.user).toBeNull();

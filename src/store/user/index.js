@@ -163,14 +163,30 @@ const getters = {};
 
 const mutations = {
     'update-user'(state, user) {
+        const previousUid = state.user?.uid ?? null;
+        const nextUid = user?.uid ?? null;
+
+        // A DIFFERENT identity arrives with no role of its own, so the previous
+        // user's admin/agent answer must be dropped here — in the same mutation
+        // that installs the new user. Doing it later (once the token resolves)
+        // leaves a window where `user` is the new person but `isAdmin` and
+        // `isRoleResolved` still describe the old one, and a route guard would
+        // admit them on the previous user's role.
+        //
+        // Keyed on the uid so Firebase's repeated fires for the SAME user (e.g.
+        // on token refresh) do not needlessly reopen the unresolved-role window.
+        if (previousUid !== nextUid) {
+            state.isRoleResolved = false;
+            state.isAdmin = false;
+            state.isAgent = false;
+        }
+
         state.user = user;
         if (!user) {
             localStorage.removeItem(PS_AUTH_KEY);
             localStorage.removeItem(USER_PROFILE_STORAGE_KEY);
             state.isAdmin = false;
             state.isAgent = false;
-            // A signed-out user has no role, so the previous user's resolved
-            // role must not be trusted for whoever signs in next.
             state.isRoleResolved = false;
         }
     },
