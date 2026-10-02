@@ -467,12 +467,72 @@ describe('User Store - Agent Auth Fix', () => {
     });
 
     describe('User Store - Mutations & Actions Coverage', () => {
+        describe('update-auth-progress', () => {
+            it('never reports a resolved role while auth is not ready', () => {
+                // The two readiness flags are one lifecycle, not two
+                // independent booleans. A resolved role implies auth is ready,
+                // and this mutation normalises the input so a caller cannot
+                // put the store into a contradictory state. If this breaks,
+                // either the flags can drift apart or the single-writer
+                // guarantee in `handleAuthStateChanged` has been split up.
+                const stateObj = { isAuthReady: false, isRoleResolved: false };
+
+                userModule.mutations['update-auth-progress'](stateObj, {
+                    authReady: false,
+                    roleResolved: true,
+                });
+
+                expect(stateObj.isAuthReady).toBe(true);
+                expect(stateObj.isRoleResolved).toBe(true);
+            });
+
+            it('advances auth readiness without claiming a resolved role', () => {
+                const stateObj = { isAuthReady: false, isRoleResolved: false };
+
+                userModule.mutations['update-auth-progress'](stateObj, {
+                    authReady: true,
+                    roleResolved: false,
+                });
+
+                expect(stateObj.isAuthReady).toBe(true);
+                expect(stateObj.isRoleResolved).toBe(false);
+            });
+
+            it('does not downgrade a settled role when auth is reported ready', () => {
+                const stateObj = { isAuthReady: true, isRoleResolved: false };
+
+                userModule.mutations['update-auth-progress'](stateObj, {
+                    authReady: true,
+                    roleResolved: true,
+                });
+
+                expect(stateObj.isRoleResolved).toBe(true);
+            });
+        });
+
+        it('clears role resolution on sign-out so the next user is not trusted', () => {
+            const stateObj = {
+                user: { uid: 'someone' },
+                isAdmin: true,
+                isAgent: true,
+                isRoleResolved: true,
+            };
+
+            userModule.mutations['update-user'](stateObj, null);
+
+            expect(stateObj.isAdmin).toBe(false);
+            expect(stateObj.isAgent).toBe(false);
+            expect(stateObj.isRoleResolved).toBe(false);
+        });
+
         it('tests state function defaults', () => {
             const defaultState = userModule.state();
             expect(defaultState.user).toBeNull();
             expect(defaultState.userProfile.Type).toBe('VO');
             expect(defaultState.isAdmin).toBe(false);
             expect(defaultState.isAgent).toBe(false);
+            expect(defaultState.isAuthReady).toBe(false);
+            expect(defaultState.isRoleResolved).toBe(false);
         });
 
         it('mutations update state as expected', () => {
@@ -501,8 +561,12 @@ describe('User Store - Agent Auth Fix', () => {
             userModule.mutations['update-login-modal'](stateObj, true);
             expect(stateObj.loginModal).toBe(true);
 
-            userModule.mutations['update-auth-ready'](stateObj, true);
+            userModule.mutations['update-auth-progress'](stateObj, {
+                authReady: true,
+                roleResolved: false,
+            });
             expect(stateObj.isAuthReady).toBe(true);
+            expect(stateObj.isRoleResolved).toBe(false);
 
             userModule.mutations['update-contact'](stateObj, { cno: '123' });
             expect(stateObj.contactForm).toEqual({ cno: '123' });
@@ -555,7 +619,10 @@ describe('User Store - Agent Auth Fix', () => {
             };
             signInWithPopup.mockResolvedValue({ user: userMock });
 
-            await userModule.actions.loginWithGoogle({ commit, dispatch });
+            const result = await userModule.actions.loginWithGoogle({
+                commit,
+                dispatch,
+            });
 
             expect(localStorage.getItem('PSAuthKey')).toBe('google_token_123');
             expect(commit).toHaveBeenCalledWith('update-user', userMock);
@@ -565,6 +632,7 @@ describe('User Store - Agent Auth Fix', () => {
                 expect.anything(),
                 expect.anything(),
             );
+            expect(result).toEqual({ ok: true });
         });
 
         it('loginWithGoogle handles empty token from Google login', async () => {
@@ -573,9 +641,60 @@ describe('User Store - Agent Auth Fix', () => {
             };
             signInWithPopup.mockResolvedValue({ user: userMock });
 
-            await userModule.actions.loginWithGoogle({ commit, dispatch });
+            const result = await userModule.actions.loginWithGoogle({
+                commit,
+                dispatch,
+            });
 
             expect(commit).not.toHaveBeenCalledWith('update-user', userMock);
+            // Reported, not thrown: the UI needs to distinguish "failed" from
+            // "succeeded" in order to tell the user anything at all.
+            expect(result).toEqual({ ok: false, code: null });
+        });
+
+        it('loginWithGoogle reports a popup failure instead of throwing', async () => {
+            // A user dismissing the Google popup, or an offline device, must
+            // reach the caller as a value. Rethrowing (or returning undefined)
+            // left the login modal with no feedback whatsoever.
+            const popupError = Object.assign(new Error('closed'), {
+                code: 'auth/popup-closed-by-user',
+            });
+            signInWithPopup.mockRejectedValue(popupError);
+
+            const result = await userModule.actions.loginWithGoogle({
+                commit,
+                dispatch,
+            });
+
+            expect(result).toEqual({
+                ok: false,
+                code: 'auth/popup-closed-by-user',
+            });
+            expect(commit).not.toHaveBeenCalledWith(
+                'update-login-modal',
+                false,
+            );
+        });
+
+        it('loginWithGoogle reports a failure when getIdToken times out', async () => {
+            // getIdToken can hang on a flaky connection; without the bound the
+            // action never settled and the modal stayed open forever.
+            vi.useFakeTimers();
+            const userMock = {
+                getIdToken: vi.fn(() => new Promise(() => {})),
+            };
+            signInWithPopup.mockResolvedValue({ user: userMock });
+
+            const pending = userModule.actions.loginWithGoogle({
+                commit,
+                dispatch,
+            });
+
+            await vi.advanceTimersByTimeAsync(5000);
+
+            await expect(pending).resolves.toEqual({ ok: false, code: null });
+            expect(commit).not.toHaveBeenCalledWith('update-user', userMock);
+            vi.useRealTimers();
         });
 
         it('register posts auth register and updates login', async () => {

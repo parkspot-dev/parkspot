@@ -14,7 +14,7 @@ vi.mock('@/firebase', () => ({
     auth: {
         authStateReady: vi.fn().mockResolvedValue(),
         currentUser: {
-            accessToken: 'refreshed_firebase_token',
+            getIdToken: vi.fn().mockResolvedValue('refreshed_firebase_token'),
         },
     },
 }));
@@ -189,9 +189,11 @@ describe('MayaApiService', () => {
         mayaService = new MayaApiService('dweb');
     });
 
-    it('attaches Bearer token and PSAuthKey when PSAuthKey is present', async () => {
+    it('refreshes the stored token via getIdToken and attaches it', async () => {
         localStorage.setItem('PSAuthKey', 'existing_token');
-        auth.currentUser = { accessToken: 'new_access_token' };
+        auth.currentUser = {
+            getIdToken: vi.fn().mockResolvedValue('new_access_token'),
+        };
 
         const interceptorHandler =
             mayaService.client.interceptors.request.handlers[0].fulfilled;
@@ -200,11 +202,76 @@ describe('MayaApiService', () => {
         const resultConfig = await interceptorHandler(config);
 
         expect(auth.authStateReady).toHaveBeenCalled();
+        expect(auth.currentUser.getIdToken).toHaveBeenCalled();
         expect(localStorage.getItem('PSAuthKey')).toBe('new_access_token');
         expect(resultConfig.headers['Authorization']).toBe(
             'Bearer new_access_token',
         );
         expect(resultConfig.headers['PSAuthKey']).toBe('new_access_token');
+    });
+
+    it('keeps the existing stored token when getIdToken rejects', async () => {
+        localStorage.setItem('PSAuthKey', 'existing_token');
+        auth.currentUser = {
+            getIdToken: vi.fn().mockRejectedValue(new Error('refresh failed')),
+        };
+
+        const interceptorHandler =
+            mayaService.client.interceptors.request.handlers[0].fulfilled;
+
+        const config = { headers: {}, method: 'get', url: '/auth/user' };
+        const resultConfig = await interceptorHandler(config);
+
+        // The valid stored token must NOT be clobbered on refresh failure.
+        expect(localStorage.getItem('PSAuthKey')).toBe('existing_token');
+        expect(resultConfig.headers['Authorization']).toBe(
+            'Bearer existing_token',
+        );
+    });
+
+    it('does not clobber the stored token when getIdToken resolves empty', async () => {
+        localStorage.setItem('PSAuthKey', 'existing_token');
+        auth.currentUser = {
+            getIdToken: vi.fn().mockResolvedValue(''),
+        };
+
+        const interceptorHandler =
+            mayaService.client.interceptors.request.handlers[0].fulfilled;
+
+        const config = { headers: {}, method: 'get', url: '/auth/user' };
+        const resultConfig = await interceptorHandler(config);
+
+        expect(localStorage.getItem('PSAuthKey')).toBe('existing_token');
+        expect(resultConfig.headers['Authorization']).toBe(
+            'Bearer existing_token',
+        );
+    });
+
+    it('does not hang when authStateReady never resolves (bounded wait)', async () => {
+        vi.useFakeTimers();
+        localStorage.setItem('PSAuthKey', 'existing_token');
+        // No signed-in user, so the getIdToken refresh branch is skipped and
+        // only the authStateReady wait is under test.
+        auth.currentUser = null;
+        const originalReady = auth.authStateReady;
+        auth.authStateReady = vi.fn(() => new Promise(() => {}));
+
+        try {
+            const interceptorHandler =
+                mayaService.client.interceptors.request.handlers[0].fulfilled;
+            const config = { headers: {}, method: 'get', url: '/auth/user' };
+
+            const pending = interceptorHandler(config);
+            await vi.advanceTimersByTimeAsync(3000);
+            const resultConfig = await pending;
+
+            expect(resultConfig.headers['Authorization']).toBe(
+                'Bearer existing_token',
+            );
+        } finally {
+            auth.authStateReady = originalReady;
+            vi.useRealTimers();
+        }
     });
 
     it('logs warning when PSAuthKey is invalid (missing/blank/null string)', async () => {
@@ -233,7 +300,7 @@ describe('MayaApiService', () => {
         await expect(interceptorErrorHandler(reqErr)).rejects.toThrow(reqErr);
     });
 
-    it('handles 401 response error', () => {
+    it('handles 401 response error with login alert', () => {
         const error = {
             response: { status: 401 },
         };
@@ -243,7 +310,7 @@ describe('MayaApiService', () => {
         );
     });
 
-    it('handles 500 default error', () => {
+    it('handles 500 default error with team alert and logger error', () => {
         const error = {
             response: { status: 500 },
             message: 'Internal Server Error',

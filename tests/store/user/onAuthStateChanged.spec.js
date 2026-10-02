@@ -52,6 +52,9 @@ const makeFirebaseUser = (overrides = {}) => ({
     ...overrides,
 });
 
+// Lets fire-and-forget work started by the listener settle before asserting.
+const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
+
 describe('store/user onAuthStateChanged listener', () => {
     beforeEach(async () => {
         vi.clearAllMocks();
@@ -92,8 +95,8 @@ describe('store/user onAuthStateChanged listener', () => {
         expect(storeMock.commit).toHaveBeenCalledWith('user/update-user', user);
         expect(storeMock.dispatch).toHaveBeenCalledWith('user/getUserProfile');
         expect(storeMock.commit).toHaveBeenCalledWith(
-            'user/update-auth-ready',
-            true,
+            'user/update-auth-progress',
+            { authReady: true, roleResolved: false },
         );
         expect(localStorage.getItem('PSAuthKey')).toBe('id-token');
     });
@@ -108,8 +111,8 @@ describe('store/user onAuthStateChanged listener', () => {
         expect(storeMock.dispatch).not.toHaveBeenCalled();
         expect(localStorage.getItem('PSAuthKey')).toBeNull();
         expect(storeMock.commit).toHaveBeenCalledWith(
-            'user/update-auth-ready',
-            true,
+            'user/update-auth-progress',
+            { authReady: true, roleResolved: false },
         );
     });
 
@@ -119,14 +122,18 @@ describe('store/user onAuthStateChanged listener', () => {
         await expect(
             capturedAuthCallback(makeFirebaseUser()),
         ).resolves.toBeUndefined();
+        // The profile load is now fire-and-forget (so the navbar can render
+        // immediately), so its rejection handler lands a tick or two after
+        // the callback itself resolves.
+        await flush();
 
         expect(storeMock.commit).toHaveBeenCalledWith('user/set-auth-error', {
             source: 'onAuthStateChanged',
             message: 'Failed to load user bootstrap data',
         });
         expect(storeMock.commit).toHaveBeenCalledWith(
-            'user/update-auth-ready',
-            true,
+            'user/update-auth-progress',
+            { authReady: true, roleResolved: false },
         );
     });
 
@@ -138,8 +145,8 @@ describe('store/user onAuthStateChanged listener', () => {
         ).resolves.toBeUndefined();
 
         expect(storeMock.commit).toHaveBeenCalledWith(
-            'user/update-auth-ready',
-            true,
+            'user/update-auth-progress',
+            { authReady: true, roleResolved: false },
         );
     });
 });

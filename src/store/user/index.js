@@ -11,6 +11,11 @@ import {
 import { identify, setUserProperty } from '@/lib/analytics';
 import { formatRemarkWithUtm } from '@/lib/analytics/attribution';
 import { logger } from '@/utils/logger';
+import { withTimeout } from '@/utils/with-timeout';
+
+// Bound for `getIdToken()`, which touches the network on refresh and would
+// otherwise be able to block auth bootstrap indefinitely.
+const ID_TOKEN_TIMEOUT_MS = 5000;
 
 const PS_AUTH_KEY = 'PSAuthKey';
 const USER_PROFILE_STORAGE_KEY = 'UserProfile';
@@ -140,6 +145,10 @@ const state = () => ({
     isAdmin: false,
     isAgent: false,
     isAuthReady: false,
+    // Whether we know this user's role yet. `isAdmin` alone cannot express
+    // "asked Maya, answer is no" vs "never asked", and the pending-payments
+    // route guard must be able to tell those apart — see `update-auth-progress`.
+    isRoleResolved: false,
     loginModal: false,
     contactForm: {},
     kycForm: {},
@@ -160,6 +169,9 @@ const mutations = {
             localStorage.removeItem(USER_PROFILE_STORAGE_KEY);
             state.isAdmin = false;
             state.isAgent = false;
+            // A signed-out user has no role, so the previous user's resolved
+            // role must not be trusted for whoever signs in next.
+            state.isRoleResolved = false;
         }
     },
 
@@ -181,8 +193,24 @@ const mutations = {
         state.loginModal = loginModal;
     },
 
-    'update-auth-ready'(state, isAuthReady) {
-        state.isAuthReady = isAuthReady;
+    /**
+     * Single writer for BOTH readiness flags.
+     *
+     * `isAuthReady` and `isRoleResolved` are a lifecycle, not two
+     * independent booleans: a resolved role implies auth is ready. Keeping
+     * them in one mutation makes it impossible for a caller to advance one
+     * without the other, and the implication is asserted here rather than
+     * trusted to call order in `handleAuthStateChanged`.
+     *
+     * The `authReady || roleResolved` is deliberate — it NORMALISES a
+     * nonsensical `{ authReady: false, roleResolved: true }` into a valid
+     * state instead of letting the two flags contradict each other.
+     */
+    'update-auth-progress'(state, { authReady, roleResolved } = {}) {
+        state.isAuthReady = authReady || roleResolved;
+        // Coerced so a partial commit (`{ authReady: true }`) still leaves a
+        // real boolean behind rather than `undefined`.
+        state.isRoleResolved = Boolean(roleResolved);
     },
 
     'update-contact'(state, data = {}) {
@@ -231,24 +259,35 @@ const actions = {
     async loginWithGoogle({ commit, dispatch }) {
         const gProvider = new GoogleAuthProvider();
 
+        // Resolves rather than rethrows. A Google sign-in failure is an
+        // expected outcome of an unauthenticated action, not an exception: the
+        // caller (OrganismLogin) is the only thing that can render the right
+        // message for it. Swallowing it here means every caller previously had
+        // to invent its own error handling, and the one that did not simply
+        // left the user staring at an inert button.
         try {
             const res = await signInWithPopup(auth, gProvider);
             const user = res.user;
-            const token = await user.getIdToken();
+            const token = await withTimeout(
+                user.getIdToken(),
+                ID_TOKEN_TIMEOUT_MS,
+            );
             if (!token || !token.trim()) {
                 logger.error(
                     new Error(
                         '[PSAuthKey Error] Google Sign-In succeeded but received empty PSAuthKey',
                     ),
                 );
-                throw new Error('Received empty PSAuthKey from Google login');
+                return { ok: false, code: null };
             }
             localStorage.setItem(PS_AUTH_KEY, token);
             commit('update-user', user);
             commit('update-login-modal', false);
             await dispatch('authenticateWithMaya');
+            return { ok: true };
         } catch (error) {
             logger.error(error);
+            return { ok: false, code: error?.code || null };
         }
     },
 
@@ -493,78 +532,138 @@ const actions = {
     },
 };
 
+// Loads the signed-in user's profile and analytics identity. Runs in the
+// BACKGROUND (see `handleAuthStateChanged`) so a slow or hung Maya call can
+// never gate the navbar. Kept as a separate function so the awaited chain is
+// easy to reason about and to test.
+//
+// `/auth/user/agents` is deliberately NOT fetched here: it is an internal CRM
+// endpoint that 401/403s for regular customers, which surfaced as a "session
+// expired" alert right after a successful login. The search/booking portals
+// fetch agents on their own mount.
+async function bootstrapUserData(user) {
+    try {
+        await store.dispatch('user/getUserProfile');
+
+        // GA4 user identity. `user.uid` is Firebase's internal ID (not
+        // PII); role comes from the resolved profile. `city` is
+        // intentionally omitted — the app has no reliable home-city
+        // source (locName is a searched location, not the user's city).
+        const currentUser = store.state?.user;
+        const userRole = currentUser?.isAdmin
+            ? 'admin'
+            : currentUser?.isAgent
+              ? 'agent'
+              : currentUser?.userProfile?.Type || 'unknown';
+        identify(user.uid, {
+            is_authenticated: true,
+            user_role: userRole,
+        });
+    } finally {
+        // In a `finally` so a throwing `identify()` cannot strand the
+        // `pending-payments` route guard waiting on role resolution (see
+        // `waitForRoleResolved`). Reaching here means we have asked Maya and
+        // the role is settled one way or the other — including "definitely
+        // not an admin", which is the answer that lets the guard bail out
+        // immediately instead of burning its full timeout.
+        store.commit('user/update-auth-progress', {
+            authReady: true,
+            roleResolved: true,
+        });
+    }
+}
+
+// Firebase auth-state handler. Exported (not just registered) so it can be
+// unit-tested directly instead of through a module-level subscription.
+//
+// Key resilience property: the navbar only needs to know WHETHER a user is
+// signed in, not whether their profile has finished loading. So once we have
+// a valid token we flip `isAuthReady` immediately and hydrate the profile in
+// the background. Previously the flag flipped only after `getUserProfile` had
+// completed, so a slow/hung Maya call kept the profile picture and CRM menu
+// from ever appearing — the reported "stuck" symptom.
+//
+// `isRoleResolved` is the second half of that split: `isAuthReady` alone says
+// nothing about whether `isAdmin` can be trusted yet, so route guards that gate
+// on role wait for this one instead. Both are written only through
+// `update-auth-progress`, which is why they cannot drift apart.
+export async function handleAuthStateChanged(user) {
+    // Firebase does not attach a `.catch` to this callback, so any
+    // throw here becomes an unhandled rejection. Guard the whole body
+    // (not just the Maya calls) so a stale `store` binding — e.g. under
+    // module teardown in tests — can't escape as one.
+    try {
+        const previousUser = store?.state?.user?.user;
+        const previousCacheUserId = resolveUserIdentity(previousUser);
+
+        store.commit('user/update-user', user);
+
+        if (!user) {
+            store.commit('user/set-auth-error', null);
+            clearProfileCache(previousCacheUserId);
+            localStorage.removeItem(PS_AUTH_KEY);
+            // Clear the GA4 user-scoped identity on sign-out. No user_id and
+            // no PII — just flips the authenticated flag off.
+            setUserProperty('is_authenticated', false);
+            // Signed out: auth has settled, and there is definitively no role
+            // for this session — the guard must not sit waiting on one.
+            store.commit('user/update-auth-progress', {
+                authReady: true,
+                roleResolved: false,
+            });
+            return;
+        }
+
+        let token = '';
+        try {
+            // Bounded so a stalled token refresh cannot hang bootstrap forever.
+            token = await withTimeout(user.getIdToken(), ID_TOKEN_TIMEOUT_MS);
+        } catch {
+            token = '';
+        }
+
+        if (!token || !token.trim()) {
+            logger.warn(
+                '[PSAuthKey Error] Firebase Auth state changed but received empty PSAuthKey',
+            );
+            store.commit('user/set-auth-error', {
+                source: 'onAuthStateChanged',
+                message: 'Received empty PSAuthKey from Firebase',
+            });
+            store.commit('user/update-auth-progress', {
+                authReady: true,
+                roleResolved: false,
+            });
+            return;
+        }
+
+        localStorage.setItem(PS_AUTH_KEY, token);
+
+        // Unblock the UI now; hydrate the rest in the background. The role is
+        // still unresolved at this point, which is why `bootstrapUserData`
+        // commits `roleResolved: true` when it settles.
+        store.commit('user/update-auth-progress', {
+            authReady: true,
+            roleResolved: false,
+        });
+
+        bootstrapUserData(user).catch(() => {
+            store.commit('user/set-auth-error', {
+                source: 'onAuthStateChanged',
+                message: 'Failed to load user bootstrap data',
+            });
+        });
+    } catch (err) {
+        console.error('onAuthStateChanged listener failed', err);
+    }
+}
+
 // Firebase Auth's `onAuthStateChanged` + `localStorage` are browser-only.
 // Under SSR (vite-ssg) we must not run any of this — both because `auth` is
 // a stub on the server (see `src/firebase.js`) and because mutating a
 // module-level subscription would leak state across renders.
 if (typeof window !== 'undefined') {
-    onAuthStateChanged(auth, async (user) => {
-        // Firebase does not attach a `.catch` to this callback, so any
-        // throw here becomes an unhandled rejection. Guard the whole body
-        // (not just the Maya calls) so a stale `store` binding — e.g. under
-        // module teardown in tests — can't escape as one.
-        try {
-            const previousUser = store?.state?.user?.user;
-            const previousCacheUserId = resolveUserIdentity(previousUser);
-
-            store.commit('user/update-user', user);
-
-            if (!user) {
-                store.commit('user/set-auth-error', null);
-                clearProfileCache(previousCacheUserId);
-                localStorage.removeItem(PS_AUTH_KEY);
-                // Clear the GA4 user-scoped identity on sign-out. No user_id and
-                // no PII — just flips the authenticated flag off.
-                setUserProperty('is_authenticated', false);
-                store.commit('user/update-auth-ready', true);
-                return;
-            }
-
-            try {
-                const token = await user.getIdToken();
-                if (!token || !token.trim()) {
-                    logger.warn(
-                        '[PSAuthKey Error] Firebase Auth state changed but received empty PSAuthKey',
-                    );
-                    store.commit('user/set-auth-error', {
-                        source: 'onAuthStateChanged',
-                        message: 'Received empty PSAuthKey from Firebase',
-                    });
-                    store.commit('user/update-auth-ready', true);
-                    return;
-                }
-                localStorage.setItem(PS_AUTH_KEY, token);
-
-                await store.dispatch('user/getUserProfile');
-
-                // GA4 user identity. `user.uid` is Firebase's internal ID
-                // (not PII); role comes from the resolved profile. `city` is
-                // intentionally omitted — the app has no reliable home-city
-                // source (locName is a searched location, not the user's
-                // city).
-                const currentUser = store.state?.user;
-
-                const userRole = currentUser?.isAdmin
-                    ? 'admin'
-                    : currentUser?.isAgent
-                      ? 'agent'
-                      : currentUser?.userProfile?.Type || 'unknown';
-                identify(user.uid, {
-                    is_authenticated: true,
-                    user_role: userRole,
-                });
-            } catch {
-                store.commit('user/set-auth-error', {
-                    source: 'onAuthStateChanged',
-                    message: 'Failed to load user bootstrap data',
-                });
-            }
-
-            store.commit('user/update-auth-ready', true);
-        } catch (err) {
-            console.error('onAuthStateChanged listener failed', err);
-        }
-    });
+    onAuthStateChanged(auth, handleAuthStateChanged);
 }
 
 export default {

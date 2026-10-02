@@ -4,34 +4,41 @@ import { APP_LINK } from '../constant/constant';
 import store from '@/store';
 
 const AUTH_READY_TIMEOUT_MS = 5000;
+// Role resolution rides on a `/auth/user` round-trip after the token lands, so
+// it gets its own budget. In practice the auth wait resolves first, so the
+// worst-case stack (~10s) only occurs when Firebase is slow AND Maya is slow.
+const ROLE_READY_TIMEOUT_MS = 5000;
 
-const waitForAuthReady = (timeoutMs = AUTH_READY_TIMEOUT_MS) => {
-    // SSR: there is no Firebase Auth listener on the server (see
-    // `src/firebase.js`); waiting on `store.state.user.isAuthReady` would
-    // deadlock until `timeoutMs` expired. Skip the wait so guards return
-    // promptly during prerender.
-    if (typeof window === 'undefined') {
-        return Promise.resolve(false);
-    }
-    if (store.state.user.isAuthReady) {
+/**
+ * Watches a `user`-module state flag until it turns truthy, or the timeout
+ * expires. Shared by the two readiness waits below so neither duplicates the
+ * unwatch/settle bookkeeping.
+ *
+ * @param {(state: object) => boolean} selector - reads the flag off the user state.
+ * @param {number} timeoutMs - how long to wait before giving up.
+ * @param {() => boolean} [isSettledNow] - SSR short-circuit; see callers.
+ * @return {Promise<boolean>} true if the flag became truthy, false on timeout.
+ */
+const waitForFlag = (selector, timeoutMs, isSettledNow) => {
+    if (selector(store.state.user)) {
         return Promise.resolve(true);
+    }
+    if (!isSettledNow()) {
+        return Promise.resolve(false);
     }
 
     return new Promise((resolve) => {
         let isSettled = false;
-        const unwatch = store.watch(
-            (state) => state.user.isAuthReady,
-            (isAuthReady) => {
-                if (!isAuthReady || isSettled) {
-                    return;
-                }
+        const unwatch = store.watch(selector, (isReady) => {
+            if (!isReady || isSettled) {
+                return;
+            }
 
-                isSettled = true;
-                clearTimeout(timeoutId);
-                unwatch();
-                resolve(true);
-            },
-        );
+            isSettled = true;
+            clearTimeout(timeoutId);
+            unwatch();
+            resolve(true);
+        });
 
         const timeoutId = setTimeout(() => {
             if (isSettled) {
@@ -44,6 +51,32 @@ const waitForAuthReady = (timeoutMs = AUTH_READY_TIMEOUT_MS) => {
         }, timeoutMs);
     });
 };
+
+const waitForAuthReady = (timeoutMs = AUTH_READY_TIMEOUT_MS) =>
+    // SSR: there is no Firebase Auth listener on the server (see
+    // `src/firebase.js`); waiting on `store.state.user.isAuthReady` would
+    // deadlock until `timeoutMs` expired. Skip the wait so guards return
+    // promptly during prerender.
+    waitForFlag(
+        (state) => state.isAuthReady,
+        timeoutMs,
+        () => typeof window !== 'undefined',
+    );
+
+/**
+ * Waits until we know whether the signed-in user is an admin.
+ *
+ * `isAdmin` alone is ambiguous: `false` means either "asked Maya, answer is
+ * no" or "never asked", and the guard cannot tell those apart. `isRoleResolved`
+ * carries that distinction, so the guard gets a definitive answer instead of
+ * bouncing a real admin whose profile is merely still in flight.
+ */
+const waitForRoleResolved = (timeoutMs = ROLE_READY_TIMEOUT_MS) =>
+    waitForFlag(
+        (state) => state.isRoleResolved,
+        timeoutMs,
+        () => typeof window !== 'undefined',
+    );
 
 // prettier-ignore
 export const pages = {
@@ -225,7 +258,20 @@ export const routes = [
                 return;
             }
 
-            if (!userState.isAdmin) {
+            // `isAuthReady` now means "we have a token", not "profile loaded",
+            // so the role can still be unresolved at this point. Wait for a
+            // definitive answer, otherwise a legitimate admin who deep-links or
+            // refreshes on a cold profile cache gets bounced to Home.
+            if (!userState.isRoleResolved) {
+                const isRoleResolved = await waitForRoleResolved();
+
+                if (!isRoleResolved) {
+                    next({ name: 'Home' });
+                    return;
+                }
+            }
+
+            if (!store.state.user.isAdmin) {
                 next({ name: 'Home' });
                 return;
             }
