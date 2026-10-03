@@ -101,18 +101,12 @@ export default {
                 const result = await this.loginWithGoogle();
 
                 if (result?.ok === false && !this.isDismissed(result.code)) {
-                    this.showDangerToast(
-                        'Sign-in failed. Please check your connection and try again.',
-                    );
+                    this.showDangerToast(this.failureMessage(result.code));
                 }
             } catch {
                 // The action is contracted not to throw. Guard anyway so an
                 // unexpected rejection cannot leave the button stuck disabled.
-                if (!this.isDismissed(null)) {
-                    this.showDangerToast(
-                        'Sign-in failed. Please check your connection and try again.',
-                    );
-                }
+                this.showDangerToast(this.failureMessage(null));
             } finally {
                 this.isLoading = false;
             }
@@ -127,6 +121,15 @@ export default {
                     (code.includes('popup-closed-by-user') ||
                         code.includes('cancelled-popup-request')),
             );
+        },
+
+        // A blocked popup is fixed in the browser, not the network, so it
+        // gets its own message instead of "check your connection".
+        failureMessage(code) {
+            if (code && code.includes('popup-blocked')) {
+                return 'Your browser blocked the sign-in popup. Please allow popups for this site and try again.';
+            }
+            return 'Sign-in failed. Please check your connection and try again.';
         },
     },
 };

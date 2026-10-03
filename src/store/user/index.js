@@ -134,6 +134,21 @@ const resolveProfileCacheUserId = (
     fallbackUser = auth.currentUser,
 ) => resolveUserIdentity(primaryUser) || resolveUserIdentity(fallbackUser);
 
+// True when the signed-in user changed while a Maya call was in flight
+// (sign-out, or a different account signed in). The response belongs to the
+// previous user and must not be written into the current session.
+//
+// Deliberately uses `resolveUserIdentity` on the state rather than
+// `resolveProfileCacheUserId`. The latter falls back to `auth.currentUser`,
+// which is wrong here: Firebase can still report the previous user for a
+// moment after `state.user` is cleared, and that fallback would make a
+// signed-out session look unchanged — so the late profile would be written
+// into it. The request identity is captured from the same source it is
+// compared against, so a null user compares as null and counts as changed.
+const isStaleIdentity = (requestIdentity, state) =>
+    Boolean(requestIdentity) &&
+    resolveUserIdentity(state?.user) !== requestIdentity;
+
 const state = () => ({
     user: null,
     userProfile: {
@@ -223,9 +238,9 @@ const mutations = {
      * state instead of letting the two flags contradict each other.
      */
     'update-auth-progress'(state, { authReady, roleResolved } = {}) {
-        state.isAuthReady = authReady || roleResolved;
         // Coerced so a partial commit (`{ authReady: true }`) still leaves a
         // real boolean behind rather than `undefined`.
+        state.isAuthReady = Boolean(authReady || roleResolved);
         state.isRoleResolved = Boolean(roleResolved);
     },
 
@@ -464,23 +479,31 @@ const actions = {
         await mayaClient.post('/owner/parking-request', req);
     },
 
-    async authenticateWithMaya({ commit }) {
+    // Resolves `true` when it set the user's role, `false` otherwise.
+    async authenticateWithMaya({ commit, state }) {
         if (!hasValidPsAuthKey()) {
             commit('set-auth-error', {
                 source: 'authenticateWithMaya',
                 message: 'Missing PS auth key',
             });
-            return;
+            return false;
         }
 
         commit('set-auth-error', null);
 
+        const requestIdentity = resolveProfileCacheUserId(state?.user);
+
         try {
             const res = await mayaClient.get('/auth/authenticate');
 
+            if (isStaleIdentity(requestIdentity, state)) {
+                return false;
+            }
             if (res?.UserType) {
                 commit('set-user-type', res.UserType);
+                return true;
             }
+            return false;
         } catch (err) {
             // todo write proper exception case
             throw new Error(err?.message || 'Something went wrong');
@@ -510,13 +533,14 @@ const actions = {
         commit('update-images', images);
     },
 
+    // Resolves `true` when it set the user's role, `false` otherwise.
     async getUserProfile({ commit, dispatch, state }) {
         if (!hasValidPsAuthKey()) {
             commit('set-auth-error', {
                 source: 'getUserProfile',
                 message: 'Missing PS auth key',
             });
-            return;
+            return false;
         }
 
         commit('set-auth-error', null);
@@ -527,23 +551,27 @@ const actions = {
         if (cachedProfile?.Type) {
             commit('update-user-profile', cachedProfile);
             commit('set-user-type', cachedProfile.Type);
-            return;
+            return true;
         }
 
         try {
             const userProfile = await mayaClient.get('/auth/user');
+
+            if (isStaleIdentity(cacheUserId, state)) {
+                return false;
+            }
 
             commit('update-user-profile', userProfile);
 
             if (userProfile?.Type) {
                 writeProfileCache(cacheUserId, userProfile);
                 commit('set-user-type', userProfile.Type);
-            } else {
-                await dispatch('authenticateWithMaya');
+                return true;
             }
+            return await dispatch('authenticateWithMaya');
         } catch {
             // fallback if profile API fails
-            await dispatch('authenticateWithMaya');
+            return await dispatch('authenticateWithMaya');
         }
     },
 };
@@ -558,8 +586,25 @@ const actions = {
 // expired" alert right after a successful login. The search/booking portals
 // fetch agents on their own mount.
 async function bootstrapUserData(user) {
+    // Logout is clickable while this runs. Once a different user (or nobody)
+    // is signed in, this bootstrap's results are stale and must be dropped.
+    const isCurrentUser = () => store.state?.user?.user?.uid === user.uid;
+
     try {
-        await store.dispatch('user/getUserProfile');
+        const isRoleKnown = await store.dispatch('user/getUserProfile');
+
+        if (!isCurrentUser()) {
+            return;
+        }
+        if (!isRoleKnown) {
+            // The guard below still settles, so pending-payments fails closed
+            // right away. Record why, so a "bounced admin" is diagnosable.
+            logger.warn('[Auth] Could not resolve user role');
+            store.commit('user/set-auth-error', {
+                source: 'bootstrapUserData',
+                message: 'Could not resolve user role',
+            });
+        }
 
         // GA4 user identity. `user.uid` is Firebase's internal ID (not
         // PII); role comes from the resolved profile. `city` is
@@ -578,14 +623,17 @@ async function bootstrapUserData(user) {
     } finally {
         // In a `finally` so a throwing `identify()` cannot strand the
         // `pending-payments` route guard waiting on role resolution (see
-        // `waitForRoleResolved`). Reaching here means we have asked Maya and
-        // the role is settled one way or the other — including "definitely
-        // not an admin", which is the answer that lets the guard bail out
-        // immediately instead of burning its full timeout.
-        store.commit('user/update-auth-progress', {
-            authReady: true,
-            roleResolved: true,
-        });
+        // `waitForRoleResolved`). Reaching here means the role lookup was
+        // attempted, not that it succeeded: a failed lookup leaves `isAdmin`
+        // false, so the guard fails closed immediately instead of burning its
+        // full timeout. Skipped for a stale bootstrap, whose answer is about
+        // the previous user.
+        if (isCurrentUser()) {
+            store.commit('user/update-auth-progress', {
+                authReady: true,
+                roleResolved: true,
+            });
+        }
     }
 }
 
