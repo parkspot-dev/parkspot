@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { APP_LINK } from '@/constant/constant';
+import { createStore } from 'vuex';
+import { APP_LINK, MAYA_REQUEST_TIMEOUT_MS } from '@/constant/constant';
 
 const mockedStore = vi.hoisted(() => ({
     state: {
@@ -31,6 +32,12 @@ describe('routes', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         vi.useRealTimers();
+
+        // `clearAllMocks` keeps implementations, so a per-test `watch` stub
+        // would leak into every later test and silently satisfy the readiness
+        // waits. Reset it to an inert default that never fires.
+        mockedStore.watch.mockImplementation(() => vi.fn());
+        mockedStore.commit.mockImplementation(() => {});
 
         mockedStore.state.user = {
             isAuthReady: true,
@@ -77,10 +84,13 @@ describe('routes', () => {
                 isAdmin: false,
             };
 
+            vi.useFakeTimers();
             const unwatch = vi.fn();
+            let watchGetter;
             let watchCallback;
 
-            mockedStore.watch.mockImplementation((_selector, callback) => {
+            mockedStore.watch.mockImplementation((getter, callback) => {
+                watchGetter = getter;
                 watchCallback = callback;
                 return unwatch;
             });
@@ -88,25 +98,80 @@ describe('routes', () => {
             const next = vi.fn();
             const to = { fullPath: '/internal/pending-payments' };
 
-            let resolved = false;
-            const guardPromise = pendingPaymentsRoute
-                .beforeEnter(to, {}, next)
-                .then(() => {
-                    resolved = true;
-                });
+            pendingPaymentsRoute.beforeEnter(to, {}, next);
 
             await Promise.resolve();
 
             expect(mockedStore.watch).toHaveBeenCalledTimes(1);
             expect(next).not.toHaveBeenCalled();
-            expect(resolved).toBe(false);
 
+            // Vuex calls a `store.watch` getter with the ROOT state, so feed
+            // it that, not `state.user`.
             mockedStore.state.user.isAuthReady = true;
-            watchCallback(true);
-
-            await guardPromise;
+            watchCallback(watchGetter(mockedStore.state));
+            await vi.advanceTimersByTimeAsync(0);
 
             expect(unwatch).toHaveBeenCalledTimes(1);
+            expect(next).toHaveBeenCalledWith({
+                name: 'Home',
+                query: { redirect: '/internal/pending-payments' },
+            });
+        });
+
+        it('wakes up when auth and role land in a real Vuex store', async () => {
+            // The mock above cannot prove what Vuex actually passes to the
+            // getter. Run the guard against a real store: a getter that reads
+            // the wrong level of state never sees the flags flip, and the
+            // guard sits out both timeouts.
+            vi.useFakeTimers();
+            const realStore = createStore({
+                modules: {
+                    user: {
+                        namespaced: true,
+                        state: () => ({
+                            isAuthReady: false,
+                            isRoleResolved: false,
+                            user: null,
+                            isAdmin: false,
+                        }),
+                        mutations: {
+                            patch(state, values) {
+                                Object.assign(state, values);
+                            },
+                        },
+                    },
+                },
+            });
+            const originalState = mockedStore.state;
+            mockedStore.state = realStore.state;
+            mockedStore.watch.mockImplementation((getter, callback) =>
+                realStore.watch(getter, callback),
+            );
+
+            try {
+                const next = vi.fn();
+                pendingPaymentsRoute.beforeEnter(
+                    { fullPath: '/internal/pending-payments' },
+                    {},
+                    next,
+                );
+
+                await vi.advanceTimersByTimeAsync(100);
+                realStore.commit('user/patch', {
+                    isAuthReady: true,
+                    user: { uid: 'admin-1' },
+                });
+                await vi.advanceTimersByTimeAsync(100);
+                realStore.commit('user/patch', {
+                    isRoleResolved: true,
+                    isAdmin: true,
+                });
+                await vi.advanceTimersByTimeAsync(100);
+
+                expect(next).toHaveBeenCalledWith();
+            } finally {
+                mockedStore.state = originalState;
+            }
         });
 
         it('stops waiting after timeout and redirects to Home', async () => {
@@ -159,6 +224,7 @@ describe('routes', () => {
         it('redirects logged-in non-admin users to Home', async () => {
             mockedStore.state.user = {
                 isAuthReady: true,
+                isRoleResolved: true,
                 user: { uid: 'abc' },
                 isAdmin: false,
             };
@@ -177,6 +243,7 @@ describe('routes', () => {
         it('allows logged-in admin users', async () => {
             mockedStore.state.user = {
                 isAuthReady: true,
+                isRoleResolved: true,
                 user: { uid: 'admin-1' },
                 isAdmin: true,
             };
@@ -190,6 +257,115 @@ describe('routes', () => {
             );
 
             expect(next).toHaveBeenCalledWith();
+        });
+
+        it('waits for a pending role resolution before deciding', async () => {
+            // The regression this guard exists for: `isAuthReady` flips as soon
+            // as the token lands, which is *before* the `/auth/user` profile
+            // fetch resolves. A guard that reads `isAdmin` on auth-readiness
+            // alone sees a stale `false` and bounces a legitimate admin to Home.
+            // With the role unresolved, the guard must wait for the answer.
+            vi.useFakeTimers();
+            mockedStore.state.user = {
+                isAuthReady: true,
+                isRoleResolved: false,
+                user: { uid: 'admin-1' },
+                isAdmin: false,
+            };
+            mockedStore.watch.mockImplementation((getter, callback) => {
+                const unwatch = vi.fn();
+                // Simulate the background bootstrap committing
+                // `roleResolved: true` and the profile flipping `isAdmin`.
+                setTimeout(() => {
+                    mockedStore.state.user = {
+                        isAuthReady: true,
+                        isRoleResolved: true,
+                        user: { uid: 'admin-1' },
+                        isAdmin: true,
+                    };
+                    callback(getter(mockedStore.state));
+                }, 50);
+                return unwatch;
+            });
+
+            const next = vi.fn();
+            const pending = pendingPaymentsRoute.beforeEnter(
+                { fullPath: '/internal/pending-payments' },
+                {},
+                next,
+            );
+
+            await vi.runAllTimersAsync();
+            await pending;
+
+            expect(next).toHaveBeenCalledWith();
+            vi.useRealTimers();
+        });
+
+        it('redirects to Home when the role never resolves', async () => {
+            // A hung or dead Maya must not leave the guard waiting forever; it
+            // fails closed rather than exposing the portal to an unverifiable
+            // user.
+            vi.useFakeTimers();
+            mockedStore.state.user = {
+                isAuthReady: true,
+                isRoleResolved: false,
+                user: { uid: 'abc' },
+                isAdmin: false,
+            };
+
+            const next = vi.fn();
+            const pending = pendingPaymentsRoute.beforeEnter(
+                { fullPath: '/internal/pending-payments' },
+                {},
+                next,
+            );
+
+            await vi.advanceTimersByTimeAsync(
+                2 * MAYA_REQUEST_TIMEOUT_MS + 2000,
+            );
+            await pending;
+
+            expect(next).toHaveBeenCalledWith({ name: 'Home' });
+            vi.useRealTimers();
+        });
+
+        it('admits an admin whose role lands after a slow Maya call', async () => {
+            // `/auth/user` may take the full Maya timeout and then fall back to
+            // `/auth/authenticate`. The guard must outlast that, or it bounces
+            // a real admin while the answer is still on its way.
+            vi.useFakeTimers();
+            mockedStore.state.user = {
+                isAuthReady: true,
+                isRoleResolved: false,
+                user: { uid: 'admin-1' },
+                isAdmin: false,
+            };
+            mockedStore.watch.mockImplementation((getter, callback) => {
+                setTimeout(() => {
+                    mockedStore.state.user = {
+                        isAuthReady: true,
+                        isRoleResolved: true,
+                        user: { uid: 'admin-1' },
+                        isAdmin: true,
+                    };
+                    callback(getter(mockedStore.state));
+                }, MAYA_REQUEST_TIMEOUT_MS + 1000);
+                return vi.fn();
+            });
+
+            const next = vi.fn();
+            const pending = pendingPaymentsRoute.beforeEnter(
+                { fullPath: '/internal/pending-payments' },
+                {},
+                next,
+            );
+
+            await vi.advanceTimersByTimeAsync(MAYA_REQUEST_TIMEOUT_MS + 1000);
+            await pending;
+
+            expect(next).toHaveBeenCalledWith();
+            vi.useRealTimers();
         });
 
         it('redirects Android users to the Android app link', () => {

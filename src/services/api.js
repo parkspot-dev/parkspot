@@ -4,6 +4,18 @@ import router from '../router';
 import store from '../store';
 import { getPtid } from '../utils/ptid';
 import { logger } from '../utils/logger';
+import { withTimeout } from '../utils/with-timeout';
+import { MAYA_REQUEST_TIMEOUT_MS } from '../constant/constant';
+
+// Upper bounds (ms) for the Firebase waits that run BEFORE a Maya request is
+// sent. The axios `timeout` only bounds the network round-trip; it does not
+// cover work done inside the request interceptor. Left un-timed, these two
+// awaits are the actual cause of the "auth stuck for minutes" hang, because
+// the request never leaves the interceptor (so nothing appears in the Network
+// tab). Bounding them converts an infinite hang into "degrade to the stored
+// token, then self-heal once Firebase settles".
+const AUTH_STATE_READY_TIMEOUT_MS = 3000;
+const ID_TOKEN_TIMEOUT_MS = 5000;
 
 /**
  * Report an API error to New Relic Browser, tagged with the identifiers
@@ -172,7 +184,7 @@ class MayaApiService extends BaseApiService {
             'Accept': 'application/json',
             'Flavour': flavour,
         };
-        super(mayaDomain, baseHeaderMap, 10000, true);
+        super(mayaDomain, baseHeaderMap, MAYA_REQUEST_TIMEOUT_MS, true);
         this.client.interceptors.request.use(
             async (config) => {
                 // SSR pre-render has no `localStorage`, no signed-in user,
@@ -195,12 +207,35 @@ class MayaApiService extends BaseApiService {
                         });
                     return config;
                 }
-                await auth.authStateReady();
-                if (localStorage.getItem('PSAuthKey')) {
-                    localStorage.setItem(
-                        'PSAuthKey',
-                        auth.currentUser?.accessToken,
-                    );
+                // Bound the Firebase init wait (see AUTH_STATE_READY_TIMEOUT_MS).
+                // On timeout we proceed with whatever token is already in
+                // storage rather than blocking the request forever.
+                await withTimeout(
+                    auth.authStateReady(),
+                    AUTH_STATE_READY_TIMEOUT_MS,
+                ).catch(() => {});
+
+                // Refresh the stored token from the signed-in user using the
+                // supported `getIdToken()` API. We must NOT read the
+                // undocumented `currentUser.accessToken` field: it can be
+                // `undefined`, and `localStorage.setItem` would then persist
+                // the string "undefined", clobbering a previously-valid token
+                // for every later request. `getIdToken()` returns a valid,
+                // unexpired token and refreshes it transparently. The refresh
+                // is bounded and best-effort: on timeout/failure we keep the
+                // existing stored token.
+                if (auth.currentUser && localStorage.getItem('PSAuthKey')) {
+                    try {
+                        const freshToken = await withTimeout(
+                            auth.currentUser.getIdToken(),
+                            ID_TOKEN_TIMEOUT_MS,
+                        );
+                        if (freshToken && freshToken.trim()) {
+                            localStorage.setItem('PSAuthKey', freshToken);
+                        }
+                    } catch {
+                        // Keep the existing stored token on refresh failure.
+                    }
                 }
                 const token = localStorage.getItem('PSAuthKey');
                 const isInvalidToken =

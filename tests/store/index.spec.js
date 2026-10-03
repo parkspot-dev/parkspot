@@ -63,6 +63,7 @@ describe('root store', () => {
     describe('Accessibility tests', () => {
         it('provides user state flags needed by navigation and route guards', () => {
             expect(store.state.user).toHaveProperty('isAuthReady');
+            expect(store.state.user).toHaveProperty('isRoleResolved');
             expect(store.state.user).toHaveProperty('isAdmin');
             expect(store.state.user).toHaveProperty('isAgent');
         });
@@ -119,13 +120,19 @@ describe('root store', () => {
             const canonical = createAppStore();
             seedAppStore(canonical);
 
-            canonical.commit('user/update-auth-ready', true);
+            canonical.commit('user/update-auth-progress', {
+                authReady: true,
+                roleResolved: true,
+            });
             expect(defaultStore.state.user.isAuthReady).toBe(true);
 
             __resetAppStoreSingletonForTests();
             const canonical2 = createAppStore();
             seedAppStore(canonical2);
-            defaultStore.commit('user/update-auth-ready', true);
+            defaultStore.commit('user/update-auth-progress', {
+                authReady: true,
+                roleResolved: true,
+            });
             expect(canonical2.state.user.isAuthReady).toBe(true);
 
             __resetAppStoreSingletonForTests();
@@ -154,7 +161,10 @@ describe('root store', () => {
             const a = createAppStore();
             const b = createAppStore();
             seedAppStore(a);
-            a.commit('user/update-auth-ready', true);
+            a.commit('user/update-auth-progress', {
+                authReady: true,
+                roleResolved: true,
+            });
             expect(defaultStore.state.user.isAuthReady).toBe(true);
 
             seedAppStore(b);

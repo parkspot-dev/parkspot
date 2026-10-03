@@ -3,6 +3,7 @@ import userModule from '@/store/user';
 import { UserType } from '@/constant/enums';
 import { mayaClient } from '@/services/api';
 import { signOut, signInWithPopup } from 'firebase/auth';
+import { auth } from '@/firebase';
 
 vi.mock('@/store', () => ({
     default: {
@@ -466,13 +467,321 @@ describe('User Store - Agent Auth Fix', () => {
         );
     });
 
+    describe('responses that land after the signed-in user changed', () => {
+        // The profile now loads in the background, so logout is clickable
+        // while `/auth/user` is still in flight. A late response belongs to
+        // the previous user and must not be written into the current session.
+        const deferred = () => {
+            let resolve;
+            const promise = new Promise((r) => {
+                resolve = r;
+            });
+            return { promise, resolve };
+        };
+
+        it('getUserProfile drops a profile that lands after sign-out', async () => {
+            localStorage.setItem('PSAuthKey', 'token');
+            const state = { user: { uid: 'user-a' } };
+            const profile = deferred();
+            mayaClient.get.mockReturnValue(profile.promise);
+
+            const pending = userModule.actions.getUserProfile({
+                commit,
+                dispatch,
+                state,
+            });
+            state.user = null;
+            profile.resolve({ FullName: 'User A', Type: UserType.Admin });
+            const isRoleResolved = await pending;
+
+            expect(isRoleResolved).toBe(false);
+            expect(commit).not.toHaveBeenCalledWith(
+                'update-user-profile',
+                expect.anything(),
+            );
+            expect(commit).not.toHaveBeenCalledWith(
+                'set-user-type',
+                expect.anything(),
+            );
+            expect(localStorage.getItem('profile:user-a')).toBeNull();
+            expect(dispatch).not.toHaveBeenCalled();
+        });
+
+        it('getUserProfile drops a profile that lands after sign-out even when Firebase still reports the old user', async () => {
+            // Firebase can keep reporting the previous user for a moment after
+            // `state.user` is cleared. The staleness check used to resolve the
+            // current identity with a fallback to `auth.currentUser`, so that
+            // window made a signed-out session look UNCHANGED and the late
+            // profile — role included — was written into it.
+            localStorage.setItem('PSAuthKey', 'token');
+            const state = { user: { uid: 'user-a' } };
+            const profile = deferred();
+            mayaClient.get.mockReturnValue(profile.promise);
+
+            const pending = userModule.actions.getUserProfile({
+                commit,
+                dispatch,
+                state,
+            });
+            state.user = null;
+            // Sign-out has been requested; Firebase has not caught up yet.
+            // `auth` is a module-level singleton shared with the store, so put
+            // it back afterwards rather than leaking a signed-in user into the
+            // rest of this file.
+            const originalCurrentUser = auth.currentUser;
+            Object.defineProperty(auth, 'currentUser', {
+                configurable: true,
+                value: { uid: 'user-a' },
+            });
+
+            let isRoleResolved;
+            try {
+                profile.resolve({
+                    FullName: 'User A',
+                    Type: UserType.Admin,
+                });
+                isRoleResolved = await pending;
+            } finally {
+                Object.defineProperty(auth, 'currentUser', {
+                    configurable: true,
+                    value: originalCurrentUser,
+                });
+            }
+
+            expect(isRoleResolved).toBe(false);
+            expect(commit).not.toHaveBeenCalledWith(
+                'update-user-profile',
+                expect.anything(),
+            );
+            expect(commit).not.toHaveBeenCalledWith(
+                'set-user-type',
+                expect.anything(),
+            );
+            expect(localStorage.getItem('profile:user-a')).toBeNull();
+        });
+
+        it('getUserProfile still applies a response for the same user', async () => {
+            // The counterpart to the two cases above: tightening the check must
+            // not start dropping responses that are still current, or the role
+            // would never resolve at all.
+            localStorage.setItem('PSAuthKey', 'token');
+            const state = { user: { uid: 'user-a' } };
+            const profile = deferred();
+            mayaClient.get.mockReturnValue(profile.promise);
+
+            const pending = userModule.actions.getUserProfile({
+                commit,
+                dispatch,
+                state,
+            });
+            profile.resolve({ FullName: 'User A', Type: UserType.Admin });
+            const isRoleResolved = await pending;
+
+            expect(isRoleResolved).toBe(true);
+            expect(commit).toHaveBeenCalledWith(
+                'set-user-type',
+                UserType.Admin,
+            );
+            expect(localStorage.getItem('profile:user-a')).not.toBeNull();
+        });
+
+        it('getUserProfile drops a profile that lands after an account switch', async () => {
+            localStorage.setItem('PSAuthKey', 'token');
+            const state = { user: { uid: 'user-a' } };
+            const profile = deferred();
+            mayaClient.get.mockReturnValue(profile.promise);
+
+            const pending = userModule.actions.getUserProfile({
+                commit,
+                dispatch,
+                state,
+            });
+            state.user = { uid: 'user-b' };
+            profile.resolve({ FullName: 'User A', Type: UserType.Admin });
+            await pending;
+
+            expect(commit).not.toHaveBeenCalledWith(
+                'set-user-type',
+                expect.anything(),
+            );
+            expect(localStorage.getItem('profile:user-a')).toBeNull();
+            expect(localStorage.getItem('profile:user-b')).toBeNull();
+        });
+
+        it('authenticateWithMaya drops a role that lands after sign-out', async () => {
+            localStorage.setItem('PSAuthKey', 'token');
+            const state = { user: { uid: 'user-a' } };
+            const res = deferred();
+            mayaClient.get.mockReturnValue(res.promise);
+
+            const pending = userModule.actions.authenticateWithMaya({
+                commit,
+                state,
+            });
+            state.user = null;
+            res.resolve({ UserType: UserType.Admin });
+            const isRoleResolved = await pending;
+
+            expect(isRoleResolved).toBe(false);
+            expect(commit).not.toHaveBeenCalledWith(
+                'set-user-type',
+                expect.anything(),
+            );
+        });
+
+        it('getUserProfile reports a resolved role for the same user', async () => {
+            localStorage.setItem('PSAuthKey', 'token');
+            const state = { user: { uid: 'user-a' } };
+            mayaClient.get.mockResolvedValue({
+                FullName: 'User A',
+                Type: UserType.Agent,
+            });
+
+            const isRoleResolved = await userModule.actions.getUserProfile({
+                commit,
+                dispatch,
+                state,
+            });
+
+            expect(isRoleResolved).toBe(true);
+            expect(commit).toHaveBeenCalledWith(
+                'set-user-type',
+                UserType.Agent,
+            );
+        });
+
+        it('getUserProfile reports an unresolved role when Maya returns nothing', async () => {
+            // mayaClient swallows timeouts/network errors and resolves
+            // `undefined`; the role is then unknown, not "not an admin".
+            localStorage.setItem('PSAuthKey', 'token');
+            mayaClient.get.mockResolvedValue(undefined);
+            dispatch.mockResolvedValue(false);
+
+            const isRoleResolved = await userModule.actions.getUserProfile({
+                commit,
+                dispatch,
+                state: { user: { uid: 'user-a' } },
+            });
+
+            expect(isRoleResolved).toBe(false);
+        });
+    });
+
     describe('User Store - Mutations & Actions Coverage', () => {
+        describe('update-auth-progress', () => {
+            it('never reports a resolved role while auth is not ready', () => {
+                // The two readiness flags are one lifecycle, not two
+                // independent booleans. A resolved role implies auth is ready,
+                // and this mutation normalises the input so a caller cannot
+                // put the store into a contradictory state. If this breaks,
+                // either the flags can drift apart or the single-writer
+                // guarantee in `handleAuthStateChanged` has been split up.
+                const stateObj = { isAuthReady: false, isRoleResolved: false };
+
+                userModule.mutations['update-auth-progress'](stateObj, {
+                    authReady: false,
+                    roleResolved: true,
+                });
+
+                expect(stateObj.isAuthReady).toBe(true);
+                expect(stateObj.isRoleResolved).toBe(true);
+            });
+
+            it('advances auth readiness without claiming a resolved role', () => {
+                const stateObj = { isAuthReady: false, isRoleResolved: false };
+
+                userModule.mutations['update-auth-progress'](stateObj, {
+                    authReady: true,
+                    roleResolved: false,
+                });
+
+                expect(stateObj.isAuthReady).toBe(true);
+                expect(stateObj.isRoleResolved).toBe(false);
+            });
+
+            it('marks the role resolved when auth is reported ready', () => {
+                const stateObj = { isAuthReady: true, isRoleResolved: false };
+
+                userModule.mutations['update-auth-progress'](stateObj, {
+                    authReady: true,
+                    roleResolved: true,
+                });
+
+                expect(stateObj.isRoleResolved).toBe(true);
+            });
+
+            it('leaves real booleans behind for an empty commit', () => {
+                const stateObj = { isAuthReady: true, isRoleResolved: true };
+
+                userModule.mutations['update-auth-progress'](stateObj, {});
+
+                expect(stateObj.isAuthReady).toBe(false);
+                expect(stateObj.isRoleResolved).toBe(false);
+            });
+        });
+
+        it('clears role resolution on sign-out so the next user is not trusted', () => {
+            const stateObj = {
+                user: { uid: 'someone' },
+                isAdmin: true,
+                isAgent: true,
+                isRoleResolved: true,
+            };
+
+            userModule.mutations['update-user'](stateObj, null);
+
+            expect(stateObj.isAdmin).toBe(false);
+            expect(stateObj.isAgent).toBe(false);
+            expect(stateObj.isRoleResolved).toBe(false);
+        });
+
+        it('drops the previous role the moment a different user is installed', () => {
+            // The race this guards: `handleAuthStateChanged` commits
+            // `update-user` and only THEN awaits `getIdToken()` (up to 5s).
+            // If the new user's role state were only reset afterwards, that
+            // window would show the new user carrying the old user's admin
+            // flag, and the pending-payments guard would admit them on it.
+            const stateObj = {
+                user: { uid: 'user-a' },
+                isAdmin: true,
+                isAgent: true,
+                isRoleResolved: true,
+            };
+
+            userModule.mutations['update-user'](stateObj, { uid: 'user-b' });
+
+            expect(stateObj.user).toEqual({ uid: 'user-b' });
+            expect(stateObj.isAdmin).toBe(false);
+            expect(stateObj.isAgent).toBe(false);
+            expect(stateObj.isRoleResolved).toBe(false);
+        });
+
+        it('keeps the resolved role when the same user is re-announced', () => {
+            // Firebase re-fires `onAuthStateChanged` for the same account (e.g.
+            // on token refresh). Reopening the unresolved-role window there
+            // would make the route guard wait again for no reason.
+            const stateObj = {
+                user: { uid: 'user-a' },
+                isAdmin: true,
+                isAgent: true,
+                isRoleResolved: true,
+            };
+
+            userModule.mutations['update-user'](stateObj, { uid: 'user-a' });
+
+            expect(stateObj.isAdmin).toBe(true);
+            expect(stateObj.isAgent).toBe(true);
+            expect(stateObj.isRoleResolved).toBe(true);
+        });
+
         it('tests state function defaults', () => {
             const defaultState = userModule.state();
             expect(defaultState.user).toBeNull();
             expect(defaultState.userProfile.Type).toBe('VO');
             expect(defaultState.isAdmin).toBe(false);
             expect(defaultState.isAgent).toBe(false);
+            expect(defaultState.isAuthReady).toBe(false);
+            expect(defaultState.isRoleResolved).toBe(false);
         });
 
         it('mutations update state as expected', () => {
@@ -501,8 +810,12 @@ describe('User Store - Agent Auth Fix', () => {
             userModule.mutations['update-login-modal'](stateObj, true);
             expect(stateObj.loginModal).toBe(true);
 
-            userModule.mutations['update-auth-ready'](stateObj, true);
+            userModule.mutations['update-auth-progress'](stateObj, {
+                authReady: true,
+                roleResolved: false,
+            });
             expect(stateObj.isAuthReady).toBe(true);
+            expect(stateObj.isRoleResolved).toBe(false);
 
             userModule.mutations['update-contact'](stateObj, { cno: '123' });
             expect(stateObj.contactForm).toEqual({ cno: '123' });
@@ -555,7 +868,10 @@ describe('User Store - Agent Auth Fix', () => {
             };
             signInWithPopup.mockResolvedValue({ user: userMock });
 
-            await userModule.actions.loginWithGoogle({ commit, dispatch });
+            const result = await userModule.actions.loginWithGoogle({
+                commit,
+                dispatch,
+            });
 
             expect(localStorage.getItem('PSAuthKey')).toBe('google_token_123');
             expect(commit).toHaveBeenCalledWith('update-user', userMock);
@@ -565,6 +881,7 @@ describe('User Store - Agent Auth Fix', () => {
                 expect.anything(),
                 expect.anything(),
             );
+            expect(result).toEqual({ ok: true });
         });
 
         it('loginWithGoogle handles empty token from Google login', async () => {
@@ -573,9 +890,60 @@ describe('User Store - Agent Auth Fix', () => {
             };
             signInWithPopup.mockResolvedValue({ user: userMock });
 
-            await userModule.actions.loginWithGoogle({ commit, dispatch });
+            const result = await userModule.actions.loginWithGoogle({
+                commit,
+                dispatch,
+            });
 
             expect(commit).not.toHaveBeenCalledWith('update-user', userMock);
+            // Reported, not thrown: the UI needs to distinguish "failed" from
+            // "succeeded" in order to tell the user anything at all.
+            expect(result).toEqual({ ok: false, code: null });
+        });
+
+        it('loginWithGoogle reports a popup failure instead of throwing', async () => {
+            // A user dismissing the Google popup, or an offline device, must
+            // reach the caller as a value. Rethrowing (or returning undefined)
+            // left the login modal with no feedback whatsoever.
+            const popupError = Object.assign(new Error('closed'), {
+                code: 'auth/popup-closed-by-user',
+            });
+            signInWithPopup.mockRejectedValue(popupError);
+
+            const result = await userModule.actions.loginWithGoogle({
+                commit,
+                dispatch,
+            });
+
+            expect(result).toEqual({
+                ok: false,
+                code: 'auth/popup-closed-by-user',
+            });
+            expect(commit).not.toHaveBeenCalledWith(
+                'update-login-modal',
+                false,
+            );
+        });
+
+        it('loginWithGoogle reports a failure when getIdToken times out', async () => {
+            // getIdToken can hang on a flaky connection; without the bound the
+            // action never settled and the modal stayed open forever.
+            vi.useFakeTimers();
+            const userMock = {
+                getIdToken: vi.fn(() => new Promise(() => {})),
+            };
+            signInWithPopup.mockResolvedValue({ user: userMock });
+
+            const pending = userModule.actions.loginWithGoogle({
+                commit,
+                dispatch,
+            });
+
+            await vi.advanceTimersByTimeAsync(5000);
+
+            await expect(pending).resolves.toEqual({ ok: false, code: null });
+            expect(commit).not.toHaveBeenCalledWith('update-user', userMock);
+            vi.useRealTimers();
         });
 
         it('register posts auth register and updates login', async () => {
