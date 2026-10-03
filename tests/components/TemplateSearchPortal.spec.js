@@ -2,6 +2,7 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createStore } from 'vuex';
 import TemplateSearchPortal from '@/components/templates/TemplateSearchPortal.vue';
+import { MAX_REGISTERED_REQUESTS } from '@/constant/constant';
 
 describe('TemplateSearchPortal.vue', () => {
     let store;
@@ -73,6 +74,9 @@ describe('TemplateSearchPortal.vue', () => {
             },
             global: {
                 plugins: [store],
+                mocks: {
+                    $route: { query: {} },
+                },
                 stubs: {
                     'AtomButton': {
                         template:
@@ -198,6 +202,16 @@ describe('TemplateSearchPortal.vue', () => {
         expect(extractRequestsByStatus).toHaveBeenCalled();
     });
 
+    it('removeExpiringFilter clears expiring filter', async () => {
+        await wrapper.setData({
+            filters: { ...wrapper.vm.filters, isExpiring: true },
+        });
+        await wrapper.vm.removeExpiringFilter();
+        await flushPromises();
+        expect(wrapper.vm.filters.isExpiring).toBe(false);
+        expect(resetFilterParkingRequests).toHaveBeenCalled();
+    });
+
     it('removeAgentFilter clears agent filter', async () => {
         await wrapper.setData({
             filters: { ...wrapper.vm.filters, Agent: 'dev' },
@@ -238,6 +252,20 @@ describe('TemplateSearchPortal.vue', () => {
         await flushPromises();
         const payload = wrapper.emitted('updateRequest').at(-1)[0];
         expect(payload.Status).toBe(2);
+    });
+
+    it('handles status as a string in onStatusUpdate', async () => {
+        await wrapper.vm.onStatusUpdate(parkingRequests[0], 'Processing');
+        await flushPromises();
+        const payload = wrapper.emitted('updateRequest').at(-1)[0];
+        expect(payload.Status).toBe(2);
+    });
+
+    it('emits updateRequest when date is updated via onDateUpdate', async () => {
+        await wrapper.vm.onDateUpdate(parkingRequests[0], '2024-05-01');
+        await flushPromises();
+        const payload = wrapper.emitted('updateRequest').at(-1)[0];
+        expect(payload.NextCall).toBe('2024-05-01');
     });
 
     it('updates latitude and longitude correctly', async () => {
@@ -362,6 +390,60 @@ describe('TemplateSearchPortal.vue', () => {
         });
     });
 
+    it('updates summary correctly for high/medium/low priority and today/yesterday dates', () => {
+        const todayStr = new Date().toISOString();
+        const yesterdayDate = new Date();
+        yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+        const yesterdayStr = yesterdayDate.toISOString();
+
+        const testRequests = [
+            { Priority: 3, Status: 1, Agent: 'dev', CreatedAt: todayStr },
+            { Priority: 2, Status: 2, Agent: 'dev', CreatedAt: yesterdayStr },
+            {
+                Priority: 1,
+                Status: 3,
+                Agent: 'admin',
+                CreatedAt: '2020-01-01T00:00:00Z',
+            },
+        ];
+
+        wrapper.vm.updateSummary(testRequests);
+
+        expect(wrapper.vm.summary.high).toBe(1);
+        expect(wrapper.vm.summary.medium).toBe(1);
+        expect(wrapper.vm.summary.low).toBe(1);
+        expect(wrapper.vm.summary.today).toBe(1);
+        expect(wrapper.vm.summary.yesterday).toBe(1);
+    });
+
+    it('triggers route query extraction when parkingRequests changes with route queries set', async () => {
+        wrapper.vm.$route.query = {
+            isExpiring: 'true',
+            agent: 'dev',
+            status: '1',
+        };
+
+        await wrapper.setProps({ parkingRequests: [...parkingRequests] });
+        await flushPromises();
+
+        expect(extractExpiringRequests).toHaveBeenCalled();
+        expect(extractRequestsByAgentName).toHaveBeenCalledWith(
+            expect.any(Object),
+            'dev',
+        );
+        expect(extractRequestsByStatus).toHaveBeenCalledWith(
+            expect.any(Object),
+            1,
+        );
+    });
+
+    it('returns true if nextCall is in the past and false if in the future', () => {
+        const pastDate = new Date(Date.now() - 10000).toISOString();
+        const futureDate = new Date(Date.now() + 10000).toISOString();
+        expect(wrapper.vm.isCallDelayed(pastDate)).toBe(true);
+        expect(wrapper.vm.isCallDelayed(futureDate)).toBe(false);
+    });
+
     describe('isEmpty computed property', () => {
         it('returns false when filteredParkingRequests contains items', () => {
             expect(wrapper.vm.isEmpty).toBe(false);
@@ -375,6 +457,51 @@ describe('TemplateSearchPortal.vue', () => {
         it('returns true when filteredParkingRequests is null or undefined', () => {
             store.state.searchPortal.filteredParkingRequests = null;
             expect(wrapper.vm.isEmpty).toBe(true);
+        });
+    });
+
+    describe('isAssignDisabled validation', () => {
+        it(`disables assign to me when agent has ${MAX_REGISTERED_REQUESTS} or more registered requests`, async () => {
+            const agentRequests = Array.from(
+                { length: MAX_REGISTERED_REQUESTS },
+                (_, i) => ({
+                    ID: i + 1,
+                    Agent: 'dev',
+                    Status: 1,
+                }),
+            );
+            await wrapper.setProps({ parkingRequests: agentRequests });
+            expect(wrapper.vm.isAssignDisabled).toBe(true);
+        });
+
+        it(`enables assign to me when agent has fewer than ${MAX_REGISTERED_REQUESTS} registered requests`, async () => {
+            const agentRequests = Array.from(
+                { length: MAX_REGISTERED_REQUESTS - 1 },
+                (_, i) => ({
+                    ID: i + 1,
+                    Agent: 'dev',
+                    Status: 1,
+                }),
+            );
+            await wrapper.setProps({ parkingRequests: agentRequests });
+            expect(wrapper.vm.isAssignDisabled).toBe(false);
+        });
+
+        it('re-enables assign to me when a request status changes from Registered (1) to Processing (2)', async () => {
+            const agentRequests = Array.from(
+                { length: MAX_REGISTERED_REQUESTS },
+                (_, i) => ({
+                    ID: i + 1,
+                    Agent: 'dev',
+                    Status: 1,
+                }),
+            );
+            await wrapper.setProps({ parkingRequests: agentRequests });
+            expect(wrapper.vm.isAssignDisabled).toBe(true);
+
+            agentRequests[0].Status = 2;
+            await wrapper.setProps({ parkingRequests: [...agentRequests] });
+            expect(wrapper.vm.isAssignDisabled).toBe(false);
         });
     });
 });
