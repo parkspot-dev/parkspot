@@ -5,6 +5,7 @@ import store from '../store';
 import { getPtid } from '../utils/ptid';
 import { logger } from '../utils/logger';
 import { withTimeout } from '../utils/with-timeout';
+import { MAYA_REQUEST_TIMEOUT_MS } from '../constant/constant';
 
 // Upper bounds (ms) for the Firebase waits that run BEFORE a Maya request is
 // sent. The axios `timeout` only bounds the network round-trip; it does not
@@ -15,11 +16,6 @@ import { withTimeout } from '../utils/with-timeout';
 // token, then self-heal once Firebase settles".
 const AUTH_STATE_READY_TIMEOUT_MS = 3000;
 const ID_TOKEN_TIMEOUT_MS = 5000;
-// Maya request timeout, reduced from 10s so a slow/blocked backend surfaces an
-// error quickly instead of holding the UI. Note this bounds only calls that go
-// through this client; image bytes are uploaded by ImageUploadService via its
-// own raw `fetch` and are not affected by it.
-const MAYA_REQUEST_TIMEOUT_MS = 8000;
 
 /**
  * Report an API error to New Relic Browser, tagged with the identifiers

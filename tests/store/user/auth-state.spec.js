@@ -42,6 +42,13 @@ describe('handleAuthStateChanged', () => {
         localStorage.clear();
         store.state = { user: {} };
         store.dispatch.mockResolvedValue();
+        // Apply `update-user` so the handler can tell whether the user it is
+        // bootstrapping is still the signed-in one.
+        store.commit.mockImplementation((type, payload) => {
+            if (type === 'user/update-user') {
+                store.state.user.user = payload;
+            }
+        });
     });
 
     afterEach(() => {
@@ -228,6 +235,74 @@ describe('handleAuthStateChanged', () => {
         expect(store.commit).not.toHaveBeenCalledWith(
             'user/update-auth-progress',
             { authReady: true, roleResolved: true },
+        );
+    });
+
+    it('drops a bootstrap that settles after the user signed out', async () => {
+        // Logout is clickable while the profile is still loading. The late
+        // bootstrap must not mark a role resolved or re-identify the old user.
+        let resolveProfile;
+        store.dispatch.mockImplementation((action) =>
+            action === 'user/getUserProfile'
+                ? new Promise((r) => {
+                      resolveProfile = r;
+                  })
+                : Promise.resolve(),
+        );
+        const user = {
+            uid: 'u8',
+            getIdToken: vi.fn().mockResolvedValue('id-token'),
+        };
+
+        await handleAuthStateChanged(user);
+        await handleAuthStateChanged(null);
+        resolveProfile(true);
+        await flush();
+
+        expect(store.commit).not.toHaveBeenCalledWith(
+            'user/update-auth-progress',
+            { authReady: true, roleResolved: true },
+        );
+        expect(identify).not.toHaveBeenCalled();
+    });
+
+    it('records an auth error when the role could not be resolved', async () => {
+        store.dispatch.mockResolvedValue(false);
+        const user = {
+            uid: 'u9',
+            getIdToken: vi.fn().mockResolvedValue('id-token'),
+        };
+
+        await handleAuthStateChanged(user);
+        await flush();
+
+        expect(logger.warn).toHaveBeenCalledWith(
+            expect.stringContaining('Could not resolve user role'),
+        );
+        expect(store.commit).toHaveBeenCalledWith('user/set-auth-error', {
+            source: 'bootstrapUserData',
+            message: 'Could not resolve user role',
+        });
+        // Still settled, so the guard bails out instead of burning its timeout.
+        expect(store.commit).toHaveBeenCalledWith('user/update-auth-progress', {
+            authReady: true,
+            roleResolved: true,
+        });
+    });
+
+    it('does not record a role error when the role resolved', async () => {
+        store.dispatch.mockResolvedValue(true);
+        const user = {
+            uid: 'u10',
+            getIdToken: vi.fn().mockResolvedValue('id-token'),
+        };
+
+        await handleAuthStateChanged(user);
+        await flush();
+
+        expect(store.commit).not.toHaveBeenCalledWith(
+            'user/set-auth-error',
+            expect.objectContaining({ source: 'bootstrapUserData' }),
         );
     });
 });

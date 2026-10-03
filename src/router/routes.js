@@ -1,13 +1,15 @@
 import Home from '../views/PageHome.vue';
 import PageAbout from '@/views/PageAbout.vue';
-import { APP_LINK } from '../constant/constant';
+import { APP_LINK, MAYA_REQUEST_TIMEOUT_MS } from '../constant/constant';
 import store from '@/store';
 
 const AUTH_READY_TIMEOUT_MS = 5000;
-// Role resolution rides on a `/auth/user` round-trip after the token lands, so
-// it gets its own budget. In practice the auth wait resolves first, so the
-// worst-case stack (~10s) only occurs when Firebase is slow AND Maya is slow.
-const ROLE_READY_TIMEOUT_MS = 5000;
+// Role resolution rides on Maya after the token lands: `/auth/user`, then the
+// `/auth/authenticate` fallback, each bounded by the Maya request timeout. The
+// budget covers both plus slack, so a slow-but-working Maya still admits a
+// real admin. Every step is bounded, so the bootstrap always settles; this
+// timer is only a backstop.
+const ROLE_READY_TIMEOUT_MS = 2 * MAYA_REQUEST_TIMEOUT_MS + 2000;
 
 /**
  * Watches a `user`-module state flag until it turns truthy, or the timeout
@@ -16,29 +18,34 @@ const ROLE_READY_TIMEOUT_MS = 5000;
  *
  * @param {(state: object) => boolean} selector - reads the flag off the user state.
  * @param {number} timeoutMs - how long to wait before giving up.
- * @param {() => boolean} [isSettledNow] - SSR short-circuit; see callers.
+ * @param {() => boolean} canWait - false skips the wait (SSR); see callers.
  * @return {Promise<boolean>} true if the flag became truthy, false on timeout.
  */
-const waitForFlag = (selector, timeoutMs, isSettledNow) => {
+const waitForFlag = (selector, timeoutMs, canWait) => {
     if (selector(store.state.user)) {
         return Promise.resolve(true);
     }
-    if (!isSettledNow()) {
+    if (!canWait()) {
         return Promise.resolve(false);
     }
 
     return new Promise((resolve) => {
         let isSettled = false;
-        const unwatch = store.watch(selector, (isReady) => {
-            if (!isReady || isSettled) {
-                return;
-            }
+        // `store.watch` hands its getter the ROOT state, so step into the
+        // `user` module before applying the selector.
+        const unwatch = store.watch(
+            (rootState) => selector(rootState.user),
+            (isReady) => {
+                if (!isReady || isSettled) {
+                    return;
+                }
 
-            isSettled = true;
-            clearTimeout(timeoutId);
-            unwatch();
-            resolve(true);
-        });
+                isSettled = true;
+                clearTimeout(timeoutId);
+                unwatch();
+                resolve(true);
+            },
+        );
 
         const timeoutId = setTimeout(() => {
             if (isSettled) {

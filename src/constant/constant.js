@@ -1,4 +1,12 @@
 import { ParkingSize } from '@/constant/enums';
+
+// Maya request timeout, reduced from 10s so a slow/blocked backend surfaces an
+// error quickly instead of holding the UI. Note this bounds only calls that go
+// through `mayaClient`; image bytes are uploaded by ImageUploadService via its
+// own raw `fetch` and are not affected by it. Lives here, not in `api.js`, so
+// the router can size its role wait from it without an import cycle
+// (api.js -> router -> routes.js -> api.js).
+export const MAYA_REQUEST_TIMEOUT_MS = 8000;
 // Todo: Remove Form constants not needed
 export const FORM = {
     USERNAME: 'Username',

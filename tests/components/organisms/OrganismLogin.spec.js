@@ -107,6 +107,25 @@ describe('OrganismLogin.vue - Google sign-in failure handling', () => {
         expect(toastOpen).not.toHaveBeenCalled();
     });
 
+    it('tells the user to allow popups when the popup is blocked', async () => {
+        // "Check your connection" sends the user the wrong way; a blocked
+        // popup is fixed in the browser, not the network.
+        const loginWithGoogle = vi.fn().mockResolvedValue({
+            ok: false,
+            code: 'auth/popup-blocked',
+        });
+
+        const { wrapper } = mountIt(loginWithGoogle, toastOpen);
+
+        await wrapper.vm.login();
+
+        expect(toastOpen).toHaveBeenCalledWith({
+            ...DANGER_TOAST,
+            message:
+                'Your browser blocked the sign-in popup. Please allow popups for this site and try again.',
+        });
+    });
+
     it('raises no toast on success', async () => {
         const loginWithGoogle = vi.fn().mockResolvedValue({ ok: true });
 
