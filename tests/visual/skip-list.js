@@ -44,6 +44,8 @@ export const SKIP = [
      reason: 'depends on map/getLocationName store array' },
    { match: /TemplateSrp|TemplateSpotDetail|PageSpotDetail|BookingPortal/i,
      reason: 'reads sdp.* / spotRequests.* state not seeded by fake store' },
+   { match: /PageSearchSpotByName/i,
+     reason: 'reads spotSearch.sites, which the fake store leaves undefined (real store defaults it to [])' },
    // ─── Form views that expect populated parent flow ──────────────
    { match: /RegisterRequest|ReviewSpot/i,
      reason: 'requires formData / SO state seeded by parent flow' },

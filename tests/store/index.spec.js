@@ -79,6 +79,7 @@ describe('root store', () => {
                 "bookingPortal",
                 "config",
                 "device",
+                "identityKyc",
                 "kycStatusPortal",
                 "map",
                 "myBookings",
