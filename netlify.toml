@@ -2,8 +2,9 @@
 #
 # IMPORTANT: no [build] block is declared here intentionally -- the existing
 # build command and publish directory are managed in the Netlify UI and must
-# stay authoritative. This file only *adds* edge function route registrations
-# on top of whatever is already configured.
+# stay authoritative. This file only *adds* edge function route
+# registrations, per-context env vars and a local build plugin on top of
+# whatever is already configured.
 #
 # The SPA fallback in `_redirects` (/* -> /index.html 200) remains
 # authoritative for non-matching paths. Edge functions run BEFORE the SPA
@@ -46,12 +47,23 @@
 # a deploy can only target one backend by design.
 [context.uat.environment]
   VITE_MAYA_API_DOMAIN = "https://maya-uat.parkspot.in"
+  # New Relic tags UAT browser data "uat" rather than Netlify's generic
+  # "branch-deploy" context (see scripts/newrelic/build-info.js). This
+  # only reaches the build: edge functions read their own value from the
+  # Netlify UI (see netlify/edge-functions/README.md).
+  NEW_RELIC_ENVIRONMENT = "uat"
 
 [context.deploy-preview.environment]
   VITE_MAYA_API_DOMAIN = "https://maya-uat.parkspot.in"
 
 [context.branch-deploy.environment]
   VITE_MAYA_API_DOMAIN = "https://maya-uat.parkspot.in"
+
+# Source maps and deployment markers for New Relic Browser, once
+# NEW_RELIC_API_KEY is set in the Netlify UI. A local plugin, so there is
+# nothing to install. See netlify/plugins/newrelic/README.md.
+[[plugins]]
+  package = "./netlify/plugins/newrelic"
 
 # Spot-detail pages remain SPA + edge-injected head until Phase 3
 # prerenders them. See `ssg-research/04-integration-plan.md` § 3.5.

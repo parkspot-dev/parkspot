@@ -108,3 +108,43 @@ describe('src/main.js setup fn — seedAppStore wiring', () => {
         20000,
     );
 });
+
+describe('src/main.js setup fn — New Relic wiring', () => {
+    it(
+        'installs the telemetry plugin with the router on the client',
+        async () => {
+            capturedSetupFn = null;
+            vi.resetModules();
+            await import('@/main.js');
+            expect(capturedSetupFn).toBeTypeOf('function');
+            const { telemetryPlugin } = await import('@/telemetry/vue.js');
+
+            const app = { use: vi.fn(), mixin: vi.fn(), component: vi.fn() };
+            const router = { afterEach: vi.fn() };
+            capturedSetupFn({ app, router, isClient: true, initialState: {} });
+
+            expect(app.use).toHaveBeenCalledWith(telemetryPlugin, { router });
+        },
+        20000,
+    );
+
+    it(
+        'leaves it out of the SSG render',
+        async () => {
+            capturedSetupFn = null;
+            vi.resetModules();
+            await import('@/main.js');
+            const { telemetryPlugin } = await import('@/telemetry/vue.js');
+
+            const app = { use: vi.fn(), mixin: vi.fn(), component: vi.fn() };
+            const router = { afterEach: vi.fn() };
+            capturedSetupFn({ app, router, isClient: false, initialState: {} });
+
+            expect(app.use).not.toHaveBeenCalledWith(
+                telemetryPlugin,
+                expect.anything(),
+            );
+        },
+        20000,
+    );
+});

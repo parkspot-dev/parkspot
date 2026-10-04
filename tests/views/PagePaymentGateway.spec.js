@@ -18,11 +18,14 @@
 //     load-bearing guarantee of the whole module).
 //   - The success redirect carries `?from=booking&t=<id>` so that
 //     PageThankYou can fire `purchase_confirmed`.
+//   - New Relic gets a `payment_status` PageAction for every /status
+//     outcome, and handled failures (a /validate error, a status lookup
+//     that never returns) are reported with their `source`.
 //
 // What we deliberately skip:
-//   - Error / ACTIVE / unknown status branches — covered by the
-//     existing redirect assertions in nearby integration tests; the
-//     analytics layer adds nothing there.
+//   - Redirect targets of the error / ACTIVE / unknown status branches —
+//     covered by the existing redirect assertions in nearby integration
+//     tests; the analytics layer adds nothing there.
 //   - The handcrafted E.164 normalizer — same logic lives in
 //     TemplateSpotDetail.vue and is exercised end-to-end by the
 //     attribution suite; duplicating phone-format edge cases here
@@ -38,7 +41,17 @@ vi.mock('@/lib/analytics', async () => {
     };
 });
 
+vi.mock('@/telemetry', async () => {
+    const real = await vi.importActual('@/telemetry/events.js');
+    return {
+        reportError: vi.fn(),
+        trackEvent: vi.fn(),
+        NR_EVENTS: real.NR_EVENTS,
+    };
+});
+
 import { track, EVENTS } from '@/lib/analytics';
+import { NR_EVENTS, reportError, trackEvent } from '@/telemetry';
 import PagePaymentGateway from '@/views/PagePaymentGateway.vue';
 
 // Build a minimal $route stub. The component's `mounted` hook tests
@@ -256,6 +269,98 @@ describe('PagePaymentGateway.vue — booking funnel payment events', () => {
         );
         expect(purchaseCalls).toHaveLength(1);
         expect(purchaseCalls[0][1].transaction_id).toBe('CF_ORDER_42');
+
+        wrapper.unmount();
+    });
+
+    it.each([
+        [{ Status: 'PAID' }, { status: 'paid' }],
+        [{ Status: 'ACTIVE' }, { status: 'pending' }],
+        [
+            { ErrorCode: 3, DisplayMsg: 'Failed' },
+            { status: 'failed', error_code: 3 },
+        ],
+        [{ Status: 'EXPIRED' }, { status: 'unknown', order_status: 'EXPIRED' }],
+    ])(
+        'reports payment_status for /status reply %o',
+        async (reply, expected) => {
+            global.fetch = vi.fn().mockResolvedValue({
+                ok: true,
+                json: vi.fn().mockResolvedValue(reply),
+            });
+
+            const wrapper = mountWithRoute(
+                makeRoute({
+                    pathMatch: 'status',
+                    query: { order_id: 'CF_ORDER_1' },
+                }),
+            );
+            await flushPromises();
+
+            expect(trackEvent).toHaveBeenCalledTimes(1);
+            expect(trackEvent).toHaveBeenCalledWith(
+                NR_EVENTS.PAYMENT_STATUS,
+                expected,
+            );
+            expect(reportError).not.toHaveBeenCalled();
+
+            wrapper.unmount();
+        },
+    );
+
+    it('reports a status lookup that fails instead of rejecting unhandled', async () => {
+        const failure = new TypeError('Failed to fetch');
+        global.fetch = vi.fn().mockRejectedValue(failure);
+
+        const routerPush = vi.fn();
+        const wrapper = mountWithRoute(
+            makeRoute({
+                pathMatch: 'status',
+                query: { order_id: 'CF_ORDER_1' },
+            }),
+            routerPush,
+        );
+        await flushPromises();
+
+        expect(reportError).toHaveBeenCalledWith(failure, {
+            source: 'payment_status',
+        });
+        expect(trackEvent).toHaveBeenCalledWith(NR_EVENTS.PAYMENT_STATUS, {
+            status: 'unknown',
+        });
+        // Same visible behaviour as before: no redirect.
+        expect(routerPush).not.toHaveBeenCalled();
+
+        wrapper.unmount();
+    });
+
+    it('reports a failed /validate call, then falls back to the status lookup', async () => {
+        global.fetch = vi
+            .fn()
+            .mockResolvedValueOnce({ ok: false, status: 502 })
+            .mockResolvedValueOnce({
+                ok: true,
+                json: vi.fn().mockResolvedValue({ Status: 'ACTIVE' }),
+            });
+
+        const wrapper = mountWithRoute(
+            makeRoute({
+                pathMatch: 'payment/validate',
+                query: { p: 'PAY_77', h: 'hash123' },
+            }),
+        );
+        await flushPromises();
+
+        expect(reportError).toHaveBeenCalledWith(
+            expect.objectContaining({
+                message: 'payment/validate failed with HTTP 502',
+            }),
+            { source: 'payment_validate' },
+        );
+        expect(global.fetch).toHaveBeenCalledTimes(2);
+        expect(trackEvent).toHaveBeenCalledWith(NR_EVENTS.PAYMENT_STATUS, {
+            status: 'pending',
+        });
 
         wrapper.unmount();
     });

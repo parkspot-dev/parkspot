@@ -80,7 +80,7 @@ const buefyMock = {
     },
 };
 
-const factory = (routerOverrides = {}) =>
+const factory = (routerOverrides = {}, stubOverrides = {}) =>
     mount(PageKYCStatus, {
         global: {
             plugins: [store],
@@ -118,6 +118,7 @@ const factory = (routerOverrides = {}) =>
                     props: ['modelValue'],
                     template:
                         '<div class="b-modal-stub" v-if="modelValue"><slot /></div>',
+                },
                 },
             },
             mocks: {
@@ -243,6 +244,22 @@ describe('PageKYCStatus.vue', () => {
         await wrapper.vm.$nextTick();
         wrapper.vm.openDetailsModal(emptyUser, 'ownership');
         await wrapper.vm.$nextTick();
+    });
+
+    it('keeps the document preview out of session replays', async () => {
+        const wrapper = factory(
+            {},
+            { 'b-modal': { template: '<div class="b-modal"><slot /></div>' } },
+        );
+
+        wrapper.vm.openImage('front.jpg');
+        await wrapper.vm.$nextTick();
+
+        const preview = wrapper.find('.image-preview-modal');
+        expect(preview.find('img').attributes('src')).toBe('front.jpg');
+        // New Relic's session replay records nothing inside [data-nr-block].
+        expect(preview.attributes()).toHaveProperty('data-nr-block');
+    });
     });
 
     it('shows error alert when hasError becomes true', async () => {

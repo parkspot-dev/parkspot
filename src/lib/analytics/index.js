@@ -10,6 +10,8 @@
 import { push } from './dataLayer.js';
 import { getStored as getAttribution } from './attribution.js';
 import { EVENTS, LEAD_TYPES, validateEvent } from './schema.js';
+import { trackEvent } from '@/telemetry';
+import { FORWARDED_ANALYTICS_EVENTS } from '@/telemetry/events.js';
 
 export { EVENTS, LEAD_TYPES };
 export { setDefault as setDefaultConsent, update as updateConsent } from './consent.js';
@@ -55,6 +57,9 @@ function readPageDefaults() {
  *   3. Merges attribution (gclid, gbraid, wbraid, utm_*) from storage.
  *   4. In dev, validates against `schema.js` (throws on violation).
  *   5. Pushes `{ event: eventName, ...mergedParams }` onto dataLayer.
+ *   6. Mirrors funnel events (`FORWARDED_ANALYTICS_EVENTS`) to New
+ *      Relic as PageActions, with the call-site params only: no page
+ *      defaults or attribution, and PII scrubbed by `@/telemetry`.
  *
  * @param {string} eventName One of `EVENTS.*`.
  * @param {Record<string, unknown>} [params] Per-event params. May
@@ -76,7 +81,11 @@ export function track(eventName, params = {}) {
         validateEvent(eventName, merged);
     }
 
-    return push({ event: eventName, ...merged });
+    const pushed = push({ event: eventName, ...merged });
+    if (FORWARDED_ANALYTICS_EVENTS.includes(eventName)) {
+        trackEvent(eventName, params);
+    }
+    return pushed;
 }
 
 /**
