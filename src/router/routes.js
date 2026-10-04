@@ -78,6 +78,12 @@ export const pages = {
     MY_BOOKINGS              : "/profile/my-bookings"
 };
 
+// `meta: { sessionReplay: false }` keeps a page out of New Relic session
+// replays (see src/telemetry/vue.js). Replays mask text and inputs, but
+// keep the page URL with its query string, and attributes such as image
+// sources: mark payment links, the thank-you page (its `?t=` is the
+// transaction ID), the internal tools, and any page whose URL or markup
+// holds personal data.
 export const routes = [
     {
         path: pages.HOME,
@@ -149,16 +155,19 @@ export const routes = [
         path: pages.SEARCH_PORTAL,
         name: 'SearchPortal',
         component: () => import('@/views/PageSearchPortal.vue'),
+        meta: { sessionReplay: false },
     },
     {
         path: pages.SPOT_REQUESTS,
         name: 'spotRequest',
         component: () => import('@/views/SpotRequest.vue'),
+        meta: { sessionReplay: false },
     },
     {
         path: pages.PAYMENTGATEWAY,
         name: 'paymentGateway',
         component: () => import('@/views/PagePaymentGateway.vue'),
+        meta: { sessionReplay: false },
     },
     // ! it will take " -mara/xyx"
     {
@@ -180,6 +189,7 @@ export const routes = [
         path: pages.THANK_YOU,
         name: 'thankYou',
         component: () => import('@/views/PageThankYou.vue'),
+        meta: { sessionReplay: false },
     },
     {
         path: pages.ERROR,
@@ -190,11 +200,13 @@ export const routes = [
         path: pages.BOOKING_PORTAL,
         name: 'booking-portal',
         component: () => import('@/views/BookingPortal.vue'),
+        meta: { sessionReplay: false },
     },
     {
         path: pages.PENDING_PAYMENTS,
         name: 'pending-payments',
         component: () => import('@/views/PendingPaymentsPortal.vue'),
+        meta: { sessionReplay: false },
         beforeEnter: async (to, from, next) => {
             // SSR fast-path: `/internal/pending-payments` is filtered out
             // of `includedRoutes` and `crawl` is disabled (see
@@ -237,6 +249,7 @@ export const routes = [
         path: pages.REGISTER_REQUEST,
         name: 'vehicle-owner-registration',
         component: () => import('@/views/RegisterRequest.vue'),
+        meta: { sessionReplay: false },
     },
     {
         path: pages.AUTOMATED_PARKING,
@@ -247,11 +260,13 @@ export const routes = [
         path: pages.KYC_STATUS_PAGE,
         name: 'kyc-status',
         component: () => import('@/views/PageKYCStatus.vue'),
+        meta: { sessionReplay: false },
     },
     {
         path: pages.SPOTS_SEARCH,
         name: 'spot-search',
         component: () => import('@/views/PageSearchSpotByName.vue'),
+        meta: { sessionReplay: false },
     },
     {
         path: pages.MY_BOOKINGS,

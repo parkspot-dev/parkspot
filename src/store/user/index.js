@@ -3,6 +3,7 @@ import { auth } from '../../firebase';
 import store from '../../store';
 import { UserType } from '@/constant/enums';
 import {
+    AuthErrorCodes,
     signInWithPopup,
     GoogleAuthProvider,
     signOut,
@@ -11,12 +12,19 @@ import {
 import { identify, setUserProperty } from '@/lib/analytics';
 import { formatRemarkWithUtm } from '@/lib/analytics/attribution';
 import { logger } from '@/utils/logger';
+import { clearUser, reportError, setUser } from '@/telemetry';
 
 const PS_AUTH_KEY = 'PSAuthKey';
 const USER_PROFILE_STORAGE_KEY = 'UserProfile';
 const PROFILE_CACHE_PREFIX = 'profile:';
 const PROFILE_CACHE_VERSION = 1;
 const PROFILE_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+// The visitor closed the Google popup, or opened a second one: not
+// failures, so they aren't reported.
+const SIGN_IN_CANCELLED = [
+    AuthErrorCodes.POPUP_CLOSED_BY_USER,
+    AuthErrorCodes.EXPIRED_POPUP_REQUEST,
+];
 const getPsAuthKey = () => {
     const key = localStorage.getItem(PS_AUTH_KEY);
     if (
@@ -240,6 +248,7 @@ const actions = {
                     new Error(
                         '[PSAuthKey Error] Google Sign-In succeeded but received empty PSAuthKey',
                     ),
+                    { source: 'google_sign_in' },
                 );
                 throw new Error('Received empty PSAuthKey from Google login');
             }
@@ -248,7 +257,9 @@ const actions = {
             commit('update-login-modal', false);
             await dispatch('authenticateWithMaya');
         } catch (error) {
-            logger.error(error);
+            if (!SIGN_IN_CANCELLED.includes(error?.code)) {
+                logger.error(error, { source: 'google_sign_in' });
+            }
         }
     },
 
@@ -516,6 +527,9 @@ if (typeof window !== 'undefined') {
                 // Clear the GA4 user-scoped identity on sign-out. No user_id and
                 // no PII — just flips the authenticated flag off.
                 setUserProperty('is_authenticated', false);
+                // Ends the New Relic session if a user was signed in, so
+                // the next visitor's data never joins theirs.
+                clearUser();
                 store.commit('user/update-auth-ready', true);
                 return;
             }
@@ -553,7 +567,9 @@ if (typeof window !== 'undefined') {
                     is_authenticated: true,
                     user_role: userRole,
                 });
-            } catch {
+                setUser(user.uid, { role: userRole });
+            } catch (error) {
+                reportError(error, { source: 'auth_bootstrap' });
                 store.commit('user/set-auth-error', {
                     source: 'onAuthStateChanged',
                     message: 'Failed to load user bootstrap data',
@@ -562,6 +578,7 @@ if (typeof window !== 'undefined') {
 
             store.commit('user/update-auth-ready', true);
         } catch (err) {
+            reportError(err, { source: 'auth_listener' });
             console.error('onAuthStateChanged listener failed', err);
         }
     });

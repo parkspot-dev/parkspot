@@ -1,27 +1,38 @@
 import axios from 'axios';
 import { auth } from '../firebase';
-import router from '../router';
-import store from '../store';
+import { reportError } from '../telemetry';
 import { getPtid } from '../utils/ptid';
 import { logger } from '../utils/logger';
 
 /**
- * Report an API error to New Relic Browser, tagged with the identifiers
- * needed to correlate it with a session/page.
- * @param { number } status - HTTP status of the failed request.
+ * Path of a request without its query string, with ID-like segments
+ * (anything containing a digit) replaced so the value stays
+ * low-cardinality: `/booking/42/payments` -> `/booking/:id/payments`.
+ * @param { string } [url] - request URL relative to the client's baseURL.
+ * @return { string }
+ */
+function endpointOf(url = '') {
+    return url.split(/[?#]/)[0].replace(/\/[^/]*\d[^/]*(?=\/|$)/g, '/:id');
+}
+
+/**
+ * Report a failed Maya call to New Relic. The user and page are added by
+ * the agent itself (enduser.id, route_name); the ptid tells tabs apart.
+ * A call that got no answer has status 0 and axios's error code:
+ * ECONNABORTED for a timeout, or for a request the browser dropped
+ * (message "Request aborted"); ERR_NETWORK when the request failed or the
+ * browser withheld the answer (a response without CORS headers).
  * @param { any } error - the axios error.
  */
-function reportApiError(status, error) {
-    if (typeof window === 'undefined' || !window.newrelic) {
-        return;
-    }
-    const attributes = {
+function reportApiError(error) {
+    reportError(error, {
+        source: 'maya',
+        status: error.response?.status ?? 0,
+        error_code: error.response ? undefined : error.code,
+        method: error.config?.method?.toUpperCase(),
+        endpoint: endpointOf(error.config?.url),
         ptid: getPtid(),
-        session: store.state.user?.user?.uid || 'anonymous',
-        pageUrl: router.currentRoute?.value?.fullPath || '',
-        status,
-    };
-    window.newrelic.noticeError(error, attributes);
+    });
 }
 
 // BaseApiService create http client with basic configurations and error handling.
@@ -74,15 +85,21 @@ class BaseApiService {
     responseInterceptor = (response) => response;
 
     /**
-     * handleError is used to log http errors.
+     * handleError is used to log http errors. Maya's errorInterceptor has
+     * already reported its own (with more detail), so New Relic only gets
+     * this report for the other clients.
      * @param { any } error - .
      */
     handleErrors(error) {
         if (!error.request) {
-            logger.error(error, { context: 'Http server/network error' });
+            logger.error(error, {
+                source: 'http',
+                context: 'Http server/network error',
+            });
             return;
         }
         logger.error(error, {
+            source: 'http',
             context: 'Errors in http call',
             url: error.request?.responseURL,
         });
@@ -210,8 +227,10 @@ class MayaApiService extends BaseApiService {
                     token.trim().toLowerCase() === 'null';
 
                 if (isInvalidToken) {
+                    // The endpoint pattern, not the URL: query strings
+                    // carry searched mobile numbers.
                     logger.warn(
-                        `[PSAuthKey Error] Sender check failed: PSAuthKey is empty or invalid for ${config.method?.toUpperCase()} ${config.url}`,
+                        `[PSAuthKey Error] Sender check failed: PSAuthKey is empty or invalid for ${config.method?.toUpperCase()} ${endpointOf(config.url)}`,
                     );
                 } else {
                     config.headers['Authorization'] = `Bearer ${token}`;
@@ -230,11 +249,11 @@ class MayaApiService extends BaseApiService {
      * @param { any } error -  .
      */
     errorInterceptor(error) {
+        reportApiError(error);
         if (!error.response) {
             // network/timeout error, handled (and re-thrown) by base interceptor.
             return super.errorInterceptor(error);
         }
-        reportApiError(error.response.status, error);
         switch (error.response.status) {
             case 401: // authentication error, logout the user
                 alert('Your session has expired. Please login and try again.');
@@ -251,10 +270,6 @@ class MayaApiService extends BaseApiService {
                 alert(
                     'Something went wrong.\nNo worries, our team is always there to help. \nPlease reach out to us at +91 80929 96057.',
                 );
-                logger.error(error, {
-                    context: 'maya interceptor default',
-                    status: error.response.status,
-                });
         }
         throw error;
     }

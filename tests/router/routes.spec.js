@@ -67,6 +67,26 @@ describe('routes', () => {
                 '/internal/search-portal',
             );
         });
+
+        it('keeps payment links, the thank-you page and the internal tools out of session replays', () => {
+            // Their URLs carry payment hashes, transaction IDs and
+            // customers' mobile numbers, which replay masking doesn't
+            // hide.
+            const keptOut = (path) =>
+                path.startsWith('/internal/') ||
+                path === pages.PAYMENTGATEWAY ||
+                path === pages.THANK_YOU;
+            const pageRoutes = routes.filter((route) => route.component);
+
+            for (const route of pageRoutes) {
+                expect(route.meta?.sessionReplay === false, route.path).toBe(
+                    keptOut(route.path),
+                );
+            }
+            expect(
+                pageRoutes.filter((route) => keptOut(route.path)),
+            ).toHaveLength(9);
+        });
     });
 
     describe('Behavior tests', () => {

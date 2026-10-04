@@ -27,3 +27,20 @@ coverage/
 
 # Claude story context (working memory, not a project artifact)
 .claude/context/
+
+# Terraform (observability/newrelic/terraform): state, variables and
+# overrides stay local; .terraform.lock.hcl is committed.
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc

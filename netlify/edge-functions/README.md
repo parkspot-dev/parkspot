@@ -61,6 +61,9 @@ early before calling `context.next()`.
    node and all existing body content / scripts are preserved byte-for-byte.
 7. The existing LocalBusiness JSON-LD block in `index.html` is preserved; a
    **second, route-scoped** JSON-LD block is appended alongside it.
+8. Telemetry (see [below](#telemetry-new-relic)) is posted after the
+   response through `context.waitUntil`, with its own timeout, and never
+   throws: a missing key or a New Relic outage changes nothing for visitors.
 
 ## Files
 
@@ -73,12 +76,72 @@ netlify/edge-functions/
     ├── spot-id.js          # Parsing for "HYD#REQ#104"-style spot IDs
     ├── meta.js             # Pure builders that return MetaPayload objects
     ├── html-rewrite.js     # Pure string transforms on the HTML shell
-    └── firebase-rest.js    # Optional RTDB enhancement (timeout-bounded)
+    ├── firebase-rest.js    # Optional RTDB enhancement (timeout-bounded)
+    └── telemetry.js        # New Relic log record per handled request
 ```
 
-Pure modules (every file under `lib/` except `firebase-rest.js`) are
-side-effect-free and covered by Vitest unit tests in
-`tests/edge-functions/`.
+Pure modules (every file under `lib/` except `firebase-rest.js` and
+`telemetry.js`) are side-effect-free and covered by Vitest unit tests in
+`tests/edge-functions/`. The two that talk to the network take a
+`fetchImpl` for their tests, and `seo-inject.spec.js` runs the handler end
+to end with Netlify's runtime stubbed out.
+
+## Telemetry (New Relic)
+
+No New Relic agent runs on the Deno edge, so `lib/telemetry.js` turns each
+handled request into one log record and posts it to the
+[New Relic Log API](https://docs.newrelic.com/docs/logs/log-api/introduction-log-api/)
+with a plain `fetch`. Unmatched paths report nothing.
+
+Env vars, set in the Netlify UI with the **Functions** scope. Values in
+`netlify.toml` never reach edge functions.
+
+| Variable | Default | Meaning |
+|----------|---------|---------|
+| `NEW_RELIC_LICENSE_KEY` | unset: nothing is sent | Ingest license key. Not the browser key, and not a user API key. |
+| `NEW_RELIC_ENVIRONMENT` | the deploy context (`production`, `deploy-preview`, `branch-deploy`) | Environment tag. Set it to `uat` as a branch-specific value for the UAT branch: the `[context.uat.environment]` entry in `netlify.toml` only reaches the build (the browser agent). |
+| `NEW_RELIC_EDGE_SAMPLE_RATE` | `1` | Share of `info` records to send, 0 to 1. `warn` and `error` records are always sent. |
+
+Each record has the common attributes `service.name` (`parkspot-edge`),
+`environment`, `deploy_id` and `edge_region`, and these per-request ones:
+
+| Attribute | Meaning |
+|-----------|---------|
+| `edge_function` | `seo-inject` |
+| `outcome` / `level` | `injected` / `info`, `not_html` / `info`, `unchanged` / `warn` (no `</head>` in the shell, or a rewrite failed), `error` / `error` (fell through) |
+| `route_name` | Vue router route name: `spot-detail`, `discover`, `discover-hyderabad` |
+| `status` | Upstream (SPA shell) status |
+| `upstream_ms`, `duration_ms` | Time until `context.next()` resolved, and until the response was ready |
+| `enriched`, `enrichment_ms` | Area pages only: whether the RTDB lookup found the area, and how long it took |
+| `client` | User-agent class: `googlebot`, `google-ads`, `bingbot`, `facebook`, `whatsapp`, `telegram`, `twitter`, `linkedin`, `slack`, `other-bot`, `browser` or `none` |
+| `request_id` | Netlify request ID, to find the request in the Edge Functions log |
+| `sample_rate` | Each record stands for `1 / sample_rate` requests |
+| `error.class`, `error.message`, `error.stack` | `error` records only |
+
+Records carry no URL, user agent, IP or geo data. Attributes go through the
+browser app's PII rules (`src/telemetry/sanitize.js`), and so does error text:
+query strings, emails, phone and Aadhaar numbers, and tokens are masked; paths
+are kept.
+
+A record is about 0.5 KB (1-2 KB with a stack trace), so 100,000 requests
+a month cost about 0.05 GB of the free tier's 100 GB. The work fits in
+Netlify's 50 ms CPU budget per request, which also covers `waitUntil` work.
+
+```sql
+-- Outcomes over time (sampling-aware)
+FROM Log SELECT sum(1 / sample_rate) WHERE service.name = 'parkspot-edge'
+  FACET outcome TIMESERIES
+-- Latency by client class
+FROM Log SELECT percentile(duration_ms, 50, 95)
+  WHERE service.name = 'parkspot-edge' FACET client
+-- Recent failures
+FROM Log SELECT request_id, error.class, error.message
+  WHERE service.name = 'parkspot-edge' AND level != 'info' SINCE 1 day ago
+```
+
+If records stop arriving, look for `[newrelic]` lines in the Edge Functions
+log: `the Log API answered 403` means a wrong key; the key itself is never
+logged.
 
 ## Local testing
 
@@ -110,6 +173,10 @@ curl -s http://localhost:8888/spot-details/HYD%23REQ%23104 \
       `og:description`.
 - [ ] Googlebot (URL Inspection in Search Console) sees the route-specific
       title, not the generic shell title.
+- [ ] With `NEW_RELIC_LICENSE_KEY` set, the spot-detail `curl` above shows
+      up in New Relic within a minute:
+      `FROM Log SELECT * WHERE service.name = 'parkspot-edge' SINCE 10 minutes ago`
+      returns an `injected` record with `client` = `other-bot`.
 
 ## Future enhancements (out of scope for this PR)
 

@@ -37,10 +37,15 @@
 //   - Dismissal is persisted to localStorage so the strip stays
 //     dismissed for 12 months. After expiry it re-shows so the
 //     disclosure stays fresh.
+//   - New Relic session replay (masked, kept only for sessions with
+//     errors) starts only once the notice is acknowledged, on this
+//     visit or within the TTL. See src/telemetry.
 //
 // SSR-safety: this component is mounted under <ClientOnly> in App.vue,
 // but we still guard localStorage access with try/catch because Safari
 // private mode throws on read/write.
+
+import { enableSessionReplay } from '@/telemetry';
 
 const STORAGE_KEY = 'parkspot_consent_notice';
 // 12 months in milliseconds. Keeping this as a literal makes it easy
@@ -89,6 +94,7 @@ export default {
         const now = Date.now();
         const ack = readStoredAck();
         if (isAckFresh(ack, now)) {
+            enableSessionReplay();
             return;
         }
         // Tiny delay so the strip slides in after first paint rather
@@ -118,6 +124,7 @@ export default {
                 // cookies) — strip will re-show next visit, which is
                 // acceptable for a disclosure-only notice.
             }
+            enableSessionReplay();
             this.visible = false;
         },
     },

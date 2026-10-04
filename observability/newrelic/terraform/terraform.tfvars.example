@@ -1,0 +1,27 @@
+# Copy to terraform.tfvars (git ignores it) and fill in. Every variable has
+# a default, so set only what differs; variables.tf lists them all.
+
+environment  = "production"
+alert_emails = ["oncall@example.com"]
+
+# Slack: create the destination in the New Relic UI first (README.md).
+# slack = {
+#   destination_id = "00000000-0000-0000-0000-000000000000"
+#   channel_id     = "C0123456789"
+# }
+
+# Only the values that differ from the defaults.
+# thresholds = {
+#   payment_failed_per_hour = 5
+# }
+
+# On a paid plan, or to warn earlier.
+# ingest_budget = {
+#   monthly_gb = 100
+# }
+
+# A second state for UAT (see README.md) leaves the account-wide resources
+# to the production state:
+# environment              = "uat"
+# maya_origin              = "https://maya-uat.parkspot.in"
+# manage_account_resources = false

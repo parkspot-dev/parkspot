@@ -115,6 +115,20 @@ describe('NavbarBody.vue', () => {
 
             expect(pendingPaymentsLink.exists()).toBe(false);
         });
+
+        it('keeps the profile photo out of session replays', async () => {
+            store.state.user.user = {
+                photoURL: 'https://lh3.googleusercontent.com/a/photo',
+            };
+            wrapper = mountComponent();
+
+            await wrapper.vm.$nextTick();
+
+            const photo = wrapper.find('img.user-pic');
+            expect(photo.exists()).toBe(true);
+            // New Relic's session replay records nothing inside [data-nr-block].
+            expect(photo.attributes()).toHaveProperty('data-nr-block');
+        });
     });
 
     describe('Behavior tests', () => {

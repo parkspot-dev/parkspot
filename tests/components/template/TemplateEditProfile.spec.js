@@ -89,6 +89,13 @@ describe('TemplateEditProfile.vue', () => {
             expect(img.attributes('alt')).toBe('profile pic');
         });
 
+        it('keeps the avatar out of session replays', () => {
+            // New Relic's session replay records nothing inside [data-nr-block].
+            expect(wrapper.find('img').attributes()).toHaveProperty(
+                'data-nr-block',
+            );
+        });
+
         it('renders OrganismUserGeneralInfo component by default', () => {
             expect(wrapper.find('[data-testid="user-general-info"]').exists()).toBe(true);
         });

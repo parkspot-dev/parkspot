@@ -10,9 +10,11 @@
 //   - An expired acknowledgement re-shows the strip.
 //   - localStorage failures (Safari private mode) don't throw.
 //   - There is no Reject / Manage Preferences button (disclosure-only).
+//   - New Relic session replay starts only after an acknowledgement.
 import { mount } from '@vue/test-utils';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import OrganismConsentNotice from '@/components/organisms/OrganismConsentNotice.vue';
+import { _resetTelemetryState } from '@/telemetry';
 
 const STORAGE_KEY = 'parkspot_consent_notice';
 const TWELVE_MONTHS_MS = 365 * 24 * 60 * 60 * 1000;
@@ -36,11 +38,14 @@ describe('OrganismConsentNotice.vue — disclosure-only cookie notice', () => {
     beforeEach(() => {
         vi.useFakeTimers();
         window.localStorage.clear();
+        _resetTelemetryState();
+        window.newrelic = { start: vi.fn() };
     });
 
     afterEach(() => {
         vi.useRealTimers();
         window.localStorage.clear();
+        delete window.newrelic;
     });
 
     it('is hidden on mount and slides in after the show delay', async () => {
@@ -100,6 +105,39 @@ describe('OrganismConsentNotice.vue — disclosure-only cookie notice', () => {
         const w = mountIt();
         await vi.advanceTimersByTimeAsync(1500);
         expect(w.find('.consent-notice').exists()).toBe(true);
+        w.unmount();
+    });
+
+    it('starts session replay only once the notice is acknowledged', async () => {
+        const w = mountIt();
+        await vi.advanceTimersByTimeAsync(1500);
+        expect(window.newrelic.start).not.toHaveBeenCalled();
+        await w.find('button').trigger('click');
+        expect(window.newrelic.start).toHaveBeenCalledTimes(1);
+        w.unmount();
+    });
+
+    it('starts session replay on mount when a fresh acknowledgement exists', () => {
+        window.localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({ acknowledged: true, timestamp: Date.now() }),
+        );
+        const w = mountIt();
+        expect(window.newrelic.start).toHaveBeenCalledTimes(1);
+        w.unmount();
+    });
+
+    it('keeps session replay off when the acknowledgement has expired', async () => {
+        window.localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({
+                acknowledged: true,
+                timestamp: Date.now() - (TWELVE_MONTHS_MS + 1000),
+            }),
+        );
+        const w = mountIt();
+        await vi.advanceTimersByTimeAsync(1500);
+        expect(window.newrelic.start).not.toHaveBeenCalled();
         w.unmount();
     });
 
