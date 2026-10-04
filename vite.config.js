@@ -4,6 +4,7 @@ import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueDevTools from 'vite-plugin-vue-devtools';
+import { newRelicBrowser } from './scripts/newrelic/vite-plugin.js';
 
 // Strip network-blocking resources during tests. Two layers:
 //
@@ -94,7 +95,9 @@ export default defineConfig(({ mode }) => ({
     publicDir: mode === 'test' ? false : 'public',
     plugins: [
         vue(),
-        ...(mode === 'test' ? [stripTestBlockingResources()] : [vueDevTools()]),
+        ...(mode === 'test'
+            ? [stripTestBlockingResources()]
+            : [vueDevTools(), newRelicBrowser()]),
     ],
     // vite-ssg configuration. Only fields that appear in upstream's
     // `ViteSSGOptions` type are accepted; unknown keys are silently

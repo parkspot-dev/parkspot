@@ -296,7 +296,16 @@
                             </div>
 
                             <div class="modal-right">
-                                <div v-if="upiUrl !== ''" class="qr-card">
+                                <!-- The QR code encodes the owner's UPI ID
+                                     or bank account. Replay masking hides
+                                     text and inputs, not canvas pixels, so
+                                     data-nr-block keeps the card out of
+                                     New Relic session replays. -->
+                                <div
+                                    v-if="upiUrl !== ''"
+                                    class="qr-card"
+                                    data-nr-block
+                                >
                                     <qrcode-vue
                                         :size="220"
                                         :value="upiUrl"

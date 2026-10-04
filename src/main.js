@@ -26,6 +26,7 @@ import { metaInfoBridge } from './plugins/unhead-meta-adapter.js';
 import { cleanupEdgeInjectedStructuredData } from './plugins/edge-seo-handoff.js';
 import { captureFromUrl as captureAttribution } from './lib/analytics/attribution.js';
 import { track, EVENTS } from './lib/analytics';
+import { telemetryPlugin } from './telemetry/vue.js';
 
 configure({
     validateOnInput: true,
@@ -75,6 +76,12 @@ export const createApp = createViteSSG(
         app.component('VueDatePicker', VueDatePicker);
 
         if (isClient && router) {
+            // New Relic: reports Vue and router errors, filters browser
+            // noise and names SPA routes. Installed before the first
+            // render so hydration errors are captured too. A no-op when
+            // the agent isn't on the page.
+            app.use(telemetryPlugin, { router });
+
             // Custom SPA page_view tracking. GA4's default page_view only fires
             // on hard navigation, so SPA route changes need explicit firing.
             // The `track()` wrapper auto-fills page_path/page_title from

@@ -1,0 +1,2 @@
+# Local build plugin, registered in netlify.toml. See README.md.
+name: parkspot-newrelic

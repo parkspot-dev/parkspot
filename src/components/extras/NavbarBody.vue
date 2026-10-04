@@ -154,10 +154,13 @@
                         <div v-if="user" class="login-options">
                             <div class="user-profile">
                                 <div class="user-pic-wrapper">
+                                    <!-- data-nr-block: the photo's URL
+                                         stays out of session replays. -->
                                     <img
                                         class="user-pic"
                                         :src="user.photoURL"
                                         alt="profile image"
+                                        data-nr-block
                                     />
                                 </div>
                                 <!-- user profile dropdown -->

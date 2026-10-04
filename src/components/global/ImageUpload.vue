@@ -7,7 +7,9 @@
                 :key="index"
                 class="preview-img"
             >
-                <img :src="img.preview" alt="Preview" />
+                <!-- The preview is the photo itself, as a data: URL.
+                     data-nr-block keeps it out of session replays. -->
+                <img :src="img.preview" alt="Preview" data-nr-block />
                 <button class="delete-btn" @click="deleteImage(index)">
                     <AtomIcon icon="close" />
                 </button>

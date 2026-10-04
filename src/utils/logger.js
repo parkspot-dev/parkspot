@@ -1,10 +1,10 @@
-const nr = () => (typeof window !== 'undefined' ? window.newrelic : null);
+// Kept for existing call sites; new code should import from
+// '@/telemetry' directly. Same scrubbing and de-duplication either way.
+import { log, reportError, trackEvent } from '@/telemetry';
 
 export const logger = {
-    info: (msg, attrs) =>
-        nr()?.log?.(msg, { level: 'info', customAttributes: attrs }),
-    warn: (msg, attrs) =>
-        nr()?.log?.(msg, { level: 'warn', customAttributes: attrs }),
-    error: (err, attrs) => nr()?.noticeError?.(err, attrs),
-    event: (name, attrs) => nr()?.addPageAction?.(name, attrs),
+    info: (msg, attrs) => log('info', msg, attrs),
+    warn: (msg, attrs) => log('warn', msg, attrs),
+    error: (err, attrs) => reportError(err, attrs),
+    event: (name, attrs) => trackEvent(name, attrs),
 };

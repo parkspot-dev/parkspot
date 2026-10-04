@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import userModule from '@/store/user';
 import { UserType } from '@/constant/enums';
 import { mayaClient } from '@/services/api';
@@ -576,6 +576,49 @@ describe('User Store - Agent Auth Fix', () => {
             await userModule.actions.loginWithGoogle({ commit, dispatch });
 
             expect(commit).not.toHaveBeenCalledWith('update-user', userMock);
+        });
+
+        describe('loginWithGoogle New Relic reporting', () => {
+            beforeEach(() => {
+                window.newrelic = { noticeError: vi.fn() };
+            });
+
+            afterEach(() => {
+                delete window.newrelic;
+            });
+
+            it('reports a failed sign-in', async () => {
+                const error = Object.assign(
+                    new Error('Firebase: Error (auth/network-request-failed).'),
+                    { code: 'auth/network-request-failed' },
+                );
+                signInWithPopup.mockRejectedValue(error);
+
+                await userModule.actions.loginWithGoogle({ commit, dispatch });
+
+                expect(window.newrelic.noticeError).toHaveBeenCalledWith(
+                    error,
+                    { source: 'google_sign_in' },
+                );
+            });
+
+            it.each([
+                'auth/popup-closed-by-user',
+                'auth/cancelled-popup-request',
+            ])('does not report %s', async (code) => {
+                signInWithPopup.mockRejectedValue(
+                    Object.assign(new Error(`Firebase: Error (${code}).`), {
+                        code,
+                    }),
+                );
+
+                await userModule.actions.loginWithGoogle({
+                    commit,
+                    dispatch,
+                });
+
+                expect(window.newrelic.noticeError).not.toHaveBeenCalled();
+            });
         });
 
         it('register posts auth register and updates login', async () => {

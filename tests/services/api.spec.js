@@ -19,12 +19,6 @@ vi.mock('@/firebase', () => ({
     },
 }));
 
-vi.mock('@/router', () => ({
-    default: { currentRoute: { value: { fullPath: '/srp?latlng=1,2' } } },
-}));
-vi.mock('@/store', () => ({
-    default: { state: { user: { user: { uid: 'user-123' } } } },
-}));
 vi.mock('@/utils/ptid', () => ({ getPtid: () => 'ptid-abc' }));
 
 vi.mock('@/utils/logger', () => ({
@@ -76,6 +70,7 @@ describe('BaseApiService', () => {
         const err = new Error('network error');
         apiService.handleErrors(err);
         expect(logger.error).toHaveBeenCalledWith(err, {
+            source: 'http',
             context: 'Http server/network error',
         });
     });
@@ -86,6 +81,7 @@ describe('BaseApiService', () => {
         };
         apiService.handleErrors(err);
         expect(logger.error).toHaveBeenCalledWith(err, {
+            source: 'http',
             context: 'Errors in http call',
             url: 'https://api.example.com/test',
         });
@@ -225,6 +221,33 @@ describe('MayaApiService', () => {
         expect(resultConfig.headers['PSAuthKey']).toBe('');
     });
 
+    it('logs the endpoint pattern, never the query string or IDs', async () => {
+        localStorage.clear();
+
+        const interceptorHandler =
+            mayaService.client.interceptors.request.handlers[0].fulfilled;
+
+        await interceptorHandler({
+            headers: {},
+            method: 'get',
+            url: 'sites-and-spot-requests?mobile=98765',
+        });
+        await interceptorHandler({
+            headers: {},
+            method: 'get',
+            url: '/booking/42/payments',
+        });
+
+        expect(logger.warn).toHaveBeenNthCalledWith(
+            1,
+            expect.stringMatching(/for GET sites-and-spot-requests$/),
+        );
+        expect(logger.warn).toHaveBeenNthCalledWith(
+            2,
+            expect.stringMatching(/for GET \/booking\/:id\/payments$/),
+        );
+    });
+
     it('rejects request error in request interceptor rejected handler', async () => {
         const interceptorErrorHandler =
             mayaService.client.interceptors.request.handlers[0].rejected;
@@ -243,7 +266,7 @@ describe('MayaApiService', () => {
         );
     });
 
-    it('handles 500 default error with team alert and logger error', () => {
+    it('handles 500 default error with team alert', () => {
         const error = {
             response: { status: 500 },
             message: 'Internal Server Error',
@@ -252,10 +275,9 @@ describe('MayaApiService', () => {
         expect(alertMock).toHaveBeenCalledWith(
             expect.stringContaining('Something went wrong'),
         );
-        expect(logger.error).toHaveBeenCalledWith(error, {
-            context: 'maya interceptor default',
-            status: 500,
-        });
+        // Reported once by reportApiError (see the New Relic block below),
+        // not a second time through the logger.
+        expect(logger.error).not.toHaveBeenCalled();
     });
 
     it('returns early in errorInterceptor if error.response is undefined', () => {
@@ -312,13 +334,71 @@ describe('MayaApiService errorInterceptor New Relic reporting', () => {
         expect(window.newrelic.noticeError).toHaveBeenCalledWith(
             error,
             expect.objectContaining({
+                source: 'maya',
                 ptid: 'ptid-abc',
-                session: 'user-123',
-                pageUrl: '/srp?latlng=1,2',
                 status: 401,
             }),
         );
         expect(window.newrelic.addPageAction).not.toHaveBeenCalled();
+    });
+
+    it('tags the request shape without query strings or user data', () => {
+        const error = {
+            ...makeError(500),
+            config: { method: 'get', url: '/site?site-id=X' },
+        };
+        expect(() => mayaClient.errorInterceptor(error)).toThrow();
+
+        const attributes = window.newrelic.noticeError.mock.calls[0][1];
+        expect(attributes).toEqual({
+            source: 'maya',
+            status: 500,
+            method: 'GET',
+            endpoint: '/site',
+            ptid: 'ptid-abc',
+        });
+    });
+
+    it.each([
+        ['ECONNABORTED', 'timeout of 10000ms exceeded'],
+        ['ERR_NETWORK', 'Network Error'],
+    ])('reports a call without an answer (%s) as status 0', (code, message) => {
+        const error = {
+            code,
+            message,
+            config: { method: 'get', url: '/booking/history' },
+        };
+        expect(() => mayaClient.errorInterceptor(error)).toThrow();
+
+        expect(window.newrelic.noticeError).toHaveBeenCalledTimes(1);
+        expect(window.newrelic.noticeError.mock.calls[0][1]).toEqual({
+            source: 'maya',
+            status: 0,
+            error_code: code,
+            method: 'GET',
+            endpoint: '/booking/history',
+            ptid: 'ptid-abc',
+        });
+    });
+
+    it.each([
+        ['get', '/booking/42/payments', '/booking/:id/payments'],
+        [
+            'patch',
+            'auth/user/9876543210/kycStatus',
+            'auth/user/[user]/kycStatus',
+        ],
+    ])('normalizes the %s %s endpoint', (method, url, endpoint) => {
+        const error = { ...makeError(500), config: { method, url } };
+        expect(() => mayaClient.errorInterceptor(error)).toThrow();
+
+        expect(window.newrelic.noticeError).toHaveBeenCalledWith(
+            error,
+            expect.objectContaining({
+                method: method.toUpperCase(),
+                endpoint,
+            }),
+        );
     });
 
     it('shows a not-found message for 404 and notices a real error', () => {

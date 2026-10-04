@@ -16,6 +16,7 @@ import { PAGE_TITLE } from '@/constant/constant';
 import { PaymentType } from '@/constant/enums';
 import { track, EVENTS } from '@/lib/analytics';
 import { MAYA_API_DOMAIN } from '@/services/api';
+import { NR_EVENTS, reportError, trackEvent } from '@/telemetry';
 
 // Phase 2.5 booking funnel: dedup `purchase` events on `transaction_id`.
 // Cashfree retries, browser back-button revisits, and any client-side
@@ -118,7 +119,9 @@ export default {
                     },
                 );
                 if (!response.ok) {
-                    throw new Error(response);
+                    throw new Error(
+                        `payment/validate failed with HTTP ${response.status}`,
+                    );
                 } else {
                     const data = await response.json();
                     if (
@@ -183,25 +186,36 @@ export default {
                         });
                     }
                 }
-            } catch {
+            } catch (err) {
+                reportError(err, { source: 'payment_validate' });
                 this.status = !this.status;
                 this.getStatus();
             }
         },
         async getStatus() {
             const o = this.$route.query.order_id;
-            const response = await fetch(
-                `${ MAYA_API_DOMAIN}/payment/status?order_id=${o}`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // 'Content-Type': 'application/x-www-form-urlencoded',
-                        'flavour': 'this.flavour',
+            let data;
+            try {
+                const response = await fetch(
+                    `${ MAYA_API_DOMAIN}/payment/status?order_id=${o}`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // 'Content-Type': 'application/x-www-form-urlencoded',
+                            'flavour': 'this.flavour',
+                        },
                     },
-                },
-            );
-            const data = await response.json();
+                );
+                data = await response.json();
+            } catch (err) {
+                // Network failure or a reply that isn't JSON. The page
+                // stays on the status screen as before; this records why.
+                reportError(err, { source: 'payment_status' });
+                trackEvent(NR_EVENTS.PAYMENT_STATUS, { status: 'unknown' });
+                return;
+            }
             if (data.Status === 'PAID') {
+                trackEvent(NR_EVENTS.PAYMENT_STATUS, { status: 'paid' });
                 // Booking-funnel step 10: `purchase`. Secondary GA4 key
                 // event — present in reports but excluded from the Ads
                 // bidding column to avoid double-counting against the
@@ -290,16 +304,25 @@ export default {
                 });
                 return;
             } else if (data.Status === 'ACTIVE') {
+                trackEvent(NR_EVENTS.PAYMENT_STATUS, { status: 'pending' });
                 this.$router.push({
                     name: 'error',
                     params: { msg: 'Your order is still pending!' },
                 });
             } else if (data.ErrorCode > 0) {
+                trackEvent(NR_EVENTS.PAYMENT_STATUS, {
+                    status: 'failed',
+                    error_code: data.ErrorCode,
+                });
                 this.$router.push({
                     name: 'error',
                     params: { msg: data.DisplayMsg },
                 });
             } else {
+                trackEvent(NR_EVENTS.PAYMENT_STATUS, {
+                    status: 'unknown',
+                    order_status: data.Status,
+                });
                 this.$router.push({
                     name: 'error',
                 });

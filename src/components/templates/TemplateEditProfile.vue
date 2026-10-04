@@ -4,7 +4,9 @@
         <div v-else class="edit-profile-main">
             <div class="profile-group-head">
                 <div class="user-avatar">
-                    <img :src="user.photoURL" alt="profile pic" />
+                    <!-- data-nr-block: the photo's URL stays out of session
+                         replays. -->
+                    <img :src="user.photoURL" alt="profile pic" data-nr-block />
                 </div>
                 <div class="user-details">
                     <h1>
