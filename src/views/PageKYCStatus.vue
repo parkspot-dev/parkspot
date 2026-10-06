@@ -500,7 +500,10 @@ export default {
 
         async onStatusUpdate(row, newStatus) {
             const labelId = KYCStatus[newStatus];
-            if (labelId == null) return;
+            if (labelId == null) {
+                this.alertError('Invalid status selected.');
+                return;
+            }
             const originalStatus = row?.User?.KYCStatus;
             try {
                 if (row && row.User) {
