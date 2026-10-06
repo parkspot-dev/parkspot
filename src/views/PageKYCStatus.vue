@@ -260,6 +260,11 @@ export default {
 
             try {
                 await this.updateStatus({ userData: row });
+                if (this.hasError) {
+                    await this.refreshPendingUsersSafely();
+                    return;
+                }
+
                 await this.refreshPendingUsersSafely();
 
                 this.$buefy.toast.open({

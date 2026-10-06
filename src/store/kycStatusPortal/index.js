@@ -18,11 +18,16 @@ const getters = {
 const mutations = {
     'set-users'(state, users) {
         state.hasError = false;
+        state.errorMessage = '';
         state.users = users;
     },
     'set-error'(state, errorMessage) {
         state.hasError = true;
         state.errorMessage = errorMessage;
+    },
+    'clear-error'(state) {
+        state.hasError = false;
+        state.errorMessage = '';
     },
     'set-loading'(state, isLoading) {
         state.isLoading = isLoading;
@@ -37,6 +42,7 @@ const actions = {
     async fetchKycPendingUsers({ commit, state }) {
         if (state.isLoading) return;
         try {
+            commit('clear-error');
             commit('set-loading', true);
             const BASE_KYC_PENDING_USERS_URL = '/internal/users/kyc-status';
             const kycPendingStatusURL = state.searchMobile
@@ -58,6 +64,7 @@ const actions = {
     },
 
     async updateStatus({ commit }, { userData }) {
+        commit('clear-error');
         commit('set-loading', true);
         const res = await mayaClient.patch(
             `auth/user/${userData.UserName}/kycStatus`,

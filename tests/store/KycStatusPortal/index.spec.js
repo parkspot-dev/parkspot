@@ -42,12 +42,21 @@ describe("Vuex Module: KycStatusPortal", () => {
       kycStatusPortal.mutations["set-users"](state, [{ id: 1 }]);
       expect(state.users).toEqual([{ id: 1 }]);
       expect(state.hasError).toBe(false);
+      expect(state.errorMessage).toBe("");
     });
 
     it("set-error updates errorMessage and hasError", () => {
       kycStatusPortal.mutations["set-error"](state, "Failed");
       expect(state.hasError).toBe(true);
       expect(state.errorMessage).toBe("Failed");
+    });
+
+    it("clear-error resets hasError and errorMessage", () => {
+      state.hasError = true;
+      state.errorMessage = "Previous Error";
+      kycStatusPortal.mutations["clear-error"](state);
+      expect(state.hasError).toBe(false);
+      expect(state.errorMessage).toBe("");
     });
 
     it("set-loading updates loading state", () => {
@@ -84,6 +93,7 @@ describe("Vuex Module: KycStatusPortal", () => {
       await kycStatusPortal.actions.fetchKycPendingUsers({ commit, state });
 
       expect(mayaClient.get).toHaveBeenCalledWith("/internal/users/kyc-status");
+      expect(commit).toHaveBeenCalledWith("clear-error");
       expect(commit).toHaveBeenCalledWith("set-loading", true);
       expect(commit).toHaveBeenCalledWith("set-users", mockUsers);
       expect(commit).toHaveBeenCalledWith("set-loading", false);
@@ -107,6 +117,7 @@ describe("Vuex Module: KycStatusPortal", () => {
 
       await kycStatusPortal.actions.fetchKycPendingUsers({ commit, state });
 
+      expect(commit).toHaveBeenCalledWith("clear-error");
       expect(commit).toHaveBeenCalledWith("set-loading", true);
       expect(commit).toHaveBeenCalledWith("set-error", "API failed");
       expect(commit).toHaveBeenCalledWith("set-loading", false);
@@ -125,6 +136,7 @@ describe("Vuex Module: KycStatusPortal", () => {
 
       await kycStatusPortal.actions.updateStatus({ commit }, { userData });
 
+      expect(commit).toHaveBeenCalledWith("clear-error");
       expect(commit).toHaveBeenCalledWith("set-loading", true);
       expect(commit).toHaveBeenCalledWith(
         "set-error",
@@ -141,6 +153,7 @@ describe("Vuex Module: KycStatusPortal", () => {
 
       await kycStatusPortal.actions.updateStatus({ commit }, { userData });
 
+      expect(commit).toHaveBeenCalledWith("clear-error");
       expect(commit).toHaveBeenCalledWith("set-loading", true);
       expect(commit).not.toHaveBeenCalledWith("set-error", expect.anything());
       expect(commit).toHaveBeenCalledWith("set-loading", false);

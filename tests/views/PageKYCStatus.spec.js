@@ -178,6 +178,39 @@ describe('PageKYCStatus.vue', () => {
         );
     });
 
+    it('handles status update failure when hasError is set', async () => {
+        actions.updateStatus.mockImplementationOnce(async () => {
+            store.state.kycStatusPortal.hasError = true;
+            store.state.kycStatusPortal.errorMessage = 'Failed to update';
+        });
+        const wrapper = factory();
+
+        await wrapper.vm.onStatusUpdate(
+            store.state.kycStatusPortal.users[0],
+            'APPROVED',
+        );
+
+        expect(actions.updateStatus).toHaveBeenCalled();
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalled();
+        expect(buefyMock.toast.open).not.toHaveBeenCalled();
+    });
+
+    it('alerts error when invalid status is selected', async () => {
+        const wrapper = factory();
+
+        await wrapper.vm.onStatusUpdate(
+            store.state.kycStatusPortal.users[0],
+            'INVALID_STATUS',
+        );
+
+        expect(buefyMock.dialog.alert).toHaveBeenCalledWith(
+            expect.objectContaining({
+                message: 'Invalid status selected.',
+            }),
+        );
+        expect(actions.updateStatus).not.toHaveBeenCalled();
+    });
+
     it('open image preview modal', async () => {
         const wrapper = factory();
 
