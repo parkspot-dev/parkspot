@@ -565,11 +565,6 @@ describe('User Store - Agent Auth Fix', () => {
                 expect.anything(),
                 expect.anything(),
             );
-            expect(dispatch).toHaveBeenCalledWith(
-                'app/getAgents',
-                expect.anything(),
-                expect.objectContaining({ root: true }),
-            );
         });
 
         it('loginWithGoogle handles empty token from Google login', async () => {

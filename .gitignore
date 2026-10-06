@@ -2,6 +2,9 @@ node_modules
 pkg
 dist/
 
+# breadcrumbs working memory, not a project artifact
+.breadcrumbs/context/
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
@@ -21,3 +24,6 @@ coverage/
 .env.*
 # Vitest debugging attachments
 .vitest-attachments/
+
+# Claude story context (working memory, not a project artifact)
+.claude/context/

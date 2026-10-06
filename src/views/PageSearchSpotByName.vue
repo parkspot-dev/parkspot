@@ -36,7 +36,7 @@
 
         <!-- Show message when no data -->
         <div
-            v-if="!isLoading && sites.length === 0"
+            v-if="!isLoading && (!sites || sites.length === 0)"
             class="has-text-centered mt-6"
         >
             <b-icon icon="alert-circle" size="is-large" type="is-info"></b-icon>

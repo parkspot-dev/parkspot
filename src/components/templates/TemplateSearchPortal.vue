@@ -299,15 +299,28 @@
                                 @change="onAgentUpdate(props.row, $event)"
                             >
                             </AtomSelectInput>
-                            <button
-                                v-else
-                                class="btn"
-                                @click="
-                                    onAgentUpdate(props.row, agentList[0].id)
-                                "
-                            >
-                                Assign to me
-                            </button>
+                            <template v-else>
+                                <AtomTooltip
+                                    v-if="isAssignDisabled"
+                                    :label="`Please complete ${MAX_REGISTERED_REQUESTS} registered requests to assign more`"
+                                >
+                                    <button class="btn" disabled>
+                                        Assign to me
+                                    </button>
+                                </AtomTooltip>
+                                <button
+                                    v-else
+                                    class="btn"
+                                    @click="
+                                        onAgentUpdate(
+                                            props.row,
+                                            agentList[0].id,
+                                        )
+                                    "
+                                >
+                                    Assign to me
+                                </button>
+                            </template>
                         </div>
                     </div>
                 </template>
@@ -411,6 +424,7 @@
                     :parking-requests="filteredParkingRequests"
                     :is-empty="isEmpty"
                     :is-admin="isAdmin"
+                    :is-assign-disabled="isAssignDisabled"
                     :new-comment-map="newCommentMap"
                     :status-list="statusList"
                     :agent-list="agentList"
@@ -503,7 +517,10 @@
 </template>
 
 <script>
-import { FREQUENT_COMMENTS } from '@/constant/constant';
+import {
+    FREQUENT_COMMENTS,
+    MAX_REGISTERED_REQUESTS,
+} from '@/constant/constant';
 import { getCoordinate } from '../../includes/LatLng';
 import { mapActions, mapState } from 'vuex';
 import AtomButton from '../atoms/AtomButton.vue';
@@ -512,11 +529,12 @@ import AtomIcon from '../atoms/AtomIcon';
 import AtomInput from '../atoms/AtomInput.vue';
 import AtomSelectInput from '../atoms/AtomSelectInput.vue';
 import AtomTextarea from '../atoms/AtomTextarea.vue';
+import AtomTooltip from '../atoms/AtomTooltip.vue';
 import moment from 'moment';
 import SelectInput from '../global/SelectInput.vue';
 import FilterDropdown from '../global/FilterDropdown.vue';
 import MobileView from '../search-portal/MobileView.vue';
-import { RequestPriority } from '@/constant/enums';
+import { ParkingRequestStatus, RequestPriority } from '@/constant/enums';
 
 export default {
     name: 'TemplateSearchPortal',
@@ -527,6 +545,7 @@ export default {
         AtomDatePicker,
         AtomInput,
         AtomButton,
+        AtomTooltip,
         SelectInput,
         FilterDropdown,
         MobileView,
@@ -554,11 +573,6 @@ export default {
                 UpdatedAt: null,
                 isExpiring: false,
             },
-            isBordered: false,
-            isStriped: false,
-            isNarrowed: false,
-            isHoverable: false,
-            isFocusable: false,
             hasMobileCards: true,
 
             statusList: [
@@ -571,13 +585,6 @@ export default {
                 { id: 6, name: 'Archive' },
             ],
 
-            model: {
-                comments: '',
-                agent: '',
-                status: '',
-                nextCall: '',
-            },
-
             summary: {
                 btn: 'Show',
                 show: false,
@@ -585,14 +592,10 @@ export default {
                 high: 0,
                 medium: 0,
                 low: 0,
-                agent: [0, 0, 0, 0],
-                status: [0, 0, 0, 0, 0, 0],
+                agent: {},
+                status: [0, 0, 0, 0, 0, 0, 0],
                 today: 0,
                 yesterday: 0,
-            },
-            showSecondaryDetails: {
-                ID: 0,
-                isShow: false,
             },
             oldComments: '',
             isOpen: false,
@@ -600,6 +603,7 @@ export default {
             newComment: '',
             defaultStatus: '',
             FREQUENT_COMMENTS: FREQUENT_COMMENTS,
+            MAX_REGISTERED_REQUESTS: MAX_REGISTERED_REQUESTS,
             newCommentMap: {},
             requestsFilterOptions: ['Expiring'],
             windowWidth: 0,
@@ -631,23 +635,47 @@ export default {
             }
             return this.windowWidth > 768 || this.forceDesktop;
         },
+        isAssignDisabled() {
+            const rawAgent = this.userProfile?.FullName ?? '';
+            const currentAgent = rawAgent
+                .replace(/[[\]]/g, '')
+                .trim()
+                .split(' ')[0]
+                .toLowerCase();
+            if (!currentAgent) return false;
+
+            const requests = this.parkingRequests || [];
+            return (
+                requests.filter((req) => {
+                    const reqAgent = (req?.Agent || '')
+                        .replace(/[[\]]/g, '')
+                        .trim()
+                        .split(' ')[0]
+                        .toLowerCase();
+                    return (
+                        reqAgent === currentAgent &&
+                        req?.Status === ParkingRequestStatus.RequestRegistered
+                    );
+                }).length >= MAX_REGISTERED_REQUESTS
+            );
+        },
     },
 
     watch: {
         parkingRequests(newRequests) {
             this.updateSummary(newRequests);
 
-            if (this.$route.query[this.QUERY_PARAMS.IS_EXPIRING]) {
+            if (this.$route?.query?.[this.QUERY_PARAMS.IS_EXPIRING]) {
                 this.extractExpiringRequests();
                 this.filters.isExpiring = true;
             }
 
-            if (this.$route.query[this.QUERY_PARAMS.AGENT]) {
+            if (this.$route?.query?.[this.QUERY_PARAMS.AGENT]) {
                 const agentName = this.$route.query['agent'];
                 this.filters.Agent = agentName;
                 this.extractRequestsByAgentName(agentName);
             }
-            if (this.$route.query[this.QUERY_PARAMS.STATUS]) {
+            if (this.$route?.query?.[this.QUERY_PARAMS.STATUS]) {
                 const statusId = parseInt(this.$route.query['status']);
                 const statusRow = this.statusList.find(
                     (item) => item.id === statusId,
@@ -688,7 +716,6 @@ export default {
 
     methods: {
         ...mapActions('searchPortal', [
-            'getAgents',
             'setAgents',
             'extractExpiringRequests',
             'resetFilterParkingRequests',
@@ -871,7 +898,7 @@ export default {
             this.summary.high = 0;
             this.summary.medium = 0;
             this.summary.low = 0;
-            this.summary.status = [0, 0, 0, 0];
+            this.summary.status = [0, 0, 0, 0, 0, 0, 0];
             this.summary.agent = {};
 
             const today = new Date();
@@ -1164,6 +1191,8 @@ $portal-font-size: 13px;
 
 .btn:disabled {
     cursor: not-allowed;
+    background-color: var(--parkspot-grey, #a9a9a9);
+    color: #252525;
 }
 
 .frequent-comments {

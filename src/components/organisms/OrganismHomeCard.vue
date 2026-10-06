@@ -78,6 +78,9 @@ export default {
     },
     methods: {
         flyToSrp() {
+            if (!this.LocDetails?.lnglat) {
+                return;
+            }
             const coordinate = getCoordinate(this.LocDetails.lnglat.toString())
                 .reverse()
                 .toString();
