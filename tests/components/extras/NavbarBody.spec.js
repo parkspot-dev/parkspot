@@ -85,12 +85,14 @@ describe('NavbarBody.vue', () => {
     });
 
     describe('Structure tests', () => {
-        it('loads the user profile on mount', async () => {
+        it('does not fetch the profile on mount (bootstrap is owned by the auth listener)', async () => {
             wrapper = mountComponent();
 
             await flushPromises();
 
-            expect(userActions.getUserProfile).toHaveBeenCalledTimes(1);
+            // Profile/agents hydration is driven by onAuthStateChanged, so the
+            // navbar must not issue its own duplicate fetch on mount.
+            expect(userActions.getUserProfile).not.toHaveBeenCalled();
         });
 
         it('renders the CRM pending payments link for admin agents', () => {
@@ -130,14 +132,23 @@ describe('NavbarBody.vue', () => {
             expect(store.state.user.loginModal).toBe(true);
         });
 
-        it('signout dispatches the logout action and redirects to Home', async () => {
+        it('signout awaits the logout action and redirects to Home', async () => {
             wrapper = mountComponent();
 
-            wrapper.vm.signout();
-
+            await wrapper.vm.signout();
             await flushPromises();
 
             expect(userActions.logOut).toHaveBeenCalled();
+            expect(routerPushMock).toHaveBeenCalledWith({ name: 'Home' });
+        });
+
+        it('still redirects Home when logout fails', async () => {
+            userActions.logOut.mockRejectedValueOnce(new Error('signout boom'));
+            wrapper = mountComponent();
+
+            await wrapper.vm.signout();
+            await flushPromises();
+
             expect(routerPushMock).toHaveBeenCalledWith({ name: 'Home' });
         });
 

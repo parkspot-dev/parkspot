@@ -68,7 +68,7 @@
                                             Bookings
                                         </router-link>
                                     </li>
-                                    <li v-if="isAuthReady && isAdmin">
+                                    <li v-if="isAdmin">
                                         <router-link
                                             :to="{ name: 'pending-payments' }"
                                         >
@@ -141,46 +141,48 @@
                     </ul>
                     <!-- login buttons -->
 
-                    <template v-if="isAuthReady">
-                        <div v-if="!user" class="login-options">
-                            <AtomButton class="login-btn" @click="logInBtn">
-                                Log in
-                            </AtomButton>
-                            <!-- todo: add functionality for sign up -->
-                            <!-- <AtomButton class="signup-btn" :outlined="true">
-                                Sign up
-                            </AtomButton> -->
-                        </div>
-                        <div v-if="user" class="login-options">
-                            <div class="user-profile">
-                                <div class="user-pic-wrapper">
-                                    <img
-                                        class="user-pic"
-                                        :src="user.photoURL"
-                                        alt="profile image"
-                                    />
-                                </div>
-                                <!-- user profile dropdown -->
-                                <div v-if="user" class="user-dropdown">
-                                    <ul>
-                                        <li class="dropdown-list">
-                                            <a @click="gotoProfile">
-                                                Profile
-                                            </a>
-                                        </li>
-                                        <li class="dropdown-list">
-                                            <a @click="gotoMybookings">
-                                                My Bookings
-                                            </a>
-                                        </li>
-                                        <li class="dropdown-list">
-                                            <a @click="signout"> Sign Out</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                    <!-- Auth controls render as soon as the navbar mounts,
+                         gated only on `user` (not on `isAuthReady`). A logged-in
+                         visitor may briefly see "Log in" until Firebase restores
+                         the session — an acceptable, self-correcting flash, and
+                         far better than a navbar that hangs blank while Firebase
+                         or Maya is slow. -->
+                    <div v-if="!user" class="login-options">
+                        <AtomButton class="login-btn" @click="logInBtn">
+                            Log in
+                        </AtomButton>
+                        <!-- todo: add functionality for sign up -->
+                        <!-- <AtomButton class="signup-btn" :outlined="true">
+                            Sign up
+                        </AtomButton> -->
+                    </div>
+                    <div v-if="user" class="login-options">
+                        <div class="user-profile">
+                            <div class="user-pic-wrapper">
+                                <img
+                                    class="user-pic"
+                                    :src="user.photoURL"
+                                    alt="profile image"
+                                />
+                            </div>
+                            <!-- user profile dropdown -->
+                            <div v-if="user" class="user-dropdown">
+                                <ul>
+                                    <li class="dropdown-list">
+                                        <a @click="gotoProfile"> Profile </a>
+                                    </li>
+                                    <li class="dropdown-list">
+                                        <a @click="gotoMybookings">
+                                            My Bookings
+                                        </a>
+                                    </li>
+                                    <li class="dropdown-list">
+                                        <a @click="signout"> Sign Out</a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-                    </template>
+                    </div>
                 </div>
                 <!-- hamburger for mobile view -->
                 <div class="primary-nav-hamburger" @click="toggleMobileNav">
@@ -287,20 +289,18 @@
                                         </p>
                                     </li>
                                 </ul>
-                                <template v-if="isAuthReady">
-                                    <div v-if="!user">
-                                        <AtomButton
-                                            class="menu-mobile-btn"
-                                            @click="logInBtn"
-                                        >
-                                            Log in
-                                        </AtomButton>
-                                        <!-- todo: add functionality for sign up -->
-                                        <!-- <AtomButton class="menu-mobile-btn">
-                                            Sign up
-                                        </AtomButton> -->
-                                    </div>
-                                </template>
+                                <div v-if="!user">
+                                    <AtomButton
+                                        class="menu-mobile-btn"
+                                        @click="logInBtn"
+                                    >
+                                        Log in
+                                    </AtomButton>
+                                    <!-- todo: add functionality for sign up -->
+                                    <!-- <AtomButton class="menu-mobile-btn">
+                                        Sign up
+                                    </AtomButton> -->
+                                </div>
                             </div>
                         </div>
                         <!-- my account slide -->
@@ -346,20 +346,18 @@
                                         </p>
                                     </li>
                                 </ul>
-                                <template v-if="isAuthReady">
-                                    <div v-if="!user">
-                                        <AtomButton
-                                            class="menu-mobile-btn"
-                                            @click="logInBtn"
-                                        >
-                                            Log in
-                                        </AtomButton>
-                                        <!-- todo: add functionality for sign up -->
-                                        <!-- <AtomButton class="menu-mobile-btn">
-                                            Sign up
-                                        </AtomButton> -->
-                                    </div>
-                                </template>
+                                <div v-if="!user">
+                                    <AtomButton
+                                        class="menu-mobile-btn"
+                                        @click="logInBtn"
+                                    >
+                                        Log in
+                                    </AtomButton>
+                                    <!-- todo: add functionality for sign up -->
+                                    <!-- <AtomButton class="menu-mobile-btn">
+                                        Sign up
+                                    </AtomButton> -->
+                                </div>
                             </div>
                         </div>
                         <!-- company slide -->
@@ -459,13 +457,12 @@
                                             </router-link>
                                         </p>
                                     </li>
-                                    <li
-                                        v-if="isAuthReady && isAdmin"
-                                        class="scroll-item"
-                                    >
+                                    <li v-if="isAdmin" class="scroll-item">
                                         <p @click="toggleMobileNav">
                                             <router-link
-                                                :to="{ name: 'pending-payments' }"
+                                                :to="{
+                                                    name: 'pending-payments',
+                                                }"
                                             >
                                                 Pending Payments
                                             </router-link>
@@ -513,6 +510,7 @@
 import AtomButton from '../atoms/AtomButton.vue';
 import { mapState, mapMutations, mapActions } from 'vuex';
 import AtomImage from '@/components/atoms/AtomImage.vue';
+import { logger } from '@/utils/logger';
 
 export default {
     name: 'NavbarBody',
@@ -529,28 +527,33 @@ export default {
     computed: {
         ...mapState('user', {
             user: (state) => state.user,
-            isAuthReady: (state) => state.isAuthReady,
             isAgent: (state) => state.isAgent,
             isAdmin: (state) => state.isAdmin,
         }),
         ...mapState('config', ['helplineNumber', 'helplineRef']),
     },
-    mounted() {
-        this.getUserProfile();
-    },
     methods: {
         ...mapMutations('user', {
             updateLoginModal: 'update-login-modal',
         }),
-        ...mapActions('user', ['logOut', 'getUserProfile']),
+        ...mapActions('user', ['logOut']),
 
         logInBtn() {
             this.updateLoginModal(true);
         },
 
-        signout() {
-            this.logOut();
-            this.$router.push({ name: 'Home' });
+        // Await the logout so navigation reflects the real result and a
+        // failed sign-out surfaces instead of becoming an unhandled rejection.
+        // Profile/session cleanup is owned by the `onAuthStateChanged`
+        // listener, so we don't duplicate it here.
+        async signout() {
+            try {
+                await this.logOut();
+            } catch (err) {
+                logger.error(err, { context: 'NavbarBody signout' });
+            } finally {
+                this.$router.push({ name: 'Home' });
+            }
         },
 
         gotoProfile() {
