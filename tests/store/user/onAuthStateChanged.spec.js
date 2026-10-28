@@ -2,11 +2,16 @@
 // it used to become an unhandled rejection. It's now wrapped in try/catch.
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const { storeMock } = vi.hoisted(() => ({
+const { storeMock, telemetryMock } = vi.hoisted(() => ({
     storeMock: {
         state: { user: { user: null } },
         commit: vi.fn(),
         dispatch: vi.fn().mockResolvedValue(undefined),
+    },
+    telemetryMock: {
+        clearUser: vi.fn(),
+        reportError: vi.fn(),
+        setUser: vi.fn(),
     },
 }));
 
@@ -36,6 +41,11 @@ vi.mock('firebase/auth', async () => {
 vi.mock('@/lib/analytics', () => ({
     identify: vi.fn(),
     setUserProperty: vi.fn(),
+}));
+
+vi.mock('@/telemetry', async (importOriginal) => ({
+    ...(await importOriginal()),
+    ...telemetryMock,
 }));
 
 vi.mock('@/lib/analytics/attribution', () => ({
@@ -85,6 +95,10 @@ describe('store/user onAuthStateChanged listener', () => {
             'onAuthStateChanged listener failed',
             expect.any(Error),
         );
+        expect(telemetryMock.reportError).toHaveBeenCalledWith(
+            expect.objectContaining({ message: 'stale store binding' }),
+            { source: 'auth_listener' },
+        );
     });
 
     it('signs the user in: commits the user, fetches the profile, marks auth ready', async () => {
@@ -99,6 +113,9 @@ describe('store/user onAuthStateChanged listener', () => {
             { authReady: true, roleResolved: false },
         );
         expect(localStorage.getItem('PSAuthKey')).toBe('id-token');
+        expect(telemetryMock.setUser).toHaveBeenCalledWith('user-123', {
+            role: 'unknown',
+        });
     });
 
     it('signs the user out: clears the token and does not touch the profile fetch', async () => {
@@ -107,13 +124,18 @@ describe('store/user onAuthStateChanged listener', () => {
         await capturedAuthCallback(null);
 
         expect(storeMock.commit).toHaveBeenCalledWith('user/update-user', null);
-        expect(storeMock.commit).toHaveBeenCalledWith('user/set-auth-error', null);
+        expect(storeMock.commit).toHaveBeenCalledWith(
+            'user/set-auth-error',
+            null,
+        );
         expect(storeMock.dispatch).not.toHaveBeenCalled();
         expect(localStorage.getItem('PSAuthKey')).toBeNull();
         expect(storeMock.commit).toHaveBeenCalledWith(
             'user/update-auth-progress',
             { authReady: true, roleResolved: false },
         );
+        expect(telemetryMock.clearUser).toHaveBeenCalledTimes(1);
+        expect(telemetryMock.setUser).not.toHaveBeenCalled();
     });
 
     it('records an auth error (without throwing) when the profile fetch fails', async () => {
@@ -135,6 +157,11 @@ describe('store/user onAuthStateChanged listener', () => {
             'user/update-auth-progress',
             { authReady: true, roleResolved: false },
         );
+        expect(telemetryMock.reportError).toHaveBeenCalledWith(
+            expect.objectContaining({ message: 'maya down' }),
+            { source: 'auth_bootstrap' },
+        );
+        expect(telemetryMock.setUser).not.toHaveBeenCalled();
     });
 
     it('resolves the previous-user cache key safely when store.state.user is absent', async () => {

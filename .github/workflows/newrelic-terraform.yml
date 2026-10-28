@@ -1,0 +1,57 @@
+name: New Relic Terraform
+
+# Checks the New Relic alerts, service levels and dashboard in
+# observability/newrelic/terraform on PRs that change them. It never runs
+# plan or apply and has no New Relic key: changes are applied from a
+# workstation, as that folder's README describes.
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'observability/newrelic/terraform/**'
+      - '.github/workflows/newrelic-terraform.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: newrelic-terraform-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: 🔭 Validate New Relic Terraform
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: observability/newrelic/terraform
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.16.5
+
+      - name: Check formatting
+        run: terraform fmt -check -recursive -diff
+
+      - name: Install the provider
+        run: terraform init -backend=false -input=false
+
+      - name: Validate
+        env:
+          # validate never calls New Relic, but the provider wants a key to
+          # be set.
+          NEW_RELIC_API_KEY: validate-only
+        run: terraform validate -no-color
+
+      - name: Validation summary
+        if: success()
+        run: |
+          echo "## ✅ New Relic Terraform is valid" >> $GITHUB_STEP_SUMMARY

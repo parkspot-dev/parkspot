@@ -400,7 +400,9 @@
             full-screen
             scroll="keep"
         >
-            <div class="image-preview-modal">
+            <!-- The route is already kept out of session replays; the block
+                 is for the identity document should that ever change. -->
+            <div class="image-preview-modal" data-nr-block>
                 <img :src="selectedImage" alt="Document Preview" />
             </div>
         </b-modal>

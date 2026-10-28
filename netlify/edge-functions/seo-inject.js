@@ -16,17 +16,28 @@
 //     response body).
 //   - No external SDKs. Firebase enhancement uses a plain REST fetch with a
 //     short timeout and falls back to template metadata when unavailable.
+//   - Observable. Every handled request reports its outcome and timings to
+//     New Relic after the response is sent (see lib/telemetry.js).
 //
 // Registered in netlify.toml via the `path` field on `[[edge_functions]]`.
 
 import { applyMetaToHtml } from './lib/html-rewrite.js';
 import { fetchAreaEnhancement } from './lib/firebase-rest.js';
 import { buildAreaPageMeta, buildSpotDetailMeta } from './lib/meta.js';
+import { startTelemetry } from './lib/telemetry.js';
 
 const AREA_PATH_REGEX = /^\/(bangalore|hyderabad)\/parking-near-[^/]+\/?$/i;
 const SPOT_PATH_REGEX = /^\/spot-details\/[^/]+\/?$/i;
 
+// Telemetry names routes like the Vue router does (src/router/routes.js),
+// so edge records and browser data facet alike.
+const AREA_ROUTE_NAMES = {
+    bangalore: 'discover',
+    hyderabad: 'discover-hyderabad',
+};
+
 export default async (request, context) => {
+    let telemetry;
     try {
         const url = new URL(request.url);
 
@@ -36,11 +47,23 @@ export default async (request, context) => {
             return; // Non-matching path: let Netlify serve normally.
         }
 
+        telemetry = startTelemetry('seo-inject', request, context);
+        telemetry.set({
+            route_name: isAreaPage
+                ? AREA_ROUTE_NAMES[url.pathname.split('/')[1].toLowerCase()]
+                : 'spot-detail',
+        });
+
         // Fetch the original SPA shell that would have been served.
         const upstream = await context.next();
+        telemetry.set({
+            status: upstream.status,
+            upstream_ms: telemetry.elapsed(),
+        });
 
         const contentType = upstream.headers.get('content-type') || '';
         if (!contentType.toLowerCase().includes('text/html')) {
+            telemetry.finish('not_html');
             return upstream; // Asset / API / redirect -- leave alone.
         }
 
@@ -52,7 +75,12 @@ export default async (request, context) => {
                 .split('/')
                 .filter(Boolean)[1]
                 ?.replace(/^parking-near-/, '') ?? '';
+            const enrichmentStart = telemetry.elapsed();
             const enhancement = await fetchAreaEnhancement(areaSlug);
+            telemetry.set({
+                enriched: enhancement !== null,
+                enrichment_ms: telemetry.elapsed() - enrichmentStart,
+            });
             meta = buildAreaPageMeta(url, enhancement);
         } else {
             // Future: look up spot record to enrich name / rate / address.
@@ -65,15 +93,25 @@ export default async (request, context) => {
         // etc.) and just swap in the new body.
         const headers = new Headers(upstream.headers);
         headers.delete('content-length'); // Body size is about to change.
-        return new Response(transformed, {
+        const response = new Response(transformed, {
             status: upstream.status,
             statusText: upstream.statusText,
             headers,
         });
+        // applyMetaToHtml hands back the shell untouched when it finds no
+        // </head> or a rewrite throws; only this tells that apart from
+        // success.
+        if (transformed === originalHtml) {
+            telemetry.finish('unchanged', { level: 'warn' });
+        } else {
+            telemetry.finish('injected');
+        }
+        return response;
     } catch (err) {
         // Last-resort guard: on ANY unexpected error, fall through so the
         // original SPA response is still delivered.
         console.error('[seo-inject] fell through due to error:', err);
+        telemetry?.finish('error', { error: err });
         return;
     }
 };

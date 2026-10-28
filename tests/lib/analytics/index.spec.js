@@ -126,4 +126,93 @@ describe('analytics/index (public API)', () => {
             });
         });
     });
+
+    describe('New Relic forwarding', () => {
+        let addPageAction;
+
+        beforeEach(() => {
+            addPageAction = vi.fn();
+            window.newrelic = { addPageAction };
+        });
+
+        afterEach(() => {
+            delete window.newrelic;
+        });
+
+        it('mirrors funnel events with the call-site params only', () => {
+            sessionStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify({ gclid: 'G123', utm_source: 'google' }),
+            );
+            track(EVENTS.FORM_SUBMIT_ATTEMPT, { funnel_name: 'vo_lead' });
+            expect(addPageAction).toHaveBeenCalledTimes(1);
+            expect(addPageAction).toHaveBeenCalledWith('form_submit_attempt', {
+                funnel_name: 'vo_lead',
+            });
+        });
+
+        it('flattens items and drops item names', () => {
+            track(EVENTS.SELECT_ITEM, {
+                funnel_name: 'srp',
+                items: [
+                    { item_id: 'S1', item_name: 'Koramangala Lot', price: 50 },
+                ],
+            });
+            expect(addPageAction).toHaveBeenCalledWith('select_item', {
+                funnel_name: 'srp',
+                item_count: 1,
+                item_id: 'S1',
+                price: 50,
+            });
+        });
+
+        it('never forwards enhanced conversion data or the search location', () => {
+            track(EVENTS.GENERATE_LEAD, {
+                funnel_name: 'vo_lead',
+                lead_type: LEAD_TYPES.PARKING_OWNER,
+                value: 500,
+                currency: 'INR',
+                enhanced_conversion_data: {
+                    email: 'owner@example.com',
+                    phone_number: '+919876543210',
+                },
+            });
+            track(EVENTS.SEARCH, { search_term: '12.9716,77.5946' });
+            expect(addPageAction).toHaveBeenNthCalledWith(1, 'generate_lead', {
+                funnel_name: 'vo_lead',
+                lead_type: 'parking_owner',
+                value: 500,
+                currency: 'INR',
+            });
+            expect(addPageAction).toHaveBeenNthCalledWith(2, 'search', {});
+        });
+
+        it('never forwards the transaction ID, not even as an item ID', () => {
+            // PagePaymentGateway falls back to the transaction ID when it
+            // has neither a spot ID nor a booking ID.
+            track(EVENTS.PURCHASE, {
+                funnel_name: 'booking',
+                transaction_id: 'P123',
+                value: 500,
+                currency: 'INR',
+                items: [{ item_id: 'P123', item_name: 'Lot', price: 500 }],
+                enhanced_conversion_data: {},
+            });
+            expect(addPageAction).toHaveBeenCalledWith('purchase', {
+                funnel_name: 'booking',
+                value: 500,
+                currency: 'INR',
+                item_count: 1,
+                price: 500,
+            });
+        });
+
+        it('skips page views and identity events', () => {
+            track(EVENTS.PAGE_VIEW, { page_path: '/x', page_title: 'X' });
+            identify('user_42', { is_authenticated: true });
+            setUserProperty('city', 'Bangalore');
+            expect(window.dataLayer).toHaveLength(3);
+            expect(addPageAction).not.toHaveBeenCalled();
+        });
+    });
 });

@@ -3,6 +3,7 @@ import { auth } from '../../firebase';
 import store from '../../store';
 import { UserType } from '@/constant/enums';
 import {
+    AuthErrorCodes,
     signInWithPopup,
     GoogleAuthProvider,
     signOut,
@@ -12,6 +13,7 @@ import { identify, setUserProperty } from '@/lib/analytics';
 import { formatRemarkWithUtm } from '@/lib/analytics/attribution';
 import { logger } from '@/utils/logger';
 import { withTimeout } from '@/utils/with-timeout';
+import { clearUser, reportError, setUser } from '@/telemetry';
 
 // Bound for `getIdToken()`, which touches the network on refresh and would
 // otherwise be able to block auth bootstrap indefinitely.
@@ -22,6 +24,12 @@ const USER_PROFILE_STORAGE_KEY = 'UserProfile';
 const PROFILE_CACHE_PREFIX = 'profile:';
 const PROFILE_CACHE_VERSION = 1;
 const PROFILE_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+// The visitor closed the Google popup, or opened a second one: not
+// failures, so they aren't reported.
+const SIGN_IN_CANCELLED = [
+    AuthErrorCodes.POPUP_CLOSED_BY_USER,
+    AuthErrorCodes.EXPIRED_POPUP_REQUEST,
+];
 const getPsAuthKey = () => {
     const key = localStorage.getItem(PS_AUTH_KEY);
     if (
@@ -308,6 +316,7 @@ const actions = {
                     new Error(
                         '[PSAuthKey Error] Google Sign-In succeeded but received empty PSAuthKey',
                     ),
+                    { source: 'google_sign_in' },
                 );
                 return { ok: false, code: null };
             }
@@ -317,7 +326,9 @@ const actions = {
             await dispatch('authenticateWithMaya');
             return { ok: true };
         } catch (error) {
-            logger.error(error);
+            if (!SIGN_IN_CANCELLED.includes(error?.code)) {
+                logger.error(error, { source: 'google_sign_in' });
+            }
             return { ok: false, code: error?.code || null };
         }
     },

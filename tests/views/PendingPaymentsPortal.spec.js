@@ -687,4 +687,17 @@ describe('PendingPaymentsPortal.vue', () => {
             }),
         );
     });
+
+    it('keeps the UPI QR code out of session replays', async () => {
+        wrapper = mountPage();
+        wrapper.vm.openPaymentModal(
+            store.state.pendingPayments.pendingPayments[0],
+        );
+        await wrapper.vm.$nextTick();
+
+        const card = wrapper.find('.qr-card');
+        expect(card.exists()).toBe(true);
+        // New Relic's session replay records nothing inside [data-nr-block].
+        expect(card.attributes()).toHaveProperty('data-nr-block');
+    });
 });
