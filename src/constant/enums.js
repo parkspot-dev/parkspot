@@ -148,6 +148,23 @@ export function getKYCStatusLabel(kyStatus) {
     return getEnumLabel(KYCStatusLabel, kyStatus);
 }
 
+export const IDType = Object.freeze({
+    NotSet: 0,
+    Aadhaar: 1,
+    RC: 2,
+});
+
+export const IDTypeLabel = ['NotSet', 'Aadhaar', 'RC'];
+
+/**
+ *
+ * @param {int} idType
+ * @return {string}: label for id type
+ */
+export function getIDTypeLabel(idType) {
+    return getEnumLabel(IDTypeLabel, idType);
+}
+
 // kyc statuses
 export const IdentityKycStatus = Object.freeze({
     NotVerified: 'NOT_VERIFIED',

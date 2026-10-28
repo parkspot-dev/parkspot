@@ -9,9 +9,11 @@
                 @on-search="searchUsersWithMobile"
             ></MoleculeSearchBox>
         </div>
-        <!-- Loading modal displayed during data fetch -->
+
+        <!-- Loader -->
         <LoaderModal v-if="isLoading"></LoaderModal>
-        <!-- Buefy Table for spot requests with pagination -->
+
+        <!-- KYC Status Table -->
         <b-table
             :data="users"
             :paginated="true"
@@ -31,9 +33,7 @@
                 cell-class="has-text-left"
             >
                 <template #default="props">
-                    <div>
-                        {{ props.row.FullName }}
-                    </div>
+                    <div>{{ props.row?.User?.FullName }}</div>
                 </template>
             </b-table-column>
 
@@ -44,90 +44,82 @@
                 cell-class="has-text-left"
             >
                 <template #default="props">
-                    <div>
-                        {{ props.row.Mobile }}
-                    </div>
+                    <div>{{ props.row?.User?.Mobile }}</div>
                 </template>
             </b-table-column>
 
             <b-table-column
-                field="IdentityDocument"
-                label="Identity Document"
+                field="VehicleNumber"
+                label="Vehicle Number"
                 cell-class="has-text-left"
             >
                 <template #default="props">
                     <div>
-                        {{ props.row.IdentityDocument }}
+                        {{
+                            props.row?.User?.VehicleNumber ||
+                            props.row?.OwnershipVerifiedDetails
+                                ?.VehicleNumber ||
+                            '—'
+                        }}
                     </div>
                 </template>
             </b-table-column>
 
             <b-table-column
-                field="ID Proof Document"
+                field="IDProofDocument"
                 label="ID Proof Document View"
                 cell-class="has-text-left"
             >
                 <template #default="props">
-                    <div
-                        v-if="props.row.IDProofURLs.length > 0"
-                        class="documents-preview"
-                    >
+                    <div class="documents-preview">
                         <div
+                            v-if="
+                                (props.row?.IdentityDocument &&
+                                    props.row.IdentityDocument.length > 0) ||
+                                props.row?.IDVerifiedDetails
+                            "
                             class="tag"
-                            @click="openImage(props.row.IDProofURLs[0])"
+                            @click="openDetailsModal(props.row, 'id')"
                         >
-                            Front
+                            Document
                         </div>
-
                         <div
-                            v-if="props.row.IDProofURLs[1]"
-                            class="tag"
-                            @click="openImage(props.row.IDProofURLs[1])"
+                            v-else
+                            class="no-doc-text"
+                            @click="openDetailsModal(props.row, 'id')"
                         >
-                            Back
+                            No Document Present
                         </div>
-                    </div>
-                    <div v-else>No Document Present</div>
-                </template>
-            </b-table-column>
-
-            <b-table-column
-                field="OwnershipDocument"
-                label="Ownership Document"
-                cell-class="has-text-left"
-            >
-                <template #default="props">
-                    <div>
-                        {{ props.row.OwnershipDocument }}
                     </div>
                 </template>
             </b-table-column>
 
             <b-table-column
-                field="Ownership Proof Document"
+                field="OwnershipProofDocument"
                 label="Ownership Proof Document View"
                 cell-class="has-text-left"
             >
                 <template #default="props">
-                    <div
-                        v-if="props.row.OwnershipProofURLs.length > 0"
-                        class="documents-preview"
-                    >
+                    <div class="documents-preview">
                         <div
+                            v-if="
+                                (props.row?.OwnershipDocument &&
+                                    props.row.OwnershipDocument.length > 0) ||
+                                props.row?.OwnershipVerifiedDetails
+                            "
                             class="tag"
-                            @click="openImage(props.row.OwnershipProofURLs[0])"
+                            @click="openDetailsModal(props.row, 'ownership')"
                         >
-                            Front
+                            Document
                         </div>
                         <div
-                            v-if="props.row.OwnershipProofURLs[1]"
-                            class="tag"
-                            @click="openImage(props.row.OwnershipProofURLs[1])"
+                            v-else
+                            class="no-doc-text"
+                            @click="openDetailsModal(props.row, 'ownership')"
                         >
-                            Back
+                            No Document Present
                         </div>
                     </div>
-                    <div v-else>No Document Present</div>
                 </template>
             </b-table-column>
 
@@ -140,8 +132,12 @@
             >
                 <template #default="props">
                     <SelectInput
-                        :key="props.row.ID"
-                        :model-value="getKYCStatusLabel(props.row.KYCStatus)"
+                        :key="
+                            props.row?.User?.UserName || props.row?.User?.Mobile
+                        "
+                        :model-value="
+                            getKYCStatusLabel(props.row?.User?.KYCStatus)
+                        "
                         :list="KYCStatusLabel"
                         class="select"
                         name="updateKYCStatus"
@@ -150,18 +146,275 @@
                 </template>
             </b-table-column>
         </b-table>
+
+        <!-- Details Modal -->
+        <b-modal
+            v-model="showDetailsModal"
+            has-modal-card
+            width="720"
+            scroll="keep"
+        >
+            <div class="modal-card kyc-details-modal">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">
+                        {{
+                            activeModalType === 'id'
+                                ? 'ID Verification Details (Aadhaar)'
+                                : 'Ownership Verification Details (RC)'
+                        }}
+                    </p>
+                    <button
+                        type="button"
+                        class="delete"
+                        @click="showDetailsModal = false"
+                    />
+                </header>
+                <section v-if="selectedUserKYC" class="modal-card-body">
+                    <!-- User Basic Information Card -->
+                    <div class="kyc-card">
+                        <div class="card-header-bar">
+                            <h3 class="card-title">User Basic Information</h3>
+                        </div>
+                        <div class="card-grid">
+                            <div class="info-item">
+                                <span class="info-label">Full Name</span>
+                                <span class="info-value">{{
+                                    selectedUserKYC.User?.FullName
+                                }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Mobile Number</span>
+                                <span class="info-value">{{
+                                    selectedUserKYC.User?.Mobile
+                                }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">ID Type</span>
+                                <span class="info-value id-type-badge">
+                                    {{
+                                        getIDTypeLabel(
+                                            activeModalType === 'id'
+                                                ? (selectedUserKYC
+                                                      .IDVerifiedDetails
+                                                      ?.IDType ?? 1)
+                                                : (selectedUserKYC
+                                                      .OwnershipVerifiedDetails
+                                                      ?.IDType ?? 2),
+                                        )
+                                    }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cashfree ID Verification Details Card (Aadhaar) -->
+                    <div v-if="activeModalType === 'id'" class="kyc-card">
+                        <div class="card-header-bar">
+                            <h3 class="card-title">
+                                Cashfree ID Verification Details (Aadhaar)
+                            </h3>
+                        </div>
+                        <div
+                            v-if="selectedUserKYC.IDVerifiedDetails"
+                            class="card-grid"
+                        >
+                            <div class="info-item">
+                                <span class="info-label">Name (on ID)</span>
+                                <span class="info-value">{{
+                                    selectedUserKYC.IDVerifiedDetails?.Name
+                                }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Gender</span>
+                                <span class="info-value highlight-gender">{{
+                                    selectedUserKYC.IDVerifiedDetails?.Gender
+                                }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"
+                                    >Date of Birth (DOB)</span
+                                >
+                                <span class="info-value">{{
+                                    selectedUserKYC.IDVerifiedDetails?.DOB
+                                }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Masked Aadhaar</span>
+                                <span class="info-value">{{
+                                    selectedUserKYC.IDVerifiedDetails
+                                        ?.MaskedAadhar
+                                }}</span>
+                            </div>
+                            <div class="info-item full-width">
+                                <span class="info-label">Address</span>
+                                <span class="info-value">{{
+                                    selectedUserKYC.IDVerifiedDetails?.Address
+                                }}</span>
+                            </div>
+                        </div>
+                        <div v-else class="empty-doc-box">
+                            No Cashfree ID Verification Details Available
+                        </div>
+                    </div>
+
+                    <!-- Manual ID Document Display -->
+                    <div v-if="activeModalType === 'id'" class="kyc-card">
+                        <div class="card-header-bar">
+                            <h3 class="card-title">
+                                Uploaded Identity Document Proof
+                            </h3>
+                        </div>
+                        <div
+                            v-if="
+                                selectedUserKYC.IdentityDocument &&
+                                selectedUserKYC.IdentityDocument.length > 0
+                            "
+                            class="doc-thumbs"
+                        >
+                            <div
+                                v-for="(
+                                    imgUrl, idx
+                                ) in selectedUserKYC.IdentityDocument"
+                                :key="'id-doc-' + idx"
+                                class="doc-thumb"
+                                @click="openImage(imgUrl)"
+                            >
+                                <img :src="imgUrl" alt="Identity Document" />
+                                <span class="preview-overlay"
+                                    >Click to View</span
+                                >
+                            </div>
+                        </div>
+                        <div v-else class="empty-doc-box">
+                            No ID Photo Uploaded
+                        </div>
+                    </div>
+
+                    <!-- Cashfree Ownership Verification Details Card (RC) -->
+                    <div
+                        v-if="activeModalType === 'ownership'"
+                        class="kyc-card"
+                    >
+                        <div class="card-header-bar">
+                            <h3 class="card-title">
+                                Cashfree Ownership Verification Details (RC)
+                            </h3>
+                        </div>
+                        <div
+                            v-if="selectedUserKYC.OwnershipVerifiedDetails"
+                            class="card-grid"
+                        >
+                            <div class="info-item">
+                                <span class="info-label">Name (on RC)</span>
+                                <span class="info-value">{{
+                                    selectedUserKYC.OwnershipVerifiedDetails
+                                        ?.Name
+                                }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Vehicle Number</span>
+                                <span class="info-value">{{
+                                    selectedUserKYC.OwnershipVerifiedDetails
+                                        ?.VehicleNumber ||
+                                    selectedUserKYC.User?.VehicleNumber ||
+                                    '—'
+                                }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Expiry Date</span>
+                                <span class="info-value">{{
+                                    selectedUserKYC.OwnershipVerifiedDetails
+                                        ?.Expiry
+                                }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Vehicle Make</span>
+                                <span class="info-value">{{
+                                    selectedUserKYC.OwnershipVerifiedDetails
+                                        ?.Make
+                                }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Vehicle Model</span>
+                                <span class="info-value">{{
+                                    selectedUserKYC.OwnershipVerifiedDetails
+                                        ?.Model
+                                }}</span>
+                            </div>
+                            <div class="info-item full-width">
+                                <span class="info-label">Address</span>
+                                <span class="info-value">{{
+                                    selectedUserKYC.OwnershipVerifiedDetails
+                                        ?.Address
+                                }}</span>
+                            </div>
+                        </div>
+                        <div v-else class="empty-doc-box">
+                            No Cashfree Ownership Verification Details Available
+                        </div>
+                    </div>
+
+                    <!-- Manual Ownership Document Display -->
+                    <div
+                        v-if="activeModalType === 'ownership'"
+                        class="kyc-card"
+                    >
+                        <div class="card-header-bar">
+                            <h3 class="card-title">
+                                Uploaded Ownership Document Proof
+                            </h3>
+                        </div>
+                        <div
+                            v-if="
+                                selectedUserKYC.OwnershipDocument &&
+                                selectedUserKYC.OwnershipDocument.length > 0
+                            "
+                            class="doc-thumbs"
+                        >
+                            <div
+                                v-for="(
+                                    imgUrl, idx
+                                ) in selectedUserKYC.OwnershipDocument"
+                                :key="'own-doc-' + idx"
+                                class="doc-thumb"
+                                @click="openImage(imgUrl)"
+                            >
+                                <img :src="imgUrl" alt="Ownership Document" />
+                                <span class="preview-overlay"
+                                    >Click to View</span
+                                >
+                            </div>
+                        </div>
+                        <div v-else class="empty-doc-box">
+                            No RC Photo Uploaded
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </b-modal>
+
+        <!-- Fullscreen Image Preview Modal -->
+        <b-modal
+            v-model="showImageModal"
+            has-modal-card
+            full-screen
+            scroll="keep"
+        >
+            <div class="image-preview-modal">
+                <img :src="selectedImage" alt="Document Preview" />
+            </div>
+        </b-modal>
     </div>
-    <b-modal v-model="showImageModal" has-modal-card full-screen scroll="keep">
-        <div class="image-preview-modal">
-            <img :src="selectedImage" alt="Document Preview" />
-        </div>
-    </b-modal>
 </template>
 
 <script>
-import { getKYCStatusLabel, KYCStatusLabel, KYCStatus } from '@/constant/enums';
+import {
+    getKYCStatusLabel,
+    KYCStatusLabel,
+    KYCStatus,
+    getIDTypeLabel,
+} from '@/constant/enums';
 import { mapState, mapActions } from 'vuex';
-// import AtomSelectInput from '../components/atoms/AtomSelectInput.vue';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import SelectInput from '@/components/global/SelectInput.vue';
 import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
@@ -174,68 +427,45 @@ export default {
         MoleculeSearchBox,
         SelectInput,
     },
-
     data() {
         return {
             KYCStatusLabel,
-            KYCStatus,
             showImageModal: false,
             selectedImage: null,
+            showDetailsModal: false,
+            selectedUserKYC: null,
+            activeModalType: 'id',
         };
     },
     computed: {
         ...mapState('kycStatusPortal', [
             'isLoading',
+            'searchMobile',
+            'users',
             'hasError',
             'errorMessage',
-            'users',
-            'searchMobile',
         ]),
     },
     watch: {
-        hasError(error) {
-            if (error) {
+        hasError(val) {
+            if (val) {
                 this.alertError(this.errorMessage);
             }
         },
     },
     mounted() {
-        this.refreshPendingUsersSafely();
+        this.fetchKycPendingUsers();
     },
     created() {
         const mobile = this.$route.query.mobile;
-        if (mobile) {
-            this.updateMobileInput(mobile);
-        } else {
-            this.updateMobileInput('');
-        }
+        this.updateMobileInput(mobile || '');
     },
-
     methods: {
         ...mapActions('kycStatusPortal', [
             'fetchKycPendingUsers',
             'updateStatus',
             'updateMobileInput',
         ]),
-        
-
-        // Get label for status based on the enum value
-        getKYCStatusLabel(spotRequestStatus) {
-            return getKYCStatusLabel(spotRequestStatus);
-        },
-
-        async refreshPendingUsersSafely() {
-            const previousUsers = [...this.users];
-
-            try {
-                await this.fetchKycPendingUsers();
-            } catch {
-                this.$store.commit('kycStatusPortal/set-users', previousUsers);
-                this.alertError(
-                    'Failed to fetch KYC users. Please try again.'
-                );
-            }
-        },
 
         alertError(msg) {
             this.$buefy.dialog.alert({
@@ -249,88 +479,92 @@ export default {
             });
         },
 
-        async onStatusUpdate(row, newStatus) {
-            const labelId = KYCStatus[newStatus];
-            if (labelId == null) {
-                this.alertError('Invalid status selected.');
-                return;
-            }
-
-            row['KYCStatus'] = labelId;
-
-            try {
-                await this.updateStatus({ userData: row });
-                await this.refreshPendingUsersSafely();
-
-                this.$buefy.toast.open({
-                    message: `KYC Status updated to ${getKYCStatusLabel(labelId)}`,
-                    type: 'is-success',
-                });
-            } catch {
-                this.alertError('Failed to update KYC status.');
-            }
+        getKYCStatusLabel(status) {
+            return getKYCStatusLabel(status);
         },
 
-        async searchUsersWithMobile(userMobile) {
-            if (userMobile != '') {
-                // Sanitize Mobile Number
-                const sanitizeMobileNumber = sanitizeMobile(userMobile);
-                if (!sanitizeMobileNumber) {
-                    this.$buefy.dialog.alert({
-                        title: 'Error',
-                        message: 'Invalid Mobile Number',
-                        type: 'is-danger',
-                        hasIcon: true,
-                        icon: 'alert-circle',
-                        ariaRole: 'alertdialog',
-                        ariaModal: true,
-                    });
-                } else {
-                    // Update Search Text with voMobile
-                    this.updateMobileInput(sanitizeMobileNumber);
-
-                    await this.refreshPendingUsersSafely();
-
-                    this.$router.push({
-                        path: this.$route.path,
-                        query: {
-                            mobile: sanitizeMobileNumber,
-                        },
-                    });
-                }
-            }
+        getIDTypeLabel(idType) {
+            return getIDTypeLabel(idType);
         },
 
-        // Clear Mobile Input
-        async onClearMobileInput() {
-            if (this.$route.query.mobile) {
-                this.updateMobileInput('');
-                await this.refreshPendingUsersSafely();
-                this.$router.push({
-                    name: 'kyc-status',
-                });
-            }
+        openDetailsModal(row, type = 'id') {
+            this.selectedUserKYC = row;
+            this.activeModalType = type;
+            this.showDetailsModal = true;
         },
 
         openImage(url) {
             this.selectedImage = url;
             this.showImageModal = true;
         },
+
+        async onStatusUpdate(row, newStatus) {
+            const labelId = KYCStatus[newStatus];
+            if (labelId == null) {
+                this.alertError('Invalid status selected.');
+                return;
+            }
+            const originalStatus = row?.User?.KYCStatus;
+            try {
+                if (row && row.User) {
+                    row.User.KYCStatus = labelId;
+                }
+                await this.updateStatus({ userData: row });
+                if (this.hasError) {
+                    if (row && row.User) {
+                        row.User.KYCStatus = originalStatus;
+                    }
+                    return;
+                }
+                await this.fetchKycPendingUsers();
+                this.$buefy.toast.open({
+                    message: `KYC Status updated to ${getKYCStatusLabel(labelId)}`,
+                    type: 'is-success',
+                });
+            } catch (error) {
+                if (row && row.User) {
+                    row.User.KYCStatus = originalStatus;
+                }
+                this.alertError(error.message || 'Failed to update status');
+            }
+        },
+
+        async searchUsersWithMobile(userMobile) {
+            if (userMobile) {
+                const sanitized = sanitizeMobile(userMobile);
+                if (sanitized) {
+                    this.updateMobileInput(sanitized);
+                    await this.fetchKycPendingUsers();
+                    this.$router.push({
+                        path: this.$route.path,
+                        query: { mobile: sanitized },
+                    });
+                }
+            }
+        },
+
+        async onClearMobileInput() {
+            if (this.$route.query.mobile) {
+                this.updateMobileInput('');
+                await this.fetchKycPendingUsers();
+                this.$router.push({ name: 'kyc-status' });
+            }
+        },
     },
 };
 </script>
 
 <style lang="scss" scoped>
-$portal-font-size: 13px;
+$portal-font-size: 12px;
 
 .kyc-status-portal-root {
-    background: #f5f5fb;
+    background: var(--parkspot-white);
     padding: 16px;
     text-align: center;
 
     h1 {
         font-size: 24px;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
     }
 }
 
@@ -342,7 +576,7 @@ $portal-font-size: 13px;
     width: 100px;
 
     @media only screen and (max-width: 1024px) {
-        width: 150px;
+        width: 152px;
     }
 }
 
@@ -352,12 +586,24 @@ $portal-font-size: 13px;
 
     .tag {
         background-color: var(--primary-color);
-        border-radius: 10px;
+        border-radius: 8px;
         border: 1px dashed var(--parkspot-black);
         color: var(--parkspot-black);
         cursor: pointer;
         padding: 12px 12px;
         text-align: center;
+    }
+}
+
+.no-doc-text {
+    font-size: 12px;
+    color: var(--parkspot-muted-black);
+    font-style: italic;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+        color: var(--parkspot-red);
     }
 }
 
@@ -377,9 +623,216 @@ $portal-font-size: 13px;
 .image-preview-modal img {
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    max-height: 90vh;
+    max-height: 92vh;
     max-width: 100%;
     object-fit: contain;
     z-index: 999;
+}
+
+.kyc-details-modal {
+    text-align: left;
+    max-width: 100%;
+
+    :deep(.modal-card-head) {
+        padding: 12px 16px;
+        align-items: center;
+
+        .modal-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.3;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            padding-right: 12px;
+        }
+
+        .delete {
+            flex-shrink: 0;
+        }
+    }
+
+    .modal-card-body {
+        background-color: var(--parkspot-white);
+        padding: 20px;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .kyc-card {
+        background: var(--parkspot-white);
+        border: 1px solid var(--grey-shade);
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+
+        .card-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--grey-shade);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+
+            .card-title {
+                font-size: 16px;
+                font-weight: 700;
+                color: var(--parkspot-black);
+                margin: 0;
+                word-break: break-word;
+                overflow-wrap: break-word;
+            }
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+
+            &.full-width {
+                grid-column: 1 / -1;
+            }
+
+            .info-label {
+                font-size: 12px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: var(--parkspot-muted-black);
+            }
+
+            .info-value {
+                font-size: 16px;
+                font-weight: 500;
+                color: var(--parkspot-black);
+                word-break: break-word;
+                overflow-wrap: break-word;
+
+                &.highlight-gender {
+                    font-weight: 600;
+                    color: var(--secondary-color);
+                }
+            }
+        }
+
+        .id-type-badge {
+            color: var(--secondary-color) !important;
+            font-weight: 700 !important;
+        }
+
+        .empty-doc-box {
+            background-color: var(--parkspot-white);
+            border: 1px dashed var(--parkspot-red);
+            color: var(--parkspot-red);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .doc-thumbs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 4px;
+        }
+
+        .doc-thumb {
+            position: relative;
+            width: 140px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--grey-shade);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+
+            &:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+            }
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .preview-overlay {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, 0.7);
+                color: var(--parkspot-white);
+                font-size: 12px;
+                text-align: center;
+                padding: 4px 0;
+                font-weight: 500;
+            }
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        margin: 0 auto;
+
+        :deep(.modal-card-head) {
+            padding: 10px 12px;
+
+            .modal-card-title {
+                font-size: 15px;
+                line-height: 1.25;
+                padding-right: 8px;
+            }
+        }
+
+        .modal-card-body {
+            padding: 12px;
+        }
+
+        .kyc-card {
+            padding: 12px;
+            margin-bottom: 12px;
+
+            .card-header-bar {
+                padding-bottom: 8px;
+                margin-bottom: 12px;
+
+                .card-title {
+                    font-size: 14px;
+                }
+            }
+
+            .card-grid {
+                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+                gap: 12px;
+            }
+
+            .info-item {
+                .info-label {
+                    font-size: 11px;
+                }
+
+                .info-value {
+                    font-size: 14px;
+                }
+            }
+
+            .doc-thumb {
+                width: 110px;
+                height: 80px;
+            }
+        }
+    }
 }
 </style>
