@@ -3,11 +3,32 @@
         <!-- Search Bar -->
         <div class="search-control">
             <MoleculeSearchBox
-                :initial-value="searchMobile"
-                placeholder="Mobile"
-                @clear-input="onClearMobileInput"
-                @on-search="searchUsersWithMobile"
+                :key="searchType"
+                :initial-value="searchQuery"
+                :placeholder="searchPlaceholder"
+                @clear-input="onClearSearchInput"
+                @on-search="searchUsers"
             ></MoleculeSearchBox>
+        </div>
+
+        <!-- Search Type Radio Buttons -->
+        <div class="search-type-container mb-4">
+            <b-field>
+                <b-radio
+                    v-model="searchType"
+                    native-value="mobile"
+                    class="mr-4 parkspot-radio"
+                >
+                    Mobile
+                </b-radio>
+                <b-radio
+                    v-model="searchType"
+                    native-value="username"
+                    class="parkspot-radio"
+                >
+                    Username
+                </b-radio>
+            </b-field>
         </div>
 
         <!-- Loader -->
@@ -437,21 +458,36 @@ export default {
             showDetailsModal: false,
             selectedUserKYC: null,
             activeModalType: 'id',
+            searchType: 'mobile',
         };
     },
     computed: {
         ...mapState('kycStatusPortal', [
             'isLoading',
             'searchMobile',
+            'searchUsername',
             'users',
             'hasError',
             'errorMessage',
         ]),
+        searchPlaceholder() {
+            return this.searchType === 'username' ? 'Username' : 'Mobile';
+        },
+        searchQuery() {
+            return this.searchType === 'username'
+                ? this.searchUsername || ''
+                : this.searchMobile || '';
+        },
     },
     watch: {
         hasError(val) {
             if (val) {
                 this.alertError(this.errorMessage);
+            }
+        },
+        searchType(val) {
+            if (this.updateSearchType) {
+                this.updateSearchType(val);
             }
         },
     },
@@ -460,13 +496,26 @@ export default {
     },
     created() {
         const mobile = this.$route.query.mobile;
-        this.updateMobileInput(mobile || '');
+        const username = this.$route.query.user_name || this.$route.query.username;
+        if (username) {
+            this.searchType = 'username';
+            if (this.updateSearchType) this.updateSearchType('username');
+            if (this.updateUsernameInput) this.updateUsernameInput(username);
+            this.updateMobileInput('');
+        } else {
+            this.searchType = 'mobile';
+            if (this.updateSearchType) this.updateSearchType('mobile');
+            this.updateMobileInput(mobile || '');
+            if (this.updateUsernameInput) this.updateUsernameInput('');
+        }
     },
     methods: {
         ...mapActions('kycStatusPortal', [
             'fetchKycPendingUsers',
             'updateStatus',
             'updateMobileInput',
+            'updateUsernameInput',
+            'updateSearchType',
         ]),
 
         alertError(msg) {
@@ -531,23 +580,69 @@ export default {
             }
         },
 
+        async searchUsers(query) {
+            if (this.searchType === 'username') {
+                await this.searchUsersWithUsername(query);
+            } else {
+                await this.searchUsersWithMobile(query);
+            }
+        },
+
         async searchUsersWithMobile(userMobile) {
             if (userMobile) {
                 const sanitized = sanitizeMobile(userMobile);
                 if (sanitized) {
                     this.updateMobileInput(sanitized);
+                    if (this.updateUsernameInput) this.updateUsernameInput('');
+                    if (this.updateSearchType) this.updateSearchType('mobile');
                     await this.fetchKycPendingUsers();
                     this.$router.push({
                         path: this.$route.path,
                         query: { mobile: sanitized },
                     });
+                } else {
+                    this.alertError('Invalid mobile number');
                 }
             }
         },
 
+        async searchUsersWithUsername(username) {
+            if (username) {
+                const trimmed = username.trim();
+                if (trimmed) {
+                    if (this.updateUsernameInput) this.updateUsernameInput(trimmed);
+                    this.updateMobileInput('');
+                    if (this.updateSearchType) this.updateSearchType('username');
+                    await this.fetchKycPendingUsers();
+                    this.$router.push({
+                        path: this.$route.path,
+                        query: { user_name: trimmed },
+                    });
+                } else {
+                    this.alertError('Invalid username');
+                }
+            }
+        },
+
+        async onClearSearchInput() {
+            if (this.searchType === 'username') {
+                await this.onClearUsernameInput();
+            } else {
+                await this.onClearMobileInput();
+            }
+        },
+
         async onClearMobileInput() {
+            this.updateMobileInput('');
             if (this.$route.query.mobile) {
-                this.updateMobileInput('');
+                await this.fetchKycPendingUsers();
+                this.$router.push({ name: 'kyc-status' });
+            }
+        },
+
+        async onClearUsernameInput() {
+            if (this.updateUsernameInput) this.updateUsernameInput('');
+            if (this.$route.query.user_name || this.$route.query.username) {
                 await this.fetchKycPendingUsers();
                 this.$router.push({ name: 'kyc-status' });
             }
@@ -563,6 +658,50 @@ $portal-font-size: 12px;
     background: var(--parkspot-white);
     padding: 16px;
     text-align: center;
+}
+
+.search-type-container {
+    display: flex;
+    justify-content: center;
+
+    :deep(.parkspot-radio.radio) {
+        color: var(--parkspot-black);
+        font-weight: 500;
+        font-size: 14px;
+        transition: color 0.2s ease-in-out;
+
+        .check {
+            border-color: var(--grey-shade);
+            transition: border-color 0.2s ease-in-out;
+        }
+
+        &:hover {
+            color: var(--secondary-color);
+
+            .check {
+                border-color: var(--secondary-color);
+            }
+        }
+
+        input[type='radio']:checked + .check {
+            border-color: var(--secondary-color) !important;
+            background: transparent !important;
+
+            &:before {
+                background: var(--secondary-color) !important;
+                transform: scale(0.5);
+            }
+        }
+
+        input[type='radio']:focus + .check {
+            box-shadow: 0 0 0 0.125em var(--parkspot-border-grey);
+        }
+
+        &:has(input[type='radio']:checked) {
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+    }
 
     h1 {
         font-size: 24px;
