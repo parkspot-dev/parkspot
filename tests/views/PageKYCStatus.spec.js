@@ -32,6 +32,8 @@ beforeEach(() => {
         fetchKycPendingUsers: vi.fn(),
         updateStatus: vi.fn(),
         updateMobileInput: vi.fn(),
+        updateUsernameInput: vi.fn(),
+        updateSearchType: vi.fn(),
     };
 
     store = createStore({
@@ -60,6 +62,8 @@ beforeEach(() => {
                         },
                     ],
                     searchMobile: '',
+                    searchUsername: '',
+                    searchType: 'mobile',
                 }),
                 actions,
             },
@@ -89,6 +93,8 @@ const factory = (routerOverrides = {}) =>
                     template: '<div class="loader-modal"></div>',
                 },
                 'SelectInput': true,
+                'b-field': true,
+                'b-radio': true,
                 'MoleculeSearchBox': {
                     template: `
                         <div class="search-box">
@@ -274,5 +280,38 @@ describe('PageKYCStatus.vue', () => {
             store.state.kycStatusPortal.users[0],
             'INVALID_STATUS',
         );
+    });
+    it('initializes with username search type when query has username', async () => {
+        const wrapper = factory({ query: { user_name: 'testuser' } });
+        await wrapper.vm.$nextTick();
+
+        expect(actions.updateUsernameInput).toHaveBeenCalledWith(expect.anything(), 'testuser');
+        expect(actions.updateSearchType).toHaveBeenCalledWith(expect.anything(), 'username');
+        expect(wrapper.vm.searchType).toBe('username');
+        expect(wrapper.vm.searchPlaceholder).toBe('Username');
+    });
+
+    it('searches users by username and updates router', async () => {
+        const wrapper = factory();
+        wrapper.vm.searchType = 'username';
+        await wrapper.vm.searchUsers('johndoe');
+
+        expect(actions.updateUsernameInput).toHaveBeenCalledWith(expect.anything(), 'johndoe');
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalled();
+        expect(routerMock.push).toHaveBeenCalledWith(
+            expect.objectContaining({
+                query: { user_name: 'johndoe' },
+            }),
+        );
+    });
+
+    it('clears username search and resets route query', async () => {
+        const wrapper = factory({ query: { user_name: 'johndoe' } });
+        wrapper.vm.searchType = 'username';
+        await wrapper.vm.onClearUsernameInput();
+
+        expect(actions.updateUsernameInput).toHaveBeenCalledWith(expect.anything(), '');
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalled();
+        expect(routerMock.push).toHaveBeenCalledWith({ name: 'kyc-status' });
     });
 });
