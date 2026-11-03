@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import kycStatusPortal from '@/store/kycStatusPortal/index';
+import kycStatusPortal, { SEARCH_TYPE } from '@/store/kycStatusPortal/index';
 import { mayaClient } from '@/services/api';
 
 // Mock maya
@@ -73,8 +73,11 @@ describe('Vuex Module: KycStatusPortal', () => {
         });
 
         it('set-search-type updates searchType', () => {
-            kycStatusPortal.mutations['set-search-type'](state, 'username');
-            expect(state.searchType).toBe('username');
+            kycStatusPortal.mutations['set-search-type'](
+                state,
+                SEARCH_TYPE.USERNAME,
+            );
+            expect(state.searchType).toBe(SEARCH_TYPE.USERNAME);
         });
     });
 
@@ -130,7 +133,7 @@ describe('Vuex Module: KycStatusPortal', () => {
 
         it('passes user_name query parameter when searchType is username and searchUsername is set', async () => {
             const commit = vi.fn();
-            state.searchType = 'username';
+            state.searchType = SEARCH_TYPE.USERNAME;
             state.searchUsername = ' johndoe ';
             mayaClient.get.mockResolvedValue([]);
 
@@ -281,10 +284,7 @@ describe('Vuex Module: KycStatusPortal', () => {
         it('commits set-search-type', () => {
             const commit = vi.fn();
             kycStatusPortal.actions.updateSearchType({ commit }, 'username');
-            expect(commit).toHaveBeenCalledWith(
-                'set-search-type',
-                'username',
-            );
+            expect(commit).toHaveBeenCalledWith('set-search-type', 'username');
         });
     });
 });

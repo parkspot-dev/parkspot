@@ -496,7 +496,8 @@ export default {
     },
     created() {
         const mobile = this.$route.query.mobile;
-        const username = this.$route.query.user_name || this.$route.query.username;
+        const username =
+            this.$route.query.user_name || this.$route.query.username;
         if (username) {
             this.searchType = 'username';
             if (this.updateSearchType) this.updateSearchType('username');
@@ -610,9 +611,11 @@ export default {
             if (username) {
                 const trimmed = username.trim();
                 if (trimmed) {
-                    if (this.updateUsernameInput) this.updateUsernameInput(trimmed);
+                    if (this.updateUsernameInput)
+                        this.updateUsernameInput(trimmed);
                     this.updateMobileInput('');
-                    if (this.updateSearchType) this.updateSearchType('username');
+                    if (this.updateSearchType)
+                        this.updateSearchType('username');
                     await this.fetchKycPendingUsers();
                     this.$router.push({
                         path: this.$route.path,

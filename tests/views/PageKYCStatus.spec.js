@@ -125,7 +125,6 @@ const factory = (routerOverrides = {}, stubOverrides = {}) =>
                     template:
                         '<div class="b-modal-stub" v-if="modelValue"><slot /></div>',
                 },
-                },
             },
             mocks: {
                 $router: routerMock,
@@ -266,7 +265,6 @@ describe('PageKYCStatus.vue', () => {
         // New Relic's session replay records nothing inside [data-nr-block].
         expect(preview.attributes()).toHaveProperty('data-nr-block');
     });
-    });
 
     it('shows error alert when hasError becomes true', async () => {
         const wrapper = factory();
@@ -302,8 +300,14 @@ describe('PageKYCStatus.vue', () => {
         const wrapper = factory({ query: { user_name: 'testuser' } });
         await wrapper.vm.$nextTick();
 
-        expect(actions.updateUsernameInput).toHaveBeenCalledWith(expect.anything(), 'testuser');
-        expect(actions.updateSearchType).toHaveBeenCalledWith(expect.anything(), 'username');
+        expect(actions.updateUsernameInput).toHaveBeenCalledWith(
+            expect.anything(),
+            'testuser',
+        );
+        expect(actions.updateSearchType).toHaveBeenCalledWith(
+            expect.anything(),
+            'username',
+        );
         expect(wrapper.vm.searchType).toBe('username');
         expect(wrapper.vm.searchPlaceholder).toBe('Username');
     });
@@ -313,7 +317,10 @@ describe('PageKYCStatus.vue', () => {
         wrapper.vm.searchType = 'username';
         await wrapper.vm.searchUsers('johndoe');
 
-        expect(actions.updateUsernameInput).toHaveBeenCalledWith(expect.anything(), 'johndoe');
+        expect(actions.updateUsernameInput).toHaveBeenCalledWith(
+            expect.anything(),
+            'johndoe',
+        );
         expect(actions.fetchKycPendingUsers).toHaveBeenCalled();
         expect(routerMock.push).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -327,7 +334,10 @@ describe('PageKYCStatus.vue', () => {
         wrapper.vm.searchType = 'username';
         await wrapper.vm.onClearUsernameInput();
 
-        expect(actions.updateUsernameInput).toHaveBeenCalledWith(expect.anything(), '');
+        expect(actions.updateUsernameInput).toHaveBeenCalledWith(
+            expect.anything(),
+            '',
+        );
         expect(actions.fetchKycPendingUsers).toHaveBeenCalled();
         expect(routerMock.push).toHaveBeenCalledWith({ name: 'kyc-status' });
     });
