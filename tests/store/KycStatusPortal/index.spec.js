@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import kycStatusPortal from '@/store/kycStatusPortal/index';
+import kycStatusPortal, { SEARCH_TYPE } from '@/store/kycStatusPortal/index';
 import { mayaClient } from '@/services/api';
 
 // Mock maya
@@ -66,6 +66,19 @@ describe('Vuex Module: KycStatusPortal', () => {
             kycStatusPortal.mutations['set-search-mobile'](state, '9999999999');
             expect(state.searchMobile).toBe('9999999999');
         });
+
+        it('set-search-username updates searchUsername', () => {
+            kycStatusPortal.mutations['set-search-username'](state, 'johndoe');
+            expect(state.searchUsername).toBe('johndoe');
+        });
+
+        it('set-search-type updates searchType', () => {
+            kycStatusPortal.mutations['set-search-type'](
+                state,
+                SEARCH_TYPE.USERNAME,
+            );
+            expect(state.searchType).toBe(SEARCH_TYPE.USERNAME);
+        });
     });
 
     // Actions
@@ -114,7 +127,23 @@ describe('Vuex Module: KycStatusPortal', () => {
             });
 
             expect(mayaClient.get).toHaveBeenCalledWith(
-                '/internal/users/kyc?Mobile=9876543210',
+                '/internal/users/kyc?mobile=9876543210',
+            );
+        });
+
+        it('passes user_name query parameter when searchType is username and searchUsername is set', async () => {
+            const commit = vi.fn();
+            state.searchType = SEARCH_TYPE.USERNAME;
+            state.searchUsername = ' johndoe ';
+            mayaClient.get.mockResolvedValue([]);
+
+            await kycStatusPortal.actions.fetchKycPendingUsers({
+                commit,
+                state,
+            });
+
+            expect(mayaClient.get).toHaveBeenCalledWith(
+                '/internal/users/kyc?user_name=johndoe',
             );
         });
 
@@ -135,6 +164,23 @@ describe('Vuex Module: KycStatusPortal', () => {
                 'set-error',
                 'API failed ( 500 )',
             );
+            expect(commit).toHaveBeenCalledWith('set-loading', false);
+        });
+
+        it('commits set-error and clears users on failure response with only ErrorMsg (e.g. user not found)', async () => {
+            const commit = vi.fn();
+            mayaClient.get.mockResolvedValue({
+                ErrorMsg: 'user not found',
+            });
+
+            await kycStatusPortal.actions.fetchKycPendingUsers({
+                commit,
+                state,
+            });
+
+            expect(commit).toHaveBeenCalledWith('set-loading', true);
+            expect(commit).toHaveBeenCalledWith('set-users', []);
+            expect(commit).toHaveBeenCalledWith('set-error', 'user not found');
             expect(commit).toHaveBeenCalledWith('set-loading', false);
         });
 
@@ -220,6 +266,25 @@ describe('Vuex Module: KycStatusPortal', () => {
                 'set-search-mobile',
                 '9876543210',
             );
+        });
+    });
+
+    describe('actions.updateUsernameInput', () => {
+        it('commits set-search-username', () => {
+            const commit = vi.fn();
+            kycStatusPortal.actions.updateUsernameInput({ commit }, 'johndoe');
+            expect(commit).toHaveBeenCalledWith(
+                'set-search-username',
+                'johndoe',
+            );
+        });
+    });
+
+    describe('actions.updateSearchType', () => {
+        it('commits set-search-type', () => {
+            const commit = vi.fn();
+            kycStatusPortal.actions.updateSearchType({ commit }, 'username');
+            expect(commit).toHaveBeenCalledWith('set-search-type', 'username');
         });
     });
 });

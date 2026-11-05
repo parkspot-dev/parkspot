@@ -3,11 +3,32 @@
         <!-- Search Bar -->
         <div class="search-control">
             <MoleculeSearchBox
-                :initial-value="searchMobile"
-                placeholder="Mobile"
-                @clear-input="onClearMobileInput"
-                @on-search="searchUsersWithMobile"
+                :key="searchType"
+                :initial-value="searchQuery"
+                :placeholder="searchPlaceholder"
+                @clear-input="onClearSearchInput"
+                @on-search="searchUsers"
             ></MoleculeSearchBox>
+        </div>
+
+        <!-- Search Type Radio Buttons -->
+        <div class="search-type-container mb-4">
+            <b-field>
+                <b-radio
+                    v-model="searchType"
+                    :native-value="SEARCH_TYPE.MOBILE"
+                    class="mr-4 parkspot-radio"
+                >
+                    Mobile
+                </b-radio>
+                <b-radio
+                    v-model="searchType"
+                    :native-value="SEARCH_TYPE.USERNAME"
+                    class="parkspot-radio"
+                >
+                    Username
+                </b-radio>
+            </b-field>
         </div>
 
         <!-- Loader -->
@@ -417,6 +438,7 @@ import {
     getIDTypeLabel,
 } from '@/constant/enums';
 import { mapState, mapActions } from 'vuex';
+import { SEARCH_TYPE } from '@/store/kycStatusPortal';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import SelectInput from '@/components/global/SelectInput.vue';
 import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
@@ -432,26 +454,44 @@ export default {
     data() {
         return {
             KYCStatusLabel,
+            SEARCH_TYPE,
             showImageModal: false,
             selectedImage: null,
             showDetailsModal: false,
             selectedUserKYC: null,
             activeModalType: 'id',
+            searchType: SEARCH_TYPE.MOBILE,
         };
     },
     computed: {
         ...mapState('kycStatusPortal', [
             'isLoading',
             'searchMobile',
+            'searchUsername',
             'users',
             'hasError',
             'errorMessage',
         ]),
+        searchPlaceholder() {
+            return this.searchType === SEARCH_TYPE.USERNAME
+                ? 'Username'
+                : 'Mobile';
+        },
+        searchQuery() {
+            return this.searchType === SEARCH_TYPE.USERNAME
+                ? this.searchUsername || ''
+                : this.searchMobile || '';
+        },
     },
     watch: {
         hasError(val) {
             if (val) {
                 this.alertError(this.errorMessage);
+            }
+        },
+        searchType(val) {
+            if (this.updateSearchType) {
+                this.updateSearchType(val);
             }
         },
     },
@@ -460,13 +500,28 @@ export default {
     },
     created() {
         const mobile = this.$route.query.mobile;
-        this.updateMobileInput(mobile || '');
+        const username = this.$route.query.user_name;
+        if (username) {
+            this.searchType = SEARCH_TYPE.USERNAME;
+            if (this.updateSearchType)
+                this.updateSearchType(SEARCH_TYPE.USERNAME);
+            if (this.updateUsernameInput) this.updateUsernameInput(username);
+            this.updateMobileInput('');
+        } else {
+            this.searchType = SEARCH_TYPE.MOBILE;
+            if (this.updateSearchType)
+                this.updateSearchType(SEARCH_TYPE.MOBILE);
+            this.updateMobileInput(mobile || '');
+            if (this.updateUsernameInput) this.updateUsernameInput('');
+        }
     },
     methods: {
         ...mapActions('kycStatusPortal', [
             'fetchKycPendingUsers',
             'updateStatus',
             'updateMobileInput',
+            'updateUsernameInput',
+            'updateSearchType',
         ]),
 
         alertError(msg) {
@@ -531,24 +586,83 @@ export default {
             }
         },
 
+        async searchUsers(query) {
+            if (this.searchType === SEARCH_TYPE.USERNAME) {
+                await this.searchUsersWithUsername(query);
+            } else {
+                await this.searchUsersWithMobile(query);
+            }
+        },
+
         async searchUsersWithMobile(userMobile) {
             if (userMobile) {
                 const sanitized = sanitizeMobile(userMobile);
                 if (sanitized) {
                     this.updateMobileInput(sanitized);
-                    await this.fetchKycPendingUsers();
+                    if (this.updateUsernameInput) this.updateUsernameInput('');
+                    if (this.updateSearchType)
+                        this.updateSearchType(SEARCH_TYPE.MOBILE);
+                    if (
+                        !this.$route.hash &&
+                        Object.keys(this.$route.query).length === 1 &&
+                        this.$route.query.mobile === sanitized
+                    ) {
+                        await this.fetchKycPendingUsers();
+                    }
                     this.$router.push({
                         path: this.$route.path,
                         query: { mobile: sanitized },
                     });
+                } else {
+                    this.alertError('Invalid mobile number');
                 }
             }
         },
 
+        async searchUsersWithUsername(username) {
+            if (username) {
+                const trimmedUserName = username.trim();
+                if (trimmedUserName) {
+                    if (this.updateUsernameInput)
+                        this.updateUsernameInput(trimmedUserName);
+                    this.updateMobileInput('');
+                    if (this.updateSearchType)
+                        this.updateSearchType(SEARCH_TYPE.USERNAME);
+                    if (
+                        !this.$route.hash &&
+                        Object.keys(this.$route.query).length === 1 &&
+                        this.$route.query.user_name === trimmedUserName
+                    ) {
+                        await this.fetchKycPendingUsers();
+                    }
+                    this.$router.push({
+                        path: this.$route.path,
+                        query: { user_name: trimmedUserName },
+                    });
+                } else {
+                    this.alertError('Invalid username');
+                }
+            }
+        },
+
+        async onClearSearchInput() {
+            if (this.searchType === SEARCH_TYPE.USERNAME) {
+                await this.onClearUsernameInput();
+            } else {
+                await this.onClearMobileInput();
+            }
+        },
+
         async onClearMobileInput() {
+            this.updateMobileInput('');
             if (this.$route.query.mobile) {
-                this.updateMobileInput('');
-                await this.fetchKycPendingUsers();
+                this.$router.push({ name: 'kyc-status' });
+            }
+        },
+
+        async onClearUsernameInput() {
+            if (this.updateUsernameInput) this.updateUsernameInput('');
+            if (this.$route.query.user_name) {
                 this.$router.push({ name: 'kyc-status' });
             }
         },
@@ -563,6 +677,50 @@ $portal-font-size: 12px;
     background: var(--parkspot-white);
     padding: 16px;
     text-align: center;
+}
+
+.search-type-container {
+    display: flex;
+    justify-content: center;
+
+    :deep(.parkspot-radio.radio) {
+        color: var(--parkspot-black);
+        font-weight: 500;
+        font-size: 14px;
+        transition: color 0.2s ease-in-out;
+
+        .check {
+            border-color: var(--grey-shade);
+            transition: border-color 0.2s ease-in-out;
+        }
+
+        &:hover {
+            color: var(--secondary-color);
+
+            .check {
+                border-color: var(--secondary-color);
+            }
+        }
+
+        input[type='radio']:checked + .check {
+            border-color: var(--secondary-color) !important;
+            background: transparent !important;
+
+            &:before {
+                background: var(--secondary-color) !important;
+                transform: scale(0.5);
+            }
+        }
+
+        input[type='radio']:focus + .check {
+            box-shadow: 0 0 0 0.125em var(--parkspot-border-grey);
+        }
+
+        &:has(input[type='radio']:checked) {
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+    }
 
     h1 {
         font-size: 24px;
