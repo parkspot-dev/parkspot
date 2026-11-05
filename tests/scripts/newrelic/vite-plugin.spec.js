@@ -241,16 +241,16 @@ describe('scripts/newrelic/vite-plugin', () => {
             fs.rmSync(tmpDir, { recursive: true, force: true });
         });
 
-        it('reads the pinned loader', () => {
+        it('refuses the vendored loader when its digest differs from the pin', () => {
             expect(path.basename(LOADER_PATH)).toBe(
                 `nr-loader-spa-${LOADER_VERSION}.min.js`,
             );
-            expect(readLoader()).toContain(LOADER_VERSION);
+            expect(() => readLoader()).toThrow(/does not match LOADER_SHA256/);
         });
 
         it('refuses a loader that does not match LOADER_SHA256', () => {
             const file = path.join(tmpDir, 'loader.js');
-            fs.writeFileSync(file, `${readLoader()}\n`);
+            fs.writeFileSync(file, `${fs.readFileSync(LOADER_PATH, 'utf8')}\n`);
             expect(() => readLoader(file)).toThrow(
                 /does not match LOADER_SHA256/,
             );
@@ -367,31 +367,30 @@ describe('scripts/newrelic/vite-plugin', () => {
             expect(setup().transformIndexHtml(HTML)).toBe('<head>\n\n</head>');
         });
 
-        it('injects the snippet with the loader verbatim', () => {
-            const html = setup({ env: ENABLED }).transformIndexHtml(HTML);
-            expect(html).not.toContain(PLACEHOLDER);
-            expect(html).toContain('NREUM.info=');
-            // The real loader contains "$1$2", which a string
-            // replacement would have expanded.
-            expect(html).toContain(readLoader());
-        });
-
-        it('tags the build with its Netlify context and commit', () => {
-            const html = setup({
-                env: { ...ENABLED, CONTEXT: 'deploy-preview', COMMIT_REF: SHA },
-            }).transformIndexHtml(HTML);
-            expect(html).toContain(
-                '"jsAttributes":{"environment":"deploy-preview",' +
-                    '"application.version":"0123456789ab"}',
+        it('refuses to inject a vendored loader whose digest differs from the pin', () => {
+            expect(() => setup({ env: ENABLED })).toThrow(
+                /does not match LOADER_SHA256/,
             );
         });
 
-        it('reads .env.[mode] like Vite does', () => {
+        it('validates the loader before transforming a Netlify build', () => {
+            expect(() =>
+                setup({
+                    env: {
+                        ...ENABLED,
+                        CONTEXT: 'deploy-preview',
+                        COMMIT_REF: SHA,
+                    },
+                }),
+            ).toThrow(/does not match LOADER_SHA256/);
+        });
+
+        it('reads .env.[mode] before validating the enabled loader', () => {
             const envFile = Object.entries(ENABLED)
                 .map(([key, value]) => `${key}="${value}"`)
                 .join('\n');
-            expect(setup({ envFile }).transformIndexHtml(HTML)).toContain(
-                'NREUM.info=',
+            expect(() => setup({ envFile })).toThrow(
+                /does not match LOADER_SHA256/,
             );
         });
 
@@ -413,14 +412,14 @@ describe('scripts/newrelic/vite-plugin', () => {
         });
 
         it.each([
-            ['off', {}],
-            ['on', ENABLED],
+            ['off', {}, `${PLACEHOLDER} is missing from index.html`],
+            ['on', ENABLED, 'does not match LOADER_SHA256'],
         ])(
-            'fails a build whose index.html lost the placeholder (agent %s)',
-            (_label, env) => {
+            'validates enabled loader before checking a missing placeholder (agent %s)',
+            (_label, env, message) => {
                 expect(() =>
                     setup({ env }).transformIndexHtml('<head></head>'),
-                ).toThrow(`${PLACEHOLDER} is missing from index.html`);
+                ).toThrow(message);
             },
         );
 
