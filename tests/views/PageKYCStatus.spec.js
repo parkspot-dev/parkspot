@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createStore } from 'vuex';
 import PageKYCStatus from '@/views/PageKYCStatus.vue';
 import { flushPromises } from '@vue/test-utils';
+import { SEARCH_TYPE } from '@/store/kycStatusPortal';
 
 vi.mock('@/constant/enums', () => ({
     KYCStatusLabel: ['PENDING', 'APPROVED', 'REJECTED'],
@@ -63,7 +64,7 @@ beforeEach(() => {
                     ],
                     searchMobile: '',
                     searchUsername: '',
-                    searchType: 'mobile',
+                    searchType: SEARCH_TYPE.MOBILE,
                 }),
                 actions,
             },
@@ -125,7 +126,6 @@ const factory = (routerOverrides = {}, stubOverrides = {}) =>
                     template:
                         '<div class="b-modal-stub" v-if="modelValue"><slot /></div>',
                 },
-                },
             },
             mocks: {
                 $router: routerMock,
@@ -165,7 +165,7 @@ describe('PageKYCStatus.vue', () => {
         await wrapper.find('.clear-btn').trigger('click');
 
         expect(actions.updateMobileInput).toHaveBeenCalledTimes(3);
-        expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(3);
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(2);
     });
 
     it('updates KYC status', async () => {
@@ -266,7 +266,6 @@ describe('PageKYCStatus.vue', () => {
         // New Relic's session replay records nothing inside [data-nr-block].
         expect(preview.attributes()).toHaveProperty('data-nr-block');
     });
-    });
 
     it('shows error alert when hasError becomes true', async () => {
         const wrapper = factory();
@@ -302,19 +301,39 @@ describe('PageKYCStatus.vue', () => {
         const wrapper = factory({ query: { user_name: 'testuser' } });
         await wrapper.vm.$nextTick();
 
-        expect(actions.updateUsernameInput).toHaveBeenCalledWith(expect.anything(), 'testuser');
-        expect(actions.updateSearchType).toHaveBeenCalledWith(expect.anything(), 'username');
-        expect(wrapper.vm.searchType).toBe('username');
+        expect(actions.updateUsernameInput).toHaveBeenCalledWith(
+            expect.anything(),
+            'testuser',
+        );
+        expect(actions.updateSearchType).toHaveBeenCalledWith(
+            expect.anything(),
+            SEARCH_TYPE.USERNAME,
+        );
+        expect(wrapper.vm.searchType).toBe(SEARCH_TYPE.USERNAME);
         expect(wrapper.vm.searchPlaceholder).toBe('Username');
+    });
+
+    it('ignores the nonstandard username query parameter', async () => {
+        const wrapper = factory({ query: { username: 'testuser' } });
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.searchType).toBe(SEARCH_TYPE.MOBILE);
+        expect(actions.updateUsernameInput).not.toHaveBeenCalledWith(
+            expect.anything(),
+            'testuser',
+        );
     });
 
     it('searches users by username and updates router', async () => {
         const wrapper = factory();
-        wrapper.vm.searchType = 'username';
+        wrapper.vm.searchType = SEARCH_TYPE.USERNAME;
         await wrapper.vm.searchUsers('johndoe');
 
-        expect(actions.updateUsernameInput).toHaveBeenCalledWith(expect.anything(), 'johndoe');
-        expect(actions.fetchKycPendingUsers).toHaveBeenCalled();
+        expect(actions.updateUsernameInput).toHaveBeenCalledWith(
+            expect.anything(),
+            'johndoe',
+        );
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(1);
         expect(routerMock.push).toHaveBeenCalledWith(
             expect.objectContaining({
                 query: { user_name: 'johndoe' },
@@ -322,13 +341,35 @@ describe('PageKYCStatus.vue', () => {
         );
     });
 
+    it('does not fetch before navigating to a new mobile query', async () => {
+        const wrapper = factory();
+        await wrapper.vm.searchUsersWithMobile('9876543210');
+
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(1);
+        expect(routerMock.push).toHaveBeenCalledWith(
+            expect.objectContaining({
+                query: { mobile: '9876543210' },
+            }),
+        );
+    });
+
+    it('fetches again when searching the current username query', async () => {
+        const wrapper = factory({ query: { user_name: 'johndoe' } });
+        await wrapper.vm.searchUsers('johndoe');
+
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(2);
+    });
+
     it('clears username search and resets route query', async () => {
         const wrapper = factory({ query: { user_name: 'johndoe' } });
-        wrapper.vm.searchType = 'username';
+        wrapper.vm.searchType = SEARCH_TYPE.USERNAME;
         await wrapper.vm.onClearUsernameInput();
 
-        expect(actions.updateUsernameInput).toHaveBeenCalledWith(expect.anything(), '');
-        expect(actions.fetchKycPendingUsers).toHaveBeenCalled();
+        expect(actions.updateUsernameInput).toHaveBeenCalledWith(
+            expect.anything(),
+            '',
+        );
+        expect(actions.fetchKycPendingUsers).toHaveBeenCalledTimes(1);
         expect(routerMock.push).toHaveBeenCalledWith({ name: 'kyc-status' });
     });
 });

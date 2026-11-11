@@ -16,14 +16,14 @@
             <b-field>
                 <b-radio
                     v-model="searchType"
-                    native-value="mobile"
+                    :native-value="SEARCH_TYPE.MOBILE"
                     class="mr-4 parkspot-radio"
                 >
                     Mobile
                 </b-radio>
                 <b-radio
                     v-model="searchType"
-                    native-value="username"
+                    :native-value="SEARCH_TYPE.USERNAME"
                     class="parkspot-radio"
                 >
                     Username
@@ -438,6 +438,7 @@ import {
     getIDTypeLabel,
 } from '@/constant/enums';
 import { mapState, mapActions } from 'vuex';
+import { SEARCH_TYPE } from '@/store/kycStatusPortal';
 import LoaderModal from '../components/extras/LoaderModal.vue';
 import SelectInput from '@/components/global/SelectInput.vue';
 import MoleculeSearchBox from '@/components/molecules/MoleculeSearchBox.vue';
@@ -453,12 +454,13 @@ export default {
     data() {
         return {
             KYCStatusLabel,
+            SEARCH_TYPE,
             showImageModal: false,
             selectedImage: null,
             showDetailsModal: false,
             selectedUserKYC: null,
             activeModalType: 'id',
-            searchType: 'mobile',
+            searchType: SEARCH_TYPE.MOBILE,
         };
     },
     computed: {
@@ -471,10 +473,12 @@ export default {
             'errorMessage',
         ]),
         searchPlaceholder() {
-            return this.searchType === 'username' ? 'Username' : 'Mobile';
+            return this.searchType === SEARCH_TYPE.USERNAME
+                ? 'Username'
+                : 'Mobile';
         },
         searchQuery() {
-            return this.searchType === 'username'
+            return this.searchType === SEARCH_TYPE.USERNAME
                 ? this.searchUsername || ''
                 : this.searchMobile || '';
         },
@@ -496,15 +500,17 @@ export default {
     },
     created() {
         const mobile = this.$route.query.mobile;
-        const username = this.$route.query.user_name || this.$route.query.username;
+        const username = this.$route.query.user_name;
         if (username) {
-            this.searchType = 'username';
-            if (this.updateSearchType) this.updateSearchType('username');
+            this.searchType = SEARCH_TYPE.USERNAME;
+            if (this.updateSearchType)
+                this.updateSearchType(SEARCH_TYPE.USERNAME);
             if (this.updateUsernameInput) this.updateUsernameInput(username);
             this.updateMobileInput('');
         } else {
-            this.searchType = 'mobile';
-            if (this.updateSearchType) this.updateSearchType('mobile');
+            this.searchType = SEARCH_TYPE.MOBILE;
+            if (this.updateSearchType)
+                this.updateSearchType(SEARCH_TYPE.MOBILE);
             this.updateMobileInput(mobile || '');
             if (this.updateUsernameInput) this.updateUsernameInput('');
         }
@@ -581,7 +587,7 @@ export default {
         },
 
         async searchUsers(query) {
-            if (this.searchType === 'username') {
+            if (this.searchType === SEARCH_TYPE.USERNAME) {
                 await this.searchUsersWithUsername(query);
             } else {
                 await this.searchUsersWithMobile(query);
@@ -594,8 +600,15 @@ export default {
                 if (sanitized) {
                     this.updateMobileInput(sanitized);
                     if (this.updateUsernameInput) this.updateUsernameInput('');
-                    if (this.updateSearchType) this.updateSearchType('mobile');
-                    await this.fetchKycPendingUsers();
+                    if (this.updateSearchType)
+                        this.updateSearchType(SEARCH_TYPE.MOBILE);
+                    if (
+                        !this.$route.hash &&
+                        Object.keys(this.$route.query).length === 1 &&
+                        this.$route.query.mobile === sanitized
+                    ) {
+                        await this.fetchKycPendingUsers();
+                    }
                     this.$router.push({
                         path: this.$route.path,
                         query: { mobile: sanitized },
@@ -608,15 +621,23 @@ export default {
 
         async searchUsersWithUsername(username) {
             if (username) {
-                const trimmed = username.trim();
-                if (trimmed) {
-                    if (this.updateUsernameInput) this.updateUsernameInput(trimmed);
+                const trimmedUserName = username.trim();
+                if (trimmedUserName) {
+                    if (this.updateUsernameInput)
+                        this.updateUsernameInput(trimmedUserName);
                     this.updateMobileInput('');
-                    if (this.updateSearchType) this.updateSearchType('username');
-                    await this.fetchKycPendingUsers();
+                    if (this.updateSearchType)
+                        this.updateSearchType(SEARCH_TYPE.USERNAME);
+                    if (
+                        !this.$route.hash &&
+                        Object.keys(this.$route.query).length === 1 &&
+                        this.$route.query.user_name === trimmedUserName
+                    ) {
+                        await this.fetchKycPendingUsers();
+                    }
                     this.$router.push({
                         path: this.$route.path,
-                        query: { user_name: trimmed },
+                        query: { user_name: trimmedUserName },
                     });
                 } else {
                     this.alertError('Invalid username');
@@ -625,7 +646,7 @@ export default {
         },
 
         async onClearSearchInput() {
-            if (this.searchType === 'username') {
+            if (this.searchType === SEARCH_TYPE.USERNAME) {
                 await this.onClearUsernameInput();
             } else {
                 await this.onClearMobileInput();
@@ -635,15 +656,13 @@ export default {
         async onClearMobileInput() {
             this.updateMobileInput('');
             if (this.$route.query.mobile) {
-                await this.fetchKycPendingUsers();
                 this.$router.push({ name: 'kyc-status' });
             }
         },
 
         async onClearUsernameInput() {
             if (this.updateUsernameInput) this.updateUsernameInput('');
-            if (this.$route.query.user_name || this.$route.query.username) {
-                await this.fetchKycPendingUsers();
+            if (this.$route.query.user_name) {
                 this.$router.push({ name: 'kyc-status' });
             }
         },

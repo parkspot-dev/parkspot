@@ -1,5 +1,10 @@
 import { mayaClient } from '@/services/api';
 
+export const SEARCH_TYPE = Object.freeze({
+    MOBILE: 'mobile',
+    USERNAME: 'username',
+});
+
 const state = {
     users: [],
     hasError: false,
@@ -7,7 +12,7 @@ const state = {
     isLoading: false,
     searchMobile: '',
     searchUsername: '',
-    searchType: 'mobile',
+    searchType: SEARCH_TYPE.MOBILE,
 };
 
 const getters = {
@@ -54,25 +59,14 @@ const actions = {
         commit('clear-error');
         commit('set-loading', true);
         try {
-            let url = '/internal/users/kyc';
-            if (state.searchType === 'username') {
-                if (state.searchUsername && state.searchUsername.trim()) {
-                    url = `/internal/users/kyc?user_name=${encodeURIComponent(state.searchUsername.trim())}`;
-                }
-            } else if (state.searchType === 'mobile') {
-                if (state.searchMobile && state.searchMobile.trim()) {
-                    url = `/internal/users/kyc?mobile=${state.searchMobile.replace(/\s+/g, '')}`;
-                }
-            } else if (state.searchMobile && state.searchMobile.trim()) {
-                url = `/internal/users/kyc?mobile=${state.searchMobile.replace(/\s+/g, '')}`;
-            }
-
+            const url = state.searchMobile
+                ? `/internal/users/kyc?Mobile=${state.searchMobile.replace(/\s+/g, '')}`
+                : '/internal/users/kyc';
             const res = await mayaClient.get(url);
-            if (res && (res.DisplayMsg || res.ErrorMsg)) {
-                const message = res.DisplayMsg
-                    ? res.DisplayMsg + (res.ErrorMsg ? ' ( ' + res.ErrorMsg + ' )' : '')
-                    : res.ErrorMsg;
-                throw new Error(message);
+            if (res && res.DisplayMsg) {
+                throw new Error(
+                    res.DisplayMsg + ' ( ' + (res.ErrorMsg || '') + ' )',
+                );
             }
             commit('set-users', Array.isArray(res) ? res : res ? [res] : []);
         } catch (error) {
@@ -96,11 +90,10 @@ const actions = {
                     KYCStatus: statusValue,
                 },
             );
-            if (res && (res.DisplayMsg || res.ErrorMsg)) {
-                const message = res.DisplayMsg
-                    ? res.DisplayMsg + (res.ErrorMsg ? ' ( ' + res.ErrorMsg + ' )' : '')
-                    : res.ErrorMsg;
-                throw new Error(message);
+            if (res && res.DisplayMsg) {
+                throw new Error(
+                    res.DisplayMsg + ' ( ' + (res.ErrorMsg || '') + ' )',
+                );
             }
         } catch (error) {
             commit('set-error', error.message);
