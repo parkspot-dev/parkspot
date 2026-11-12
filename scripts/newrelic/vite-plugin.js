@@ -222,14 +222,17 @@ export function resolveAgentConfig(env) {
  */
 export function readLoader(path = LOADER_PATH) {
     const bytes = fs.readFileSync(path);
-    const digest = createHash('sha256').update(bytes).digest('hex');
+    const source = bytes.toString('utf8');
+    const digest = createHash('sha256')
+        .update(source.replace(/\r\n/g, '\n'))
+        .digest('hex');
     if (digest !== LOADER_SHA256) {
         throw new Error(
             `[newrelic] ${path} does not match LOADER_SHA256 (got ` +
                 `${digest}); see scripts/newrelic/vendor/README.md`,
         );
     }
-    return bytes.toString('utf8');
+    return source;
 }
 
 // JSON that is safe inside an inline <script>: no "</script>" or "<!--"
