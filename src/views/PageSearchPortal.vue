@@ -63,6 +63,7 @@ export default {
         return {
             isLoading: false,
             VOMobile: this.searchMobile,
+            hasLoadedPortalData: false,
         };
     },
     computed: {
@@ -76,7 +77,12 @@ export default {
             'errorMessage',
             'hasError',
         ]),
-        ...mapState('user', ['isAdmin', 'userProfile']),
+        ...mapState('user', [
+            'isAdmin',
+            'isAgent',
+            'isAuthReady',
+            'userProfile',
+        ]),
         activeTabView: {
             get() {
                 return this.activeTab;
@@ -108,15 +114,13 @@ export default {
                 this.alertError(this.errorMessage);
             }
         },
+        isAuthReady: 'loadPortalData',
+        isAgent: 'loadPortalData',
     },
-    async mounted() {
-        await this.getUserProfile();
-        if (this.isAdmin) {
-            await this.$store.dispatch('app/getAgents');
-            await this.$store.dispatch('searchPortal/getAgents');
-        }
+    mounted() {
+        this.loadPortalData();
     },
-    async created() {
+    created() {
         const tab = this.$route.query['tab'];
         if (tab) {
             if (tab === 'interested-request') {
@@ -124,18 +128,12 @@ export default {
                 if (this.$route.query['latlng']) {
                     const latlng = this.$route.query['latlng'];
                     this.updateSOLatLngInput(latlng);
-                    this.getInterestedVO(this.SOLatLngInput);
-                } else {
-                    this.getParkingRequests();
                 }
             } else {
                 this.updateActiveTab(0);
                 const mobile = this.$route.query['mobile'];
                 if (mobile) {
                     this.updateMobileInput(mobile);
-                    this.getParkingRequests();
-                } else {
-                    this.getParkingRequests();
                 }
             }
         } else {
@@ -144,7 +142,6 @@ export default {
                 path: this.$route.fullPath,
                 query: { tab: getActiveTabStatusLabel(this.activeTab) },
             });
-            this.getParkingRequests();
         }
     },
     methods: {
@@ -156,7 +153,29 @@ export default {
             'resetError',
             'getInterestedVO',
         ]),
-        ...mapActions('user', ['getUserProfile']),
+
+        async loadPortalData() {
+            if (
+                !this.isAuthReady ||
+                !this.isAgent ||
+                this.hasLoadedPortalData
+            ) {
+                return;
+            }
+
+            this.hasLoadedPortalData = true;
+
+            if (this.isAdmin) {
+                await this.$store.dispatch('app/getAgents');
+                await this.$store.dispatch('searchPortal/getAgents');
+            }
+
+            if (this.activeTab === 1 && this.SOLatLngInput) {
+                await this.getInterestedVO(this.SOLatLngInput);
+            } else {
+                await this.getParkingRequests();
+            }
+        },
 
         alertError(msg) {
             this.$buefy.dialog.alert({
@@ -247,7 +266,7 @@ export default {
                         icon: 'alert-circle',
                         ariaRole: 'alertdialog',
                         ariaModal: true,
-                        canCancel: false,        // disables Esc + outside-click
+                        canCancel: false, // disables Esc + outside-click
                         onConfirm: () => window.location.reload(),
                         onCancel: () => window.location.reload(), // belt-and-suspenders
                     });

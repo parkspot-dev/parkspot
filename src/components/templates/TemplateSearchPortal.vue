@@ -823,6 +823,9 @@ export default {
 
         updateLatLng(spotData, latlng) {
             const coordinate = getCoordinate(latlng);
+            if (!coordinate) {
+                return;
+            }
             if (
                 spotData['Latitude'].toString() !== coordinate[0] ||
                 spotData['Longitude'].toString() !== coordinate[1]
