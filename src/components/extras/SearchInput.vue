@@ -68,7 +68,7 @@ export default {
          */
         label: {
             type: String,
-            default : '',
+            default: '',
         },
     },
     emits: ['changed'],
@@ -96,11 +96,14 @@ export default {
     },
     watch: {
         selected(location) {
+            if (!Array.isArray(location?.center)) {
+                return;
+            }
             this.updateMapConfig([location.center[0], location.center[1]]); // needed for recentering of map.
             this.updateSelectedLocation(location); // get the actual value of selected option.
-            this.updateSelectedCity(location.context[0]); // update selected city
-            this.updateSelectedState(location.context[1]); // update selected state
-            this.updateSelectedCountry(location.context[2]); // update selected country
+            this.updateSelectedCity(location.context?.[0]); // update selected city
+            this.updateSelectedState(location.context?.[1]); // update selected state
+            this.updateSelectedCountry(location.context?.[2]); // update selected country
         },
     },
     methods: {

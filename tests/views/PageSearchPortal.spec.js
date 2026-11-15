@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 import PageSearchPortal from '@/views/PageSearchPortal.vue';
 import { mayaClient } from '@/services/api';
@@ -41,10 +41,20 @@ const createStoreMock = (stateOverrides = {}) =>
                 namespaced: true,
                 state: () => ({
                     isAdmin: true,
+                    isAgent: true,
+                    isAuthReady: true,
                     userProfile: { FullName: 'Dev Shrivastav' },
+                    ...stateOverrides.user,
                 }),
                 actions: {
                     getUserProfile: vi.fn(),
+                },
+            },
+            app: {
+                namespaced: true,
+                state: () => ({ agents: [] }),
+                actions: {
+                    getAgents: vi.fn(),
                 },
             },
         },
@@ -96,6 +106,31 @@ describe('PageSearchPortal.vue', () => {
     it('renders search portal root', () => {
         wrapper = mountPage(store);
         expect(wrapper.find('.search-portal-root').exists()).toBe(true);
+    });
+
+    it('waits for auth and role before loading internal data', async () => {
+        store = createStoreMock({
+            user: { isAuthReady: false, isAgent: false },
+        });
+        const dispatch = vi.spyOn(store, 'dispatch');
+
+        wrapper = mountPage(store);
+        await flushPromises();
+
+        expect(dispatch).not.toHaveBeenCalledWith(
+            'searchPortal/getParkingRequests',
+        );
+        expect(dispatch).not.toHaveBeenCalledWith('app/getAgents');
+
+        store.state.user.isAuthReady = true;
+        store.state.user.isAgent = true;
+        await wrapper.vm.$nextTick();
+        await flushPromises();
+
+        expect(dispatch).toHaveBeenCalledWith(
+            'searchPortal/getParkingRequests',
+            undefined,
+        );
     });
 
     it('sanitizeMobile works correctly', () => {

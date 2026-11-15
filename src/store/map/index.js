@@ -186,9 +186,14 @@ const mutations = {
 
 const actions = {
     async searchLocation({ commit }, query) {
+        const searchQuery = typeof query === 'string' ? query.trim() : '';
+        if (!searchQuery) {
+            commit('update-location', []);
+            return;
+        }
         const token =
             'pk.eyJ1IjoicGFya3Nwb3QiLCJhIjoiY2xzbTIzdTllMGIzajJqb3owbXY3bjVqYyJ9.elvf98anNZZj4h-x5Rd0mg'; // parkspotofficial@gmail.com
-        const url = `/geocoding/v5/mapbox.places/${query}.json?access_token=${token}&proximity=77.4977,12.9716`;
+        const url = `/geocoding/v5/mapbox.places/${encodeURIComponent(searchQuery)}.json?access_token=${token}&proximity=77.4977,12.9716`;
         const responseData = await mapBoxClient.get(url);
         const searchResult = _.get(responseData, 'features', []);
         commit('update-location', searchResult);

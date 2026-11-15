@@ -279,6 +279,12 @@ describe('TemplateSearchPortal.vue', () => {
         expect(payload.Longitude).toBeCloseTo(77.3);
     });
 
+    it('ignores an invalid latlng value instead of crashing', async () => {
+        await wrapper.vm.updateLatLng(parkingRequests[0], 'invalid');
+
+        expect(wrapper.emitted('updateRequest')).toBeFalsy();
+    });
+
     it('stores old comments safely', () => {
         wrapper.vm.storeOldComment({ Comments: 'old comment' });
         expect(wrapper.vm.oldComments).toBe('old comment');
