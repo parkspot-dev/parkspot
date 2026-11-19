@@ -177,7 +177,15 @@ const mutations = {
     },
 
     'update-filter-array'(state, filter) {
-        state.filters.push(filter);
+        const existingFilterIndex = state.filters.findIndex(
+            (existingFilter) => existingFilter.name === filter.name,
+        );
+
+        if (existingFilterIndex === -1) {
+            state.filters.push(filter);
+        } else {
+            state.filters.splice(existingFilterIndex, 1, filter);
+        }
     },
     'update-sort'(state, { name, order }) {
         (state.selectedSort.name = name), (state.selectedSort.order = order);
