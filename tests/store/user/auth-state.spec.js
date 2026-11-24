@@ -21,7 +21,8 @@ vi.mock('@/lib/analytics/attribution', () => ({
 vi.mock('@/utils/logger', () => ({
     logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), event: vi.fn() },
 }));
-vi.mock('firebase/auth', () => ({
+vi.mock('firebase/auth', async (importOriginal) => ({
+    ...(await importOriginal()),
     onAuthStateChanged: vi.fn(),
     signInWithPopup: vi.fn(),
     GoogleAuthProvider: vi.fn(),
