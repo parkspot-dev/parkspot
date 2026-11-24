@@ -178,6 +178,30 @@ const actions = {
         commit('set-loading', false);
     },
 
+    async updateSiteId(
+        { commit, dispatch },
+        { bookingId, oldSiteId, newSiteId },
+    ) {
+        commit('reset-global-status');
+        commit('set-loading', true);
+
+        const encodedOldSiteId = encodeURIComponent(oldSiteId);
+        const res = await mayaClient.patch(`/owner/site/${encodedOldSiteId}`, {
+            NewSiteID: newSiteId,
+        });
+
+        if (res?.Success) {
+            await dispatch('getBookingDetails', bookingId);
+            commit('set-success', 'Site ID updated successfully.');
+        } else if (res?.DisplayMsg) {
+            commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
+        } else {
+            commit('set-error', res?.ErrorMsg || 'Unable to update Site ID.');
+        }
+
+        commit('set-loading', false);
+    },
+
     async getActiveBooking({ commit, state }, force = false) {
         commit('reset-global-status');
         if (
