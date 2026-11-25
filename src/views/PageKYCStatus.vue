@@ -51,6 +51,7 @@
             <b-table-column
                 field="FullName"
                 label="Full Name"
+                width="150px"
                 cell-class="has-text-left"
             >
                 <template #default="props">
@@ -59,8 +60,20 @@
             </b-table-column>
 
             <b-table-column
+                field="UserName"
+                label="Username"
+                width="220px"
+                cell-class="has-text-left"
+            >
+                <template #default="props">
+                    <div>{{ props.row?.User?.UserName || '—' }}</div>
+                </template>
+            </b-table-column>
+
+            <b-table-column
                 field="Mobile"
                 label="Mobile"
+                width="150px"
                 searchable
                 cell-class="has-text-left"
             >
@@ -72,6 +85,7 @@
             <b-table-column
                 field="VehicleNumber"
                 label="Vehicle Number"
+                width="150px"
                 cell-class="has-text-left"
             >
                 <template #default="props">
@@ -88,7 +102,8 @@
 
             <b-table-column
                 field="IDProofDocument"
-                label="ID Proof Document View"
+                label="ID Proof"
+                width="150px"
                 cell-class="has-text-left"
             >
                 <template #default="props">
@@ -117,7 +132,8 @@
 
             <b-table-column
                 field="OwnershipProofDocument"
-                label="Ownership Proof Document View"
+                label="Ownership Proof"
+                width="150px"
                 cell-class="has-text-left"
             >
                 <template #default="props">
