@@ -13,7 +13,6 @@ import { identify, setUserProperty } from '@/lib/analytics';
 import { formatRemarkWithUtm } from '@/lib/analytics/attribution';
 import { logger } from '@/utils/logger';
 import { withTimeout } from '@/utils/with-timeout';
-import { clearUser, reportError, setUser } from '@/telemetry';
 
 // Bound for `getIdToken()`, which touches the network on refresh and would
 // otherwise be able to block auth bootstrap indefinitely.

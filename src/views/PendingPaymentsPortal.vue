@@ -137,6 +137,17 @@
 
                 <b-table-column
                     v-slot="props"
+                    field="RentCycle"
+                    label="Rent Cycle"
+                    numeric
+                    sortable
+                    width="120"
+                >
+                    <div>{{ getRentCycle(props.row) }}</div>
+                </b-table-column>
+
+                <b-table-column
+                    v-slot="props"
                     label="Action"
                     centered
                     width="152"
@@ -597,6 +608,10 @@ export default {
 
         getSpotId(payment) {
             return String(payment?.SiteID || '').trim();
+        },
+
+        getRentCycle(payment) {
+            return payment?.RentCycle ?? payment?.Booking?.RentCycle ?? '-';
         },
 
         getSpotDetailRoute(spotId) {

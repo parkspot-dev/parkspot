@@ -25,14 +25,14 @@ const ENABLED = Object.freeze({
     NEW_RELIC_BROWSER_ENABLED: 'true',
     NEW_RELIC_ACCOUNT_ID: '7629005',
     NEW_RELIC_BROWSER_APPLICATION_ID: '1589185089',
-    NEW_RELIC_BROWSER_LICENSE_KEY: 'NRBR-b5f8ce862e40dfb4cd2',
+    NEW_RELIC_BROWSER_LICENSE_KEY: 'NRBR-TEST_ONLY_PLACEHOLDER',
 });
 
 const SHA = '0123456789abcdef0123456789abcdef01234567';
 
-// Made-up values in the shape of server-side keys.
-const USER_API_KEY = ['NRAK', '0123456789ABCDEFGHIJKLMNOPQ'].join('-');
-const LICENSE_KEY = ['0123456789abcdef0123456789abcdef0123', 'NRAL'].join('');
+// Explicit placeholders in the shape of server-side keys.
+const USER_API_KEY = 'NRAK-TEST-ONLY-PLACEHOLDER';
+const LICENSE_KEY = 'NRAL-TEST-ONLY-PLACEHOLDER';
 
 const LOADER = '/* loader */';
 
@@ -127,13 +127,13 @@ describe('scripts/newrelic/vite-plugin', () => {
                     accountID: '7629005',
                     trustKey: '7629005',
                     agentID: '1589185089',
-                    licenseKey: 'NRBR-b5f8ce862e40dfb4cd2',
+                    licenseKey: ENABLED.NEW_RELIC_BROWSER_LICENSE_KEY,
                     applicationID: '1589185089',
                 },
                 info: {
                     beacon: 'bam.nr-data.net',
                     errorBeacon: 'bam.nr-data.net',
-                    licenseKey: 'NRBR-b5f8ce862e40dfb4cd2',
+                    licenseKey: ENABLED.NEW_RELIC_BROWSER_LICENSE_KEY,
                     applicationID: '1589185089',
                     sa: 1,
                     jsAttributes: {
@@ -241,16 +241,25 @@ describe('scripts/newrelic/vite-plugin', () => {
             fs.rmSync(tmpDir, { recursive: true, force: true });
         });
 
-        it('reads the pinned loader', () => {
+        it('reads the vendored loader whose digest matches the pin', () => {
             expect(path.basename(LOADER_PATH)).toBe(
                 `nr-loader-spa-${LOADER_VERSION}.min.js`,
             );
             expect(readLoader()).toContain(LOADER_VERSION);
         });
 
+        it('accepts a Windows CRLF checkout of the pinned loader', () => {
+            const file = path.join(tmpDir, 'loader.js');
+            const source = fs
+                .readFileSync(LOADER_PATH, 'utf8')
+                .replace(/\r?\n/g, '\r\n');
+            fs.writeFileSync(file, source);
+            expect(readLoader(file)).toBe(source);
+        });
+
         it('refuses a loader that does not match LOADER_SHA256', () => {
             const file = path.join(tmpDir, 'loader.js');
-            fs.writeFileSync(file, `${readLoader()}\n`);
+            fs.writeFileSync(file, `${fs.readFileSync(LOADER_PATH, 'utf8')}\n`);
             expect(() => readLoader(file)).toThrow(
                 /does not match LOADER_SHA256/,
             );
@@ -382,7 +391,7 @@ describe('scripts/newrelic/vite-plugin', () => {
             }).transformIndexHtml(HTML);
             expect(html).toContain(
                 '"jsAttributes":{"environment":"deploy-preview",' +
-                    '"application.version":"0123456789ab"}',
+                    '"application.version":"0123456789ab"',
             );
         });
 
