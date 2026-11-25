@@ -87,11 +87,22 @@
                         <p>
                             {{ currBookingDetails.Booking.ID }}
                         </p>
-                        <a :href="sdpURL" target="_blank">
-                            <p>
-                                {{ currBookingDetails.Booking.SiteID }}
-                            </p>
-                        </a>
+                        <div class="site-id-value">
+                            <a :href="sdpURL" target="_blank">
+                                <p>
+                                    {{ currBookingDetails.Booking.SiteID }}
+                                </p>
+                            </a>
+                            <button
+                                v-if="isAdmin"
+                                class="site-id-edit-button"
+                                type="button"
+                                aria-label="Edit Site ID"
+                                @click="openSiteIdModal"
+                            >
+                                <AtomIcon :icon="'pencil'" size="is-small" />
+                            </button>
+                        </div>
                         <div
                             v-if="editField === 'Booking Details'"
                             class="select"
@@ -620,6 +631,42 @@
                 <div v-else>No payment history found.</div>
             </div>
         </div>
+        <b-modal
+            v-model="showSiteIdModal"
+            has-modal-card
+            trap-focus
+            :destroy-on-hide="false"
+        >
+            <div class="modal-card site-id-modal">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Update Site ID</p>
+                </header>
+                <section class="modal-card-body">
+                    <div class="site-id-fields">
+                        <div class="site-id-row site-id-current-field">
+                            <label>Old Site ID:</label>
+                            <p>{{ currBookingDetails.Booking.SiteID }}</p>
+                        </div>
+                        <div class="site-id-row site-id-new-field">
+                            <label for="new-site-id">New Site ID:</label>
+                            <AtomInput
+                                id="new-site-id"
+                                v-model="newSiteId"
+                                placeholder="Enter new Site ID"
+                            />
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot site-id-modal-actions">
+                    <AtomButton @btn-click="submitSiteIdChange">
+                        Submit
+                    </AtomButton>
+                    <AtomButton outlined @btn-click="closeSiteIdModal">
+                        Cancel
+                    </AtomButton>
+                </footer>
+            </div>
+        </b-modal>
     </section>
 </template>
 
@@ -680,6 +727,8 @@ export default {
             paymentPeriodicityLabels: PaymentPeriodicityLabels,
             paymentTypeLabels: PaymentTypeLabels,
             refundDialogVisible: false,
+            showSiteIdModal: false,
+            newSiteId: '',
             selectedPaymentAmount: null,
             toolTipLabel: 'Copy payment url!',
             rentValidationError: '',
@@ -809,6 +858,7 @@ export default {
             'createRefund',
             'setUpdatedFields',
             'changePaymentType',
+            'updateSiteId',
         ]),
         ...mapActions('user', ['getUserProfile']),
 
@@ -894,6 +944,46 @@ export default {
             return moment(date).format('MMM Do YYYY');
         },
 
+        openSiteIdModal() {
+            this.newSiteId = '';
+            this.showSiteIdModal = true;
+        },
+
+        closeSiteIdModal() {
+            this.showSiteIdModal = false;
+            this.newSiteId = '';
+        },
+
+        submitSiteIdChange() {
+            const siteId = this.newSiteId.trim();
+            if (!siteId) {
+                this.alertError('Please enter a new Site ID.');
+                return;
+            }
+
+            const currentSiteId = String(
+                this.currBookingDetails?.Booking?.SiteID || '',
+            ).trim();
+            if (siteId === currentSiteId) {
+                this.closeSiteIdModal();
+                return;
+            }
+
+            this.updateSiteId({
+                bookingId: this.currBookingDetails.Booking.ID,
+                siteId,
+            });
+            this.closeSiteIdModal();
+        },
+
+        submitBookingUpdate(updatedFields) {
+            this.setUpdatedFields(updatedFields);
+            this.$emit(
+                'update-booking-details',
+                this.currBookingDetails.Booking,
+            );
+        },
+
         enableEdit(fieldName) {
             this.editField = fieldName;
         },
@@ -977,11 +1067,7 @@ export default {
             }
 
             if (updatedArray.length > 0) {
-                this.setUpdatedFields(updatedArray);
-                this.$emit(
-                    'update-booking-details',
-                    this.currBookingDetails.Booking,
-                );
+                this.submitBookingUpdate(updatedArray);
             }
 
             this.editField = null;
@@ -1220,6 +1306,38 @@ export default {
         }
     }
 
+    .site-id-value {
+        display: flex;
+        align-items: center;
+        min-height: 22px;
+        margin-bottom: 16px;
+
+        p {
+            margin-bottom: 0;
+            min-height: 22px;
+        }
+    }
+
+    .site-id-edit-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2px;
+        border: 0;
+        background: transparent;
+        color: var(--secondary-color);
+        cursor: pointer;
+
+        :deep(.icon) {
+            font-size: 1.15rem;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    }
+
     .edit-col {
         width: 50%;
         text-align: left;
@@ -1243,6 +1361,57 @@ export default {
 
         .cancel-icon {
             color: var(--parkspot-red);
+        }
+    }
+}
+
+.site-id-modal {
+    width: 540px;
+    max-width: calc(100vw - 32px);
+
+    .modal-card-body {
+        padding: 24px;
+    }
+
+    .site-id-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .site-id-row {
+        display: grid;
+        grid-template-columns: 120px minmax(0, 1fr);
+        align-items: center;
+        gap: 12px;
+
+        label {
+            font-weight: 600;
+        }
+    }
+
+    .site-id-current-field {
+        p {
+            margin: 0;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    .site-id-new-field {
+        :deep(.field) {
+            margin-bottom: 0;
+        }
+    }
+
+    .site-id-modal-actions {
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    @media only screen and (max-width: 420px) {
+        .site-id-row {
+            grid-template-columns: 100px minmax(0, 1fr);
+            gap: 8px;
         }
     }
 }
