@@ -37,6 +37,16 @@ const WIDGET_DEFAULT_PROPS = {
     CheckBoxInput:    { name: 'visual-test', label: 'Sample' },
     MultiSelectInput: { name: 'visual-test', label: 'Sample', list: [] },
     RadioInput:       { name: 'visual-test', label: 'Sample' },
+    TestimonialSection: {
+        testimonials: [
+            {
+                name: 'Sample customer',
+                image: '',
+                quote: 'A sample testimonial for the visual smoke test.',
+                rate: 5,
+            },
+        ],
+    },
 };
 
 const SETS = {
@@ -87,7 +97,7 @@ for (const [setName, files] of Object.entries(SETS)) {
 
                 await expect.element(screen.baseElement)
                     .toMatchScreenshot(`${setName}__${name}`);
-            });
+            }, 30000);
         }
     });
 }

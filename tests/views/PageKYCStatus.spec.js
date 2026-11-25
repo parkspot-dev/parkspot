@@ -5,7 +5,8 @@ import PageKYCStatus from '@/views/PageKYCStatus.vue';
 import { flushPromises } from '@vue/test-utils';
 import { SEARCH_TYPE } from '@/store/kycStatusPortal';
 
-vi.mock('@/constant/enums', () => ({
+vi.mock('@/constant/enums', async (importOriginal) => ({
+    ...(await importOriginal()),
     KYCStatusLabel: ['PENDING', 'APPROVED', 'REJECTED'],
     KYCStatus: {
         PENDING: 0,
