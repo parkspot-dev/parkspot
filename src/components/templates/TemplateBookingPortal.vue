@@ -971,8 +971,7 @@ export default {
 
             this.updateSiteId({
                 bookingId: this.currBookingDetails.Booking.ID,
-                oldSiteId: currentSiteId,
-                newSiteId: siteId,
+                siteId,
             });
             this.closeSiteIdModal();
         },

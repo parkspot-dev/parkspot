@@ -178,23 +178,23 @@ const actions = {
         commit('set-loading', false);
     },
 
-    async updateSiteId(
-        { commit, dispatch },
-        { bookingId, oldSiteId, newSiteId },
-    ) {
+    async updateSiteId({ commit, dispatch }, { bookingId, siteId }) {
         commit('reset-global-status');
         commit('set-loading', true);
 
-        const encodedOldSiteId = encodeURIComponent(oldSiteId);
-        const res = await mayaClient.patch(`/owner/site/${encodedOldSiteId}`, {
-            NewSiteID: newSiteId,
-        });
+        const res = await mayaClient.patch(
+            `/owner/booking/${encodeURIComponent(bookingId)}/site-id`,
+            { SiteID: siteId },
+        );
 
         if (res?.Success) {
             await dispatch('getBookingDetails', bookingId);
             commit('set-success', 'Site ID updated successfully.');
         } else if (res?.DisplayMsg) {
-            commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
+            commit(
+                'set-error',
+                res.DisplayMsg + (res.ErrorMsg ? ` ( ${res.ErrorMsg} )` : ''),
+            );
         } else {
             commit('set-error', res?.ErrorMsg || 'Unable to update Site ID.');
         }
