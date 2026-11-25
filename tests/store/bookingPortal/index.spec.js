@@ -139,6 +139,45 @@ describe('BookingPortal Store', () => {
         expect(commit).toHaveBeenCalledWith('set-updated-fields', []);
     });
 
+    it('updateSiteId patches the booking SiteID and refreshes booking details', async () => {
+        mayaClient.patch.mockResolvedValue({ Success: true });
+
+        await actions.updateSiteId(
+            { commit, dispatch },
+            { bookingId: 30029, siteId: 'BLR#TESTSITE#001' },
+        );
+
+        expect(mayaClient.patch).toHaveBeenCalledWith(
+            '/owner/booking/30029/site-id',
+            { SiteID: 'BLR#TESTSITE#001' },
+        );
+        expect(dispatch).toHaveBeenCalledWith('getBookingDetails', 30029);
+        expect(commit).toHaveBeenCalledWith(
+            'set-success',
+            'Site ID updated successfully.',
+        );
+        expect(commit).toHaveBeenLastCalledWith('set-loading', false);
+    });
+
+    it('updateSiteId commits API failures', async () => {
+        mayaClient.patch.mockResolvedValue({
+            DisplayMsg: 'Site ID update failed',
+            ErrorMsg: 'Invalid Site ID',
+        });
+
+        await actions.updateSiteId(
+            { commit, dispatch },
+            { bookingId: 30029, siteId: 'invalid' },
+        );
+
+        expect(commit).toHaveBeenCalledWith(
+            'set-error',
+            'Site ID update failed ( Invalid Site ID )',
+        );
+        expect(dispatch).not.toHaveBeenCalled();
+        expect(commit).toHaveBeenLastCalledWith('set-loading', false);
+    });
+
     it('changePaymentType commits success message', async () => {
         mayaClient.patch.mockResolvedValue({ Success: true });
 

@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createStore } from 'vuex';
 import TemplateBookingPortal from '@/components/templates/TemplateBookingPortal.vue';
@@ -44,6 +44,8 @@ const paymentsMock = [
     },
 ];
 
+const updateSiteIdMock = vi.fn();
+
 const createVuexStore = (isAdmin = true, isAgent = false) =>
     createStore({
         modules: {
@@ -74,6 +76,7 @@ const createVuexStore = (isAdmin = true, isAgent = false) =>
                     setUpdatedFields: vi.fn(),
                     createRefund: vi.fn(),
                     changePaymentType: vi.fn(),
+                    updateSiteId: updateSiteIdMock,
                 },
                 mutations: {
                     'set-isField-updated': vi.fn(),
@@ -98,21 +101,26 @@ const factory = (isAdmin = true, isAgent = false) => {
         global: {
             plugins: [store],
             stubs: {
-                AtomButton: {
-                    template: `<button @click="$emit('click')"><slot /></button>`,
+                'AtomButton': {
+                    emits: ['btnClick'],
+                    template: `<button @click="$emit('btnClick')"><slot /></button>`,
                 },
-                AtomIcon: {
+                'AtomIcon': {
                     template: `<span @click="$emit('click')"></span>`,
                 },
-                AtomTooltip: true,
-                AtomDatePicker: true,
-                AtomInput: { template: `<input />` },
-                RefundDialog: true,
-                SelectInput: {
+                'AtomTooltip': true,
+                'AtomDatePicker': true,
+                'AtomInput': { template: `<input />` },
+                'b-modal': {
+                    props: ['modelValue'],
+                    template: '<div v-if="modelValue"><slot /></div>',
+                },
+                'RefundDialog': true,
+                'SelectInput': {
                     name: 'SelectInput',
                     template: `<select></select>`,
                 },
-                RouterLink: true,
+                'RouterLink': true,
             },
             mocks: {
                 $router: {
@@ -135,6 +143,7 @@ describe('TemplateBookingPortal.vue', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
+        updateSiteIdMock.mockResolvedValue({ Success: true });
         global.navigator.clipboard = {
             writeText: vi.fn().mockResolvedValue(),
         };
@@ -153,6 +162,48 @@ describe('TemplateBookingPortal.vue', () => {
     it('renders booking ID and site ID', () => {
         expect(wrapper.text()).toContain('101');
         expect(wrapper.text()).toContain('SITE123');
+    });
+
+    it('shows the Site ID pencil only for admins and opens the existing modal', async () => {
+        expect(wrapper.find('.site-id-edit-button').exists()).toBe(true);
+
+        await wrapper.find('.site-id-edit-button').trigger('click');
+
+        expect(wrapper.vm.showSiteIdModal).toBe(true);
+        expect(wrapper.find('.site-id-modal').text()).toContain('Old Site ID:');
+
+        const { wrapper: nonAdminWrapper } = factory(false);
+        expect(nonAdminWrapper.find('.site-id-edit-button').exists()).toBe(
+            false,
+        );
+        nonAdminWrapper.unmount();
+    });
+
+    it('submits the Site ID through the booking update action and closes the modal', async () => {
+        await wrapper.find('.site-id-edit-button').trigger('click');
+        wrapper.vm.newSiteId = 'BLR#TESTSITE#001';
+        await wrapper.find('.site-id-modal-actions button').trigger('click');
+        await flushPromises();
+
+        expect(updateSiteIdMock).toHaveBeenCalledWith(expect.anything(), {
+            bookingId: 101,
+            siteId: 'BLR#TESTSITE#001',
+        });
+        expect(wrapper.vm.showSiteIdModal).toBe(false);
+    });
+
+    it('keeps the Site ID modal open and skips the request for an empty value', async () => {
+        await wrapper.find('.site-id-edit-button').trigger('click');
+        await wrapper.find('.site-id-modal-actions button').trigger('click');
+        await flushPromises();
+
+        expect(wrapper.vm.showSiteIdModal).toBe(true);
+        expect(updateSiteIdMock).not.toHaveBeenCalled();
+        expect(wrapper.vm.$buefy.dialog.alert).toHaveBeenCalledWith(
+            expect.objectContaining({
+                message: 'Please enter a new Site ID.',
+            }),
+        );
     });
 
     it('renders vehicle owner user name (VOUserName)', async () => {
