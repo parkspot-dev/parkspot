@@ -35,6 +35,9 @@ describe('createErrorFilter()', () => {
         'Firebase: Error (auth/popup-closed-by-user).',
         'Firebase: Error (auth/cancelled-popup-request).',
         'Firebase: Error (auth/user-cancelled).',
+        'Unhandled Promise Rejection: Object Not Found Matching Id:3, MethodName:update, ParamCount:4',
+        "Can't find variable: _AutofillCallbackHandler",
+        'Error invoking postMessage: Java object is gone',
     ])('drops "%s"', (message) => {
         expect(createErrorFilter()(error(message))).toBe(true);
     });
@@ -101,11 +104,26 @@ describe('createErrorFilter()', () => {
         ],
         ['Importing a module script failed.', 'chunk-load'],
         ['Unable to preload CSS for /assets/PageSrp-B1.css', 'chunk-load'],
+        [
+            "'text/html' is not a valid JavaScript MIME type for module script 'https://www.parkspot.in/assets/PendingPaymentsPortal-C9PEudSJ.js'.",
+            'chunk-load',
+        ],
         ['Network Error', 'network'],
         ['Failed to fetch', 'network'],
         ['Load failed', 'network'],
         ['Unhandled Promise Rejection: Failed to fetch', 'network'],
         ['NetworkError when attempting to fetch resource.', 'network'],
+        ['Unhandled Promise Rejection: Failed to initialize WebGL.', 'webgl'],
+        [
+            'Unhandled Promise Rejection: u.texStorage2D is not a function',
+            'webgl',
+        ],
+        ["Unhandled Promise Rejection: Container 'map' not found.", 'map-init'],
+        ['Request failed with status code 400', 'maya-4xx'],
+        ['Request failed with status code 404', 'maya-4xx'],
+        ['Request failed with status code 500', 'maya-5xx'],
+        ['Request failed with status code 502', 'maya-5xx'],
+        ['payment/validate failed with HTTP 500', 'maya-5xx'],
     ])('groups "%s" as %s', (message, group) => {
         expect(createErrorFilter()(error(message))).toEqual({ group });
     });

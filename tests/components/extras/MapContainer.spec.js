@@ -1,10 +1,9 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { createStore } from "vuex";
-import MapContainer from "@/components/extras/MapContainer.vue";
+import { mount } from '@vue/test-utils';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { createStore } from 'vuex';
+import MapContainer from '@/components/extras/MapContainer.vue';
 import mapboxgl from 'mapbox-gl';
-import { flushPromises } from "@vue/test-utils";
-
+import { flushPromises } from '@vue/test-utils';
 
 vi.mock('mapbox-gl', () => {
     const mapMock = {
@@ -28,28 +27,33 @@ vi.mock('mapbox-gl', () => {
 
     return {
         default: {
-            Map: vi.fn(function() {return mapMock; }),
-            Marker: vi.fn(function() {return markerMock; }),
-            Popup: vi.fn(function() {return popupMock; }),
+            supported: vi.fn(() => true),
+            Map: vi.fn(function () {
+                return mapMock;
+            }),
+            Marker: vi.fn(function () {
+                return markerMock;
+            }),
+            Popup: vi.fn(function () {
+                return popupMock;
+            }),
         },
     };
 });
 
-
 vi.mock('@/firebase', () => ({
-    getValueFromFirebase: vi.fn(() => 
-        Promise.resolve([{ token: 'fake-mapbox-token' }])
+    getValueFromFirebase: vi.fn(() =>
+        Promise.resolve([{ token: 'fake-mapbox-token' }]),
     ),
 }));
-
-
 
 describe('MapContainer.vue', () => {
     let wrapper;
     let store;
 
-
     beforeEach(async () => {
+        vi.clearAllMocks();
+        mapboxgl.supported.mockReturnValue(true);
         store = createStore({
             modules: {
                 map: {
@@ -70,7 +74,7 @@ describe('MapContainer.vue', () => {
                     },
                     mutations: {
                         'update-map-config': vi.fn(),
-                        setFilteredSpots(state, spots){
+                        'setFilteredSpots'(state, spots) {
                             state.filteredSpots = spots;
                         },
                     },
@@ -101,7 +105,6 @@ describe('MapContainer.vue', () => {
         vi.clearAllMocks();
     });
 
-
     it('renders map container', () => {
         expect(wrapper.find('#map').exists()).toBe(true);
     });
@@ -112,6 +115,38 @@ describe('MapContainer.vue', () => {
 
     it('initializes mapbox map', () => {
         expect(mapboxgl.Map).toHaveBeenCalled();
+    });
+
+    it('uses the component container element', () => {
+        expect(mapboxgl.Map.mock.calls[0][0].container).toBe(
+            wrapper.vm.$refs.mapContainer,
+        );
+    });
+
+    it('falls back when WebGL is unavailable', async () => {
+        mapboxgl.supported.mockReturnValue(false);
+        mapboxgl.Map.mockClear();
+        wrapper.vm.map = null;
+        wrapper.vm.mapUnavailable = false;
+
+        expect(() => wrapper.vm.renderMap()).not.toThrow();
+        expect(mapboxgl.Map).not.toHaveBeenCalled();
+        expect(wrapper.vm.mapUnavailable).toBe(true);
+        await wrapper.vm.$nextTick();
+        expect(wrapper.text()).toContain('Map is unavailable');
+    });
+
+    it('handles mapbox initialization errors', async () => {
+        mapboxgl.Map.mockImplementationOnce(function () {
+            throw new Error('Failed to initialize WebGL.');
+        });
+        wrapper.vm.map = null;
+        wrapper.vm.mapUnavailable = false;
+
+        expect(() => wrapper.vm.renderMap()).not.toThrow();
+        expect(wrapper.vm.mapUnavailable).toBe(true);
+        await wrapper.vm.$nextTick();
+        expect(wrapper.text()).toContain('Map is unavailable');
     });
 
     it('calls updateMarkers when filteredSpots changes', async () => {
@@ -134,15 +169,14 @@ describe('MapContainer.vue', () => {
         expect(spy).toHaveBeenCalled();
     });
 
-
     it('recenterMap flies map and moves marker', () => {
-        wrapper.vm.map = {flyTo: vi.fn()};
-        wrapper.vm.marker = {setLngLat: vi.fn()};
+        wrapper.vm.map = { flyTo: vi.fn() };
+        wrapper.vm.marker = { setLngLat: vi.fn() };
 
         const center = [77.6, 12.9];
         wrapper.vm.recenterMap(center);
 
-        expect(wrapper.vm.map.flyTo).toHaveBeenCalledWith({center});
+        expect(wrapper.vm.map.flyTo).toHaveBeenCalledWith({ center });
         expect(wrapper.vm.marker.setLngLat).toHaveBeenCalledWith(center);
     });
 

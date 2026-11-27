@@ -1,5 +1,13 @@
 import { mayaClient } from '@/services/api';
+import { reportError } from '@/telemetry';
+import {
+    getStoredValue,
+    removeStoredValue,
+    setStoredValue,
+} from '@/utils/storage';
 
+const cacheParseError = new Error('Invalid Maya agents cache');
+const cacheWriteError = new Error('Failed to cache Maya agents');
 const CACHE_KEY = 'maya_agents_cache';
 const CACHE_TTL = 5 * 60 * 1000;
 
@@ -33,7 +41,7 @@ const actions = {
         if (state.loading) return;
 
         try {
-            const cached = localStorage.getItem(CACHE_KEY);
+            const cached = getStoredValue(CACHE_KEY);
             if (cached) {
                 const parsed = JSON.parse(cached);
 
@@ -48,7 +56,11 @@ const actions = {
                 }
             }
         } catch {
-            localStorage.removeItem(CACHE_KEY);
+            reportError(cacheParseError, {
+                source: 'app',
+                failure: 'agents_cache_parse',
+            });
+            removeStoredValue(CACHE_KEY);
         }
 
         commit('set-loading', true);
@@ -65,7 +77,7 @@ const actions = {
             const now = Date.now();
 
             try {
-                localStorage.setItem(
+                setStoredValue(
                     CACHE_KEY,
                     JSON.stringify({
                         data: filtered,
@@ -73,14 +85,18 @@ const actions = {
                     }),
                 );
             } catch {
-                localStorage.removeItem(CACHE_KEY);
+                reportError(cacheWriteError, {
+                    source: 'app',
+                    failure: 'agents_cache_write',
+                });
+                removeStoredValue(CACHE_KEY);
             }
 
             commit('set-agents', filtered);
             commit('set-last-fetched', now);
         } catch (error) {
             try {
-                const cached = localStorage.getItem(CACHE_KEY);
+                const cached = getStoredValue(CACHE_KEY);
                 if (cached) {
                     const parsed = JSON.parse(cached);
                     if (parsed?.data) {
@@ -90,7 +106,11 @@ const actions = {
                     }
                 }
             } catch {
-                localStorage.removeItem(CACHE_KEY);
+                reportError(cacheParseError, {
+                    source: 'app',
+                    failure: 'agents_cache_fallback',
+                });
+                removeStoredValue(CACHE_KEY);
             }
 
             throw error;
@@ -100,7 +120,7 @@ const actions = {
     },
 
     clearAgents({ commit }) {
-        localStorage.removeItem(CACHE_KEY);
+        removeStoredValue(CACHE_KEY);
         commit('set-agents', []);
         commit('set-last-fetched', null);
     },

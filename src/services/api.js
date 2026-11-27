@@ -2,6 +2,7 @@ import axios from 'axios';
 import { auth } from '../firebase';
 import { reportError } from '../telemetry';
 import { getPtid } from '../utils/ptid';
+import { getStoredValue, setStoredValue } from '../utils/storage';
 import { logger } from '../utils/logger';
 import { withTimeout } from '../utils/with-timeout';
 import { MAYA_REQUEST_TIMEOUT_MS } from '../constant/constant';
@@ -212,7 +213,7 @@ class MayaApiService extends BaseApiService {
                 // short-circuit, touching `localStorage` would throw a
                 // `ReferenceError` mid-request and pollute build logs with
                 // misleading "Http server/network error" entries.
-                if (typeof localStorage === 'undefined') {
+                if (typeof window === 'undefined') {
                     config.adapter = () =>
                         Promise.resolve({
                             data: {},
@@ -241,20 +242,24 @@ class MayaApiService extends BaseApiService {
                 // unexpired token and refreshes it transparently. The refresh
                 // is bounded and best-effort: on timeout/failure we keep the
                 // existing stored token.
-                if (auth.currentUser && localStorage.getItem('PSAuthKey')) {
+                if (auth.currentUser && getStoredValue('PSAuthKey')) {
                     try {
                         const freshToken = await withTimeout(
                             auth.currentUser.getIdToken(),
                             ID_TOKEN_TIMEOUT_MS,
                         );
                         if (freshToken && freshToken.trim()) {
-                            localStorage.setItem('PSAuthKey', freshToken);
+                            setStoredValue('PSAuthKey', freshToken);
                         }
-                    } catch {
+                    } catch (error) {
+                        reportError(error, {
+                            source: 'auth_token_refresh',
+                            failure: 'token_refresh',
+                        });
                         // Keep the existing stored token on refresh failure.
                     }
                 }
-                const token = localStorage.getItem('PSAuthKey');
+                const token = getStoredValue('PSAuthKey');
                 const isInvalidToken =
                     !token ||
                     !token.trim() ||
@@ -297,7 +302,7 @@ class MayaApiService extends BaseApiService {
             case 404: // requested spot/site does not exist or isn't supported
                 alert(
                     error.response.data?.DisplayMsg ||
-                        'We couldn\'t find a parking spot for this search. Please try a different location.',
+                        "We couldn't find a parking spot for this search. Please try a different location.",
                 );
                 break;
 

@@ -16,7 +16,7 @@ export default {
             type: String,
             default: 'p',
             validator: (value) => {
-                return value.match(/(p|span)/);
+                return typeof value === 'string' && value.match(/(p|span)/);
             },
         },
         /**
@@ -27,7 +27,10 @@ export default {
             type: String,
             default: 'medium',
             validator: (value) => {
-                return value.match(/(medium|intro|large|small)/);
+                return (
+                    typeof value === 'string' &&
+                    value.match(/(medium|intro|large|small)/)
+                );
             },
         },
     },
