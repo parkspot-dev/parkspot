@@ -27,7 +27,9 @@ export default {
             type: String,
             default: 'div',
             validator: (value) => {
-                return value.match(/(div|section)/);
+                return (
+                    typeof value === 'string' && value.match(/(div|section)/)
+                );
             },
         },
         /**
@@ -62,7 +64,10 @@ export default {
             type: String,
             default: 'text',
             validator: (value) => {
-                return value.match(/(text|number|email)/);
+                return (
+                    typeof value === 'string' &&
+                    value.match(/(text|number|email)/)
+                );
             },
         },
 

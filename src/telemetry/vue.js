@@ -12,7 +12,7 @@
 //
 // Client-only. Does nothing when the agent isn't on the page.
 
-import { createErrorFilter } from './error-filter.js';
+import { CHUNK_LOAD_ERROR, createErrorFilter } from './error-filter.js';
 import {
     disableSessionReplay,
     getAgent,
@@ -24,6 +24,31 @@ import {
 // Production builds pass a link such as
 // https://vuejs.org/error-reference/#runtime-1 instead of a description.
 const VUE_ERROR_REFERENCE = 'https://vuejs.org/error-reference/#';
+const CHUNK_RELOAD_KEY = 'parkspot_chunk_reload';
+const CHUNK_RELOAD_TTL_MS = 5 * 60 * 1000;
+
+function reportChunkReloadStateFailure(error) {
+    reportError(new Error('Chunk reload state unavailable'), {
+        source: 'router',
+        failure: 'chunk_reload_state',
+        storage_error_name: String(error?.name || 'Error'),
+    });
+}
+
+function shouldReloadForChunk(error) {
+    if (!CHUNK_LOAD_ERROR.test(String(error?.message ?? ''))) return false;
+    if (typeof window === 'undefined') return false;
+    try {
+        const now = Date.now();
+        const last = Number(window.sessionStorage.getItem(CHUNK_RELOAD_KEY));
+        if (last && now - last < CHUNK_RELOAD_TTL_MS) return false;
+        window.sessionStorage.setItem(CHUNK_RELOAD_KEY, String(now));
+        return true;
+    } catch (error) {
+        reportChunkReloadStateFailure(error);
+        return false;
+    }
+}
 
 // Route records are named in src/router/routes.js; the matched path
 // pattern ("/spot-details/:id") is the fallback, never the actual URL.
@@ -33,7 +58,7 @@ function routeName(route) {
 }
 
 export const telemetryPlugin = {
-    install(app, { router } = {}) {
+    install(app, { router, reload } = {}) {
         if (!getAgent()) return;
         setErrorFilter(createErrorFilter());
 
@@ -54,11 +79,16 @@ export const telemetryPlugin = {
         };
 
         if (!router) return;
+        const reloadPage =
+            typeof reload === 'function'
+                ? reload
+                : () => window.location.reload();
         router.onError((err) => {
             reportError(err, { source: 'router' });
             // Same as above: a registered onError replaces the router's
             // console.error.
             console.error(err);
+            if (shouldReloadForChunk(err)) reloadPage();
         });
         // beforeResolve runs once every guard has let the navigation
         // through, before the page renders: none of it is recorded, and a

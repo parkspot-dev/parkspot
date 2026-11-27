@@ -71,7 +71,12 @@ describe('store/user onAuthStateChanged listener', () => {
         localStorage.clear();
         capturedAuthCallback = null;
         storeMock.state = { user: { user: null } };
-        storeMock.commit = vi.fn();
+        storeMock.commit = vi.fn((type, payload) => {
+            if (type === 'user/update-user') {
+                storeMock.state.user = storeMock.state.user || {};
+                storeMock.state.user.user = payload;
+            }
+        });
         storeMock.dispatch = vi.fn().mockResolvedValue(undefined);
 
         vi.resetModules();
@@ -105,6 +110,7 @@ describe('store/user onAuthStateChanged listener', () => {
         const user = makeFirebaseUser();
 
         await capturedAuthCallback(user);
+        await flush();
 
         expect(storeMock.commit).toHaveBeenCalledWith('user/update-user', user);
         expect(storeMock.dispatch).toHaveBeenCalledWith('user/getUserProfile');

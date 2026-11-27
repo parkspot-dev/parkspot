@@ -16,23 +16,40 @@ const IGNORED_MESSAGES = [
     /^Script error\.?$/i,
     // The visitor closed or replaced the Google sign-in popup.
     /\bauth\/(?:popup-closed-by-user|cancelled-popup-request|user-cancelled)\b/,
+    // Outlook SafeLinks / CefSharp bot scanners inject scripts and then
+    // lose their object handles. Known non-user-facing telemetry noise.
+    /Object Not Found Matching Id:\d+,\s*MethodName:\w+,\s*ParamCount:\d+/i,
+    // Injected by mobile password managers and in-app-browser bridges.
+    /Can't find variable: _AutofillCallbackHandler/i,
+    /Error invoking postMessage: Java object is gone/i,
 ];
 
 const EXTENSION_URL =
     /\b(?:chrome|moz|safari(?:-web)?|ms-browser)-extension:\/\//i;
 
 // A tab opened before a deploy requests chunks that no longer exist.
-const CHUNK_LOAD_ERROR =
-    /Failed to fetch dynamically imported module|error loading dynamically imported module|Importing a module script failed|Unable to preload CSS/i;
+export const CHUNK_LOAD_ERROR =
+    /Failed to fetch dynamically imported module|error loading dynamically imported module|Importing a module script failed|Unable to preload CSS|not a valid JavaScript MIME type for module script/i;
 // Offline / flaky-network failures from fetch and axios.
 const NETWORK_ERROR =
-    /^(?:Unhandled Promise Rejection: )?(?:Network Error|Failed to fetch|Load failed|NetworkError when attempting to fetch resource\.)$/i;
+    /^(?:Unhandled Promise Rejection: )?(?:Network Error|Failed to fetch|Load failed|NetworkError when attempting to fetch resource\.|timeout of \d+ms exceeded|Request aborted)$/i;
+const WEBGL_ERROR =
+    /Failed to initialize WebGL|texStorage2D is not a function|WebGL is not supported/i;
+const MAP_CONTAINER_ERROR =
+    /Container 'map' not found|Map container not found/i;
+const MAYA_4XX_ERROR = /Request failed with status code (?:400|401|403|404)/i;
+const MAYA_5XX_ERROR =
+    /Request failed with status code 5\d\d|payment\/validate failed with HTTP 5\d\d/i;
 
 // Fingerprints that fold many near-identical errors into one Errors
 // Inbox group. Add new groups here rather than at call sites.
 const ERROR_GROUPS = [
     { group: 'chunk-load', pattern: CHUNK_LOAD_ERROR },
     { group: 'network', pattern: NETWORK_ERROR },
+    { group: 'webgl', pattern: WEBGL_ERROR },
+    { group: 'map-init', pattern: MAP_CONTAINER_ERROR },
+    { group: 'maya-4xx', pattern: MAYA_4XX_ERROR },
+    { group: 'maya-5xx', pattern: MAYA_5XX_ERROR },
 ];
 
 // Per-message cap within one window, so a render loop or a retry storm

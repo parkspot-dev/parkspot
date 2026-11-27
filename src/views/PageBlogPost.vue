@@ -88,9 +88,10 @@ export default {
             const blog = this.blog;
             this.title = blog ? blog.title : this.$route.params.id;
         }
-        this.getContentById(this.$route.params.id).then(
-            (res) => (this.content = res),
-        );
+        const contentRequest = this.getContentById(this.$route.params.id);
+        if (contentRequest && typeof contentRequest.then === 'function') {
+            contentRequest.then((res) => (this.content = res));
+        }
     },
     methods: {
         ...mapActions({

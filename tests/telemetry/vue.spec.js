@@ -33,11 +33,13 @@ describe('telemetryPlugin', () => {
 
     beforeEach(() => {
         _resetTelemetryState();
+        window.sessionStorage.removeItem('parkspot_chunk_reload');
         consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
     });
 
     afterEach(() => {
         delete window.newrelic;
+        window.sessionStorage.removeItem('parkspot_chunk_reload');
         vi.restoreAllMocks();
     });
 
@@ -128,7 +130,8 @@ describe('telemetryPlugin', () => {
         it('reports and logs router errors', () => {
             const agent = stubAgent();
             const router = fakeRouter();
-            telemetryPlugin.install(fakeApp(), { router });
+            const reload = vi.fn();
+            telemetryPlugin.install(fakeApp(), { router, reload });
             const [onError] = router.onError.mock.calls[0];
             const error = new Error('Failed to fetch dynamically imported');
             onError(error);
@@ -136,6 +139,62 @@ describe('telemetryPlugin', () => {
                 source: 'router',
             });
             expect(consoleError).toHaveBeenCalledWith(error);
+        });
+
+        it('reloads once for a stale chunk and reports it', () => {
+            const agent = stubAgent();
+            const router = fakeRouter();
+            const reload = vi.fn();
+            telemetryPlugin.install(fakeApp(), { router, reload });
+            const [onError] = router.onError.mock.calls[0];
+            const message =
+                'Failed to fetch dynamically imported module: https://www.parkspot.in/assets/PageSrp-B1.js';
+
+            onError(new Error(message));
+            onError(new Error(message));
+
+            expect(agent.noticeError).toHaveBeenCalledTimes(2);
+            expect(reload).toHaveBeenCalledTimes(1);
+        });
+
+        it('reports chunk reload state failures instead of reloading blindly', () => {
+            const agent = stubAgent();
+            const router = fakeRouter();
+            const reload = vi.fn();
+            telemetryPlugin.install(fakeApp(), { router, reload });
+            const [onError] = router.onError.mock.calls[0];
+            vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+                throw new Error('Access is denied for this document.');
+            });
+
+            onError(
+                new Error(
+                    'Failed to fetch dynamically imported module: /assets/PageSrp.js',
+                ),
+            );
+
+            expect(agent.noticeError).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    message: 'Chunk reload state unavailable',
+                }),
+                expect.objectContaining({
+                    source: 'router',
+                    failure: 'chunk_reload_state',
+                }),
+            );
+            expect(reload).not.toHaveBeenCalled();
+        });
+
+        it('does not reload for other router errors', () => {
+            stubAgent();
+            const router = fakeRouter();
+            const reload = vi.fn();
+            telemetryPlugin.install(fakeApp(), { router, reload });
+            const [onError] = router.onError.mock.calls[0];
+
+            onError(new Error('Navigation guard failed'));
+
+            expect(reload).not.toHaveBeenCalled();
         });
 
         it.each([

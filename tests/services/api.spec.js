@@ -185,6 +185,10 @@ describe('MayaApiService', () => {
         mayaService = new MayaApiService('dweb');
     });
 
+    afterEach(() => {
+        delete window.newrelic;
+    });
+
     it('refreshes the stored token via getIdToken and attaches it', async () => {
         localStorage.setItem('PSAuthKey', 'existing_token');
         auth.currentUser = {
@@ -207,6 +211,7 @@ describe('MayaApiService', () => {
     });
 
     it('keeps the existing stored token when getIdToken rejects', async () => {
+        window.newrelic = { noticeError: vi.fn() };
         localStorage.setItem('PSAuthKey', 'existing_token');
         auth.currentUser = {
             getIdToken: vi.fn().mockRejectedValue(new Error('refresh failed')),
@@ -222,6 +227,10 @@ describe('MayaApiService', () => {
         expect(localStorage.getItem('PSAuthKey')).toBe('existing_token');
         expect(resultConfig.headers['Authorization']).toBe(
             'Bearer existing_token',
+        );
+        expect(window.newrelic.noticeError).toHaveBeenCalledWith(
+            expect.any(Error),
+            expect.objectContaining({ source: 'auth_token_refresh' }),
         );
     });
 
@@ -482,7 +491,7 @@ describe('MayaApiService errorInterceptor New Relic reporting', () => {
         expect(window.newrelic.addPageAction).not.toHaveBeenCalled();
     });
 
-    it('prefers Maya\'s DisplayMsg over the hardcoded 404 copy when present', () => {
+    it("prefers Maya's DisplayMsg over the hardcoded 404 copy when present", () => {
         const error = {
             response: {
                 status: 404,

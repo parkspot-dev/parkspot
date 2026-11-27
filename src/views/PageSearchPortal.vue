@@ -46,6 +46,7 @@ import { mapActions, mapState } from 'vuex';
 import MoleculeSearchBox from '../components/molecules/MoleculeSearchBox.vue';
 import { getActiveTabStatusLabel } from '../constant/enums';
 import { sanitizeMobile } from '@/utils/sanitizeMobile';
+import { reportError } from '@/telemetry';
 
 export default {
     name: 'PageSearchPortal',
@@ -114,11 +115,11 @@ export default {
                 this.alertError(this.errorMessage);
             }
         },
-        isAuthReady: 'loadPortalData',
-        isAgent: 'loadPortalData',
+        isAuthReady: 'loadPortalDataSafely',
+        isAgent: 'loadPortalDataSafely',
     },
     mounted() {
-        this.loadPortalData();
+        this.loadPortalDataSafely();
     },
     created() {
         const tab = this.$route.query['tab'];
@@ -153,6 +154,12 @@ export default {
             'resetError',
             'getInterestedVO',
         ]),
+
+        loadPortalDataSafely() {
+            return this.loadPortalData().catch((error) => {
+                reportError(error, { source: 'search_portal' });
+            });
+        },
 
         async loadPortalData() {
             if (

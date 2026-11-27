@@ -1,5 +1,10 @@
 import { mapBoxClient, mayaClient } from '@/services/api';
+import { reportError } from '@/telemetry';
+import { getStoredValue, setStoredValue } from '@/utils/storage';
 import _ from 'lodash';
+
+const invalidFilterError = new Error('Invalid filter data');
+const recentSearchError = new Error('Invalid recent search cache');
 
 const state = {
     locations: [],
@@ -103,7 +108,7 @@ const mutations = {
 
         state.recentSearch = [...uniqueRecentSearches];
         // JSON used to store array as string in LS
-        localStorage.setItem('recent', JSON.stringify(state.recentSearch));
+        setStoredValue('recent', JSON.stringify(state.recentSearch));
     },
 
     'update-selected-city'(state, city) {
@@ -210,7 +215,7 @@ const actions = {
             state.srpResults = data.Sites;
             commit('update-filtered-srp-results', state.srpResults);
         } else {
-            throw data.DisplayMsg;
+            throw data?.DisplayMsg || 'Unable to load parking results';
         }
     },
 
@@ -228,9 +233,18 @@ const actions = {
     },
 
     getFromRecent({ state }) {
-        state.recentSearch = JSON.parse(localStorage.getItem('recent'));
-        if (state.recentSearch === null) {
-            return (state.recentSearch = []);
+        const raw = getStoredValue('recent');
+        try {
+            state.recentSearch = raw ? JSON.parse(raw) : [];
+        } catch {
+            reportError(recentSearchError, {
+                source: 'map',
+                failure: 'recent_search_cache',
+            });
+            state.recentSearch = [];
+        }
+        if (!Array.isArray(state.recentSearch)) {
+            state.recentSearch = [];
         }
         return state.recentSearch;
     },
@@ -247,6 +261,10 @@ const actions = {
     // Update filter Array
     updateFilter({ commit }, { name, value }) {
         if (!name || !value || typeof value !== 'object') {
+            reportError(invalidFilterError, {
+                source: 'map',
+                failure: 'invalid_filter',
+            });
             console.error('Invalid filter data', { name, value });
             return;
         }

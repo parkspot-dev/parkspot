@@ -12,6 +12,11 @@ import {
 import { identify, setUserProperty } from '@/lib/analytics';
 import { formatRemarkWithUtm } from '@/lib/analytics/attribution';
 import { logger } from '@/utils/logger';
+import {
+    getStoredValue,
+    removeStoredValue,
+    setStoredValue,
+} from '@/utils/storage';
 import { withTimeout } from '@/utils/with-timeout';
 import { clearUser, reportError, setUser } from '@/telemetry';
 
@@ -31,7 +36,7 @@ const SIGN_IN_CANCELLED = [
     AuthErrorCodes.EXPIRED_POPUP_REQUEST,
 ];
 const getPsAuthKey = () => {
-    const key = localStorage.getItem(PS_AUTH_KEY);
+    const key = getStoredValue(PS_AUTH_KEY);
     if (
         !key ||
         !key.trim() ||
@@ -81,7 +86,7 @@ const clearProfileCache = (userId) => {
     if (!cacheKey) {
         return;
     }
-    localStorage.removeItem(cacheKey);
+    removeStoredValue(cacheKey);
 };
 
 const readProfileCache = (userId) => {
@@ -90,7 +95,7 @@ const readProfileCache = (userId) => {
         return null;
     }
 
-    const rawCache = localStorage.getItem(cacheKey);
+    const rawCache = getStoredValue(cacheKey);
     if (!rawCache) {
         return null;
     }
@@ -131,7 +136,7 @@ const writeProfileCache = (userId, userProfile) => {
     };
 
     try {
-        localStorage.setItem(cacheKey, JSON.stringify(payload));
+        setStoredValue(cacheKey, JSON.stringify(payload));
     } catch {
         clearProfileCache(userId);
     }
@@ -206,8 +211,8 @@ const mutations = {
 
         state.user = user;
         if (!user) {
-            localStorage.removeItem(PS_AUTH_KEY);
-            localStorage.removeItem(USER_PROFILE_STORAGE_KEY);
+            removeStoredValue(PS_AUTH_KEY);
+            removeStoredValue(USER_PROFILE_STORAGE_KEY);
             state.isAdmin = false;
             state.isAgent = false;
             state.isRoleResolved = false;
@@ -221,7 +226,7 @@ const mutations = {
             userProfile &&
             !Object.prototype.hasOwnProperty.call(userProfile, 'ErrorCode')
         ) {
-            localStorage.setItem(
+            setStoredValue(
                 USER_PROFILE_STORAGE_KEY,
                 JSON.stringify(userProfile),
             );
@@ -320,7 +325,7 @@ const actions = {
                 );
                 return { ok: false, code: null };
             }
-            localStorage.setItem(PS_AUTH_KEY, token);
+            setStoredValue(PS_AUTH_KEY, token);
             commit('update-user', user);
             commit('update-login-modal', false);
             await dispatch('authenticateWithMaya');
@@ -631,6 +636,7 @@ async function bootstrapUserData(user) {
             is_authenticated: true,
             user_role: userRole,
         });
+        setUser(user.uid, { role: userRole });
     } finally {
         // In a `finally` so a throwing `identify()` cannot strand the
         // `pending-payments` route guard waiting on role resolution (see
@@ -676,10 +682,11 @@ export async function handleAuthStateChanged(user) {
         if (!user) {
             store.commit('user/set-auth-error', null);
             clearProfileCache(previousCacheUserId);
-            localStorage.removeItem(PS_AUTH_KEY);
+            removeStoredValue(PS_AUTH_KEY);
             // Clear the GA4 user-scoped identity on sign-out. No user_id and
             // no PII — just flips the authenticated flag off.
             setUserProperty('is_authenticated', false);
+            clearUser();
             // Signed out: auth has settled, and there is definitively no role
             // for this session — the guard must not sit waiting on one.
             store.commit('user/update-auth-progress', {
@@ -712,7 +719,7 @@ export async function handleAuthStateChanged(user) {
             return;
         }
 
-        localStorage.setItem(PS_AUTH_KEY, token);
+        setStoredValue(PS_AUTH_KEY, token);
 
         // Unblock the UI now; hydrate the rest in the background. The role is
         // still unresolved at this point, which is why `bootstrapUserData`
@@ -722,7 +729,8 @@ export async function handleAuthStateChanged(user) {
             roleResolved: false,
         });
 
-        bootstrapUserData(user).catch(() => {
+        bootstrapUserData(user).catch((error) => {
+            reportError(error, { source: 'auth_bootstrap' });
             store.commit('user/set-auth-error', {
                 source: 'onAuthStateChanged',
                 message: 'Failed to load user bootstrap data',
@@ -730,6 +738,7 @@ export async function handleAuthStateChanged(user) {
         });
     } catch (err) {
         console.error('onAuthStateChanged listener failed', err);
+        reportError(err, { source: 'auth_listener' });
     }
 }
 
