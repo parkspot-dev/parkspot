@@ -33,6 +33,25 @@
 import 'lightgallery.js/dist/css/lightgallery.css';
 import ParkspotImage from '../../../public/assets/Parkspot_default.png';
 import AtomIcon from '@/components/atoms/AtomIcon.vue';
+import { reportError } from '@/telemetry';
+
+function isValidImageUrl(image) {
+    if (typeof image !== 'string') return false;
+    const value = image.trim();
+    if (!value || /^(javascript|vbscript):/i.test(value)) return false;
+    if (/^(\/|\.\.?\/|data:image\/|blob:)/i.test(value)) return true;
+    try {
+        const base =
+            typeof window === 'undefined'
+                ? 'http://localhost'
+                : window.location.href;
+        const parsed = new URL(value, base);
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    } catch {
+        return false;
+    }
+}
+
 export default {
     name: 'ImageGallery',
     components: {
@@ -62,14 +81,18 @@ export default {
         },
         removable: {
             type: Boolean,
-            default: true
-        }
+            default: true,
+        },
     },
     emits: ['delete-image'],
     data() {
         return {
             imageSize: '',
             displayImages: [ParkspotImage],
+            imageIndexes: [],
+            lightGalleryImportFailed: false,
+            invalidImageError: new Error('Invalid image URL in gallery data'),
+            lightGalleryError: new Error('lightGallery global unavailable'),
         };
     },
     watch: {
@@ -78,13 +101,45 @@ export default {
     async mounted() {
         // Browser-only dynamic import — see the comment at the top of the
         // <script> block for why this can't be a static import.
-        await import('lightgallery.js');
+        try {
+            await import('lightgallery.js');
+        } catch (error) {
+            this.lightGalleryImportFailed = true;
+            reportError(error, {
+                source: 'image_gallery',
+                failure: 'lightgallery_import',
+            });
+        }
         this.updateImages();
     },
     methods: {
         updateImages() {
-            this.displayImages =
-                this.images.length > 0 ? this.images : [ParkspotImage];
+            const entries = (this.images || []).map((image, index) => ({
+                image,
+                index,
+            }));
+            const validImages = entries.filter(({ image }) =>
+                isValidImageUrl(image),
+            );
+            const invalidImages = entries.filter(
+                ({ image }) => !isValidImageUrl(image),
+            );
+            if (invalidImages.length) {
+                reportError(this.invalidImageError, {
+                    source: 'image_gallery',
+                    failure: 'invalid_image_url',
+                    invalid_image_count: invalidImages.length,
+                    invalid_image_types: [
+                        ...new Set(
+                            invalidImages.map(({ image }) => typeof image),
+                        ),
+                    ].join(','),
+                });
+            }
+            this.displayImages = validImages.length
+                ? validImages.map(({ image }) => image)
+                : [ParkspotImage];
+            this.imageIndexes = validImages.map(({ index }) => index);
             this.setImageSize();
             this.$nextTick(() => {
                 if (typeof window === 'undefined') return;
@@ -95,6 +150,11 @@ export default {
                     }
                     if (typeof window.lightGallery === 'function') {
                         window.lightGallery(el, { thumbnail: true });
+                    } else if (!this.lightGalleryImportFailed) {
+                        reportError(this.lightGalleryError, {
+                            source: 'image_gallery',
+                            failure: 'lightgallery_missing',
+                        });
                     }
                 }
             });
@@ -119,7 +179,7 @@ export default {
         },
 
         removeImage(index) {
-            this.$emit('delete-image', index);
+            this.$emit('delete-image', this.imageIndexes[index] ?? index);
         },
     },
 };

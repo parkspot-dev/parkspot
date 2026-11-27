@@ -162,6 +162,17 @@ describe('PageBlogPost.vue - Complete Test Suite', () => {
         expect(tcu.vm.$options.metaInfo).toBeUndefined();
     });
 
+    it('does not throw when the content action is missing', async () => {
+        const originalAction = store._actions['blog/p'];
+        delete store._actions['blog/p'];
+        wrapper.unmount();
+
+        expect(() => mountComponent()).not.toThrow();
+        await flushPromises();
+        expect(wrapper.vm.content).toBe('');
+        store._actions['blog/p'] = originalAction;
+    });
+
     it('resets isLoading via finally even if the catch path re-throws', async () => {
         // Make the router throw on the redirect inside fireContact's
         // catch branch — the spinner state must still come back down

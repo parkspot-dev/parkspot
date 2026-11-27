@@ -1,11 +1,17 @@
 <template>
-    <div id="map" style="min-height: 550px"></div>
+    <div id="map" ref="mapContainer" style="min-height: 550px">
+        <p v-if="mapUnavailable" class="map-unavailable">
+            Map is unavailable on this device. Parking details are still shown
+            below.
+        </p>
+    </div>
 </template>
 
 <script>
 import mapboxgl from 'mapbox-gl';
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 import { getValueFromFirebase } from '../../firebase';
+import { reportError } from '../../telemetry';
 export default {
     name: 'MapContainer',
     props: {
@@ -52,6 +58,7 @@ export default {
             map: null, // map for mapbox
             marker: null, // marker for location
             markers: [],
+            mapUnavailable: false,
         };
     },
     computed: {
@@ -76,7 +83,9 @@ export default {
     mounted() {
         this.updateMapConfig(this.center);
         this.updateZoomValue(this.zoom);
-        this.getMapAccessToken().then(() => this.renderMap());
+        this.getMapAccessToken()
+            .then(() => this.renderMap())
+            .catch((error) => this.handleMapError(error));
     },
 
     unmounted() {
@@ -85,7 +94,11 @@ export default {
         // instance and triggers "map re-initialization into a non-empty
         // container" warnings.
         if (typeof this.map?.remove === 'function') {
-            this.map.remove();
+            try {
+                this.map.remove();
+            } catch (error) {
+                reportError(error, { source: 'map_cleanup' });
+            }
         }
         this.map = null;
     },
@@ -111,94 +124,121 @@ export default {
             this.marker?.setLngLat(center);
         },
         renderMap() {
-            if (!this.accessToken || this.map) {
+            if (!this.accessToken || this.map || this.mapUnavailable) {
                 return;
             }
-            mapboxgl.accessToken = this.accessToken;
-
-            // Create map
-            this.map = new mapboxgl.Map(this.mapConfig);
-
-            // Missing sprite images (e.g. a style referencing an image that
-            // was never registered) otherwise spam the console; swallow
-            // them instead of letting them surface as warnings/errors.
-            this.map.on('styleimagemissing', (e) => {
-                console.warn(`Mapbox style image missing: ${e.id}`);
-            });
-
-            // Create popup
-            const popup = new mapboxgl.Popup({ offset: 25 }).setText(
-                'Your current location.',
-            );
-
-            // Create marker
-            if (
-                this.filteredSpots &&
-                this.isValidLngLat(this.mapConfig.center)
-            ) {
-                this.marker = new mapboxgl.Marker({
-                    draggable: this.drag,
-                })
-                    .setLngLat(this.mapConfig.center)
-                    .setPopup(popup)
-                    .addTo(this.map);
+            const container =
+                this.$refs.mapContainer ||
+                document.getElementById(this.mapConfig.container);
+            if (!container) {
+                this.handleMapError(new Error('Map container not found'));
+                return;
             }
 
-            if (this.spotDetails && this.isValidLngLat(this.center)) {
-                const psMarker = document.createElement('div');
-                psMarker.className = 'marker';
-                psMarker.style.backgroundImage = `url(${this.img})`;
-                psMarker.style.width = '50px';
-                psMarker.style.height = '50px';
-                psMarker.style.backgroundSize = 'contain';
-                psMarker.style.backgroundRepeat = 'no-repeat';
-                psMarker.style.backgroundPosition = 'center';
-                const psPopup = this.getPsPopup(this.spotDetails);
-                new mapboxgl.Marker(psMarker)
-                    .setLngLat(this.center)
-                    .setPopup(psPopup)
-                    .addTo(this.map);
-
-                // Create user current location marker
+            try {
                 if (
-                    this.userCurrentLocation &&
-                    typeof this.userCurrentLocation === 'object' &&
-                    typeof this.userCurrentLocation.lng === 'number' &&
-                    typeof this.userCurrentLocation.lat === 'number'
+                    typeof mapboxgl.supported === 'function' &&
+                    !mapboxgl.supported()
                 ) {
-                    new mapboxgl.Marker({ draggable: this.drag })
-                        .setLngLat([
-                            this.userCurrentLocation.lng,
-                            this.userCurrentLocation.lat,
-                        ])
+                    this.handleMapError(new Error('WebGL is not supported'));
+                    return;
+                }
+                mapboxgl.accessToken = this.accessToken;
+
+                // Create map
+                this.map = new mapboxgl.Map({
+                    ...this.mapConfig,
+                    container,
+                });
+
+                // Missing sprite images (e.g. a style referencing an image that
+                // was never registered) otherwise spam the console; swallow
+                // them instead of letting them surface as warnings/errors.
+                this.map.on('styleimagemissing', (e) => {
+                    console.warn(`Mapbox style image missing: ${e.id}`);
+                });
+
+                // Create popup
+                const popup = new mapboxgl.Popup({ offset: 25 }).setText(
+                    'Your current location.',
+                );
+
+                // Create marker
+                if (
+                    this.filteredSpots &&
+                    this.isValidLngLat(this.mapConfig.center)
+                ) {
+                    this.marker = new mapboxgl.Marker({
+                        draggable: this.drag,
+                    })
+                        .setLngLat(this.mapConfig.center)
                         .setPopup(popup)
                         .addTo(this.map);
                 }
-            }
 
-            if (this.drag && this.marker) {
-                this.map.on('click', (e) => {
-                    this.marker
-                        .setPopup(popup)
-                        .setLngLat(e.lngLat)
+                if (this.spotDetails && this.isValidLngLat(this.center)) {
+                    const psMarker = document.createElement('div');
+                    psMarker.className = 'marker';
+                    psMarker.style.backgroundImage = `url(${this.img})`;
+                    psMarker.style.width = '50px';
+                    psMarker.style.height = '50px';
+                    psMarker.style.backgroundSize = 'contain';
+                    psMarker.style.backgroundRepeat = 'no-repeat';
+                    psMarker.style.backgroundPosition = 'center';
+                    const psPopup = this.getPsPopup(this.spotDetails);
+                    new mapboxgl.Marker(psMarker)
+                        .setLngLat(this.center)
+                        .setPopup(psPopup)
                         .addTo(this.map);
-                    const { lng, lat } = this.marker.getLngLat();
-                    this.updateMapConfig([lng, lat]);
-                    this.$emit('location', { lng, lat });
-                });
 
-                this.marker.on('dragend', () => {
-                    const { lng, lat } = this.marker.getLngLat();
-                    this.updateMapConfig([lng, lat]);
-                    this.$emit('location', { lng, lat });
-                });
-            }
+                    // Create user current location marker
+                    if (
+                        this.userCurrentLocation &&
+                        typeof this.userCurrentLocation === 'object' &&
+                        typeof this.userCurrentLocation.lng === 'number' &&
+                        typeof this.userCurrentLocation.lat === 'number'
+                    ) {
+                        new mapboxgl.Marker({ draggable: this.drag })
+                            .setLngLat([
+                                this.userCurrentLocation.lng,
+                                this.userCurrentLocation.lat,
+                            ])
+                            .setPopup(popup)
+                            .addTo(this.map);
+                    }
+                }
 
-            // Add parking site markers
-            // Only run when we have spots list
-            if (this.filteredSpots) {
-                this.updateMarkers();
+                if (this.drag && this.marker) {
+                    this.map.on('click', (e) => {
+                        this.marker
+                            .setPopup(popup)
+                            .setLngLat(e.lngLat)
+                            .addTo(this.map);
+                        const { lng, lat } = this.marker.getLngLat();
+                        this.updateMapConfig([lng, lat]);
+                        this.$emit('location', { lng, lat });
+                    });
+
+                    this.marker.on('dragend', () => {
+                        const { lng, lat } = this.marker.getLngLat();
+                        this.updateMapConfig([lng, lat]);
+                        this.$emit('location', { lng, lat });
+                    });
+                }
+
+                // Add parking site markers
+                // Only run when we have spots list
+                if (this.filteredSpots) {
+                    this.updateMarkers();
+                }
+            } catch (error) {
+                this.handleMapError(error);
             }
+        },
+
+        handleMapError(error) {
+            this.mapUnavailable = true;
+            reportError(error, { source: 'map_init' });
         },
 
         // Get map access token from cookies
@@ -361,5 +401,11 @@ export default {
 #map {
     width: 100%;
     height: 550px;
+}
+
+.map-unavailable {
+    color: var(--parkspot-black);
+    font-size: 0.875rem;
+    padding: 8px 0;
 }
 </style>

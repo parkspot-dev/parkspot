@@ -1,6 +1,12 @@
 import { mayaClient } from '@/services/api';
 import ImageUploadService from '@/services/ImageUploadService';
+import { reportError } from '@/telemetry';
 import router from '@/router';
+
+const imageUploadFailure = new Error('Failed to upload images');
+const spotSaveFailure = new Error('Failed to save spot request');
+const spotSubmitFailure = new Error('Failed to submit spot request');
+
 const state = {
     SO: {
         userName: '',
@@ -442,15 +448,30 @@ const actions = {
                 state.SO.uploadImages,
                 state.SO.spotId,
             );
-            if (!uploadedImageURLs['success']) {
-                commit('set-error-msg', uploadedImageURLs['DisplayMsg']);
+            if (!uploadedImageURLs?.['success']) {
+                reportError(imageUploadFailure, {
+                    source: 'spot_request',
+                    failure: 'image_upload',
+                });
+                commit(
+                    'set-error-msg',
+                    uploadedImageURLs?.['DisplayMsg'] ||
+                        'Failed to upload images',
+                );
             } else {
                 response = await dispatch(
                     'updateSpotRequest',
                     uploadedImageURLs['urls'],
                 );
-                if (response.ErrorCode) {
-                    commit('set-error-msg', response.DisplayMsg);
+                if (!response || response.ErrorCode) {
+                    reportError(spotSaveFailure, {
+                        source: 'spot_request',
+                        failure: 'save',
+                    });
+                    commit(
+                        'set-error-msg',
+                        response?.DisplayMsg || 'Failed to save spot request',
+                    );
                 } else {
                     commit(
                         'set-success-msg',
@@ -460,8 +481,15 @@ const actions = {
             }
         } else {
             response = await dispatch('updateSpotRequest', []);
-            if (response.ErrorCode) {
-                commit('set-error-msg', response.DisplayMsg);
+            if (!response || response.ErrorCode) {
+                reportError(spotSaveFailure, {
+                    source: 'spot_request',
+                    failure: 'save',
+                });
+                commit(
+                    'set-error-msg',
+                    response?.DisplayMsg || 'Failed to save spot request',
+                );
             } else {
                 commit(
                     'set-success-msg',
@@ -486,9 +514,16 @@ const actions = {
             {},
             { timeout: 2000 },
         );
-        if (response.ErrorCode) {
+        if (response?.ErrorCode) {
+            reportError(spotSubmitFailure, {
+                source: 'spot_request',
+                failure: 'submit',
+            });
             // Network issues or server errors could cause the API call to fail.
-            commit('set-error-msg', response.ErrorMsg);
+            commit(
+                'set-error-msg',
+                response?.ErrorMsg || 'Failed to submit spot request',
+            );
         } else {
             commit(
                 'set-success-msg',

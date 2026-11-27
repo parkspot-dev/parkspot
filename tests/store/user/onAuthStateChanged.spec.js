@@ -2,7 +2,7 @@
 // it used to become an unhandled rejection. It's now wrapped in try/catch.
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const { storeMock, analyticsMock } = vi.hoisted(() => ({
+const { storeMock, analyticsMock, telemetryMock } = vi.hoisted(() => ({
     storeMock: {
         state: { user: { user: null } },
         commit: vi.fn(),
@@ -11,6 +11,11 @@ const { storeMock, analyticsMock } = vi.hoisted(() => ({
     analyticsMock: {
         identify: vi.fn(),
         setUserProperty: vi.fn(),
+    },
+    telemetryMock: {
+        clearUser: vi.fn(),
+        reportError: vi.fn(),
+        setUser: vi.fn(),
     },
 }));
 
@@ -38,6 +43,11 @@ vi.mock('firebase/auth', async () => {
 });
 
 vi.mock('@/lib/analytics', () => analyticsMock);
+
+vi.mock('@/telemetry', async (importOriginal) => ({
+    ...(await importOriginal()),
+    ...telemetryMock,
+}));
 
 vi.mock('@/lib/analytics/attribution', () => ({
     formatRemarkWithUtm: (remark) => remark,
@@ -90,6 +100,10 @@ describe('store/user onAuthStateChanged listener', () => {
             'onAuthStateChanged listener failed',
             expect.any(Error),
         );
+        expect(telemetryMock.reportError).toHaveBeenCalledWith(
+            expect.objectContaining({ message: 'stale store binding' }),
+            { source: 'auth_listener' },
+        );
     });
 
     it('signs the user in: commits the user, fetches the profile, marks auth ready', async () => {
@@ -108,6 +122,9 @@ describe('store/user onAuthStateChanged listener', () => {
         expect(analyticsMock.identify).toHaveBeenCalledWith('user-123', {
             is_authenticated: true,
             user_role: 'unknown',
+        });
+        expect(telemetryMock.setUser).toHaveBeenCalledWith('user-123', {
+            role: 'unknown',
         });
     });
 
@@ -131,6 +148,8 @@ describe('store/user onAuthStateChanged listener', () => {
             'is_authenticated',
             false,
         );
+        expect(telemetryMock.clearUser).toHaveBeenCalledTimes(1);
+        expect(telemetryMock.setUser).not.toHaveBeenCalled();
     });
 
     it('records an auth error (without throwing) when the profile fetch fails', async () => {
@@ -153,6 +172,11 @@ describe('store/user onAuthStateChanged listener', () => {
             { authReady: true, roleResolved: false },
         );
         expect(analyticsMock.identify).not.toHaveBeenCalled();
+        expect(telemetryMock.reportError).toHaveBeenCalledWith(
+            expect.objectContaining({ message: 'maya down' }),
+            { source: 'auth_bootstrap' },
+        );
+        expect(telemetryMock.setUser).not.toHaveBeenCalled();
     });
 
     it('resolves the previous-user cache key safely when store.state.user is absent', async () => {

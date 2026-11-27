@@ -66,7 +66,7 @@ export default class FilterManager {
         }));
 
         // check for sort
-        if(this.viewModel.$route.query['sort']) {
+        if (this.viewModel.$route.query['sort']) {
             this.store.dispatch('map/updateSort', {
                 name: this.viewModel.$route.query['sort'],
             });
@@ -76,6 +76,7 @@ export default class FilterManager {
     }
 
     extractMinMax(filter) {
+        if (typeof filter !== 'string') return null;
         const numbers = filter.match(/\d+/g)?.map(Number) || [];
         if (numbers.length === 1) {
             return filter.includes('Less')
@@ -129,7 +130,10 @@ export default class FilterManager {
         }
 
         this.store.commit('map/update-filtered-srp-results', filteredSpots);
-        if (this.viewModel.selectedSort && this.viewModel.selectedSort.name !== 'Recommended') {
+        if (
+            this.viewModel.selectedSort &&
+            this.viewModel.selectedSort.name !== 'Recommended'
+        ) {
             this.sortFilteredResults(
                 this.viewModel.selectedSort.name,
                 this.viewModel.selectedSort.order,
@@ -147,7 +151,7 @@ export default class FilterManager {
 
         const sortedResults = [...this.viewModel.filteredSpots];
 
-        if(field !== 'Recommended') {
+        if (field !== 'Recommended') {
             sortedResults.sort((a, b) => {
                 const valueA = field === 'Rent' ? a.Rate : a.Distance;
                 const valueB = field === 'Rent' ? b.Rate : b.Distance;
@@ -157,7 +161,7 @@ export default class FilterManager {
 
         this.updateQueryParams('sort', field);
 
-        if(field === 'Recommended') {
+        if (field === 'Recommended') {
             this.applyFilters();
         } else {
             this.store.commit('map/update-filtered-srp-results', sortedResults);
