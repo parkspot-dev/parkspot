@@ -17,8 +17,8 @@ import {
     removeStoredValue,
     setStoredValue,
 } from '@/utils/storage';
-import { withTimeout } from '@/utils/with-timeout';
 import { clearUser, reportError, setUser } from '@/telemetry';
+import { withTimeout } from '@/utils/with-timeout';
 
 // Bound for `getIdToken()`, which touches the network on refresh and would
 // otherwise be able to block auth bootstrap indefinitely.

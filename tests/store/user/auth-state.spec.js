@@ -21,16 +21,13 @@ vi.mock('@/lib/analytics/attribution', () => ({
 vi.mock('@/utils/logger', () => ({
     logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), event: vi.fn() },
 }));
-vi.mock('firebase/auth', async () => {
-    const actual = await vi.importActual('firebase/auth');
-    return {
-        ...actual,
-        onAuthStateChanged: vi.fn(),
-        signInWithPopup: vi.fn(),
-        GoogleAuthProvider: vi.fn(),
-        signOut: vi.fn(),
-    };
-});
+vi.mock('firebase/auth', async (importOriginal) => ({
+    ...(await importOriginal()),
+    onAuthStateChanged: vi.fn(),
+    signInWithPopup: vi.fn(),
+    GoogleAuthProvider: vi.fn(),
+    signOut: vi.fn(),
+}));
 vi.mock('@/firebase', () => ({ auth: { currentUser: null } }));
 
 import store from '@/store';

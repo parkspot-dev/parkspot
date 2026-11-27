@@ -5,27 +5,24 @@ import PageKYCStatus from '@/views/PageKYCStatus.vue';
 import { flushPromises } from '@vue/test-utils';
 import { SEARCH_TYPE } from '@/store/kycStatusPortal';
 
-vi.mock('@/constant/enums', async () => {
-    const actual = await vi.importActual('@/constant/enums');
-    return {
-        ...actual,
-        KYCStatusLabel: ['PENDING', 'APPROVED', 'REJECTED'],
-        KYCStatus: {
-            PENDING: 0,
-            APPROVED: 1,
-            REJECTED: 2,
-        },
-        getKYCStatusLabel: (val) => {
-            const map = {
-                0: 'PENDING',
-                1: 'APPROVED',
-                2: 'REJECTED',
-            };
-            return map[val];
-        },
-        getIDTypeLabel: (val) => (val === 1 ? 'Aadhaar' : 'RC'),
-    };
-});
+vi.mock('@/constant/enums', async (importOriginal) => ({
+    ...(await importOriginal()),
+    KYCStatusLabel: ['PENDING', 'APPROVED', 'REJECTED'],
+    KYCStatus: {
+        PENDING: 0,
+        APPROVED: 1,
+        REJECTED: 2,
+    },
+    getKYCStatusLabel: (val) => {
+        const map = {
+            0: 'PENDING',
+            1: 'APPROVED',
+            2: 'REJECTED',
+        };
+        return map[val];
+    },
+    getIDTypeLabel: (val) => (val === 1 ? 'Aadhaar' : 'RC'),
+}));
 
 let store;
 let actions;

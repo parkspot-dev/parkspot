@@ -2,11 +2,15 @@
 // it used to become an unhandled rejection. It's now wrapped in try/catch.
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const { storeMock, telemetryMock } = vi.hoisted(() => ({
+const { storeMock, analyticsMock, telemetryMock } = vi.hoisted(() => ({
     storeMock: {
         state: { user: { user: null } },
         commit: vi.fn(),
         dispatch: vi.fn().mockResolvedValue(undefined),
+    },
+    analyticsMock: {
+        identify: vi.fn(),
+        setUserProperty: vi.fn(),
     },
     telemetryMock: {
         clearUser: vi.fn(),
@@ -38,10 +42,7 @@ vi.mock('firebase/auth', async () => {
     };
 });
 
-vi.mock('@/lib/analytics', () => ({
-    identify: vi.fn(),
-    setUserProperty: vi.fn(),
-}));
+vi.mock('@/lib/analytics', () => analyticsMock);
 
 vi.mock('@/telemetry', async (importOriginal) => ({
     ...(await importOriginal()),
@@ -72,8 +73,7 @@ describe('store/user onAuthStateChanged listener', () => {
         capturedAuthCallback = null;
         storeMock.state = { user: { user: null } };
         storeMock.commit = vi.fn((type, payload) => {
-            if (type === 'user/update-user') {
-                storeMock.state.user = storeMock.state.user || {};
+            if (type === 'user/update-user' && storeMock.state.user) {
                 storeMock.state.user.user = payload;
             }
         });
@@ -119,6 +119,10 @@ describe('store/user onAuthStateChanged listener', () => {
             { authReady: true, roleResolved: false },
         );
         expect(localStorage.getItem('PSAuthKey')).toBe('id-token');
+        expect(analyticsMock.identify).toHaveBeenCalledWith('user-123', {
+            is_authenticated: true,
+            user_role: 'unknown',
+        });
         expect(telemetryMock.setUser).toHaveBeenCalledWith('user-123', {
             role: 'unknown',
         });
@@ -139,6 +143,10 @@ describe('store/user onAuthStateChanged listener', () => {
         expect(storeMock.commit).toHaveBeenCalledWith(
             'user/update-auth-progress',
             { authReady: true, roleResolved: false },
+        );
+        expect(analyticsMock.setUserProperty).toHaveBeenCalledWith(
+            'is_authenticated',
+            false,
         );
         expect(telemetryMock.clearUser).toHaveBeenCalledTimes(1);
         expect(telemetryMock.setUser).not.toHaveBeenCalled();
@@ -163,6 +171,7 @@ describe('store/user onAuthStateChanged listener', () => {
             'user/update-auth-progress',
             { authReady: true, roleResolved: false },
         );
+        expect(analyticsMock.identify).not.toHaveBeenCalled();
         expect(telemetryMock.reportError).toHaveBeenCalledWith(
             expect.objectContaining({ message: 'maya down' }),
             { source: 'auth_bootstrap' },
