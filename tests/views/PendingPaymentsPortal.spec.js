@@ -154,6 +154,29 @@ describe('PendingPaymentsPortal.vue', () => {
         expect(wrapper.find('loader-modal-stub').exists()).toBe(false);
     });
 
+    it('getRentCycle uses RentCycle from the pending payment response', () => {
+        wrapper = mountPage();
+        expect(
+            wrapper.vm.getRentCycle({
+                PaymentId: 1,
+                RentCycle: 25,
+                Booking: { RentCycle: 30 },
+            }),
+        ).toBe(25);
+    });
+
+    it('getRentCycle does not read the rent cycle from booking', () => {
+        wrapper = mountPage();
+        expect(wrapper.vm.getRentCycle({ Booking: { RentCycle: 30 } })).toBe(
+            '-',
+        );
+    });
+
+    it('getRentCycle returns a fallback when rent cycle is missing', () => {
+        wrapper = mountPage();
+        expect(wrapper.vm.getRentCycle({})).toBe('-');
+    });
+
     it('shows error message in UI when hasError becomes true', async () => {
         wrapper = mountPage();
         store.state.pendingPayments.errorMessage = 'API failed';
