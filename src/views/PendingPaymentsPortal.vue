@@ -611,7 +611,7 @@ export default {
         },
 
         getRentCycle(payment) {
-            return payment?.RentCycle ?? payment?.Booking?.RentCycle ?? '-';
+            return payment?.RentCycle ?? '-';
         },
 
         getSpotDetailRoute(spotId) {

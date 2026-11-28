@@ -154,15 +154,21 @@ describe('PendingPaymentsPortal.vue', () => {
         expect(wrapper.find('loader-modal-stub').exists()).toBe(false);
     });
 
-    it('getRentCycle returns the rent cycle from payment', () => {
+    it('getRentCycle uses RentCycle from the pending payment response', () => {
         wrapper = mountPage();
-        expect(wrapper.vm.getRentCycle({ RentCycle: 25 })).toBe(25);
+        expect(
+            wrapper.vm.getRentCycle({
+                PaymentId: 1,
+                RentCycle: 25,
+                Booking: { RentCycle: 30 },
+            }),
+        ).toBe(25);
     });
 
-    it('getRentCycle returns the rent cycle from booking', () => {
+    it('getRentCycle does not read the rent cycle from booking', () => {
         wrapper = mountPage();
         expect(wrapper.vm.getRentCycle({ Booking: { RentCycle: 30 } })).toBe(
-            30,
+            '-',
         );
     });
 
