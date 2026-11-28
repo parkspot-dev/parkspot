@@ -173,7 +173,7 @@ const actions = {
             dispatch('getBookingDetails', reqBody.Booking.ID);
             commit('set-updated-fields', []);
         } else if (res.DisplayMsg) {
-            commit('set-error', res.DisplayMsg + ' ( ' + res.ErrorMsg + ' )');
+            commit('set-error', res.DisplayMsg);
         }
         commit('set-loading', false);
     },

@@ -245,7 +245,26 @@ describe('BookingPortal Store', () => {
 
         expect(commit).toHaveBeenCalledWith(
             'set-error',
-            'Update error ( Failed )',
+            'Update error',
+        );
+    });
+
+    it('displays the API DisplayMsg for Site ID update failures', async () => {
+        state.updatedFields = ['SiteID'];
+        mayaClient.post.mockResolvedValue({
+            DisplayMsg: 'Invalid input. Please try again',
+            ErrorMsg:
+                'mysql: The UPDATE statement conflicted with the FOREIGN KEY constraint "fk_bookings_site".',
+        });
+
+        await actions.updateBookingDetails(
+            { commit, dispatch, state },
+            { ID: 5, SiteID: 'INVALID_SITE' },
+        );
+
+        expect(commit).toHaveBeenCalledWith(
+            'set-error',
+            'Invalid input. Please try again',
         );
     });
 

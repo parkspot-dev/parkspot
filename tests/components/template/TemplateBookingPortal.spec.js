@@ -155,6 +155,66 @@ describe('TemplateBookingPortal.vue', () => {
         expect(wrapper.text()).toContain('SITE123');
     });
 
+    it('allows admins to open the Site ID edit modal', async () => {
+        wrapper.vm.newSiteId = 'OLD_SITE';
+
+        await wrapper.find('button[aria-label="Edit Site ID"]').trigger('click');
+
+        expect(wrapper.vm.showSiteIdModal).toBe(true);
+        expect(wrapper.vm.newSiteId).toBe('');
+    });
+
+    it('does not show the Site ID edit button to non-admin users', () => {
+        const { wrapper: nonAdminWrapper } = factory(false);
+
+        expect(
+            nonAdminWrapper.find('button[aria-label="Edit Site ID"]').exists(),
+        ).toBe(false);
+
+        nonAdminWrapper.unmount();
+    });
+
+    it('requires a new Site ID before submitting', () => {
+        wrapper.vm.showSiteIdModal = true;
+        wrapper.vm.newSiteId = '   ';
+
+        wrapper.vm.submitSiteIdChange();
+
+        expect(wrapper.vm.$buefy.dialog.alert).toHaveBeenCalledWith(
+            expect.objectContaining({
+                message: 'Please enter a new Site ID.',
+            }),
+        );
+        expect(wrapper.emitted('update-booking-details')).toBeFalsy();
+        expect(wrapper.vm.showSiteIdModal).toBe(true);
+    });
+
+    it('trims and submits a changed Site ID through the booking update flow', () => {
+        const setUpdatedFields = vi.spyOn(wrapper.vm, 'setUpdatedFields');
+        wrapper.vm.showSiteIdModal = true;
+        wrapper.vm.newSiteId = ' SITE456 ';
+
+        wrapper.vm.submitSiteIdChange();
+
+        expect(wrapper.vm.currBookingDetails.Booking.SiteID).toBe('SITE456');
+        expect(setUpdatedFields).toHaveBeenCalledWith(['SiteID']);
+        expect(wrapper.emitted('update-booking-details')[0][0]).toMatchObject({
+            SiteID: 'SITE456',
+        });
+        expect(wrapper.vm.showSiteIdModal).toBe(false);
+        expect(wrapper.vm.newSiteId).toBe('');
+    });
+
+    it('does not submit when the Site ID is unchanged', () => {
+        wrapper.vm.showSiteIdModal = true;
+        wrapper.vm.newSiteId = ' SITE123 ';
+
+        wrapper.vm.submitSiteIdChange();
+
+        expect(wrapper.emitted('update-booking-details')).toBeFalsy();
+        expect(wrapper.vm.showSiteIdModal).toBe(false);
+    });
+
     it('renders vehicle owner user name (VOUserName)', async () => {
         expect(wrapper.text()).toContain('vo_user1');
 
